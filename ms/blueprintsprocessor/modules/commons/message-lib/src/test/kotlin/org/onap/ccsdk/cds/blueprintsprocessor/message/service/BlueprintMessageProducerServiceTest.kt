@@ -43,10 +43,15 @@ import kotlin.test.assertTrue
 )
 @TestPropertySource(
     properties =
-    ["blueprintsprocessor.messageproducer.sample.type=kafka-basic-auth",
+    ["blueprintsprocessor.messageproducer.sample.type=kafka-scram-ssl-auth",
         "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
         "blueprintsprocessor.messageproducer.sample.topic=default-topic",
-        "blueprintsprocessor.messageproducer.sample.clientId=default-client-id"
+        "blueprintsprocessor.messageproducer.sample.clientId=default-client-id",
+        "blueprintsprocessor.messageproducer.sample.clientId=default-client-id",
+        "blueprintsprocessor.messageproducer.sample.truststore=/path/to/truststore.jks",
+        "blueprintsprocessor.messageproducer.sample.truststorePassword=secretpassword",
+        "blueprintsprocessor.messageproducer.sample.scramUsername=sample-user",
+        "blueprintsprocessor.messageproducer.sample.scramPassword=secretpassword"
     ]
 )
 open class BlueprintMessageProducerServiceTest {
@@ -55,10 +60,10 @@ open class BlueprintMessageProducerServiceTest {
     lateinit var bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
 
     @Test
-    fun testKafkaBasicAuthProducertService() {
+    fun testKafkaBasicAuthProducerService() {
         runBlocking {
             val blueprintMessageProducerService = bluePrintMessageLibPropertyService
-                .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
+                .blueprintMessageProducerService("sample") as KafkaMessageProducerService
 
             val mockKafkaTemplate = mockk<KafkaProducer<String, ByteArray>>()
 

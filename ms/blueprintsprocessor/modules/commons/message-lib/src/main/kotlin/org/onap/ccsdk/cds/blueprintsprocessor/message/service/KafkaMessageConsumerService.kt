@@ -21,24 +21,20 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.Consumer
-import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.KafkaConsumer
-import org.apache.kafka.common.serialization.ByteArrayDeserializer
-import org.apache.kafka.common.serialization.StringDeserializer
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageConsumerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import java.nio.charset.Charset
 import java.time.Duration
 import kotlin.concurrent.thread
 
-open class KafkaBasicAuthMessageConsumerService(
+open class KafkaMessageConsumerService(
     private val messageConsumerProperties: KafkaBasicAuthMessageConsumerProperties
 ) :
     BlueprintMessageConsumerService {
 
-    val log = logger(KafkaBasicAuthMessageConsumerService::class)
+    val log = logger(KafkaMessageConsumerService::class)
     val channel = Channel<String>()
     var kafkaConsumer: Consumer<String, ByteArray>? = null
 
@@ -46,24 +42,7 @@ open class KafkaBasicAuthMessageConsumerService(
     var keepGoing = true
 
     fun kafkaConsumer(additionalConfig: Map<String, Any>? = null): Consumer<String, ByteArray> {
-        val configProperties = hashMapOf<String, Any>()
-        configProperties[CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG] = messageConsumerProperties.bootstrapServers
-        configProperties[ConsumerConfig.GROUP_ID_CONFIG] = messageConsumerProperties.groupId
-        configProperties[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = messageConsumerProperties.autoCommit
-        /**
-         * earliest: automatically reset the offset to the earliest offset
-         * latest: automatically reset the offset to the latest offset
-         */
-        configProperties[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = messageConsumerProperties.autoOffsetReset
-        configProperties[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
-        configProperties[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = ByteArrayDeserializer::class.java
-        configProperties[ConsumerConfig.CLIENT_ID_CONFIG] = messageConsumerProperties.clientId
-
-        /** To handle Back pressure, Get only configured record for processing */
-        if (messageConsumerProperties.pollRecords > 0) {
-            configProperties[ConsumerConfig.MAX_POLL_RECORDS_CONFIG] = messageConsumerProperties.pollRecords
-        }
-        // TODO("Security Implementation based on type")
+        val configProperties = messageConsumerProperties.getConfig()
         /** add or override already set properties */
         additionalConfig?.let { configProperties.putAll(it) }
         /** Create Kafka consumer */

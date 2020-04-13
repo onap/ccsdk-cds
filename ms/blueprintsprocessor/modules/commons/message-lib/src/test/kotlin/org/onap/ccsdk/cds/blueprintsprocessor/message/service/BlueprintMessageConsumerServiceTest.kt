@@ -52,18 +52,26 @@ import kotlin.test.assertTrue
 )
 @TestPropertySource(
     properties =
-    ["blueprintsprocessor.messageconsumer.sample.type=kafka-basic-auth",
+    ["blueprintsprocessor.messageconsumer.sample.type=kafka-scram-ssl-auth",
         "blueprintsprocessor.messageconsumer.sample.bootstrapServers=127.0.0.1:9092",
         "blueprintsprocessor.messageconsumer.sample.groupId=sample-group",
         "blueprintsprocessor.messageconsumer.sample.topic=default-topic",
         "blueprintsprocessor.messageconsumer.sample.clientId=default-client-id",
         "blueprintsprocessor.messageconsumer.sample.pollMillSec=10",
         "blueprintsprocessor.messageconsumer.sample.pollRecords=1",
+        "blueprintsprocessor.messageconsumer.sample.truststore=/path/to/truststore.jks",
+        "blueprintsprocessor.messageconsumer.sample.truststorePassword=secretpassword",
+        "blueprintsprocessor.messageconsumer.sample.scramUsername=sample-user",
+        "blueprintsprocessor.messageconsumer.sample.scramPassword=secretpassword",
 
-        "blueprintsprocessor.messageproducer.sample.type=kafka-basic-auth",
+        "blueprintsprocessor.messageproducer.sample.type=kafka-scram-ssl-auth",
         "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
         "blueprintsprocessor.messageproducer.sample.topic=default-topic",
-        "blueprintsprocessor.messageproducer.sample.clientId=default-client-id"
+        "blueprintsprocessor.messageproducer.sample.clientId=default-client-id",
+        "blueprintsprocessor.messageconsumer.sample.truststore=/path/to/truststore.jks",
+        "blueprintsprocessor.messageconsumer.sample.truststorePassword=secretpassword",
+        "blueprintsprocessor.messageconsumer.sample.scramUsername=sample-user",
+        "blueprintsprocessor.messageconsumer.sample.scramPassword=secretpassword"
     ]
 )
 open class BlueprintMessageConsumerServiceTest {
@@ -77,7 +85,7 @@ open class BlueprintMessageConsumerServiceTest {
     fun testKafkaBasicAuthConsumerService() {
         runBlocking {
             val blueprintMessageConsumerService = bluePrintMessageLibPropertyService
-                .blueprintMessageConsumerService("sample") as KafkaBasicAuthMessageConsumerService
+                .blueprintMessageConsumerService("sample") as KafkaMessageConsumerService
             assertNotNull(blueprintMessageConsumerService, "failed to get blueprintMessageConsumerService")
 
             val spyBlueprintMessageConsumerService = spyk(blueprintMessageConsumerService, recordPrivateCalls = true)
@@ -124,7 +132,7 @@ open class BlueprintMessageConsumerServiceTest {
     fun testKafkaBasicAuthConsumerWithDynamicFunction() {
         runBlocking {
             val blueprintMessageConsumerService = bluePrintMessageLibPropertyService
-                .blueprintMessageConsumerService("sample") as KafkaBasicAuthMessageConsumerService
+                .blueprintMessageConsumerService("sample") as KafkaMessageConsumerService
             assertNotNull(blueprintMessageConsumerService, "failed to get blueprintMessageConsumerService")
 
             val spyBlueprintMessageConsumerService = spyk(blueprintMessageConsumerService, recordPrivateCalls = true)
@@ -178,7 +186,7 @@ open class BlueprintMessageConsumerServiceTest {
     fun testKafkaIntegration() {
         runBlocking {
             val blueprintMessageConsumerService = bluePrintMessageLibPropertyService
-                .blueprintMessageConsumerService("sample") as KafkaBasicAuthMessageConsumerService
+                .blueprintMessageConsumerService("sample") as KafkaMessageConsumerService
             assertNotNull(blueprintMessageConsumerService, "failed to get blueprintMessageConsumerService")
 
             val channel = blueprintMessageConsumerService.subscribe(null)
@@ -190,7 +198,7 @@ open class BlueprintMessageConsumerServiceTest {
 
             /** Send message with every 1 sec */
             val blueprintMessageProducerService = bluePrintMessageLibPropertyService
-                .blueprintMessageProducerService("sample") as KafkaBasicAuthMessageProducerService
+                .blueprintMessageProducerService("sample") as KafkaMessageProducerService
             launch {
                 repeat(5) {
                     delay(100)
