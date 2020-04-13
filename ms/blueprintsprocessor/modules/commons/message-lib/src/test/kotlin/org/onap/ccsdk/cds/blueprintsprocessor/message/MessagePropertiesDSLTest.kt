@@ -27,17 +27,27 @@ import kotlin.test.assertNotNull
 class MessagePropertiesDSLTest {
 
     @Test
-    fun testMessageProducerDSL() {
+    fun testScramSslMessageProducerDSL() {
         val serviceTemplate = serviceTemplate("message-properties-test", "1.0.0", "xxx.@xx.com", "message") {
             topologyTemplate {
-                relationshipTemplateMessageProducer("sample-basic-auth", "Message Producer") {
-                    kafkaBasicAuth {
+                relationshipTemplateMessageProducer("sample-scram-ssl-auth", "Message Producer") {
+                    kafkaScramSslAuth {
                         bootstrapServers("sample-bootstrapServers")
                         clientId("sample-client-id")
                         acks("all")
                         retries(3)
                         enableIdempotence(true)
                         topic("sample-topic")
+                        truststore("/path/to/truststore.jks")
+                        truststorePassword("secretpassword")
+                        truststoreType("JKS")
+                        keystore("/path/to/keystore.jks")
+                        keystorePassword("secretpassword")
+                        keystoreType("JKS")
+                        sslEndpointIdentificationAlgorithm("")
+                        saslMechanism("SCRAM-SHA-512")
+                        scramUsername("sample-user")
+                        scramPassword("secretpassword")
                     }
                 }
             }
@@ -50,27 +60,27 @@ class MessagePropertiesDSLTest {
         val relationshipTemplates = serviceTemplate.topologyTemplate?.relationshipTemplates
         assertNotNull(relationshipTemplates, "failed to get relationship templates")
         assertEquals(1, relationshipTemplates.size, "relationshipTemplates doesn't match")
-        assertNotNull(relationshipTemplates["sample-basic-auth"], "failed to get sample-basic-auth")
+        assertNotNull(relationshipTemplates["sample-scram-ssl-auth"], "failed to get sample-scram-ssl-auth")
 
         val relationshipTypes = serviceTemplate.relationshipTypes
         assertNotNull(relationshipTypes, "failed to get relationship types")
         assertEquals(2, relationshipTypes.size, "relationshipTypes doesn't match")
         assertNotNull(
-            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO],
-            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO}"
+                relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO],
+                "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO}"
         )
         assertNotNull(
-            relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_MESSAGE_PRODUCER],
-            "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_MESSAGE_PRODUCER}"
+                relationshipTypes[BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_MESSAGE_PRODUCER],
+                "failed to get ${BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_MESSAGE_PRODUCER}"
         )
     }
 
     @Test
-    fun testMessageConsumerDSL() {
+    fun testScramSslAuthMessageConsumerDSL() {
         val serviceTemplate = serviceTemplate("message-properties-test", "1.0.0", "xxx.@xx.com", "message") {
             topologyTemplate {
-                relationshipTemplateMessageConsumer("sample-basic-auth", "Message Consumer") {
-                    kafkaBasicAuth {
+                relationshipTemplateMessageConsumer("sample-scram-ssl-auth", "Message Consumer") {
+                    kafkaScramSslAuth {
                         bootstrapServers("sample-bootstrapServers")
                         clientId("sample-client-id")
                         groupId("sample-group-id")
@@ -79,15 +89,35 @@ class MessagePropertiesDSLTest {
                         autoOffsetReset("latest")
                         pollMillSec(5000)
                         pollRecords(20)
+                        truststore("/path/to/truststore.jks")
+                        truststorePassword("secretpassword")
+                        truststoreType("JKS")
+                        keystore("/path/to/keystore.jks")
+                        keystorePassword("secretpassword")
+                        keystoreType("JKS")
+                        sslEndpointIdentificationAlgorithm("")
+                        saslMechanism("SCRAM-SHA-512")
+                        scramUsername("sample-user")
+                        scramPassword("secretpassword")
                     }
                 }
-                relationshipTemplateMessageConsumer("sample-stream-basic-auth", "Message Consumer") {
-                    kafkaStreamsBasicAuth {
+                relationshipTemplateMessageConsumer("sample-stream-scram-ssl-auth", "Message Consumer") {
+                    kafkaStreamsScramSslAuth {
                         bootstrapServers("sample-bootstrapServers")
                         applicationId("sample-application-id")
                         autoOffsetReset("latest")
                         processingGuarantee(StreamsConfig.EXACTLY_ONCE)
                         topic("sample-streaming-topic")
+                        truststore("/path/to/truststore.jks")
+                        truststorePassword("secretpassword")
+                        truststoreType("JKS")
+                        keystore("/path/to/keystore.jks")
+                        keystorePassword("secretpassword")
+                        keystoreType("JKS")
+                        sslEndpointIdentificationAlgorithm("")
+                        saslMechanism("SCRAM-SHA-512")
+                        scramUsername("sample-user")
+                        scramPassword("secretpassword")
                     }
                 }
             }
@@ -100,8 +130,8 @@ class MessagePropertiesDSLTest {
         val relationshipTemplates = serviceTemplate.topologyTemplate?.relationshipTemplates
         assertNotNull(relationshipTemplates, "failed to get relationship templates")
         assertEquals(2, relationshipTemplates.size, "relationshipTemplates doesn't match")
-        assertNotNull(relationshipTemplates["sample-basic-auth"], "failed to get sample-basic-auth")
-        assertNotNull(relationshipTemplates["sample-stream-basic-auth"], "failed to get sample-stream-basic-auth")
+        assertNotNull(relationshipTemplates["sample-scram-ssl-auth"], "failed to get sample-scram-ssl-auth")
+        assertNotNull(relationshipTemplates["sample-stream-scram-ssl-auth"], "failed to get sample-stream-scram-ssl-auth")
 
         val relationshipTypes = serviceTemplate.relationshipTypes
         assertNotNull(relationshipTypes, "failed to get relationship types")

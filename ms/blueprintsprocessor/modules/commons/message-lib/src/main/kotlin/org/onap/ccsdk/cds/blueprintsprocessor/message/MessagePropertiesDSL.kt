@@ -99,6 +99,20 @@ class MessageProducerRelationshipTemplateBuilder(name: String, description: Stri
             BluePrintTypes.kafkaBasicAuthMessageProducerProperties(block)
         )
     }
+
+    fun kafkaSslAuth(block: KafkaSslAuthMessageProducerPropertiesAssignmentBuilder.() -> Unit) {
+        property(
+                BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+                BluePrintTypes.kafkaSslAuthMessageProducerProperties(block)
+        )
+    }
+
+    fun kafkaScramSslAuth(block: KafkaScramSslAuthMessageProducerPropertiesAssignmentBuilder.() -> Unit) {
+        property(
+                BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+                BluePrintTypes.kafkaScramSslAuthMessageProducerProperties(block)
+        )
+    }
 }
 
 fun BluePrintTypes.kafkaBasicAuthMessageProducerProperties(block: KafkaBasicAuthMessageProducerPropertiesAssignmentBuilder.() -> Unit): JsonNode {
@@ -108,9 +122,23 @@ fun BluePrintTypes.kafkaBasicAuthMessageProducerProperties(block: KafkaBasicAuth
     return assignments.asJsonType()
 }
 
+fun BluePrintTypes.kafkaSslAuthMessageProducerProperties(block: KafkaSslAuthMessageProducerPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = KafkaSslAuthMessageProducerPropertiesAssignmentBuilder().apply(block).build()
+    assignments[KafkaSslAuthMessageProducerProperties::type.name] =
+            MessageLibConstants.TYPE_KAFKA_SSL_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
+fun BluePrintTypes.kafkaScramSslAuthMessageProducerProperties(block: KafkaScramSslAuthMessageProducerPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = KafkaScramSslAuthMessageProducerPropertiesAssignmentBuilder().apply(block).build()
+    assignments[KafkaScramSslAuthMessageProducerProperties::type.name] =
+            MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
 open class MessageProducerPropertiesAssignmentBuilder : PropertiesAssignmentBuilder()
 
-class KafkaBasicAuthMessageProducerPropertiesAssignmentBuilder : MessageProducerPropertiesAssignmentBuilder() {
+open class KafkaBasicAuthMessageProducerPropertiesAssignmentBuilder : MessageProducerPropertiesAssignmentBuilder() {
 
     fun bootstrapServers(bootstrapServers: String) = bootstrapServers(bootstrapServers.asJsonPrimitive())
 
@@ -141,6 +169,61 @@ class KafkaBasicAuthMessageProducerPropertiesAssignmentBuilder : MessageProducer
         property(KafkaBasicAuthMessageProducerProperties::enableIdempotence, enableIdempotence)
 }
 
+open class KafkaSslAuthMessageProducerPropertiesAssignmentBuilder : KafkaBasicAuthMessageProducerPropertiesAssignmentBuilder() {
+    fun truststore(truststore: String) = truststore(truststore.asJsonPrimitive())
+
+    fun truststore(truststore: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::truststore, truststore)
+
+    fun truststorePassword(truststorePassword: String) = truststorePassword(truststorePassword.asJsonPrimitive())
+
+    fun truststorePassword(truststorePassword: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::truststorePassword, truststorePassword)
+
+    fun truststoreType(truststoreType: String) = truststoreType(truststoreType.asJsonPrimitive())
+
+    fun truststoreType(truststoreType: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::truststoreType, truststoreType)
+
+    fun keystore(keystore: String) = keystore(keystore.asJsonPrimitive())
+
+    fun keystore(keystore: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::keystore, keystore)
+
+    fun keystorePassword(keystorePassword: String) = keystorePassword(keystorePassword.asJsonPrimitive())
+
+    fun keystorePassword(keystorePassword: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::keystorePassword, keystorePassword)
+
+    fun keystoreType(keystoreType: String) = keystoreType(keystoreType.asJsonPrimitive())
+
+    fun keystoreType(keystoreType: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::keystoreType, keystoreType)
+
+    fun sslEndpointIdentificationAlgorithm(sslEndpointIdentificationAlgorithm: String) =
+            sslEndpointIdentificationAlgorithm(sslEndpointIdentificationAlgorithm.asJsonPrimitive())
+
+    fun sslEndpointIdentificationAlgorithm(sslEndpointIdentificationAlgorithm: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::sslEndpointIdentificationAlgorithm, sslEndpointIdentificationAlgorithm)
+}
+
+class KafkaScramSslAuthMessageProducerPropertiesAssignmentBuilder : KafkaSslAuthMessageProducerPropertiesAssignmentBuilder() {
+    fun saslMechanism(saslMechanism: String) = saslMechanism(saslMechanism.asJsonPrimitive())
+
+    fun saslMechanism(saslMechanism: JsonNode) =
+            property(KafkaScramSslAuthMessageProducerProperties::saslMechanism, saslMechanism)
+
+    fun scramUsername(scramUsername: String) = scramUsername(scramUsername.asJsonPrimitive())
+
+    fun scramUsername(scramUsername: JsonNode) =
+            property(KafkaScramSslAuthMessageProducerProperties::scramUsername, scramUsername)
+
+    fun scramPassword(scramPassword: String) = scramPassword(scramPassword.asJsonPrimitive())
+
+    fun scramPassword(scramPassword: JsonNode) =
+            property(KafkaScramSslAuthMessageProducerProperties::scramPassword, scramPassword)
+}
+
 /** Relationships Templates DSL for Message Consumer */
 fun TopologyTemplateBuilder.relationshipTemplateMessageConsumer(
     name: String,
@@ -166,10 +249,38 @@ class MessageConsumerRelationshipTemplateBuilder(name: String, description: Stri
         )
     }
 
+    fun kafkaSslAuth(block: KafkaSslAuthMessageConsumerPropertiesAssignmentBuilder.() -> Unit) {
+        property(
+                BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+                BluePrintTypes.kafkaSslAuthMessageConsumerProperties(block)
+        )
+    }
+
+    fun kafkaScramSslAuth(block: KafkaScramSslAuthMessageConsumerPropertiesAssignmentBuilder.() -> Unit) {
+        property(
+                BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+                BluePrintTypes.kafkaScramSslAuthMessageConsumerProperties(block)
+        )
+    }
+
     fun kafkaStreamsBasicAuth(block: KafkaStreamsBasicAuthConsumerPropertiesAssignmentBuilder.() -> Unit) {
         property(
             BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
             BluePrintTypes.kafkaStreamsBasicAuthConsumerProperties(block)
+        )
+    }
+
+    fun kafkaStreamsSslAuth(block: KafkaStreamsSslAuthConsumerPropertiesAssignmentBuilder.() -> Unit) {
+        property(
+                BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+                BluePrintTypes.kafkaStreamsSslAuthConsumerProperties(block)
+        )
+    }
+
+    fun kafkaStreamsScramSslAuth(block: KafkaStreamsScramSslAuthConsumerPropertiesAssignmentBuilder.() -> Unit) {
+        property(
+                BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+                BluePrintTypes.kafkaStreamsScramSslAuthConsumerProperties(block)
         )
     }
 }
@@ -181,6 +292,20 @@ fun BluePrintTypes.kafkaBasicAuthMessageConsumerProperties(block: KafkaBasicAuth
     return assignments.asJsonType()
 }
 
+fun BluePrintTypes.kafkaSslAuthMessageConsumerProperties(block: KafkaSslAuthMessageConsumerPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = KafkaSslAuthMessageConsumerPropertiesAssignmentBuilder().apply(block).build()
+    assignments[KafkaSslAuthMessageConsumerProperties::type.name] =
+            MessageLibConstants.TYPE_KAFKA_SSL_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
+fun BluePrintTypes.kafkaScramSslAuthMessageConsumerProperties(block: KafkaScramSslAuthMessageConsumerPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = KafkaScramSslAuthMessageConsumerPropertiesAssignmentBuilder().apply(block).build()
+    assignments[KafkaScramSslAuthMessageConsumerProperties::type.name] =
+            MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
 fun BluePrintTypes.kafkaStreamsBasicAuthConsumerProperties(block: KafkaStreamsBasicAuthConsumerPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = KafkaStreamsBasicAuthConsumerPropertiesAssignmentBuilder().apply(block).build()
     assignments[KafkaStreamsBasicAuthConsumerProperties::type.name] =
@@ -188,81 +313,201 @@ fun BluePrintTypes.kafkaStreamsBasicAuthConsumerProperties(block: KafkaStreamsBa
     return assignments.asJsonType()
 }
 
+fun BluePrintTypes.kafkaStreamsSslAuthConsumerProperties(block: KafkaStreamsSslAuthConsumerPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = KafkaStreamsSslAuthConsumerPropertiesAssignmentBuilder().apply(block).build()
+    assignments[KafkaStreamsSslAuthConsumerProperties::type.name] =
+            MessageLibConstants.TYPE_KAFKA_STREAMS_SSL_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
+fun BluePrintTypes.kafkaStreamsScramSslAuthConsumerProperties(block: KafkaStreamsScramSslAuthConsumerPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+    val assignments = KafkaStreamsScramSslAuthConsumerPropertiesAssignmentBuilder().apply(block).build()
+    assignments[KafkaStreamsScramSslAuthConsumerProperties::type.name] =
+            MessageLibConstants.TYPE_KAFKA_STREAMS_SCRAM_SSL_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
 open class MessageConsumerPropertiesAssignmentBuilder : PropertiesAssignmentBuilder()
 
-open class KafkaMessageConsumerPropertiesAssignmentBuilder : MessageConsumerPropertiesAssignmentBuilder() {
+/** KafkaBasicAuthMessageConsumerProperties assignment builder */
+open class KafkaBasicAuthMessageConsumerPropertiesAssignmentBuilder : MessageConsumerPropertiesAssignmentBuilder() {
 
     fun bootstrapServers(bootstrapServers: String) = bootstrapServers(bootstrapServers.asJsonPrimitive())
 
     fun bootstrapServers(bootstrapServers: JsonNode) =
-        property(KafkaMessageConsumerProperties::bootstrapServers, bootstrapServers)
+        property(KafkaBasicAuthMessageConsumerProperties::bootstrapServers, bootstrapServers)
 
     fun groupId(groupId: String) = groupId(groupId.asJsonPrimitive())
 
     fun groupId(groupId: JsonNode) =
-        property(KafkaMessageConsumerProperties::groupId, groupId)
+        property(KafkaBasicAuthMessageConsumerProperties::groupId, groupId)
 
     fun clientId(clientId: String) = clientId(clientId.asJsonPrimitive())
 
     fun clientId(clientId: JsonNode) =
-        property(KafkaMessageConsumerProperties::clientId, clientId)
+        property(KafkaBasicAuthMessageConsumerProperties::clientId, clientId)
 
     fun topic(topic: String) = topic(topic.asJsonPrimitive())
 
     fun topic(topic: JsonNode) =
-        property(KafkaMessageConsumerProperties::topic, topic)
+        property(KafkaBasicAuthMessageConsumerProperties::topic, topic)
 
     fun autoCommit(autoCommit: Boolean) = autoCommit(autoCommit.asJsonPrimitive())
 
     fun autoCommit(autoCommit: JsonNode) =
-        property(KafkaMessageConsumerProperties::autoCommit, autoCommit)
+        property(KafkaBasicAuthMessageConsumerProperties::autoCommit, autoCommit)
 
     fun autoOffsetReset(autoOffsetReset: String) = autoOffsetReset(autoOffsetReset.asJsonPrimitive())
 
     fun autoOffsetReset(autoOffsetReset: JsonNode) =
-        property(KafkaMessageConsumerProperties::autoOffsetReset, autoOffsetReset)
+        property(KafkaBasicAuthMessageConsumerProperties::autoOffsetReset, autoOffsetReset)
 
     fun pollMillSec(pollMillSec: Int) = pollMillSec(pollMillSec.asJsonPrimitive())
 
     fun pollMillSec(pollMillSec: JsonNode) =
-        property(KafkaMessageConsumerProperties::pollMillSec, pollMillSec)
+        property(KafkaBasicAuthMessageConsumerProperties::pollMillSec, pollMillSec)
 
     fun pollRecords(pollRecords: Int) = pollRecords(pollRecords.asJsonPrimitive())
 
     fun pollRecords(pollRecords: JsonNode) =
-        property(KafkaMessageConsumerProperties::pollRecords, pollRecords)
+        property(KafkaBasicAuthMessageConsumerProperties::pollRecords, pollRecords)
 }
 
-/** KafkaBasicAuthMessageConsumerProperties assignment builder */
-class KafkaBasicAuthMessageConsumerPropertiesAssignmentBuilder : KafkaMessageConsumerPropertiesAssignmentBuilder()
+open class KafkaSslAuthMessageConsumerPropertiesAssignmentBuilder : KafkaBasicAuthMessageConsumerPropertiesAssignmentBuilder() {
+    fun truststore(truststore: String) = truststore(truststore.asJsonPrimitive())
+
+    fun truststore(truststore: JsonNode) =
+            property(KafkaSslAuthMessageConsumerProperties::truststore, truststore)
+
+    fun truststorePassword(truststorePassword: String) = truststorePassword(truststorePassword.asJsonPrimitive())
+
+    fun truststorePassword(truststorePassword: JsonNode) =
+            property(KafkaSslAuthMessageConsumerProperties::truststorePassword, truststorePassword)
+
+    fun truststoreType(truststoreType: String) = truststoreType(truststoreType.asJsonPrimitive())
+
+    fun truststoreType(truststoreType: JsonNode) =
+            property(KafkaSslAuthMessageConsumerProperties::truststoreType, truststoreType)
+
+    fun keystore(keystore: String) = keystore(keystore.asJsonPrimitive())
+
+    fun keystore(keystore: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::keystore, keystore)
+
+    fun keystorePassword(keystorePassword: String) = keystorePassword(keystorePassword.asJsonPrimitive())
+
+    fun keystorePassword(keystorePassword: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::keystorePassword, keystorePassword)
+
+    fun keystoreType(keystoreType: String) = keystoreType(keystoreType.asJsonPrimitive())
+
+    fun keystoreType(keystoreType: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::keystoreType, keystoreType)
+
+    fun sslEndpointIdentificationAlgorithm(sslEndpointIdentificationAlgorithm: String) =
+            sslEndpointIdentificationAlgorithm(sslEndpointIdentificationAlgorithm.asJsonPrimitive())
+
+    fun sslEndpointIdentificationAlgorithm(sslEndpointIdentificationAlgorithm: JsonNode) =
+            property(KafkaSslAuthMessageConsumerProperties::sslEndpointIdentificationAlgorithm, sslEndpointIdentificationAlgorithm)
+}
+
+class KafkaScramSslAuthMessageConsumerPropertiesAssignmentBuilder : KafkaSslAuthMessageConsumerPropertiesAssignmentBuilder() {
+    fun saslMechanism(saslMechanism: String) = saslMechanism(saslMechanism.asJsonPrimitive())
+
+    fun saslMechanism(saslMechanism: JsonNode) =
+            property(KafkaScramSslAuthMessageConsumerProperties::saslMechanism, saslMechanism)
+
+    fun scramUsername(scramUsername: String) = scramUsername(scramUsername.asJsonPrimitive())
+
+    fun scramUsername(scramUsername: JsonNode) =
+            property(KafkaScramSslAuthMessageConsumerProperties::scramUsername, scramUsername)
+
+    fun scramPassword(scramPassword: String) = scramPassword(scramPassword.asJsonPrimitive())
+
+    fun scramPassword(scramPassword: JsonNode) =
+            property(KafkaScramSslAuthMessageConsumerProperties::scramPassword, scramPassword)
+}
 
 /** KafkaStreamsConsumerProperties assignment builder */
-open class KafkaStreamsConsumerPropertiesAssignmentBuilder : MessageConsumerPropertiesAssignmentBuilder() {
+open class KafkaStreamsBasicAuthConsumerPropertiesAssignmentBuilder : MessageConsumerPropertiesAssignmentBuilder() {
 
     fun bootstrapServers(bootstrapServers: String) = bootstrapServers(bootstrapServers.asJsonPrimitive())
 
     fun bootstrapServers(bootstrapServers: JsonNode) =
-        property(KafkaStreamsConsumerProperties::bootstrapServers, bootstrapServers)
+        property(KafkaStreamsBasicAuthConsumerProperties::bootstrapServers, bootstrapServers)
 
     fun applicationId(applicationId: String) = bootstrapServers(applicationId.asJsonPrimitive())
 
     fun applicationId(applicationId: JsonNode) =
-        property(KafkaStreamsConsumerProperties::applicationId, applicationId)
+        property(KafkaStreamsBasicAuthConsumerProperties::applicationId, applicationId)
 
     fun topic(topic: String) = topic(topic.asJsonPrimitive())
 
     fun topic(topic: JsonNode) =
-        property(KafkaStreamsConsumerProperties::topic, topic)
+        property(KafkaStreamsBasicAuthConsumerProperties::topic, topic)
 
     fun autoOffsetReset(autoOffsetReset: String) = autoOffsetReset(autoOffsetReset.asJsonPrimitive())
 
     fun autoOffsetReset(autoOffsetReset: JsonNode) =
-        property(KafkaStreamsConsumerProperties::autoOffsetReset, autoOffsetReset)
+        property(KafkaStreamsBasicAuthConsumerProperties::autoOffsetReset, autoOffsetReset)
 
     fun processingGuarantee(processingGuarantee: String) = processingGuarantee(processingGuarantee.asJsonPrimitive())
 
     fun processingGuarantee(processingGuarantee: JsonNode) =
-        property(KafkaStreamsConsumerProperties::processingGuarantee, processingGuarantee)
+        property(KafkaStreamsBasicAuthConsumerProperties::processingGuarantee, processingGuarantee)
 }
 
-class KafkaStreamsBasicAuthConsumerPropertiesAssignmentBuilder : KafkaStreamsConsumerPropertiesAssignmentBuilder()
+open class KafkaStreamsSslAuthConsumerPropertiesAssignmentBuilder : KafkaStreamsBasicAuthConsumerPropertiesAssignmentBuilder() {
+    fun truststore(truststore: String) = truststore(truststore.asJsonPrimitive())
+
+    fun truststore(truststore: JsonNode) =
+            property(KafkaStreamsSslAuthConsumerProperties::truststore, truststore)
+
+    fun truststorePassword(truststorePassword: String) = truststorePassword(truststorePassword.asJsonPrimitive())
+
+    fun truststorePassword(truststorePassword: JsonNode) =
+            property(KafkaStreamsSslAuthConsumerProperties::truststorePassword, truststorePassword)
+
+    fun truststoreType(truststoreType: String) = truststoreType(truststoreType.asJsonPrimitive())
+
+    fun truststoreType(truststoreType: JsonNode) =
+            property(KafkaStreamsSslAuthConsumerProperties::truststoreType, truststoreType)
+
+    fun keystore(keystore: String) = keystore(keystore.asJsonPrimitive())
+
+    fun keystore(keystore: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::keystore, keystore)
+
+    fun keystorePassword(keystorePassword: String) = keystorePassword(keystorePassword.asJsonPrimitive())
+
+    fun keystorePassword(keystorePassword: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::keystorePassword, keystorePassword)
+
+    fun keystoreType(keystoreType: String) = keystoreType(keystoreType.asJsonPrimitive())
+
+    fun keystoreType(keystoreType: JsonNode) =
+            property(KafkaSslAuthMessageProducerProperties::keystoreType, keystoreType)
+
+    fun sslEndpointIdentificationAlgorithm(sslEndpointIdentificationAlgorithm: String) =
+            sslEndpointIdentificationAlgorithm(sslEndpointIdentificationAlgorithm.asJsonPrimitive())
+
+    fun sslEndpointIdentificationAlgorithm(sslEndpointIdentificationAlgorithm: JsonNode) =
+            property(KafkaStreamsSslAuthConsumerProperties::sslEndpointIdentificationAlgorithm, sslEndpointIdentificationAlgorithm)
+}
+
+class KafkaStreamsScramSslAuthConsumerPropertiesAssignmentBuilder : KafkaStreamsSslAuthConsumerPropertiesAssignmentBuilder() {
+    fun saslMechanism(saslMechanism: String) = saslMechanism(saslMechanism.asJsonPrimitive())
+
+    fun saslMechanism(saslMechanism: JsonNode) =
+            property(KafkaStreamsScramSslAuthConsumerProperties::saslMechanism, saslMechanism)
+
+    fun scramUsername(scramUsername: String) = scramUsername(scramUsername.asJsonPrimitive())
+
+    fun scramUsername(scramUsername: JsonNode) =
+            property(KafkaStreamsScramSslAuthConsumerProperties::scramUsername, scramUsername)
+
+    fun scramPassword(scramPassword: String) = scramPassword(scramPassword.asJsonPrimitive())
+
+    fun scramPassword(scramPassword: JsonNode) =
+            property(KafkaStreamsScramSslAuthConsumerProperties::scramPassword, scramPassword)
+}

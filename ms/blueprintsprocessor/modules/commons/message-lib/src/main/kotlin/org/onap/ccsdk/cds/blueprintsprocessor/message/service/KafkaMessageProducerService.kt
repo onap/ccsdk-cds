@@ -20,28 +20,20 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 import org.apache.commons.lang.builder.ToStringBuilder
 import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.KafkaProducer
-import org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG
-import org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG
-import org.apache.kafka.clients.producer.ProducerConfig.CLIENT_ID_CONFIG
-import org.apache.kafka.clients.producer.ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG
-import org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG
-import org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.header.internals.RecordHeader
-import org.apache.kafka.common.serialization.ByteArraySerializer
-import org.apache.kafka.common.serialization.StringSerializer
-import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageProducerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageProducerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import org.slf4j.LoggerFactory
 import java.nio.charset.Charset
 
-class KafkaBasicAuthMessageProducerService(
-    private val messageProducerProperties: KafkaBasicAuthMessageProducerProperties
+class KafkaMessageProducerService(
+    private val messageProducerProperties: MessageProducerProperties
 ) :
     BlueprintMessageProducerService {
 
-    private val log = LoggerFactory.getLogger(KafkaBasicAuthMessageProducerService::class.java)!!
+    private val log = LoggerFactory.getLogger(KafkaMessageProducerService::class.java)!!
 
     private var kafkaProducer: KafkaProducer<String, ByteArray>? = null
 
@@ -81,26 +73,16 @@ class KafkaBasicAuthMessageProducerService(
     }
 
     fun messageTemplate(additionalConfig: Map<String, ByteArray>? = null): KafkaProducer<String, ByteArray> {
-        log.trace("Client Properties : ${ToStringBuilder.reflectionToString(messageProducerProperties)}")
-        val configProps = hashMapOf<String, Any>()
-        configProps[BOOTSTRAP_SERVERS_CONFIG] = messageProducerProperties.bootstrapServers
-        configProps[KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
-        configProps[VALUE_SERIALIZER_CLASS_CONFIG] = ByteArraySerializer::class.java
-        configProps[ACKS_CONFIG] = messageProducerProperties.acks
-        configProps[ENABLE_IDEMPOTENCE_CONFIG] = messageProducerProperties.enableIdempotence
-        if (messageProducerProperties.clientId != null) {
-            configProps[CLIENT_ID_CONFIG] = messageProducerProperties.clientId!!
-        }
-        // TODO("Security Implementation based on type")
+        log.trace("Producer client properties : ${ToStringBuilder.reflectionToString(messageProducerProperties)}")
+        val configProps = messageProducerProperties.getConfig()
 
-        // Add additional Properties
-        if (additionalConfig != null) {
+        /** Add additional Properties */
+        if (additionalConfig != null)
             configProps.putAll(additionalConfig)
-        }
 
-        if (kafkaProducer == null) {
+        if (kafkaProducer == null)
             kafkaProducer = KafkaProducer(configProps)
-        }
+
         return kafkaProducer!!
     }
 }
