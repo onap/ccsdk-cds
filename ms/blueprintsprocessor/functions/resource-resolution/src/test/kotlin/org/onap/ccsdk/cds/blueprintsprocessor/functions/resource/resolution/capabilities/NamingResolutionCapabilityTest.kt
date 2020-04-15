@@ -40,6 +40,7 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.BulkResourceSequencingUtils
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
@@ -58,10 +59,9 @@ class NamingResolutionCapabilityTest {
         val blueprintWebClientService = mockk<BlueprintWebClientService>()
         // Create mock Response
         val mockResponse = BlueprintWebClientService.WebClientResponse<String>(
-            200, """{
-            "ip-address-1" : "127.0.0.1",
-            "ip-address-2" : "127.0.0.2",
-            "ip-address-3" : "127.0.0.3"
+                200, """{
+            "vf-module-name" : "dlsst001dbcx-adsf-Base-01",
+            "vnfc-name" : "dlsst001dbcx"
             }
         """.trimMargin()
         )
@@ -78,7 +78,7 @@ class NamingResolutionCapabilityTest {
             val componentFunctionScriptingService = mockk<ComponentFunctionScriptingService>()
             coEvery {
                 componentFunctionScriptingService
-                    .scriptInstance<ResourceAssignmentProcessor>(any(), any(), any())
+                        .scriptInstance<ResourceAssignmentProcessor>(any(), any(), any())
             } returns NamingResolutionCapability()
 
             coEvery {
@@ -87,18 +87,21 @@ class NamingResolutionCapabilityTest {
 
             val raRuntimeService = mockk<ResourceAssignmentRuntimeService>()
             every { raRuntimeService.bluePrintContext() } returns mockk<BluePrintContext>()
-            every { raRuntimeService.getInputValue("ra-dict-name-1") } returns NullNode.getInstance()
+            every { raRuntimeService.getInputValue("vf-module-name") } returns NullNode.getInstance()
+            every { raRuntimeService.getInputValue("vnfc-name") } returns NullNode.getInstance()
 
-            every { raRuntimeService.getResolutionStore("naming-code") } returns "naming-123".asJsonPrimitive()
-            every { raRuntimeService.getResolutionStore("naming-type") } returns "sample-type".asJsonPrimitive()
-            every { raRuntimeService.getResolutionStore("naming-policy") } returns "sample-policy".asJsonPrimitive()
-            every { raRuntimeService.getResolutionStore("cloud-region-id") } returns "cloud-123".asJsonPrimitive()
+            every { raRuntimeService.getResolutionStore("policy-instance-name") } returns "SDNC_Policy.Config_MS_1806SRIOV_VNATJson.4.xml".asJsonPrimitive()
+            every { raRuntimeService.getResolutionStore("naming-code") } returns "dbc".asJsonPrimitive()
+            every { raRuntimeService.getResolutionStore("vnf-name") } returns "vnf-123".asJsonPrimitive()
+            every { raRuntimeService.getResolutionStore("vf-module-label") } returns "adsf".asJsonPrimitive()
+            every { raRuntimeService.getResolutionStore("vf-module-type") } returns "base".asJsonPrimitive()
+            every { raRuntimeService.getResolutionStore("cloud-region-id") } returns "region-123".asJsonPrimitive()
 
             every { raRuntimeService.putResolutionStore(any(), any()) } returns Unit
             every { raRuntimeService.putDictionaryStore(any(), any()) } returns Unit
 
             val capabilityResourceResolutionProcessor =
-                CapabilityResourceResolutionProcessor(componentFunctionScriptingService)
+                    CapabilityResourceResolutionProcessor(componentFunctionScriptingService)
             capabilityResourceResolutionProcessor.raRuntimeService = raRuntimeService
 
             capabilityResourceResolutionProcessor.resourceDictionaries = resourceDefinitions()
@@ -109,15 +112,23 @@ class NamingResolutionCapabilityTest {
             capabilityResourceResolutionProcessor.resourceAssignments = resourceAssignmentList
 
             val bulkSequenced =
-                BulkResourceSequencingUtils.process(capabilityResourceResolutionProcessor.resourceAssignments)
+                    BulkResourceSequencingUtils.process(capabilityResourceResolutionProcessor.resourceAssignments)
             // log.info("Bulk Sequenced : ${bulkSequenced} ")
-
-            val status = capabilityResourceResolutionProcessor.applyNB(resourceAssignments["ra-dict-name-1"]!!)
+            val resourceAssignment1 = resourceAssignments["vf-module-name"]
+            var status = capabilityResourceResolutionProcessor.applyNB(resourceAssignment1!!)
             assertTrue(status, "failed to execute capability source")
-            // assertNotEquals(
-            //     "assigned-data".asJsonPrimitive(), resourceAssignment1.property!!.value,
-            //     "assigned value miss match"
-            // )
+            assertEquals(
+                    "dlsst001dbcx-adsf-Base-01".asJsonPrimitive(), resourceAssignment1.property!!.value,
+                    "assigned value miss match"
+            )
+
+            val resourceAssignment2 = resourceAssignments["vnfc-name"]
+            status = capabilityResourceResolutionProcessor.applyNB(resourceAssignment2!!)
+            assertTrue(status, "failed to execute capability source")
+            assertEquals(
+                    "dlsst001dbcx".asJsonPrimitive(), resourceAssignment2.property!!.value,
+                    "assigned value miss match"
+            )
         }
     }
 
@@ -140,14 +151,6 @@ class NamingResolutionCapabilityTest {
                     sourceInput("input", "") {}
                 }
             }
-            resourceDefinition("naming-policy", "naming-policy Resource Definition") {
-                tags("naming-policy")
-                updatedBy("brindasanth@onap.com")
-                property("string", true)
-                sources {
-                    sourceInput("input", "") {}
-                }
-            }
             resourceDefinition("cloud-region-id", "cloud-region-id Resource Definition") {
                 tags("cloud-region-id")
                 updatedBy("brindasanth@onap.com")
@@ -156,38 +159,76 @@ class NamingResolutionCapabilityTest {
                     sourceInput("input", "") {}
                 }
             }
-            resourceDefinition("ra-dict-name-1", "ra-dict-name-1 Resource Definition") {
-                tags("ra-dict-name-1")
-                updatedBy("brindasanth@onap.com")
+            resourceDefinition("policy-instance-name", "policy-instance-name Resource Definition") {
+                tags("policy-instance-name")
+                updatedBy("sp694w@att.com")
                 property("string", true)
+                sources {
+                    sourceInput("input", "") {}
+                }
+            }
+            resourceDefinition("vnf-name", "vnf-name Resource Definition") {
+                tags("vnf-name")
+                updatedBy("sp694w@att.com")
+                property("string", true)
+                sources {
+                    sourceInput("input", "") {}
+                }
+            }
+            resourceDefinition("vf-module-label", "vf-module-label Resource Definition") {
+                tags("vf-module-label")
+                updatedBy("sp694w@att.com")
+                property("string", true)
+                sources {
+                    sourceInput("input", "") {}
+                }
+            }
+            resourceDefinition("vf-module-type", "vf-module-type Resource Definition") {
+                tags("vf-module-type")
+                updatedBy("sp694w@att.com")
+                property("string", true)
+                sources {
+                    sourceInput("input", "") {}
+                }
+            }
+            resourceDefinition("vf-module-name", "vf-module-name Resource Definition") {
+                tags("vf-module-name")
+                updatedBy("brindasanth@onap.com")
+                property("string", true){
+                    metadata("naming-type", "VF-MODULE")
+                }
                 sources {
                     sourceCapability("naming-ms", "") {
                         definedProperties {
                             type("internal")
                             scriptClassReference(NamingResolutionCapability::class)
                             keyDependencies(
-                                arrayListOf(
-                                    "cloud-region-id",
-                                    "naming-policy",
-                                    "naming-type",
-                                    "naming-code"
-                                )
+                                    arrayListOf(
+                                            "policy-instance-name",
+                                            "naming-code",
+                                            "vnf-name",
+                                            "vf-module-label",
+                                            "vf-module-type"
+                                    )
                             )
                         }
                     }
                 }
             }
-            resourceDefinition("ra-dict-name-2", "ra-dict-name-2 Resource Definition") {
-                tags("ra-dict-name-2")
+            resourceDefinition("vnfc-name", "vnfc-name Resource Definition") {
+                tags("vnfc-name")
                 updatedBy("brindasanth@onap.com")
-                property("string", true)
+                property("string", true){
+                    metadata("naming-type", "VNFC")
+                }
+
                 sources {
                     sourceCapability("naming-ms", "") {
                         definedProperties {
                             type("internal")
                             scriptClassReference(NamingResolutionCapability::class)
                             keyDependencies(
-                                arrayListOf("ra-dict-name-1")
+                                    arrayListOf("vf-module-name")
                             )
                         }
                     }
@@ -203,7 +244,7 @@ class NamingResolutionCapabilityTest {
                             type("internal")
                             scriptClassReference(NamingResolutionCapability::class)
                             keyDependencies(
-                                arrayListOf("ra-dict-name-1")
+                                    arrayListOf("vf-module-name")
                             )
                         }
                     }
@@ -215,67 +256,78 @@ class NamingResolutionCapabilityTest {
     private fun resourceAssignments(): MutableMap<String, ResourceAssignment> {
         return BluePrintTypes.resourceAssignments {
             resourceAssignment(
-                name = "naming-code", dictionaryName = "naming-code",
-                dictionarySource = "input"
+                    name = "naming-code", dictionaryName = "naming-code",
+                    dictionarySource = "input"
             ) {
                 property("string", true, "")
                 dependencies(arrayListOf())
             }
             resourceAssignment(
-                name = "naming-type", dictionaryName = "naming-type",
-                dictionarySource = "input"
+                    name = "naming-type", dictionaryName = "naming-type",
+                    dictionarySource = "input"
             ) {
                 property("string", true, "")
                 dependencies(arrayListOf())
             }
             resourceAssignment(
-                name = "naming-policy", dictionaryName = "naming-policy",
-                dictionarySource = "input"
+                    name = "cloud-region-id", dictionaryName = " cloud-region-id",
+                    dictionarySource = "input"
             ) {
                 property("string", true, "")
                 dependencies(arrayListOf())
             }
             resourceAssignment(
-                name = "cloud-region-id", dictionaryName = " cloud-region-id",
-                dictionarySource = "input"
+                    name = "policy-instance-name", dictionaryName = " policy-instance-name",
+                    dictionarySource = "input"
             ) {
                 property("string", true, "")
                 dependencies(arrayListOf())
             }
             resourceAssignment(
-                name = "ra-dict-name-1", dictionaryName = "ra-dict-name-1",
-                dictionarySource = "naming-ms"
+                    name = "vnf-name", dictionaryName = " vnf-name",
+                    dictionarySource = "input"
+            ) {
+                property("string", true, "")
+                dependencies(arrayListOf())
+            }
+            resourceAssignment(
+                    name = "vf-module-label", dictionaryName = " vf-module-label",
+                    dictionarySource = "input"
+            ) {
+                property("string", true, "")
+                dependencies(arrayListOf())
+            }
+            resourceAssignment(
+                    name = "vf-module-type", dictionaryName = " vf-module-type",
+                    dictionarySource = "input"
+            ) {
+                property("string", true, "")
+                dependencies(arrayListOf())
+            }
+            resourceAssignment(
+                    name = "vf-module-name", dictionaryName = "vf-module-name",
+                    dictionarySource = "naming-ms"
             ) {
                 property("string", true, "")
                 dependencies(
-                    arrayListOf(
-                        "naming-code",
-                        "naming-type",
-                        "naming-policy",
-                        "cloud-region-id"
-                    )
+                        arrayListOf(
+                                "policy-instance-name",
+                                "naming-code",
+                                "vnf-name",
+                                "vf-module-label",
+                                "vf-module-type"
+                        )
                 )
             }
             resourceAssignment(
-                name = "ra-dict-name-2", dictionaryName = "ra-dict-name-2",
-                dictionarySource = "naming-ms"
+                    name = "vnfc-name", dictionaryName = "vnfc-name",
+                    dictionarySource = "naming-ms"
             ) {
                 property("string", true, "")
                 dependencies(
-                    arrayListOf(
-                        "ra-dict-name-1"
-                    )
-                )
-            }
-            resourceAssignment(
-                name = "ra-dict-name-3", dictionaryName = "ra-dict-name-3",
-                dictionarySource = "naming-ms"
-            ) {
-                property("string", true, "")
-                dependencies(
-                    arrayListOf(
-                        "ra-dict-name-1"
-                    )
+                        arrayListOf(
+                                "vf-module-name"
+                        )
                 )
             }
         }

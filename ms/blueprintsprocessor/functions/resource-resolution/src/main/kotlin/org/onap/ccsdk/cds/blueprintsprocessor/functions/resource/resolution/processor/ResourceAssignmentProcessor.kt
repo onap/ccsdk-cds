@@ -197,4 +197,15 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     fun addError(error: String) {
         raRuntimeService.getBluePrintError().addError(error)
     }
+
+    fun isTemplateKeyValueNull(resourceAssignment: ResourceAssignment): Boolean {
+        val resourceProp = checkNotNull(resourceAssignment.property) {
+            "Failed to populate mandatory resource resource mapping $resourceAssignment"
+        }
+        if (resourceProp.required != null && resourceProp.required!! &&
+                resourceProp.value.isNullOrMissing()) {
+            return true
+        }
+        return false
+    }
 }

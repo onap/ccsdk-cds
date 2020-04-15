@@ -21,9 +21,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.proc
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.restClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.http.HttpMethod
 
@@ -41,40 +41,42 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
 
     override suspend fun processNB(resourceAssignment: ResourceAssignment) {
         try {
-            if (!setFromInput(resourceAssignment)) {
+            if (!setFromInput(resourceAssignment) && isTemplateKeyValueNull(resourceAssignment)) {
                 val dName = resourceAssignment.dictionaryName!!
                 val dSource = resourceAssignment.dictionarySource!!
 
+                print(resourceAssignment.dependencies)
                 // Get all matching resources assignments to process
                 val groupResourceAssignments =
-                    resourceAssignments.filter { it.dictionarySource == dSource }.toMutableList()
+                        resourceAssignments.filter {
+                            it.dictionarySource == dSource
+                        }.toMutableList()
 
-                // keys to be retrieved from RA runtime store
-                val inputKeyMapping: MutableMap<String, String> = hashMapOf(
-                    "naming-code" to "naming-code",
-                    "naming-type" to "naming-type",
-                    "naming-policy" to "naming-policy",
-                    "cloud-region-id" to "cloud-region-id"
-                )
+                val inputKeyMapping: MutableMap<String, String> =
+                        resourceAssignment.dependencies?.map { it to it }?.toMap()
+                                as MutableMap<String, String>
 
                 // Get the values from runtime store
                 val resolvedKeyValues = resolveInputKeyMappingVariables(inputKeyMapping)
 
                 // Generate the payload using already resolved value
-                val generatedPayload = generatePayload(resolvedKeyValues)
+                val generatedPayload = generatePayload(resolvedKeyValues, groupResourceAssignments)
 
                 // Get the Rest Client service, selector will be included in application.properties
-                val restClientService = BluePrintDependencyService.restClientService("naming-ms")
+                val restClientService = BluePrintDependencyService.restClientService(
+                        "naming-ms")
 
                 // Get the Rest Response
-                val response = restClientService.exchangeResource(HttpMethod.POST.name, "TODO()", generatedPayload)
+                val response = restClientService.exchangeResource(HttpMethod.POST.name,
+                        "/web/service/v1/genNetworkElementName/cds", generatedPayload)
                 val responseStatusCode = response.status
                 val responseBody = response.body
                 if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
                     populateResource(groupResourceAssignments, responseBody)
                 } else {
                     val errMsg =
-                        "Failed to dictionary name ($dName), dictionary source($($dName) response_code: ($responseStatusCode)"
+                            "Failed to dictionary name ($dName), dictionary source($($dName) " +
+                                    "response_code: ($responseStatusCode)"
                     log.warn(errMsg)
                     throw BluePrintProcessorException(errMsg)
                 }
@@ -85,36 +87,58 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException(
-                "Failed in template key ($resourceAssignment) assignments with: ${e.message}",
-                e
+                    "Failed in template key ($resourceAssignment) assignments with: ${e.message}",
+                    e
             )
         }
     }
 
-    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
+    override suspend fun recoverNB(runtimeException: RuntimeException,
+                                   executionRequest: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 
-    private fun generatePayload(input: Map<String, Any>): String {
-        // TODO("Implement Actual Payload")
-        return """            
-            {          
-            "name1" : ${input["name1"]},
-            "name2" : ${input["name2"]},
-            "name3" : ${input["name3"]},            
+    private fun generatePayload(input: Map<String, Any>,
+                                groupResourceAssignments: MutableList<ResourceAssignment>): String {
+
+        var payload = """{ "elements" : ["""
+        groupResourceAssignments.forEach {
+            val metadata = resourceDictionaries[it.dictionaryName]?.property?.metadata
+            val namingType = metadata?.get("naming-type")
+
+            payload = payload.plus("""{ 
+                    "${it.name}" : "$""")
+            payload = payload.plus("""{${it.name}}",
+                    "naming-type" : "$namingType",""")
+
+            for ((k, v) in input) {
+                payload = payload.plus(""""$k" : $v,""")
             }
-        """.trimIndent()
+            payload = payload.dropLast(1).plus("},")
+        }
+        payload = payload.dropLast(1).plus("] }")
+        return payload
+
     }
 
-    private fun populateResource(resourceAssignments: MutableList<ResourceAssignment>, restResponse: String) {
+    private fun populateResource(resourceAssignments: MutableList<ResourceAssignment>,
+                                 restResponse: String) {
         /** Parse all the resource assignment fields and set the corresponding value */
         resourceAssignments.forEach { resourceAssignment ->
             // Set the List of Complex Values
-            val parsedResourceAssignmentValue = "TODO".asJsonPrimitive()
+            val metadata =
+                    resourceDictionaries[resourceAssignment.dictionaryName]?.property?.metadata
+            val responseKey = metadata?.get("naming-type")?.toLowerCase().plus("-name")
+
+            val parsedResourceAssignmentValue = checkNotNull(
+                    JacksonUtils.jsonNode(restResponse).path(responseKey).textValue()) {
+                "Failed to find path ($responseKey) in response ($restResponse)"
+            }
+
             ResourceAssignmentUtils.setResourceDataValue(
-                resourceAssignment,
-                raRuntimeService,
-                parsedResourceAssignmentValue
+                    resourceAssignment,
+                    raRuntimeService,
+                    parsedResourceAssignmentValue
             )
         }
     }
