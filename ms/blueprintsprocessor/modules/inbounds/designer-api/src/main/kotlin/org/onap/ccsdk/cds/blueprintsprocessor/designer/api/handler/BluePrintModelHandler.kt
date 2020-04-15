@@ -42,6 +42,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
@@ -121,15 +122,27 @@ open class BluePrintModelHandler(
         workFlowData.inputs = workFlow.inputs
         workFlowData.outputs = workFlow.outputs
 
-        for ((k, v) in workFlow.inputs!!) {
-            addDataType(v.type, blueprintContext, wfRes)
+        if (workFlow.inputs != null) {
+            for ((k, v) in workFlow.inputs!!) {
+                addPropertyInfo(v, blueprintContext, wfRes)
+            }
         }
 
-        for ((k, v) in workFlow.outputs!!) {
-            addDataType(v.type, blueprintContext, wfRes)
+        if (workFlow.outputs != null) {
+            for ((k, v) in workFlow.outputs!!) {
+                addPropertyInfo(v, blueprintContext, wfRes)
+            }
         }
+
         wfRes.workFlowData = workFlowData
         return wfRes
+    }
+
+    private fun addPropertyInfo(prop: PropertyDefinition, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
+        addDataType(prop.type, ctx, res)
+        if (prop.entrySchema != null && prop.entrySchema!!.type != null) {
+            addDataType(prop.entrySchema!!.type, ctx, res)
+        }
     }
 
     private fun addDataType(name: String, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
@@ -141,8 +154,10 @@ open class BluePrintModelHandler(
     }
 
     private fun addParentDataType(data: DataType, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
-        for ((k, v) in data.properties!!) {
-            addDataType(v.type, ctx, res)
+        if (data.properties != null) {
+            for ((k, v) in data.properties!!) {
+                addPropertyInfo(v, ctx, res)
+            }
         }
     }
 
