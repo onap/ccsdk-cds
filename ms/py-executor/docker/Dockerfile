@@ -1,5 +1,7 @@
 FROM python:3.7-slim
 
+RUN groupadd -r onap && useradd -r -g onap onap
+
 RUN mkdir -p /opt/app/onap/logs/ && touch /opt/app/onap/logs/application.log
 
 COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
@@ -10,6 +12,8 @@ RUN tar -xzf /source.tar.gz -C /tmp \
 
 RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements/docker.txt
 
-VOLUME /opt/app/onap/blueprints/deploy/
+RUN chown onap:onap /opt -R
 
+VOLUME /opt/app/onap/blueprints/deploy/
+USER onap
 ENTRYPOINT /opt/app/onap/python/start.sh
