@@ -48,13 +48,14 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
                 print(resourceAssignment.dependencies)
                 // Get all matching resources assignments to process
                 val groupResourceAssignments =
-                        resourceAssignments.filter {
-                            it.dictionarySource == dSource
-                        }.toMutableList()
+                    resourceAssignments.filter {
+                        it.dictionarySource == dSource
+                    }.toMutableList()
 
+                // inputKeyMapping is dynamic based on dependencies
                 val inputKeyMapping: MutableMap<String, String> =
-                        resourceAssignment.dependencies?.map { it to it }?.toMap()
-                                as MutableMap<String, String>
+                    resourceAssignment.dependencies?.map { it to it }?.toMap()
+                        as MutableMap<String, String>
 
                 // Get the values from runtime store
                 val resolvedKeyValues = resolveInputKeyMappingVariables(inputKeyMapping)
@@ -64,19 +65,22 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
 
                 // Get the Rest Client service, selector will be included in application.properties
                 val restClientService = BluePrintDependencyService.restClientService(
-                        "naming-ms")
+                    "naming-ms"
+                )
 
                 // Get the Rest Response
-                val response = restClientService.exchangeResource(HttpMethod.POST.name,
-                        "/web/service/v1/genNetworkElementName/cds", generatedPayload)
+                val response = restClientService.exchangeResource(
+                    HttpMethod.POST.name,
+                    "/web/service/v1/genNetworkElementName/cds", generatedPayload
+                )
                 val responseStatusCode = response.status
                 val responseBody = response.body
                 if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
                     populateResource(groupResourceAssignments, responseBody)
                 } else {
                     val errMsg =
-                            "Failed to dictionary name ($dName), dictionary source($($dName) " +
-                                    "response_code: ($responseStatusCode)"
+                        "Failed to dictionary name ($dName), dictionary source($($dName) " +
+                            "response_code: ($responseStatusCode)"
                     log.warn(errMsg)
                     throw BluePrintProcessorException(errMsg)
                 }
@@ -87,29 +91,57 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException(
-                    "Failed in template key ($resourceAssignment) assignments with: ${e.message}",
-                    e
+                "Failed in template key ($resourceAssignment) assignments with: ${e.message}",
+                e
             )
         }
     }
 
-    override suspend fun recoverNB(runtimeException: RuntimeException,
-                                   executionRequest: ResourceAssignment) {
+    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
         raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 
-    private fun generatePayload(input: Map<String, Any>,
-                                groupResourceAssignments: MutableList<ResourceAssignment>): String {
+    /** Generates aggregated request payload for Naming mS. Parses the resourceassignments of
+     * sourceCapability "naming-ms". "naming-type" should be provides as property metadata for
+     * each resourceassigment of sourceCapability "naming-ms". It generates below sample payload
+     * {
+    "elements": [{
+    "vf-module-name": "${vf-module-name}",
+    "naming-type": "VF-MODULE",
+    "naming-code": "dbc",
+    "vf-module-label": "adsf",
+    "policy-instance-name": "SDNC_Policy.Config_Json.xml",
+    "vnf-name": "vnf-123",
+    "vf-module-type": "base"
+    }, {
+    "vnfc-name": "${vnfc-name}",
+    "naming-type": "VNFC",
+    "naming-code": "dbc",
+    "vf-module-label": "adsf",
+    "policy-instance-name": "SDNC_Policy.Config_Json.xml",
+    "vnf-name": "vnf-123",
+    "vf-module-type": "base"
+    }
+    ]
+    } */
+    private fun generatePayload(
+        input: Map<String, Any>,
+        groupResourceAssignments: MutableList<ResourceAssignment>
+    ): String {
 
         var payload = """{ "elements" : ["""
         groupResourceAssignments.forEach {
             val metadata = resourceDictionaries[it.dictionaryName]?.property?.metadata
             val namingType = metadata?.get("naming-type")
 
-            payload = payload.plus("""{ 
-                    "${it.name}" : "$""")
-            payload = payload.plus("""{${it.name}}",
-                    "naming-type" : "$namingType",""")
+            payload = payload.plus(
+                """{ 
+                    "${it.name}" : "$"""
+            )
+            payload = payload.plus(
+                """{${it.name}}",
+                    "naming-type" : "$namingType","""
+            )
 
             for ((k, v) in input) {
                 payload = payload.plus(""""$k" : $v,""")
@@ -118,27 +150,31 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
         }
         payload = payload.dropLast(1).plus("] }")
         return payload
-
     }
 
-    private fun populateResource(resourceAssignments: MutableList<ResourceAssignment>,
-                                 restResponse: String) {
+    private fun populateResource(
+        resourceAssignments: MutableList<ResourceAssignment>,
+        restResponse: String
+    ) {
         /** Parse all the resource assignment fields and set the corresponding value */
         resourceAssignments.forEach { resourceAssignment ->
             // Set the List of Complex Values
             val metadata =
-                    resourceDictionaries[resourceAssignment.dictionaryName]?.property?.metadata
+                resourceDictionaries[resourceAssignment.dictionaryName]?.property?.metadata
+
+            /** Naming ms returns the keys with "${naming-type}-name" */
             val responseKey = metadata?.get("naming-type")?.toLowerCase().plus("-name")
 
             val parsedResourceAssignmentValue = checkNotNull(
-                    JacksonUtils.jsonNode(restResponse).path(responseKey).textValue()) {
+                JacksonUtils.jsonNode(restResponse).path(responseKey).textValue()
+            ) {
                 "Failed to find path ($responseKey) in response ($restResponse)"
             }
 
             ResourceAssignmentUtils.setResourceDataValue(
-                    resourceAssignment,
-                    raRuntimeService,
-                    parsedResourceAssignmentValue
+                resourceAssignment,
+                raRuntimeService,
+                parsedResourceAssignmentValue
             )
         }
     }

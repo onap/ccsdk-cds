@@ -32,7 +32,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTem
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
-import java.util.HashMap
 
 abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssignment, Boolean> {
 
@@ -203,7 +202,8 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
             "Failed to populate mandatory resource resource mapping $resourceAssignment"
         }
         if (resourceProp.required != null && resourceProp.required!! &&
-                resourceProp.value.isNullOrMissing()) {
+            resourceProp.value.isNullOrMissing()
+        ) {
             return true
         }
         return false

@@ -77,7 +77,7 @@ import kotlin.test.assertNotNull
         "server.ssl.keyStoreType=PKCS12",
         "server.ssl.keyAlias=tomcat",
         "blueprintsprocessor.restclient.sample.type=basic-auth",
-        "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:8081",
+        "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:9081",
         "blueprintsprocessor.restclient.sample.username=admin",
         "blueprintsprocessor.restclient.sample.password=jans",
         "blueprintsprocessor.restclient.test.type=ssl-basic-auth",
@@ -104,7 +104,7 @@ class RestClientServiceTest {
     @Before
     fun start() {
         // Second Http server required for non-SSL requests to be processed along with the https server.
-        val factory: ReactiveWebServerFactory = NettyReactiveWebServerFactory(8081)
+        val factory: ReactiveWebServerFactory = NettyReactiveWebServerFactory(9081)
         this.http = factory.getWebServer(this.httpHandler)
         this.http.start()
     }
@@ -144,7 +144,7 @@ class RestClientServiceTest {
     fun testSimpleBasicAuth() {
         val json: String = "{\n" +
                 "  \"type\" : \"basic-auth\",\n" +
-                "  \"url\" : \"http://localhost:8081\",\n" +
+                "  \"url\" : \"http://localhost:9081\",\n" +
                 "  \"username\" : \"admin\",\n" +
                 "  \"password\" : \"jans\"\n" +
                 "}"
