@@ -1,0 +1,90 @@
+<!-- /*
+* ============LICENSE_START=======================================================
+* ONAP : CDS
+* ================================================================================
+* Copyright (C) 2020 TechMahindra
+*=================================================================================
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ============LICENSE_END=========================================================
+*/ -->
+
+<div class="row packages-card">
+    <div class="col-lg-3 col-md-6 d-flex">
+        <!--Add Package Card-->
+        <div class="card addPaackage-card">
+            <div class="card-body text-center">
+                <img src="/assets/img/icon-addPackage.svg" width="40%">
+            </div>
+            <div class="card-footer row">
+                <div class="col text-center">
+                    <a routerLink="/resource-dictionary/createDictionary" role="button" aria-pressed="true"
+                        class="btn-create-package float"><i class="icon-create-white" aria-hidden="true"></i>Create Package
+                    </a>
+                    <br/>
+                    <a href="#" role="button" aria-pressed="true" class="btn-import-package float mb-3"><i class="icon-import-blue" aria-hidden="true"></i>Import Package
+                    </a> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 d-flex" *ngFor="let dictionary of viewedDictionary">
+        <!--Card 1-->
+        <div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-9 pr-0">
+                            <a class="card-title" [routerLink]="['/dictionary/dictionaryByName', dictionary.name]"
+                                (click)="testDispatch(dictionary)">
+                                <!-- <img class="icon-deployed" src="/assets/img/icon-deploy.svg"> -->
+                                {{dictionary.name}}
+                            </a>
+                        </div>
+                        <div class="col-3">
+
+                            <div class="dropdown">
+                                <input class="dropdown-toggle" type="text">
+                                <div class="dropdown-text">
+                                    <!-- <img src="/assets/img/icon-menuDots.svg" title="Actions"> -->
+                                    <i class="icon-menuDots" aria-hidden="true"></i>
+                                </div>
+                                <ul class="dropdown-content">
+                                    <li class="action-clone">
+                                        <a href="#">
+                                            <i class="icon-clone-sm" aria-hidden="true"></i>
+                                            Clone
+                                        </a>
+                                    </li>
+                                    <li class="action-delete">
+                                        <a href="#">
+                                            <i class="icon-delete-sm" aria-hidden="true"></i>
+                                            Delete
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-0">Last modified {{ dictionary.createdDate | date:'short' }}
+                            </p>
+                            <p class="mb-2">By {{dictionary.updatedBy}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
