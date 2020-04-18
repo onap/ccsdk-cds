@@ -1,0 +1,59 @@
+<!-- /*
+* ============LICENSE_START=======================================================
+* ONAP : CDS
+* ================================================================================
+* Copyright (C) 2020 TechMahindra
+*=================================================================================
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ============LICENSE_END=========================================================
+*/ -->
+
+<app-header>
+</app-header>
+<div class="new-wrapper">
+    <div class="container-fluid main-container">
+        <app-dictionary-header></app-dictionary-header>
+        <div class="container-fluid body-container">
+            <nav class="row">
+                <!--Nav Tabs-->
+                <div class="col pr-0">
+                    <div class="nav nav-tabs " id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
+                           role="tab" aria-controls="nav-home"
+                           aria-selected="true">All</a>
+                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
+                           role="tab" aria-controls="nav-profile"
+                           aria-selected="false">ATT</a>
+                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
+                           role="tab" aria-controls="nav-contact"
+                           aria-selected="false">OPEN CONFIG</a>
+                    </div>
+                </div>
+                <!--Nav Search & Filter-->
+                <div class="col search-filter-col">
+                    <div class="row">
+                        <div class="col-7">
+                            <app-search-dictionary></app-search-dictionary>
+                        </div>
+                        <div class="col-5 pl-2">
+                            <app-filterby-tags class="w-100"></app-filterby-tags> 
+                        </div>
+
+                    </div>
+                </div>
+            </nav>
+            <app-sort-dictionary></app-sort-dictionary>
+        </div>
+    </div>
+</div>
+
