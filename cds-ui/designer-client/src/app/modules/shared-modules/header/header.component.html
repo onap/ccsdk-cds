@@ -5,17 +5,18 @@
     <div class="overflow-container">
       <ul class="menu-dropdown">
         <li class="active">
-          <a (click)="redirect()" routerLink="/packages">Packages</a>
+          <a routerLink="/packages">Packages</a>
           <span class="icon">
             <!-- <i class="fa fa-dashboard"></i> -->
             <i class="icon-nav-packages"></i>
           </span>
         </li>
-        <li class="menu-hasdropdown">
-          <a >Data Dictionary</a>
+        <li>
+          <a routerLink="/resource-dictionary">Resource Dictionary</a>
           <span class="icon">
             <i class="icon-nav-dictionary"></i>
           </span>
+        </li>
           <!-- <label title="toggle menu" for="settings">
             <span class="downarrow">
               <i class="fa fa-caret-down"></i>

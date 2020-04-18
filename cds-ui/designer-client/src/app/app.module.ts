@@ -1,4 +1,3 @@
-
 /*
 ============LICENSE_START==========================================
 ===================================================================
@@ -31,9 +30,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {ApiService} from './common/core/services/api.service';
 import {HttpClientModule} from '@angular/common/http';
 import {PackagesModule} from './modules/feature-modules/packages/packages.module';
-import { SidebarModule } from 'ng-sidebar';
+import {SidebarModule} from 'ng-sidebar';
 import {SharedModulesModule} from './modules/shared-modules/shared-modules.module';
-import { NgxFileDropModule } from 'ngx-file-drop';
+import {NgxFileDropModule} from 'ngx-file-drop';
+import {ResourceDictionaryModule} from './modules/feature-modules/resource-dictionary/resource-dictionary.module';
 
 @NgModule({
     declarations: [
@@ -50,6 +50,8 @@ import { NgxFileDropModule } from 'ngx-file-drop';
         PackagesModule,
         SharedModulesModule,
         NgxFileDropModule,
+        ResourceDictionaryModule,
+        SidebarModule
     ],
 
     providers: [ApiService],
