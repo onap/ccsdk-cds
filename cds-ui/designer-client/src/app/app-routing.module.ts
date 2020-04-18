@@ -24,6 +24,7 @@ import {Routes, RouterModule} from '@angular/router';
 
 const routes: Routes = [
     {path: 'packages', loadChildren: './modules/feature-modules/packages/packages.module#PackagesModule'},
+    {path: 'resource-dictionary', loadChildren: './modules/feature-modules/resource-dictionary/resource-dictionary.module#ResourceDictionaryModule'},
     // { path: '', component: MainAppComponent },
     {
         path: '',

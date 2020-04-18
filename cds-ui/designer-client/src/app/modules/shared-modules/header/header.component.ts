@@ -13,8 +13,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-  redirect() {
-    this.router.navigate(['/packages']);
-  }
-
+  // redirect() {
+  //   this.router.navigate(['/packages']);
+  // }
 }

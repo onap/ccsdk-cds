@@ -1,0 +1,38 @@
+<!-- /*
+* ============LICENSE_START=======================================================
+* ONAP : CDS
+* ================================================================================
+* Copyright (C) 2020 TechMahindra
+*=================================================================================
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ============LICENSE_END=========================================================
+*/ -->
+
+<div class="dropdown packagesFilter w-100">
+    <input class="dropdown-toggle" type="text">
+    <div class="dropdown-text">{{checkBoxTages.substr(0,checkBoxTages.length-1)}}</div>
+    <ul class="dropdown-content w-100">
+        <li>
+            <div class="form-group">
+                <input type="text" (input)="reloadChanges($event)" class="form-control" placeholder="Search By Tag" autofocus>
+            </div>
+        </li>
+        <li *ngFor="let tag of viewedTags">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" (click)="reloadDictionary($event)" class="custom-control-input" id={{tag}}>
+                <label class="custom-control-label" for={{tag}}>{{tag}}</label>
+            </div>
+        </li>
+        <li class="reset-filter"><a href="">Reset filter</a></li>
+    </ul>
+</div>
