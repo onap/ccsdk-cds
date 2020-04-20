@@ -22,6 +22,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
@@ -47,7 +48,10 @@ class ComponentRemotePythonExecutorTest {
         runBlocking {
             val remoteScriptExecutionService = MockRemoteScriptExecutionService()
 
-            val componentRemotePythonExecutor = ComponentRemotePythonExecutor(remoteScriptExecutionService)
+            val componentRemotePythonExecutor = ComponentRemotePythonExecutor(
+                    remoteScriptExecutionService,
+                    mockk<BluePrintPropertiesService>()
+            )
 
             val executionServiceInput =
                 JacksonUtils.readValueFromClassPathFile(
@@ -88,7 +92,10 @@ class ComponentRemotePythonExecutorTest {
     fun testComponentRemotePythonExecutorProcessNB() {
         runBlocking {
             val remoteScriptExecutionService = MockRemoteScriptExecutionService()
-            val componentRemotePythonExecutor = ComponentRemotePythonExecutor(remoteScriptExecutionService)
+            val componentRemotePythonExecutor = ComponentRemotePythonExecutor(
+                    remoteScriptExecutionService,
+                    mockk<BluePrintPropertiesService>()
+            )
             val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("123456-1000")
 
             every { bluePrintRuntime.getBluePrintError() } answers { BluePrintError() } // successful case.

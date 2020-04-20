@@ -20,10 +20,12 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageProducerService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
@@ -48,17 +50,15 @@ class KafkaPublishAuditService(
     private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService,
     private val blueprintsProcessorCatalogService: BluePrintCatalogService
 ) : PublishAuditService {
-
     private var inputInstance: BlueprintMessageProducerService? = null
     private var outputInstance: BlueprintMessageProducerService? = null
-
     private lateinit var correlationUUID: String
-
     private val log = LoggerFactory.getLogger(KafkaPublishAuditService::class.toString())
 
     companion object {
         const val INPUT_SELECTOR = "self-service-api.audit.request"
         const val OUTPUT_SELECTOR = "self-service-api.audit.response"
+        const val MAX_ERR_MSG_LEN = 128
     }
 
     @PostConstruct
@@ -85,8 +85,9 @@ class KafkaPublishAuditService(
      */
     override fun publish(executionServiceOutput: ExecutionServiceOutput) {
         executionServiceOutput.correlationUUID = this.correlationUUID
+        val truncExecutionServiceOutput = truncateResponse(executionServiceOutput)
         this.outputInstance = this.getOutputInstance(OUTPUT_SELECTOR)
-        this.outputInstance!!.sendMessage(executionServiceOutput)
+        this.outputInstance!!.sendMessage(truncExecutionServiceOutput)
     }
 
     /**
@@ -127,7 +128,8 @@ class KafkaPublishAuditService(
             correlationUUID = executionServiceInput.correlationUUID
             commonHeader = executionServiceInput.commonHeader
             actionIdentifiers = executionServiceInput.actionIdentifiers
-            payload = executionServiceInput.payload
+            payload = executionServiceInput.payload.deepCopy()
+            stepData = executionServiceInput.stepData
         }
 
         val blueprintName = clonedExecutionServiceInput.actionIdentifiers.blueprintName
@@ -173,12 +175,40 @@ class KafkaPublishAuditService(
 
             sensitiveParameters.forEach { sensitiveParameter ->
                 if (workflowProperties.has(sensitiveParameter)) {
-                    workflowProperties.remove(sensitiveParameter)
-                    workflowProperties.put(sensitiveParameter, ApplicationConstants.LOG_REDACTED)
+                    workflowProperties.replace(sensitiveParameter, ApplicationConstants.LOG_REDACTED.asJsonPrimitive())
                 }
             }
         }
 
         return clonedExecutionServiceInput
+    }
+
+    private fun truncateResponse(executionServiceOutput: ExecutionServiceOutput): ExecutionServiceOutput {
+        var truncErrMsg = executionServiceOutput.status.errorMessage
+        if (truncErrMsg != null && truncErrMsg.length > MAX_ERR_MSG_LEN) {
+            truncErrMsg = "${truncErrMsg.substring(0,MAX_ERR_MSG_LEN)}" +
+                    " [...]. Check Blueprint Processor logs for more information."
+        }
+
+        var truncPayload = executionServiceOutput.payload.deepCopy()
+        if (truncPayload.path("execute-remote-python-response").has("execute-command-logs")) {
+            var cmdExecLogNode = truncPayload.path("execute-remote-python-response") as ObjectNode
+            cmdExecLogNode.replace("execute-command-logs", "Check Command Executor logs for more information.".asJsonPrimitive())
+        }
+
+        return ExecutionServiceOutput().apply {
+            correlationUUID = this.correlationUUID
+            commonHeader = executionServiceOutput.commonHeader
+            actionIdentifiers = executionServiceOutput.actionIdentifiers
+            status = Status().apply {
+                code = executionServiceOutput.status.code
+                eventType = executionServiceOutput.status.eventType
+                timestamp = executionServiceOutput.status.timestamp
+                errorMessage = truncErrMsg
+                message = executionServiceOutput.status.message
+            }
+            payload = truncPayload
+            stepData = executionServiceOutput.stepData
+        }
     }
 }
