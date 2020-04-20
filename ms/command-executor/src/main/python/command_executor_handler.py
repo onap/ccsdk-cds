@@ -31,7 +31,7 @@ import json
 REQUIREMENTS_TXT = "requirements.txt"
 
 
-class CommandExecutorHandler:
+class CommandExecutorHandler():
 
     def __init__(self, request):
         self.request = request
@@ -58,12 +58,12 @@ class CommandExecutorHandler:
                 return utils.build_ret_data(False, err_msg)
             try:
                 with open(self.installed, "w+") as f:
-                   if not self.install_packages(request, CommandExecutor_pb2.pip, f, results):
-                       return utils.build_ret_data(False, "ERROR: failed to prepare environment for request {} during pip package install.".format(self.blueprint_id))
-                   f.write("\r\n") # TODO: is \r needed?
-                   results.append("\n")
-                   if not self.install_packages(request, CommandExecutor_pb2.ansible_galaxy, f, results):
-                       return utils.build_ret_data(False, "ERROR: failed to prepare environment for request {} during Ansible install.".format(self.blueprint_id))
+                    if not self.install_packages(request, CommandExecutor_pb2.pip, f, results):
+                        return utils.build_ret_data(False, "ERROR: failed to prepare environment for request {} during pip package install.".format(self.blueprint_id))
+                    f.write("\r\n") # TODO: is \r needed?
+                    results.append("\n")
+                    if not self.install_packages(request, CommandExecutor_pb2.ansible_galaxy, f, results):
+                        return utils.build_ret_data(False, "ERROR: failed to prepare environment for request {} during Ansible install.".format(self.blueprint_id))
             except Exception as ex:
                 err_msg = "ERROR: failed to prepare environment for request {} during installing packages. Exception: {}".format(self.blueprint_id, ex)
                 self.logger.error(err_msg)
@@ -71,7 +71,7 @@ class CommandExecutorHandler:
         else:
             try:
                 with open(self.installed, "r") as f:
-                  results.append(f.read())
+                    results.append(f.read())
             except Exception as ex:
                 return utils.build_ret_data(False, "ERROR: failed to prepare environment during reading 'installed' file {}. Exception: {}".format(self.installed, ex))
 
@@ -108,15 +108,14 @@ class CommandExecutorHandler:
             payload_section = []
             is_payload_section = False
 
-        ### extract the original header request into sys-env variables
-        ### RequestID
-        request_id = request.requestId
-        ### Sub-requestID
-        subrequest_id = request.correlationId
-        request_id_map = {'CDS_REQUEST_ID':request_id, 'CDS_CORRELATION_ID':subrequest_id}
-        updated_env =  { **os.environ, **request_id_map }
+            ### extract the original header request into sys-env variables
+            ### RequestID
+            request_id = request.requestId
+            ### Sub-requestID
+            subrequest_id = request.correlationId
+            request_id_map = {'CDS_REQUEST_ID':request_id, 'CDS_CORRELATION_ID':subrequest_id}
+            updated_env =  { **os.environ, **request_id_map }
 
-        try:
             with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                   shell=True, bufsize=1, universal_newlines=True, env=updated_env) as newProcess:
                 while True:
@@ -190,9 +189,11 @@ class CommandExecutorHandler:
         try:
             results.append(subprocess.run(command, check=True, stdout=PIPE, stderr=PIPE, env=env).stdout.decode())
             results.append("\n")
+            self.logger.info("install_python_packages {} succeeded".format(package))
             return True
         except CalledProcessError as e:
             results.append(e.stderr.decode())
+            self.logger.error("install_python_packages {} failed".format(package))
             return False
 
     def install_ansible_packages(self, package, results):
@@ -224,6 +225,7 @@ class CommandExecutorHandler:
             # venv doesn't populate the activate_this.py script, hence we use from virtualenv
             venv.create(self.venv_home, with_pip=True, system_site_packages=True)
             virtualenv.writefile(os.path.join(bin_dir, "activate_this.py"), virtualenv.ACTIVATE_THIS)
+            self.logger.info("{} - Creation of Python Virtual Environment finished.".format(self.blueprint_id))
             return utils.build_ret_data(True, "")
         except Exception as err:
             err_msg = "{} - Failed to provision Python Virtual Environment. Error: {}".format(self.blueprint_id, err)
@@ -243,7 +245,7 @@ class CommandExecutorHandler:
         path = "%s/bin/activate_this.py" % self.venv_home
         try:
             with open(path) as activate_this_script:
-              exec (activate_this_script.read(), {'__file__': path})
+                exec (activate_this_script.read(), {'__file__': path})
             exec (fixpathenvvar)
             self.logger.info("Running with PATH : {}".format(os.environ['PATH']))
             return utils.build_ret_data(True, "")
