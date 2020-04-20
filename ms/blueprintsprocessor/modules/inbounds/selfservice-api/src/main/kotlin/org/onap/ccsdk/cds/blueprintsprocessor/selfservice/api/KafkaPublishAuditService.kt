@@ -24,6 +24,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageProducerService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
@@ -48,12 +49,9 @@ class KafkaPublishAuditService(
     private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService,
     private val blueprintsProcessorCatalogService: BluePrintCatalogService
 ) : PublishAuditService {
-
     private var inputInstance: BlueprintMessageProducerService? = null
     private var outputInstance: BlueprintMessageProducerService? = null
-
     private lateinit var correlationUUID: String
-
     private val log = LoggerFactory.getLogger(KafkaPublishAuditService::class.toString())
 
     companion object {
@@ -127,7 +125,8 @@ class KafkaPublishAuditService(
             correlationUUID = executionServiceInput.correlationUUID
             commonHeader = executionServiceInput.commonHeader
             actionIdentifiers = executionServiceInput.actionIdentifiers
-            payload = executionServiceInput.payload
+            payload = executionServiceInput.payload.deepCopy()
+            stepData = executionServiceInput.stepData
         }
 
         val blueprintName = clonedExecutionServiceInput.actionIdentifiers.blueprintName
@@ -173,8 +172,7 @@ class KafkaPublishAuditService(
 
             sensitiveParameters.forEach { sensitiveParameter ->
                 if (workflowProperties.has(sensitiveParameter)) {
-                    workflowProperties.remove(sensitiveParameter)
-                    workflowProperties.put(sensitiveParameter, ApplicationConstants.LOG_REDACTED)
+                    workflowProperties.replace(sensitiveParameter, ApplicationConstants.LOG_REDACTED.asJsonPrimitive())
                 }
             }
         }

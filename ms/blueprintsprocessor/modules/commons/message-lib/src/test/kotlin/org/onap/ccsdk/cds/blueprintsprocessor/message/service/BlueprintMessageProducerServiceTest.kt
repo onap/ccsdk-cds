@@ -109,7 +109,7 @@ open class BlueprintMessageProducerServiceTest {
                 SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG to "/path/to/keystore.jks",
                 SslConfigs.SSL_KEYSTORE_TYPE_CONFIG to "JKS",
                 SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG to "secretpassword",
-                SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG to "",
+                SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG to SslConfigs.DEFAULT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM,
                 SaslConfigs.SASL_MECHANISM to "SCRAM-SHA-512",
                 SaslConfigs.SASL_JAAS_CONFIG to "${ScramLoginModule::class.java.canonicalName} required " +
                         "username=\"sample-user\" " +

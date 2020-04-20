@@ -78,7 +78,7 @@ open class KafkaSslAuthMessageProducerProperties : KafkaBasicAuthMessageProducer
     var keystore: String? = null
     var keystorePassword: String? = null
     var keystoreType: String = SslConfigs.DEFAULT_SSL_KEYSTORE_TYPE
-    var sslEndpointIdentificationAlgorithm: String = ""
+    var sslEndpointIdentificationAlgorithm: String = SslConfigs.DEFAULT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
 
     override fun getConfig(): HashMap<String, Any> {
         val configProps = super.getConfig()
@@ -142,7 +142,7 @@ open class KafkaStreamsSslAuthConsumerProperties : KafkaStreamsBasicAuthConsumer
     var keystore: String? = null
     var keystorePassword: String? = null
     var keystoreType: String = SslConfigs.DEFAULT_SSL_KEYSTORE_TYPE
-    var sslEndpointIdentificationAlgorithm: String = ""
+    var sslEndpointIdentificationAlgorithm: String = SslConfigs.DEFAULT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
 
     override fun getConfig(): HashMap<String, Any> {
         val configProps = super.getConfig()
@@ -218,7 +218,7 @@ open class KafkaSslAuthMessageConsumerProperties : KafkaBasicAuthMessageConsumer
     var keystore: String? = null
     var keystorePassword: String? = null
     var keystoreType: String = SslConfigs.DEFAULT_SSL_KEYSTORE_TYPE
-    var sslEndpointIdentificationAlgorithm: String = ""
+    var sslEndpointIdentificationAlgorithm: String = SslConfigs.DEFAULT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM
 
     override fun getConfig(): HashMap<String, Any> {
         val configProps = super.getConfig()
