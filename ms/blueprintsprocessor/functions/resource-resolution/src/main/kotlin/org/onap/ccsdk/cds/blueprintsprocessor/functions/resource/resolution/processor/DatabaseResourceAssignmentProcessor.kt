@@ -107,7 +107,7 @@ open class DatabaseResourceAssignmentProcessor(
             "DatabaseResource ($dSource) dictionary information: " +
                     "Query:($sql), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
         )
-        val jdbcTemplate = blueprintDBLibService(sourceProperties)
+        val jdbcTemplate = blueprintDBLibService(sourceProperties, dSource)
 
         val rows = jdbcTemplate.query(sql, populateNamedParameter(inputKeyMapping))
         if (rows.isNullOrEmpty()) {
@@ -117,12 +117,12 @@ open class DatabaseResourceAssignmentProcessor(
         }
     }
 
-    private fun blueprintDBLibService(sourceProperties: DatabaseResourceSource): BluePrintDBLibGenericService {
+    private fun blueprintDBLibService(sourceProperties: DatabaseResourceSource, selector: String): BluePrintDBLibGenericService {
         return if (isNotEmpty(sourceProperties.endpointSelector)) {
             val dbPropertiesJson = raRuntimeService.resolveDSLExpression(sourceProperties.endpointSelector!!)
             bluePrintDBLibPropertyService.JdbcTemplate(dbPropertiesJson)
         } else {
-            primaryDBLibGenericService
+            bluePrintDBLibPropertyService.JdbcTemplate(selector)
         }
     }
 
