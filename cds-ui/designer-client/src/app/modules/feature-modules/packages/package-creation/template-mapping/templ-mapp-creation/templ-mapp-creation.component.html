@@ -87,7 +87,7 @@
                             class="mapping-source-load">
                             <i class="icon-upload-attributes"></i>
                             <br />
-                            <div>Upload attribute list</div>
+                            <div>Upload Attribute List</div>
                             <div class="source-load-note">(Should be comma delimited file)</div>
                         </a>
                         <!-- <a href="#" class="mapping-source-load">
@@ -166,15 +166,14 @@
                         <tbody>
                             <tr *ngFor="let dict of mappingRes">
                                 <td>
-                                    <i *ngIf="dict.definition?.property?.required" class="fa fa-check-square mx-2"></i>
-                                    <i *ngIf="!dict.definition?.property?.required" class="fa fa-square mx-2"></i>
+                                    <img *ngIf="dict.definition?.property?.required" src="/assets/img/icon-required-no.svg">
+                                    <img *ngIf="!dict.definition?.property?.required" src="/assets/img/icon-required-yes.svg">
                                 </td>
                                 <td>{{ dict['name'] }}</td>
                                 <td>{{ dict['name'] }}</td>
                                 <td>
                                     <input type="text" class="form-control" [value]="dict['dictionary-source']"
                                         disabled>
-
                                 </td>
                                 <td>
                                     <input type="text" class="form-control" [value]="dict['dependencies']" disabled>
@@ -187,11 +186,7 @@
                         </tbody>
                     </table>
                 </div>
-
-
             </div>
-
-
         </div>
         <div class="template-mapping-action">
             <button class="btn btn-sm btn-outline-secondary">Cancel</button>
@@ -199,7 +194,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="templateModal" tabindex="-1" role="dialog" aria-labelledby="templateModalLabel"
     aria-hidden="true">

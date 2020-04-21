@@ -34,7 +34,6 @@ import {PackagesModule} from './modules/feature-modules/packages/packages.module
 import { SidebarModule } from 'ng-sidebar';
 import {SharedModulesModule} from './modules/shared-modules/shared-modules.module';
 import { NgxFileDropModule } from 'ngx-file-drop';
-
 @NgModule({
     declarations: [
         AppComponent,
@@ -50,6 +49,7 @@ import { NgxFileDropModule } from 'ngx-file-drop';
         PackagesModule,
         SharedModulesModule,
         NgxFileDropModule,
+        
     ],
 
     providers: [ApiService],

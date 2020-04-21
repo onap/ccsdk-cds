@@ -22,17 +22,16 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-9 pr-0">
+                        <div class="col-10 pr-0">
                             <a class="card-title" [routerLink]="['/packages/package', bluePrint.id]"
                                 (click)="testDispatch(bluePrint)">
                                 <!-- <img class="icon-deployed" src="/assets/img/icon-deploy.svg"> -->
-                                {{bluePrint.artifactName}}<span>.vLB.CDS</span>
-                                <span class="package-version">Version 1.0.2</span>
+                                <p class="packageName" tooltip="{{bluePrint.artifactName}}" placement="bottom">{{bluePrint.artifactName}}<span>.vLB.CDS</span></p>
+                                <span class="package-version">V 1.0.2</span>
                             </a>
 
                         </div>
-                        <div class="col-3">
-
+                        <div class="col-2">
                             <div class="dropdown">
                                 <input class="dropdown-toggle" type="text">
                                 <div class="dropdown-text">
@@ -74,8 +73,8 @@
                             <p class="mb-0 mt-1">Last modified {{ bluePrint.createdDate | date:'short' }}
                             </p>
                             <p class="mb-2">By {{bluePrint.updatedBy}}</p>
-                            <p class="package-desc tooltip-bottom" data-tooltip="DESCRIPTION:
-                            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et Malorum by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.">Description text quisquam est dolorem, velit...</p>
+                            <p class="package-desc" [delay]="300" tooltip="DESCRIPTION:
+                            The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et Malorum by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham." placement="auto">Description text quisquam est dolorem, velitThe standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et</p>
                             
                             <ul class="package-contributers">
                                 <li>
