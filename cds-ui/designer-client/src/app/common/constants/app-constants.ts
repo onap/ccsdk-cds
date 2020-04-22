@@ -109,7 +109,10 @@ export const ResourceDictionaryURLs = {
     searchResourceDictionaryByNames: '/resourcedictionary/search/by-names',
     getSources: '/resourcedictionary/source-mapping',
     getModelType: '/resourcedictionary/model-type',
-    getResourceDictionary: '/resourcedictionary/model-type/by-definition'
+    getResourceDictionary: '/resourcedictionary/model-type/by-definition',
+    getMetaDatePageable: '/resourcedictionary/metadata/paged',
+    getDictionaryByName: '/resourcedictionary/by-name/',
+    getPagedDictionary: '/resourcedictionary/paged',
 };
 
 export const ControllerCatalogURLs = {
