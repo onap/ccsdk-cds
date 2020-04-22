@@ -35,6 +35,7 @@ import {SharedModulesModule} from './modules/shared-modules/shared-modules.modul
 import {NgxFileDropModule} from 'ngx-file-drop';
 import {ResourceDictionaryModule} from './modules/feature-modules/resource-dictionary/resource-dictionary.module';
 
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -51,7 +52,7 @@ import {ResourceDictionaryModule} from './modules/feature-modules/resource-dicti
         SharedModulesModule,
         NgxFileDropModule,
         ResourceDictionaryModule,
-        SidebarModule
+        SidebarModule,
     ],
 
     providers: [ApiService],
