@@ -51,6 +51,67 @@
                     </a>
                 </div>
 
+                <div class="card creat-card view-package-container">
+                    <div class="row">
+                        <div class="col-1 text-center"><i class="package-type-icon icon-topologyView-active"></i></div>
+                        <div class="col-9">
+                            <div class="row mb-4">
+                                <div class="col-12 package-name deployed">
+                                    {{viewedPackage.artifactName}}<span>.vLB.CDS</span>
+                                    <img src="/assets/img/icon-deploy-inactive.svg" class="deply-status-icon">
+                                    <span class="package-version">Version 1.0.2</span>
+                                </div>
+                                <div class="col-12 package-description">
+                                    Last modified {{ viewedPackage.createdDate | date:'short' }} By
+                                    {{viewedPackage.updatedBy}}
+                                </div>
+                            </div>
+                            <div class="row package-auth-info">
+                                <div class="col-3">
+                                    <p><b>Author Name</b></p>
+                                    <span>Shaaban Ebrahim</span>
+                                </div>
+                                <div class="col-4">
+                                    <p><b>Author Email</b></p>
+                                    <span>shaaban.eltanany.ext@orange.com</span>
+                                </div>
+                                <div class="col-5">
+                                    <p><b>Contributions</b></p>
+                                    <ul class="package-contributers">
+                                        <li>
+                                            <button type="button" class="border-fade" data-toggle="tooltip"
+                                                data-placement="bottom" title="User name">
+                                                <img src="/assets/img/img-user1.jpeg">
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                                title="User name">
+                                                <img src="/assets/img/img-user2.jpg">
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                                title="User name">
+                                                <img src="/assets/img/img-user3.jpg">
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <a href="">5 contributors</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 package-view-button pt-3">
+                            <button class="btn btn-sm btn-primary mb-2" (click)="goToDesignerMode()">Designer
+                                Mode</button>
+                            <button class="btn btn-sm btn-outline-secondary" (click)="deployCurrentPackage()"><i
+                                    class="fa fa-play-circle"></i> Deploy</button>
+                        </div>
+                    </div>
+
+                </div>
 
                 <nav class="row">
                     <!--Nav Tabs-->

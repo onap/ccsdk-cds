@@ -3,6 +3,8 @@
 ===================================================================
 Copyright (C) 2019 Orange. All rights reserved.
 ===================================================================
+Modification Copyright © 2020 IBM.
+===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
 under the Apache License, Version 2.0 (the License);
@@ -109,5 +111,9 @@ export class PackageCreationComponent implements OnInit {
 
     goBackToDashBorad() {
         this.router.navigate(['/packages']);
+    }
+
+    goToDesignerMode() {
+        this.router.navigate(['/packages/designer']);
     }
 }
