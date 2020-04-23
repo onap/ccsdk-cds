@@ -1,8 +1,8 @@
-import { PackageCreationModes } from './PackageCreationModes';
-import { CBAPackage, Scripts } from '../mapping-models/CBAPacakge.model';
-import { FilesContent } from '../mapping-models/metadata/MetaDataTab.model';
-import { Import, Metadata, VlbDefinition } from '../mapping-models/definitions/VlbDefinition';
-import { PackageCreationUtils } from '../package-creation.utils';
+import {PackageCreationModes} from './PackageCreationModes';
+import {CBAPackage, Scripts} from '../mapping-models/CBAPacakge.model';
+import {FilesContent} from '../mapping-models/metadata/MetaDataTab.model';
+import {Import, Metadata, VlbDefinition} from '../mapping-models/definitions/VlbDefinition';
+import {PackageCreationUtils} from '../package-creation.utils';
 
 
 export class DesignerCreationMode extends PackageCreationModes {
@@ -41,7 +41,7 @@ export class DesignerCreationMode extends PackageCreationModes {
             FilesContent.putData(key, valueOfFile);
         });
 
-        const filenameEntry = 'Definitions/blueprint.json';
+        const filenameEntry = 'Definitions/' + cbaPackage.metaData.name + '.json';
         const vlbDefinition: VlbDefinition = new VlbDefinition();
         const metadata: Metadata = new Metadata();
 
@@ -68,7 +68,7 @@ export class DesignerCreationMode extends PackageCreationModes {
         vlbDefinition.metadata = metadata;
         const files: Import[] = [];
         cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
-            files.push({ file: key });
+            files.push({file: key});
         });
         console.log(vlbDefinition);
         vlbDefinition.imports = files;
