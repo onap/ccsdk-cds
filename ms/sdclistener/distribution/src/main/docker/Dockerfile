@@ -12,7 +12,8 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && rm -rf /source.tar.gz \
  && rm -rf /tmp/@project.build.finalName@
 
-RUN mkdir /opt/app/onap/cds-sdc-listener
+RUN mkdir -p /opt/app/onap/cds-sdc-listener
 RUN chown onap:onap /opt -R
+
 USER onap
 ENTRYPOINT /startService.sh
