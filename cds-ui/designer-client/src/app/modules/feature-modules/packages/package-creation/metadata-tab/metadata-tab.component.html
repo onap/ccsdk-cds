@@ -62,7 +62,7 @@
             <input type="input" (keyup.enter)="addTag($event)" [(ngModel)]="metaDataTab.tags"
                 placeholder="Ex., vDNS-CDS">
         </div>
-        <div class="model-note-container tag-notes">Seprate tags with comma or space</div>
+        <div class="model-note-container tag-notes">Use ENTER to add tag</div>
         <div class="model-note-container tages-container">
             <span *ngFor="let tag of tags" class="single-tage">{{tag}}
                 <i (click)="removeTag(tag)" class="fa fa-times-circle"></i>

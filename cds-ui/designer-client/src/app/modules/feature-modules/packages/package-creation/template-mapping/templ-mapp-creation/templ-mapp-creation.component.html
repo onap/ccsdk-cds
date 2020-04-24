@@ -58,7 +58,7 @@
                         <a href="#" data-toggle="modal" (click)="allowedExt=[getFileExtension()]"
                             data-target="#templateModal"><b>Import
                                 File</b></a></div>
-                    <div class="editor-container">
+                    <div class="editor-container mb-4">
                         <app-source-editor (textChange)="textChanges($event,templateInfo.fileName)"
                             [(text)]="templateFileContent"></app-source-editor>
                     </div>
@@ -87,7 +87,7 @@
                             class="mapping-source-load">
                             <i class="icon-upload-attributes"></i>
                             <br />
-                            <div>Upload attribute list</div>
+                            <div>Upload Attributes List</div>
                             <div class="source-load-note">(Should be comma delimited file)</div>
                         </a>
                         <!-- <a href="#" class="mapping-source-load">
@@ -119,8 +119,8 @@
                         <tbody>
                             <tr *ngFor="let dict of resourceDictionaryRes">
                                 <td>
-                                    <img *ngIf="dict.definition?.property?.required" src="/assets/img/icon-required-no.svg">
-                                    <img *ngIf="!dict.definition?.property?.required" src="/assets/img/icon-required-yes.svg">
+                                    <img *ngIf="dict.definition?.property?.required" src="/assets/img/icon-required-yes.svg">
+                                    <img *ngIf="!dict.definition?.property?.required" src="/assets/img/icon-required-no.svg">
                                 </td>
                                 <td>{{ dict.name }}</td>
                                 <td>{{ dict.name }}</td>
@@ -166,8 +166,8 @@
                         <tbody>
                             <tr *ngFor="let dict of mappingRes">
                                 <td>
-                                    <i *ngIf="dict.definition?.property?.required" class="fa fa-check-square mx-2"></i>
-                                    <i *ngIf="!dict.definition?.property?.required" class="fa fa-square mx-2"></i>
+                                    <img *ngIf="dict.definition?.property?.required" src="/assets/img/icon-required-yes.svg">
+                                    <img *ngIf="!dict.definition?.property?.required" src="/assets/img/icon-required-no.svg">
                                 </td>
                                 <td>{{ dict['name'] }}</td>
                                 <td>{{ dict['name'] }}</td>
@@ -194,8 +194,8 @@
 
         </div>
         <div class="template-mapping-action">
-            <button class="btn btn-sm btn-outline-secondary">Cancel</button>
-            <button (click)="saveToStore()" class="btn btn-sm btn-primary">Submit</button>
+            <button class="btn btn-outline-secondary">Cancel</button>
+            <button (click)="saveToStore()" class="btn btn-primary">Submit</button>
         </div>
     </div>
 </div>
