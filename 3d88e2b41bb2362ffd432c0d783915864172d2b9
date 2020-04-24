@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfd6edf0_dc83c37c",
+        "filename": "ms/blueprintsprocessor/modules/commons/message-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/message/service/KafkaBasicAuthMessageProducerService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 5732
+      },
+      "writtenOn": "2020-04-24T14:15:13Z",
+      "side": 1,
+      "message": "This is dynamic based on the name of the node-template, the only thing static is the -response at the end. You\u0027ll have to take this in consideration.",
+      "range": {
+        "startLine": 132,
+        "startChar": 31,
+        "endLine": 132,
+        "endChar": 61
+      },
+      "revId": "3d88e2b41bb2362ffd432c0d783915864172d2b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
