@@ -2001,7 +2001,7 @@ hr{
 }
 .modal-header{
   border-bottom-color: #ECEDF2 !important;
-  padding: 1rem 1.5rem !important;
+  padding: .7rem 1.5rem !important;
 }
 .modal-footer{
   border-top: 0 !important;
@@ -2023,6 +2023,10 @@ hr{
 }
 .modal-footer .btn-secondary:hover{
   opacity: 1;
+}
+.modal-footer .btn-secondary:active{
+  background-color: #E7F1FC !important;
+  color: #1B3E6F !important;
 }
 .action-button span{
   width: 100%;
