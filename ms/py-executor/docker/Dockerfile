@@ -12,6 +12,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
 
 RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements/docker.txt
 
+RUN mkdir -p /opt/app/onap/blueprints/deploy
 RUN chown onap:onap /opt -R
 
 VOLUME /opt/app/onap/blueprints/deploy/
