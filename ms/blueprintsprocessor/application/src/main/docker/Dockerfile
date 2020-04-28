@@ -9,9 +9,14 @@ FROM omahoco1/alpine-java-python
 
 # add entrypoint
 COPY startService.sh /startService.sh
+RUN addgroup -S onap && adduser -S onap -G onap
+RUN chown onap:onap /startService.sh
 RUN chmod 777 /startService.sh && dos2unix /startService.sh
 
 # add application
 COPY --from=extractor /opt /opt
+RUN mkdir /opt/app/onap/blueprints
+RUN chown onap:onap /opt -R
+USER onap
 
 ENTRYPOINT [ "/startService.sh" ]
