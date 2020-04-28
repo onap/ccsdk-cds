@@ -11,7 +11,7 @@ export abstract class PackageCreationModes {
 
     public static setEntryPoint(metaDataTab: MetaDataTabModel) {
         if (metaDataTab.mode.startsWith(ModeType.Designer)) {
-            metaDataTab.entryFileName = 'Definitions/blueprint.json';
+            metaDataTab.entryFileName = 'Definitions/' + metaDataTab.name + '.json';
         } else {
             // TODO Not implemented
             metaDataTab.entryFileName = '';
