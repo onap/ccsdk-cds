@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "b6358a96_8374bb3e",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/capabilities/NamingResolutionCapability.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-04-29T20:40:51Z",
+      "side": 1,
+      "message": "please add the inputKeyMappings as KeyIdentifier to resourceAssignment.keyIdentifiers\nexample RestResourceResolutionProcessor:81",
+      "revId": "8f4f51c8c75a1ec60897356891e87915b4c398b4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1e99b52_d77477b4",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/capabilities/NamingResolutionCapability.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-04-29T20:40:51Z",
+      "side": 1,
+      "message": "Please add generatedPayLoad to resourceSourceProperties[\"resolved-payload\"] as per RestResourceResolutionProcessor:88",
+      "revId": "8f4f51c8c75a1ec60897356891e87915b4c398b4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d83dd69_09e61497",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/capabilities/NamingResolutionCapability.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-04-29T20:40:51Z",
+      "side": 1,
+      "message": "Building JSON by concatenating strings is not safe nor maintainable, please consider doing this with objects instead and use tools in JacksonUtils to create json string.",
+      "revId": "8f4f51c8c75a1ec60897356891e87915b4c398b4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ef439696_d93c50f8",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/capabilities/NamingResolutionCapabilityTest.kt",
         "patchSetId": 1
