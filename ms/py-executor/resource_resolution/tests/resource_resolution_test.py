@@ -13,12 +13,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import json
+from unittest.mock import patch, MagicMock
+
 from google.protobuf import json_format
 from pytest import raises
 
 from resource_resolution.resource_resolution import (
     ExecutionServiceInput,
     ExecutionServiceOutput,
+    ResourceResolution,
+    Template,
     WorkflowExecution,
     WorkflowExecutionResult,
     WorkflowMode,
@@ -103,3 +108,62 @@ def test_workflow_execution_result_class():
     execution_output.status.code = 500
     assert execution_result.has_error
     assert execution_result.error_message == ""
+
+
+def test_resource_resolution_check_resolve_params():
+    """Check values of potentially HTTP parameters."""
+    rr = ResourceResolution()
+    with raises(AttributeError):
+        rr._check_template_resolve_params()
+        rr._check_template_resolve_params(resource_type="test")
+        rr._check_template_resolve_params(resource_id="test")
+    rr._check_template_resolve_params(resolution_key="test")
+    rr._check_template_resolve_params(resource_type="test", resource_id="test")
+
+
+def test_store_template():
+    """Test store_template method.
+
+    Checks if http_client send_request method is called with valid parameters.
+    """
+    rr = ResourceResolution(server_address="127.0.0.1", http_server_port=8080)
+    rr.http_client = MagicMock()
+    rr.store_template(
+        blueprint_name="test_blueprint_name",
+        blueprint_version="test_blueprint_version",
+        artifact_name="test_artifact_name",
+        resolution_key="test_resolution_key",
+        result="test_result",
+    )
+    rr.http_client.send_request.assert_called_once_with(
+        "POST",
+        "template/test_blueprint_name/test_blueprint_version/test_artifact_name/test_resolution_key",
+        data=json.dumps({"result": "test_result"}),
+        headers={"Content-Type": "application/json"},
+    )
+
+
+def test_retrieve_template():
+    """Test retrieve_template method.
+
+    Checks if http_client send_request method is called with valid parameters.
+    """
+    rr = ResourceResolution(server_address="127.0.0.1", http_server_port=8080)
+    rr.http_client = MagicMock()
+    rr.retrieve_template(
+        blueprint_name="test_blueprint_name",
+        blueprint_version="test_blueprint_version",
+        artifact_name="test_artifact_name",
+        resolution_key="test_resolution_key",
+    )
+    rr.http_client.send_request.assert_called_once_with(
+        "GET",
+        "template",
+        params={
+            "bpName": "test_blueprint_name",
+            "bpVersion": "test_blueprint_version",
+            "artifactName": "test_artifact_name",
+            "resolutionKey": "test_resolution_key",
+        },
+        headers={"Accept": "application/json"},
+    )
