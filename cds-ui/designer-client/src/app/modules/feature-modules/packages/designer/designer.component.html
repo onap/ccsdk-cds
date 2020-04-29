@@ -110,15 +110,44 @@
     <!-- Controller SideBar -->
     <ng-sidebar [(opened)]="controllerSideBar" [sidebarClass]="'demo-sidebar controllerSidebar container-fluid'"
         [mode]="'push'" #sidebarLeft>
-        <div class="row">
-            <h1 class="col-12">Actions</h1>
-            <div class="col-12 text-center p-0">
-                <div class="btn-group actionBtns" role="group">
-                    <button (click)="insertCustomActionIntoBoard()" type="button" class="btn insert-custom">Insert
-                        Custom</button>
-                    <!-- <button type="button" class="btn import-action"><i class="icon-import-blue" aria-hidden="true"></i>Import Action</button> -->
+
+        <nav class="row">
+            <!--Nav Tabs-->
+            <div class="col-12">
+                <div class="nav nav-tabs " id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active col-6" id="nav-action-tab" data-toggle="tab"
+                        href="#nav-action" role="tab" aria-controls="nav-action" aria-selected="false"
+                        autofocus #nameit >Actions</a>
+                    <a class="nav-item nav-link col-6" id="nav-function-tab" data-toggle="tab"
+                        href="#nav-function" role="tab" aria-controls="nav-function" aria-selected="false">Functions</a>
                 </div>
             </div>
+   </nav>
+
+
+ <div class="row mt-2">
+            <div class="col">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-action" role="tabpanel"
+                        aria-labelledby="nav-action-tab">
+                        <div class="btn-group actionBtns col-8" role="group">
+                            <button (click)="insertCustomActionIntoBoard()" type="button" class="btn insert-custom">
+                                Insert Custom
+                            </button> 
+                      <!-- <button type="button" class="btn import-action"><i class="icon-import-blue" aria-hidden="true"></i>Import Action</button> -->
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-function" role="tabpanel"
+                        aria-labelledby="nav-function-tab">
+                        <div class="col-12 text-center p-0">
+                            <b>Drag and drop function to Action’s box</b>
+                            <div id="palette-paper" class="col-12 componentsList"> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
             <!-- <div class="col-12 actionsList">
         <b>Select from other packages:</b>
         <div class="actions-scroll">
@@ -153,11 +182,7 @@
         </div>
       </div> -->
 
-            <h1 class="col-12">Functions</h1>
-            <b>Drag and drop function to Action’s box</b>
-            <div id="palette-paper" class="col-12 componentsList">
-            </div>
-        </div>
+           
     </ng-sidebar>
     <!-- Page content -->
 
