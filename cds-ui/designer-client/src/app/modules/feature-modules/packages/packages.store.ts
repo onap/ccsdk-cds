@@ -31,7 +31,7 @@ import {Observable, of} from 'rxjs';
 })
 export class PackagesStore extends Store<PackagesDashboardState> {
     // TDOD fixed for now as there is no requirement to change it from UI
-    public pageSize = 5;
+    public pageSize = 15;
     private bluePrintContent: BluePrintPage = new BluePrintPage();
 
     constructor(private packagesServiceList: PackagesApiService) {
