@@ -30,7 +30,7 @@
                             <!-- <img class="icon-deployed" src="/assets/img/icon-deploy.svg"> -->
                             <p class="packageName" tooltip="{{bluePrint.artifactName}}" placement="bottom">
                                 {{bluePrint.artifactName}}</p>
-                            <span class="package-version">V 1.0.2</span>
+                            <span class="package-version">{{bluePrint.artifactVersion}}</span>
                         </a>
 
                     </div>
@@ -55,7 +55,7 @@
                                     </a>
                                 </li>
                                 <li class="action-archive">
-                                    <a href="#">
+                                    <a (click)="downloadPackage(bluePrint.artifactName,bluePrint.artifactVersion)">
                                         <i class="icon-download" aria-hidden="true"></i>
                                         Download
                                     </a>
@@ -75,7 +75,7 @@
                     <div class="col">
                         <p class="mb-0 mt-1">Last modified {{ bluePrint.createdDate | date:'short' }}
                         </p>
-                        <p class="mb-2">By {{bluePrint.updatedBy}}</p>
+<!--                        <p class="mb-2">By {{bluePrint.updatedBy}}</p>-->
                         <p class="package-desc" [delay]="300"
                             tooltip="DESCRIPTION:
                             The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et Malorum by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."
