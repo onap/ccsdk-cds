@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -221,6 +222,29 @@ open class ResourceResolutionDBServiceTest {
                 )
 
             assertEquals(resourceResolution, res)
+        }
+    }
+
+    @Test
+    fun write_with_null_value() {
+        val slot = slot<ResourceResolution>()
+        val resourceAssignment = ResourceAssignment()
+        resourceAssignment.status = BluePrintConstants.STATUS_SUCCESS
+        resourceAssignment.dictionarySource = "ddSource"
+        resourceAssignment.dictionaryName = "ddName"
+        resourceAssignment.version = 1
+        resourceAssignment.name = "test"
+        every {
+            resourceResolutionRepository.saveAndFlush(capture(slot))
+        } returns ResourceResolution()
+        runBlocking {
+            resourceResolutionDBService.write(
+                            props, bluePrintRuntimeService, artifactPrefix, resourceAssignment
+                    )
+
+            val res = slot.captured
+
+            assertEquals("", res.value)
         }
     }
 
