@@ -181,11 +181,11 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         resourceResolution.resolutionKey = resolutionKey
         resourceResolution.resourceType = resourceType
         resourceResolution.resourceId = resourceId
-        if (BluePrintConstants.STATUS_SUCCESS == resourceAssignment.status) {
-            resourceResolution.value = JacksonUtils.getValue(resourceAssignment.property?.value!!).toString()
-        } else {
-            resourceResolution.value = ""
-        }
+        resourceResolution.value = resourceAssignment.property?.value?.let {
+            if (BluePrintConstants.STATUS_SUCCESS == resourceAssignment.status)
+                JacksonUtils.getValue(it).toString()
+            else ""
+        } ?: ""
         resourceResolution.name = resourceAssignment.name
         resourceResolution.dictionaryName = resourceAssignment.dictionaryName
         resourceResolution.dictionaryVersion = resourceAssignment.version
