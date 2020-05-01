@@ -36,6 +36,13 @@ import { SortDictionaryComponent } from './resource-dictionary-dashboard/sort-di
 import { DictionaryPaginationComponent } from './resource-dictionary-dashboard/dictionary-pagination/dictionary-pagination.component';
 import { SharedModulesModule } from '../../shared-modules/shared-modules.module';
 import { DictionaryListComponent } from './resource-dictionary-dashboard/dictionary-list/dictionary-list.component';
+import { SearchPipe } from 'src/app/common/core/pipes/search.pipe';
+import { ResourceDictionaryCreationComponent } from './resource-dictionary-creation/resource-dictionary-creation.component';
+import { DictionaryMetadataComponent } from './resource-dictionary-creation/dictionary-metadata/dictionary-metadata.component';
+import { SourcesTemplateComponent } from './resource-dictionary-creation/sources-template/sources-template.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatExpansionModule } from '@angular/material';
+import { DictionaryEditorComponent } from './resource-dictionary-creation/dictionary-editor/dictionary-editor.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +53,11 @@ import { DictionaryListComponent } from './resource-dictionary-dashboard/diction
     SortDictionaryComponent,
     DictionaryPaginationComponent,
     DictionaryListComponent,
+    ResourceDictionaryCreationComponent,
+    DictionaryMetadataComponent,
+    SourcesTemplateComponent,
+    SearchPipe,
+    DictionaryEditorComponent,
   ],
   imports: [
     CommonModule,
@@ -57,6 +69,8 @@ import { DictionaryListComponent } from './resource-dictionary-dashboard/diction
     NgxFileDropModule,
     AceEditorModule,
     DataTablesModule,
+    DragDropModule,
+    MatExpansionModule,
   ]
 })
 export class ResourceDictionaryModule { }

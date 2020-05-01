@@ -17,24 +17,28 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ResourceDictionaryDashboardComponent } from './resource-dictionary-dashboard/resource-dictionary-dashboard.component';
-import { ResourceDictionaryCreationComponent } from './resource-dictionary-creation/resource-dictionary-creation.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: ResourceDictionaryDashboardComponent
-  },
-  {
-    path: 'createDictionary',
-    component: ResourceDictionaryCreationComponent
-  }
-];
+import { DictionaryMetadataComponent } from './dictionary-metadata.component';
 
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ResourceDictionaryRoutingModule { }
+describe('DictionaryMetadataComponent', () => {
+  let component: DictionaryMetadataComponent;
+  let fixture: ComponentFixture<DictionaryMetadataComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ DictionaryMetadataComponent ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(DictionaryMetadataComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

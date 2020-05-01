@@ -17,24 +17,28 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ResourceDictionaryDashboardComponent } from './resource-dictionary-dashboard/resource-dictionary-dashboard.component';
-import { ResourceDictionaryCreationComponent } from './resource-dictionary-creation/resource-dictionary-creation.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: ResourceDictionaryDashboardComponent
-  },
-  {
-    path: 'createDictionary',
-    component: ResourceDictionaryCreationComponent
-  }
-];
+import { SourcesTemplateComponent } from './sources-template.component';
 
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ResourceDictionaryRoutingModule { }
+describe('SourcesTemplateComponent', () => {
+  let component: SourcesTemplateComponent;
+  let fixture: ComponentFixture<SourcesTemplateComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ SourcesTemplateComponent ]
+    })
+    .compileComponents();
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SourcesTemplateComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

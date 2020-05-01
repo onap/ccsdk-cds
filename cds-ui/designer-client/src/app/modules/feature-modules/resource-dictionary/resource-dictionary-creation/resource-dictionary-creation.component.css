@@ -17,24 +17,21 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ResourceDictionaryDashboardComponent } from './resource-dictionary-dashboard/resource-dictionary-dashboard.component';
-import { ResourceDictionaryCreationComponent } from './resource-dictionary-creation/resource-dictionary-creation.component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: ResourceDictionaryDashboardComponent
-  },
-  {
-    path: 'createDictionary',
-    component: ResourceDictionaryCreationComponent
+.edit-button{
+    color:white;
+    background:#1B3E6F;
+    margin-right: 60px;
+    border: none;
+    width: 80px;
+    height: 20px;
+    margin-top: 25px;
+    font-size: 10px;
+    padding-left:5px;
+    padding-top: 3px;
   }
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ResourceDictionaryRoutingModule { }
+  .ed{
+    justify-content: space-between;
+  }
+  .single-line-model{
+    margin:20px;
+  }

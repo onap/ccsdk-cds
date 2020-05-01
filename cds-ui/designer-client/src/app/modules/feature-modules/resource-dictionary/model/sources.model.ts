@@ -17,8 +17,6 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-
 export class Sources {
     sources: [];
-
 }

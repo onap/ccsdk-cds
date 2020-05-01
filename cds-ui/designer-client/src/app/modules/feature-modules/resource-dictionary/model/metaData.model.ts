@@ -26,4 +26,7 @@ export class MetaData {
     public entrySchema: string;
     public updatedBy: string;
     public createdDate: string;
+    public libraryInstance: string;
+    public required: string;
+    public derivedFrom: string;
 }

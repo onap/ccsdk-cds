@@ -17,24 +17,28 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ResourceDictionaryDashboardComponent } from './resource-dictionary-dashboard/resource-dictionary-dashboard.component';
-import { ResourceDictionaryCreationComponent } from './resource-dictionary-creation/resource-dictionary-creation.component';
+import { Pipe, PipeTransform } from '@angular/core';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: ResourceDictionaryDashboardComponent
-  },
-  {
-    path: 'createDictionary',
-    component: ResourceDictionaryCreationComponent
-  }
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+@Pipe({
+  name: 'search'
 })
-export class ResourceDictionaryRoutingModule { }
+
+export class SearchPipe implements PipeTransform {
+   transform(items: any[], searchText: string): any[] {
+        if (!items) {
+            return [];
+        }
+        if (!searchText) {
+            return items;
+        }
+        searchText = searchText.toLowerCase();
+        return items.filter( it => {
+            if (it.name) {
+             return it.name.toLowerCase().includes(searchText);
+            } else {
+                return items;
+            }
+        });
+    }
+
+}

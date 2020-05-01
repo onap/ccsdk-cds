@@ -21,10 +21,6 @@
 import { Sources } from './sources.model';
 
 export class Definition {
-    tag: string;
-    name: string;
-    property: string;
-    updatedBy: string;
     sources: Sources[];
 
 }

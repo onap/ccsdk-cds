@@ -1,0 +1,91 @@
+<!--/*
+* ============LICENSE_START=======================================================
+* ONAP : CDS
+* ================================================================================
+* Copyright (C) 2020 TechMahindra
+*=================================================================================
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ============LICENSE_END=========================================================
+*/-->
+<div class="card creat-card col-11">
+    <div class="single-line-model">
+        <label class="label-name">Name</label>
+        <div class="label-input">
+            <input type="input" [(ngModel)]="metaDataTab.name"
+                placeholder="Topology name.vLB.CDS">
+        </div>
+         <!-- <div class="model-note-container error-message">
+            Package name already exists with this version. Please enter a different name or enter different version
+            number.
+        </div>  -->
+    </div>
+
+    <!-- <div class="single-line-model">
+        <label class="label-name">Version <span>*</span></label>
+        <div class="label-input">
+            <input type="input" [readOnly]="!packageNameAndVersionEnables" [(ngModel)]="metaDataTab.version"
+                (input)="validatePackageNameAndVersion()" placeholder="Example: 1.0.0"> 
+        </div>
+        <div class="model-note-container error-message">{{errorMessage}}</div>
+    </div>  -->
+    <div class="single-line-model">
+        <label class="label-name">Entry Schema</label>
+        <div class="label-input">
+            <input type="input" [(ngModel)]="metaDataTab.entrySchema" placeholder="Entry Schema">
+        </div>
+    </div>
+    <div class="single-line-model">
+        <label class="label-name">Data Type</label>
+        <div class="label-input">
+            <input type="input" [(ngModel)]="metaDataTab.dataType" placeholder="Data Type">
+        </div>
+    </div>
+    <div class="single-line-model">
+        <label class="label-name">Description</label>
+        <div class="label-input">
+            <input type="input" [(ngModel)]="metaDataTab.description" placeholder="Descripe the package">
+        </div>
+    </div>
+    <div class="single-line-model">
+        <label class="label-name">Required</label>
+        <div class="label-input">
+            <input type="input" [(ngModel)]="metaDataTab.updatedBy" placeholder="required">
+        </div>
+    </div>
+    <div class="single-line-model">
+        <label class="label-name">Library Instance</label>
+        <div class="label-input">
+            <input type="input" [(ngModel)]="metaDataTab.libraryInstance" placeholder="Library Instance">
+        </div>
+    </div>
+    <div class="single-line-model">
+        <label class="label-name">Derived From</label>
+        <div class="label-input">
+            <input type="input" [(ngModel)]="metaDataTab.derivedFrom" placeholder="Derived From">
+        </div>
+    </div>
+
+    <div class="single-line-model">
+        <label class="label-name">Tags</label>
+        <div class="label-input">
+            <input type="input" (keyup.enter)="addTag($event)" [(ngModel)]="metaDataTab.tags"
+                placeholder="Ex., vDNS-CDS">
+
+        </div>
+        <div class="model-note-container tag-notes">Seprate tags with comma or space</div>
+        <div class="model-note-container tages-container">
+            <span *ngFor="let tag of tags" class="single-tage">{{tag}} <i (click)="removeTag(tag)"
+                    class="fa fa-times-circle"></i></span>
+        </div>
+    </div>
+</div> 

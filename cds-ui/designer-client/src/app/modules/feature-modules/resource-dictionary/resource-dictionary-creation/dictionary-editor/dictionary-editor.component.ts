@@ -17,24 +17,22 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ResourceDictionaryDashboardComponent } from './resource-dictionary-dashboard/resource-dictionary-dashboard.component';
-import { ResourceDictionaryCreationComponent } from './resource-dictionary-creation/resource-dictionary-creation.component';
+import { Component, OnInit } from '@angular/core';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: ResourceDictionaryDashboardComponent
-  },
-  {
-    path: 'createDictionary',
-    component: ResourceDictionaryCreationComponent
-  }
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+@Component({
+  selector: 'app-dictionary-editor',
+  templateUrl: './dictionary-editor.component.html',
+  styleUrls: ['./dictionary-editor.component.css']
 })
-export class ResourceDictionaryRoutingModule { }
+export class DictionaryEditorComponent implements OnInit {
+  constructor() {
+   }
+
+  ngOnInit() {
+  }
+
+  textChanged(event) {
+    console.log(event);
+  }
+}
+

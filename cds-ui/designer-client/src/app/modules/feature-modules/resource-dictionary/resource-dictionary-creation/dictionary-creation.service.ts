@@ -17,24 +17,21 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ResourceDictionaryDashboardComponent } from './resource-dictionary-dashboard/resource-dictionary-dashboard.component';
-import { ResourceDictionaryCreationComponent } from './resource-dictionary-creation/resource-dictionary-creation.component';
+import { Injectable } from '@angular/core';
+import { ResourceDictionaryURLs } from 'src/app/common/constants/app-constants';
+import { Observable } from 'rxjs';
+import { Sources } from '../model/sources.model';
+import { ApiService } from 'src/app/common/core/services/api.service';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: ResourceDictionaryDashboardComponent
-  },
-  {
-    path: 'createDictionary',
-    component: ResourceDictionaryCreationComponent
-  }
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+@Injectable({
+  providedIn: 'root'
 })
-export class ResourceDictionaryRoutingModule { }
+export class DictionaryCreationService {
+
+  constructor(private api: ApiService) { }
+
+  getSources() {
+    return this.api.get(ResourceDictionaryURLs.getSources);
+}
+
+}

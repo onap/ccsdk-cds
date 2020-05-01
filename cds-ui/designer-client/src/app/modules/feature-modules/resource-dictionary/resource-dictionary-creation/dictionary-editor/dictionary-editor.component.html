@@ -1,4 +1,4 @@
-/*
+<!--/*
 * ============LICENSE_START=======================================================
 * ONAP : CDS
 * ================================================================================
@@ -16,25 +16,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 * ============LICENSE_END=========================================================
-*/
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ResourceDictionaryDashboardComponent } from './resource-dictionary-dashboard/resource-dictionary-dashboard.component';
-import { ResourceDictionaryCreationComponent } from './resource-dictionary-creation/resource-dictionary-creation.component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: ResourceDictionaryDashboardComponent
-  },
-  {
-    path: 'createDictionary',
-    component: ResourceDictionaryCreationComponent
-  }
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ResourceDictionaryRoutingModule { }
+*/-->
+<ace-editor [(text)]="text" [mode]="'javascript'" [autoUpdateContent]="true"
+[durationBeforeCallback]="1000" (textChanged)="textChanged($event)" [theme]="'tomorrow_night_bright'" #editor style="height:500px;">
+</ace-editor>
