@@ -31,7 +31,7 @@ limitations under the License.
 
     <groupId>org.onap.ccsdk.cds</groupId>
     <artifactId>ui</artifactId>
-    <version>0.7.2-SNAPSHOT</version>
+    <version>0.7.2</version>
     <packaging>pom</packaging>
 
     <name>CDS UI Parent</name>

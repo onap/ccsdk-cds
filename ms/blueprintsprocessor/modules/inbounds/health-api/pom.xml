@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
         <artifactId>inbounds</artifactId>
-        <version>0.7.2-SNAPSHOT</version>
+        <version>0.7.2</version>
     </parent>
 
     <artifactId>health-api</artifactId>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>health-api-common</artifactId>
-            <version>0.7.2-SNAPSHOT</version>
+            <version>0.7.2</version>
         </dependency>
     </dependencies>
 </project>
