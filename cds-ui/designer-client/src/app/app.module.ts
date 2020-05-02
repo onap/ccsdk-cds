@@ -34,6 +34,7 @@ import {SidebarModule} from 'ng-sidebar';
 import {SharedModulesModule} from './modules/shared-modules/shared-modules.module';
 import {NgxFileDropModule} from 'ngx-file-drop';
 import {ResourceDictionaryModule} from './modules/feature-modules/resource-dictionary/resource-dictionary.module';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import {ResourceDictionaryModule} from './modules/feature-modules/resource-dicti
         NgxFileDropModule,
         ResourceDictionaryModule,
         SidebarModule,
+        ToastrModule.forRoot() // ToastrModule added
     ],
 
     providers: [ApiService],

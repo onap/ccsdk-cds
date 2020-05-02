@@ -84,6 +84,10 @@ export class PackageCreationStore extends Store<CBAPackage> {
         this.state.scripts.files.delete(name);
     }
 
+    fileExist(key: string) {
+        return this.state.templates.files.has(key);
+    }
+
     removeFileFromDefinition(filename) {
         this.state.definitions.imports.delete(filename);
     }

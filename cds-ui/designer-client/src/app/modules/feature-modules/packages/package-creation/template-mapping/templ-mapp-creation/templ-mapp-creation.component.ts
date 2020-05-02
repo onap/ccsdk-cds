@@ -7,7 +7,8 @@ import { ResourceDictionary } from '../../mapping-models/ResourceDictionary.mode
 import { DataTableDirective } from 'angular-datatables';
 import { Mapping, MappingAdapter } from '../../mapping-models/mappingAdapter.model';
 import { PackageCreationUtils } from '../../package-creation.utils';
-import { JsonConvert } from 'json2typescript';
+import { JsonConvert, Any } from 'json2typescript';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-templ-mapp-creation',
@@ -40,13 +41,16 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     dependancies = new Map<string, Array<string>>();
     dependanciesSource = new Map<string, string>();
     mappingRes = [];
+    currentTemplate: any;
+    currentMapping: any;
 
 
 
     constructor(
         private packageCreationStore: PackageCreationStore,
         private templateStore: TemplateStore,
-        private packageCreationUtils: PackageCreationUtils
+        private packageCreationUtils: PackageCreationUtils,
+        private toastr: ToastrService
     ) {
     }
 
@@ -56,13 +60,18 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             console.log(templateInfo);
             this.templateInfo = templateInfo;
             this.fileName = templateInfo.fileName.split('/')[1];
+            if (this.fileName) {
+                this.fileName = this.fileName.split('-')[0];
+            }
             if (templateInfo.type === 'mapping') {
                 this.mappingRes = templateInfo.mapping;
+                this.currentMapping = templateInfo;
                 this.resourceDictionaryRes = [];
                 this.resTableDtTrigger.next();
             } else {
 
                 this.templateFileContent = templateInfo.fileContent;
+                this.currentTemplate = templateInfo;
             }
         });
 
@@ -224,27 +233,43 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         }
         return map.key;
     }
+    cancel() {
+        this.fileName = '';
+        this.templateFileContent = '';
+        this.resourceDictionaryRes = [];
+        this.mappingRes = [];
+        this.currentMapping = {};
+        this.currentTemplate = {};
+    }
     saveToStore() {
-        console.log(this.dependancies);
-        console.log(this.dependanciesSource);
         if (this.fileName) {
-            // Save Mapping to Store
-            if (this.resourceDictionaryRes && this.resourceDictionaryRes.length > 0) {
-                const mapArray = this.convertDictionaryToMap(this.resourceDictionaryRes);
-                this.packageCreationStore.addMapping('Templates/' + this.fileName + '-mapping.json',
-                    this.packageCreationUtils.transformToJson(this.jsonConvert.serialize(mapArray)));
-                this.resourceDictionaryRes = [];
-            }
-            // Save Template to store
-            if (this.templateFileContent) {
-                this.packageCreationStore.addTemplate('Templates/' + this.fileName + '-template' + this.getFileExtension(),
-                    this.templateFileContent);
-                this.templateFileContent = '';
+            // check file duplication
+            if (!(this.packageCreationStore.fileExist('Templates/' + this.fileName + '-mapping.json')
+                || this.packageCreationStore.fileExist('Templates/' + this.fileName + '-template' + this.getFileExtension()))) {
+                // Save Mapping to Store
+                if (this.resourceDictionaryRes && this.resourceDictionaryRes.length > 0) {
+                    const mapArray = this.convertDictionaryToMap(this.resourceDictionaryRes);
+                    this.packageCreationStore.addMapping('Templates/' + this.fileName + '-mapping.json',
+                        this.packageCreationUtils.transformToJson(this.jsonConvert.serialize(mapArray)));
+                    this.resourceDictionaryRes = [];
+                }
+                // Save Template to store
+                if (this.templateFileContent) {
+                    this.packageCreationStore.addTemplate('Templates/' + this.fileName + '-template' + this.getFileExtension(),
+                        this.templateFileContent);
+                    this.templateFileContent = '';
+                }
+                this.fileName = '';
+                this.toastr.success('File is created', 'success');
+            } else {
+                console.log('this file already exist');
+                this.toastr.error('File name already exist', 'Error');
             }
         } else {
-
+            this.toastr.error('Add the file name', 'Error');
         }
     }
+
 
     selectSource(dict, e) {
         const source = e.target.value;
