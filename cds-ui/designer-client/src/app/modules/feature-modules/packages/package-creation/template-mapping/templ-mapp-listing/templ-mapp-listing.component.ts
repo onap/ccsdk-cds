@@ -17,6 +17,7 @@ export class TemplMappListingComponent implements OnInit {
     private templates: Template;
     private mapping: Mapping;
     isCreate = true;
+    currentFile: string;
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -72,6 +73,7 @@ export class TemplMappListingComponent implements OnInit {
     }
 
     setSourceCodeEditor(key: string) {
+        this.currentFile = key;
         const templateKey = 'Templates/' + key + '-template.vtl';
         this.packageCreationStore.state$.subscribe(cba => {
             console.log('cba ------');

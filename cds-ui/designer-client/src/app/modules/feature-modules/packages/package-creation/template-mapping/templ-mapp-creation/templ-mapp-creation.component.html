@@ -12,13 +12,13 @@
 </div>
 
 <div class="template-mapping-accordion">
-    <div id="accordion">
+    <div class="accordion" id="accordion">
         <div class="card">
             <div class="card-header" id="headingOne">
                 <h5 class="mb-0 d-flex justify-content-between">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
                         aria-controls="collapseOne">
-                        1. Create Template
+                        1. Template <span class="accordian-title">{{currentTemplate?.fileName?.split('/')[1]}}</span>
                     </button>
 
                 </h5>
@@ -70,7 +70,8 @@
                 <h5 class="mb-0">
                     <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
                         aria-expanded="false" aria-controls="collapseTwo">
-                        2. Manage Mapping
+                        2. Manage Mapping <span
+                            class="accordian-title">{{currentMapping?.fileName?.split('/')[1]}}</span>
                     </button>
                 </h5>
             </div>
@@ -119,8 +120,10 @@
                         <tbody>
                             <tr *ngFor="let dict of resourceDictionaryRes">
                                 <td>
-                                    <img *ngIf="dict.definition?.property?.required" src="/assets/img/icon-required-yes.svg">
-                                    <img *ngIf="!dict.definition?.property?.required" src="/assets/img/icon-required-no.svg">
+                                    <img *ngIf="dict.definition?.property?.required"
+                                        src="/assets/img/icon-required-yes.svg">
+                                    <img *ngIf="!dict.definition?.property?.required"
+                                        src="/assets/img/icon-required-no.svg">
                                 </td>
                                 <td>{{ dict.name }}</td>
                                 <td>{{ dict.name }}</td>
@@ -166,8 +169,10 @@
                         <tbody>
                             <tr *ngFor="let dict of mappingRes">
                                 <td>
-                                    <img *ngIf="dict.definition?.property?.required" src="/assets/img/icon-required-yes.svg">
-                                    <img *ngIf="!dict.definition?.property?.required" src="/assets/img/icon-required-no.svg">
+                                    <img *ngIf="dict.definition?.property?.required"
+                                        src="/assets/img/icon-required-yes.svg">
+                                    <img *ngIf="!dict.definition?.property?.required"
+                                        src="/assets/img/icon-required-no.svg">
                                 </td>
                                 <td>{{ dict['name'] }}</td>
                                 <td>{{ dict['name'] }}</td>
@@ -194,7 +199,7 @@
 
         </div>
         <div class="template-mapping-action">
-            <button class="btn btn-outline-secondary">Cancel</button>
+            <button (click)="cancel()" class="btn btn-outline-secondary">Cancel</button>
             <button (click)="saveToStore()" class="btn btn-primary">Submit</button>
         </div>
     </div>
@@ -212,8 +217,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <ngx-file-drop [multiple]="false" [accept]="allowedExt" dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
-                    (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+                <ngx-file-drop [multiple]="false" [accept]="allowedExt" dropZoneLabel="Drop files here"
+                    (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
                     <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
                         <div class="folder-upload">
                             <img src="assets/img/folder-upload.svg" />

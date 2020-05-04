@@ -4,7 +4,7 @@
 
 
 <div class="template-mapping-accordion">
-    <div id="accordion">
+    <div class="accordion" id="listAccordion">
         <div class="card">
             <div class="card-header" id="headingThree">
                 <h5 class="mb-0 d-flex justify-content-between">
@@ -16,12 +16,12 @@
                 </h5>
             </div>
 
-            <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordion">
+            <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#listAccordion">
                 <div class="card-body max-height-list">
                     <div class="row">
                         <!-- <div class="col-4" style="color:white" *ngFor="let file of templates.files | keyvalue; let mapIndex = index">-->
                         <div class="col-4" *ngFor="let file of  getKeys(templateAndMappingMap)">
-                            <a (click)="setSourceCodeEditor(file)" class="template-mapping-list active">{{file}}
+                            <a (click)="setSourceCodeEditor(file)" class="template-mapping-list" [ngClass]="{'active':currentFile == file}">{{file}}
                                 <span *ngIf="getValue(file).isMapping">Mapping</span>
                                 <span *ngIf="getValue(file).isTemplate">Template</span>
                             </a>
