@@ -3,6 +3,7 @@ import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { PackageCreationStore } from '../package-creation.store';
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/webpack-resolver';
+declare var $: any;
 
 @Component({
     selector: 'app-scripts-tab',
@@ -15,6 +16,7 @@ export class ScriptsTabComponent implements OnInit {
     public uploadedFiles: FileSystemFileEntry[] = [];
     public files: NgxFileDropEntry[] = [];
     private fileNames: Set<string> = new Set();
+    fileToDelete: any = {};
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -42,7 +44,9 @@ export class ScriptsTabComponent implements OnInit {
             }
         }
     }
-
+    initDelete(file) {
+        this.fileToDelete = file;
+    }
     removeFile(filePath: string, FileIndex: number) {
         const filename = filePath.split('/')[2] || '';
         //  const filename = 'Scripts/' + this.getFileType(this.uploadedFiles[fileIndex].name) + '/' + this.uploadedFiles[fileIndex].name;
