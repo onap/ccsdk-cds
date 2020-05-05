@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
-import {PackageCreationStore} from '../package-creation.store';
-import {PackageCreationUtils} from '../package-creation.utils';
+import { Component, OnInit } from '@angular/core';
+import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
+import { PackageCreationStore } from '../package-creation.store';
+import { PackageCreationUtils } from '../package-creation.utils';
 
 
 @Component({
@@ -14,7 +14,7 @@ export class ImportsTabComponent implements OnInit {
     public definitionFiles: Map<string, string> = new Map<string, string>();
     public uploadedFiles: FileSystemFileEntry[] = [];
     private fileNames: Set<string> = new Set();
-
+    fileToDelete: any = {};
     public files: NgxFileDropEntry[] = [];
 
     constructor(private packageCreationStore: PackageCreationStore, private packageCreationUtils: PackageCreationUtils) {
@@ -40,11 +40,21 @@ export class ImportsTabComponent implements OnInit {
             }
         }
     }
-
-    removeFile(fileIndex: number) {
-        const filename = 'Definitions/' + this.uploadedFiles[fileIndex].name;
+    initDelete(file) {
+        console.log(file);
+        this.fileToDelete = file;
+    }
+    removeFile() {
+        const filename = this.fileToDelete.key;
         this.packageCreationStore.removeFileFromDefinition(filename);
-        this.uploadedFiles.splice(fileIndex, 1);
+
+        for (let i = 0; i < this.uploadedFiles.length; i++) {
+            console.log(this.uploadedFiles[i]);
+            if (this.uploadedFiles[i].name === filename) {
+                this.uploadedFiles.splice(i, 1);
+                break;
+            }
+        }
     }
 
     public fileOver(event) {

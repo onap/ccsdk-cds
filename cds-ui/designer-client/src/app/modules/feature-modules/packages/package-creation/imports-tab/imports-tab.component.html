@@ -36,38 +36,39 @@
             <div class="card">
                 <div class="card-header" [id]="'head-'+mapIndex">
                     <h5 class="mb-0 d-flex justify-content-between">
-                        <button class="btn btn-link " data-toggle="collapse"
-                                aria-expanded="false"
-                            (click)="changeDivShow(mapIndex)" >
+                        <button class="btn btn-link " data-toggle="collapse" aria-expanded="false"
+                            (click)="changeDivShow(mapIndex)">
                             <i class="icon-file-code"></i> {{file.key}}
                         </button>
-                        
-                        <a data-toggle="modal" data-target="#exampleModal" class="accordion-delete"><i
-                            class="icon-delete-sm"></i></a>
-    
-                    <!-- <a class="accordion-delete" (click)="removeFile(mapIndex)"><i class="icon-delete-sm"></i></a> -->
-                    <!-- Delete Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Delete File</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Are you sure you want to delete file <span>artifact_types.json</span>?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-primary">Delete</button>
+
+                        <a data-toggle="modal" (click)="initDelete(file)" data-target="#exampleModal"
+                            class="accordion-delete"><i class="icon-delete-sm"></i></a>
+
+                        <!-- <a class="accordion-delete" (click)="removeFile(mapIndex)"><i class="icon-delete-sm"></i></a> -->
+                        <!-- Delete Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Delete File</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete file
+                                            <span>{{fileToDelete?.key?.split('/')[1]}}</span>?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Cancel</button>
+                                        <button type="button" data-dismiss="modal" (click)="removeFile()"
+                                            class="btn btn-primary">Delete</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </h5>
                 </div>
                 <div [id]="'id-'+mapIndex" class="collapse" [attr.aria-labelledby]="'head-'+mapIndex"
@@ -153,7 +154,8 @@
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal"
                     (click)="resetTheUploadedFiles()">Cancel
                 </button>
-                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" (click)="setFilesToStore()">
+                <button type="button" class="btn btn-sm btn-primary" [disabled]="uploadedFiles?.length<=0"
+                    data-dismiss="modal" (click)="setFilesToStore()">
                     Import
                 </button>
             </div>
