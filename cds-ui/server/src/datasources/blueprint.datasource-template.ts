@@ -73,7 +73,7 @@ export default {
         {
             "template": {
                 "method": "GET",
-                "url": processorApiConfig.http.url + "/blueprint-model/paged?limit={limit}&offset={offset}&sort={sort}",
+                "url": processorApiConfig.http.url + "/blueprint-model/paged?limit={limit}&offset={offset}&sort={sort}&sortType={sortType}",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
@@ -82,13 +82,13 @@ export default {
                 "responsePath": "$",
             },
             "functions": {
-                "getPagedBueprints": ["limit", "offset", "sort"],
+                "getPagedBueprints": ["limit", "offset", "sort","sortType"],
             }
         },
         {
             "template": {
                 "method": "GET",
-                "url": processorApiConfig.http.url + "/blueprint-model/paged/meta-data/{keyword}?limit={limit}&offset={offset}&sort={sort}",
+                "url": processorApiConfig.http.url + "/blueprint-model/paged/meta-data/{keyword}?limit={limit}&offset={offset}&sort={sort}&sortType={sortType}",
                 "headers": {
                     "accepts": "application/json",
                     "content-type": "application/json",
@@ -97,7 +97,7 @@ export default {
                 "responsePath": "$",
             },
             "functions": {
-                "getMetaDataPagedBlueprints": ["limit", "offset", "sort", "keyword"],
+                "getMetaDataPagedBlueprints": ["limit", "offset", "sort", "keyword","sortType"],
             }
         },
         {

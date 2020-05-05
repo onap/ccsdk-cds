@@ -7,8 +7,8 @@ export interface BlueprintService {
    getAllblueprints(): Promise<any>;
    getBlueprintsByKeyword(keyword: string): Promise<any>;
    getByTags(tags: string): Promise<JSON>;
-   getPagedBueprints(limit: number, offset: number , sort: string): Promise<any>;
-   getMetaDataPagedBlueprints(limit: number, offset: number, sort: string, keyword: string): Promise<any>;
+   getPagedBueprints(limit: number, offset: number , sort: string,sortType: String): Promise<any>;
+   getMetaDataPagedBlueprints(limit: number, offset: number, sort: string, keyword: string,sortType: String): Promise<any>;
    getBlueprintByNameAndVersion(name:string, version:string): Promise<any>;
 
 

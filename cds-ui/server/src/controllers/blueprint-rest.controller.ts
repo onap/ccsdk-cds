@@ -20,34 +20,14 @@ limitations under the License.
 */
 
 
-import {
-  Count,
-  CountSchema,
-  Filter,
-  repository,
-  Where,
-} from '@loopback/repository';
-import {
-  post,
-  param,
-  get,
-  getFilterSchemaFor,
-  getWhereSchemaFor,
-  patch,
-  put,
-  del,
-  requestBody,
-  Request,
-  Response,
-  RestBindings,
-} from '@loopback/rest';
+import {get, param, post, Request, requestBody, Response, RestBindings} from '@loopback/rest';
 import {Blueprint} from '../models';
 import {inject} from '@loopback/core';
 import {BlueprintService} from '../services';
 import * as fs from 'fs';
 import * as multiparty from 'multiparty';
 import * as request_lib from 'request';
-import {processorApiConfig, appConfig} from '../config/app-config';
+import {appConfig, processorApiConfig} from '../config/app-config';
 import {bluePrintManagementServiceGrpcClient} from '../clients/blueprint-management-service-grpc-client';
 import {BlueprintDetail} from '../models/blueprint.detail.model';
 
@@ -94,8 +74,9 @@ export class BlueprintRestController {
   async getPagedBlueprints(
     @param.query.number('limit') limit: number,
     @param.query.number('offset') offset: number,
-    @param.query.string('sort') sort: string) {
-    return await this.bpservice.getPagedBueprints(limit, offset, sort);
+    @param.query.string('sort') sort: string,
+    @param.query.string('sortType') sortType: string) {
+    return await this.bpservice.getPagedBueprints(limit, offset, sort, sortType);
   }
 
   @get('/controllerblueprint/metadata/paged/{keyword}', {
@@ -110,8 +91,9 @@ export class BlueprintRestController {
     @param.path.string('keyword') keyword: string,
     @param.query.number('limit') limit: number,
     @param.query.number('offset') offset: number,
-    @param.query.string('sort') sort: string) {
-    return await this.bpservice.getMetaDataPagedBlueprints(limit, offset, sort, keyword);
+    @param.query.string('sort') sort: string,
+    @param.query.string('sortType') sortType: string) {
+    return await this.bpservice.getMetaDataPagedBlueprints(limit, offset, sort, keyword, sortType);
   }
 
   @get('/controllerblueprint/meta-data/{keyword}', {
