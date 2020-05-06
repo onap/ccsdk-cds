@@ -8,7 +8,7 @@
                     <ul class="breadcrumb-header">
                         <li><a routerLink="/packages">CBA Packages</a></li>
                         <i class="fa fa-angle-right ml-2 mr-2"></i>
-                        <li>Package Name</li>
+                        <li>{{viewedPackage.artifactName}}</li>
                     </ul>
                 </h2>
                 <div class="col">
@@ -17,12 +17,13 @@
         </header>
 
 
+
         <div class="container-fluid body-container">
 
             <div class="container">
                 <div class="creat-action-container">
 
-                    <a href="#" class="action-button save" (click)="editBluePrint()">
+                    <a href="#" class="action-button" (click)="editBluePrint()">
                         <i class="icon-save-sm" aria-hidden="true"></i>
                         <span>Save</span>
                     </a>
@@ -42,13 +43,13 @@
                         <span>Archive</span>
                     </a>
 
-                    <a class="action-button"
-                       (click)="downloadPackage(viewedPackage.artifactName,viewedPackage.artifactVersion)">
+                    <a href="#" class="action-button">
                         <i class="icon-download" aria-hidden="true"></i>
                         <span>Download</span>
                     </a>
 
-                    <a class="action-button delete">
+                    <a href="#" class="action-button delete"
+                        (click)="downloadPackage(viewedPackage.artifactName,viewedPackage.artifactVersion)">
                         <i class="icon-delete-sm" aria-hidden="true"></i>
                         <span>Delete</span>
                     </a>
@@ -60,7 +61,7 @@
                         <div class="col-9">
                             <div class="row mb-4">
                                 <div class="col-12 package-name deployed">
-                                    {{viewedPackage.artifactName}}
+                                    {{viewedPackage.artifactName}}<span>.vLB.CDS</span>
                                     <img src="/assets/img/icon-deploy-inactive.svg" class="deply-status-icon">
                                     <span class="package-version">Version 1.0.2</span>
                                 </div>
@@ -83,19 +84,19 @@
                                     <ul class="package-contributers">
                                         <li>
                                             <button type="button" class="border-fade" data-toggle="tooltip"
-                                                    data-placement="bottom" title="User name">
+                                                data-placement="bottom" title="User name">
                                                 <img src="/assets/img/img-user1.jpeg">
                                             </button>
                                         </li>
                                         <li>
                                             <button type="button" data-toggle="tooltip" data-placement="bottom"
-                                                    title="User name">
+                                                title="User name">
                                                 <img src="/assets/img/img-user2.jpg">
                                             </button>
                                         </li>
                                         <li>
                                             <button type="button" data-toggle="tooltip" data-placement="bottom"
-                                                    title="User name">
+                                                title="User name">
                                                 <img src="/assets/img/img-user3.jpg">
                                             </button>
                                         </li>
@@ -107,12 +108,10 @@
                             </div>
                         </div>
                         <div class="col-2 package-view-button pt-3">
-                            <button class="btn btn-sm btn-primary mb-2" (click)="goToDesignerMode()">Designer
-                                Mode
-                            </button>
+                            <button class="btn btn-sm btn-primary mb-2" (click)="goToDesignerMode(viewedPackage.id)">Designer
+                                Mode</button>
                             <button class="btn btn-sm btn-outline-secondary" (click)="deployCurrentPackage()"><i
-                                    class="fa fa-play-circle"></i> Deploy
-                            </button>
+                                    class="fa fa-play-circle"></i> Deploy</button>
                         </div>
                     </div>
 
@@ -123,17 +122,17 @@
                     <div class="col">
                         <div class="nav nav-tabs " id="nav-tab" role="tablist">
                             <a class="nav-item nav-link active complete" id="nav-metadata-tab" data-toggle="tab"
-                               href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="true"
-                               autofocus #nameit (focusout)="saveMetaData()">METADATA</a>
+                                href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="true"
+                                autofocus #nameit (focusout)="saveMetaData()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
-                               role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
+                                role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
                             <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
-                               role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
+                                role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
                             <a class="nav-item nav-link" id="nav-imports-tab" data-toggle="tab" href="#nav-imports"
-                               role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a>
+                                role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a>
                             <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab"
-                               href="#nav-authentication" role="tab" aria-controls="nav-authentication"
-                               aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
+                                href="#nav-authentication" role="tab" aria-controls="nav-authentication"
+                                aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
                         </div>
                     </div>
 
@@ -142,24 +141,24 @@
                     <div class="col">
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
-                                 aria-labelledby="nav-metadata-tab">
+                                aria-labelledby="nav-metadata-tab">
                                 <app-metadata-tab></app-metadata-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-template" role="tabpanel"
-                                 aria-labelledby="nav-template-tab">
+                                aria-labelledby="nav-template-tab">
                                 <app-template-mapping></app-template-mapping>
                             </div>
                             <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
-                                 aria-labelledby="nav-scripts-tab">
+                                aria-labelledby="nav-scripts-tab">
                                 <app-scripts-tab></app-scripts-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-imports" role="tabpanel"
-                                 aria-labelledby="nav-imports-tab">
+                                aria-labelledby="nav-imports-tab">
                                 <app-imports-tab></app-imports-tab>
 
                             </div>
                             <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
-                                 aria-labelledby="nav-authentication-tab">
+                                aria-labelledby="nav-authentication-tab">
                                 <div class="card creat-card">
                                     <div class="editor-container">
                                         <app-dsl-definitions-tab></app-dsl-definitions-tab>

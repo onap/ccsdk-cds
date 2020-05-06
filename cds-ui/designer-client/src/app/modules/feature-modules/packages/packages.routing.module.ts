@@ -12,8 +12,8 @@ const routes: Routes = [
         path: '',
         component: PackagesDashboardComponent
     },
-    {path: 'designer', component: DesignerComponent},
-    { path: 'designer/source', component: DesignerSourceViewComponent },
+    {path: 'designer/:id', component: DesignerComponent},
+    { path: 'designer/source/:id', component: DesignerSourceViewComponent },
     {path: 'package/:id', component: ConfigurationDashboardComponent},
     {path: 'createPackage', component: PackageCreationComponent},
 ];

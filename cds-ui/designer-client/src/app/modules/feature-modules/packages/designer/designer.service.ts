@@ -3,6 +3,8 @@
 ===================================================================
 Copyright (C) 2019 Orange. All rights reserved.
 ===================================================================
+Modification Copyright (c) 2020 IBM Intellectual Property
+===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
 under the Apache License, Version 2.0 (the License);
@@ -22,8 +24,9 @@ limitations under the License.
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from '../../../../common/core/services/api.typed.service';
-import {ResourceDictionaryURLs} from '../../../../common/constants/app-constants';
+import {ResourceDictionaryURLs, BlueprintURLs} from '../../../../common/constants/app-constants';
 import {ModelType} from './model/ModelType.model';
+import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
 
 
 @Injectable({
@@ -31,11 +34,20 @@ import {ModelType} from './model/ModelType.model';
 })
 export class DesignerService {
 
-    constructor(private api: ApiService<ModelType>) {
+    constructor(private api: ApiService<ModelType>,
+               private api2: ApiService<BluePrintDetailModel>) {
     }
 
     getFunctions(modelDefinitionType: string): Observable<ModelType[]> {
         return this.api.get(ResourceDictionaryURLs.getResourceDictionary + '/' + modelDefinitionType);
+    }
+
+    private getBluePrintModel(id: string): Observable<BluePrintDetailModel> {
+        return this.api2.getOne(BlueprintURLs.getOneBlueprint + '/' + id);
+    }
+    
+    getPagedPackages(id: string) {
+        return this.getBluePrintModel(id);
     }
 
 }
