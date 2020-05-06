@@ -37,10 +37,12 @@ export class PackagesApiService {
     }
 
     getPagedPackages(pageNumber: number, pageSize: number, sortBy: string): Observable<BluePrintPage[]> {
+        const sortType = sortBy.includes('DATE') ? 'DESC' : 'ASC';
         return this.api.get(BlueprintURLs.getPagedBlueprints, {
             offset: pageNumber,
             limit: pageSize,
-            sort: sortBy
+            sort: sortBy,
+            sortType
         });
     }
 
@@ -56,11 +58,12 @@ export class PackagesApiService {
     }
 
     getPagedPackagesByKeyWord(keyWord: string, pageNumber: number, pageSize: number, sortBy: string) {
-
+        const sortType = sortBy.includes('DATE') ? 'DESC' : 'ASC';
         return this.api.get(BlueprintURLs.getMetaDatePageable + '/' + keyWord, {
             offset: pageNumber,
             limit: pageSize,
-            sort: sortBy
+            sort: sortBy,
+            sortType
         });
     }
 }

@@ -89,9 +89,11 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     fun allBlueprintModel(
         @RequestParam(defaultValue = "20") limit: Int,
         @RequestParam(defaultValue = "0") offset: Int,
-        @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption
+        @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption,
+        @RequestParam(defaultValue = "ASC") sortType: String
     ): Page<BlueprintModelSearch> {
-        val pageRequest = PageRequest.of(offset, limit, Sort.Direction.ASC, sort.columnName)
+        val pageRequest = PageRequest.of(offset, limit,
+                Sort.Direction.fromString(sortType), sort.columnName)
         return this.bluePrintModelHandler.allBlueprintModel(pageRequest)
     }
 
@@ -110,9 +112,11 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         @NotNull @PathVariable(value = "keyword") keyWord: String,
         @RequestParam(defaultValue = "20") limit: Int,
         @RequestParam(defaultValue = "0") offset: Int,
-        @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption
+        @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption,
+        @RequestParam(defaultValue = "ASC") sortType: String
     ): Page<BlueprintModelSearch> {
-        val pageRequest = PageRequest.of(offset, limit, Sort.Direction.ASC, sort.columnName)
+        val pageRequest = PageRequest.of(offset, limit,
+                Sort.Direction.fromString(sortType), sort.columnName)
         return this.bluePrintModelHandler.searchBluePrintModelsByKeyWordPaged(keyWord, pageRequest)
     }
 
