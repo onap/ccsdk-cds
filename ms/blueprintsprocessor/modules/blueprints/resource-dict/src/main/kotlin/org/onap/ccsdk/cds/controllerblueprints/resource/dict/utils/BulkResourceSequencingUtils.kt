@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils
 
 import org.apache.commons.collections.CollectionUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asListOfString
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -51,20 +52,25 @@ object BulkResourceSequencingUtils {
         resourceAssignmentMap.forEach { _, resourceAssignment ->
             // Get the dependencies from the assignment sources, if not get from the Resource Assignment dependencies
             if (resourceAssignment.dictionarySourceDefinition != null) {
-                val dependencies = resourceAssignment.dictionarySourceDefinition?.properties?.get("key-dependencies")?.asListOfString()
+                val dependencies =
+                    resourceAssignment.dictionarySourceDefinition?.properties?.get("key-dependencies")?.asListOfString()
                 dependencies?.forEach { dependency ->
                     topologySorting.add(resourceAssignmentMap[dependency]!!, resourceAssignment)
                 }
             } else if (CollectionUtils.isNotEmpty(resourceAssignment.dependencies)) {
                 for (dependency in resourceAssignment.dependencies!!) {
-                    topologySorting.add(resourceAssignmentMap[dependency]!!, resourceAssignment)
+                    val ra = resourceAssignmentMap[dependency]
+                        ?: throw BluePrintProcessorException("Couldn't get Resource Assignment dependency " +
+                            "Key($dependency)")
+                    topologySorting.add(ra, resourceAssignment)
                 }
             } else {
                 topologySorting.add(startResourceAssignment, resourceAssignment)
             }
         }
 
-        val sequencedResourceAssignments: MutableList<ResourceAssignment> = topologySorting.topSort()!! as MutableList<ResourceAssignment>
+        val sequencedResourceAssignments: MutableList<ResourceAssignment> =
+            topologySorting.topSort()!! as MutableList<ResourceAssignment>
         log.trace("Sorted Sequenced Assignments ({})", sequencedResourceAssignments)
 
         var batchResourceAssignment: MutableList<ResourceAssignment>? = null
