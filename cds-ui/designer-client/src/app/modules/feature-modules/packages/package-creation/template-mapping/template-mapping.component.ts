@@ -8,8 +8,8 @@ import { PackageCreationStore } from '../package-creation.store';
     styleUrls: ['./template-mapping.component.css']
 })
 export class TemplateMappingComponent implements OnInit {
-    creationView = true;
-    listView = false;
+    creationView = false;
+    listView = true;
 
     constructor(private route: ActivatedRoute, private pakcageStore: PackageCreationStore) {
     }
@@ -17,7 +17,7 @@ export class TemplateMappingComponent implements OnInit {
     ngOnInit() {
         if (this.route.snapshot.paramMap.has('id')) {
             console.log('Edit mode');
-            this.creationView = false;
+            this.creationView = true;
             this.listView = false;
         } else {
             console.log('Create mode');
@@ -32,6 +32,11 @@ export class TemplateMappingComponent implements OnInit {
     openListView() {
         this.listView = false;
         this.creationView = false;
+    }
+
+    closeCreationView() {
+        this.creationView = true;
+        this.listView = false;
     }
 
 }

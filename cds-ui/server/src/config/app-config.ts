@@ -16,7 +16,7 @@
 export const appConfig = Object.freeze({
     action: Object.freeze({
         // deployBlueprint: Object.freeze({
-            grpcEnabled: process.env.APP_ACTION_DEPLOY_BLUEPRINT_GRPC_ENABLED || true
+        grpcEnabled: false
         // })
     })
 });
