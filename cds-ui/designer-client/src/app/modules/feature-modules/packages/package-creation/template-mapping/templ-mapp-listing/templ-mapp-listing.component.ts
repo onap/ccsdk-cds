@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TemplMappListingComponent implements OnInit {
     @Output() showCreationViewParentNotification = new EventEmitter<any>();
+    @Output() showFullView = new EventEmitter<any>();
     private templateAndMappingMap = new Map<string, TemplateAndMapping>();
     private templates: Template;
     private mapping: Mapping;
@@ -71,6 +72,9 @@ export class TemplMappListingComponent implements OnInit {
     openCreationView() {
         this.showCreationViewParentNotification.emit('tell parent to open create views');
     }
+    FullView() {
+        this.showFullView.emit('show full view');
+    }
 
     setSourceCodeEditor(key: string) {
         this.currentFile = key;
@@ -80,23 +84,23 @@ export class TemplMappListingComponent implements OnInit {
             console.log(cba);
             console.log(key);
             console.log(this.templateAndMappingMap);
+            const templateInfo = new TemplateInfo();
             if (cba.templates && cba.templates.files.has(templateKey)) {
                 const fileContent = cba.templates.getValue(templateKey.trim());
                 console.log(fileContent);
-                const templateInfo = new TemplateInfo();
                 templateInfo.fileContent = fileContent;
                 templateInfo.fileName = templateKey;
-                this.templateStore.changeTemplateInfo(templateInfo);
+                templateInfo.type = 'template';
             }
             const mappingKey = 'Templates/' + key + '-mapping.json';
             if (cba.mapping && cba.mapping.files.has(mappingKey)) {
                 const obj = JSON.parse(cba.mapping.getValue(mappingKey));
-                const templateInfo = new TemplateInfo();
                 templateInfo.mapping = obj;
                 templateInfo.fileName = mappingKey;
-                templateInfo.type = 'mapping';
-                this.templateStore.changeTemplateInfo(templateInfo);
+                templateInfo.type += 'mapping';
             }
+            this.templateStore.changeTemplateInfo(templateInfo);
+            this.FullView();
         });
     }
 

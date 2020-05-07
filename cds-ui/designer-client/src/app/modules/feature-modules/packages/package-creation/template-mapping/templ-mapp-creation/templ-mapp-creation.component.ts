@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { PackageCreationStore } from '../../package-creation.store';
 import { TemplateInfo, TemplateStore } from '../../template.store';
@@ -17,14 +17,14 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class TemplMappCreationComponent implements OnInit, OnDestroy {
     @Output() showListViewParent = new EventEmitter<any>();
-
+    @Output() openList = new EventEmitter<any>();
     public uploadedFiles: FileSystemFileEntry[] = [];
     private fileNames: Set<string> = new Set();
     private jsonConvert = new JsonConvert();
     public files: NgxFileDropEntry[] = [];
     fileName: any;
     templateInfo = new TemplateInfo();
-    private variables: string[] = [];
+    variables: string[] = [];
     dtOptions: DataTables.Settings = {};
     // We use this trigger because fetching the list of persons can be quite long,
     // thus we ensure the data is fetched before rendering
@@ -44,8 +44,6 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     currentTemplate: any;
     currentMapping: any;
 
-
-
     constructor(
         private packageCreationStore: PackageCreationStore,
         private templateStore: TemplateStore,
@@ -56,6 +54,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.templateStore.state$.subscribe(templateInfo => {
+            // init Template&mapping vars
             console.log('----------');
             console.log(templateInfo);
             this.templateInfo = templateInfo;
@@ -63,21 +62,29 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             if (this.fileName) {
                 this.fileName = this.fileName.split('-')[0];
             }
-            if (templateInfo.type === 'mapping') {
+            if (templateInfo.type === 'mapping' || templateInfo.type.includes('mapping')) {
                 this.mappingRes = templateInfo.mapping;
-                this.currentMapping = templateInfo;
+                this.currentMapping = Object.assign({}, templateInfo);
                 this.resourceDictionaryRes = [];
                 this.resTableDtTrigger.next();
             } else {
-
-                this.templateFileContent = templateInfo.fileContent;
-                this.currentTemplate = templateInfo;
+                this.mappingRes = [];
+                this.currentMapping = Any;
             }
+            this.templateFileContent = templateInfo.fileContent;
+            this.currentTemplate = Object.assign({}, templateInfo);
+
+            if (templateInfo.type === 'template' || templateInfo.type.includes('template')) {
+                this.currentTemplate.fileName = 'Templates/' + this.fileName + '-template.vtl';
+            } else {
+                this.currentTemplate = Any;
+            }
+
         });
 
         this.dtOptions = {
             pagingType: 'full_numbers',
-            pageLength: 10,
+            pageLength: 25,
             destroy: true,
             retrieve: true,
         };
@@ -211,7 +218,12 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.showListViewParent.emit('tell parent to open create views');
     }
 
+    closeCreationForm() {
+        this.openList.emit('close create form and open list');
+    }
+
     getMappingTableFromTemplate(e) {
+        console.log('-' + this.templateFileContent + '-');
         this.resourceDictionaryRes = [];
         if (e) {
             e.preventDefault();
@@ -219,10 +231,17 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         if (this.variables && this.variables.length > 0) {
             console.log('base');
             this.packageCreationStore.getTemplateAndMapping(this.variables).subscribe(res => {
+                let message = 'Attributes are Fetched';
                 this.mappingRes = [];
                 this.resourceDictionaryRes = res;
                 console.log(this.resourceDictionaryRes);
                 this.rerender();
+                if (this.resourceDictionaryRes && this.resourceDictionaryRes.length <= 0) {
+                    message = 'No values for those attributes';
+                }
+                this.toastr.success(message, 'Success');
+            }, err => {
+                this.toastr.error('Error');
             });
         }
     }
@@ -261,6 +280,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 }
                 this.fileName = '';
                 this.toastr.success('File is created', 'success');
+                this.closeCreationForm();
             } else {
                 console.log('this file already exist');
                 this.toastr.error('File name already exist', 'Error');
