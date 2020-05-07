@@ -40,6 +40,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
     lateinit var raRuntimeService: ResourceAssignmentRuntimeService
     var resourceDictionaries: MutableMap<String, ResourceDefinition> = hashMapOf()
+    var resourceAssignments: MutableList<ResourceAssignment> = arrayListOf()
 
     var scriptPropertyInstances: MutableMap<String, Any> = hashMapOf()
     lateinit var scriptType: String
@@ -104,7 +105,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     }
 
     open suspend fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: MutableMap<String, JsonNode>):
-            String {
+        String {
         if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
             return valueToResolve
         }
@@ -195,5 +196,17 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
     fun addError(error: String) {
         raRuntimeService.getBluePrintError().addError(error)
+    }
+
+    fun isTemplateKeyValueNull(resourceAssignment: ResourceAssignment): Boolean {
+        val resourceProp = checkNotNull(resourceAssignment.property) {
+            "Failed to populate mandatory resource resource mapping $resourceAssignment"
+        }
+        if (resourceProp.required != null && resourceProp.required!! &&
+            resourceProp.value.isNullOrMissing()
+        ) {
+            return true
+        }
+        return false
     }
 }
