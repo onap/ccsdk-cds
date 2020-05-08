@@ -44,7 +44,7 @@ helm install --name cds cds
 Result
 ------
 
-.. code-block:: json
+.. code-block:: bash
    :linenos:
    
    $ kubectl get all --selector=release=cds
