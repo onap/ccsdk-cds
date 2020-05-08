@@ -12,12 +12,14 @@ token-auth:
 .. code-block:: json
    :linenos:
    
-   "dsl_definitions": {
-     "dynamic-rest-source": {
-       "type" : "token-auth",
-       "url" : "http://localhost:32778",
-       "token" : <token>
-     }
+   {
+      "dsl_definitions": {
+        "dynamic-rest-source": {
+          "type" : "token-auth",
+          "url" : "http://localhost:32778",
+          "token" : "<token>"
+        }
+      }
    }
    
 basic-auth:
@@ -26,13 +28,15 @@ basic-auth:
 .. code-block:: json
    :linenos:
       
-   "dsl_definitions": {
-     "dynamic-rest-source": {
-       "type" : "basic-auth",
-       "url" : "http://localhost:32778",
-       "username" : <username>,
-       "password": <password>
-    }
+   {
+      "dsl_definitions": {
+        "dynamic-rest-source": {
+          "type" : "basic-auth",
+          "url" : "http://localhost:32778",
+          "username" : "<username>",
+          "password": "<password>"
+       }
+      }
    }
    
 ssl-basic-auth:
@@ -41,14 +45,16 @@ ssl-basic-auth:
 .. code-block:: json
    :linenos:
       
-   "dsl_definitions": {
-     "dynamic-rest-source": {
-       "type" : "ssl-basic-auth",
-       "url" : "http://localhost:32778",
-       "keyStoreInstance": "JKS or PKCS12",
-       "sslTrust": "trusture",
-       "sslTrustPassword": <password>,
-       "sslKey": "keystore",
-       "sslKeyPassword: <password>
-    }
+   {
+      "dsl_definitions": {
+        "dynamic-rest-source": {
+          "type" : "ssl-basic-auth",
+          "url" : "http://localhost:32778",
+          "keyStoreInstance": "JKS or PKCS12",
+          "sslTrust": "trusture",
+          "sslTrustPassword": "<password>",
+          "sslKey": "keystore",
+          "sslKeyPassword": "<password>"
+       }
+      }
    }

@@ -31,43 +31,41 @@ Below the properties of a workflow:
 Workflow Example
 ----------------
 
-.. code:: json
+::
 
-print("
-{
-  "workflow": {
-    "resource-assignment": {                                <- workflow-name
-      "inputs": {
-        "vnf-id": {                                         <- static inputs
-          "required": true,
-          "type": "string"
-        },
-        "resource-assignment-properties": {                    <- dynamic inputs
-          "required": true,
-          "type": "dt-resource-assignment-properties"
-        }
-      },
-      "steps": {
-        "call-resource-assignment": {                       <- step-name
-          "description": "Resource Assignment Workflow",
-          "target": "resource-assignment-process"           <- node_template targeted by the step
-        }
-      },
-      "outputs": {
-        "template-properties": {                            <- output
-          "type": "json",                                   <- complex type
-          "value": {
-            "get_attribute": [                              <- uses expression to retrieve attribute from context
-              "resource-assignment",
-              "assignment-params"
-            ]
-          }
-        }
-      }
-    }
-  }
-}
-")
+   {
+     "workflow": {
+       "resource-assignment": {                                <- workflow-name
+         "inputs": {
+           "vnf-id": {                                         <- static inputs
+             "required": true,
+             "type": "string"
+           },
+           "resource-assignment-properties": {                    <- dynamic inputs
+             "required": true,
+             "type": "dt-resource-assignment-properties"
+           }
+         },
+         "steps": {
+           "call-resource-assignment": {                       <- step-name
+             "description": "Resource Assignment Workflow",
+             "target": "resource-assignment-process"           <- node_template targeted by the step
+           }
+         },
+         "outputs": {
+           "template-properties": {                            <- output
+             "type": "json",                                   <- complex type
+             "value": {
+               "get_attribute": [                              <- uses expression to retrieve attribute from context
+                 "resource-assignment",
+                 "assignment-params"
+               ]
+             }
+           }
+         }
+       }
+     }
+   }
 
 
 TOSCA definition: http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454203

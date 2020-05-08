@@ -8,7 +8,9 @@ Source Input code
 .. code-block:: json
    :linenos:
    
-   "description": "This is Input Resource Source Node Type",
-   "version": "1.0.0",
-   "properties": {},
-   "derived_from": "tosca.nodes.ResourceSource"
+   {
+      "description": "This is Input Resource Source Node Type",
+      "version": "1.0.0",
+      "properties": {},
+      "derived_from": "tosca.nodes.ResourceSource"
+   }
