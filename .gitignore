@@ -157,3 +157,4 @@ MacOS
 
 # Generated dependency list
 direct-dependencies.txt
+.gitignore
