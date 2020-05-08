@@ -8,14 +8,16 @@ complex Response code
 .. code-block:: json
    :linenos:
 
-   "id": 4,
-   "address": "192.168.10.2/32",
-   "vrf": null,
-   "tenant": null,
-   "status": 1,
-   "role": null,
-   "interface": null,
-   "description": "",
-   "nat_inside": null,
-   "created": "2018-08-30",
-   "last_updated": "2018-08-30T14:59:05.277820Z"
+   {
+      "id": 4,
+      "address": "192.168.10.2/32",
+      "vrf": null,
+      "tenant": null,
+      "status": 1,
+      "role": null,
+      "interface": null,
+      "description": "",
+      "nat_inside": null,
+      "created": "2018-08-30",
+      "last_updated": "2018-08-30T14:59:05.277820Z"
+   }

@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2019 IBM.
 
-Resource Source 
+Resource Source
 ---------------
 
 Input:
@@ -10,32 +10,37 @@ Input:
 Expects the value to be provided as input to the request.
 
 
-
 .. code-block:: json
    :linenos:
-
-   source-input
+   
    {
-    "description": "This is Input Resource Source Node Type",
-    "version": "1.0.0",
-    "properties": {},
-    "derived_from": "tosca.nodes.ResourceSource"
+     "source-input" : 
+     {
+       "description": "This is Input Resource Source Node Type",
+       "version": "1.0.0",
+       "properties": {},
+       "derived_from": "tosca.nodes.ResourceSource"
+     }
    }
+
 
 
 Default:
 ========
 Expects the value to be defaulted in the model itself.
 
+   
 .. code-block:: json
    :linenos:
-
-   source-default
+   
    {
-    "description": "This is Default Resource Source Node Type",
-    "version": "1.0.0",
-    "properties": {},
-    "derived_from": "tosca.nodes.ResourceSource"
+     "source-default" : 
+     {
+       "description": "This is Default Resource Source Node Type",
+       "version": "1.0.0",
+       "properties": {},
+       "derived_from": "tosca.nodes.ResourceSource"
+     }
    }
 
 
