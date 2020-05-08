@@ -6,7 +6,8 @@
         </label>
 
         <div class="label-input">
-            <input type="input" [(ngModel)]="fileName" placeholder="Template name">
+            <input type="input" [(ngModel)]="fileName" placeholder="Template name" name="templateName" autofocus
+                [autofocus]="true">
         </div>
     </div>
 </div>
@@ -79,11 +80,13 @@
                 <div class="card-body">
                     <p class="text-center"><b>Select a source to load config parameters</b></p>
                     <div class="text-center">
-                        <a href="#" (click)="getMappingTableFromTemplate($event)" class="mapping-source-load">
+                        <button [disabled]="!(variables?.length>0 && templateFileContent?.trim()?.length > 0)"
+                            (click)="getMappingTableFromTemplate($event)" class="mapping-source-load" [ngClass]="variables?.length>0 && templateFileContent?.trim()?.length > 0
+                            ?'hover-enable':'hover-disable'">
                             <i class="icon-use-attributes"></i>
                             <br />
                             <span>Use Current Template Instance</span>
-                        </a>
+                        </button>
                         <a href="#" (click)="allowedExt=['.csv']" data-toggle="modal" data-target="#templateModal"
                             class="mapping-source-load">
                             <i class="icon-upload-attributes"></i>
@@ -199,8 +202,9 @@
 
         </div>
         <div class="template-mapping-action">
-            <button (click)="cancel()" class="btn btn-outline-secondary">Cancel</button>
-            <button (click)="saveToStore()" class="btn btn-primary">Submit</button>
+            <button (click)="cancel()" [disabled]="fileName?.length <=0"
+                class="btn btn-outline-secondary">Cancel</button>
+            <button (click)="saveToStore()" [disabled]="fileName?.length <=0" class="btn btn-primary">Submit</button>
         </div>
     </div>
 </div>
@@ -253,8 +257,9 @@
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal"
                     (click)="resetTheUploadedFiles()">Cancel
                 </button>
-                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"
-                    (click)="uploadFile();openListView()">
+
+                <button (click)="uploadFile();openListView()" class="btn btn-sm btn-primary" data-dismiss="modal"
+                    type="button">
                     Import
                 </button>
             </div>

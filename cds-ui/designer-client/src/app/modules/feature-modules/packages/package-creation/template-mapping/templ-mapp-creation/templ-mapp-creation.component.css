@@ -2,3 +2,8 @@
     color: #a09e9e;
     font-size: .9em;
 }
+
+.mapping-source-load {
+    background-color: white;
+    border: 0
+}
