@@ -1,6 +1,5 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PackagesStore} from '../../packages.store';
-import {map} from 'rxjs/operators';
 
 @Component({
     selector: 'app-package-pagination',
@@ -18,7 +17,7 @@ export class PackagePaginationComponent implements OnInit {
 
         this.packagesStore.state$
             .subscribe(state => {
-                this.pageNumber = state.currentPage;
+                this.pageNumber = state.currentPage + 1;
                 this.totalCount = state.totalPackages;
             });
     }
