@@ -9,6 +9,8 @@ import { Mapping, MappingAdapter } from '../../mapping-models/mappingAdapter.mod
 import { PackageCreationUtils } from '../../package-creation.utils';
 import { JsonConvert, Any } from 'json2typescript';
 import { ToastrService } from 'ngx-toastr';
+import { Router, ActivatedRoute } from '@angular/router';
+import { SharedService } from '../shared-service';
 
 @Component({
     selector: 'app-templ-mapp-creation',
@@ -43,19 +45,27 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     mappingRes = [];
     currentTemplate: any;
     currentMapping: any;
+    edit = false;
 
     constructor(
         private packageCreationStore: PackageCreationStore,
         private templateStore: TemplateStore,
         private packageCreationUtils: PackageCreationUtils,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private router: ActivatedRoute,
+        private sharedService: SharedService
     ) {
     }
 
     ngOnInit() {
+        if (this.router.snapshot.paramMap.has('id')) {
+            console.log('URL contains Id');
+            this.sharedService.enableEdit();
+        }
+
         this.templateStore.state$.subscribe(templateInfo => {
             // init Template&mapping vars
-            console.log('----------');
+            console.log('Oninit');
             console.log(templateInfo);
             this.templateInfo = templateInfo;
             this.fileName = templateInfo.fileName.split('/')[1];
@@ -80,6 +90,22 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 this.currentTemplate = Any;
             }
 
+        });
+
+        this.sharedService.isEdit().subscribe(res => {
+            console.log('------------------------');
+            console.log(res);
+            this.edit = res;
+
+            if (!this.edit) {
+                console.log('remove ----');
+                this.currentMapping = {};
+                this.currentTemplate = {};
+                this.fileName = '';
+                this.templateFileContent = '';
+                this.resourceDictionaryRes = [];
+                this.mappingRes = [];
+            }
         });
 
         this.dtOptions = {
@@ -259,12 +285,17 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.mappingRes = [];
         this.currentMapping = {};
         this.currentTemplate = {};
+        this.closeCreationForm();
     }
     saveToStore() {
         if (this.fileName) {
             // check file duplication
-            if (!(this.packageCreationStore.fileExist('Templates/' + this.fileName + '-mapping.json')
-                || this.packageCreationStore.fileExist('Templates/' + this.fileName + '-template' + this.getFileExtension()))) {
+            console.log('----------- mode ' + this.edit);
+            if (
+                (!(this.packageCreationStore.fileExist('Templates/' + this.fileName + '-mapping.json')
+                    || this.packageCreationStore.fileExist('Templates/' + this.fileName + '-template' + this.getFileExtension())))
+                || this.edit
+            ) {
                 // Save Mapping to Store
                 if (this.resourceDictionaryRes && this.resourceDictionaryRes.length > 0) {
                     const mapArray = this.convertDictionaryToMap(this.resourceDictionaryRes);

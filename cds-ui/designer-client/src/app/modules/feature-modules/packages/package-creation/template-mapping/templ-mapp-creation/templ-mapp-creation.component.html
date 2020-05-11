@@ -6,8 +6,8 @@
         </label>
 
         <div class="label-input">
-            <input type="input" [(ngModel)]="fileName" placeholder="Template name" name="templateName" autofocus
-                [autofocus]="true">
+            <input type="input" [disabled]="edit" [(ngModel)]="fileName" placeholder="Template name" name="templateName"
+                autofocus [autofocus]="true">
         </div>
     </div>
 </div>
