@@ -4,6 +4,7 @@ import { Mapping, Template } from '../../mapping-models/CBAPacakge.model';
 import { TemplateInfo, TemplateStore } from '../../template.store';
 import { TemplateAndMapping } from '../TemplateAndMapping';
 import { ActivatedRoute } from '@angular/router';
+import { SharedService } from '../shared-service';
 
 
 @Component({
@@ -19,17 +20,23 @@ export class TemplMappListingComponent implements OnInit {
     private mapping: Mapping;
     isCreate = true;
     currentFile: string;
+    edit = false;
 
     constructor(
         private packageCreationStore: PackageCreationStore,
         private templateStore: TemplateStore,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private sharedService: SharedService
     ) {
     }
 
     ngOnInit() {
         if (this.route.snapshot.paramMap.has('id')) {
             this.isCreate = false;
+            this.sharedService.isEdit().subscribe(res => {
+                this.edit = res;
+            });
+
         }
         this.packageCreationStore.state$.subscribe(cba => {
             if (cba.templates) {
@@ -71,6 +78,9 @@ export class TemplMappListingComponent implements OnInit {
 
     openCreationView() {
         this.showCreationViewParentNotification.emit('tell parent to open create views');
+        console.log('disable edit mode');
+        this.sharedService.disableEdit();
+
     }
     FullView() {
         this.showFullView.emit('show full view');
@@ -101,6 +111,7 @@ export class TemplMappListingComponent implements OnInit {
             }
             this.templateStore.changeTemplateInfo(templateInfo);
             this.FullView();
+            this.sharedService.enableEdit();
         });
     }
 
