@@ -114,7 +114,7 @@ class ExecutionServiceHandlerTest {
         }
 
         verify {
-            publishAuditService.publish(executionServiceOutput!!)
+            publishAuditService.publish(executionServiceInput.correlationUUID, executionServiceOutput!!)
         }
     }
 }

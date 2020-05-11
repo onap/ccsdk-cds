@@ -51,7 +51,6 @@ class KafkaPublishAuditService(
 ) : PublishAuditService {
     private var inputInstance: BlueprintMessageProducerService? = null
     private var outputInstance: BlueprintMessageProducerService? = null
-    private lateinit var correlationUUID: String
     private val log = LoggerFactory.getLogger(KafkaPublishAuditService::class.toString())
 
     companion object {
@@ -70,7 +69,6 @@ class KafkaPublishAuditService(
      * Sensitive data within the request are hidden.
      */
     override suspend fun publish(executionServiceInput: ExecutionServiceInput) {
-        this.correlationUUID = executionServiceInput.correlationUUID
         val secureExecutionServiceInput = hideSensitiveData(executionServiceInput)
         this.inputInstance = this.getInputInstance(INPUT_SELECTOR)
         this.inputInstance!!.sendMessage(secureExecutionServiceInput)
@@ -81,8 +79,8 @@ class KafkaPublishAuditService(
      * The correlation UUID is used to link the output to its input.
      * A correlation UUID is added to link the input to its output.
      */
-    override fun publish(executionServiceOutput: ExecutionServiceOutput) {
-        executionServiceOutput.correlationUUID = this.correlationUUID
+    override fun publish(correlationUUID: String, executionServiceOutput: ExecutionServiceOutput) {
+        executionServiceOutput.correlationUUID = correlationUUID
         this.outputInstance = this.getOutputInstance(OUTPUT_SELECTOR)
         this.outputInstance!!.sendMessage(executionServiceOutput)
     }
