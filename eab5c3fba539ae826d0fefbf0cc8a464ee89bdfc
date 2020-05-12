@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e31799fb_8b555567",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/capabilities/NamingResolutionCapability.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-05-12T14:43:01Z",
+      "side": 1,
+      "message": "I assume this is to be removed in favour of generatePayload1",
+      "revId": "eab5c3fba539ae826d0fefbf0cc8a464ee89bdfc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
