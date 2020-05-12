@@ -16,6 +16,24 @@
       "revId": "eab5c3fba539ae826d0fefbf0cc8a464ee89bdfc",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0155b5a6_c60aff53",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/capabilities/NamingResolutionCapability.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 3527
+      },
+      "writtenOn": "2020-05-12T15:01:40Z",
+      "side": 1,
+      "message": "Yes, I missed to remove it. I will make the change.",
+      "parentUuid": "e31799fb_8b555567",
+      "revId": "eab5c3fba539ae826d0fefbf0cc8a464ee89bdfc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
