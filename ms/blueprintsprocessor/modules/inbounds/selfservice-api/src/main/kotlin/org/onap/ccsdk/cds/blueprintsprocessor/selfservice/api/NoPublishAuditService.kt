@@ -42,6 +42,6 @@ class NoPublishAuditService : PublishAuditService {
     override suspend fun publish(executionServiceInput: ExecutionServiceInput) {
     }
 
-    override fun publish(executionServiceOutput: ExecutionServiceOutput) {
+    override fun publish(correlationUUID: String, executionServiceOutput: ExecutionServiceOutput) {
     }
 }

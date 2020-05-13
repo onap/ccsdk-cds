@@ -75,7 +75,7 @@ class ExecutionServiceHandler(
                         "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
                         true
                 )
-                publishAuditService.publish(executionServiceOutput)
+                publishAuditService.publish(executionServiceInput.correlationUUID, executionServiceOutput)
                 responseObserver.onNext(
                         executionServiceOutput.toProto()
                 )
@@ -121,7 +121,7 @@ class ExecutionServiceHandler(
             executionServiceOutput = response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
         }
 
-        publishAuditService.publish(executionServiceOutput)
+        publishAuditService.publish(executionServiceInput.correlationUUID, executionServiceOutput)
         return executionServiceOutput
     }
 
