@@ -8,7 +8,7 @@
                     <ul class="breadcrumb-header">
                         <li><a routerLink="/packages">CBA Packages</a></li>
                         <i class="fa fa-angle-right ml-2 mr-2"></i>
-                        <li>Package Name</li>
+                        <li>{{viewedPackage.artifactName}}</li>
                     </ul>
                 </h2>
                 <div class="col">
@@ -217,7 +217,7 @@
                                                             <div class="form-group text-center">
                                                                 <input type="text" class="form-control customAction"
                                                                     placeholder="Type Action Name" autofocus>
-                                                                <button type="button" class="btn submit">Start</button>
+                                                                <button type="button" (click)="goToDesignerMode(viewedPackage.id)" class="btn submit">Start</button>
                                                             </div>
 
                                                         </div>
@@ -387,7 +387,7 @@
                                                                 <div class="row">
                                                                     <div class="col text-center">
                                                                         <p class="selectedActions">0 selected</p>
-                                                                        <button type="button"
+                                                                        <button type="button" (click)="goToDesignerMode(viewedPackage.id)"
                                                                             class="btn submit">Start</button>
                                                                     </div>
                                                                 </div>

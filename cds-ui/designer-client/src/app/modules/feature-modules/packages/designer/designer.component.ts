@@ -3,6 +3,8 @@
 ===================================================================
 Copyright (C) 2019 Orange. All rights reserved.
 ===================================================================
+Modification Copyright (c) 2020 IBM 
+===================================================================
 
 Unless otherwise specified, all software contained herein is licensed
 under the Apache License, Version 2.0 (the License);
@@ -34,6 +36,9 @@ import { FunctionsStore } from './functions.store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
+import { ActivatedRoute } from '@angular/router';
+import { DesignerService } from './designer.service';
 
 
 @Component({
@@ -46,6 +51,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
   private controllerSideBar: boolean;
   private attributesSideBar: boolean;
+  viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
 
   boardGraph: joint.dia.Graph;
   boardPaper: joint.dia.Paper;
@@ -58,7 +64,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
   constructor(private designerStore: DesignerStore,
               private functionStore: FunctionsStore,
               private graphUtil: GraphUtil,
-              private graphGenerator: GraphGenerator) {
+              private graphGenerator: GraphGenerator,
+              private route: ActivatedRoute,
+              private designerService: DesignerService) {
     this.controllerSideBar = true;
     this.attributesSideBar = false;
 
@@ -87,6 +95,14 @@ export class DesignerComponent implements OnInit, OnDestroy {
     this.initializeBoard();
     this.initializePalette();
     this.stencilPaperEventListeners();
+
+    const id = this.route.snapshot.paramMap.get('id');
+    this.designerService.getPagedPackages(id).subscribe(
+      (bluePrintDetailModels) => {
+        if (bluePrintDetailModels) {
+          this.viewedPackage = bluePrintDetailModels[0];
+        }
+      });
 
     /**
      * the code to retrieve from server is commented
