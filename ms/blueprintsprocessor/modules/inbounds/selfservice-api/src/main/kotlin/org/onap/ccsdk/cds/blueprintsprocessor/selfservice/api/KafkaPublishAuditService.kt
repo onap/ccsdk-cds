@@ -23,6 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutp
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageProducerService
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
@@ -144,33 +145,40 @@ class KafkaPublishAuditService(
             val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
             val blueprintContext = blueprintRuntimeService.bluePrintContext()
 
-            val nodeTemplateName = blueprintContext.workflowFirstStepNodeTemplate(workflowName)
-            val interfaceName = blueprintContext.nodeTemplateFirstInterfaceName(nodeTemplateName)
-            val operationName = blueprintContext.nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName)
+            /** Looking for node templates defined as component-resource-resolution */
+            val nodeTemplates = blueprintContext.nodeTemplates()
+            nodeTemplates!!.forEach { nodeTemplate ->
+                val nodeTemplateName = nodeTemplate.key
+                val nodeTemplateType = blueprintContext.nodeTemplateByName(nodeTemplateName).type
+                if (nodeTemplateType == BluePrintConstants.NODE_TEMPLATE_TYPE_COMPONENT_RESOURCE_RESOLUTION) {
+                    val interfaceName = blueprintContext.nodeTemplateFirstInterfaceName(nodeTemplateName)
+                    val operationName = blueprintContext.nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName)
 
-            val propertyAssignments: MutableMap<String, JsonNode> =
-                    blueprintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
-                            ?: hashMapOf()
+                    val propertyAssignments: MutableMap<String, JsonNode> =
+                            blueprintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
+                                    ?: hashMapOf()
 
-            val artifactPrefixNamesNode = propertyAssignments[ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES]
-            val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode!!, String::class.java)
+                    val artifactPrefixNamesNode = propertyAssignments[ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES]
+                    val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode!!, String::class.java)
 
-            /** Storing mapping entries with metadata log-protect set to true */
-            val sensitiveParameters: List<String> = artifactPrefixNames
-                    .map { "$it-mapping" }
-                    .map { blueprintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, it) }
-                    .flatMap { JacksonUtils.getListFromJson(it, ResourceAssignment::class.java) }
-                    .filter { PropertyDefinitionUtils.hasLogProtect(it.property) }
-                    .map { it.name }
+                    /** Storing mapping entries with metadata log-protect set to true */
+                    val sensitiveParameters: List<String> = artifactPrefixNames
+                            .map { "$it-mapping" }
+                            .map { blueprintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, it) }
+                            .flatMap { JacksonUtils.getListFromJson(it, ResourceAssignment::class.java) }
+                            .filter { PropertyDefinitionUtils.hasLogProtect(it.property) }
+                            .map { it.name }
 
-            /** Hiding sensitive input parameters from the request */
-            var workflowProperties: ObjectNode = clonedExecutionServiceInput.payload
-                    .path("$workflowName-request")
-                    .path("$workflowName-properties") as ObjectNode
+                    /** Hiding sensitive input parameters from the request */
+                    var workflowProperties: ObjectNode = clonedExecutionServiceInput.payload
+                            .path("$workflowName-request")
+                            .path("$workflowName-properties") as ObjectNode
 
-            sensitiveParameters.forEach { sensitiveParameter ->
-                if (workflowProperties.has(sensitiveParameter)) {
-                    workflowProperties.replace(sensitiveParameter, ApplicationConstants.LOG_REDACTED.asJsonPrimitive())
+                    sensitiveParameters.forEach { sensitiveParameter ->
+                        if (workflowProperties.has(sensitiveParameter)) {
+                            workflowProperties.replace(sensitiveParameter, ApplicationConstants.LOG_REDACTED.asJsonPrimitive())
+                        }
+                    }
                 }
             }
         }
