@@ -10,7 +10,7 @@
                     </li>
                     <i class="fa fa-angle-right ml-2 mr-2"></i>
                     <li class="breadcrumb-item">
-                        <a href="#">Package Name</a>
+                        <a href="/package/{{viewedPackage.id}}">{{viewedPackage.artifactName}}</a>
                         <button type="button" class="btn package-info-btn" data-toggle="modal"
                             data-target="#exampleModalLong">
                             <i class="icon-info" aria-hidden="true"></i>
@@ -102,7 +102,7 @@
 <div class="source-button editBar">
     <div class="btn-group viewBtns" role="group">
         <button type="button" class="btn btn-secondary topologySource active">Designer</button>
-        <button [routerLink]="['/designer/source']" type="button"
+        <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
             class="btn btn-secondary topologyView">Scripting</button>
     </div>
 </div>

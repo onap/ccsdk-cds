@@ -206,7 +206,7 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.router.navigate(['/packages']);
     }
 
-    goToDesignerMode() {
-        this.router.navigate(['/packages/designer']);
-    }
+    goToDesignerMode(id) {
+        this.router.navigate(['/packages/designer', id]);
+     }
 }
