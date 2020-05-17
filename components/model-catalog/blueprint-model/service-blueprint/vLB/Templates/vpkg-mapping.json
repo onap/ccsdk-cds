@@ -11,15 +11,42 @@
       ],
       "entry_schema": {
         "type": ""
-      },
-      "default": "openstack"
+      }
     },
     "input-param": false,
     "dictionary-name": "cloud_env",
-    "dictionary-source": "default",
-    "dependencies": [],
+    "dictionary-source": "sdnc",
+    "dependencies": [
+			"service-instance-id",
+			"vnf-id"
+			],
     "version": 0
   },
+  	{
+		"name": "vf-module-assign",
+		"property": {
+			"description": "",
+			"required": false,
+			"type": "string",
+			"status": "",
+			"constraints": [{}],
+			"entry_schema": {
+				"type": ""
+			},
+						"metadata": {
+				"transform-template": "${vf-module-assign}_${service-instance-id}"
+			}
+		},
+		"input-param": false,
+		"dictionary-name": "vf-module-assign",
+		"dictionary-source": "aai-data",
+		"dependencies": [
+			"service-instance-id",
+			"vnf-id",
+			"vf-module-name"
+		],
+		"version": 0
+	},
   {
     "name": "vf-module-name",
     "property": {
@@ -32,13 +59,12 @@
       ],
       "entry_schema": {
         "type": ""
-      },
-      "default": "${vf-module-name}"
+      }
     },
     "input-param": false,
     "dictionary-name": "vf-module-name",
-    "dictionary-source": "default",
-    "dependencies": [],
+    "dictionary-source": "rest",
+	"dependencies": ["vnf_name", "vf-module-label", "vf-module-type", "vf-naming-policy", "vf-module-id"],
     "version": 0
   },
   {
@@ -107,27 +133,7 @@
     "dependencies": [],
     "version": 0
   },
-  {
-    "name": "keypair",
-    "property": {
-      "description": "",
-      "required": false,
-      "type": "string",
-      "status": "",
-      "constraints": [
-        {}
-      ],
-      "entry_schema": {
-        "type": ""
-      },
-      "default": "vlb_key"
-    },
-    "input-param": false,
-    "dictionary-name": "keypair",
-    "dictionary-source": "default",
-    "dependencies": [],
-    "version": 0
-  },
+
   {
     "name": "nb_api_version",
     "property": {
@@ -140,13 +146,15 @@
       ],
       "entry_schema": {
         "type": ""
-      },
-      "default": "1.2.0"
+      }
     },
     "input-param": false,
     "dictionary-name": "nb_api_version",
-    "dictionary-source": "default",
-    "dependencies": [],
+    "dictionary-source": "sdnc",
+    "dependencies": [
+			"service-instance-id",
+			"vnf-id"
+			],
     "version": 0
   },
   {
@@ -161,13 +169,15 @@
       ],
       "entry_schema": {
         "type": ""
-      },
-      "default": "https://nexus.onap.org"
+      }
     },
     "input-param": false,
     "dictionary-name": "nexus_artifact_repo",
-    "dictionary-source": "default",
-    "dependencies": [],
+    "dictionary-source": "sdnc",
+    "dependencies": [
+			"service-instance-id",
+			"vnf-id"
+			],
     "version": 0
   },
   {
@@ -630,13 +640,12 @@
       ],
       "entry_schema": {
         "type": ""
-      },
-      "default": "${vpg_name_0}"
+      }
     },
     "input-param": false,
     "dictionary-name": "vpg_name_0",
-    "dictionary-source": "default",
-    "dependencies": [],
+    "dictionary-source": "rest",
+	"dependencies": ["vf-module-id", "vf-module-name", "vf-module-label", "nfc-naming-code", "vf-naming-policy"],
     "version": 0
   },
   {
@@ -651,8 +660,7 @@
       ],
       "entry_schema": {
         "type": ""
-      },
-      "default": ""
+      }
     },
     "input-param": false,
     "dictionary-name": "private2-prefix-id",
@@ -713,12 +721,14 @@
       "entry_schema": {
         "type": ""
       },
-      "default": "${pg_int}"
+			"metadata": {
+				"transform-template": "${pg_int.replaceAll(\"/.+\", \"\")}"
+			}
     },
     "input-param": false,
     "dictionary-name": "pg_int",
-    "dictionary-source": "default",
-    "dependencies": [],
+    "dictionary-source": "rest",
+    "dependencies": ["private2-prefix-id"],
     "version": 0
   },
   {
