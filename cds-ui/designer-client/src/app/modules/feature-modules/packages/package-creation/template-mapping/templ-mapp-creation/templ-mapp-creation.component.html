@@ -1,4 +1,13 @@
-<h6 class="create-title">CREATE</h6>
+
+<div class="row template-mapping-action">
+    <div class="col">
+        <h6 class="create-title">Create Template</h6>
+    </div>
+    <div class="col text-right">
+        <button (click)="cancel()" [disabled]="fileName?.length <=0" class="btn btn-outline-secondary">Cancel</button>
+        <button (click)="saveToStore()" [disabled]="fileName?.length <=0" class="btn btn-primary">Finish</button>
+    </div>
+</div>
 <div class="card creat-card">
     <div class="single-line-model">
         <label class="label-name">Name
@@ -201,11 +210,7 @@
 
 
         </div>
-        <div class="template-mapping-action">
-            <button (click)="cancel()" [disabled]="fileName?.length <=0"
-                class="btn btn-outline-secondary">Cancel</button>
-            <button (click)="saveToStore()" [disabled]="fileName?.length <=0" class="btn btn-primary">Submit</button>
-        </div>
+
     </div>
 </div>
 

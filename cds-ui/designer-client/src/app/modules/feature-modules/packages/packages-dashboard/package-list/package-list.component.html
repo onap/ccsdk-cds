@@ -30,7 +30,7 @@
                             <!-- <img class="icon-deployed" src="/assets/img/icon-deploy.svg"> -->
                             <p class="packageName" tooltip="{{bluePrint.artifactName}}" placement="bottom">
                                 {{bluePrint.artifactName}}</p>
-                            <span class="package-version">{{bluePrint.artifactVersion}}</span>
+                            <span class="package-version">version {{bluePrint.artifactVersion}}</span>
                         </a>
 
                     </div>
@@ -107,14 +107,15 @@
                 </div>
                 <div class="card-footer">
                     <div class="row">
+                        
+                        <div class="col">
+                            <button type="button" (click)="view(bluePrint.id)" class="btn btn-card-config"><i
+                                    class="icon-btn-card-config" aria-hidden="true"></i>Configuration</button>
+                        </div>
                         <div class="col">
                             <button type="button" class="btn btn-card-topology"><i class="icon-btn-card-topology"
                                     aria-hidden="true"></i>Designer Mode
                             </button>
-                        </div>
-                        <div class="col">
-                            <button type="button" (click)="view(bluePrint.id)" class="btn btn-card-config"><i
-                                    class="icon-btn-card-config" aria-hidden="true"></i>Configuration</button>
                         </div>
                     </div>
                 </div>

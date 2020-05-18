@@ -25,7 +25,11 @@
                                 [ngClass]="{'active':currentFile == file}">{{file}}
                                 <span *ngIf="getValue(file).isMapping">Mapping</span>
                                 <span *ngIf="getValue(file).isTemplate">Template</span>
+                                <button type="button" class="deleteTemplate" title="Delete Template">
+                                    <i class="icon-delete-sm"></i>
+                                </button>
                             </a>
+                            
                         </div>
                     </div>
                 </div>
