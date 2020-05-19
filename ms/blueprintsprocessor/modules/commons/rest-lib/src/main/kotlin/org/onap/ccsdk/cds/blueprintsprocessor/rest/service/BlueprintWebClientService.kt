@@ -94,7 +94,7 @@ interface BlueprintWebClientService {
          * the difference is in convertToBasicHeaders vs basicHeaders
          */
         val convertedHeaders: Array<BasicHeader> = convertToBasicHeaders(headers)
-        val encodedPath = UriUtils.encodePath(path, StandardCharsets.UTF_8.name())
+        val encodedPath = UriUtils.encodeQuery(path, StandardCharsets.UTF_8.name())
         return when (HttpMethod.resolve(methodType)) {
             HttpMethod.DELETE -> delete(encodedPath, convertedHeaders, String::class.java)
             HttpMethod.GET -> get(encodedPath, convertedHeaders, String::class.java)
