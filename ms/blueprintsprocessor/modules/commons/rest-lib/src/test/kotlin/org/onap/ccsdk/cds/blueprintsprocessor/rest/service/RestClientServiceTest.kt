@@ -51,10 +51,12 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -112,6 +114,32 @@ class RestClientServiceTest {
     @After
     fun stop() {
         this.http.stop()
+    }
+
+    @Test
+    fun testGetQueryParam() {
+        val restClientService = bluePrintRestLibPropertyService
+                .blueprintWebClientService("sample")
+        val response = restClientService.exchangeResource(
+                HttpMethod.GET.name, "/sample/query?id=3", ""
+        )
+        assertEquals(
+                "query with id:3", response.body,
+                "failed to get query param response"
+        )
+    }
+
+    @Test
+    fun testGetPathParamWithWhitespace() {
+        val restClientService = bluePrintRestLibPropertyService
+                .blueprintWebClientService("sample")
+        val response = restClientService.exchangeResource(
+                HttpMethod.GET.name, "/sample/path/id 3/get", ""
+        )
+        assertEquals(
+                "path param id:id 3", response.body,
+                "failed to get query param response"
+        )
     }
 
     @Test
@@ -276,6 +304,14 @@ open class SampleController {
 
     @GetMapping("/name")
     fun getName(): String = "Sample Controller"
+
+    @GetMapping("/query")
+    fun getQuery(@RequestParam("id") id: String): String =
+            "query with id:$id"
+
+    @GetMapping("/path/{id}/get")
+    fun getPathParam(@PathVariable("id") id: String): String =
+            "path param id:$id"
 
     @PatchMapping("/name")
     fun patchName(): String = "Patch request successful"
