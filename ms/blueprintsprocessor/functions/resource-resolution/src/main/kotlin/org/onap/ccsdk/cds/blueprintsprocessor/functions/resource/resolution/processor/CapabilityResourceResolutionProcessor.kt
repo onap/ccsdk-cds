@@ -57,6 +57,7 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
 
             val resourceSourceProps =
                 checkNotNull(resourceSource.properties) { "failed to get $resourceSource properties" }
+
             /**
              * Get the Capability Resource Source Info from Property Definitions.
              */
@@ -77,6 +78,7 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
             // Assign Current Blueprint runtime and ResourceDictionaries
             componentResourceAssignmentProcessor!!.scriptType = scriptType
             componentResourceAssignmentProcessor!!.raRuntimeService = raRuntimeService
+            componentResourceAssignmentProcessor!!.resourceAssignments = resourceAssignments
             componentResourceAssignmentProcessor!!.resourceDictionaries = resourceDictionaries
 
             // Invoke componentResourceAssignmentProcessor
@@ -93,12 +95,9 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
     }
 
     suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>):
-            ResourceAssignmentProcessor {
+        ResourceAssignmentProcessor {
 
-        log.info(
-            "creating resource resolution of script type($scriptType), reference name($scriptClassReference) and" +
-                    "instanceDependencies($instanceDependencies)"
-        )
+        log.info("creating resource resolution of script type($scriptType), reference name($scriptClassReference)")
 
         val scriptComponent = componentFunctionScriptingService
             .scriptInstance<ResourceAssignmentProcessor>(
