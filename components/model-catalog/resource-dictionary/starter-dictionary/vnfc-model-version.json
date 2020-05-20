@@ -1,36 +1,35 @@
 {
-	"tags": "vnfc-model-version",
-	"name": "vnfc-model-version",
-	"group":"default",
-	"property": {
-		"description": "vnfc-model-version",
-		"type": "string"
-	},
-	"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-	"sources": {
-		"input": {
-			"type": "source-input"
-		},
-		"default": {
-			"type": "source-default",
-			"properties": {}
-		},
-		"processor-db": {
-			"type": "source-db",
-			"properties": {
-				
-				"type": "SQL",
-				"query": "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-				"input-key-mapping": {
-					"vfccustomizationuuid": "vfccustomizationuuid"
-				},
-				"output-key-mapping": {
-					"vnfc-model-version": "vnfc_model_version"
-				},
-				"key-dependencies": [
-					"vfccustomizationuuid"
-				]
-			}
-		}
-	}
+    "tags": "vnfc-model-version",
+    "name": "vnfc-model-version",
+    "group":"default",
+    "property": {
+        "description": "vnfc-model-version",
+        "type": "string"
+    },
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        },
+        "processor-db": {
+            "type": "source-db",
+            "properties": {
+                "type": "SQL",
+                "query": "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+                "output-key-mapping": {
+                    "vnfc-model-version": "vnfc_model_version"
+                },
+                "input-key-mapping": {
+                    "vfccustomizationuuid": "vfccustomizationuuid"
+                },
+                "key-dependencies": [
+                    "vfccustomizationuuid"
+                ]
+            }
+        }
+    }
 }
