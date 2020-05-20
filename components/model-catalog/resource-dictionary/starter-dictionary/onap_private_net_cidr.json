@@ -1,51 +1,50 @@
 {
-	"tags": "onap_private_net_cidr",
-	"name": "onap_private_net_cidr",
-	"group":"default",
-	"property": {
-		"description": "onap_private_net_cidr",
-		"type": "string"
-	},
-	"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-	"sources": {
-		"input": {
-			"type": "source-input"
-		},
-		"default": {
-			"type": "source-default",
-			"properties": {}
-		},
-		"processor-db": {
-			"type": "source-db",
-			"properties": {
-				
-				"type": "SQL",
-				"query": "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"management\"",
-				"input-key-mapping": {},
-				"output-key-mapping": {
-					"onap_private_net_cidr": "prefix"
-				}
-			}
-		},
-		"sdnc": {
-			"type": "source-rest",
-			"properties": {
-				"verb": "GET",
-				"type": "JSON",
-				"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_net_cidr",
-				"path": "/param/0/value",
-				"input-key-mapping": {
-					"service-instance-id": "service-instance-id",
-					"vnf-id": "vnf-id"
-				},
-				"output-key-mapping": {
-					"onap_private_net_cidr": "value"
-				},
-				"key-dependencies": [
-					"service-instance-id",
-					"vnf-id"
-				]
-			}
-		}
-	}
+    "tags": "onap_private_net_cidr",
+    "name": "onap_private_net_cidr",
+    "group":"default",
+    "property": {
+        "description": "onap_private_net_cidr",
+        "type": "string"
+    },
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        },
+        "processor-db": {
+            "type": "source-db",
+            "properties": {
+                "type": "SQL",
+                "query": "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"management\"",
+                "input-key-mapping": {},
+                "output-key-mapping": {
+                    "onap_private_net_cidr": "prefix"
+                }
+            }
+        },
+        "sdnc": {
+            "type": "source-rest",
+            "properties": {
+                "verb": "GET",
+                "type": "JSON",
+                "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_net_cidr",
+                "path": "/param/0/value",
+                "input-key-mapping": {
+                    "service-instance-id": "service-instance-id",
+                    "vnf-id": "vnf-id"
+                },
+                "output-key-mapping": {
+                    "onap_private_net_cidr": "value"
+                },
+                "key-dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                ]
+            }
+        }
+    }
 }
