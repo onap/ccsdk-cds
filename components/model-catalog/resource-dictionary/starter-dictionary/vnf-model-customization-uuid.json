@@ -1,16 +1,16 @@
 {
-	"tags": "vnf-model-customization-uuid",
-	"name": "vnf-model-customization-uuid",
-	"group":"default",
-	"property": {
-		"description": "vnf-model-customization-uuid",
-		"type": "string"
-	},
-	"updated-by": "Singal, Kapil <ks220y@att.com>",
-	"sources": {
-		"input": {
-			"type": "source-input",
-			"properties": {}
-		}
-	}
+    "tags": "vnf-model-customization-uuid",
+    "name": "vnf-model-customization-uuid",
+    "group":"default",
+    "property": {
+        "description": "vnf-model-customization-uuid",
+        "type": "string"
+    },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+        "input": {
+            "type": "source-input",
+            "properties": {}
+        }
+    }
 }

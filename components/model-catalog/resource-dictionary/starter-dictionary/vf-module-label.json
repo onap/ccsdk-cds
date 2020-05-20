@@ -1,36 +1,35 @@
 {
-	"tags": "vf-module-label",
-	"name": "vf-module-label",
-	"group":"default",
-	"property": {
-		"description": "vf-module-label",
-		"type": "string"
-	},
-	"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-	"sources": {
-		"input": {
-			"type": "source-input"
-		},
-		"default": {
-			"type": "source-default",
-			"properties": {}
-		},
-		"processor-db": {
-			"type": "source-db",
-			"properties": {
-				"type": "SQL",
-				"query": "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
-				"input-key-mapping": {
-					"customizationid": "vf-module-model-customization-uuid"
-				},
-				"output-key-mapping": {
-					"vf-module-label": "vf_module_label"
-				},
-				"key-dependencies": [
-					"vf-module-model-customization-uuid"
-				],
-				"endpoint-selector": "dynamic-db-source"
-			}
-		}
-	}
+    "tags": "vf-module-label",
+    "name": "vf-module-label",
+    "group":"default",
+    "property": {
+        "description": "vf-module-label",
+        "type": "string"
+    },
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        },
+        "processor-db": {
+            "type": "source-db",
+            "properties": {
+                "type": "SQL",
+                "query": "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
+                "input-key-mapping": {
+                    "customizationid": "vf-module-model-customization-uuid"
+                },
+                "output-key-mapping": {
+                    "vf-module-label": "vf_module_label"
+                },
+                "key-dependencies": [
+                    "vf-module-model-customization-uuid"
+                ]
+            }
+        }
+    }
 }

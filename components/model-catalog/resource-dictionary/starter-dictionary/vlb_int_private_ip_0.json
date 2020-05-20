@@ -1,39 +1,59 @@
 {
-	"tags": "vlb_int_private_ip_0",
-	"name": "vlb_int_private_ip_0",
-	"group":"default",
-	"property": {
-		"description": "vlb_int_private_ip_0",
-		"type": "string"
-	},
-	"updated-by": "Singal, Kapil <ks220y@att.com>",
-	"sources": {
-		"input": {
-			"type": "source-input"
-		},
-		"default": {
-			"type": "source-default",
-			"properties": {}
-		},
-		"sdnc": {
-			"type": "source-rest",
-			"properties": {
-				"verb": "GET",
-				"type": "JSON",
-				"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_int_private_ip_0",
-				"path": "/param/0/value",
-				"input-key-mapping": {
-					"service-instance-id": "service-instance-id",
-					"vnf-id": "vnf-id"
-				},
-				"output-key-mapping": {
-					"vlb_int_private_ip_0": "value"
-				},
-				"key-dependencies": [
-					"service-instance-id",
-					"vnf-id"
-				]
-			}
-		}
-	}
+    "tags": "vlb_int_private_ip_0",
+    "name": "vlb_int_private_ip_0",
+    "group":"default",
+    "property": {
+        "description": "vlb_int_private_ip_0",
+        "type": "string"
+    },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        },
+        "sdnc": {
+            "type": "source-rest",
+            "properties": {
+                "verb": "GET",
+                "type": "JSON",
+                "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_int_private_ip_0",
+                "path": "/param/0/value",
+                "input-key-mapping": {
+                    "service-instance-id": "service-instance-id",
+                    "vnf-id": "vnf-id"
+                },
+                "output-key-mapping": {
+                    "vlb_int_private_ip_0": "value"
+                },
+                "key-dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                ]
+            }
+        },
+        "rest": {
+            "type": "source-rest",
+            "properties": {
+                "endpoint-selector": "ipam-1",
+                "type": "JSON",
+                "verb": "POST",
+                "url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
+                "path": "",
+                "input-key-mapping": {
+                    "prefix-id": "private1-prefix-id"
+                },
+                "output-key-mapping": {
+                    "vlb_int_private_ip_0": "address",
+                    "id": "id"
+                },
+                "key-dependencies": [
+                    "private1-prefix-id"
+                ]
+            }
+        }
+    }
 }
