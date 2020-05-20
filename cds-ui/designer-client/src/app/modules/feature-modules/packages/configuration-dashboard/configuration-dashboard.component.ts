@@ -13,16 +13,18 @@ import {PackageCreationModes} from '../package-creation/creationModes/PackageCre
 import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
 import {saveAs} from 'file-saver';
 import {DesignerStore} from '../designer/designer.store';
+import { DesignerService } from '../designer/designer.service';
 
 @Component({
     selector: 'app-configuration-dashboard',
     templateUrl: './configuration-dashboard.component.html',
-    styleUrls: ['./configuration-dashboard.component.css']
+    styleUrls: ['./configuration-dashboard.component.css'],
 })
 export class ConfigurationDashboardComponent implements OnInit {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     @ViewChild(MetadataTabComponent, {static: false})
     private metadataTabComponent: MetadataTabComponent;
+    public customActionName:string;
 
     entryDefinitionKeys: string[] = ['template_tags', 'user-groups',
         'author-email', 'template_version', 'template_name', 'template_author'];
@@ -39,7 +41,8 @@ export class ConfigurationDashboardComponent implements OnInit {
                 private packageCreationStore: PackageCreationStore,
                 private packageCreationUtils: PackageCreationUtils,
                 private router: Router,
-                private designerStore: DesignerStore) {
+                private designerStore: DesignerStore,
+                private designerService: DesignerService) {
     }
 
     ngOnInit() {
@@ -207,6 +210,7 @@ export class ConfigurationDashboardComponent implements OnInit {
     }
 
     goToDesignerMode(id) {
-        this.router.navigate(['/packages/designer', id]);
+      //  this.designerService.setActionName(this.customActionName);
+        this.router.navigate(['/packages/designer', id, {actionName:this.customActionName}]);
      }
 }

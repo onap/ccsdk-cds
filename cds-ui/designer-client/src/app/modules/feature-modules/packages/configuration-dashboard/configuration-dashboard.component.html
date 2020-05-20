@@ -209,7 +209,7 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col text-center">
-                                                                    <button class="btn skip-btn">Skip to Designer Canvas</button>
+                                                                    <button class="btn skip-btn" (click)="goToDesignerMode(viewedPackage.id)">Skip to Designer Canvas</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -220,7 +220,7 @@
                                                                     class="icon-action-back"></i></button>
                                                             <h1>Create Custom Action</h1>
                                                             <div class="form-group text-center">
-                                                                <input type="text" class="form-control customAction"
+                                                                <input type="text" [(ngModel)]="customActionName" class="form-control customAction"
                                                                     placeholder="Type Action Name" autofocus>
                                                                 <button type="button" (click)="goToDesignerMode(viewedPackage.id)" class="btn submit">Start</button>
                                                             </div>
