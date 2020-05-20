@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.uti
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
@@ -181,6 +182,7 @@ class ResourceAssignmentUtils {
             val result: String
             try {
                 val mapper = ObjectMapper()
+                mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
                 val root: ObjectNode = mapper.createObjectNode()
 
                 var containsLogProtected = false
@@ -196,7 +198,8 @@ class ResourceAssignmentUtils {
                         root.set<JsonNode>(rName, value)
                     }
                 }
-                result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root)
+                result = mapper.writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(mapper.treeToValue(root, Object::class.java))
 
                 if (!containsLogProtected) {
                     logger.info("Generated Resource Param Data ($result)")

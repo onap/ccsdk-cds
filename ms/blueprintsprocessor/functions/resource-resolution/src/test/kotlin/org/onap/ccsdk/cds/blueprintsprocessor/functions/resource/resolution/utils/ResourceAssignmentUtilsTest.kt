@@ -131,17 +131,23 @@ class ResourceAssignmentUtilsTest {
     @Test
     fun `generateResourceDataForAssignments - positive test`() {
         // given a valid resource assignment
-        val validResourceAssignment = createResourceAssignmentForTest("valid_value")
+        val validResourceAssignment1 = createResourceAssignmentForTest("valid_value", "pnf-id")
+        val validResourceAssignment2 = createResourceAssignmentForTest("also_valid", "a1")
 
         // and a list containing that resource assignment
-        val resourceAssignmentList = listOf<ResourceAssignment>(validResourceAssignment)
+        val resourceAssignmentList = listOf<ResourceAssignment>(validResourceAssignment1, validResourceAssignment2)
 
         // when the values of the resources are evaluated
         val outcome = ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignmentList)
 
         // then the assignment should produce a valid result
-        val expected = "{\n" + "  \"pnf-id\" : \"valid_value\"\n" + "}"
-        assertEquals(expected, outcome.replace("\r\n", "\n"), "unexpected outcome generated")
+        val expected = """
+            {
+              "a1" : "also_valid",
+              "pnf-id" : "valid_value"
+            }
+        """.trimIndent()
+        assertEquals(expected, outcome.trimIndent(), "unexpected outcome generated")
     }
 
     @Test
@@ -200,10 +206,10 @@ class ResourceAssignmentUtilsTest {
         """.replace("\n|\\s".toRegex(), ""), result)
     }
 
-    private fun createResourceAssignmentForTest(resourceValue: String?): ResourceAssignment {
+    private fun createResourceAssignmentForTest(resourceValue: String?, resourceName: String = "pnf-id"): ResourceAssignment {
         val valueForTest = if (resourceValue == null) null else TextNode(resourceValue)
         val resourceAssignmentForTest = ResourceAssignment().apply {
-            name = "pnf-id"
+            name = resourceName
             dictionaryName = "pnf-id"
             dictionarySource = "input"
             property = PropertyDefinition().apply {
