@@ -40,7 +40,6 @@ import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
 import { ActivatedRoute } from '@angular/router';
 import { DesignerService } from './designer.service';
 
-
 @Component({
   selector: 'app-designer',
   templateUrl: './designer.component.html',
@@ -52,6 +51,8 @@ export class DesignerComponent implements OnInit, OnDestroy {
   private controllerSideBar: boolean;
   private attributesSideBar: boolean;
   viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
+  customActionName: string;
+  showAction: boolean;
 
   boardGraph: joint.dia.Graph;
   boardPaper: joint.dia.Paper;
@@ -69,6 +70,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
               private designerService: DesignerService) {
     this.controllerSideBar = true;
     this.attributesSideBar = false;
+    this.showAction = false;
 
   }
   private _toggleSidebar1() {
@@ -92,10 +94,13 @@ export class DesignerComponent implements OnInit, OnDestroy {
    */
 
   ngOnInit() {
+    this.customActionName = this.route.snapshot.paramMap.get('actionName');
+    if (this.customActionName != null) {
+      this.showAction = true;
+    }
     this.initializeBoard();
     this.initializePalette();
     this.stencilPaperEventListeners();
-
     const id = this.route.snapshot.paramMap.get('id');
     this.designerService.getPagedPackages(id).subscribe(
       (bluePrintDetailModels) => {
@@ -103,7 +108,6 @@ export class DesignerComponent implements OnInit, OnDestroy {
           this.viewedPackage = bluePrintDetailModels[0];
         }
       });
-
     /**
      * the code to retrieve from server is commented
      */
