@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Dan Timoney <dtimoney@att.com>
+Code-Review+2: Gaurav Agrawal <gaurav.agrawal@huawei.com>
+Submitted-by: Dan Timoney <dtimoney@att.com>
+Submitted-at: Thu, 21 May 2020 15:33:35 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/ccsdk/cds/+/108061
+Project: ccsdk/cds
+Branch: refs/heads/elalto
