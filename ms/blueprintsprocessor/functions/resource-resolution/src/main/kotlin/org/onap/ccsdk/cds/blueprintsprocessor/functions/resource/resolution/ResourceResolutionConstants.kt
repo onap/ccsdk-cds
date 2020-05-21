@@ -27,6 +27,7 @@ object ResourceResolutionConstants {
     const val FILE_NAME_RESOURCE_DEFINITION_TYPES = "resources_definition_types.json"
     const val RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY = "resolution-key"
     const val RESOURCE_RESOLUTION_INPUT_STORE_RESULT = "store-result"
+    const val RESOURCE_RESOLUTION_INPUT_FORCE_RESOLUTION = "force-resolution"
     const val RESOURCE_RESOLUTION_INPUT_OCCURRENCE = "occurrence"
     const val RESOURCE_RESOLUTION_INPUT_RESOURCE_ID = "resource-id"
     const val RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE = "resource-type"

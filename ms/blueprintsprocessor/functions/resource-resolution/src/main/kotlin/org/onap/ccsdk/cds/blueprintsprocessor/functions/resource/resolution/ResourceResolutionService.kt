@@ -199,6 +199,7 @@ open class ResourceResolutionServiceImpl(
         val artifactTemplate = "$artifactPrefix-template"
         // Resource Assignment Artifact Definition Name
         val artifactMapping = "$artifactPrefix-mapping"
+        val forceResolution = isForceResolution(properties)
 
         log.info("Resolving resource with resource assignment artifact($artifactMapping)")
 
@@ -213,10 +214,16 @@ open class ResourceResolutionServiceImpl(
         if (isToStore(properties)) {
             val existingResourceResolution = isNewResolution(bluePrintRuntimeService, properties, artifactPrefix)
             if (existingResourceResolution.isNotEmpty()) {
-                updateResourceAssignmentWithExisting(
-                    bluePrintRuntimeService as ResourceAssignmentRuntimeService,
-                    existingResourceResolution, resourceAssignments
-                )
+                if (forceResolution) {
+                    resourceResolutionDBService.deleteResourceResolutionList(existingResourceResolution)
+                    log.info("Force resolution is enabled - will resolve all resources.")
+                } else {
+                    updateResourceAssignmentWithExisting(
+                        bluePrintRuntimeService as ResourceAssignmentRuntimeService,
+                        existingResourceResolution, resourceAssignments
+                    )
+                    log.info("Force resolution is disabled - will resolve all resources not already resolved.")
+                }
             }
         }
 
@@ -407,6 +414,10 @@ open class ResourceResolutionServiceImpl(
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] as Boolean
     }
 
+    private fun isForceResolution(properties: Map<String, Any>): Boolean =
+        properties.containsKey(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_FORCE_RESOLUTION) &&
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_FORCE_RESOLUTION] as Boolean
+
     // Check whether resolution already exist in the database for the specified resolution-key or resourceId/resourceType
     private suspend fun isNewResolution(
         bluePrintRuntimeService: BluePrintRuntimeService<*>,
@@ -428,7 +439,7 @@ open class ResourceResolutionServiceImpl(
                 )
             if (existingResourceAssignments.isNotEmpty()) {
                 log.info(
-                    "Resolution with resolutionKey=($resolutionKey) already exist - will resolve all resources not already resolved.",
+                    "Resolution with resolutionKey=($resolutionKey) already exist",
                     resolutionKey
                 )
             }
@@ -445,8 +456,7 @@ open class ResourceResolutionServiceImpl(
                 )
             if (existingResourceAssignments.isNotEmpty()) {
                 log.info(
-                    "Resolution with resourceId=($resourceId) and resourceType=($resourceType) already " +
-                        "exist - will resolve all resources not already resolved."
+                    "Resolution with resourceId=($resourceId) and resourceType=($resourceType) already exist"
                 )
             }
             return existingResourceAssignments

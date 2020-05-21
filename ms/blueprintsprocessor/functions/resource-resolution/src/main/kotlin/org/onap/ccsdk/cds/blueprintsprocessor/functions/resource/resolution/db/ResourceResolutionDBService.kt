@@ -221,4 +221,12 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
             resolutionKey
         )
     }
+
+    suspend fun deleteResourceResolutionList(listResourceResolution: List<ResourceResolution>) = withContext(Dispatchers.IO) {
+        try {
+            resourceResolutionRepository.deleteInBatch(listResourceResolution)
+        } catch (ex: Exception) {
+            throw BluePrintException("Failed to batch delete resource resolution", ex)
+        }
+    }
 }
