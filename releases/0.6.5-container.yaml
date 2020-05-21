@@ -1,6 +1,6 @@
 ---
 distribution_type: 'container'
-container_release_tag: '0.6.4'
+container_release_tag: '0.6.5'
 project: 'ccsdk-cds'
 log_dir: 'ccsdk-cds-maven-docker-stage-elalto/66/'
 ref: c079ace7799d9e8619eddf81b9d2b441413c97dd
