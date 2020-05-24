@@ -94,7 +94,9 @@ open class TemplateController(private val templateResolutionService: TemplateRes
             defaultValue = MediaType.TEXT_PLAIN_VALUE,
             required = true
         )
-        @RequestParam(value = "format", required = false, defaultValue = MediaType.TEXT_PLAIN_VALUE) format: String
+        @RequestParam(value = "format", required = false, defaultValue = MediaType.TEXT_PLAIN_VALUE) format: String,
+        @ApiParam(value = "Occurrence of the template resolution (1-n).", required = false)
+        @RequestParam(value = "occurrence", required = false, defaultValue = "1") occurrence: Int = 1
     ):
             ResponseEntity<String> = runBlocking {
 
@@ -108,7 +110,8 @@ open class TemplateController(private val templateResolutionService: TemplateRes
                 bpName,
                 bpVersion,
                 artifactName,
-                resolutionKey
+                resolutionKey,
+                occurrence
             )
         } else if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
             result =
@@ -117,7 +120,8 @@ open class TemplateController(private val templateResolutionService: TemplateRes
                     bpVersion,
                     artifactName,
                     resourceId,
-                    resourceType
+                    resourceType,
+                    occurrence
                 )
         } else {
             throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
