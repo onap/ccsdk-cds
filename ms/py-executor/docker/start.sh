@@ -28,6 +28,12 @@ then
   export ARTIFACT_MANAGER_PORT=50053
 fi
 
+if [ -z "${BASIC_AUTH}" ]
+then
+  echo "BASIC_AUTH environment variable is not set, using default."
+  export BASIC_AUTH="Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
+fi
+
 if [ -z "${LOG_FILE}" ]
 then
   echo "LOG_FILE environment variable is not set, using default."
