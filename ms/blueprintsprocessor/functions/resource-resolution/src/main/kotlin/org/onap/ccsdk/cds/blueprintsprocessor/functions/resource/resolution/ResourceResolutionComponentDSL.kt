@@ -116,6 +116,10 @@ fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
                     true, "Output Response"
                 )
                 property(
+                    ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_MAP, BluePrintConstants.DATA_TYPE_MAP,
+                    false, "Output Resolved Values"
+                )
+                property(
                     ResourceResolutionComponent.OUTPUT_STATUS, BluePrintConstants.DATA_TYPE_STRING,
                     true, "Status of the Component Execution ( success or failure )"
                 )
@@ -227,6 +231,13 @@ class ComponentResourceResolutionNodeTemplateBuilder(id: String, description: St
 
         fun status(status: JsonNode) {
             property(ResourceResolutionComponent.OUTPUT_STATUS, status)
+        }
+
+        fun resourceAssignmentMap(resourceAssignmentMap: String) =
+            resourceAssignmentMap(resourceAssignmentMap.asJsonType())
+
+        fun resourceAssignmentMap(resourceAssignmentMap: JsonNode) {
+            property(ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_MAP, resourceAssignmentMap)
         }
 
         fun resourceAssignmentParams(resourceAssignmentParams: String) =

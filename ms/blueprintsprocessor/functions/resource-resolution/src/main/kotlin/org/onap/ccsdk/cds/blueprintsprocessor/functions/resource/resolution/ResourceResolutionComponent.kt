@@ -51,6 +51,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         const val ATTRIBUTE_STATUS = "status"
 
         const val OUTPUT_RESOURCE_ASSIGNMENT_PARAMS = "resource-assignment-params"
+        const val OUTPUT_RESOURCE_ASSIGNMENT_MAP = "resource-assignment-map"
         const val OUTPUT_STATUS = "status"
     }
 
