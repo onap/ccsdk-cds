@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.OUTPUT_ASSIGNMENT_MAP
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionService
@@ -183,6 +184,12 @@ open class ResourceResolutionServiceImpl(
             resourceAssignments,
             artifactPrefix,
             properties
+        )
+
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(
+                nodeTemplateName,
+                OUTPUT_ASSIGNMENT_MAP,
+                ResourceAssignmentUtils.generateAssignmentMap(artifactPrefix, resourceAssignments)
         )
 
         val resolutionSummary = properties.getOrDefault(
