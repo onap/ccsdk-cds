@@ -3,8 +3,14 @@
   "version": "1.0.0",
   "attributes": {
     "assignment-params": {
+      "description": "Holds resolved template, resolution-summary or key-value",
       "required": true,
       "type": "string"
+    },
+    "assignment-map": {
+      "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+      "required": true,
+      "type": "map"
     }
   },
   "capabilities": {
@@ -74,6 +80,10 @@
           },
           "outputs": {
             "resource-assignment-params": {
+              "required": true,
+              "type": "string"
+            },
+            "resource-assignment-map" : {
               "required": true,
               "type": "string"
             },
