@@ -21,12 +21,12 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
         <artifactId>functions</artifactId>
-        <version>0.7.3-SNAPSHOT</version>
+        <version>0.7.3</version>
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
     <artifactId>restconf-executor</artifactId>
-    <version>0.7.3-SNAPSHOT</version>
+    <version>0.7.3</version>
 
     <name>Blueprints Processor Function - Restconf Executor</name>
     <description>Blueprints Processor Function - Restconf Executor</description>

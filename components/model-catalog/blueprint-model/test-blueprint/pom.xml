@@ -21,11 +21,11 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.cba</groupId>
         <artifactId>blueprint-model</artifactId>
-        <version>0.7.3-SNAPSHOT</version>
+        <version>0.7.3</version>
     </parent>
 
     <artifactId>test-blueprint-model</artifactId>
-    <version>0.7.3-SNAPSHOT</version>
+    <version>0.7.3</version>
     <packaging>pom</packaging>
 
     <name>CBA - Test Blueprints</name>
