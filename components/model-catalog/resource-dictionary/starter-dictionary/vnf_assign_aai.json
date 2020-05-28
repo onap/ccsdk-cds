@@ -1,0 +1,36 @@
+{
+    "tags": "vnf_assign_aai",
+    "name": "vnf_assign_aai",
+    "group":"default",
+    "property": {
+        "description": "vnf_assign_aai",
+        "type": "string"
+    },
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+        "aai-data": {
+            "type": "source-rest",
+            "properties": {
+                "verb": "PATCH",
+                "type": "JSON",
+                "headers": {
+                    "Content-Type": "application/merge-patch+json"
+                },
+                "url-path": "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id",
+                "payload": "{\r\n\"vnf-name\":\"${vnf_name}\", \r\n \"selflink\": \"restconf/config/GENERIC-RESOURCE-API:services/service/${service-instance-id}/service-data/vnfs/vnf/${vnf-id}/vnf-data/vnf-topology/\"\r\n}",
+                "path": "",
+                "input-key-mapping": {
+                    "service-instance-id": "service-instance-id",
+                    "vnf-id": "vnf-id",
+                    "vnf_name": "vnf_name"
+                },
+                "output-key-mapping": {},
+                "key-dependencies": [
+                    "service-instance-id",
+                    "vnf-id",
+                    "vnf_name"
+                ]
+            }
+        }
+    }
+}
