@@ -1,39 +1,59 @@
 {
-	"tags": "gre_ipaddr",
-	"name": "gre_ipaddr",
-	"group":"default",
-	"property": {
-		"description": "gre_ipaddr",
-		"type": "string"
-	},
-	"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-	"sources": {
-		"input": {
-			"type": "source-input"
-		},
-		"default": {
-			"type": "source-default",
-			"properties": {}
-		},
-		"sdnc": {
-			"type": "source-rest",
-			"properties": {
-				"verb": "GET",
-				"type": "JSON",
-				"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/gre_ipaddr",
-				"path": "/param/0/value",
-				"input-key-mapping": {
-					"service-instance-id": "service-instance-id",
-					"vnf-id": "vnf-id"
-				},
-				"output-key-mapping": {
-					"gre_ipaddr": "value"
-				},
-				"key-dependencies": [
-					"service-instance-id",
-					"vnf-id"
-				]
-			}
-		}
-	}
+    "tags": "gre_ipaddr",
+    "name": "gre_ipaddr",
+    "group":"default",
+    "property": {
+        "description": "gre_ipaddr",
+        "type": "string"
+    },
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        },
+        "sdnc": {
+            "type": "source-rest",
+            "properties": {
+                "verb": "GET",
+                "type": "JSON",
+                "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/gre_ipaddr",
+                "path": "/param/0/value",
+                "input-key-mapping": {
+                    "service-instance-id": "service-instance-id",
+                    "vnf-id": "vnf-id"
+                },
+                "output-key-mapping": {
+                    "gre_ipaddr": "value"
+                },
+                "key-dependencies": [
+                    "service-instance-id",
+                    "vnf-id"
+                ]
+            }
+        },
+        "rest": {
+            "type": "source-rest",
+            "properties": {
+                "endpoint-selector": "ipam-1",
+                "type": "JSON",
+                "verb": "POST",
+                "url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
+                "path": "",
+                "input-key-mapping": {
+                    "prefix-id": "private1-prefix-id"
+                },
+                "output-key-mapping": {
+                    "gre_ipaddr": "address",
+                    "id": "id"
+                },
+                "key-dependencies": [
+                    "private1-prefix-id"
+                ]
+            }
+        }
+    }
 }
