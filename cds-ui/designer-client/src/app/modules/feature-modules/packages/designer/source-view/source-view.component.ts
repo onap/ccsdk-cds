@@ -19,6 +19,7 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
     private controllerSideBar: boolean;
     private ngUnsubscribe = new Subject();
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
+    public customActionName = '';
 
     constructor(private store: DesignerStore,
                 private packageCreationUtils: PackageCreationUtils,
@@ -48,7 +49,7 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
         // TODO validate json against scheme
         console.log('convertAndOpenInDesingerView ...', this.content);
         this.store.saveSourceContent(this.content);
-        this.router.navigate(['/packages/designer', id]);
+        this.router.navigate(['/packages/designer', id, {actionName: this.customActionName}]);
     }
 
     ngOnDestroy() {
