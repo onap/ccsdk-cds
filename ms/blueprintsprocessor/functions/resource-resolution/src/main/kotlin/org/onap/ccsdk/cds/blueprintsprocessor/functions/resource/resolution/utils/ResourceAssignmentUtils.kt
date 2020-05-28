@@ -274,6 +274,13 @@ class ResourceAssignmentUtils {
             return JacksonUtils.getJson(data, includeNull = true)
         }
 
+        fun generateAssignmentMap(
+            artifactPrefix: String,
+            resourceAssignments: List<ResourceAssignment>
+        ): ObjectNode = resourceAssignments.associateBy({ it.name }, { it.property?.value })
+                .let { mutableMapOf(artifactPrefix to it) }
+                .let { JacksonUtils.objectNodeFromObject(it) }
+
         private fun useDefaultValueIfNull(
             resourceAssignment: ResourceAssignment,
             resourceAssignmentName: String
