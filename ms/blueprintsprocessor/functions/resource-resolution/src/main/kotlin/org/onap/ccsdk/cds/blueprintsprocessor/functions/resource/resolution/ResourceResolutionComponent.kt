@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -78,10 +79,15 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY] = resolutionSummary
 
         val jsonResponse = JsonNodeFactory.instance.objectNode()
-        // Initialize Output Attribute to empty JSON
+        val assignmentMap = JsonNodeFactory.instance.objectNode()
+        // Initialize Output Attributes to empty JSON
         bluePrintRuntimeService.setNodeTemplateAttributeValue(
             nodeTemplateName,
             ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, jsonResponse
+        )
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(
+            nodeTemplateName,
+            ResourceResolutionConstants.OUTPUT_ASSIGNMENT_MAP, assignmentMap
         )
 
         // validate inputs if we need to store the resource and template resolution.
@@ -104,7 +110,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         for (j in 1..occurrence) {
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = j
 
-            val response = resourceResolutionService.resolveResources(
+            val result = resourceResolutionService.resolveResources(
                 bluePrintRuntimeService,
                 nodeTemplateName,
                 artifactPrefixNames,
@@ -113,9 +119,11 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
             // provide indexed result in output if we have multiple resolution
             if (occurrence != 1) {
-                jsonResponse.set<JsonNode>(Integer.toString(j), response.asJsonNode())
+                jsonResponse.set<JsonNode>(j.toString(), result.templateMap.asJsonNode())
+                assignmentMap.set<JsonNode>(j.toString(), result.assignmentMap.asJsonNode())
             } else {
-                jsonResponse.setAll(response.asObjectNode())
+                jsonResponse.setAll<ObjectNode>(result.templateMap.asObjectNode())
+                assignmentMap.setAll<ObjectNode>(result.assignmentMap.asObjectNode())
             }
         }
 
@@ -123,6 +131,10 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         bluePrintRuntimeService.setNodeTemplateAttributeValue(
             nodeTemplateName,
             ResourceResolutionConstants.OUTPUT_ASSIGNMENT_PARAMS, jsonResponse
+        )
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(
+            nodeTemplateName,
+            ResourceResolutionConstants.OUTPUT_ASSIGNMENT_MAP, assignmentMap
         )
     }
 
