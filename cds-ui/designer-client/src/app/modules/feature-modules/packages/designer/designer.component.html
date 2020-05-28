@@ -102,9 +102,9 @@
 <div class="source-button editBar">
     
     <div class="btn-group viewBtns" role="group">
-        <button (click)="_toggleSidebar1()" class="topologySource active">
+        <!-- <button (click)="_toggleSidebar1()" class="topologySource active">
             <i style="font-size:24px" class="fa">&#xf101;</i> 
-        </button>
+        </button> -->
         <button type="button" class="btn btn-secondary topologySource active">Designer</button>
         <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
             class="btn btn-secondary topologyView">Scripting</button>
@@ -230,7 +230,7 @@
         </div> -->
         <!-- <button (click)="_toggleSidebar2()" style="float:right;">Toggle sidebar right</button> -->
     </div>
-    <!-- Attribute SideBar -->
+    <!-- Action Attribute SideBar -->
     <ng-sidebar [(opened)]="attributesSideBar" [sidebarClass]="'demo-sidebar attributesSideBar '" [mode]="'push'"
         [position]="'right'" #sidebarRight>
         <div class="container-fluid0">
@@ -381,6 +381,204 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-sidebar>
+
+        <!-- Function Attribute SideBar -->
+    <ng-sidebar [(opened)]="functionAttributeSidebar" [sidebarClass]="'demo-sidebar functionAttributeSidebar '" [mode]="'push'"
+        [position]="'right'" #sidebarRight>
+        <div class="container-fluid0">
+            <div class="row m-0">
+                <div class="col-2 pr-0">
+                    <!-- <button (click)="sidebarRight.close()" class="closeBar"></button> -->
+                </div>
+                <div class="col-10 attributesContainer p-0">
+                   <div class="row m-0"> 
+                       <div class="col-12">
+                           <div class="col-3">
+                                 <button (click)="sidebarRight.close()" class="closeBar"></button>
+                           </div>
+
+                           <div class="function-attribute">
+                              <h6>Function Attributes 
+                                  <span class="trash-span">
+                                      <i class="fa fa-trash" type="button" aria-hidden="true"></i>
+                                  </span>
+                            </h6>         
+                           </div>
+                           
+                        
+                       </div>
+                   </div>
+                   
+                    <div>
+                        <div class="row m-0">
+                            <div class="col-12">
+                                <div class="form-group actionName">
+                                    <label for="exampleInputEmail1">Function Name</label>
+                                    <input type="text" class="form-control" placeholder="Function Name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row m-0">
+                            <div class="col-12">
+                                <div class=" actionName">
+                                    <label>Function Type</label>
+                                    <div class="dropdown  w-100">
+                                        <input class="dropdown-toggle" type="text">
+                                        <div class="dropdown-text">component-resource-resolution <i class="fa fa-caret-down"></i></div>
+                                        <ul class="dropdown-content w-100">
+                                            <li>
+                                                <div class="form-group ">
+                                                    <li>other component</li>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion" id="accordionExample">
+                            <div class="card">
+                                <div class="card-header row" id="headingOne">
+                                    <h2 class="col-10 mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Interface
+                                        </button>
+                                    </h2>
+                                    <div class="col-2 p-0 text-center">
+                                        <button class="btn btn-addAttribute" type="button"></button>
+                                    </div>
+                                </div>
+
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-9">
+                                                <label for="exampleInputEmail1">ResourceResolutionComponent</label> &nbsp;
+                                                <button type="button" class="btn p-0">
+                                                    <img src="/assets/img/icon-edit.svg">
+                                                </button>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-deleteAttribute">Delete</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Resoluton-key</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlTextarea1">Store result</label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <input class="with-gap radio-btn" name="group1" type="radio"/>
+                                                <span class="radio-btn">True</span>
+                                              </label>
+                                              <label class="radio-btn">
+                                                <input class="with-gap radio-btn" name="group1" type="radio"  />
+                                                <span class="radio-btn">False</span>
+                                              </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Target</label>
+                                            <input type="text" class="form-control" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlTextarea1">Artifact Prefix Name</label>
+                                            <input type="text" class="form-control" placeholder="">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <div class="accordion" id="accordionExample">
+                            <div class="card">
+                                <div class="card-header row" id="headingOne">
+                                    <h2 class="col-10 mb-0">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            Artifact
+                                        </button>
+                                    </h2>
+                                    <div class="col-2 p-0 text-center">
+                                        <button class="btn btn-addAttribute" type="button"></button>
+                                    </div>
+                                </div>
+
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                    data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-9">
+                                                <label for="exampleInputEmail1">base config-template</label> &nbsp;
+                                                <button type="button" class="btn p-0">
+                                                    <img src="/assets/img/icon-edit.svg">
+                                                </button>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-deleteAttribute">Delete</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Type</label>
+                                            <div class="dropdown  w-100">
+                                                <input class="dropdown-toggle" type="text">
+                                                <div class="dropdown-text">artifact-template-velocity <i class="fa fa-caret-down"></i></div>
+                                                <ul class="dropdown-content w-100">
+                                                    <li>
+                                                        <div class="form-group ">
+                                                            <li>ddwd</li>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div style="height: 30px; margin-top: 30px;"><hr></div>
+
+                                        <div class="row">
+                                            <div class="col-9">
+                                                <label for="exampleInputEmail1">base config-mapping</label> &nbsp;
+                                                <button type="button" class="btn p-0">
+                                                    <img src="/assets/img/icon-edit.svg">
+                                                </button>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" class="btn btn-deleteAttribute">Delete</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Type</label>
+                                            <div class="dropdown  w-100">
+                                                <input class="dropdown-toggle" type="text">
+                                                <div class="dropdown-text">artifact-mapping resource <i class="fa fa-caret-down"></i></div>
+                                                <ul class="dropdown-content w-100">
+                                                    <li>
+                                                        <div class="form-group ">
+                                                            <li>ddwd</li>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div style="height: 30px; margin-top: 30px;"><hr></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>

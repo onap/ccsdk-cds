@@ -33,12 +33,13 @@ import { ActionElementTypeName } from 'src/app/common/constants/app-constants';
 import { GraphUtil } from './graph.util';
 import { GraphGenerator } from './graph.generator.util';
 import { FunctionsStore } from './functions.store';
-import { Subject } from 'rxjs';
+import { Subject, empty } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
 import { ActivatedRoute } from '@angular/router';
 import { DesignerService } from './designer.service';
+import { isDefined } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-designer',
@@ -50,6 +51,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
   private controllerSideBar: boolean;
   private attributesSideBar: boolean;
+  functionAttributeSidebar: boolean;
   viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
   customActionName: string;
   showAction: boolean;
@@ -71,6 +73,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     this.controllerSideBar = true;
     this.attributesSideBar = false;
     this.showAction = false;
+    this.functionAttributeSidebar = true;
 
   }
   private _toggleSidebar1() {
@@ -79,6 +82,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
   private _toggleSidebar2() {
     this.attributesSideBar = !this.attributesSideBar;
   }
+  // private _toggleSidebar3() {
+  //   this.functionAttributeSidebar = !this.functionAttributeSidebar;
+  // }
 
 
   /**
@@ -95,7 +101,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.customActionName = this.route.snapshot.paramMap.get('actionName');
-    if (this.customActionName != null) {
+    if (this.customActionName !== '') {
       this.showAction = true;
     }
     this.initializeBoard();

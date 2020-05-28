@@ -225,7 +225,7 @@ button.rotate{
   left: 30px;
 }
 .componentsList tspan{
-  width:60px !important; 
+  /* width:30px !important;  */
   font: normal 13px sans-serif; 
   fill: #1B3E6F !important; 
   overflow-wrap: break-word;
@@ -419,9 +419,8 @@ p.compType-4{
  
 /*CANVAS*/
 .editBar{
-  width: 1080px;
-  height: 50px;
-  margin: 0 auto 0 -392px;
+  width: 200px;
+  margin: 0 auto 0;
   padding: 6px 10px;
   background:#F4F9FE;
   /* border: solid 1px #E8EFF8; */
@@ -505,11 +504,21 @@ p.compType-4{
 .componentContainer p{
   font-size: 12px;
 }
-
+.functionAttributeSidebar{
+  width: 440px;
+  padding: 0px;
+  margin-top: 50px;
+}
+.functionAttributeSidebar .attributesContainer{
+  background: #fff;
+  border: solid 1px #C1CDDD;
+  box-shadow: 0 2px 6px rgba(47, 83, 151, .1);
+}
 /*ATTRIBUTES SIDE BAR*/
 .attributesSideBar{
   width: 396px;
-  padding: 0;
+  padding: 0px;
+  margin-top: 50px;
 }
 .attributesSideBar .attributesContainer{
   background: #fff;
@@ -517,17 +526,27 @@ p.compType-4{
   box-shadow: 0 2px 6px rgba(47, 83, 151, .1);
 }
 .closeBar{
-  float: right;
-  width: 90%;
-  height: 40px;
+  float: left;
+  width: 50%;
+  height: 42px;
   background: url(/assets/img/icon-close.svg) center center #DCE8F4 no-repeat ;
   border: 0;
   outline: 0;
+  margin-left: -30px;
 }
 .closeBar:focus{
   outline: none;
 }
 .attributesContainer h1{
+  margin-bottom: 10px;
+  padding: 12px 0 12px 15px;
+  background: #DEE8F3;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #1B3E6F;
+}
+.attributesContainer h6{
   margin-bottom: 10px;
   padding: 12px 0 12px 15px;
   background: #DEE8F3;
@@ -586,7 +605,7 @@ p.compType-4{
   font-weight: bold;
   font-size: 13px;
   text-transform: uppercase;
-  line-height: 38px;
+  line-height: 15px;
 }
 .accordion .btn-link:hover{
   color: #103D73;
@@ -653,3 +672,27 @@ p.compType-4{
     -webkit-user-select: none;
     z-index: 2;
 } */
+.attributesContainer .dropdown-text,
+.dropdown-toggle:hover ~ .dropdown-text, 
+.dropdown-toggle:focus ~ .dropdown-text{
+  top: 7px;
+  text-indent: 15px;
+  background: #F4F9FE;
+  border-radius: 5px;
+  border: 0;
+  box-shadow: whitesmoke;
+  color: #1B3E6F;
+  font-weight: bold;
+  font-size: 13px;
+}
+.radio-btn{
+  margin-left: 12px;
+  font-weight: bold;
+}
+.function-attribute{
+  margin-right: -16px;
+}
+.trash-span{
+  margin-left: 150px;
+  font-size:15px
+}

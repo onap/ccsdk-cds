@@ -24,7 +24,7 @@ export class ConfigurationDashboardComponent implements OnInit {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     @ViewChild(MetadataTabComponent, {static: false})
     private metadataTabComponent: MetadataTabComponent;
-    public customActionName: string;
+    public customActionName = '';
 
     entryDefinitionKeys: string[] = ['template_tags', 'user-groups',
         'author-email', 'template_version', 'template_name', 'template_author'];
