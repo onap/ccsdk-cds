@@ -33,6 +33,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -135,12 +136,22 @@ class ResourceResolutionServiceTest {
                 "baseconfig",
                 props
             )
+        }.let { (templateMap, assignmentMap) ->
+            assertEquals("This is Sample Velocity Template", templateMap)
+
+            val expectedAssignmentMap = hashMapOf(
+                    "service-instance-id" to "siid_1234",
+                    "vnf-id" to "vnf_1234",
+                    "vnf_name" to "temp_vnf"
+            ).asJsonType()
+            assertEquals(expectedAssignmentMap, assignmentMap)
         }
     }
 
     @Test
     @Throws(Exception::class)
     fun testResolveResources() {
+        val artifactNames = listOf("baseconfig", "another")
         runBlocking {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
@@ -155,8 +166,6 @@ class ResourceResolutionServiceTest {
                     ExecutionServiceInput::class.java
                 )!!
 
-            val artefactNames = listOf("baseconfig", "another")
-
             // Prepare Inputs
             PayloadUtils.prepareInputsFromWorkflowPayload(
                 bluePrintRuntimeService,
@@ -167,9 +176,15 @@ class ResourceResolutionServiceTest {
             resourceResolutionService.resolveResources(
                 bluePrintRuntimeService,
                 "resource-assignment",
-                artefactNames,
+                artifactNames,
                 props
             )
+        }.let {
+            assertEquals(artifactNames.toSet(), it.templateMap.keys)
+            assertEquals(artifactNames.toSet(), it.assignmentMap.keys)
+
+            assertEquals("This is Sample Velocity Template", it.templateMap["another"])
+            assertEquals("vnf_1234", it.assignmentMap["another"]!!["vnf-id"]!!.asText())
         }
     }
 
@@ -256,7 +271,7 @@ class ResourceResolutionServiceTest {
                     props
             )
         }.let {
-            val summaries = JacksonUtils.jsonNode(it)["resolution-summary"]
+            val summaries = JacksonUtils.jsonNode(it.first)["resolution-summary"]
             val list = JacksonUtils.getListFromJsonNode(summaries, ResolutionSummary::class.java)
             assertEquals(list.size, 3)
         }
@@ -265,6 +280,7 @@ class ResourceResolutionServiceTest {
     @Test
     @Throws(Exception::class)
     fun testResolveResourcesWithoutTemplate() {
+        val artifactPrefix = "notemplate"
         runBlocking {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
@@ -284,8 +300,6 @@ class ResourceResolutionServiceTest {
                             bluePrintRuntimeService,
                             "testResolveResourcesWithMappingAndTemplate"
                     )
-
-            val artifactPrefix = "notemplate"
 
             // Prepare Inputs
             PayloadUtils.prepareInputsFromWorkflowPayload(
@@ -307,7 +321,8 @@ class ResourceResolutionServiceTest {
                   "vnf-id" : "vnf_1234",
                   "vnf_name" : "temp_vnf"
                 }
-            """.trimIndent(), it)
+            """.trimIndent(), it.first)
+            assertEquals("siid_1234", it.second["service-instance-id"].asText())
         }
     }
 
