@@ -179,8 +179,14 @@
       "version": "1.0.0",
       "attributes": {
         "assignment-params": {
+          "description": "Holds resolved template, resolution-summary or key-value",
           "required": true,
           "type": "string"
+        },
+        "assignment-map": {
+          "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+          "required": true,
+          "type": "map"
         }
       },
       "capabilities": {
@@ -214,6 +220,11 @@
                   "required": false,
                   "type": "string"
                 },
+                "resolution-summary": {
+                  "description": "Enable resolution-summary output",
+                  "required": false,
+                  "type": "boolean"
+                },
                 "artifact-prefix-names": {
                   "required": true,
                   "description": "Template , Resource Assignment Artifact Prefix names",
@@ -245,6 +256,10 @@
               },
               "outputs": {
                 "resource-assignment-params": {
+                  "required": true,
+                  "type": "string"
+                },
+                "resource-assignment-map": {
                   "required": true,
                   "type": "string"
                 },

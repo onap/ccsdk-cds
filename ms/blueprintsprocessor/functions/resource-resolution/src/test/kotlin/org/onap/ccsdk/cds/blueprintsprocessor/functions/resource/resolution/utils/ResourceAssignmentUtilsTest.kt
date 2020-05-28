@@ -22,7 +22,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import io.mockk.every
 import io.mockk.spyk
@@ -205,20 +204,6 @@ class ResourceAssignmentUtilsTest {
                 ]
             }
         """.replace("\n|\\s".toRegex(), ""), result)
-    }
-
-    @Test
-    fun generateAssignmentMapTest() {
-        val artifactPrefix = "vdns"
-        val resourceAssignments = mutableListOf(
-            createResourceAssignmentForTest("abc-123", "vnf-id"),
-            createResourceAssignmentForTest(null, "vf-module-name")
-        )
-
-        val result: ObjectNode = ResourceAssignmentUtils.generateAssignmentMap(artifactPrefix, resourceAssignments)
-
-        assertEquals("abc-123", result["vdns"]["vnf-id"].textValue())
-        assertEquals(JacksonUtils.getJsonNode(null), result["vdns"]["vf-module-name"])
     }
 
     private fun createResourceAssignmentForTest(resourceValue: String?, resourceName: String = "pnf-id"): ResourceAssignment {
