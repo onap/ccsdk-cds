@@ -40,6 +40,7 @@ suspend fun AbstractComponentFunction.storedContentFromResolvedArtifactNB(
 suspend fun AbstractComponentFunction.contentFromResolvedArtifactNB(artifactPrefix: String): String {
     return BluePrintDependencyService.resourceResolutionService()
         .resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactPrefix, mapOf())
+        .first
 }
 
 /**

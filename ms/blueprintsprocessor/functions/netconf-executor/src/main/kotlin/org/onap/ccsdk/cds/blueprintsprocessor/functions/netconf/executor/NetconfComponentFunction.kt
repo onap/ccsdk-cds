@@ -81,6 +81,6 @@ abstract class NetconfComponentFunction : AbstractScriptComponentFunction() {
         resourceResolutionService().resolveResources(
             bluePrintRuntimeService, nodeTemplateName,
             artifactPrefix, mapOf()
-        )
+        ).first
     }
 }

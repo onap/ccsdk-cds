@@ -130,7 +130,7 @@ object BluePrintExpressionService {
                 val propertyPaths: List<String> = arrayNode.filterIndexed { index, _ ->
                     index >= 3
                 }.map { it.textValue() }
-                subProperty = propertyPaths.joinToString("/")
+                subProperty = propertyPaths.joinToString(".")
             }
         }
 
@@ -170,7 +170,7 @@ object BluePrintExpressionService {
                 val propertyPaths: List<String> = arrayNode.filterIndexed { index, _ ->
                     index >= 3
                 }.map { it.textValue() }
-                subAttributeName = propertyPaths.joinToString("/")
+                subAttributeName = propertyPaths.joinToString(".")
             }
         }
         return AttributeExpression(
