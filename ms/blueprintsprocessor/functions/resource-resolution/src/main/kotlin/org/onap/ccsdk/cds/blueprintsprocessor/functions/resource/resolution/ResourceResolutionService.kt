@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.OUTPUT_ASSIGNMENT_MAP
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionService
@@ -30,6 +29,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.util
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceDefinitionUtils.createResourceAssignments
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
@@ -46,6 +46,11 @@ import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import java.util.UUID
 
+data class ResourceResolutionResult(
+    val templateMap: MutableMap<String, String>,
+    val assignmentMap: MutableMap<String, JsonNode>
+)
+
 interface ResourceResolutionService {
 
     fun registeredResourceSources(): List<String>
@@ -61,14 +66,14 @@ interface ResourceResolutionService {
         nodeTemplateName: String,
         artifactNames: List<String>,
         properties: Map<String, Any>
-    ): MutableMap<String, String>
+    ): ResourceResolutionResult
 
     suspend fun resolveResources(
         bluePrintRuntimeService: BluePrintRuntimeService<*>,
         nodeTemplateName: String,
         artifactPrefix: String,
         properties: Map<String, Any>
-    ): String
+    ): Pair<String, JsonNode>
 
     /** Resolve resources for all the sources defined in a particular resource Definition[resolveDefinition]
      * with other [resourceDefinitions] dependencies for the sources [sources]
@@ -124,21 +129,22 @@ open class ResourceResolutionServiceImpl(
         nodeTemplateName: String,
         artifactNames: List<String>,
         properties: Map<String, Any>
-    ): MutableMap<String, String> {
+    ): ResourceResolutionResult {
 
         val resourceAssignmentRuntimeService =
             ResourceAssignmentUtils.transformToRARuntimeService(bluePrintRuntimeService, artifactNames.toString())
 
-        val resolvedParams: MutableMap<String, String> = hashMapOf()
+        val templateMap: MutableMap<String, String> = hashMapOf()
+        val assignmentMap: MutableMap<String, JsonNode> = hashMapOf()
         artifactNames.forEach { artifactName ->
-            val resolvedContent = resolveResources(
+            val (resolvedStringContent, resolvedJsonContent) = resolveResources(
                 resourceAssignmentRuntimeService, nodeTemplateName,
                 artifactName, properties
             )
-
-            resolvedParams[artifactName] = resolvedContent
+            templateMap[artifactName] = resolvedStringContent
+            assignmentMap[artifactName] = resolvedJsonContent
         }
-        return resolvedParams
+        return ResourceResolutionResult(templateMap, assignmentMap)
     }
 
     override suspend fun resolveResources(
@@ -146,7 +152,7 @@ open class ResourceResolutionServiceImpl(
         nodeTemplateName: String,
         artifactPrefix: String,
         properties: Map<String, Any>
-    ): String {
+    ): Pair<String, JsonNode> {
 
         // Template Artifact Definition Name
         val artifactTemplate = "$artifactPrefix-template"
@@ -186,16 +192,13 @@ open class ResourceResolutionServiceImpl(
             properties
         )
 
-        bluePrintRuntimeService.setNodeTemplateAttributeValue(
-                nodeTemplateName,
-                OUTPUT_ASSIGNMENT_MAP,
-                ResourceAssignmentUtils.generateAssignmentMap(artifactPrefix, resourceAssignments)
-        )
-
         val resolutionSummary = properties.getOrDefault(
             ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY,
             false
         ) as Boolean
+        val assignmentMap = resourceAssignments
+                .associateBy({ it.name }, { it.property?.value })
+                .asJsonNode()
         val resolvedParamJsonContent =
             ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
         val artifactTemplateDefinition =
@@ -226,7 +229,7 @@ open class ResourceResolutionServiceImpl(
             log.info("Template resolution saved into database successfully : ($properties)")
         }
 
-        return resolvedContent
+        return Pair(resolvedContent, assignmentMap)
     }
 
     override suspend fun resolveResourceDefinition(
