@@ -23,6 +23,7 @@ import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.TestConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintRuntimeUtils
@@ -232,6 +233,46 @@ class BluePrintRuntimeServiceTest {
 
         val resolvedJsonNode = bluePrintRuntimeService.resolveWorkflowOutputs("resource-assignment")
         assertNotNull(resolvedJsonNode, "Failed to populate workflow output property values")
+    }
+
+    @Test
+    fun `test resolvePropertyDefinitions using sub attributes`() {
+        val bluePrintRuntimeService = getBluePrintRuntimeService()
+
+        bluePrintRuntimeService.setNodeTemplateAttributeValue(
+                "resource-assignment", "assignment-map",
+                JacksonUtils.jsonNode("""
+                    {
+                      "a-prefix":{
+                        "an-object":{
+                          "a-key":123
+                        }
+                      }
+                    }
+                """.trimIndent())
+        )
+
+        val propertyDefinitions = mutableMapOf<String, PropertyDefinition>(
+                "resolution" to PropertyDefinition().apply {
+                    this.type = "json"
+                    this.value = JacksonUtils.jsonNode("""
+                        {
+                          "get_attribute":[
+                            "resource-assignment",
+                            "",
+                            "assignment-map",
+                            "a-prefix",
+                            "an-object",
+                            "a-key"
+                            ]
+                        }
+                    """.trimIndent())
+                }
+        )
+
+        val result = bluePrintRuntimeService.resolvePropertyDefinitions("workflow", "WORKFLOW", propertyDefinitions)
+
+        assertEquals("123", result["resolution"]!!.asText())
     }
 
     private fun getBluePrintRuntimeService(): BluePrintRuntimeService<MutableMap<String, JsonNode>> {

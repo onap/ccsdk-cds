@@ -147,7 +147,7 @@ class ResourceResolutionComponentTest {
                 any<List<String>>(),
                 any<MutableMap<String, Any>>()
             )
-        } returns mutableMapOf()
+        } returns ResourceResolutionResult(mutableMapOf(), mutableMapOf())
 
         runBlocking {
             resourceResolutionComponent.processNB(executionRequest)

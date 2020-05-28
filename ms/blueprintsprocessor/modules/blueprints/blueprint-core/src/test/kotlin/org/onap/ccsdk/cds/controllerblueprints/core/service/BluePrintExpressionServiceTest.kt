@@ -60,7 +60,7 @@ class BluePrintExpressionServiceTest {
         assertEquals("SELF", expressionData1.propertyExpression?.modelableEntityName, " Failed to get expected modelableEntityName")
         assertEquals("property-name", expressionData1.propertyExpression?.propertyName, " Failed to get expected propertyName")
         assertEquals(
-            "resource/name",
+            "resource.name",
             expressionData1.propertyExpression?.subPropertyName,
             " Failed to populate nested subPropertyName expression data"
         )
@@ -84,7 +84,7 @@ class BluePrintExpressionServiceTest {
         assertEquals("SELF", expressionData1.attributeExpression?.modelableEntityName, " Failed to get expected modelableEntityName")
         assertEquals("attribute-name", expressionData1.attributeExpression?.attributeName, " Failed to get expected attributeName")
         assertEquals(
-            "resource/name",
+            "resource.name",
             expressionData1.attributeExpression?.subAttributeName,
             " Failed to populate nested subAttributeName expression data"
         )
