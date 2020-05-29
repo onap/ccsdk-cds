@@ -23,13 +23,13 @@ limitations under the License.
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.4</version>
+        <version>1.5.8-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <groupId>org.onap.ccsdk.cds</groupId>
     <artifactId>parent</artifactId>
-    <version>0.7.3-SNAPSHOT</version>
+    <version>0.7.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>CDS Parent</name>
