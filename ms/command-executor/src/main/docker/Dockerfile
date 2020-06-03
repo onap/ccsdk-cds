@@ -5,7 +5,7 @@ RUN python -m pip install --upgrade pip
 RUN pip install grpcio==${GRPC_PYTHON_VERSION} grpcio-tools==${GRPC_PYTHON_VERSION}
 RUN pip install virtualenv==16.7.9
 
-RUN groupadd -r onap && useradd -r -g onap onap
+RUN groupadd -r -g 1000 onap && useradd -r -u 1000 -g onap onap
 
 COPY start.sh /opt/app/onap/start.sh
 RUN chmod u+x /opt/app/onap/start.sh

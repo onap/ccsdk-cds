@@ -1,6 +1,6 @@
 FROM python:3.7-slim
 
-RUN groupadd -r onap && useradd -r -g onap onap
+RUN groupadd -r -g 1000 onap && useradd -u 1000 -r -g onap onap
 
 RUN mkdir -p /opt/app/onap/logs/ && touch /opt/app/onap/logs/application.log
 
