@@ -1,6 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
-RUN addgroup -S onap && adduser -S onap -G onap
+RUN addgroup -S -g 1000 onap && adduser -S onap -u 1000 -G onap
 # add entrypoint
 COPY startService.sh /startService.sh
 RUN chown onap:onap /startService.sh

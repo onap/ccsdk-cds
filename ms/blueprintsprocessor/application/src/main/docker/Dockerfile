@@ -9,7 +9,7 @@ FROM omahoco1/alpine-java-python
 
 # add entrypoint
 COPY startService.sh /startService.sh
-RUN addgroup -S onap && adduser -S onap -G onap
+RUN addgroup -S -g 1000 onap && adduser -u 1000 -S onap -G onap
 RUN chown onap:onap /startService.sh
 RUN touch /velocity.log && chmod 777 /velocity.log
 RUN chown onap:onap /velocity.log
