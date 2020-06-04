@@ -180,7 +180,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
       this.palettePaper = new joint.dia.Paper({
         el: $('#palette-paper'),
         model: this.paletteGraph,
-        width: 300,
+        width: 318,
         height: $('#palette-paper').height(),
         // background: {
         //   color: 'rgba(0, 255, 0, 0.3)'
