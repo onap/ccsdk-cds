@@ -99,17 +99,51 @@
         </div>
     </div>
 </header>
-<div class="source-button editBar">
-    
-    <div class="btn-group viewBtns" role="group">
-        <!-- <button (click)="_toggleSidebar1()" class="topologySource active">
-            <i style="font-size:24px" class="fa">&#xf101;</i> 
-        </button> -->
-        <button type="button" class="btn btn-secondary topologySource active">Designer</button>
-        <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
-            class="btn btn-secondary topologyView">Scripting</button>
+<!-- <nav class="row source-button editBar navbar navbar-expand-lg">
+    <nav class="col-12">
+            <button (click)="_toggleSidebar1()" class="topologySource active">
+                <i style="font-size:40px" class="fa">&#xf100;</i>
+            </button>
+        <div class="btn-group viewBtns" role="group" style="float: right">
+            <button type="button" class="btn btn-secondary topologySource active">Designer</button>
+            <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
+                class="btn btn-secondary topologyView">Scripting</button>
+        </div>
+    </nav>
+
+</nav> -->
+<nav class="row source-button {{cl}} navbar navbar-expand-lg">
+    <button (click)="_toggleSidebar1()" class="active btn arrow">
+        <i class="fa arr-size">&#xf100;</i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <nav class="row">
+                    <!--Nav Tabs-->
+                    <div class="col-12">
+                        <div class="nav nav-tabs " id="nav-tab" role="tablist">
+                            <a style="height: 43px" class="nav-item nav-link active col-6" id=" " data-toggle="tab" href="" role="tab"
+                                aria-controls=" " aria-selected="false" autofocus #nameit>Workflow</a>
+                            <a style="height: 43px" class="nav-item nav-link col-6" id=" " data-toggle="tab" href="" role="tab"
+                                aria-controls=" " aria-selected="false">Template</a>
+                        </div>
+                    </div>
+                </nav>
+            </li>
+        </ul>
+        <ul class="navbar ml-auto" style="list-style: none;">
+            <li class="nav-item">
+                <div class="btn-group viewBtns" role="group">
+                    <button type="button" class="btn btn-secondary topologySource active">Designer</button>
+                    <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
+                        class="btn btn-secondary topologyView">Scripting</button>
+                </div>
+            </li>
+        </ul>
+
     </div>
-</div>
+</nav>
 
 <ng-sidebar-container class="sidebar-container">
     <!-- Controller SideBar -->
@@ -119,20 +153,18 @@
         <nav class="row">
             <!--Nav Tabs-->
             <div class="col-12">
-                <div class="nav nav-tabs " id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active col-6" id="nav-action-tab" data-toggle="tab"
-                        href="#nav-action" role="tab" aria-controls="nav-action" aria-selected="false"
-                        autofocus #nameit >Actions</a>
-                    <a class="nav-item nav-link col-6" id="nav-function-tab" data-toggle="tab"
-                        href="#nav-function" role="tab" aria-controls="nav-function" aria-selected="false">Functions</a>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a style="height: 43px" class="nav-item nav-link active col-6" id="nav-action-tab" data-toggle="tab" href="#nav-action"
+                        role="tab" aria-controls="nav-action" aria-selected="false" autofocus #nameit>Actions</a>
+                    <a style="height: 43px" class="nav-item nav-link col-6" id="nav-function-tab" data-toggle="tab" href="#nav-function"
+                        role="tab" aria-controls="nav-function" aria-selected="false">Functions</a>
                 </div>
             </div>
         </nav>
 
-
         <div class="row mt-2">
             <div class="col-12">
-                <div class="tab-content" id="nav-tabContent">
+                <div class="tab-content" id="nav-tabContent" style="margin-top: 20px;">
                     <div class="tab-pane fade show active" id="nav-action" role="tabpanel"
                         aria-labelledby="nav-action-tab">
                         <!--Action Search Box-->
@@ -141,21 +173,21 @@
                         </div>
 
                         <div class="btn-group actionBtns col-8" role="group">
-                            <button (click)="insertCustomActionIntoBoard()" type="button" class="btn insert-custom">
-                               + New Action
-                            </button> 
+                            <button type="button" class="btn insert-custom">
+                                + New Action
+                            </button>
                         </div>
 
-                            <div>
-                              <div *ngIf="showAction" class="custom-control">
-                                <label><span><i class="fa fa-file-o" aria-hidden="true" style="margin-right: 20px;"></i></span>
+                        <div>
+                            <div *ngIf="showAction" class="custom-control">
+                                <label><span><i class="fa fa-file-o" aria-hidden="true"
+                                            style="margin-right: 20px;"></i></span>
                                     {{customActionName}} </label>
-                              </div>
                             </div>
+                        </div>
                     </div>
 
-                    <div class="tab-pane fade" id="nav-function" role="tabpanel"
-                        aria-labelledby="nav-function-tab">
+                    <div class="tab-pane fade" id="nav-function" role="tabpanel" aria-labelledby="nav-function-tab">
                         <div class="col-12 text-center p-0">
                             <b>Drag and drop function to Action’s box</b>
                             <div id="palette-paper" class="col-12 componentsList"> </div>
@@ -164,8 +196,8 @@
                 </div>
             </div>
         </div>
-       
-   
+
+
     </ng-sidebar>
     <!-- Page content -->
 
@@ -388,33 +420,33 @@
         </div>
     </ng-sidebar>
 
-        <!-- Function Attribute SideBar -->
-    <ng-sidebar [(opened)]="functionAttributeSidebar" [sidebarClass]="'demo-sidebar functionAttributeSidebar '" [mode]="'push'"
-        [position]="'right'" #sidebarRight>
+    <!-- Function Attribute SideBar -->
+    <ng-sidebar [(opened)]="functionAttributeSidebar" [sidebarClass]="'demo-sidebar functionAttributeSidebar '"
+        [mode]="'push'" [position]="'right'" #sidebarRight>
         <div class="container-fluid0">
             <div class="row m-0">
                 <div class="col-2 pr-0">
                     <!-- <button (click)="sidebarRight.close()" class="closeBar"></button> -->
                 </div>
                 <div class="col-10 attributesContainer p-0">
-                   <div class="row m-0"> 
-                       <div class="col-12">
-                           <div class="col-3">
-                                 <button (click)="sidebarRight.close()" class="closeBar"></button>
-                           </div>
+                    <div class="row m-0">
+                        <div class="col-12">
+                            <div class="col-3">
+                                <button (click)="sidebarRight.close()" class="closeBar"></button>
+                            </div>
 
-                           <div class="function-attribute">
-                              <h6>Function Attributes 
-                                  <span class="trash-span">
-                                      <i class="fa fa-trash" type="button" aria-hidden="true"></i>
-                                  </span>
-                            </h6>         
-                           </div>
-                           
-                        
-                       </div>
-                   </div>
-                   
+                            <div class="function-attribute">
+                                <h6>Function Attributes
+                                    <span class="trash-span">
+                                        <i class="fa fa-trash" type="button" aria-hidden="true"></i>
+                                    </span>
+                                </h6>
+                            </div>
+
+
+                        </div>
+                    </div>
+
                     <div>
                         <div class="row m-0">
                             <div class="col-12">
@@ -430,159 +462,166 @@
                                     <label>Function Type</label>
                                     <div class="dropdown  w-100">
                                         <input class="dropdown-toggle" type="text">
-                                        <div class="dropdown-text">component-resource-resolution <i class="fa fa-caret-down"></i></div>
+                                        <div class="dropdown-text">component-resource-resolution <i
+                                                class="fa fa-caret-down"></i></div>
                                         <ul class="dropdown-content w-100">
                                             <li>
                                                 <div class="form-group ">
-                                                    <li>other component</li>
-                                                </div>
-                                            </li>
+                                            <li>other component</li>
+                                    </div>
+                                    </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <div class="card-header row" id="headingOne">
+                                <h2 class="col-10 mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Interface
+                                    </button>
+                                </h2>
+                                <div class="col-2 p-0 text-center">
+                                    <button class="btn btn-addAttribute" type="button"></button>
+                                </div>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <label for="exampleInputEmail1">ResourceResolutionComponent</label> &nbsp;
+                                            <button type="button" class="btn p-0">
+                                                <img src="/assets/img/icon-edit.svg">
+                                            </button>
+                                        </div>
+                                        <div class="col-3">
+                                            <button type="button" class="btn btn-deleteAttribute">Delete</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Resoluton-key</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">Store result</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            <input class="with-gap radio-btn" name="group1" type="radio" />
+                                            <span class="radio-btn">True</span>
+                                        </label>
+                                        <label class="radio-btn">
+                                            <input class="with-gap radio-btn" name="group1" type="radio" />
+                                            <span class="radio-btn">False</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Target</label>
+                                        <input type="text" class="form-control" placeholder="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">Artifact Prefix Name</label>
+                                        <input type="text" class="form-control" placeholder="">
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <div class="card-header row" id="headingOne">
+                                <h2 class="col-10 mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Artifact
+                                    </button>
+                                </h2>
+                                <div class="col-2 p-0 text-center">
+                                    <button class="btn btn-addAttribute" type="button"></button>
+                                </div>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-9">
+                                            <label for="exampleInputEmail1">base config-template</label> &nbsp;
+                                            <button type="button" class="btn p-0">
+                                                <img src="/assets/img/icon-edit.svg">
+                                            </button>
+                                        </div>
+                                        <div class="col-3">
+                                            <button type="button" class="btn btn-deleteAttribute">Delete</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Type</label>
+                                        <div class="dropdown  w-100">
+                                            <input class="dropdown-toggle" type="text">
+                                            <div class="dropdown-text">artifact-template-velocity <i
+                                                    class="fa fa-caret-down"></i></div>
+                                            <ul class="dropdown-content w-100">
+                                                <li>
+                                                    <div class="form-group ">
+                                                <li>ddwd</li>
+                                        </div>
+                                        </li>
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="accordion" id="accordionExample">
-                            <div class="card">
-                                <div class="card-header row" id="headingOne">
-                                    <h2 class="col-10 mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Interface
+
+                                <div style="height: 30px; margin-top: 30px;">
+                                    <hr>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-9">
+                                        <label for="exampleInputEmail1">base config-mapping</label> &nbsp;
+                                        <button type="button" class="btn p-0">
+                                            <img src="/assets/img/icon-edit.svg">
                                         </button>
-                                    </h2>
-                                    <div class="col-2 p-0 text-center">
-                                        <button class="btn btn-addAttribute" type="button"></button>
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-deleteAttribute">Delete</button>
                                     </div>
                                 </div>
-
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                    data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <label for="exampleInputEmail1">ResourceResolutionComponent</label> &nbsp;
-                                                <button type="button" class="btn p-0">
-                                                    <img src="/assets/img/icon-edit.svg">
-                                                </button>
-                                            </div>
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-deleteAttribute">Delete</button>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Resoluton-key</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleFormControlTextarea1">Store result</label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>
-                                                <input class="with-gap radio-btn" name="group1" type="radio"/>
-                                                <span class="radio-btn">True</span>
-                                              </label>
-                                              <label class="radio-btn">
-                                                <input class="with-gap radio-btn" name="group1" type="radio"  />
-                                                <span class="radio-btn">False</span>
-                                              </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Target</label>
-                                            <input type="text" class="form-control" placeholder="">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleFormControlTextarea1">Artifact Prefix Name</label>
-                                            <input type="text" class="form-control" placeholder="">
-
-                                        </div>
-
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Type</label>
+                                    <div class="dropdown  w-100">
+                                        <input class="dropdown-toggle" type="text">
+                                        <div class="dropdown-text">artifact-mapping resource <i
+                                                class="fa fa-caret-down"></i></div>
+                                        <ul class="dropdown-content w-100">
+                                            <li>
+                                                <div class="form-group ">
+                                            <li>ddwd</li>
                                     </div>
+                                    </li>
+                                    </ul>
                                 </div>
                             </div>
-                            
-                        </div>
 
-                        <div class="accordion" id="accordionExample">
-                            <div class="card">
-                                <div class="card-header row" id="headingOne">
-                                    <h2 class="col-10 mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Artifact
-                                        </button>
-                                    </h2>
-                                    <div class="col-2 p-0 text-center">
-                                        <button class="btn btn-addAttribute" type="button"></button>
-                                    </div>
-                                </div>
-
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                    data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <label for="exampleInputEmail1">base config-template</label> &nbsp;
-                                                <button type="button" class="btn p-0">
-                                                    <img src="/assets/img/icon-edit.svg">
-                                                </button>
-                                            </div>
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-deleteAttribute">Delete</button>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Type</label>
-                                            <div class="dropdown  w-100">
-                                                <input class="dropdown-toggle" type="text">
-                                                <div class="dropdown-text">artifact-template-velocity <i class="fa fa-caret-down"></i></div>
-                                                <ul class="dropdown-content w-100">
-                                                    <li>
-                                                        <div class="form-group ">
-                                                            <li>ddwd</li>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <div style="height: 30px; margin-top: 30px;"><hr></div>
-
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <label for="exampleInputEmail1">base config-mapping</label> &nbsp;
-                                                <button type="button" class="btn p-0">
-                                                    <img src="/assets/img/icon-edit.svg">
-                                                </button>
-                                            </div>
-                                            <div class="col-3">
-                                                <button type="button" class="btn btn-deleteAttribute">Delete</button>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Type</label>
-                                            <div class="dropdown  w-100">
-                                                <input class="dropdown-toggle" type="text">
-                                                <div class="dropdown-text">artifact-mapping resource <i class="fa fa-caret-down"></i></div>
-                                                <ul class="dropdown-content w-100">
-                                                    <li>
-                                                        <div class="form-group ">
-                                                            <li>ddwd</li>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <div style="height: 30px; margin-top: 30px;"><hr></div>
-                                    </div>
-                                </div>
+                            <div style="height: 30px; margin-top: 30px;">
+                                <hr>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
+
             </div>
+        </div>
+        </div>
+        </div>
         </div>
     </ng-sidebar>
 
