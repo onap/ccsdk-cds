@@ -74,6 +74,7 @@ body{
 .toast-error{
   border-left: solid 5px #FF6469 !important;
   background: url(/assets/img/icon-error.svg) 12px center #fff no-repeat !important;
+  background-size: 18px !important;
 }
 /*ICONS*/
 .icon-menuDots{
@@ -555,12 +556,15 @@ height: 40px;
   border: solid 1px #D7E7F9 !important;
   box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.18) !important;
 }
+.addPaackage-card .card-body img{
+  width: 30%;
+}
 .addPaackage-card a{
   margin: 0;
   padding: 7px 15px;
   font-weight: bold;
   font-size: 12px;
-  border-radius: 2px;
+  border-radius: 18px;
   border-width: 0px;
   border-style: solid;
   background-position: 15px center;
@@ -1152,7 +1156,7 @@ height: 40px;
 }
 .btn-create-package,
 .btn-import-package{
-  width: 145px;
+  width: auto;
 }
 .btn-create-package{
   margin-bottom: 6px !important;
@@ -1235,9 +1239,7 @@ height: 40px;
   background: #1B3E6F;
   box-shadow: none;
 }
-.package-version{
-  /* color: #C3CDDB !important; */
-}
+
 .package-version::before{
   content: "|";
   margin-left: 8px;

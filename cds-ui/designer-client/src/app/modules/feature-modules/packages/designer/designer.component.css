@@ -12,6 +12,18 @@ body{
   color: #fff;
 }
 
+/*Bootstrap*/
+.controllerSidebar .nav-tabs{
+  border-bottom-width: 2px;
+}
+.controllerSidebar .nav-tabs .nav-link{
+  padding: 12px 0 !important;
+  text-align: center;
+}
+.controllerSidebar .nav-tabs .nav-link::before{
+  content: "";
+}
+
 /*Header*/
 header{
   position: relative;
@@ -240,9 +252,9 @@ tspan#type{
 }
 /*ACTIONS & COMPONENTS MENU*/
 .input-search-controller{
-  height: 50px;
-  padding-left: 30px;
-  background: url(src/assets/img/icon-search-light.svg) #fff 10px center no-repeat;
+  height: 40px;
+  padding-left: 42px;
+  background: url(src/assets/img/icon-search-light.svg) #fff 21px center no-repeat;
   border-radius: 0;
   border: 0;
   border-bottom: solid 1px #D7E7F9;
@@ -254,15 +266,10 @@ tspan#type{
   font-size: 11px;
 }
 .input-search-controller:focus{
-  
+  background-color: #fff !important;
   box-shadow: 0 2px 6px 0 rgba(47, 83, 151, .15);
+  text-shadow: none;
   border-color: #DEE8F3;
-}
-.actions-scroll{
-  max-height: 29vh;
-  overflow-y: auto;
-  margin-top: 12px;
-  margin-bottom: 20px;
 }
 .componentsList p{
   margin-bottom: 0;
@@ -296,9 +303,36 @@ p.compType-4{
 
 .controllerSidebar{
   width: 320px;
+  padding: 0;
+  overflow: hidden !important;
   background: #F4F9FE;
   border: solid 1px #C1CDDD;
   box-shadow: 0 2px 6px rgba(47, 83, 151, .10);
+}
+.helpBox{
+  position : absolute;
+  bottom : 0;
+  width: 100%;
+  height : 40px;
+  margin-top : 24px;
+  padding-left: 20px;
+  background: #fff;
+  border-top: solid 1px #C1CDDD;
+  font-size: 14px;
+  line-height: 40px;
+  color: #0070F4;
+}
+.helpBox .icon-info{
+  margin-left: 0;
+  margin-right: 10px;
+}
+.helpBox .icon-info::before{
+  color: #0070F4 !important;
+}
+.controllerSidebar .row,
+.controllerSidebar .col{
+  margin: 0;
+  padding: 0;
 }
 .controllerSidebar h1{
   margin-bottom: 15px;
@@ -315,6 +349,7 @@ p.compType-4{
   font-size: 12px;
   color: #C3CDDB;
 }
+
 .actionBtns .btn{
   margin: 0px 15px 16px -90px;
   /* padding: 9px 20px; */
@@ -325,24 +360,25 @@ p.compType-4{
   float: left;
   
 }
-.actionBtns .btn.insert-custom{
-  /* background: white; */
-  /* border: solid 1px #1B3E6F; */
+.new-action,
+.new-action:hover{
+  margin: 9px 0 4px 18px;
+  padding: 6px;
+  font-size: 13px;
+  font-weight: bold;
   color: #1B3E6F;
 }
-.actionBtns .btn.import-action{
-  border: solid 1px #D0DFF1;
-  color: #1B3E6F;
-  
+.new-action:hover{
+  background: #D7E7F9;
 }
-.actionsList,
 .componentsList{
-  padding: 0 12px 20px;
+  margin-top: 16px;
+  padding: 0 20px 10px;
 }
 .componentsList{
   padding-bottom: 0;
-  height: calc( 100vh - 218px)!important;
-  overflow: scroll;
+  /* height: calc( 100vh - 218px)!important;
+  overflow: scroll;*/
   background: #F4F9FE !important;
 }
 .custom-control.custom-checkbox:hover,
@@ -350,18 +386,18 @@ p.compType-4{
   cursor: pointer;
 }
 .custom-control{
-  padding-top: 10px;
-  width: 315px;
   height: 40px;
-  margin-left: -15px;
   font-size: 14px;
-  padding-bottom: 0;
+  line-height: 40px;
 }
 .custom-control:hover{
     background-color: white;
 }
-
-.actionsList .custom-checkbox,
+.actionsList,
+.componentsList{
+  height: 65vh !important;
+  overflow-y: auto;
+}
 .componentsList .list-group-item{
   margin-bottom: 10px;
   padding-left: 40px;
@@ -374,7 +410,7 @@ p.compType-4{
   padding: 6px;
   vertical-align: unset;
   color: #1B3E6F;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 20px;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
@@ -408,6 +444,12 @@ p.compType-4{
   background: #fff;
   border: solid 1px #D9E6F2;
   color: #C3CDDB;
+}
+.controllerSidebar .custom-control label{
+  margin-bottom: 0;
+}
+.controllerSidebar .custom-control i{
+  margin-right: 9px;
 }
 /*Components List*/
 .componentsList .list-group-item{
@@ -507,7 +549,7 @@ p.compType-4{
 .functionAttributeSidebar{
   width: 440px;
   padding: 0px;
-  margin-top: 50px;
+  margin-top: 45px;
 }
 .functionAttributeSidebar .attributesContainer{
   background: #fff;
