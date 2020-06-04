@@ -1,4 +1,3 @@
-
 body{
   background-image: linear-gradient(-45deg, #000 9%, #fff 0) !important;
   background-size: 6px 6px !important;  
@@ -10,7 +9,7 @@ body{
 }
 .icon-info::before{
   color: #fff;
-}
+} 
 
 /*Header*/
 header{
@@ -419,8 +418,9 @@ p.compType-4{
  
 /*CANVAS*/
 .editBar{
-  width: 200px;
-  margin: 0 auto 0;
+  width: 73.7%;
+  margin: 0 auto 0 -320px;
+  height: 43px;
   padding: 6px 10px;
   background:#F4F9FE;
   /* border: solid 1px #E8EFF8; */
@@ -444,6 +444,7 @@ p.compType-4{
 .viewBtns .btn{
   background-position: 10px center;
   padding-left: 30px!important;
+  margin-top: 14px;
 }
 .viewBtns .topologySource{
   background-image: url(src/assets/img/icon-topologyView-active.svg);
@@ -695,4 +696,35 @@ p.compType-4{
 .trash-span{
   margin-left: 150px;
   font-size:15px
+}
+.arrow{
+  margin-left: -10px;
+  border-radius: 1%
+}
+.arr-size{
+  font-size: 32px;
+}
+.editBar2{
+  width: 98.7%;
+  margin: 0 auto 0 -640px;
+  height: 43px;
+  padding: 6px 10px;
+  background:#F4F9FE;
+  /* border: solid 1px #E8EFF8; */
+  box-shadow: 0 2px 6px rgba(47, 83, 151, .1);
+}
+.editBar2 .btn-group{
+  box-shadow: 0 2px 6px rgba(47, 83, 151, .15);
+}
+.editBar2 .btn{
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: left center;
+  border: 0;
+  color: #1B3E6F;
+  font-size: 10px;
+}
+.editBar2 .btn.active{
+  background-color: #1B3E6F !important;
+  color: #fff;
 }
