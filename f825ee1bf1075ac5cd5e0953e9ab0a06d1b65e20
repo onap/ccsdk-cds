@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e222fb8_68f154e6",
+        "filename": "ms/py-executor/certs/py-executor/py-executor.conf",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-06-05T13:58:19Z",
+      "side": 1,
+      "message": "Merge DNS.2, DNS.3 and DNS.4 with value *py-exec*",
+      "revId": "f825ee1bf1075ac5cd5e0953e9ab0a06d1b65e20",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
