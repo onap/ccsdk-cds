@@ -99,17 +99,47 @@
         </div>
     </div>
 </header>
-<div class="source-button editBar">
+<!-- <div class="source-button editBar">
 
     <div class="btn-group viewBtns" role="group">
-        <!-- <button (click)="_toggleSidebar1()" class="topologySource active">
-            <i style="font-size:24px" class="fa">&#xf101;</i> 
-        </button> -->
         <button type="button" class="btn btn-secondary topologySource active">Designer</button>
         <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
             class="btn btn-secondary topologyView">Scripting</button>
     </div>
-</div>
+</div> -->
+
+<nav class="editNavbar row source-button {{cl}} navbar navbar-expand-lg">
+    <button (click)="_toggleSidebar1()" class="active btn arrow">
+        <i class="fa arr-size">&#xf100;</i>
+    </button>
+    <div class="collapse navbar-collapse ">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <nav class="row">
+                    <!--Nav Tabs-->
+                    <div class="col-12">
+                        <div class="nav nav-tabs " id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active col-6" id=" " data-toggle="tab" href="" role="tab"
+                                aria-controls=" " aria-selected="false" autofocus #nameit>Workflow</a>
+                            <a class="nav-item nav-link col-6" id=" " data-toggle="tab" href="" role="tab"
+                                aria-controls=" " aria-selected="false">Template</a>
+                        </div>
+                    </div>
+                </nav>
+            </li>
+        </ul>
+        <ul class="navbar ml-auto" style="list-style: none;">
+            <li class="nav-item">
+                <div class="btn-group viewBtns" role="group">
+                    <button type="button" class="btn btn-secondary topologySource active">Designer</button>
+                    <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
+                        class="btn btn-secondary topologyView">Scripting</button>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</nav>
 
 <ng-sidebar-container class="sidebar-container">
     <!-- Controller SideBar -->

@@ -55,6 +55,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
   viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
   customActionName: string;
   showAction: boolean;
+  cl = 'editBar';
 
   boardGraph: joint.dia.Graph;
   boardPaper: joint.dia.Paper;
@@ -73,11 +74,17 @@ export class DesignerComponent implements OnInit, OnDestroy {
     this.controllerSideBar = true;
     this.attributesSideBar = false;
     this.showAction = false;
-    this.functionAttributeSidebar = true;
+    this.functionAttributeSidebar = false;
 
   }
   private _toggleSidebar1() {
     this.controllerSideBar = !this.controllerSideBar;
+    if (this.controllerSideBar === false) {
+      this.cl = 'editBar2';
+   }
+    if (this.controllerSideBar === true) {
+    this.cl = 'editBar';
+   }
   }
   private _toggleSidebar2() {
     this.attributesSideBar = !this.attributesSideBar;
