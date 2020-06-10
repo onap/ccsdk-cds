@@ -29,6 +29,7 @@ import kotlinx.coroutines.reactor.ReactorContext
 import kotlinx.coroutines.reactor.asCoroutineContext
 import kotlinx.coroutines.withContext
 import org.apache.http.message.BasicHeader
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVOCATION_ID
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_ORIGINATOR_ID
@@ -107,8 +108,12 @@ class RestLoggerService {
     }
 }
 
-/** Used in Rest controller API methods to populate MDC context to nested coroutines from reactor web filter context. */
+/**
+ * Used in Rest controller API methods to populate MDC context to nested coroutines from reactor web filter context.
+ * @param executionServiceInput (Optional) Used to override values populated in the MDC Context
+ */
 suspend fun <T> mdcWebCoroutineScope(
+    executionServiceInput: ExecutionServiceInput? = null,
     block: suspend CoroutineScope.() -> T
 ) = coroutineScope {
     val reactorContext = this.coroutineContext[ReactorContext]
@@ -118,12 +123,20 @@ suspend fun <T> mdcWebCoroutineScope(
         !reactorContext.context.isEmpty &&
         reactorContext.context.hasKey(MDCContext)
     ) {
-        val mdcContext = reactorContext.context.get<MDCContext>(MDCContext)
+        val mdcContext = if (executionServiceInput != null) {
+            // MDC Context with overridden request ID
+            MDC.put("RequestID", executionServiceInput.commonHeader.requestId)
+            MDCContext(MDC.getCopyOfContextMap())
+        } else {
+            // Default MDC Context
+            reactorContext.context.get(MDCContext)
+        }
         if (mdcContext != null)
             newCoroutineContext(this.coroutineContext + reactorContext + mdcContext)
         else
             newCoroutineContext(this.coroutineContext + reactorContext)
     } else this.coroutineContext
+
     // Execute the block with new and old context
     withContext(newContext) {
         block()
