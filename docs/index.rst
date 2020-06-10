@@ -127,6 +127,14 @@ User Guide
 
    installation
    designtime
+
+CDS Desginer UI
+---------------
+
+.. toctree::
+   :maxdepth: 1
+
+   CDS_Designer_Guide
   
 
 Controller Design Studio Presentation
