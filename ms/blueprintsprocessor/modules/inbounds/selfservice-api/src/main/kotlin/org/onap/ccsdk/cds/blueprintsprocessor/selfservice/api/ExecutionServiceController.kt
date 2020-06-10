@@ -91,8 +91,7 @@ open class ExecutionServiceController {
     suspend fun process(
         @ApiParam(value = "ExecutionServiceInput payload.", required = true)
         @RequestBody executionServiceInput: ExecutionServiceInput
-    ): ResponseEntity<ExecutionServiceOutput> = mdcWebCoroutineScope {
-
+    ): ResponseEntity<ExecutionServiceOutput> = mdcWebCoroutineScope(executionServiceInput) {
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
             throw httpProcessorException(
                 ErrorCatalogCodes.GENERIC_FAILURE,
