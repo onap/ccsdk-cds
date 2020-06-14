@@ -109,11 +109,12 @@
 </div> -->
 
 <nav class="editNavbar row source-button {{cl}} navbar navbar-expand-lg">
-    <button (click)="_toggleSidebar1()" class="active btn arrow">
+    <button (click)="_toggleSidebar1()" class="toggoleBtn active btn tooltip-bottom" title="" aria-pressed="true"
+        data-tooltip="Collapse Side bar">
         <i class="fa arr-size">&#xf100;</i>
     </button>
     <div class="collapse navbar-collapse ">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav">
             <li class="nav-item active">
                 <nav class="row">
                     <!--Nav Tabs-->
@@ -128,7 +129,11 @@
                 </nav>
             </li>
         </ul>
-        <ul class="navbar ml-auto" style="list-style: none;">
+        <ul class="templateLegend ml-auto mr-auto p-0">
+            <li class="requirement"><i class="icon-rectangle" aria-hidden="true"></i> Requirement</li>
+            <li class="capability"><i class="icon-rectangle" aria-hidden="true"></i> Capability</li>
+        </ul>
+        <ul class="navbar" style="list-style: none;">
             <li class="nav-item">
                 <div class="btn-group viewBtns" role="group">
                     <button type="button" class="btn btn-secondary topologySource active">Designer</button>
@@ -184,7 +189,9 @@
                 </div>
             </div>
         </div>
-        <div class="helpBox"><i class="icon-info" aria-hidden="true"></i><a href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank">Help - Learn The Basics</a></div>
+        <div class="helpBox"><i class="icon-info" aria-hidden="true"></i><a
+                href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank">Help - Learn The Basics</a>
+        </div>
     </ng-sidebar>
     <!-- Page content -->
 
