@@ -45,7 +45,7 @@
         <label class="label-name">Version <span>*</span></label>
         <div class="label-input">
             <input type="input" [readOnly]="!packageNameAndVersionEnables" [(ngModel)]="metaDataTab.version"
-                (input)="validatePackageNameAndVersion()" placeholder="Example: 1.0.0">
+                (input)="validatePackageNameAndVersion()" [pattern]="versionPattern" placeholder="Example: 1.0.0">
         </div>
         <div class="model-note-container error-message">{{errorMessage}}</div>
     </div>

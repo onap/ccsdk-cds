@@ -22,6 +22,7 @@ export class MetadataTabComponent implements OnInit {
     modeType = this.modes[0].name;
     private metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     private errorMessage: string;
+    versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
 
     constructor(
         private route: ActivatedRoute,
