@@ -202,6 +202,7 @@ object BluePrintConstants {
     const val METADATA_TEMPLATE_TYPE = "template_type"
     const val METADATA_TEMPLATE_AUTHOR = "template_author"
     const val METADATA_TEMPLATE_TAGS = "template_tags"
+    const val METADATA_TEMPLATE_DESCRIPTION = "template_description"
     const val METADATA_WORKFLOW_NAME = "workflow_name"
 
     const val PAYLOAD_DATA = "payload-data"

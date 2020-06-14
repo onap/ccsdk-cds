@@ -50,6 +50,7 @@ export class DesignerCreationMode extends PackageCreationModes {
         metadata.template_version = cbaPackage.metaData.version;
         metadata['author-email'] = 'shaaban.eltanany.ext@orange.com';
         metadata['user-groups'] = 'test';
+        metadata.template_description = cbaPackage.metaData.description;
         cbaPackage.metaData.mapOfCustomKey.forEach((customKeyValue, key) => {
             metadata[key] = customKeyValue;
         });
