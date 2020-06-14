@@ -45,6 +45,9 @@ export class Metadata {
     dictionary_group: string;
     @JsonProperty('template_tags')
     templateTags: string;
+    @JsonProperty('template_description')
+        // tslint:disable-next-line:variable-name
+    template_description: string;
 
 
     /* @JsonProperty('custom_keys', {String}, false)
