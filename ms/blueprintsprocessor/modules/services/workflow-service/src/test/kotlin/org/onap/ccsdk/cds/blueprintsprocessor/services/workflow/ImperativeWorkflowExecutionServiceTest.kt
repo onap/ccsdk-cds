@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import kotlinx.coroutines.runBlocking
@@ -118,7 +119,7 @@ class ImperativeWorkflowExecutionServiceTest {
                     ExecutionServiceInput::class.java
                 )!!
 
-            val bluePrintWorkFlowService = ImperativeBluePrintWorkflowService(NodeTemplateExecutionService())
+            val bluePrintWorkFlowService = ImperativeBluePrintWorkflowService(NodeTemplateExecutionService(mockk()))
             val imperativeWorkflowExecutionService = ImperativeWorkflowExecutionService(bluePrintWorkFlowService)
             val output = imperativeWorkflowExecutionService
                 .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())

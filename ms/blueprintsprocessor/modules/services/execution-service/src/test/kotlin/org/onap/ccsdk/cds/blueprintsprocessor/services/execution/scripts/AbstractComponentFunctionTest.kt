@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,13 +33,18 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.CDS_LOCK_GROUP
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
+import org.onap.ccsdk.cds.controllerblueprints.core.data.LockAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
@@ -61,14 +67,20 @@ import kotlin.test.assertNotNull
 )
 class AbstractComponentFunctionTest {
 
+    lateinit var bluePrintRuntimeService: DefaultBluePrintRuntimeService
     lateinit var blueprintContext: BluePrintContext
+    lateinit var blueprintClusterService: BluePrintClusterService
 
     @Autowired
     lateinit var compSvc: ComponentFunctionScriptingService
 
     @BeforeTest
     fun init() {
-        blueprintContext = mockk<BluePrintContext>()
+        bluePrintRuntimeService = mockk()
+        blueprintContext = mockk()
+        blueprintClusterService = mockk()
+        every { bluePrintRuntimeService.bluePrintContext() } returns blueprintContext
+
         every { blueprintContext.rootPath } returns normalizedPathName("target")
         every {
             blueprintContext.nodeTemplateOperationImplementation(
@@ -80,15 +92,14 @@ class AbstractComponentFunctionTest {
     @Test
     fun testAbstractComponent() {
         runBlocking {
-            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("1234")
             val samp = SampleComponent()
             val comp = samp as AbstractComponentFunction
 
-            comp.bluePrintRuntimeService = bluePrintRuntime
+            comp.bluePrintRuntimeService = bluePrintRuntimeService
             comp.stepName = "sample-step"
             assertNotNull(comp, "failed to get kotlin instance")
 
-            val input = getMockedInput(bluePrintRuntime)
+            val input = getMockedInput(bluePrintRuntimeService)
 
             val output = comp.applyNB(input)
 
@@ -115,16 +126,14 @@ class AbstractComponentFunctionTest {
     @Test
     fun testAbstractScriptComponent() {
         runBlocking {
-            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("1234")
             val samp = SampleRestconfComponent(compSvc)
             val comp = samp as AbstractComponentFunction
 
-            comp.bluePrintRuntimeService = bluePrintRuntime
+            comp.bluePrintRuntimeService = bluePrintRuntimeService
             comp.stepName = "sample-step"
             assertNotNull(comp, "failed to get kotlin instance")
 
-            val input = getMockedInput(bluePrintRuntime)
-            val inp = getMockedContext()
+            val input = getMockedInput(bluePrintRuntimeService)
 
             val output = comp.applyNB(input)
 
@@ -135,17 +144,103 @@ class AbstractComponentFunctionTest {
         }
     }
 
-    /**
-     * Mocked input for abstract function test.
-     */
-    private fun getMockedContext() {
-        val operationOutputs = hashMapOf<String, JsonNode>()
+    @Test
+    fun testComponentScriptExecutorNodeType() {
+        val componentScriptExecutor = BluePrintTypes.nodeTypeComponentScriptExecutor()
+        assertNotNull(componentScriptExecutor.interfaces, "failed to get interface operations")
+    }
+
+    @Test
+    fun `prepareRequestNB should resolve lock properties`() {
+        val implementation = Implementation().apply {
+            this.lock = LockAssignment().apply {
+                this.key = """ {"get_input": "lock-key"} """.asJsonPrimitive()
+            }
+        }
         every {
-            blueprintContext.name()
-        } returns "SampleTest"
+            blueprintContext.nodeTemplateOperationImplementation(any(), any(), any())
+        } returns implementation
+
         every {
-            blueprintContext.version()
-        } returns "SampleScriptComponent"
+            bluePrintRuntimeService.resolvePropertyAssignments(any(), any(), any())
+        } returns mutableMapOf(
+                "key" to "abc-123-def-456".asJsonType(),
+                "acquireTimeout" to implementation.lock!!.acquireTimeout
+        )
+
+        val component: AbstractComponentFunction = SampleComponent()
+        component.bluePrintRuntimeService = bluePrintRuntimeService
+        component.bluePrintClusterService = blueprintClusterService
+
+        runBlocking {
+            component.prepareRequestNB(getMockedInput(bluePrintRuntimeService))
+        }
+
+        val resolvedLock = component.implementation.lock!!
+
+        assertEquals("abc-123-def-456", resolvedLock.key.textValue())
+        // default value
+        assertEquals(180, resolvedLock.acquireTimeout.intValue())
+    }
+
+    @Test(expected = Exception::class)
+    fun `prepareRequestNB should throw exception if it fails to resolve lock key`() {
+        every {
+            blueprintContext.nodeTemplateOperationImplementation(any(), any(), any())
+        } returns Implementation().apply { this.lock = LockAssignment() }
+
+        every {
+            bluePrintRuntimeService.resolvePropertyAssignments(any(), any(), any())
+        } returns mutableMapOf("key" to "".asJsonType(),
+                "acquireTimeout" to Integer(360).asJsonType())
+
+        val component: AbstractComponentFunction = SampleComponent()
+        component.bluePrintRuntimeService = bluePrintRuntimeService
+        component.bluePrintClusterService = blueprintClusterService
+
+        runBlocking {
+            component.prepareRequestNB(getMockedInput(bluePrintRuntimeService))
+        }
+    }
+
+    @Test
+    fun `applyNB - when lock is present use ClusterLock`() {
+
+        val lockName = "testing-lock"
+
+        every {
+            blueprintContext.nodeTemplateOperationImplementation(any(), any(), any())
+        } returns Implementation().apply {
+            this.lock = LockAssignment().apply { this.key = lockName.asJsonType() }
+        }
+
+        every {
+            bluePrintRuntimeService.resolvePropertyAssignments(any(), any(), any())
+        } returns mutableMapOf("key" to lockName.asJsonType(),
+                "acquireTimeout" to Integer(180).asJsonType())
+
+        val clusterLock: ClusterLock = mockk()
+
+        every { clusterLock.name() } returns lockName
+        every { runBlocking { clusterLock.tryLock(any()) } } returns true
+        every { runBlocking { clusterLock.unLock() } } returns Unit
+
+        every {
+            runBlocking { blueprintClusterService.clusterLock(any()) }
+        } returns clusterLock
+
+        val component: AbstractComponentFunction = SampleComponent()
+        component.bluePrintRuntimeService = bluePrintRuntimeService
+        component.bluePrintClusterService = blueprintClusterService
+
+        runBlocking {
+            component.applyNB(getMockedInput(bluePrintRuntimeService))
+        }
+
+        verify {
+            runBlocking { blueprintClusterService.clusterLock("$lockName@$CDS_LOCK_GROUP") }
+        }
+        verify { runBlocking { clusterLock.unLock() } }
     }
 
     /**
@@ -198,11 +293,5 @@ class AbstractComponentFunctionTest {
         every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
 
         return executionServiceInput
-    }
-
-    @Test
-    fun testComponentScriptExecutorNodeType() {
-        val componentScriptExecutor = BluePrintTypes.nodeTypeComponentScriptExecutor()
-        assertNotNull(componentScriptExecutor.interfaces, "failed to get interface operations")
     }
 }

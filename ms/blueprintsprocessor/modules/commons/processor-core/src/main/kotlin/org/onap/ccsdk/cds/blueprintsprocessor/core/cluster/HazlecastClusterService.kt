@@ -133,7 +133,7 @@ open class HazlecastClusterService : BluePrintClusterService {
     }
 
     override fun clusterJoined(): Boolean {
-        return hazelcast.lifecycleService.isRunning
+        return ::hazelcast.isInitialized && hazelcast.lifecycleService.isRunning
     }
 
     override suspend fun masterMember(partitionGroup: String): ClusterMember {
@@ -225,21 +225,21 @@ open class BlueprintsClusterMembershipListener() :
 open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val name: String) : ClusterLock {
     private val log = logger(ClusterLockImpl::class)
 
-    lateinit var distributedLock: FencedLock
+    private val distributedLock: FencedLock = hazelcast.cpSubsystem.getLock(name)
 
     override fun name(): String {
         return distributedLock.name
     }
 
     override suspend fun lock() {
-        distributedLock = hazelcast.cpSubsystem.getLock(name)
         distributedLock.lock()
         log.trace("Cluster lock($name) created..")
     }
 
     override suspend fun tryLock(timeout: Long): Boolean {
-        distributedLock = hazelcast.cpSubsystem.getLock(name)
         return distributedLock.tryLock(timeout, TimeUnit.MILLISECONDS)
+                .also { if (it) log.trace("Cluster lock acquired: $name")
+                    else log.trace("Failed to acquire Cluster lock $name within timeout $timeout") }
     }
 
     override suspend fun unLock() {
@@ -255,14 +255,12 @@ open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val
     }
 
     override suspend fun fenceLock(): String {
-        distributedLock = hazelcast.cpSubsystem.getLock(name)
         val fence = distributedLock.lockAndGetFence()
         log.trace("Cluster lock($name) fence($fence) created..")
         return fence.toString()
     }
 
     override suspend fun tryFenceLock(timeout: Long): String {
-        distributedLock = hazelcast.cpSubsystem.getLock(name)
         return distributedLock.tryLockAndGetFence(timeout, TimeUnit.MILLISECONDS).toString()
     }
 

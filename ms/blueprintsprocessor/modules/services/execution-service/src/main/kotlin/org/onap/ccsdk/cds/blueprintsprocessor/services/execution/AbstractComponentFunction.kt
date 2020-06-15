@@ -23,9 +23,14 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.executeWithLock
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.CDS_LOCK_GROUP
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
+import org.onap.ccsdk.cds.controllerblueprints.core.checkNotBlank
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
 import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
@@ -49,6 +54,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var executionServiceInput: ExecutionServiceInput
     var executionServiceOutput = ExecutionServiceOutput()
     lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
+    lateinit var bluePrintClusterService: BluePrintClusterService
     lateinit var implementation: Implementation
     lateinit var processId: String
     lateinit var workflowName: String
@@ -95,6 +101,22 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         implementation = bluePrintRuntimeService.bluePrintContext()
             .nodeTemplateOperationImplementation(nodeTemplateName, interfaceName, operationName)
             ?: Implementation()
+
+        /** Resolve and validate lock properties */
+        implementation.lock?.apply {
+            val resolvedValues = bluePrintRuntimeService.resolvePropertyAssignments(
+                    nodeTemplateName,
+                    interfaceName,
+                    mutableMapOf("key" to this.key, "acquireTimeout" to this.acquireTimeout))
+            this.key = resolvedValues["key"] ?: "".asJsonType()
+            this.acquireTimeout = resolvedValues["acquireTimeout"] ?: "".asJsonType()
+
+            checkNotBlank(this.key.textValue()) { "Failed to resolve lock key" }
+            check(this.acquireTimeout.isInt && this.acquireTimeout.intValue() >= 0) {
+                "Failed to resolve lock acquireTimeout - must be a positive integer"
+            }
+        }
+
         check(this::implementation.isInitialized) { "failed to prepare implementation" }
 
         val operationResolvedProperties = bluePrintRuntimeService
@@ -131,8 +153,17 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+        prepareRequestNB(executionServiceInput)
+        return implementation.lock?.let {
+            bluePrintClusterService.clusterLock("${it.key.textValue()}@$CDS_LOCK_GROUP")
+                    .executeWithLock(it.acquireTimeout.intValue().times(1000).toLong()) {
+                        applyNBWithTimeout(executionServiceInput)
+                    }
+        } ?: applyNBWithTimeout(executionServiceInput)
+    }
+
+    private suspend fun applyNBWithTimeout(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         try {
-            prepareRequestNB(executionServiceInput)
             withTimeout((implementation.timeout * 1000).toLong()) {
                 log.debug("DEBUG::: AbstractComponentFunction.withTimeout section ${implementation.timeout} seconds")
                 processNB(executionServiceInput)

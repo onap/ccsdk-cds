@@ -24,11 +24,13 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.MockComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertEquals
@@ -38,6 +40,9 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(classes = [WorkflowServiceConfiguration::class])
 
 class NodeTemplateExecutionServiceTest {
+
+    @MockBean
+    lateinit var bluePrintClusterService: BluePrintClusterService
 
     @Before
     fun init() {
@@ -68,7 +73,7 @@ class NodeTemplateExecutionServiceTest {
             bluePrintRuntimeService.assignWorkflowInputs("resource-assignment", input)
 
             val nodeTemplate = "resource-assignment"
-            val nodeTemplateExecutionService = NodeTemplateExecutionService()
+            val nodeTemplateExecutionService = NodeTemplateExecutionService(bluePrintClusterService)
             val executionServiceOutput = nodeTemplateExecutionService
                 .executeNodeTemplate(bluePrintRuntimeService, nodeTemplate, executionServiceInput)
 
