@@ -80,3 +80,5 @@ interface ClusterLock {
     fun isLocked(): Boolean
     fun close()
 }
+
+const val CDS_LOCK_GROUP = "cds-lock"

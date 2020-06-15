@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
@@ -30,7 +31,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-open class NodeTemplateExecutionService {
+open class NodeTemplateExecutionService(private val bluePrintClusterService: BluePrintClusterService) {
 
     private val log = LoggerFactory.getLogger(NodeTemplateExecutionService::class.java)!!
 
@@ -62,8 +63,9 @@ open class NodeTemplateExecutionService {
 
         // Get the Component Instance
         val plugin = BluePrintDependencyService.instance<AbstractComponentFunction>(componentName)
-        // Set the Blueprint Service
+        // Set the Blueprint Services
         plugin.bluePrintRuntimeService = bluePrintRuntimeService
+        plugin.bluePrintClusterService = bluePrintClusterService
         plugin.stepName = nodeTemplateName
 
         // Parent request shouldn't tamper, so need to clone the request and send to the actual component.

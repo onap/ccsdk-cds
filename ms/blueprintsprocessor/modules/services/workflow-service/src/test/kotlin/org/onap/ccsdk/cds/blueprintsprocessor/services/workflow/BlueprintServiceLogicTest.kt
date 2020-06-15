@@ -22,6 +22,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.executor.ComponentExecuteNodeExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.PrototypeComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.SingletonComponentFunction
@@ -30,6 +31,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyS
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
@@ -45,6 +47,9 @@ class BlueprintServiceLogicTest {
 
     @Autowired
     lateinit var dgWorkflowExecutionService: DGWorkflowExecutionService
+
+    @MockBean
+    lateinit var bluePrintClusterService: BluePrintClusterService
 
     @Before
     fun init() {

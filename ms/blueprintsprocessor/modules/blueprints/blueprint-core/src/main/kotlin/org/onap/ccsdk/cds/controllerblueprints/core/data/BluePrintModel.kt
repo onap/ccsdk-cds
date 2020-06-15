@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.JsonNode
 import io.swagger.annotations.ApiModelProperty
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 
 /**
  *
@@ -223,6 +224,12 @@ class Implementation {
     var operationHost: String = BluePrintConstants.PROPERTY_SELF
     // Timeout value in seconds
     var timeout: Int = 180
+    var lock: LockAssignment? = null
+}
+
+class LockAssignment {
+    lateinit var key: JsonNode
+    var acquireTimeout: JsonNode = Integer(180).asJsonType()
 }
 
 /*
