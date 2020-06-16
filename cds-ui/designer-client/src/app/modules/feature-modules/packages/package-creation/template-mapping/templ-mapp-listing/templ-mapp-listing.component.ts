@@ -21,6 +21,7 @@ export class TemplMappListingComponent implements OnInit {
     isCreate = true;
     currentFile: string;
     edit = false;
+    fileToDelete: any = {};
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -121,6 +122,18 @@ export class TemplMappListingComponent implements OnInit {
 
     getValue(file: string) {
         return this.templateAndMappingMap.get(file);
+    }
+    initDelete(file) {
+        console.log(file);
+        this.fileToDelete = file;
+    }
+    condifrmDelete() {
+        console.log(this.templateAndMappingMap);
+        this.templateAndMappingMap.delete(this.fileToDelete);
+        if (this.templateAndMappingMap.size <= 0) {
+            this.openCreationView();
+        }
+
     }
 
 }

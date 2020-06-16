@@ -1,3 +1,23 @@
 .template-mapping-list {
     cursor: pointer;
 }
+
+a.accordion-delete i {
+    color: red;
+}
+
+a.accordion-delete i:hover {
+    color: #007bff;
+    cursor: pointer;
+    transition-duration: .5s;
+    /* for Safari & Chrome */
+    -webkit-transition-duration: .5s;
+}
+
+a.accordion-delete {
+    margin-top: 0;
+}
+
+.template-mapping-list p{
+    display: contents;
+}

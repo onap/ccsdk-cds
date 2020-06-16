@@ -1,7 +1,8 @@
 
 <div class="row template-mapping-action">
     <div class="col">
-        <h6 class="create-title">Create Template</h6>
+        <h6 [hidden]="edit" class="create-title">Create Template</h6>
+        <button (click)="closeCreationForm()" [hidden]="!edit" class="btn btn-outline-secondary"><i class="fa fa-chevron-left mr-2"></i>Template List</button>
     </div>
     <div class="col text-right">
         <button (click)="cancel()" [disabled]="fileName?.length <=0" class="btn btn-outline-secondary">Cancel</button>
@@ -116,7 +117,7 @@
                     </div>
                 </div>
                 <div id="mapping-table" [hidden]="resourceDictionaryRes?.length == 0" class="mx-4 my-2">
-                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                    <table datatable [dtOptions]="initDtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                         <thead>
                             <tr>
                                 <th>Required</th>
@@ -164,7 +165,7 @@
                     </table>
                 </div>
 
-                <div id="mapping-table" [hidden]="mappingRes?.length == 0" class="mx-4 my-2">
+                <div id="mapping-table-res" [hidden]="mappingRes?.length == 0" class="mx-4 my-2">
                     <table datatable [dtOptions]="dtOptions" [dtTrigger]="resTableDtTrigger" class="row-border hover">
                         <thead>
                             <tr>

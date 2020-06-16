@@ -31,7 +31,7 @@ export class ImportsTabComponent implements OnInit {
         this.files = files;
         for (const droppedFile of files) {
             // Is it a file? & Not added before
-            if (droppedFile.fileEntry.isFile && !this.fileNames.has(droppedFile.fileEntry.name)) {
+            if (droppedFile.fileEntry.isFile) {
                 const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
                 this.uploadedFiles.push(fileEntry);
                 console.log(fileEntry.name);
