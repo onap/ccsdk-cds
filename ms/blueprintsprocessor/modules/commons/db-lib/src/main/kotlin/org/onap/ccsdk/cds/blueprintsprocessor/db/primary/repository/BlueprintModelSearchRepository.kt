@@ -97,7 +97,7 @@ interface BlueprintModelSearchRepository : JpaRepository<BlueprintModelSearch, L
      * @param pageRequest
      * @return Page<BlueprintModelSearch>
      */
-    fun findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(
+    fun findByUpdatedByContainingIgnoreCaseOrTagsContainingIgnoreCaseOrArtifactNameContainingIgnoreCaseOrArtifactVersionContainingIgnoreCaseOrArtifactTypeContainingIgnoreCase(
         updatedBy: String,
         tags: String,
         artifactName: String,
