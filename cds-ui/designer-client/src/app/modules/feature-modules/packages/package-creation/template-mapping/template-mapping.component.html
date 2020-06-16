@@ -1,5 +1,5 @@
-<div *ngIf="!listView">
-    <app-templ-mapp-listing (showCreationViewParentNotification)="openCreationView($event)"
+<div [hidden]="listView">
+    <app-templ-mapp-listing [hidden]="!creationView" (showCreationViewParentNotification)="openCreationView($event)"
         (showFullView)="openListView($event)">
     </app-templ-mapp-listing>
 </div>

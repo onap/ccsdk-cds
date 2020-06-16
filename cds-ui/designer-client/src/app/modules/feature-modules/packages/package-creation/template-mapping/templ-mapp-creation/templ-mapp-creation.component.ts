@@ -28,6 +28,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     templateInfo = new TemplateInfo();
     variables: string[] = [];
     dtOptions: DataTables.Settings = {};
+    initDtOptions: DataTables.Settings = {};
     // We use this trigger because fetching the list of persons can be quite long,
     // thus we ensure the data is fetched before rendering
     dtTrigger = new Subject();
@@ -62,7 +63,6 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             console.log('URL contains Id');
             this.sharedService.enableEdit();
         }
-
         this.templateStore.state$.subscribe(templateInfo => {
             // init Template&mapping vars
             console.log('Oninit');
@@ -108,11 +108,17 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.dtOptions = {
+        this.initDtOptions = {
             pagingType: 'full_numbers',
             pageLength: 25,
             destroy: true,
             retrieve: true,
+        };
+        this.dtOptions = {
+            pagingType: 'full_numbers',
+            pageLength: 25,
+            // destroy: true,
+            // retrieve: true,
         };
     }
 
@@ -164,7 +170,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.files = files;
         for (const droppedFile of files) {
             // Is it a file? & Not added before
-            if (droppedFile.fileEntry.isFile && !this.fileNames.has(droppedFile.fileEntry.name)) {
+            if (droppedFile.fileEntry.isFile) {
                 const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
                 this.uploadedFiles.push(fileEntry);
                 this.fileNames.add(fileEntry.name);
@@ -191,6 +197,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                     this.variables = fileReader.result.toString().split(',');
                     console.log(this.variables);
                     this.getMappingTableFromTemplate(null);
+
                 };
                 fileReader.readAsText(file);
             });
@@ -285,7 +292,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.mappingRes = [];
         this.currentMapping = {};
         this.currentTemplate = {};
-        this.closeCreationForm();
+        //   this.closeCreationForm();
     }
     saveToStore() {
         if (this.fileName) {
@@ -304,11 +311,11 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                     this.resourceDictionaryRes = [];
                 }
                 // Save Template to store
-                if (this.templateFileContent) {
-                    this.packageCreationStore.addTemplate('Templates/' + this.fileName + '-template' + this.getFileExtension(),
-                        this.templateFileContent);
-                    this.templateFileContent = '';
-                }
+                // if (this.templateFileContent) {
+                this.packageCreationStore.addTemplate('Templates/' + this.fileName + '-template' + this.getFileExtension(),
+                    this.templateFileContent);
+                this.templateFileContent = '';
+                //  }
                 this.fileName = '';
                 this.toastr.success('File is created', 'success');
                 this.closeCreationForm();
@@ -350,17 +357,19 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     }
 
     rerender(): void {
-        if (this.dtElement.dtInstance) {
-            console.log('rerender');
-            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                dtInstance.destroy();
-                this.dtElement.dtOptions = this.dtOptions;
-                this.dtElement.dtTrigger.next();
-                dtInstance.draw();
-            });
-        } else {
-            this.dtTrigger.next();
-        }
+        this.dtTrigger.next();
+
+        // if (this.dtElement.dtInstance) {
+        //     console.log('rerender');
+        //     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        //         dtInstance.destroy();
+        //         this.dtElement.dtOptions = this.dtOptions;
+        //         this.dtElement.dtTrigger.next();
+        //         dtInstance.draw();
+        //     });
+        // } else {
+        //     this.dtTrigger.next();
+        // }
     }
 
     ngOnDestroy(): void {
