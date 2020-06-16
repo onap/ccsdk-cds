@@ -377,7 +377,7 @@ open class BluePrintModelHandler(
      * @return List<BlueprintModelSearch> list of the controller blueprint
     </BlueprintModelSearch> */
     open fun searchBluePrintModelsByKeyWordPaged(keyWord: String, pageRequest: PageRequest): Page<BlueprintModelSearch> {
-        return blueprintModelSearchRepository.findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(
+        return blueprintModelSearchRepository.findByUpdatedByContainingIgnoreCaseOrTagsContainingIgnoreCaseOrArtifactNameContainingIgnoreCaseOrArtifactVersionContainingIgnoreCaseOrArtifactTypeContainingIgnoreCase(
             keyWord,
             keyWord,
             keyWord,
@@ -397,7 +397,7 @@ open class BluePrintModelHandler(
     @Throws(BluePrintException::class)
     open fun deleteBlueprintModel(id: String) {
         val dbBlueprintModel = blueprintModelRepository.findById(id)
-        if (dbBlueprintModel != null && dbBlueprintModel.isPresent) {
+        if (dbBlueprintModel.isPresent) {
             blueprintModelContentRepository.deleteByBlueprintModel(dbBlueprintModel.get())
             blueprintModelRepository.delete(dbBlueprintModel.get())
         } else {

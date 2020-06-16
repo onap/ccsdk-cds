@@ -149,7 +149,7 @@ class BlueprintProcessorCatalogServiceImpl(
         blueprintModel.artifactVersion = artifactVersion
         blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!
         blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]!!
-        val description = if (null == metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION]) metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION] else ""
+        val description = if (null != metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION]) metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION] else ""
         blueprintModel.artifactDescription = "Controller Blueprint for $artifactName:$artifactVersion $description"
 
         val blueprintModelContent = BlueprintModelContent()
