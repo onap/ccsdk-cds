@@ -133,6 +133,10 @@ export class TemplMappListingComponent implements OnInit {
         if (this.templateAndMappingMap.size <= 0) {
             this.openCreationView();
         }
+        // Delete from templates
+        this.packageCreationStore.state.templates.files.delete('Templates/' + this.fileToDelete + '-template.vtl');
+        // Delete from Mapping
+        this.packageCreationStore.state.mapping.files.delete('Templates/' + this.fileToDelete + '-mapping.json');
 
     }
 
