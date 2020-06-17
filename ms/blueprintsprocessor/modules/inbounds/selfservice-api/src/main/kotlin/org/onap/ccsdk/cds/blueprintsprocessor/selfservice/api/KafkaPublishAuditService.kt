@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintExpressionService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils
@@ -158,8 +159,20 @@ class KafkaPublishAuditService(
                             blueprintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
                                     ?: hashMapOf()
 
+                    /** Getting values define in artifact-prefix-names */
                     val artifactPrefixNamesNode = propertyAssignments[ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES]
-                    val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode!!, String::class.java)
+                    val artifactPrefixNamesNodeValue =
+                            if (artifactPrefixNamesNode != null && artifactPrefixNamesNode.has("get_input")) {
+                                /** From the request payload */
+                                val input = executionServiceInput.payload.get("$workflowName-request")
+                                blueprintRuntimeService.assignWorkflowInputs(workflowName, input)
+                                val expressionData = BluePrintExpressionService.getExpressionData(artifactPrefixNamesNode!!)
+                                blueprintRuntimeService.getInputValue(expressionData.inputExpression?.propertyName!!)
+                            } else {
+                                /** From the CBA */
+                                artifactPrefixNamesNode
+                            }
+                    val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNodeValue!!, String::class.java)
 
                     /** Storing mapping entries with metadata log-protect set to true */
                     val sensitiveParameters: List<String> = artifactPrefixNames
