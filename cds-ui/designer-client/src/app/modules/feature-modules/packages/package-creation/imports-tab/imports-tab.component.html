@@ -144,7 +144,8 @@
                             <tr *ngFor="let item of uploadedFiles; let i=index">
                                 <th width="40"><img src="assets/img/icon-file-code.svg" /></th>
                                 <th>{{ item.name }}</th>
-                                <th width="40" class="text-right"><img src="assets/img/icon-remove-file.svg" /></th>
+                                <th (click)="removeInitFile(i)" width="40" class="text-right"><img
+                                        src="assets/img/icon-remove-file.svg" /></th>
                             </tr>
                         </thead>
                     </table>
