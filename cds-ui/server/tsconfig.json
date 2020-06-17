@@ -12,6 +12,7 @@
     "**/*.d.ts"
   ],
   "compilerOptions": {
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "types": ["jquery"]
   }
 }
