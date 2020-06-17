@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { PackageCreationStore } from '../../package-creation.store';
 import { TemplateInfo, TemplateStore } from '../../template.store';
@@ -9,8 +9,9 @@ import { Mapping, MappingAdapter } from '../../mapping-models/mappingAdapter.mod
 import { PackageCreationUtils } from '../../package-creation.utils';
 import { JsonConvert, Any } from 'json2typescript';
 import { ToastrService } from 'ngx-toastr';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SharedService } from '../shared-service';
+declare var $: any;
 
 @Component({
     selector: 'app-templ-mapp-creation',
@@ -178,6 +179,9 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             }
         }
     }
+    removeFile(index) {
+        this.uploadedFiles.splice(index, 1);
+    }
 
     uploadFile() {
         this.dependancies.clear();
@@ -187,6 +191,9 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         } else {
             this.setTemplateFilesToStore();
         }
+        $('.btn-cancel').click();
+
+
     }
 
     fetchCSVkeys() {
