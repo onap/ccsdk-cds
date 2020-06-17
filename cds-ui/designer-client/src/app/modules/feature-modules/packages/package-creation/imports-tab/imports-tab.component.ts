@@ -26,7 +26,9 @@ export class ImportsTabComponent implements OnInit {
             }
         });
     }
-
+    removeInitFile(index) {
+        this.uploadedFiles.splice(index, 1);
+    }
     public dropped(files: NgxFileDropEntry[]) {
         this.files = files;
         for (const droppedFile of files) {
