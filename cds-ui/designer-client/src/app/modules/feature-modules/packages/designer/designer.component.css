@@ -825,3 +825,21 @@ ul.templateLegend{
 .templateLegend .capability i{
   color: #0ABDE3;
 }
+ul.editor{
+  margin-right: -40px;
+  margin-top: 16px;
+}
+.editor li{
+  list-style: none;
+}
+.roundBtn .btn{
+  width: 15px; 
+  height: 15px; 
+  padding: 0px; 
+  border-radius: 15px; 
+  font-size: 10px; 
+  text-align: center;
+  background-color:rgb(215, 234, 250);
+  color: white;
+  margin: 5px;
+}
