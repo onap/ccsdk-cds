@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.PropertyAssignmentService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils
@@ -158,8 +159,18 @@ class KafkaPublishAuditService(
                             blueprintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
                                     ?: hashMapOf()
 
+                    /** Getting values define in artifact-prefix-names */
+                    val input = executionServiceInput.payload.get("$workflowName-request")
+                    blueprintRuntimeService.assignWorkflowInputs(workflowName, input)
                     val artifactPrefixNamesNode = propertyAssignments[ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES]
-                    val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode!!, String::class.java)
+                    val propertyAssignmentService = PropertyAssignmentService(blueprintRuntimeService)
+                    val artifactPrefixNamesNodeValue = propertyAssignmentService.resolveAssignmentExpression(
+                            BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+                            nodeTemplateName,
+                            ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES,
+                            artifactPrefixNamesNode!!)
+
+                    val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNodeValue!!, String::class.java)
 
                     /** Storing mapping entries with metadata log-protect set to true */
                     val sensitiveParameters: List<String> = artifactPrefixNames
