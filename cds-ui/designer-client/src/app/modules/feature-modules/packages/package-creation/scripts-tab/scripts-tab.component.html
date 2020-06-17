@@ -106,7 +106,7 @@
                             <tr *ngFor="let item of uploadedFiles; let i=index">
                                 <th width="40"><img src="assets/img/icon-file-code.svg" /></th>
                                 <th>{{ item.name }}</th>
-                                <th width="40" class="text-right"><img src="assets/img/icon-remove-file.svg" /></th>
+                                <th (click)="removeInitFile(i)" width="40" class="text-right"><img src="assets/img/icon-remove-file.svg" /></th>
                             </tr>
                         </thead>
                     </table>
@@ -116,7 +116,7 @@
                 <button (click)="resetTheUploadedFiles()" class="btn btn-sm btn-secondary" data-dismiss="modal"
                     type="button">Cancel
                 </button>
-                <button (click)="setFilesToStore()" class="btn btn-sm btn-primary" data-dismiss="modal" type="button">
+                <button (click)="setFilesToStore()" class="btn btn-sm btn-primary" [disabled]="uploadedFiles?.length<=0" data-dismiss="modal" type="button">
                     Import
                 </button>
             </div>

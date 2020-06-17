@@ -44,6 +44,11 @@ export class ScriptsTabComponent implements OnInit {
             }
         }
     }
+
+    removeInitFile(index) {
+        this.uploadedFiles.splice(index, 1);
+    }
+
     initDelete(file) {
         this.fileToDelete = file;
     }

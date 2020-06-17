@@ -1,8 +1,8 @@
-
 <div class="row template-mapping-action">
     <div class="col">
         <h6 [hidden]="edit" class="create-title">Create Template</h6>
-        <button (click)="closeCreationForm()" [hidden]="!edit" class="btn btn-outline-secondary"><i class="fa fa-chevron-left mr-2"></i>Template List</button>
+        <button (click)="closeCreationForm()" [hidden]="!edit" class="btn btn-outline-secondary"><i
+                class="fa fa-chevron-left mr-2"></i>Template List</button>
     </div>
     <div class="col text-right">
         <button (click)="cancel()" [disabled]="fileName?.length <=0" class="btn btn-outline-secondary">Cancel</button>
@@ -252,7 +252,7 @@
                             <tr *ngFor="let item of uploadedFiles; let i=index">
                                 <th width="40"><img src="assets/img/icon-file-code.svg" /></th>
                                 <th>{{ item.name }}</th>
-                                <th width="40" class="text-right"><img src="assets/img/icon-remove-file.svg" /></th>
+                                <th (click)="removeFile(i)" width="40" class="text-right"><img src="assets/img/icon-remove-file.svg" /></th>
                             </tr>
                         </thead>
                     </table>
@@ -260,12 +260,11 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal"
+                <button type="button" class="btn btn-sm btn-secondary btn-cancel" data-dismiss="modal"
                     (click)="resetTheUploadedFiles()">Cancel
                 </button>
 
-                <button (click)="uploadFile();openListView()" class="btn btn-sm btn-primary" data-dismiss="modal"
-                    type="button">
+                <button data-dismiss="modal" (click)="uploadFile()" class="btn btn-sm btn-primary" type="button">
                     Import
                 </button>
             </div>
