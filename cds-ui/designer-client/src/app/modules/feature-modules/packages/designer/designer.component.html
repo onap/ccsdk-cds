@@ -99,14 +99,6 @@
         </div>
     </div>
 </header>
-<!-- <div class="source-button editBar">
-
-    <div class="btn-group viewBtns" role="group">
-        <button type="button" class="btn btn-secondary topologySource active">Designer</button>
-        <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
-            class="btn btn-secondary topologyView">Scripting</button>
-    </div>
-</div> -->
 
 <nav class="editNavbar row source-button {{cl}} navbar navbar-expand-lg">
     <button (click)="_toggleSidebar1()" class="toggoleBtn active btn tooltip-bottom" title="" aria-pressed="true"
@@ -133,7 +125,15 @@
             <li class="requirement"><i class="icon-rectangle" aria-hidden="true"></i> Requirement</li>
             <li class="capability"><i class="icon-rectangle" aria-hidden="true"></i> Capability</li>
         </ul>
-        <ul class="navbar" style="list-style: none;">
+
+        <ul class="editor navbar ml-auto">
+            <li class="roundBtn"><button class="btn"><span class="glyphicon">&#x2212;</span></button></li>
+            <li>100%</li>
+            <li class="roundBtn"><button class="btn"><span class="glyphicon">&#x2b;</span></button>
+            </li>
+        </ul>
+
+        <ul class="navbar ml-auto" style="list-style: none">
             <li class="nav-item">
                 <div class="btn-group viewBtns" role="group">
                     <button type="button" class="btn btn-secondary topologySource active">Designer</button>
