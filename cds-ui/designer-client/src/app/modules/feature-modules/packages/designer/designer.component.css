@@ -825,3 +825,11 @@ ul.templateLegend{
 .templateLegend .capability i{
   color: #0ABDE3;
 }
+
+.ace_editor{
+  top: 5.4vh;
+  height: 92vh !important;
+}
+.dsl-editor {
+  height: 500px;  
+}
