@@ -10,7 +10,8 @@ import { SourceViewService } from './source-view.service';
 @Component({
     selector: 'app-designer-source-view',
     templateUrl: './source-view.component.html',
-    styleUrls: ['./source-view.component.css']
+    // styleUrls: ['./source-view.component.css']
+    styleUrls: ['../designer.component.css']
 })
 export class DesignerSourceViewComponent implements OnInit, OnDestroy {
 
