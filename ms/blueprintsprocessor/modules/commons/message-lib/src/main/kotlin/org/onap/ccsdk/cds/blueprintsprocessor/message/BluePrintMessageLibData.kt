@@ -51,17 +51,18 @@ abstract class MessageProducerProperties : CommonProperties()
 open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties() {
 
     var clientId: String? = null
-    // strongest producing guarantee
-    var acks: String = "all"
-    var retries: Int = 0
-    // ensure we don't push duplicates
-    var enableIdempotence: Boolean = true
+    var acks: String = "all" // strongest producing guarantee
+    var maxBlockMs: Int = 250 // max blocking time in ms to send a message
+    var reconnectBackOffMs: Int = 60 * 60 * 1000 // time in ms before retrying connection (1 hour)
+    var enableIdempotence: Boolean = true // ensure we don't push duplicates
 
     override fun getConfig(): HashMap<String, Any> {
         val configProps = super.getConfig()
         configProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         configProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = ByteArraySerializer::class.java
         configProps[ProducerConfig.ACKS_CONFIG] = acks
+        configProps[ProducerConfig.MAX_BLOCK_MS_CONFIG] = maxBlockMs
+        configProps[ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG] = reconnectBackOffMs
         configProps[ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG] = enableIdempotence
         if (clientId != null) {
             configProps[ProducerConfig.CLIENT_ID_CONFIG] = clientId!!

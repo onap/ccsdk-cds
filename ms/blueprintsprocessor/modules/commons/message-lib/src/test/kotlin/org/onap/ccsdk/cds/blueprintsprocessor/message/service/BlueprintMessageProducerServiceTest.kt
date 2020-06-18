@@ -100,6 +100,8 @@ open class BlueprintMessageProducerServiceTest {
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to ByteArraySerializer::class.java,
                 ProducerConfig.ACKS_CONFIG to "all",
+                ProducerConfig.MAX_BLOCK_MS_CONFIG to 250,
+                ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG to 60 * 60 * 1000,
                 ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG to true,
                 ConsumerConfig.CLIENT_ID_CONFIG to "default-client-id",
                 CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to SecurityProtocol.SASL_SSL.toString(),
