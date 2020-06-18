@@ -13,7 +13,7 @@ import {PackageCreationModes} from '../package-creation/creationModes/PackageCre
 import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
 import {saveAs} from 'file-saver';
 import {DesignerStore} from '../designer/designer.store';
-import { DesignerService } from '../designer/designer.service';
+import {DesignerService} from '../designer/designer.service';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -27,7 +27,7 @@ export class ConfigurationDashboardComponent implements OnInit {
     public customActionName = '';
 
     entryDefinitionKeys: string[] = ['template_tags', 'user-groups',
-        'author-email', 'template_version', 'template_name', 'template_author'];
+        'author-email', 'template_version', 'template_name', 'template_author', 'template_description'];
     @ViewChild('nameit', {static: true})
     private elementRef: ElementRef;
 
@@ -65,7 +65,6 @@ export class ConfigurationDashboardComponent implements OnInit {
             this.currentBlob = blob;
             this.zipFile.loadAsync(blob).then((zip) => {
                 Object.keys(zip.files).forEach((filename) => {
-                    console.log(filename);
                     zip.files[filename].async('string').then((fileData) => {
                         if (fileData) {
                             if (filename.includes('Scripts/')) {
@@ -76,11 +75,11 @@ export class ConfigurationDashboardComponent implements OnInit {
                                 } else if (filename.includes('-template.')) {
                                     this.setTemplates(filename, fileData);
                                 }
+
                             } else if (filename.includes('Definitions/')) {
-                                this.setImports(filename, fileData);
+                                this.setImports(filename, fileData, bluePrintDetailModels);
                             } else if (filename.includes('TOSCA-Metadata/')) {
                                 const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
-                                // console.log(metaDataTabInfo);
                                 this.setMetaData(metaDataTabInfo, bluePrintDetailModels[0]);
                             }
                         }
@@ -94,8 +93,8 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.packageCreationStore.addScripts(filename, fileData);
     }
 
-    private setImports(filename: string, fileData: any) {
-        if (filename.includes('blueprint.json') || filename.includes('vLB_CDS.json')) {
+    private setImports(filename: string, fileData: any, bluePrintDetailModels: BluePrintDetailModel) {
+        if (filename.includes(bluePrintDetailModels[0].artifactName)) {
             let definition = new VlbDefinition();
             definition = fileData as VlbDefinition;
             definition = JSON.parse(fileData);
@@ -109,8 +108,7 @@ export class ConfigurationDashboardComponent implements OnInit {
             }
             this.packageCreationStore.changeDslDefinition(dslDefinition);
             this.packageCreationStore.setCustomKeys(mapOfCustomKeys);
-            // console.log(definition.topology_template.content);
-            if (definition.topology_template.content) {
+            if (definition.topology_template && definition.topology_template.content) {
                 this.designerStore.saveSourceContent(definition.topology_template.content);
             }
         } else {
@@ -130,7 +128,6 @@ export class ConfigurationDashboardComponent implements OnInit {
     editBluePrint() {
         this.packageCreationStore.state$.subscribe(
             cbaPackage => {
-                console.log(cbaPackage);
                 FilesContent.clear();
                 let packageCreationModes: PackageCreationModes;
                 cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
@@ -160,7 +157,6 @@ export class ConfigurationDashboardComponent implements OnInit {
         metaDataTabModel.version = arrayOfLines[5].split(':')[1];
         metaDataTabModel.mode = arrayOfLines[6].split(':')[1];
         metaDataTabModel.templateTags = new Set<string>(arrayOfLines[7].split(':')[1].split(','));
-        console.log(metaDataTabModel.mode);
         return metaDataTabModel;
     }
 
@@ -210,7 +206,7 @@ export class ConfigurationDashboardComponent implements OnInit {
     }
 
     goToDesignerMode(id) {
-      //  this.designerService.setActionName(this.customActionName);
+        //  this.designerService.setActionName(this.customActionName);
         this.router.navigate(['/packages/designer', id, {actionName: this.customActionName}]);
-     }
+    }
 }
