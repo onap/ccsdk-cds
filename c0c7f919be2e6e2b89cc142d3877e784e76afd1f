@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2361fafa_1ed00d04",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/KafkaPublishAuditService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-06-18T10:21:06Z",
+      "side": 1,
+      "message": "What if its any other expression? Could be get_attribute, get_property, dsl-reference etc?",
+      "revId": "c0c7f919be2e6e2b89cc142d3877e784e76afd1f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
