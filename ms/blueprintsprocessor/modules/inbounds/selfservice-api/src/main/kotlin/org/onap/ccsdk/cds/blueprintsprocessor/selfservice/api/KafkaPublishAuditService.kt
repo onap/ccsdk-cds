@@ -24,7 +24,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageProducerService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
@@ -69,10 +68,14 @@ class KafkaPublishAuditService(
      * The correlation UUID is used to link the input to its output.
      * Sensitive data within the request are hidden.
      */
-    override suspend fun publish(executionServiceInput: ExecutionServiceInput) {
+    override suspend fun publishExecutionInput(executionServiceInput: ExecutionServiceInput) {
         val secureExecutionServiceInput = hideSensitiveData(executionServiceInput)
-        this.inputInstance = this.getInputInstance(INPUT_SELECTOR)
-        this.inputInstance!!.sendMessage(secureExecutionServiceInput)
+        try {
+            this.inputInstance = this.getInputInstance(INPUT_SELECTOR)
+            this.inputInstance!!.sendMessage(secureExecutionServiceInput)
+        } catch (e: Exception) {
+            log.error("ERROR : Couldn't send message. ${e.message}.")
+        }
     }
 
     /**
@@ -80,10 +83,14 @@ class KafkaPublishAuditService(
      * The correlation UUID is used to link the output to its input.
      * A correlation UUID is added to link the input to its output.
      */
-    override fun publish(correlationUUID: String, executionServiceOutput: ExecutionServiceOutput) {
+    override suspend fun publishExecutionOutput(correlationUUID: String, executionServiceOutput: ExecutionServiceOutput) {
         executionServiceOutput.correlationUUID = correlationUUID
-        this.outputInstance = this.getOutputInstance(OUTPUT_SELECTOR)
-        this.outputInstance!!.sendMessage(executionServiceOutput)
+        try {
+            this.outputInstance = this.getOutputInstance(OUTPUT_SELECTOR)
+            this.outputInstance!!.sendMessage(executionServiceOutput)
+        } catch (e: Exception) {
+            log.error("ERROR : Couldn't send message. ${e.message}.")
+        }
     }
 
     /**
@@ -103,12 +110,7 @@ class KafkaPublishAuditService(
         log.info(
                 "Setting up message producer($selector)..."
         )
-        return try {
-            bluePrintMessageLibPropertyService
-                    .blueprintMessageProducerService(selector)
-        } catch (e: Exception) {
-            throw BluePrintProcessorException("failed to create producer service ${e.message}")
-        }
+        return bluePrintMessageLibPropertyService.blueprintMessageProducerService(selector)
     }
 
     /**
@@ -133,54 +135,62 @@ class KafkaPublishAuditService(
 
         if (blueprintName == "default") return clonedExecutionServiceInput
 
-        if (clonedExecutionServiceInput.payload
-                        .path("$workflowName-request").has("$workflowName-properties")) {
+        try {
+            if (clonedExecutionServiceInput.payload
+                            .path("$workflowName-request").has("$workflowName-properties")) {
 
-            /** Retrieving sensitive input parameters */
-            val requestId = clonedExecutionServiceInput.commonHeader.requestId
-            val blueprintVersion = clonedExecutionServiceInput.actionIdentifiers.blueprintVersion
+                /** Retrieving sensitive input parameters */
+                val requestId = clonedExecutionServiceInput.commonHeader.requestId
+                val blueprintVersion = clonedExecutionServiceInput.actionIdentifiers.blueprintVersion
 
-            val basePath = blueprintsProcessorCatalogService.getFromDatabase(blueprintName, blueprintVersion)
+                val basePath = blueprintsProcessorCatalogService.getFromDatabase(blueprintName, blueprintVersion)
 
-            val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
-            val blueprintContext = blueprintRuntimeService.bluePrintContext()
+                val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
+                val blueprintContext = blueprintRuntimeService.bluePrintContext()
 
-            /** Looking for node templates defined as component-resource-resolution */
-            val nodeTemplates = blueprintContext.nodeTemplates()
-            nodeTemplates!!.forEach { nodeTemplate ->
-                val nodeTemplateName = nodeTemplate.key
-                val nodeTemplateType = blueprintContext.nodeTemplateByName(nodeTemplateName).type
-                if (nodeTemplateType == BluePrintConstants.NODE_TEMPLATE_TYPE_COMPONENT_RESOURCE_RESOLUTION) {
-                    val interfaceName = blueprintContext.nodeTemplateFirstInterfaceName(nodeTemplateName)
-                    val operationName = blueprintContext.nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName)
+                /** Looking for node templates defined as component-resource-resolution */
+                val nodeTemplates = blueprintContext.nodeTemplates()
+                nodeTemplates!!.forEach { nodeTemplate ->
+                    val nodeTemplateName = nodeTemplate.key
+                    val nodeTemplateType = blueprintContext.nodeTemplateByName(nodeTemplateName).type
+                    if (nodeTemplateType == BluePrintConstants.NODE_TEMPLATE_TYPE_COMPONENT_RESOURCE_RESOLUTION) {
+                        val interfaceName = blueprintContext.nodeTemplateFirstInterfaceName(nodeTemplateName)
+                        val operationName = blueprintContext.nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName)
 
-                    val propertyAssignments: MutableMap<String, JsonNode> =
-                            blueprintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
-                                    ?: hashMapOf()
+                        val propertyAssignments: MutableMap<String, JsonNode> =
+                                blueprintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
+                                        ?: hashMapOf()
 
-                    val artifactPrefixNamesNode = propertyAssignments[ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES]
-                    val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode!!, String::class.java)
+                        val artifactPrefixNamesNode = propertyAssignments[ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES]
+                        val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode!!, String::class.java)
 
-                    /** Storing mapping entries with metadata log-protect set to true */
-                    val sensitiveParameters: List<String> = artifactPrefixNames
-                            .map { "$it-mapping" }
-                            .map { blueprintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, it) }
-                            .flatMap { JacksonUtils.getListFromJson(it, ResourceAssignment::class.java) }
-                            .filter { PropertyDefinitionUtils.hasLogProtect(it.property) }
-                            .map { it.name }
+                        /** Storing mapping entries with metadata log-protect set to true */
+                        val sensitiveParameters: List<String> = artifactPrefixNames
+                                .map { "$it-mapping" }
+                                .map { blueprintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, it) }
+                                .flatMap { JacksonUtils.getListFromJson(it, ResourceAssignment::class.java) }
+                                .filter { PropertyDefinitionUtils.hasLogProtect(it.property) }
+                                .map { it.name }
 
-                    /** Hiding sensitive input parameters from the request */
-                    var workflowProperties: ObjectNode = clonedExecutionServiceInput.payload
-                            .path("$workflowName-request")
-                            .path("$workflowName-properties") as ObjectNode
+                        /** Hiding sensitive input parameters from the request */
+                        var workflowProperties: ObjectNode = clonedExecutionServiceInput.payload
+                                .path("$workflowName-request")
+                                .path("$workflowName-properties") as ObjectNode
 
-                    sensitiveParameters.forEach { sensitiveParameter ->
-                        if (workflowProperties.has(sensitiveParameter)) {
-                            workflowProperties.replace(sensitiveParameter, ApplicationConstants.LOG_REDACTED.asJsonPrimitive())
+                        sensitiveParameters.forEach { sensitiveParameter ->
+                            if (workflowProperties.has(sensitiveParameter)) {
+                                workflowProperties.replace(sensitiveParameter, ApplicationConstants.LOG_REDACTED.asJsonPrimitive())
+                            }
                         }
                     }
                 }
             }
+        } catch (e: Exception) {
+            val errMsg = "ERROR : Couldn't hide sensitive data."
+            log.error(errMsg, e)
+            clonedExecutionServiceInput.payload.replace(
+                    "$workflowName-request",
+                    "$errMsg $e".asJsonPrimitive())
         }
 
         return clonedExecutionServiceInput

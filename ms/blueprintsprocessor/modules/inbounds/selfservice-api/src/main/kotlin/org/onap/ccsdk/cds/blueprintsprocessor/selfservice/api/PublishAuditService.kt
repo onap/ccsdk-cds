@@ -20,6 +20,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 
 interface PublishAuditService {
-    suspend fun publish(executionServiceInput: ExecutionServiceInput)
-    fun publish(correlationUUID: String, executionServiceOutput: ExecutionServiceOutput)
+    suspend fun publishExecutionInput(executionServiceInput: ExecutionServiceInput)
+    suspend fun publishExecutionOutput(correlationUUID: String, executionServiceOutput: ExecutionServiceOutput)
 }
