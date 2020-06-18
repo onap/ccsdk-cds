@@ -123,6 +123,9 @@ open class ComponentRemotePythonExecutor(
         val executionTimeout = getOptionalOperationInput(INPUT_EXECUTE_TIMEOUT)?.asInt()
             ?: DEFAULT_EXECUTE_TIMEOUT_IN_SEC
 
+        // set the component level timeout as envPrepTimeout + executionTimeout (small delta will be applied in AbstractComponentFunction
+        val timeout = envPrepTimeout + executionTimeout
+
         var scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
         if (args != null && args.isNotEmpty()) {
             scriptCommand = scriptCommand.plus(" ").plus(args)
@@ -176,7 +179,8 @@ open class ComponentRemotePythonExecutor(
                 setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, "".asJsonPrimitive())
             }
         } catch (grpcEx: io.grpc.StatusRuntimeException) {
-            val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId)."
+            val componentLevelWarningMsg = if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
+            val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId). $componentLevelWarningMsg"
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, grpcErrMsg.asJsonPrimitive())
             setNodeOutputErrors(status = grpcErrMsg, step = STEP_PREPARE_ENV, error = "${grpcEx.status}".asJsonPrimitive(), logging = isLogResponseEnabled)
             log.error(grpcErrMsg, grpcEx)
@@ -229,7 +233,8 @@ open class ComponentRemotePythonExecutor(
                     )
                 }
             } catch (timeoutEx: TimeoutCancellationException) {
-                val timeoutErrMsg = "Command executor timed out executing after $executionTimeout seconds requestId ($processId)"
+                val componentLevelWarningMsg = if (timeout < executionTimeout) "Note: component-level timeout ($timeout) is shorter than execution timeout ($executionTimeout). " else ""
+                val timeoutErrMsg = "Command executor execution timeout. DetailedMessage: (${timeoutEx.message}) requestId ($processId). $componentLevelWarningMsg"
                 setNodeOutputErrors(status = timeoutErrMsg,
                         step = STEP_EXEC_CMD,
                         logs = "".asJsonPrimitive(),
@@ -238,7 +243,7 @@ open class ComponentRemotePythonExecutor(
                 )
                 log.error(timeoutErrMsg, timeoutEx)
             } catch (grpcEx: io.grpc.StatusRuntimeException) {
-                val timeoutErrMsg = "Command executor timed out executing after $executionTimeout seconds requestId ($processId)"
+                val timeoutErrMsg = "Command executor failed to execute requestId ($processId) error (${grpcEx.status.cause?.message})"
                 setNodeOutputErrors(status = timeoutErrMsg,
                         step = STEP_EXEC_CMD,
                         logs = "".asJsonPrimitive(),
