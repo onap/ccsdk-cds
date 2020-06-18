@@ -62,6 +62,7 @@ open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties()
         configProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         configProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = ByteArraySerializer::class.java
         configProps[ProducerConfig.ACKS_CONFIG] = acks
+        configProps[ProducerConfig.RETRIES_CONFIG] = retries
         configProps[ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG] = enableIdempotence
         if (clientId != null) {
             configProps[ProducerConfig.CLIENT_ID_CONFIG] = clientId!!

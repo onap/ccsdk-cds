@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
-import io.mockk.verify
 import io.mockk.coVerify
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -102,7 +101,7 @@ class ExecutionServiceHandlerTest {
                 publishAuditService
         )
 
-        coEvery { publishAuditService.publish(ExecutionServiceInput()) } just Runs
+        coEvery { publishAuditService.publishExecutionInput(ExecutionServiceInput()) } just Runs
 
         var executionServiceOutput: ExecutionServiceOutput? = null
         runBlocking {
@@ -110,11 +109,8 @@ class ExecutionServiceHandlerTest {
         }
 
         coVerify {
-            publishAuditService.publish(executionServiceInput)
-        }
-
-        verify {
-            publishAuditService.publish(executionServiceInput.correlationUUID, executionServiceOutput!!)
+            publishAuditService.publishExecutionInput(executionServiceInput)
+            publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput!!)
         }
     }
 }
