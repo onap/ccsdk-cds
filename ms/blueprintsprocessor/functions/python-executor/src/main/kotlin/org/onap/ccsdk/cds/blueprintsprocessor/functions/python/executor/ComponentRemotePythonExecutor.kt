@@ -161,17 +161,17 @@ open class ComponentRemotePythonExecutor(
                 if (prepareEnvOutput.status != StatusType.SUCCESS) {
                     val errorMessage = prepareEnvOutput.payload
                     setNodeOutputErrors(prepareEnvOutput.status.name,
-                            STEP_PREPARE_ENV,
-                            logs,
-                            errorMessage,
-                            isLogResponseEnabled
+                        STEP_PREPARE_ENV,
+                        logs,
+                        errorMessage,
+                        isLogResponseEnabled
                     )
                 } else {
                     setNodeOutputProperties(prepareEnvOutput.status.name.asJsonPrimitive(),
-                            STEP_PREPARE_ENV,
-                            logsEnv,
-                            "".asJsonPrimitive(),
-                            isLogResponseEnabled
+                        STEP_PREPARE_ENV,
+                        logsEnv,
+                        "".asJsonPrimitive(),
+                        isLogResponseEnabled
                     )
                 }
             } else {
@@ -180,15 +180,16 @@ open class ComponentRemotePythonExecutor(
             }
         } catch (grpcEx: io.grpc.StatusRuntimeException) {
             val componentLevelWarningMsg = if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
-            val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId). $componentLevelWarningMsg"
+            val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId). $componentLevelWarningMsg grpcError: ${grpcEx.status}"
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, grpcErrMsg.asJsonPrimitive())
-            setNodeOutputErrors(status = grpcErrMsg, step = STEP_PREPARE_ENV, error = "${grpcEx.status}".asJsonPrimitive(), logging = isLogResponseEnabled)
+            setNodeOutputErrors(status = StatusType.FAILURE.name, step = STEP_PREPARE_ENV, error = grpcErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
             log.error(grpcErrMsg, grpcEx)
             addError(grpcErrMsg)
         } catch (e: Exception) {
-            val timeoutErrMsg = "Command executor failed during env. preparation.. timeout($envPrepTimeout) requestId ($processId)."
+            val timeoutErrMsg = "Command executor failed during env. preparation.. catch-all case timeout($envPrepTimeout) requestId ($processId). exception msg: ${e.message}"
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, e.message.asJsonPrimitive())
-            setNodeOutputErrors(status = timeoutErrMsg, step = STEP_PREPARE_ENV, error = "${e.message}".asJsonPrimitive(), logging = isLogResponseEnabled)
+            setNodeOutputErrors(status = StatusType.FAILURE.name, step = STEP_PREPARE_ENV, error = timeoutErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
+            log.error(timeoutErrMsg, e)
             log.error("Failed to process on remote executor requestId ($processId)", e)
             addError(timeoutErrMsg)
         }
@@ -214,45 +215,48 @@ open class ComponentRemotePythonExecutor(
                 }
 
                 checkNotNull(remoteExecutionOutput) {
-                    "Error: Request-id $processId did not return a restul from remote command execution."
+                    "Error: Request-id $processId did not return a result from remote command execution."
                 }
                 val logs = JacksonUtils.jsonNodeFromObject(remoteExecutionOutput.response)
                 if (remoteExecutionOutput.status != StatusType.SUCCESS) {
                     setNodeOutputErrors(remoteExecutionOutput.status.name,
-                            STEP_EXEC_CMD,
-                            logs,
-                            remoteExecutionOutput.payload,
-                            isLogResponseEnabled
+                        STEP_EXEC_CMD,
+                        logs,
+                        remoteExecutionOutput.payload,
+                        isLogResponseEnabled
                     )
                 } else {
                     setNodeOutputProperties(remoteExecutionOutput.status.name.asJsonPrimitive(),
-                            STEP_EXEC_CMD,
-                            logs,
-                            remoteExecutionOutput.payload,
-                            isLogResponseEnabled
+                        STEP_EXEC_CMD,
+                        logs,
+                        remoteExecutionOutput.payload,
+                        isLogResponseEnabled
                     )
                 }
             } catch (timeoutEx: TimeoutCancellationException) {
                 val componentLevelWarningMsg = if (timeout < executionTimeout) "Note: component-level timeout ($timeout) is shorter than execution timeout ($executionTimeout). " else ""
                 val timeoutErrMsg = "Command executor execution timeout. DetailedMessage: (${timeoutEx.message}) requestId ($processId). $componentLevelWarningMsg"
-                setNodeOutputErrors(status = timeoutErrMsg,
-                        step = STEP_EXEC_CMD,
-                        logs = "".asJsonPrimitive(),
-                        error = "".asJsonPrimitive(),
-                        logging = isLogResponseEnabled
+                setNodeOutputErrors(status = StatusType.FAILURE.name,
+                    step = STEP_EXEC_CMD,
+                    logs = "".asJsonPrimitive(),
+                    error = timeoutErrMsg.asJsonPrimitive(),
+                    logging = isLogResponseEnabled
                 )
                 log.error(timeoutErrMsg, timeoutEx)
             } catch (grpcEx: io.grpc.StatusRuntimeException) {
-                val timeoutErrMsg = "Command executor failed to execute requestId ($processId) error (${grpcEx.status.cause?.message})"
-                setNodeOutputErrors(status = timeoutErrMsg,
-                        step = STEP_EXEC_CMD,
-                        logs = "".asJsonPrimitive(),
-                        error = "".asJsonPrimitive(),
-                        logging = isLogResponseEnabled
+                val timeoutErrMsg = "Command executor timed out executing after $executionTimeout seconds requestId ($processId) grpcErr: ${grpcEx.status}"
+                setNodeOutputErrors(status = StatusType.FAILURE.name,
+                    step = STEP_EXEC_CMD,
+                    logs = "".asJsonPrimitive(),
+                    error = timeoutErrMsg.asJsonPrimitive(),
+                    logging = isLogResponseEnabled
                 )
-                log.error("Command executor time out during GRPC call", grpcEx)
+                log.error("Command executor timed out during GRPC call", grpcEx)
             } catch (e: Exception) {
-                log.error("Failed to process on remote executor requestId ($processId)", e)
+                val timeoutErrMsg = "Command executor failed during process catch-all case requestId ($processId) timeout($envPrepTimeout) exception msg: ${e.message}"
+                setNodeOutputErrors(status = StatusType.FAILURE.name, step = STEP_PREPARE_ENV, error = timeoutErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
+                log.error(timeoutErrMsg, e)
+                addError(timeoutErrMsg)
             }
         }
         log.debug("Trying to close GRPC channel. request ($processId)")
@@ -277,7 +281,14 @@ open class ComponentRemotePythonExecutor(
     /**
      * Utility function to set the output properties of the executor node
      */
-    private fun setNodeOutputProperties(status: JsonNode, step: String, message: JsonNode, artifacts: JsonNode, logging: Boolean = true) {
+    private fun setNodeOutputProperties(
+        status: JsonNode = StatusType.FAILURE.name.asJsonPrimitive(),
+        step: String,
+        message: JsonNode,
+        artifacts: JsonNode,
+        logging: Boolean = true
+    ) {
+
         setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status)
         setAttribute(ATTRIBUTE_RESPONSE_DATA, artifacts)
         setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message)
