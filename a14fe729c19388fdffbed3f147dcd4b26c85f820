@@ -70,6 +70,24 @@
       "revId": "a14fe729c19388fdffbed3f147dcd4b26c85f820",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5981f9a9_81f0787c",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/AbstractComponentFunction.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-06-19T13:18:47Z",
+      "side": 1,
+      "message": "Ack, just saw that it\u0027s calling same applyNBWithTimeout after elvis ?: 😊",
+      "parentUuid": "d95f5589_d8ad0a65",
+      "revId": "a14fe729c19388fdffbed3f147dcd4b26c85f820",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
