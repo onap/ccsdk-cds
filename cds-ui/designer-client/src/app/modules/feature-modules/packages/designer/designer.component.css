@@ -832,16 +832,8 @@ ul.editor{
 .editor li{
   list-style: none;
 }
-.roundBtn .btn{
-  width: 15px; 
-  height: 15px; 
-  padding: 0px; 
-  border-radius: 15px; 
-  font-size: 10px; 
-  text-align: center;
-  background-color:rgb(215, 234, 250);
-  color: white;
-  margin: 5px;
+.editor .btn {
+  box-shadow: none;
 }
 .ace_editor{
   top: 5.4vh;
@@ -850,3 +842,9 @@ ul.editor{
 .dsl-editor {
   height: 500px;  
 }
+.vertical_line{
+    border-left: 1px solid rgba(66, 169, 192, 0.1);
+    height: 45px;
+    margin-left: 12px;
+    margin-right: 12px;
+} 

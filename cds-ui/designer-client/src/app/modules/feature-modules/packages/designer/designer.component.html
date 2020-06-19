@@ -127,9 +127,24 @@
         </ul>
 
         <ul class="editor navbar ml-auto">
-            <li class="roundBtn"><button class="btn"><span class="glyphicon">&#x2212;</span></button></li>
+            <li>
+                <button type="button" class="btn tooltip-bottom" data-tooltip="Undo">
+                    <img src="/assets/img/icon-undoActive.svg">
+                </button>
+            </li>
+            <li>
+                <button type="button" class="btn tooltip-bottom" data-tooltip="Redo">
+                    <img src="/assets/img/icon-redo.svg">
+                </button>
+            </li>
+            <li class="vertical_line"></li>
+            <li><button type="button" class="btn tooltip-bottom" data-tooltip="Zoom Out">
+                    <img src="/assets/img/icon-zoomOut.svg">
+                </button></li>
             <li>100%</li>
-            <li class="roundBtn"><button class="btn"><span class="glyphicon">&#x2b;</span></button>
+            <li>
+                <button type="button" class="btn tooltip-bottom" data-tooltip="Zoom In">
+                    <img src="/assets/img/icon-zoomIn.svg"> </button>
             </li>
         </ul>
 
