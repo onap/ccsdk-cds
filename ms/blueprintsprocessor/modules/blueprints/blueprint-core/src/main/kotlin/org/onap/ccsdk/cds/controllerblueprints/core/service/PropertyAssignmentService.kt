@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory
  *
  * @author Brinda Santh
  */
-internal class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>) {
+open class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>) {
 
     private val log = LoggerFactory.getLogger(this::class.toString())
 
