@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f7232c0_a9d7ad57",
+        "filename": "ms/blueprintsprocessor/modules/services/execution-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/AbstractComponentFunction.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-06-19T13:05:58Z",
+      "side": 1,
+      "message": "what if some function doesn\u0027t want to use lock feature ?",
+      "revId": "a14fe729c19388fdffbed3f147dcd4b26c85f820",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
