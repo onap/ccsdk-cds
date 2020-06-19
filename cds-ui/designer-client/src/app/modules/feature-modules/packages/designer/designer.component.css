@@ -843,3 +843,10 @@ ul.editor{
   color: white;
   margin: 5px;
 }
+.ace_editor{
+  top: 5.4vh;
+  height: 92vh !important;
+}
+.dsl-editor {
+  height: 500px;  
+}

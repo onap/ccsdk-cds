@@ -3,17 +3,61 @@
         <div class="col pl-0">
             <p class="logo mb-0"></p>
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
+                <ol class="breadcrumb designer-breadcrumb mb-0">
                     <li class="breadcrumb-item">
                         <a href="#">CBA Packages</a>
                     </li>
+                    <i class="fa fa-angle-right ml-2 mr-2"></i>
                     <li class="breadcrumb-item">
                         <a href="/package/{{viewedPackage.id}}">{{viewedPackage.artifactName}}</a>
+                        <button type="button" class="btn package-info-btn" data-toggle="modal"
+                            data-target="#exampleModalLong">
+                            <i class="icon-info" aria-hidden="true"></i>
+                        </button>
                     </li>
+                    <i class="fa fa-angle-right ml-2 mr-2"></i>
                     <li class="breadcrumb-item active" aria-current="page">
                         <p class="mb-0">Topology View</p>
                     </li>
                 </ol>
+                <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Package Details</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <img src="assets/img/icon-close.svg" />
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row package-info">
+                                    <div class="col">
+                                        <h3>Test Package
+                                            <span class="package-version">Version 1.0.2</span></h3>
+                                    </div>
+                                    <div class="col mb-3">
+                                        <span class="badge badge-primary">test</span>
+                                        <span class="badge badge-primary">vDNS-CDS</span>
+                                        <span class="badge badge-primary">SCALE-OUT</span>
+                                        <span class="badge badge-primary">MARCO</span>
+                                    </div>
+                                    <div class="col-2">
+                                        <img src="/assets/img/img-user3.jpg" class="creator-pic">
+                                    </div>
+                                    <div class="col-10 pl-0">
+                                        <p><b>Author information:</b></p>
+                                        <p>Abdelmuhaimen Seaudi</p>
+                                        <p>abdelmuhaimen.seaudi@orange.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </nav>
         </div>
         <div class="col pr-0 text-right">
@@ -70,6 +114,9 @@
             <h1 class="col-12">Actions</h1>
            
             
+        </div>
+        <div class="helpBox"><i class="icon-info" aria-hidden="true"></i><a
+                href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank">Help - Learn The Basics</a>
         </div>
     </ng-sidebar>
 <div ng-sidebar-content id="board-paper">
