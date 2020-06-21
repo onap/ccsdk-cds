@@ -1,5 +1,5 @@
 <a (click)="openCreationView()" class="create-template-mapping-button">
-    <i class="fa fa-plus"></i> <span>Create</span>
+    <i class="fa fa-plus"></i> <span>Create Template</span>
 </a>
 
 
@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header" id="headingThree">
                 <h5 class="mb-0 d-flex justify-content-between">
-                    <button class="btn" data-toggle="collapse" data-target="#collapseThree"
+                    <button class="btn regularTitle" data-toggle="collapse" data-target="#collapseThree"
                         aria-expanded="true" aria-controls="collapseThree">
                         Template and Mapping List
                     </button>
@@ -21,7 +21,7 @@
                     <div class="row">
                         <!-- <div class="col-4" style="color:white" *ngFor="let file of templates.files | keyvalue; let mapIndex = index">-->
                         <div class="col-4" *ngFor="let file of  getKeys(templateAndMappingMap)">
-                            <a class="template-mapping-list" [ngClass]="{'active':currentFile == file}">
+                            <a class="template-mapping-list float" [ngClass]="{'active':currentFile == file}">
                                 <p (click)="setSourceCodeEditor(file)">{{file}}</p>
                                 <span *ngIf="getValue(file).isMapping">Mapping</span>
                                 <span *ngIf="getValue(file).isTemplate">Template</span>
