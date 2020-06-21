@@ -5,7 +5,7 @@
                 class="fa fa-chevron-left mr-2"></i>Template List</button>
     </div>
     <div class="col text-right">
-        <button (click)="cancel()" [disabled]="fileName?.length <=0" class="btn btn-outline-secondary">Cancel</button>
+        <button (click)="cancel()" [hidden]="fileName?.length <=0" class="btn btn-outline-secondary">Clear</button>
         <button (click)="saveToStore()" [disabled]="fileName?.length <=0" class="btn btn-primary">Finish</button>
     </div>
 </div>
@@ -70,7 +70,7 @@
                             data-target="#templateModal"><b>Import
                                 File</b></a></div>
                     <div class="editor-container mb-4">
-                        <app-source-editor (textChange)="textChanges($event,templateInfo.fileName)"
+                        <app-source-editor [lang]="'velocity'" (textChange)="textChanges($event,templateInfo.fileName)"
                             [(text)]="templateFileContent"></app-source-editor>
                     </div>
                 </div>
