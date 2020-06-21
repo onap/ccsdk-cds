@@ -20,9 +20,10 @@ export abstract class PackageCreationModes {
     }
 
     public static mapModeType(cbaPackage: CBAPackage) {
-        if (cbaPackage.metaData.mode.startsWith('Scripting')) {
+        console.log(cbaPackage.metaData.mode);
+        if (cbaPackage.metaData.mode.includes('Scripting')) {
             cbaPackage.metaData.mode = ModeType.Scripting;
-        } else if (cbaPackage.metaData.mode.startsWith('Designer')) {
+        } else if (cbaPackage.metaData.mode.includes('Designer') || cbaPackage.metaData.mode.includes('DEFAULT') ) {
             cbaPackage.metaData.mode = ModeType.Designer;
         } else {
             cbaPackage.metaData.mode = ModeType.Generic;

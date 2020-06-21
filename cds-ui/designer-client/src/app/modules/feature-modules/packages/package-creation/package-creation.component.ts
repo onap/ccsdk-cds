@@ -30,6 +30,7 @@ import {PackageCreationBuilder} from './creationModes/PackageCreationBuilder';
 import {PackageCreationUtils} from './package-creation.utils';
 import {MetadataTabComponent} from './metadata-tab/metadata-tab.component';
 import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
 
 
 @Component({
@@ -44,7 +45,8 @@ export class PackageCreationComponent implements OnInit {
 
     constructor(private packageCreationStore: PackageCreationStore,
                 private packageCreationUtils: PackageCreationUtils,
-                private router: Router) {
+                private router: Router,
+                private toastService: ToastrService) {
     }
 
     counter = 0;
@@ -89,8 +91,17 @@ export class PackageCreationComponent implements OnInit {
         this.create();
         this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
-                this.packageCreationStore.saveBluePrint(blob);
-                this.router.navigate(['/packages']);
+                this.packageCreationStore.saveBluePrint(blob).subscribe(
+                    bluePrintDetailModels => {
+                        if (bluePrintDetailModels) {
+                            const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
+                            this.toastService.info('package updated successfully ');
+                            this.router.navigate(['/packages/package/' + id]);
+                        }
+                    }, error => {
+                       // this.toastService.error('error happened when editing ' + error.message);
+                        console.log('Error -' + error.message);
+                    });
             });
     }
 
