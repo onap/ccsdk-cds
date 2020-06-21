@@ -9,7 +9,6 @@ import { Mapping, MappingAdapter } from '../../mapping-models/mappingAdapter.mod
 import { PackageCreationUtils } from '../../package-creation.utils';
 import { JsonConvert, Any } from 'json2typescript';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
 import { SharedService } from '../shared-service';
 declare var $: any;
 
@@ -54,16 +53,11 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         private templateStore: TemplateStore,
         private packageCreationUtils: PackageCreationUtils,
         private toastr: ToastrService,
-        private router: ActivatedRoute,
         private sharedService: SharedService
     ) {
     }
 
     ngOnInit() {
-        if (this.router.snapshot.paramMap.has('id')) {
-            console.log('URL contains Id');
-            this.sharedService.enableEdit();
-        }
         this.templateStore.state$.subscribe(templateInfo => {
             // init Template&mapping vars
             console.log('Oninit');
@@ -118,8 +112,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.dtOptions = {
             pagingType: 'full_numbers',
             pageLength: 25,
-            // destroy: true,
-            // retrieve: true,
+            destroy: true,
+            retrieve: true,
         };
     }
 
@@ -382,6 +376,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         // Do not forget to unsubscribe the event
         this.dtTrigger.unsubscribe();
+        this.resTableDtTrigger.unsubscribe();
     }
 }
 

@@ -30,13 +30,11 @@ export class SourceEditorComponent implements OnInit, AfterViewInit {
         this.editor.setTheme('eclipse');
         this.editor.getEditor().setOptions({
             enableBasicAutocompletion: true,
-            // fontSize: '14pt',
-            // maxLines: 4096,
-            // behavioursEnabled: true,
-            // wrapBehavioursEnabled: true,
-            // showPrintMargin: true,
-            // indentedSoftWrap: true,
-            // wrap: true,
+            highlightSelectedWord: true,
+            maxLines: Infinity,
+            enableSnippets: true,
+            enableLiveAutocompletion: true,
+            showFoldWidgets: true,
         });
 
         this.editor.getEditor().commands.addCommand({
