@@ -56,6 +56,7 @@ export class MetadataTabComponent implements OnInit {
                 }
 
                 this.customKeysMap = element.metaData.mapOfCustomKey;
+                this.metaDataTab.mapOfCustomKey = this.customKeysMap;
                 // this.tags = element.metaData.templateTags;
 
             }

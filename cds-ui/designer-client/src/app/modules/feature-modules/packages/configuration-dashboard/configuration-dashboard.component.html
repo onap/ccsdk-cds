@@ -22,8 +22,8 @@
             <div class="container">
                 <div class="creat-action-container">
 
-                    <a class="action-button save" (click)="editBluePrint()">
-                        <i class="icon-save-sm" aria-hidden="true"></i>
+                    <a class="action-button save" (click)="editBluePrint()" >
+                        <i class="icon-save-sm" aria-hidden="true" ></i>
                         <span>Save</span>
                     </a>
                     <a href="#" class="action-button" (click)="goBacktoDashboard()">
@@ -62,7 +62,7 @@
                                 <div class="col-12 package-name deployed">
                                     {{viewedPackage.artifactName}}
                                     <img src="/assets/img/icon-deploy-inactive.svg" class="deply-status-icon">
-                                    <span class="package-version">v1.0.2</span>
+                                    <span class="package-version">v{{viewedPackage.artifactVersion}}</span>
                                 </div>
                                 <div class="col-12 package-description">
                                     Last modified {{ viewedPackage.createdDate | date:'short' }} By
