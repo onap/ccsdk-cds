@@ -19,15 +19,16 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { Store } from '../../../../common/core/stores/Store';
+import {Store} from '../../../../common/core/stores/Store';
 
-import { CBAPackage, DslDefinition } from './mapping-models/CBAPacakge.model';
-import { PackageCreationService } from './package-creation.service';
-import { MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
-import { Observable } from 'rxjs';
-import { ResourceDictionary } from './mapping-models/ResourceDictionary.model';
+import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
+import {PackageCreationService} from './package-creation.service';
+import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import {Observable} from 'rxjs';
+import {ResourceDictionary} from './mapping-models/ResourceDictionary.model';
+import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
 
 
 @Injectable({
@@ -92,8 +93,8 @@ export class PackageCreationStore extends Store<CBAPackage> {
         this.state.definitions.imports.delete(filename);
     }
 
-    saveBluePrint(blob) {
-        this.packageCreationService.savePackage(blob);
+    saveBluePrint(blob): Observable<BluePrintDetailModel> {
+        return this.packageCreationService.savePackage(blob);
     }
 
     addTemplate(filePath: string, fileContent: string) {

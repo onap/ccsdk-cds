@@ -14,6 +14,7 @@ import {PackageCreationBuilder} from '../package-creation/creationModes/PackageC
 import {saveAs} from 'file-saver';
 import {DesignerStore} from '../designer/designer.store';
 import {DesignerService} from '../designer/designer.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -42,7 +43,9 @@ export class ConfigurationDashboardComponent implements OnInit {
                 private packageCreationUtils: PackageCreationUtils,
                 private router: Router,
                 private designerStore: DesignerStore,
-                private designerService: DesignerService) {
+                private designerService: DesignerService,
+                private toastService: ToastrService
+    ) {
     }
 
     ngOnInit() {
@@ -164,8 +167,17 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.create();
         this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
-                this.packageCreationStore.saveBluePrint(blob);
-                this.router.navigate(['/packages']);
+                this.packageCreationStore.saveBluePrint(blob).subscribe(
+                    bluePrintDetailModels => {
+                        if (bluePrintDetailModels) {
+                            const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
+                            this.toastService.info('package updated successfully ');
+                            this.router.navigate(['/packages/package/' + id]);
+                        }
+                    }, error => {
+                        this.toastService.error('error happened when editing ' + error.message);
+                        console.log('Error -' + error.message);
+                    });
             });
     }
 

@@ -38,21 +38,6 @@ export class MetaDataTabModel {
 
 }
 
-/*TOSCA-Meta-File-Version: 1.0.0
-CSAR-Version: 1.0
-Created-By: PLATANIA, MARCO <platania@research.att.com>
-Entry-Definitions: Definitions/vLB_CDS.json
-Template-Name: baseconfiguration
-Template-Version: 1.0.0
-Template-Type: DEFAULT
-Template-Tags: vDNS-CDS-test1
-Content-Type: application/vnd.oasis.bpmn*/
-
-export class MetaDataFile {
-
-
-}
-
 
 export interface FolderNodes {
     name: string;

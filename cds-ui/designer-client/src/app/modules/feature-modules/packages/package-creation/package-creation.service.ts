@@ -26,7 +26,7 @@ import {ApiService} from '../../../../common/core/services/api.service';
 import {BlueprintURLs, ResourceDictionaryURLs} from '../../../../common/constants/app-constants';
 import {PackagesApiService} from '../packages-api.service';
 import {PackagesStore} from '../packages.store';
-import { ResourceDictionary } from './mapping-models/ResourceDictionary.model';
+import {ResourceDictionary} from './mapping-models/ResourceDictionary.model';
 
 @Injectable({
     providedIn: 'root'
@@ -54,13 +54,8 @@ export class PackageCreationService {
 
         const formData = new FormData();
         formData.append('file', blob);
-        this.saveBlueprint(formData)
-            .subscribe(
-                data => {
-                    console.log('Success:' + JSON.stringify(data));
-                }, error => {
-                    console.log('Error -' + error.message);
-                });
+        return this.saveBlueprint(formData);
+
     }
 
     getTemplateAndMapping(variables: string[]): Observable<ResourceDictionary[]> {
