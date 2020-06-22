@@ -116,7 +116,7 @@
 
                     </div>
                 </div>
-                <div id="mapping-table" [hidden]="resourceDictionaryRes?.length == 0" class="mx-4 my-2">
+                <div id="mapping-table" [hidden]="resourceDictionaryRes?.length == 0" class="mapping-table mx-4 my-2">
                     <table datatable [dtOptions]="initDtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                         <thead>
                             <tr>
@@ -165,7 +165,7 @@
                     </table>
                 </div>
 
-                <div id="mapping-table-res" [hidden]="mappingRes?.length == 0" class="mx-4 my-2">
+                <div id="mapping-table-res" [hidden]="mappingRes?.length == 0" class="mapping-table mx-4 my-2">
                     <table datatable [dtOptions]="dtOptions" [dtTrigger]="resTableDtTrigger" class="row-border hover">
                         <thead>
                             <tr>
@@ -252,7 +252,8 @@
                             <tr *ngFor="let item of uploadedFiles; let i=index">
                                 <th width="40"><img src="assets/img/icon-file-code.svg" /></th>
                                 <th>{{ item.name }}</th>
-                                <th (click)="removeFile(i)" width="40" class="text-right"><img src="assets/img/icon-remove-file.svg" /></th>
+                                <th (click)="removeFile(i)" width="40" class="text-right"><img
+                                        src="assets/img/icon-remove-file.svg" /></th>
                             </tr>
                         </thead>
                     </table>

@@ -558,6 +558,7 @@ height: 40px;
 }
 .addPaackage-card .card-body img{
   width: 30%;
+  vertical-align: text-top;
 }
 .addPaackage-card a{
   margin: 0;
@@ -1162,7 +1163,7 @@ height: 40px;
   margin-bottom: 6px !important;
 }
 .btn-import-package{
-  margin-bottom: 4px !important;
+  margin-bottom: 15px !important;
 }
 .btn-create-package,
 .btn-create-package:hover{
@@ -2543,6 +2544,13 @@ hr{
 .template-mapping-accordion{
   width: 100%;
 }
+.card-header .btn.regularTitle{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  color: #1B3E6F;
+  font-size: 13px;
+  font-weight: bold;
+}
 .template-mapping-accordion .accordian-title{
   color: #C3CDDB !important;
   font-size: 12px !important;
@@ -2686,7 +2694,7 @@ hr{
 .breadcrumb-header li{
   list-style: none;
   display: inline-block;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .breadcrumb-header li:last-child::after{
@@ -2777,6 +2785,15 @@ padding: 0 10px 0 0;
   border-radius: 4px;
   box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.3);
 }
+.template-mapping-list p,
+.template-mapping-list:hover p{
+  margin-bottom: 0;
+  width: 60%;
+  display: inline-block !important;
+}
+.template-mapping-list:hover p{
+  width: 90%;
+}
 .template-mapping-list:hover{
   opacity: .9;
 }
@@ -2785,7 +2802,7 @@ padding: 0 10px 0 0;
   background: #fff;
   border: solid 1px #E9F3FF;
   color: #2A81ED;
-  font-size: 8px;
+  font-size: 9px;
   float: right;
   border-radius: 50px;
   padding: 3px 10px;
@@ -2798,12 +2815,13 @@ padding: 0 10px 0 0;
   display: none;
   position: absolute;
   right: 21px;
-  top: 7px;
+  top: 2px;
   border: 0;
   background: transparent;
 }
 .deleteTemplate i{
-  color: #FF6469;
+  color: #FF6469 !important;
+  font-size: 16px;
 }
 .template-mapping-list:hover .deleteTemplate{
   display: inline;
@@ -2909,7 +2927,7 @@ margin-right: 5px;
 .template-mapping-action button{
   border-radius: 50px;
   padding: 4px 20px;
-  font-size: 14px;
+  font-size: 13px;
 }
 .template-mapping-action .btn-primary{
   background:#5DBDBA !important ;
@@ -2948,34 +2966,37 @@ margin-right: 5px;
 .dataTables_filter input{
   color: #1B3E6F;
   background: url(../src/assets/img/icon-search.svg) 9px center no-repeat;
-  padding: 4px 9px 4px 24px;
+  padding: 4px 9px 4px 24px !important;
   border: solid 1px #ECEDF2;
   border-radius: 4px;
 }
 .dataTables_filter input:focus{
   box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.1);
 }
-#mapping-table th,
-#mapping-table td{
+.mapping-table th,
+.mapping-table td{
   width: auto !important;
-  padding: 7px 20px 7px 0;
-  border-bottom: solid 1px #ECEDF2;
+  padding: 7px 20px 7px 0 !important;
+  border-bottom: solid 1px #ECEDF2 !important;
   font-size: 13px;
 }
-#mapping-table th:first-child,
-#mapping-table td:first-child{
-  padding-left: 20px;
+.mapping-table th:first-child,
+.mapping-table td:first-child{
+  padding-left: 20px !important;
 }
-#mapping-table tbody tr:hover{
-  background-color: #F4F9FE;
+.mapping-table thead th{
+  border-bottom-color: #ECEDF2 !important;
 }
-#mapping-table th{
-  padding-top: 10px;
-  padding-bottom: 10px;
+.mapping-table tbody tr:hover{
+  background-color: #F4F9FE !important;
+}
+.mapping-table th{
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
   background: #F4F9FE;
 }
-#mapping-table td{
-  border-top: 0;
+.mapping-table td{
+  border-top: 0 !important;
 }
 table.dataTable.no-footer{
   margin-bottom: 9px;
@@ -3021,30 +3042,30 @@ table.dataTable.no-footer{
   background: none !important;
   border: 0 !important;
 }
-#mapping-table .form-control,
-#mapping-table .custom-select{
+.mapping-table .form-control,
+.mapping-table .custom-select{
   padding: 10px 6px;
   border-color: #EEF4F9;
   font-size: 14px;
   line-height: 12px;
   color: #1B3E6F;
 }
-#mapping-table .form-control{
+.mapping-table .form-control{
   box-shadow: 0 2px 4px rgba(47,83,151,0.1);
 }
-#mapping-table tbody tr:hover .form-control:focus,
-#mapping-table tbody tr:hover .custom-select{
+.mapping-table tbody tr:hover .form-control:focus,
+.mapping-table tbody tr:hover .custom-select{
   background-color: #fff !important;
 }
-#mapping-table .custom-select{
+.mapping-table .custom-select{
   background-color: #F4F9FE;
   color: #1B3E6F;
 }
-#mapping-table .form-control:disabled{
+.mapping-table .form-control:disabled{
   padding-left: 0;
   box-shadow: none;
   border: 0;
-  background: transparent;
+  background: transparent !important;
   color: #1B3E6F;
 }
 
