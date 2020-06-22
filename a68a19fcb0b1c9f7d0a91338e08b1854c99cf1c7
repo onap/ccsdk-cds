@@ -16,6 +16,24 @@
       "revId": "a68a19fcb0b1c9f7d0a91338e08b1854c99cf1c7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fcfb0ad_e1c1722f",
+        "filename": "ms/blueprintsprocessor/modules/commons/db-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/db/primary/service/BlueprintProcessorCatalogServiceImpl.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2020-06-22T17:57:19Z",
+      "side": 1,
+      "message": "Kapil, we dont want to hard code any of the description with the cba name and version.",
+      "parentUuid": "b22bf511_dc1625dd",
+      "revId": "a68a19fcb0b1c9f7d0a91338e08b1854c99cf1c7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
