@@ -9,6 +9,7 @@ export class SharedService {
 
     // based on edit Mode, edit=false
     mode = new BehaviorSubject(false);
+    list = new BehaviorSubject('');
     constructor() {
     }
 
@@ -20,6 +21,14 @@ export class SharedService {
     }
     disableEdit() {
         this.mode.next(false);
+    }
+
+    // from file from tempplate&mapping list
+    deleteFromList(filename) {
+        this.list.next(filename);
+    }
+    listAction(): Observable<string> {
+        return this.list.asObservable();
     }
 
 }
