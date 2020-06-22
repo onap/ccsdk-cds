@@ -56,6 +56,7 @@ export class ConfigurationDashboardComponent implements OnInit {
                 if (bluePrintDetailModels) {
                     this.viewedPackage = bluePrintDetailModels[0];
                     this.downloadCBAPackage(bluePrintDetailModels);
+                    this.packageCreationStore.clear();
                 }
             });
     }
