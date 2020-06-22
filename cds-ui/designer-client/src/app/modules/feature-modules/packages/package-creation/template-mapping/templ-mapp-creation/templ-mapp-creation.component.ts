@@ -47,6 +47,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     currentTemplate: any;
     currentMapping: any;
     edit = false;
+    fileToDelete: any = {};
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -63,6 +64,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             console.log('Oninit');
             console.log(templateInfo);
             this.templateInfo = templateInfo;
+            this.fileToDelete = templateInfo.fileName;
             this.fileName = templateInfo.fileName.split('/')[1];
             if (this.fileName) {
                 this.fileName = this.fileName.split('-')[0];
@@ -177,6 +179,22 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.uploadedFiles.splice(index, 1);
     }
 
+    initDelete(file) {
+    }
+    confirmDelete() {
+        // Delete from templates
+        this.sharedService.deleteFromList(this.fileName);
+        this.packageCreationStore.state.templates.files.delete(this.fileToDelete);
+        // Delete from Mapping
+        this.packageCreationStore.state.mapping.files.delete(this.fileToDelete);
+        if (
+            this.packageCreationStore.state.templates.files.size > 0 ||
+            this.packageCreationStore.state.mapping.files.size > 0
+        ) {
+            this.closeCreationForm();
+        }
+
+    }
     uploadFile() {
         this.dependancies.clear();
         this.dependanciesSource.clear();

@@ -61,6 +61,7 @@ export class TemplMappListingComponent implements OnInit {
                 console.log('hello there ');
                 console.log(this.templateAndMappingMap);
             }
+            this.deleteFromList();
         });
     }
 
@@ -75,6 +76,19 @@ export class TemplMappListingComponent implements OnInit {
             this.templateAndMappingMap.set(nameOfFile, templateAndMapping);
         }
 
+    }
+
+    deleteFromList() {
+        this.sharedService.listAction().subscribe(res => {
+            console.log('response from actionList');
+            console.log(res);
+            if (res) {
+                this.templateAndMappingMap.delete(res);
+                if (this.templateAndMappingMap.size <= 0) {
+                    this.openCreationView();
+                }
+            }
+        });
     }
 
     openCreationView() {
