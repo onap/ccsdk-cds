@@ -56,6 +56,7 @@ export class ConfigurationDashboardComponent implements OnInit {
                 if (bluePrintDetailModels) {
                     this.viewedPackage = bluePrintDetailModels[0];
                     this.downloadCBAPackage(bluePrintDetailModels);
+                    this.packageCreationStore.clear();
                 }
             });
     }
@@ -132,11 +133,13 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.packageCreationStore.state$.subscribe(
             cbaPackage => {
                 FilesContent.clear();
+                console.log(cbaPackage);
                 let packageCreationModes: PackageCreationModes;
                 cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
                 cbaPackage.metaData = PackageCreationModes.setEntryPoint(cbaPackage.metaData);
                 packageCreationModes = PackageCreationBuilder.getCreationMode(cbaPackage);
                 packageCreationModes.execute(cbaPackage, this.packageCreationUtils);
+                console.log(FilesContent.getMapOfFilesNamesAndContent());
                 this.filesData.push(this.folder.TREE_DATA);
                 this.saveBluePrintToDataBase();
             });
@@ -165,8 +168,10 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     saveBluePrintToDataBase() {
         this.create();
+        console.log(FilesContent.getMapOfFilesNamesAndContent());
         this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
+                console.log(FilesContent.getMapOfFilesNamesAndContent());
                 this.packageCreationStore.saveBluePrint(blob).subscribe(
                     bluePrintDetailModels => {
                         if (bluePrintDetailModels) {
@@ -183,6 +188,8 @@ export class ConfigurationDashboardComponent implements OnInit {
 
 
     create() {
+        this.zipFile = new JSZip();
+        console.log(this.zipFile);
         FilesContent.getMapOfFilesNamesAndContent().forEach((value, key) => {
             this.zipFile.folder(key.split('/')[0]);
             this.zipFile.file(key, value);
