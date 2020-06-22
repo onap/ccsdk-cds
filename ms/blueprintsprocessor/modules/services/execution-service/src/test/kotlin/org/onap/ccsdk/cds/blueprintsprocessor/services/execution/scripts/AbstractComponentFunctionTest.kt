@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -53,6 +54,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
+import java.lang.RuntimeException
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -201,6 +203,27 @@ class AbstractComponentFunctionTest {
         runBlocking {
             component.prepareRequestNB(getMockedInput(bluePrintRuntimeService))
         }
+    }
+
+    @Test
+    fun `applyNB should catch exceptions and call recoverNB`() {
+        val exception = RuntimeException("Intentional test exception")
+        every {
+            bluePrintRuntimeService.resolvePropertyAssignments(any(), any(), any())
+        } throws exception
+        every {
+            blueprintContext.nodeTemplateOperationImplementation(any(), any(), any())
+        } returns Implementation().apply {
+            this.lock = LockAssignment().apply { this.key = "testing-lock".asJsonType() }
+        }
+
+        val component: AbstractComponentFunction = spyk(SampleComponent())
+        component.bluePrintRuntimeService = bluePrintRuntimeService
+        component.bluePrintClusterService = blueprintClusterService
+        val input = getMockedInput(bluePrintRuntimeService)
+
+        runBlocking { component.applyNB(input) }
+        verify { runBlocking { component.recoverNB(exception, input) } }
     }
 
     @Test
