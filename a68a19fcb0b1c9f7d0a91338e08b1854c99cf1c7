@@ -34,6 +34,24 @@
       "revId": "a68a19fcb0b1c9f7d0a91338e08b1854c99cf1c7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad591ba6_237d9bcf",
+        "filename": "ms/blueprintsprocessor/modules/commons/db-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/db/primary/service/BlueprintProcessorCatalogServiceImpl.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-06-22T18:08:25Z",
+      "side": 1,
+      "message": "Okey, but how changing that to hardocing \"description\" is better ??",
+      "parentUuid": "4fcfb0ad_e1c1722f",
+      "revId": "a68a19fcb0b1c9f7d0a91338e08b1854c99cf1c7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
