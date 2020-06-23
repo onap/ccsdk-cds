@@ -69,13 +69,13 @@ class ExecutionServiceHandler(
                 responseObserver.onCompleted()
             }
             else -> {
-                publishAuditService.publish(executionServiceInput)
+                publishAuditService.publishExecutionInput(executionServiceInput)
                 val executionServiceOutput = response(
                         executionServiceInput,
                         "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
                         true
                 )
-                publishAuditService.publish(executionServiceInput.correlationUUID, executionServiceOutput)
+                publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput)
                 responseObserver.onNext(
                         executionServiceOutput.toProto()
                 )
@@ -93,9 +93,9 @@ class ExecutionServiceHandler(
 
         log.info("processing request id $requestId")
 
-        try {
-            publishAuditService.publish(executionServiceInput)
+        publishAuditService.publishExecutionInput(executionServiceInput)
 
+        try {
             /** Check Blueprint is needed for this request */
             if (checkServiceFunction(executionServiceInput)) {
                 executionServiceOutput = executeServiceFunction(executionServiceInput)
@@ -121,7 +121,7 @@ class ExecutionServiceHandler(
             executionServiceOutput = response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
         }
 
-        publishAuditService.publish(executionServiceInput.correlationUUID, executionServiceOutput)
+        publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput)
         return executionServiceOutput
     }
 

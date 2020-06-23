@@ -39,9 +39,9 @@ class NoPublishAuditService : PublishAuditService {
         log.info("Audit service is disabled")
     }
 
-    override suspend fun publish(executionServiceInput: ExecutionServiceInput) {
+    override suspend fun publishExecutionInput(executionServiceInput: ExecutionServiceInput) {
     }
 
-    override fun publish(correlationUUID: String, executionServiceOutput: ExecutionServiceOutput) {
+    override suspend fun publishExecutionOutput(correlationUUID: String, executionServiceOutput: ExecutionServiceOutput) {
     }
 }
