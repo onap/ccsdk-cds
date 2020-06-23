@@ -27,16 +27,16 @@ import { DictionaryStore } from '../../dictionary.store';
   styleUrls: ['./search-dictionary.component.css']
 })
 export class SearchDictionaryComponent implements OnInit {
-  private searchQuery = '';
+  searchQuery = '';
   constructor(private dictionaryStore: DictionaryStore) {
   }
 
   ngOnInit() {
   }
   searchDictionary(event: any) {
-      this.searchQuery = event.target.value;
-      this.searchQuery = this.searchQuery.trim();
-      this.dictionaryStore.search(this.searchQuery);
+    this.searchQuery = event.target.value;
+    this.searchQuery = this.searchQuery.trim();
+    this.dictionaryStore.search(this.searchQuery);
   }
 
 }

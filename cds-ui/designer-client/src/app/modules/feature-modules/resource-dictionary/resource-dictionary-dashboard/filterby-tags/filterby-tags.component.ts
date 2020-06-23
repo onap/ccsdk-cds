@@ -23,78 +23,78 @@ import { DictionaryModel, DictionaryPage } from '../../model/dictionary.model';
 import { DictionaryStore } from '../../dictionary.store';
 
 @Component({
-  selector: 'app-filterby-tags',
-  templateUrl: './filterby-tags.component.html',
-  styleUrls: ['./filterby-tags.component.css']
+    selector: 'app-filterby-tags',
+    templateUrl: './filterby-tags.component.html',
+    styleUrls: ['./filterby-tags.component.css']
 })
 export class FilterbyTagsComponent implements OnInit {
-  page: DictionaryPage;
-  tags: string[] = [];
-  viewedTags: string[] = [];
-  searchTag = '';
-  viewedDictionary: DictionaryModel[] = [];
-  private checkBoxTages = '';
-  currentPage = 0;
+    page: DictionaryPage;
+    tags: string[] = [];
+    viewedTags: string[] = [];
+    searchTag = '';
+    viewedDictionary: DictionaryModel[] = [];
+    checkBoxTages = '';
+    currentPage = 0;
 
-  constructor(private dictionaryStore: DictionaryStore) {
-      this.dictionaryStore.state$.subscribe(state => {
-          console.log(state);
-          if (state.page) {
-              this.viewedDictionary = state.page.content;
-              this.tags = [];
-              if (state.currentPage !== this.currentPage) {
-                  this.checkBoxTages = '';
-                  this.currentPage = state.currentPage;
-              }
-              this.viewedDictionary.forEach(element => {
-                  element.tags.split(',').forEach(tag => {
-                      this.tags.push(tag.trim());
-                  });
-                  this.tags.push('All');
-                  this.tags = this.tags.filter((value, index, self) => self.indexOf(value) === index);
-                  this.assignTags();
-              });
-          }
-      });
-  }
+    constructor(private dictionaryStore: DictionaryStore) {
+        this.dictionaryStore.state$.subscribe(state => {
+            console.log(state);
+            if (state.page) {
+                this.viewedDictionary = state.page.content;
+                this.tags = [];
+                if (state.currentPage !== this.currentPage) {
+                    this.checkBoxTages = '';
+                    this.currentPage = state.currentPage;
+                }
+                this.viewedDictionary.forEach(element => {
+                    element.tags.split(',').forEach(tag => {
+                        this.tags.push(tag.trim());
+                    });
+                    this.tags.push('All');
+                    this.tags = this.tags.filter((value, index, self) => self.indexOf(value) === index);
+                    this.assignTags();
+                });
+            }
+        });
+    }
 
-  ngOnInit() {
+    ngOnInit() {
 
-  }
+    }
 
-  reloadChanges(event: any) {
-      this.searchTag = event.target.value;
-      this.filterItem(this.searchTag);
-  }
+    reloadChanges(event: any) {
+        this.searchTag = event.target.value;
+        this.filterItem(this.searchTag);
+    }
 
-  private assignTags() {
-      this.viewedTags = this.tags;
-  }
+    private assignTags() {
+        this.viewedTags = this.tags;
+    }
 
-  private filterItem(value) {
-      if (!value) {
-          this.assignTags();
-      }
-      this.viewedTags = this.tags.filter(
-          item => item.toLowerCase().indexOf(value.toLowerCase()) > -1
-      );
-  }
+    private filterItem(value) {
+        if (!value) {
+            this.assignTags();
+        }
+        this.viewedTags = this.tags.filter(
+            item => item.toLowerCase().indexOf(value.toLowerCase()) > -1
+        );
+    }
 
-  reloadDictionary(event: any) {
-      if (!event.target.checked) {
-          this.checkBoxTages = this.checkBoxTages.replace(event.target.id + ',', '')
-              .replace(event.target.id, '');
-      } else {
-          this.checkBoxTages += event.target.id.trim() + ',';
-      }
-      const tagsSelected = this.checkBoxTages.split(',').filter(item => {
-          if (item) {
-              return true;
-          }
-      }).map((item) => {
-          return item.trim();
-      });
-      this.dictionaryStore.filterByTags(tagsSelected);
-  }
+    reloadDictionary(event: any) {
+        if (!event.target.checked) {
+            this.checkBoxTages = this.checkBoxTages.replace(event.target.id + ',', '')
+                .replace(event.target.id, '');
+        } else {
+            this.checkBoxTages += event.target.id.trim() + ',';
+        }
+        const tagsSelected = this.checkBoxTages.split(',').filter(item => {
+            if (item) {
+                return true;
+            }
+        }).map((item) => {
+            return item.trim();
+        });
+        this.dictionaryStore.filterByTags(tagsSelected);
+    }
 
 }

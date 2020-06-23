@@ -49,8 +49,8 @@ import { isDefined } from '@angular/compiler/src/util';
 })
 export class DesignerComponent implements OnInit, OnDestroy {
 
-  private controllerSideBar: boolean;
-  private attributesSideBar: boolean;
+  controllerSideBar: boolean;
+  attributesSideBar: boolean;
   functionAttributeSidebar: boolean;
   viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
   customActionName: string;
@@ -62,31 +62,32 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
   paletteGraph: joint.dia.Graph;
   palettePaper: joint.dia.Paper;
-  private ngUnsubscribe = new Subject();
-  private opt = { tx: 100, ty: 100 };
+  ngUnsubscribe = new Subject();
+  opt = { tx: 100, ty: 100 };
 
-  constructor(private designerStore: DesignerStore,
-              private functionStore: FunctionsStore,
-              private graphUtil: GraphUtil,
-              private graphGenerator: GraphGenerator,
-              private route: ActivatedRoute,
-              private designerService: DesignerService) {
+  constructor(
+    private designerStore: DesignerStore,
+    private functionStore: FunctionsStore,
+    private graphUtil: GraphUtil,
+    private graphGenerator: GraphGenerator,
+    private route: ActivatedRoute,
+    private designerService: DesignerService) {
     this.controllerSideBar = true;
     this.attributesSideBar = false;
     this.showAction = false;
     this.functionAttributeSidebar = false;
 
   }
-  private _toggleSidebar1() {
+  _toggleSidebar1() {
     this.controllerSideBar = !this.controllerSideBar;
     if (this.controllerSideBar === false) {
       this.cl = 'editBar2';
-   }
+    }
     if (this.controllerSideBar === true) {
-    this.cl = 'editBar';
-   }
+      this.cl = 'editBar';
+    }
   }
-  private _toggleSidebar2() {
+  _toggleSidebar2() {
     this.attributesSideBar = !this.attributesSideBar;
   }
   // private _toggleSidebar3() {
@@ -164,7 +165,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
            * auto arrange elements in graph
            * https://resources.jointjs.com/docs/jointjs/v3.1/joint.html#layout.DirectedGraph
            */
-          joint.layout.DirectedGraph.layout( this.boardGraph.getCells(), {
+          joint.layout.DirectedGraph.layout(this.boardGraph.getCells(), {
             dagre,
             graphlib,
             setLinkVertices: false,
@@ -203,17 +204,17 @@ export class DesignerComponent implements OnInit, OnDestroy {
       console.log('initializeBoard...');
       this.boardGraph = new joint.dia.Graph();
       this.boardPaper = new joint.dia.Paper({
-          el: $('#board-paper'),
-          model: this.boardGraph,
-          // height: 720,
-          // width: 1100,
-          gridSize: 10,
-          drawGrid: true,
-          // background: {
-          //   color: 'rgba(0, 255, 0, 0.3)'
-          // },
-          cellViewNamespace: joint.shapes
-        });
+        el: $('#board-paper'),
+        model: this.boardGraph,
+        // height: 720,
+        // width: 1100,
+        gridSize: 10,
+        drawGrid: true,
+        // background: {
+        //   color: 'rgba(0, 255, 0, 0.3)'
+        // },
+        cellViewNamespace: joint.shapes
+      });
 
       this.boardPaper.on('all', element => {
         // console.log(element);
@@ -273,13 +274,13 @@ export class DesignerComponent implements OnInit, OnDestroy {
       $('body').append(`
         <div id="flyPaper"
             style="position:fixed;z-index:100;opacity:.7;pointer-event:none;background-color: transparent !important;"></div>`
-        );
+      );
       const flyGraph = new joint.dia.Graph();
       const flyPaper = new joint.dia.Paper({
-          el: $('#flyPaper'),
-          model: flyGraph,
-          interactive: true
-        });
+        el: $('#flyPaper'),
+        model: flyGraph,
+        interactive: true
+      });
       const flyShape = draggedCell.model.clone();
       const pos = draggedCell.model.position();
       const offset = {
@@ -312,15 +313,15 @@ export class DesignerComponent implements OnInit, OnDestroy {
           // step name is CDS realted terminology, please refer to tosca types
           const stepName = functionType;
           const functionElementForBoard = this.graphUtil.dropFunctionOverActionWithPosition(
-              stepName, functionType,
-              mouseupX, mouseupY,
-              target, offset,
-              this.boardGraph);
+            stepName, functionType,
+            mouseupX, mouseupY,
+            target, offset,
+            this.boardGraph);
 
           const parentCell = this.graphUtil.getParent(functionElementForBoard, this.boardPaper);
 
           if (parentCell &&
-              parentCell.model.attributes.type === ActionElementTypeName &&
+            parentCell.model.attributes.type === ActionElementTypeName &&
             this.graphUtil.canEmpedMoreChildern(parentCell.model, this.boardGraph)) {
 
             if (this.graphUtil.isEmptyParent(parentCell.model)) {

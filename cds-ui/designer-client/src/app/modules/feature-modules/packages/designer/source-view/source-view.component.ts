@@ -17,16 +17,17 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
 
     content = '';
     lang = 'json';
-    private controllerSideBar: boolean;
-    private ngUnsubscribe = new Subject();
+    controllerSideBar: boolean;
+    ngUnsubscribe = new Subject();
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     public customActionName = '';
 
-    constructor(private store: DesignerStore,
-                private packageCreationUtils: PackageCreationUtils,
-                private router: Router,
-                private route: ActivatedRoute,
-                private sourceViewService: SourceViewService) {
+    constructor(
+        private store: DesignerStore,
+        private packageCreationUtils: PackageCreationUtils,
+        private router: Router,
+        private route: ActivatedRoute,
+        private sourceViewService: SourceViewService) {
         this.controllerSideBar = true;
     }
 
@@ -50,7 +51,7 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
         // TODO validate json against scheme
         console.log('convertAndOpenInDesingerView ...', this.content);
         this.store.saveSourceContent(this.content);
-        this.router.navigate(['/packages/designer', id, {actionName: this.customActionName}]);
+        this.router.navigate(['/packages/designer', id, { actionName: this.customActionName }]);
     }
 
     ngOnDestroy() {

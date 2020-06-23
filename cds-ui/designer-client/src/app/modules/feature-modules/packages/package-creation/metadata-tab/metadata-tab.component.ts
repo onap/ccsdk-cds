@@ -20,8 +20,8 @@ export class MetadataTabComponent implements OnInit {
     /*  {name: 'Scripting Mode', style: 'mode-icon icon-topologySource'},
       {name: 'Generic Script Mode', style: 'mode-icon icon-topologySource'}];*/
     modeType = this.modes[0].name;
-    private metaDataTab: MetaDataTabModel = new MetaDataTabModel();
-    private errorMessage: string;
+    metaDataTab: MetaDataTabModel = new MetaDataTabModel();
+    errorMessage: string;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
 
     constructor(

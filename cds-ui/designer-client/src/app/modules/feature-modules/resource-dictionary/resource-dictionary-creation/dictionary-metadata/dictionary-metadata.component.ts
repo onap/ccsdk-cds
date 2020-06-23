@@ -25,22 +25,22 @@ import { DictionaryCreationStore } from '../dictionary-creation.store';
 import { MetaData } from '../../model/metaData.model';
 
 @Component({
-  selector: 'app-dictionary-metadata',
-  templateUrl: './dictionary-metadata.component.html',
-  styleUrls: ['./dictionary-metadata.component.css']
+    selector: 'app-dictionary-metadata',
+    templateUrl: './dictionary-metadata.component.html',
+    styleUrls: ['./dictionary-metadata.component.css']
 })
 export class DictionaryMetadataComponent implements OnInit {
-  packageNameAndVersionEnables = true;
+    packageNameAndVersionEnables = true;
     counter = 0;
     tags = new Set<string>();
-    private metaDataTab: MetaData = new MetaData();
-    private errorMessage: string;
+    metaDataTab: MetaData = new MetaData();
+    errorMessage: string;
 
     constructor(
         private route: ActivatedRoute,
         private dictionaryCreationService: DictionaryCreationService,
         private dictionaryCreationStore: DictionaryCreationStore
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.dictionaryCreationStore.state$.subscribe(element => {

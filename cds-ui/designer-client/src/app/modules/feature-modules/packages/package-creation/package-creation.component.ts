@@ -19,18 +19,18 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FilesContent, FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FilesContent, FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
 
 import * as JSZip from 'jszip';
-import {PackageCreationStore} from './package-creation.store';
-import {Definition} from './mapping-models/CBAPacakge.model';
-import {PackageCreationModes} from './creationModes/PackageCreationModes';
-import {PackageCreationBuilder} from './creationModes/PackageCreationBuilder';
-import {PackageCreationUtils} from './package-creation.utils';
-import {MetadataTabComponent} from './metadata-tab/metadata-tab.component';
-import {Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+import { PackageCreationStore } from './package-creation.store';
+import { Definition } from './mapping-models/CBAPacakge.model';
+import { PackageCreationModes } from './creationModes/PackageCreationModes';
+import { PackageCreationBuilder } from './creationModes/PackageCreationBuilder';
+import { PackageCreationUtils } from './package-creation.utils';
+import { MetadataTabComponent } from './metadata-tab/metadata-tab.component';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -43,27 +43,28 @@ export class PackageCreationComponent implements OnInit {
     // adding initial referencing to designer mode
 
 
-    constructor(private packageCreationStore: PackageCreationStore,
-                private packageCreationUtils: PackageCreationUtils,
-                private router: Router,
-                private toastService: ToastrService) {
+    constructor(
+        private packageCreationStore: PackageCreationStore,
+        private packageCreationUtils: PackageCreationUtils,
+        private router: Router,
+        private toastService: ToastrService) {
     }
 
     counter = 0;
     modes: object[] = [
-        {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
-        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}];
-    private metaDataTab: MetaDataTabModel = new MetaDataTabModel();
-    private folder: FolderNodeElement = new FolderNodeElement();
-    private zipFile: JSZip = new JSZip();
-    private filesData: any = [];
-    private definition: Definition = new Definition();
+        { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' },
+        { name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode' }];
+    metaDataTab: MetaDataTabModel = new MetaDataTabModel();
+    folder: FolderNodeElement = new FolderNodeElement();
+    zipFile: JSZip = new JSZip();
+    filesData: any = [];
+    definition: Definition = new Definition();
 
-    @ViewChild(MetadataTabComponent, {static: false})
-    private metadataTabComponent: MetadataTabComponent;
+    @ViewChild(MetadataTabComponent, { static: false })
+    metadataTabComponent: MetadataTabComponent;
 
-    @ViewChild('nameit', {static: true})
-    private elementRef: ElementRef;
+    @ViewChild('nameit', { static: true })
+    elementRef: ElementRef;
 
     ngOnInit() {
         this.elementRef.nativeElement.focus();
@@ -89,7 +90,7 @@ export class PackageCreationComponent implements OnInit {
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({type: 'blob'})
+        this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
                 this.packageCreationStore.saveBluePrint(blob).subscribe(
                     bluePrintDetailModels => {
@@ -99,7 +100,7 @@ export class PackageCreationComponent implements OnInit {
                             this.router.navigate(['/packages/package/' + id]);
                         }
                     }, error => {
-                       // this.toastService.error('error happened when editing ' + error.message);
+                        // this.toastService.error('error happened when editing ' + error.message);
                         console.log('Error -' + error.message);
                     });
             });

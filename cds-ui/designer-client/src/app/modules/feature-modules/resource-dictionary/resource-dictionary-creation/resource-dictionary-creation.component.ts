@@ -36,20 +36,21 @@ export class ResourceDictionaryCreationComponent implements OnInit {
   }
 
   modes: object[] = [
-    {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
-    {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}
+    { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' },
+    { name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode' }
   ];
 
-  private metaDataTab: DictionaryModel = new DictionaryModel();
-  private definition: Definition = new Definition();
+  metaDataTab: DictionaryModel = new DictionaryModel();
+  definition: Definition = new Definition();
+  createDate = '';
 
-  @ViewChild(DictionaryMetadataComponent, {static: false})
+  @ViewChild(DictionaryMetadataComponent, { static: false })
   private metadataTabComponent: DictionaryMetadataComponent;
 
-  @ViewChild(SourcesTemplateComponent, {static: false})
+  @ViewChild(SourcesTemplateComponent, { static: false })
   private sourcesTemplateComponent: SourcesTemplateComponent;
 
-  @ViewChild('nameit', {static: true})
+  @ViewChild('nameit', { static: true })
   private elementRef: ElementRef;
 
   ngOnInit() {
