@@ -56,6 +56,7 @@ export class ConfigurationDashboardComponent implements OnInit {
                 if (bluePrintDetailModels) {
                     this.viewedPackage = bluePrintDetailModels[0];
                     this.downloadCBAPackage(bluePrintDetailModels);
+                    this.packageCreationStore.clear();
                 }
             });
     }
@@ -183,6 +184,7 @@ export class ConfigurationDashboardComponent implements OnInit {
 
 
     create() {
+        this.zipFile = new JSZip();
         FilesContent.getMapOfFilesNamesAndContent().forEach((value, key) => {
             this.zipFile.folder(key.split('/')[0]);
             this.zipFile.file(key, value);
