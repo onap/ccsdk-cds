@@ -1,12 +1,12 @@
 <div class="row template-mapping-action">
     <div class="col">
         <h6 [hidden]="edit" class="create-title">Create Template</h6>
-        <button (click)="closeCreationForm()" [hidden]="!edit" class="btn btn-outline-secondary"><i
+        <button (click)="openListView()" [hidden]="!edit" class="btn btn-outline-secondary"><i
                 class="fa fa-chevron-left mr-2"></i>Template List</button>
     </div>
     <div class="col text-right">
 
-        <button data-toggle="modal" [hidden]="!edit" (click)="initDelete()" data-target="#templateDeletionModal2"
+        <button data-toggle="modal" [hidden]="!edit" data-target="#templateDeletionModal2"
             class="btn btn-outline-danger" title="Delete Template">Delete</button>
 
 
