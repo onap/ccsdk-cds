@@ -1,4 +1,3 @@
-<<<<<<< HEAD   (ba4a47 Merge "cmd-exec server-side timeout." into frankfurt)
 /*
  * Copyright © 2018-2019 AT&T Intellectual Property.
  *
@@ -46,9 +45,9 @@ import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 @Service
-open class HazlecastClusterService : BluePrintClusterService {
+open class HazelcastClusterService : BluePrintClusterService {
 
-    private val log = logger(HazlecastClusterService::class)
+    private val log = logger(HazelcastClusterService::class)
     lateinit var hazelcast: HazelcastInstance
     lateinit var cpSubsystemManagementService: CPSubsystemManagementService
     var joinedClient = false
@@ -134,7 +133,7 @@ open class HazlecastClusterService : BluePrintClusterService {
     }
 
     override fun clusterJoined(): Boolean {
-        return hazelcast.lifecycleService.isRunning
+        return ::hazelcast.isInitialized && hazelcast.lifecycleService.isRunning
     }
 
     override suspend fun masterMember(partitionGroup: String): ClusterMember {
@@ -180,14 +179,14 @@ open class HazlecastClusterService : BluePrintClusterService {
     override suspend fun shutDown(duration: Duration) {
         if (::hazelcast.isInitialized && clusterJoined()) {
             delay(duration.toMillis())
-            HazlecastClusterUtils.terminate(hazelcast)
+            HazelcastClusterUtils.terminate(hazelcast)
         }
     }
 
     /** Utils */
     suspend fun promoteAsCPMember(hazelcastInstance: HazelcastInstance) {
         if (!joinedClient && !joinedLite) {
-            HazlecastClusterUtils.promoteAsCPMember(hazelcastInstance)
+            HazelcastClusterUtils.promoteAsCPMember(hazelcastInstance)
         }
     }
 
@@ -226,49 +225,46 @@ open class BlueprintsClusterMembershipListener() :
 open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val name: String) : ClusterLock {
     private val log = logger(ClusterLockImpl::class)
 
-    lateinit var distributedLock: FencedLock
+    private val distributedLock: FencedLock = hazelcast.cpSubsystem.getLock(name)
 
     override fun name(): String {
         return distributedLock.name
     }
 
     override suspend fun lock() {
-        distributedLock = hazelcast.cpSubsystem.getLock(name)
         distributedLock.lock()
         log.trace("Cluster lock($name) created..")
     }
 
     override suspend fun tryLock(timeout: Long): Boolean {
-        distributedLock = hazelcast.cpSubsystem.getLock(name)
         return distributedLock.tryLock(timeout, TimeUnit.MILLISECONDS)
+                .also { if (it) log.trace("Cluster lock acquired: $name")
+                    else log.trace("Failed to acquire Cluster lock $name within timeout $timeout") }
     }
 
     override suspend fun unLock() {
-        // Added condition to avoid failures like - "Current thread is not owner of the lock!"
-        if (distributedLock.isLockedByCurrentThread) {
-            distributedLock.unlock()
-            log.trace("Cluster unlock(${name()}) successfully..")
-        }
+        distributedLock.unlock()
+        log.trace("Cluster unlock(${name()}) successfully..")
     }
 
     override fun isLocked(): Boolean {
         return distributedLock.isLocked
     }
 
+    override fun isLockedByCurrentThread(): Boolean {
+        return distributedLock.isLockedByCurrentThread
+    }
+
     override suspend fun fenceLock(): String {
-        distributedLock = hazelcast.cpSubsystem.getLock(name)
         val fence = distributedLock.lockAndGetFence()
         log.trace("Cluster lock($name) fence($fence) created..")
         return fence.toString()
     }
 
     override suspend fun tryFenceLock(timeout: Long): String {
-        distributedLock = hazelcast.cpSubsystem.getLock(name)
         return distributedLock.tryLockAndGetFence(timeout, TimeUnit.MILLISECONDS).toString()
     }
 
     override fun close() {
     }
 }
-=======
->>>>>>> CHANGE (42b3d8 Fix hazelcast issues)
