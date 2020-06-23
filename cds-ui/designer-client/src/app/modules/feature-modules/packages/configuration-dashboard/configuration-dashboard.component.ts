@@ -1,20 +1,21 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
-import {PackageCreationStore} from '../package-creation/package-creation.store';
-import {FilesContent, FolderNodeElement, MetaDataTabModel} from '../package-creation/mapping-models/metadata/MetaDataTab.model';
-import {MetadataTabComponent} from '../package-creation/metadata-tab/metadata-tab.component';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
+import { PackageCreationStore } from '../package-creation/package-creation.store';
+import { FilesContent, FolderNodeElement, MetaDataTabModel } from '../package-creation/mapping-models/metadata/MetaDataTab.model';
+import { MetadataTabComponent } from '../package-creation/metadata-tab/metadata-tab.component';
 import * as JSZip from 'jszip';
-import {ConfigurationDashboardService} from './configuration-dashboard.service';
-import {VlbDefinition} from '../package-creation/mapping-models/definitions/VlbDefinition';
-import {DslDefinition} from '../package-creation/mapping-models/CBAPacakge.model';
-import {PackageCreationUtils} from '../package-creation/package-creation.utils';
-import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
-import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
-import {saveAs} from 'file-saver';
-import {DesignerStore} from '../designer/designer.store';
-import {DesignerService} from '../designer/designer.service';
-import {ToastrService} from 'ngx-toastr';
+import { ConfigurationDashboardService } from './configuration-dashboard.service';
+import { VlbDefinition } from '../package-creation/mapping-models/definitions/VlbDefinition';
+import { DslDefinition } from '../package-creation/mapping-models/CBAPacakge.model';
+import { PackageCreationUtils } from '../package-creation/package-creation.utils';
+import { PackageCreationModes } from '../package-creation/creationModes/PackageCreationModes';
+import { PackageCreationBuilder } from '../package-creation/creationModes/PackageCreationBuilder';
+import { saveAs } from 'file-saver';
+import { DesignerStore } from '../designer/designer.store';
+import { DesignerService } from '../designer/designer.service';
+import { ToastrService } from 'ngx-toastr';
+import { NgxFileDropEntry } from 'ngx-file-drop';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -23,28 +24,30 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class ConfigurationDashboardComponent implements OnInit {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
-    @ViewChild(MetadataTabComponent, {static: false})
-    private metadataTabComponent: MetadataTabComponent;
+    @ViewChild(MetadataTabComponent, { static: false })
+    metadataTabComponent: MetadataTabComponent;
     public customActionName = '';
 
     entryDefinitionKeys: string[] = ['template_tags', 'user-groups',
         'author-email', 'template_version', 'template_name', 'template_author', 'template_description'];
-    @ViewChild('nameit', {static: true})
-    private elementRef: ElementRef;
+    @ViewChild('nameit', { static: true })
+    elementRef: ElementRef;
+    uploadedFiles = [];
+    zipFile: JSZip = new JSZip();
+    filesData: any = [];
+    folder: FolderNodeElement = new FolderNodeElement();
 
-    private zipFile: JSZip = new JSZip();
-    private filesData: any = [];
-    private folder: FolderNodeElement = new FolderNodeElement();
+    currentBlob = new Blob();
 
-    private currentBlob = new Blob();
-
-    constructor(private route: ActivatedRoute, private configurationDashboardService: ConfigurationDashboardService,
-                private packageCreationStore: PackageCreationStore,
-                private packageCreationUtils: PackageCreationUtils,
-                private router: Router,
-                private designerStore: DesignerStore,
-                private designerService: DesignerService,
-                private toastService: ToastrService
+    constructor(
+        private route: ActivatedRoute,
+        private configurationDashboardService: ConfigurationDashboardService,
+        private packageCreationStore: PackageCreationStore,
+        private packageCreationUtils: PackageCreationUtils,
+        private router: Router,
+        private designerStore: DesignerStore,
+        private designerService: DesignerService,
+        private toastService: ToastrService
     ) {
     }
 
@@ -65,39 +68,39 @@ export class ConfigurationDashboardComponent implements OnInit {
     private downloadCBAPackage(bluePrintDetailModels: BluePrintDetailModel) {
         this.configurationDashboardService.downloadResource(
             bluePrintDetailModels[0].artifactName + '/' + bluePrintDetailModels[0].artifactVersion).subscribe(response => {
-            const blob = new Blob([response], {type: 'application/octet-stream'});
-            this.currentBlob = blob;
-            this.zipFile.loadAsync(blob).then((zip) => {
-                Object.keys(zip.files).forEach((filename) => {
-                    zip.files[filename].async('string').then((fileData) => {
-                        if (fileData) {
-                            if (filename.includes('Scripts/')) {
-                                this.setScripts(filename, fileData);
-                            } else if (filename.includes('Templates/')) {
-                                if (filename.includes('-mapping.')) {
-                                    this.setMapping(filename, fileData);
-                                } else if (filename.includes('-template.')) {
-                                    this.setTemplates(filename, fileData);
-                                }
+                const blob = new Blob([response], { type: 'application/octet-stream' });
+                this.currentBlob = blob;
+                this.zipFile.loadAsync(blob).then((zip) => {
+                    Object.keys(zip.files).forEach((filename) => {
+                        zip.files[filename].async('string').then((fileData) => {
+                            if (fileData) {
+                                if (filename.includes('Scripts/')) {
+                                    this.setScripts(filename, fileData);
+                                } else if (filename.includes('Templates/')) {
+                                    if (filename.includes('-mapping.')) {
+                                        this.setMapping(filename, fileData);
+                                    } else if (filename.includes('-template.')) {
+                                        this.setTemplates(filename, fileData);
+                                    }
 
-                            } else if (filename.includes('Definitions/')) {
-                                this.setImports(filename, fileData, bluePrintDetailModels);
-                            } else if (filename.includes('TOSCA-Metadata/')) {
-                                const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
-                                this.setMetaData(metaDataTabInfo, bluePrintDetailModels[0]);
+                                } else if (filename.includes('Definitions/')) {
+                                    this.setImports(filename, fileData, bluePrintDetailModels);
+                                } else if (filename.includes('TOSCA-Metadata/')) {
+                                    const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
+                                    this.setMetaData(metaDataTabInfo, bluePrintDetailModels[0]);
+                                }
                             }
-                        }
+                        });
                     });
                 });
             });
-        });
     }
 
-    private setScripts(filename: string, fileData: any) {
+    setScripts(filename: string, fileData: any) {
         this.packageCreationStore.addScripts(filename, fileData);
     }
 
-    private setImports(filename: string, fileData: any, bluePrintDetailModels: BluePrintDetailModel) {
+    setImports(filename: string, fileData: any, bluePrintDetailModels: BluePrintDetailModel) {
         if (filename.includes(bluePrintDetailModels[0].artifactName)) {
             let definition = new VlbDefinition();
             definition = fileData as VlbDefinition;
@@ -121,11 +124,11 @@ export class ConfigurationDashboardComponent implements OnInit {
         }
     }
 
-    private setTemplates(filename: string, fileData: any) {
+    setTemplates(filename: string, fileData: any) {
         this.packageCreationStore.addTemplate(filename, fileData);
     }
 
-    private setMapping(fileName: string, fileData: string) {
+    setMapping(fileName: string, fileData: string) {
         this.packageCreationStore.addMapping(fileName, fileData);
     }
 
@@ -143,7 +146,7 @@ export class ConfigurationDashboardComponent implements OnInit {
             });
     }
 
-    private setMetaData(metaDataObject: MetaDataTabModel, bluePrintDetailModel: BluePrintDetailModel) {
+    setMetaData(metaDataObject: MetaDataTabModel, bluePrintDetailModel: BluePrintDetailModel) {
         metaDataObject.description = bluePrintDetailModel.artifactDescription;
         this.packageCreationStore.changeMetaData(metaDataObject);
 
@@ -166,7 +169,7 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({type: 'blob'})
+        this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
                 this.packageCreationStore.saveBluePrint(blob).subscribe(
                     bluePrintDetailModels => {
@@ -198,7 +201,7 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     downloadPackage(artifactName: string, artifactVersion: string) {
         this.configurationDashboardService.downloadResource(artifactName + '/' + artifactVersion).subscribe(response => {
-            const blob = new Blob([response], {type: 'application/octet-stream'});
+            const blob = new Blob([response], { type: 'application/octet-stream' });
             saveAs(blob, artifactName + '-' + artifactVersion + '-CBA.zip');
         });
     }
@@ -221,6 +224,17 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     goToDesignerMode(id) {
         //  this.designerService.setActionName(this.customActionName);
-        this.router.navigate(['/packages/designer', id, {actionName: this.customActionName}]);
+        this.router.navigate(['/packages/designer', id, { actionName: this.customActionName }]);
+    }
+
+    public dropped(files: NgxFileDropEntry[]) {
+
+    }
+    public fileOver(event) {
+        console.log(event);
+    }
+
+    public fileLeave(event) {
+        console.log(event);
     }
 }

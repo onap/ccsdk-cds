@@ -25,8 +25,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dictionary-editor.component.css']
 })
 export class DictionaryEditorComponent implements OnInit {
+  text = '';
   constructor() {
-   }
+  }
 
   ngOnInit() {
   }

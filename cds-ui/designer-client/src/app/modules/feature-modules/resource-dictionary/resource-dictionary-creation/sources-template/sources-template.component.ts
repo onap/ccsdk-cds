@@ -17,7 +17,7 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SourcesStore } from './sources.store';
 
@@ -36,13 +36,15 @@ export class SourcesTemplateComponent implements OnInit {
   selectItem: boolean;
   ddSource = [];
   checked: boolean;
+  searchText = '';
+  text = '';
   selectedArray = [];
   constructor(private sourcesStore: SourcesStore) {
     this.sourcesStore.state$.subscribe(sources => {
       this.sources = sources.sources;
       for (const key in this.sources) {
         if (key) {
-          const sourceObj = { name: key, value: JSON.stringify(this.sources[key] )};
+          const sourceObj = { name: key, value: JSON.stringify(this.sources[key]) };
           this.option.push(sourceObj);
         }
       }
@@ -58,27 +60,27 @@ export class SourcesTemplateComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-      this.ddSource = [];
-      if (event.previousContainer === event.container) {
-         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      } else {
-         transferArrayItem(event.previousContainer.data,
-            event.container.data,
-            event.previousIndex,
-            event.currentIndex);
-      }
+    this.ddSource = [];
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
 
-      for (const key2 in this.sources) {
-        if (key2) {
-          const originalSources = this.sourcesOptions;
-          for (const key of originalSources) {
-            if (key.name === key2) {
-              const obj = `{${key.name}: ${key.value}}`;
-              this.ddSource.push(obj);
-            }
+    for (const key2 in this.sources) {
+      if (key2) {
+        const originalSources = this.sourcesOptions;
+        for (const key of originalSources) {
+          if (key.name === key2) {
+            const obj = `{${key.name}: ${key.value}}`;
+            this.ddSource.push(obj);
           }
         }
       }
+    }
   }
 
   searchDictionary(event: any) {
@@ -98,9 +100,9 @@ export class SourcesTemplateComponent implements OnInit {
     const editedData = JSON.parse(event);
     const originalSources = this.sources;
     for (const key in originalSources) {
-        if (key === item.name) {
-          this.sources[key] = editedData;
-        }
+      if (key === item.name) {
+        this.sources[key] = editedData;
+      }
     }
     this.option = [];
     this.sourcesStore.changeSources(this.sources);

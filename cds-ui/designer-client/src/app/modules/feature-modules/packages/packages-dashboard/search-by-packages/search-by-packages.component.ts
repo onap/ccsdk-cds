@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {PackagesStore} from '../../packages.store';
+import { Component, OnInit } from '@angular/core';
+import { PackagesStore } from '../../packages.store';
 
 @Component({
     selector: 'app-packages-search',
@@ -8,7 +8,7 @@ import {PackagesStore} from '../../packages.store';
 })
 export class PackagesSearchComponent implements OnInit {
 
-    private searchQuery = '';
+    searchQuery = '';
 
     constructor(private packagesStore: PackagesStore) {
     }

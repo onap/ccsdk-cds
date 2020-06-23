@@ -8,7 +8,7 @@
                     <ul class="breadcrumb-header">
                         <li><a routerLink="/packages">CBA Packages</a></li>
                         <i class="fa fa-angle-right ml-2 mr-2"></i>
-                        <li>{{viewedPackage.artifactName}}</li> 
+                        <li>{{viewedPackage.artifactName}}</li>
                     </ul>
                 </h2>
                 <div class="col">
@@ -22,8 +22,8 @@
             <div class="container">
                 <div class="creat-action-container">
 
-                    <a class="action-button save" (click)="editBluePrint()" >
-                        <i class="icon-save-sm" aria-hidden="true" ></i>
+                    <a class="action-button save" (click)="editBluePrint()">
+                        <i class="icon-save-sm" aria-hidden="true"></i>
                         <span>Save</span>
                     </a>
                     <a href="#" class="action-button" (click)="goBacktoDashboard()">
@@ -43,7 +43,7 @@
                     </a>
 
                     <a class="action-button"
-                       (click)="downloadPackage(viewedPackage.artifactName,viewedPackage.artifactVersion)">
+                        (click)="downloadPackage(viewedPackage.artifactName,viewedPackage.artifactVersion)">
                         <i class="icon-download" aria-hidden="true"></i>
                         <span>Download</span>
                     </a>
@@ -83,19 +83,19 @@
                                     <ul class="package-contributers">
                                         <li>
                                             <button type="button" class="border-fade" data-toggle="tooltip"
-                                                    data-placement="bottom" title="User name">
+                                                data-placement="bottom" title="User name">
                                                 <img src="/assets/img/img-user1.jpeg">
                                             </button>
                                         </li>
                                         <li>
                                             <button type="button" data-toggle="tooltip" data-placement="bottom"
-                                                    title="User name">
+                                                title="User name">
                                                 <img src="/assets/img/img-user2.jpg">
                                             </button>
                                         </li>
                                         <li>
                                             <button type="button" data-toggle="tooltip" data-placement="bottom"
-                                                    title="User name">
+                                                title="User name">
                                                 <img src="/assets/img/img-user3.jpg">
                                             </button>
                                         </li>
@@ -138,7 +138,8 @@
                                                             <div class="row">
                                                                 <!--Custom Action-->
                                                                 <div class="col-3 d-flex">
-                                                                    <a class="d-flex" data-target="#carouselExampleIndicators"
+                                                                    <a class="d-flex"
+                                                                        data-target="#carouselExampleIndicators"
                                                                         data-slide-to="1">
                                                                         <div class="card actionType custom">
                                                                             <div class="card-body">
@@ -155,7 +156,8 @@
                                                                 </div>
                                                                 <!--Default Action-->
                                                                 <div class="col-3 d-flex">
-                                                                    <a class="d-flex" data-target="#carouselExampleIndicators"
+                                                                    <a class="d-flex"
+                                                                        data-target="#carouselExampleIndicators"
                                                                         data-slide-to="2">
                                                                         <div class="card actionType default">
                                                                             <div class="card-body">
@@ -173,7 +175,8 @@
                                                                 </div>
                                                                 <!--Recent Action-->
                                                                 <div class="col-3 d-flex">
-                                                                    <a class="d-flex" data-target="#carouselExampleIndicators"
+                                                                    <a class="d-flex"
+                                                                        data-target="#carouselExampleIndicators"
                                                                         data-slide-to="3">
                                                                         <div class="card actionType recent">
                                                                             <div class="card-body">
@@ -192,7 +195,8 @@
                                                                 </div>
                                                                 <!--Import Action-->
                                                                 <div class="col-3 d-flex">
-                                                                    <a class="d-flex" data-target="#carouselExampleIndicators"
+                                                                    <a class="d-flex"
+                                                                        data-target="#carouselExampleIndicators"
                                                                         data-slide-to="4">
                                                                         <div class="card actionType import">
                                                                             <div class="card-body">
@@ -209,7 +213,9 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col text-center">
-                                                                    <button class="btn skip-btn" (click)="goToDesignerMode(viewedPackage.id)">Skip to Designer Canvas</button>
+                                                                    <button class="btn skip-btn"
+                                                                        (click)="goToDesignerMode(viewedPackage.id)">Skip
+                                                                        to Designer Canvas</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -220,9 +226,12 @@
                                                                     class="icon-action-back"></i></button>
                                                             <h1>Create Custom Action</h1>
                                                             <div class="form-group text-center">
-                                                                <input type="text" [(ngModel)]="customActionName" class="form-control customAction"
+                                                                <input type="text" [(ngModel)]="customActionName"
+                                                                    class="form-control customAction"
                                                                     placeholder="Type Action Name" autofocus>
-                                                                <button type="button" (click)="goToDesignerMode(viewedPackage.id)" class="btn submit">Start</button>
+                                                                <button type="button"
+                                                                    (click)="goToDesignerMode(viewedPackage.id)"
+                                                                    class="btn submit">Start</button>
                                                             </div>
 
                                                         </div>
@@ -392,7 +401,8 @@
                                                                 <div class="row">
                                                                     <div class="col text-center">
                                                                         <p class="selectedActions">0 selected</p>
-                                                                        <button type="button" (click)="goToDesignerMode(viewedPackage.id)"
+                                                                        <button type="button"
+                                                                            (click)="goToDesignerMode(viewedPackage.id)"
                                                                             class="btn submit">Start</button>
                                                                     </div>
                                                                 </div>
@@ -661,17 +671,17 @@
                     <div class="col">
                         <div class="nav nav-tabs " id="nav-tab" role="tablist">
                             <a class="nav-item nav-link active complete" id="nav-metadata-tab" data-toggle="tab"
-                               href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="true"
-                               autofocus #nameit (focusout)="saveMetaData()">METADATA</a>
+                                href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="true"
+                                autofocus #nameit (focusout)="saveMetaData()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
-                               role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
+                                role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
                             <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
-                               role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
+                                role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
                             <a class="nav-item nav-link" id="nav-imports-tab" data-toggle="tab" href="#nav-imports"
-                               role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a>
+                                role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a>
                             <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab"
-                               href="#nav-authentication" role="tab" aria-controls="nav-authentication"
-                               aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
+                                href="#nav-authentication" role="tab" aria-controls="nav-authentication"
+                                aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
                         </div>
                     </div>
 
@@ -680,24 +690,24 @@
                     <div class="col">
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
-                                 aria-labelledby="nav-metadata-tab">
+                                aria-labelledby="nav-metadata-tab">
                                 <app-metadata-tab></app-metadata-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-template" role="tabpanel"
-                                 aria-labelledby="nav-template-tab">
+                                aria-labelledby="nav-template-tab">
                                 <app-template-mapping></app-template-mapping>
                             </div>
                             <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
-                                 aria-labelledby="nav-scripts-tab">
+                                aria-labelledby="nav-scripts-tab">
                                 <app-scripts-tab></app-scripts-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-imports" role="tabpanel"
-                                 aria-labelledby="nav-imports-tab">
+                                aria-labelledby="nav-imports-tab">
                                 <app-imports-tab></app-imports-tab>
 
                             </div>
                             <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
-                                 aria-labelledby="nav-authentication-tab">
+                                aria-labelledby="nav-authentication-tab">
                                 <div class="card creat-card">
                                     <div class="editor-container">
                                         <app-dsl-definitions-tab></app-dsl-definitions-tab>

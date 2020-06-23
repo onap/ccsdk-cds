@@ -19,9 +19,9 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PackagesStore} from '../../packages.store';
-import {BlueprintModel, BluePrintPage} from '../../model/BluePrint.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { PackagesStore } from '../../packages.store';
+import { BlueprintModel, BluePrintPage } from '../../model/BluePrint.model';
 
 @Component({
     selector: 'app-filter-by-tags',
@@ -36,7 +36,7 @@ export class TagsFilteringComponent implements OnInit {
     viewedTags: string[] = [];
     searchTag = '';
     viewedPackages: BlueprintModel[] = [];
-    private checkBoxTages = '';
+    checkBoxTages = '';
     currentPage = 0;
 
     constructor(private packagesStore: PackagesStore,
