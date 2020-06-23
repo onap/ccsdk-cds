@@ -1,10 +1,9 @@
 <div [hidden]="listView">
-    <app-templ-mapp-listing [hidden]="!creationView" (showCreationViewParentNotification)="openCreationView($event)"
-        (showFullView)="openListView($event)">
+    <app-templ-mapp-listing (showCreationView)="openCreationView()" (showListView)="openListView()">
     </app-templ-mapp-listing>
 </div>
 
 <div [hidden]="creationView">
-    <app-templ-mapp-creation (showListViewParent)="openListView($event)" (openList)="closeCreationView()">
+    <app-templ-mapp-creation (showListView)="openListView()" (showCreationView)="openCreationView()">
     </app-templ-mapp-creation>
 </div>

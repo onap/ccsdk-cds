@@ -18,11 +18,11 @@ declare var $: any;
     styleUrls: ['./templ-mapp-creation.component.css']
 })
 export class TemplMappCreationComponent implements OnInit, OnDestroy {
-    @Output() showListViewParent = new EventEmitter<any>();
-    @Output() openList = new EventEmitter<any>();
+    @Output() showListView = new EventEmitter<any>();
+    @Output() showCreationView = new EventEmitter<any>();
     public uploadedFiles: FileSystemFileEntry[] = [];
-    private fileNames: Set<string> = new Set();
-    private jsonConvert = new JsonConvert();
+     fileNames: Set<string> = new Set();
+     jsonConvert = new JsonConvert();
     public files: NgxFileDropEntry[] = [];
     fileName: any;
     templateInfo = new TemplateInfo();
@@ -179,8 +179,6 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.uploadedFiles.splice(index, 1);
     }
 
-    initDelete(file) {
-    }
     confirmDelete() {
         // Delete from templates
         this.sharedService.deleteFromList(this.fileName);
@@ -191,7 +189,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             this.packageCreationStore.state.templates.files.size > 0 ||
             this.packageCreationStore.state.mapping.files.size > 0
         ) {
-            this.closeCreationForm();
+            this.openListView();
         }
 
     }
@@ -267,11 +265,13 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     }
 
     openListView() {
-        this.showListViewParent.emit('tell parent to open create views');
+        console.log('open List view');
+        this.showListView.emit('tell parent to open create views');
     }
 
-    closeCreationForm() {
-        this.openList.emit('close create form and open list');
+    openCreationView() {
+        console.log('close creation view');
+        this.showCreationView.emit('close create form and open list');
     }
 
     getMappingTableFromTemplate(e) {
@@ -337,7 +337,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 //  }
                 this.fileName = '';
                 this.toastr.success('File is created', 'success');
-                this.closeCreationForm();
+                this.openListView();
             } else {
                 console.log('this file already exist');
                 this.toastr.error('File name already exist', 'Error');
@@ -351,6 +351,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     selectSource(dict, e) {
         const source = e.target.value;
         let keyDepend = null;
+        this.dependancies.set(dict.name, null);
         try {
             keyDepend = dict.definition.sources[source].properties['key-dependencies'] || null;
         } catch (e) { }

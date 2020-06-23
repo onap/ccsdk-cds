@@ -13,11 +13,11 @@ import { SharedService } from '../shared-service';
     styleUrls: ['./templ-mapp-listing.component.css']
 })
 export class TemplMappListingComponent implements OnInit {
-    @Output() showCreationViewParentNotification = new EventEmitter<any>();
-    @Output() showFullView = new EventEmitter<any>();
-    private templateAndMappingMap = new Map<string, TemplateAndMapping>();
-    private templates: Template;
-    private mapping: Mapping;
+    @Output() showCreationView = new EventEmitter<any>();
+    @Output() showListView = new EventEmitter<any>();
+    templateAndMappingMap = new Map<string, TemplateAndMapping>();
+    templates: Template;
+    mapping: Mapping;
     isCreate = true;
     currentFile: string;
     edit = false;
@@ -40,6 +40,11 @@ export class TemplMappListingComponent implements OnInit {
 
         }
         this.packageCreationStore.state$.subscribe(cba => {
+            if (this.packageCreationStore.state.mapping.files.size > 0 || this.packageCreationStore.state.templates.files.size > 0) {
+                this.openListView();
+            } else {
+                this.openCreationView();
+            }
             if (cba.templates) {
                 this.templates = cba.templates;
                 this.mapping = cba.mapping;
@@ -58,7 +63,6 @@ export class TemplMappListingComponent implements OnInit {
                     const isFromTemplate = false;
                     this.setIsMappingOrTemplate(key, templateAndMapping, isFromTemplate);
                 });
-                console.log('hello there ');
                 console.log(this.templateAndMappingMap);
             }
             this.deleteFromList();
@@ -83,6 +87,7 @@ export class TemplMappListingComponent implements OnInit {
             console.log('response from actionList');
             console.log(res);
             if (res) {
+                console.log('xccccccccccvvvvvv');
                 this.templateAndMappingMap.delete(res);
                 if (this.templateAndMappingMap.size <= 0) {
                     this.openCreationView();
@@ -91,14 +96,17 @@ export class TemplMappListingComponent implements OnInit {
         });
     }
 
-    openCreationView() {
-        this.showCreationViewParentNotification.emit('tell parent to open create views');
-        console.log('disable edit mode');
+    createNewTemplate() {
+        this.openCreationView();
         this.sharedService.disableEdit();
-
     }
-    FullView() {
-        this.showFullView.emit('show full view');
+    openCreationView() {
+        this.showCreationView.emit('tell parent to open create views');
+        console.log('disable edit mode');
+    }
+    openListView() {
+        console.log('open list view');
+        this.showListView.emit('show full view');
     }
 
     setSourceCodeEditor(key: string) {
@@ -125,7 +133,7 @@ export class TemplMappListingComponent implements OnInit {
                 templateInfo.type += 'mapping';
             }
             this.templateStore.changeTemplateInfo(templateInfo);
-            this.FullView();
+            this.openCreationView();
             this.sharedService.enableEdit();
         });
     }
