@@ -78,5 +78,6 @@ interface ClusterLock {
     suspend fun tryFenceLock(timeout: Long): String
     suspend fun unLock()
     fun isLocked(): Boolean
+    fun isLockedByCurrentThread(): Boolean
     fun close()
 }

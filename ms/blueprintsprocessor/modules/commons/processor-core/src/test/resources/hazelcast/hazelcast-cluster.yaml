@@ -7,10 +7,15 @@ hazelcast:
     session-time-to-live-seconds: 60
     session-heartbeat-interval-seconds: 5
     missing-cp-member-auto-removal-seconds: 120
+  metrics:
+    enabled: false
   network:
           join:
-            multicast:
+            tcp-ip:
               enabled: true
+              interface: 127.0.0.1
+            multicast:
+              enabled: false
               # Specify 224.0.0.1 instead of default 224.2.2.3 since there's some issue
               # on macOs with docker installed and multicast address different than 224.0.0.1
               # https://stackoverflow.com/questions/46341715/hazelcast-multicast-does-not-work-because-of-vboxnet-which-is-used-by-docker-mac
