@@ -25,9 +25,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
-object HazlecastClusterUtils {
+object HazelcastClusterUtils {
 
-    private val log = logger(HazlecastClusterUtils::class)
+    private val log = logger(HazelcastClusterUtils::class)
 
     /** Promote [hazelcastInstance] member to CP Member */
     fun promoteAsCPMember(hazelcastInstance: HazelcastInstance) {

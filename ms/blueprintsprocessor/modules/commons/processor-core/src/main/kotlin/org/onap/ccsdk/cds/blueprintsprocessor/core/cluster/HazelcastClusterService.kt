@@ -45,9 +45,9 @@ import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 @Service
-open class HazlecastClusterService : BluePrintClusterService {
+open class HazelcastClusterService : BluePrintClusterService {
 
-    private val log = logger(HazlecastClusterService::class)
+    private val log = logger(HazelcastClusterService::class)
     lateinit var hazelcast: HazelcastInstance
     lateinit var cpSubsystemManagementService: CPSubsystemManagementService
     var joinedClient = false
@@ -179,14 +179,14 @@ open class HazlecastClusterService : BluePrintClusterService {
     override suspend fun shutDown(duration: Duration) {
         if (::hazelcast.isInitialized && clusterJoined()) {
             delay(duration.toMillis())
-            HazlecastClusterUtils.terminate(hazelcast)
+            HazelcastClusterUtils.terminate(hazelcast)
         }
     }
 
     /** Utils */
     suspend fun promoteAsCPMember(hazelcastInstance: HazelcastInstance) {
         if (!joinedClient && !joinedLite) {
-            HazlecastClusterUtils.promoteAsCPMember(hazelcastInstance)
+            HazelcastClusterUtils.promoteAsCPMember(hazelcastInstance)
         }
     }
 
@@ -243,15 +243,16 @@ open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val
     }
 
     override suspend fun unLock() {
-        // Added condition to avoid failures like - "Current thread is not owner of the lock!"
-        if (distributedLock.isLockedByCurrentThread) {
-            distributedLock.unlock()
-            log.trace("Cluster unlock(${name()}) successfully..")
-        }
+        distributedLock.unlock()
+        log.trace("Cluster unlock(${name()}) successfully..")
     }
 
     override fun isLocked(): Boolean {
         return distributedLock.isLocked
+    }
+
+    override fun isLockedByCurrentThread(): Boolean {
+        return distributedLock.isLockedByCurrentThread
     }
 
     override suspend fun fenceLock(): String {

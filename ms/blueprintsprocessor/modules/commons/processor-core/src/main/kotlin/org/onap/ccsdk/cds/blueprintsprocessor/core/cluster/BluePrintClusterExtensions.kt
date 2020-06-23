@@ -29,10 +29,10 @@ import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 /**
- * Exposed Dependency Service by this Hazlecast Lib Module
+ * Exposed Dependency Service by this Hazelcast Lib Module
  */
 fun BluePrintDependencyService.clusterService(): BluePrintClusterService =
-    instance(HazlecastClusterService::class)
+    instance(HazelcastClusterService::class)
 
 /** Optional Cluster Service, returns only if Cluster is enabled */
 fun BluePrintDependencyService.optionalClusterService(): BluePrintClusterService? {
