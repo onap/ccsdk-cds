@@ -22,7 +22,7 @@
     <parent>
        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
        <artifactId>blueprints</artifactId>
-       <version>0.7.4-SNAPSHOT</version>
+       <version>0.7.4</version>
     </parent>
 
     <artifactId>blueprint-core</artifactId>
