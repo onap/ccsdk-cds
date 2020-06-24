@@ -21,6 +21,7 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
     private ngUnsubscribe = new Subject();
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     public customActionName = '';
+    cl = 'editBar';
 
     constructor(private store: DesignerStore,
                 private packageCreationUtils: PackageCreationUtils,
@@ -29,6 +30,16 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
                 private sourceViewService: SourceViewService) {
         this.controllerSideBar = true;
     }
+    
+    private _toggleSidebar1() {
+        this.controllerSideBar = !this.controllerSideBar;
+        if (this.controllerSideBar === false) {
+          this.cl = 'editBar2';
+       }
+        if (this.controllerSideBar === true) {
+        this.cl = 'editBar';
+       }
+      }
 
     ngOnInit() {
         this.store.state$.subscribe(
