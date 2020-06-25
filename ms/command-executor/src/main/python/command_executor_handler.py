@@ -151,7 +151,12 @@ class CommandExecutorHandler():
         if rc == 0:
             return utils.build_ret_data(True, results=result, results_log=results_log)
         else:
-            err_msg = "{} - Something wrong happened during command execution. See execute command logs for more information.".format(self.blueprint_id)
+            err_msg = ""
+            if len(results_log) > 0:
+                # get exception message
+                err_msg = "{} - {}".format(self.blueprint_id, results_log[-1:][0])
+            else:
+                err_msg = "{} - Process exited with return code {}".format(self.blueprint_id, rc)
             return utils.build_ret_data(False, results=result, results_log=results_log, error=err_msg)
 
     def install_packages(self, request, type, f, results):
