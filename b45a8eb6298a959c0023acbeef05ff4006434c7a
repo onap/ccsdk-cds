@@ -16,6 +16,24 @@
       "revId": "b45a8eb6298a959c0023acbeef05ff4006434c7a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d440399a_c4aa661f",
+        "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-06-25T14:13:09Z",
+      "side": 0,
+      "message": "addError is redundant, it gets called by ```setNodeOutputErrors```",
+      "parentUuid": "6d1a2889_6d6cdd4f",
+      "revId": "b45a8eb6298a959c0023acbeef05ff4006434c7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
