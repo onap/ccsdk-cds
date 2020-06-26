@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1d0d49b_6906e4a0",
+        "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-06-26T10:30:38Z",
+      "side": 1,
+      "message": "you need a space after // linter is complaining",
+      "revId": "ad927c4209cc14a0e2a7930b4a3f7f72a03e0da3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
