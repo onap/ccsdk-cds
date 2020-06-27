@@ -19,16 +19,16 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {Store} from '../../../../common/core/stores/Store';
+import { Store } from '../../../../common/core/stores/Store';
 
-import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
-import {PackageCreationService} from './package-creation.service';
-import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
-import {Observable} from 'rxjs';
-import {ResourceDictionary} from './mapping-models/ResourceDictionary.model';
-import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
+import { CBAPackage, DslDefinition } from './mapping-models/CBAPacakge.model';
+import { PackageCreationService } from './package-creation.service';
+import { MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
+import { Observable } from 'rxjs';
+import { ResourceDictionary } from './mapping-models/ResourceDictionary.model';
+import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
 
 
 @Injectable({
@@ -56,6 +56,9 @@ export class PackageCreationStore extends Store<CBAPackage> {
         });
     }
 
+    istemplateExist(): boolean {
+        return this.state.templates.files.size > 0 && this.state.mapping.files.size > 0;
+    }
     changeDslDefinition(dslDefinition: DslDefinition) {
 
         this.setState({

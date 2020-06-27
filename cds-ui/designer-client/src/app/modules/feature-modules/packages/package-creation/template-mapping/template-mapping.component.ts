@@ -26,7 +26,9 @@ export class TemplateMappingComponent implements OnInit {
             this.creationView = true;
             this.listView = false;
             console.log('URL contains Id');
-            this.sharedService.enableEdit();
+            if (this.pakcageStore.istemplateExist()) {
+                this.sharedService.enableEdit();
+            }
         } else {
             console.log('Create mode');
             this.pakcageStore.clear();
