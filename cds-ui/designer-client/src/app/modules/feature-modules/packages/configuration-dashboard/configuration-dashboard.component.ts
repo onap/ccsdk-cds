@@ -36,6 +36,7 @@ export class ConfigurationDashboardComponent implements OnInit {
     zipFile: JSZip = new JSZip();
     filesData: any = [];
     folder: FolderNodeElement = new FolderNodeElement();
+    id: any;
 
     currentBlob = new Blob();
 
@@ -46,15 +47,14 @@ export class ConfigurationDashboardComponent implements OnInit {
         private packageCreationUtils: PackageCreationUtils,
         private router: Router,
         private designerStore: DesignerStore,
-        private designerService: DesignerService,
         private toastService: ToastrService
     ) {
     }
 
     ngOnInit() {
         this.elementRef.nativeElement.focus();
-        const id = this.route.snapshot.paramMap.get('id');
-        this.configurationDashboardService.getPagedPackages(id).subscribe(
+        this.id = this.route.snapshot.paramMap.get('id');
+        this.configurationDashboardService.getPagedPackages(this.id).subscribe(
             (bluePrintDetailModels) => {
                 if (bluePrintDetailModels) {
                     this.viewedPackage = bluePrintDetailModels[0];
@@ -62,8 +62,11 @@ export class ConfigurationDashboardComponent implements OnInit {
                     this.packageCreationStore.clear();
                 }
             });
-    }
 
+        if (this.route.snapshot.paramMap.has('id')) {
+            console.log('The id is equal to ' + this.route.snapshot.paramMap.get('id'));
+        }
+    }
 
     private downloadCBAPackage(bluePrintDetailModels: BluePrintDetailModel) {
         this.configurationDashboardService.downloadResource(
@@ -185,7 +188,15 @@ export class ConfigurationDashboardComponent implements OnInit {
             });
     }
 
-
+    deletePackage() {
+        this.configurationDashboardService.deletePackage(this.id).subscribe(res => {
+            console.log('Deleted');
+            console.log(res);
+            this.router.navigate(['/packages']);
+        }, err => {
+            console.log(err);
+        });
+    }
     create() {
         this.zipFile = new JSZip();
         FilesContent.getMapOfFilesNamesAndContent().forEach((value, key) => {
