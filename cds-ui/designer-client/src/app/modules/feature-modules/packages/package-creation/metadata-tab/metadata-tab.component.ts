@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { PackageCreationService } from '../package-creation.service';
-import { MetaDataTabModel } from '../mapping-models/metadata/MetaDataTab.model';
-import { PackageCreationStore } from '../package-creation.store';
-import { ActivatedRoute } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {PackageCreationService} from '../package-creation.service';
+import {MetaDataTabModel} from '../mapping-models/metadata/MetaDataTab.model';
+import {PackageCreationStore} from '../package-creation.store';
+import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class MetadataTabComponent implements OnInit {
     tags = new Set<string>();
     customKeysMap = new Map();
     modes: any[] = [
-        { name: 'Designer Mode', style: 'mode-icon icon-topologyView-active' }];
+        {name: 'Designer Mode', style: 'mode-icon icon-topologyView-active'}];
     /*  {name: 'Scripting Mode', style: 'mode-icon icon-topologySource'},
       {name: 'Generic Script Mode', style: 'mode-icon icon-topologySource'}];*/
     modeType = this.modes[0].name;
@@ -115,4 +115,17 @@ export class MetadataTabComponent implements OnInit {
     saveMetaDataToStore() {
         this.packageCreationStore.changeMetaData(this.metaDataTab);
     }
+
+    checkRequiredElements() {
+        const newMetaData = new MetaDataTabModel();
+        newMetaData.description = this.metaDataTab.description;
+        newMetaData.name = this.metaDataTab.name;
+        newMetaData.version = this.metaDataTab.version;
+        newMetaData.templateTags = this.metaDataTab.templateTags;
+        newMetaData.mapOfCustomKey = this.metaDataTab.mapOfCustomKey;
+        newMetaData.mode = this.metaDataTab.mode;
+        this.packageCreationStore.changeMetaData(newMetaData);
+    }
+
+
 }
