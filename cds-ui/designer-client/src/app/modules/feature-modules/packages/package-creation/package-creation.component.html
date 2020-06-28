@@ -20,11 +20,11 @@
         <div class="container-fluid body-container">
             <div class="container">
                 <div class="creat-action-container">
-                    <a class="action-button save" (click)="saveBluePrint()">
+                    <a class="action-button save" [hidden]="!isSaveEnabled" (click)="saveBluePrint()">
                         <i class="icon-save-sm" aria-hidden="true"></i>
                         <span>Save</span>
                     </a>
-                    <a href="#" class="action-button" (click)="goBackToDashBorad()">
+                <!--    <a href="#" class="action-button" (click)="goBackToDashBorad()">
                         <i class="icon-discard-sm" aria-hidden="true"></i>
                         <span>Discard Changes</span>
                     </a>
@@ -48,7 +48,7 @@
                     <a href="#" class="action-button delete">
                         <i class="icon-delete-sm" aria-hidden="true"></i>
                         <span>Delete</span>
-                    </a>
+                    </a>-->
                 </div>
 
 
