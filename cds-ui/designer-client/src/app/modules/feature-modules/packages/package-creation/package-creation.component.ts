@@ -19,18 +19,18 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FilesContent, FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FilesContent, FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
 
 import * as JSZip from 'jszip';
-import { PackageCreationStore } from './package-creation.store';
-import { Definition } from './mapping-models/CBAPacakge.model';
-import { PackageCreationModes } from './creationModes/PackageCreationModes';
-import { PackageCreationBuilder } from './creationModes/PackageCreationBuilder';
-import { PackageCreationUtils } from './package-creation.utils';
-import { MetadataTabComponent } from './metadata-tab/metadata-tab.component';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+import {PackageCreationStore} from './package-creation.store';
+import {Definition} from './mapping-models/CBAPacakge.model';
+import {PackageCreationModes} from './creationModes/PackageCreationModes';
+import {PackageCreationBuilder} from './creationModes/PackageCreationBuilder';
+import {PackageCreationUtils} from './package-creation.utils';
+import {MetadataTabComponent} from './metadata-tab/metadata-tab.component';
+import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
 
 
 @Component({
@@ -52,22 +52,34 @@ export class PackageCreationComponent implements OnInit {
 
     counter = 0;
     modes: object[] = [
-        { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' },
-        { name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode' }];
+        {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
+        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}];
     metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     folder: FolderNodeElement = new FolderNodeElement();
     zipFile: JSZip = new JSZip();
     filesData: any = [];
     definition: Definition = new Definition();
+    isSaveEnabled = false;
 
-    @ViewChild(MetadataTabComponent, { static: false })
+    @ViewChild(MetadataTabComponent, {static: false})
     metadataTabComponent: MetadataTabComponent;
 
-    @ViewChild('nameit', { static: true })
+    @ViewChild('nameit', {static: true})
     elementRef: ElementRef;
+    versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
 
     ngOnInit() {
         this.elementRef.nativeElement.focus();
+        const regexp = RegExp(this.versionPattern);
+        this.packageCreationStore.state$.subscribe(cbaPackage => {
+            if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.description
+                && cbaPackage.metaData.name && cbaPackage.metaData.version &&
+                regexp.test(cbaPackage.metaData.version)) {
+                this.isSaveEnabled = true;
+            } else {
+                this.isSaveEnabled = false;
+            }
+        });
     }
 
     saveBluePrint() {
@@ -90,7 +102,7 @@ export class PackageCreationComponent implements OnInit {
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({ type: 'blob' })
+        this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
                 this.packageCreationStore.saveBluePrint(blob).subscribe(
                     bluePrintDetailModels => {

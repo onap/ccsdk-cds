@@ -20,35 +20,13 @@
         <div class="container-fluid body-container">
             <div class="container">
                 <div class="creat-action-container">
-                    <a class="action-button save" (click)="saveBluePrint()">
-                        <i class="icon-save-sm" aria-hidden="true"></i>
-                        <span>Save</span>
-                    </a>
-                    <a href="#" class="action-button" (click)="goBackToDashBorad()">
-                        <i class="icon-discard-sm" aria-hidden="true"></i>
-                        <span>Discard Changes</span>
-                    </a>
-
-                    <hr>
-                    <a href="#" class="action-button">
-                        <i class="icon-clone-sm" aria-hidden="true"></i>
-                        <span>Clone</span>
-                    </a>
-
-                    <a href="#" class="action-button">
-                        <i class="icon-archive-sm" aria-hidden="true"></i>
-                        <span>Archive</span>
-                    </a>
-
-                    <a href="#" class="action-button">
-                        <i class="icon-download" aria-hidden="true"></i>
-                        <span>Download</span>
-                    </a>
-
-                    <a href="#" class="action-button delete">
-                        <i class="icon-delete-sm" aria-hidden="true"></i>
-                        <span>Delete</span>
-                    </a>
+                    <!--  <a class="action-button save" [hidden]="!isSaveEnabled" (click)="saveBluePrint()">
+                          <i class="icon-save-sm" aria-hidden="true"></i>
+                          <span>Save</span>-->
+                    <button (click)="saveBluePrint()" [disabled]="!isSaveEnabled"
+                            class="action-button save" aria-hidden="true"><i class="icon-save-sm"
+                                                                                          aria-hidden="true"></i>
+                        <span>Save</span></button>
                 </div>
 
 
@@ -57,17 +35,17 @@
                     <div class="col">
                         <div class="nav nav-tabs " id="nav-tab" role="tablist">
                             <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
-                                href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="false"
-                                autofocus #nameit (focusout)="test()">METADATA</a>
+                               href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="false"
+                               autofocus #nameit (focusout)="test()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
-                                role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
+                               role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
                             <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
-                                role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
+                               role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
                             <a class="nav-item nav-link" id="nav-imports-tab" data-toggle="tab" href="#nav-imports"
-                                role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a>
+                               role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a>
                             <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab"
-                                href="#nav-authentication" role="tab" aria-controls="nav-authentication"
-                                aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
+                               href="#nav-authentication" role="tab" aria-controls="nav-authentication"
+                               aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
                         </div>
                     </div>
 
@@ -76,24 +54,24 @@
                     <div class="col">
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
-                                aria-labelledby="nav-metadata-tab">
+                                 aria-labelledby="nav-metadata-tab">
                                 <app-metadata-tab></app-metadata-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-template" role="tabpanel"
-                                aria-labelledby="nav-template-tab">
+                                 aria-labelledby="nav-template-tab">
                                 <app-template-mapping></app-template-mapping>
                             </div>
                             <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
-                                aria-labelledby="nav-scripts-tab">
+                                 aria-labelledby="nav-scripts-tab">
                                 <app-scripts-tab></app-scripts-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-imports" role="tabpanel"
-                                aria-labelledby="nav-imports-tab">
+                                 aria-labelledby="nav-imports-tab">
                                 <app-imports-tab></app-imports-tab>
 
                             </div>
                             <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
-                                aria-labelledby="nav-authentication-tab">
+                                 aria-labelledby="nav-authentication-tab">
                                 <div class="card creat-card">
                                     <div class="editor-container">
                                         <app-dsl-definitions-tab></app-dsl-definitions-tab>
