@@ -20,16 +20,16 @@ limitations under the License.
 */
 
 
-import {get, param, post, Request, requestBody, Response, RestBindings} from '@loopback/rest';
-import {Blueprint} from '../models';
-import {inject} from '@loopback/core';
-import {BlueprintService} from '../services';
+import { get, param, post, Request, requestBody, Response, RestBindings, del } from '@loopback/rest';
+import { Blueprint } from '../models';
+import { inject } from '@loopback/core';
+import { BlueprintService } from '../services';
 import * as fs from 'fs';
 import * as multiparty from 'multiparty';
 import * as request_lib from 'request';
-import {appConfig, processorApiConfig} from '../config/app-config';
-import {bluePrintManagementServiceGrpcClient} from '../clients/blueprint-management-service-grpc-client';
-import {BlueprintDetail} from '../models/blueprint.detail.model';
+import { appConfig, processorApiConfig } from '../config/app-config';
+import { bluePrintManagementServiceGrpcClient } from '../clients/blueprint-management-service-grpc-client';
+import { BlueprintDetail } from '../models/blueprint.detail.model';
 
 export class BlueprintRestController {
   constructor(
@@ -42,7 +42,7 @@ export class BlueprintRestController {
     responses: {
       '200': {
         description: 'Blueprint model instance',
-        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
+        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
       },
     },
   })
@@ -54,7 +54,7 @@ export class BlueprintRestController {
     responses: {
       '200': {
         description: 'Blueprint model instance',
-        content: {'application/json': {schema: {'x-ts-type': BlueprintDetail}}},
+        content: { 'application/json': { schema: { 'x-ts-type': BlueprintDetail } } },
       },
     },
   })
@@ -62,12 +62,24 @@ export class BlueprintRestController {
     return await this.bpservice.getOneBluePrint(id);
   }
 
+  @del('/controllerblueprint/{id}', {
+    responses: {
+      '200': {
+        description: 'Blueprint model instance',
+        content: { 'application/json': { schema: { 'x-ts-type': BlueprintDetail } } },
+      },
+    },
+  })
+  async deleteBluePrint(@param.path.string('id') id: string) {
+    return await this.bpservice.deleteBluePrint(id);
+  }
+
 
   @get('/controllerblueprint/paged', {
     responses: {
       '200': {
         description: 'Blueprint model instance with pagination',
-        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
+        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
       },
     },
   })
@@ -83,7 +95,7 @@ export class BlueprintRestController {
     responses: {
       '200': {
         description: 'Blueprint model instance with pagination',
-        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
+        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
       },
     },
   })
@@ -100,7 +112,7 @@ export class BlueprintRestController {
     responses: {
       '200': {
         description: 'Blueprint model instance',
-        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
+        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
       },
     },
   })
@@ -112,7 +124,7 @@ export class BlueprintRestController {
     responses: {
       '200': {
         description: 'Blueprint model instance',
-        content: {'application/json': {schema: {'x-ts-type': Blueprint}}},
+        content: { 'application/json': { schema: { 'x-ts-type': Blueprint } } },
       },
     },
   })
@@ -123,7 +135,7 @@ export class BlueprintRestController {
   @get('/controllerblueprint/searchByTags/{tags}', {
     responses: {
       '200': {
-        content: {'application/json': {}},
+        content: { 'application/json': {} },
       },
     },
   })
@@ -140,11 +152,11 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: {type: 'object'},
+          schema: { type: 'object' },
         },
       },
     })
-      request: Request,
+    request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
@@ -180,11 +192,11 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: {type: 'object'},
+          schema: { type: 'object' },
         },
       },
     })
-      request: Request,
+    request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
@@ -220,11 +232,11 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: {type: 'object'},
+          schema: { type: 'object' },
         },
       },
     })
-      request: Request,
+    request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
@@ -261,7 +273,7 @@ export class BlueprintRestController {
   async getFileFromMultiPartForm(request: Request): Promise<multiparty.File> {
     return new Promise((resolve, reject) => {
       let form = new multiparty.Form();
-      form.parse(request, (err: any, fields: any, files: {[x: string]: any[];}) => {
+      form.parse(request, (err: any, fields: any, files: { [x: string]: any[]; }) => {
         if (err) reject(err);
         let file = files['file'][0]; // get the file from the returned files object
         if (!file) {
@@ -282,11 +294,11 @@ export class BlueprintRestController {
         'multipart/form-data': {
           // Skip body parsing
           'x-parser': 'stream',
-          schema: {type: 'object'},
+          schema: { type: 'object' },
         },
       },
     })
-      request: Request,
+    request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
