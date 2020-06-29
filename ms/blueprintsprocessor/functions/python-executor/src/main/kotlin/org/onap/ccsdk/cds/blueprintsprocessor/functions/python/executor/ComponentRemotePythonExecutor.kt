@@ -182,12 +182,12 @@ open class ComponentRemotePythonExecutor(
             val componentLevelWarningMsg = if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
             val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId). $componentLevelWarningMsg grpcError: ${grpcEx.status}"
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, grpcErrMsg.asJsonPrimitive())
-            setNodeOutputErrors(status = StatusType.FAILURE.name, step = STEP_PREPARE_ENV, error = grpcErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
+            setNodeOutputErrors(status = StatusType.FAILURE.name, step = STEP_PREPARE_ENV, message = grpcErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
             log.error(grpcErrMsg, grpcEx)
         } catch (e: Exception) {
             val timeoutErrMsg = "Command executor failed during env. preparation.. catch-all case timeout($envPrepTimeout) requestId ($processId). exception msg: ${e.message}"
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, e.message.asJsonPrimitive())
-            setNodeOutputErrors(status = StatusType.FAILURE.name, step = STEP_PREPARE_ENV, error = timeoutErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
+            setNodeOutputErrors(status = StatusType.FAILURE.name, step = STEP_PREPARE_ENV, message = timeoutErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
             log.error(timeoutErrMsg, e)
         }
         // if Env preparation was successful, then proceed with command execution in this Env
@@ -236,7 +236,7 @@ open class ComponentRemotePythonExecutor(
                 setNodeOutputErrors(status = StatusType.FAILURE.name,
                     step = STEP_EXEC_CMD,
                     logs = "".asJsonPrimitive(),
-                    error = timeoutErrMsg.asJsonPrimitive(),
+                    message = timeoutErrMsg.asJsonPrimitive(),
                     logging = isLogResponseEnabled
                 )
                 log.error(timeoutErrMsg, timeoutEx)
@@ -245,13 +245,13 @@ open class ComponentRemotePythonExecutor(
                 setNodeOutputErrors(status = StatusType.FAILURE.name,
                     step = STEP_EXEC_CMD,
                     logs = "".asJsonPrimitive(),
-                    error = timeoutErrMsg.asJsonPrimitive(),
+                    message = timeoutErrMsg.asJsonPrimitive(),
                     logging = isLogResponseEnabled
                 )
                 log.error(timeoutErrMsg, grpcEx)
             } catch (e: Exception) {
                 val timeoutErrMsg = "Command executor failed during process catch-all case requestId ($processId) timeout($envPrepTimeout) exception msg: ${e.message}"
-                setNodeOutputErrors(status = StatusType.FAILURE.name, step = STEP_PREPARE_ENV, error = timeoutErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
+                setNodeOutputErrors(status = StatusType.FAILURE.name, step = STEP_PREPARE_ENV, message = timeoutErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
                 log.error(timeoutErrMsg, e)
             }
         }
@@ -280,42 +280,42 @@ open class ComponentRemotePythonExecutor(
     private fun setNodeOutputProperties(
         status: JsonNode = StatusType.FAILURE.name.asJsonPrimitive(),
         step: String,
+        logs: JsonNode,
         message: JsonNode,
-        artifacts: JsonNode,
         logging: Boolean = true
     ) {
 
         setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status)
-        setAttribute(ATTRIBUTE_RESPONSE_DATA, artifacts)
-        setAttribute(ATTRIBUTE_EXEC_CMD_LOG, message)
+        setAttribute(ATTRIBUTE_RESPONSE_DATA, message)
+        setAttribute(ATTRIBUTE_EXEC_CMD_LOG, logs)
 
         if (logging) {
-            log.info("Executor status   : $step : $status")
-            log.info("Executor artifacts: $step : $artifacts")
-            log.info("Executor message  : $step : $message")
+            log.info("Executor status : $step : $status")
+            log.info("Executor message: $step : $message")
+            log.info("Executor logs   : $step : $logs")
         }
     }
 
     /**
-     * Utility function to set the output properties and errors of the executor node, in cas of errors
+     * Utility function to set the output properties and errors of the executor node, in case of errors
      */
     private fun setNodeOutputErrors(
         status: String,
         step: String,
         logs: JsonNode = "N/A".asJsonPrimitive(),
-        error: JsonNode,
+        message: JsonNode,
         logging: Boolean = true
     ) {
         setAttribute(ATTRIBUTE_EXEC_CMD_STATUS, status.asJsonPrimitive())
         setAttribute(ATTRIBUTE_EXEC_CMD_LOG, logs)
-        setAttribute(ATTRIBUTE_RESPONSE_DATA, "N/A".asJsonPrimitive())
+        setAttribute(ATTRIBUTE_RESPONSE_DATA, message)
 
         if (logging) {
-            log.info("Executor status   : $step : $status")
-            log.info("Executor message  : $step : $error")
-            log.info("Executor logs     : $step : $logs")
+            log.info("Executor status : $step : $status")
+            log.info("Executor message: $step : $message")
+            log.info("Executor logs   : $step : $logs")
         }
 
-        addError(status, step, error.toString())
+        addError(status, step, logs.toString())
     }
 }

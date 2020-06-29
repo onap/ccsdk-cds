@@ -143,21 +143,15 @@ class CommandExecutorHandler():
                 rc = newProcess.poll()
         except Exception as e:
             err_msg = "{} - Failed to execute command. Error: {}".format(self.blueprint_id, e)
-            return utils.build_ret_data(False, results=result, results_log=results_log, error=err_msg)
+            result.update(utils.build_ret_data(False, results_log=results_log, error=err_msg))
+            return result
 
         # deactivate_venv(blueprint_id)
         #Since return code is only used to check if it's zero (success), we can just return success flag instead.
         self.logger.debug("python return_code : {}".format(rc))
-        if rc == 0:
-            return utils.build_ret_data(True, results=result, results_log=results_log)
-        else:
-            err_msg = ""
-            if len(results_log) > 0:
-                # get exception message
-                err_msg = "{} - {}".format(self.blueprint_id, results_log[-1:][0])
-            else:
-                err_msg = "{} - Process exited with return code {}".format(self.blueprint_id, rc)
-            return utils.build_ret_data(False, results=result, results_log=results_log, error=err_msg)
+        is_execution_successful = rc == 0
+        result.update(utils.build_ret_data(is_execution_successful, results_log=results_log))
+        return result
 
     def install_packages(self, request, type, f, results):
         success = self.install_python_packages('UTILITY', results)
@@ -233,11 +227,11 @@ class CommandExecutorHandler():
             venv.create(self.venv_home, with_pip=True, system_site_packages=True)
             virtualenv.writefile(os.path.join(bin_dir, "activate_this.py"), virtualenv.ACTIVATE_THIS)
             self.logger.info("{} - Creation of Python Virtual Environment finished.".format(self.blueprint_id))
-            return utils.build_ret_data(True, "")
+            return utils.build_ret_data(True)
         except Exception as err:
             err_msg = "{} - Failed to provision Python Virtual Environment. Error: {}".format(self.blueprint_id, err)
             self.logger.info(err_msg)
-            return utils.build_ret_data(False, err_msg)
+            return utils.build_ret_data(False, error=err_msg)
 
     # return map cds_is_successful and err_msg. Status is True on success. err_msg may existence doesn't necessarily indicate fatal condition.
     # the 'status' should be set to False to indicate error.
@@ -255,11 +249,11 @@ class CommandExecutorHandler():
                 exec (activate_this_script.read(), {'__file__': path})
             exec (fixpathenvvar)
             self.logger.info("Running with PATH : {}".format(os.environ['PATH']))
-            return utils.build_ret_data(True, "")
+            return utils.build_ret_data(True)
         except Exception as err:
             err_msg ="{} - Failed to activate Python Virtual Environment. Error: {}".format(self.blueprint_id, err)
             self.logger.info( err_msg)
-            return utils.build_ret_data(False, err_msg)
+            return utils.build_ret_data(False, error=err_msg)
 
     def deactivate_venv(self):
         self.logger.info("{} - Deactivate Python Virtual Environment".format(self.blueprint_id))
