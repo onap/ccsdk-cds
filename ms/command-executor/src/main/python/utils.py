@@ -17,13 +17,12 @@ from google.protobuf.timestamp_pb2 import Timestamp
 
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
 import json
-from pympler import asizeof
 
 CDS_IS_SUCCESSFUL_KEY = "cds_is_successful"
 ERR_MSG_KEY = "err_msg"
 RESULTS_KEY = "results"
 RESULTS_LOG_KEY = "results_log"
-TRUNC_MSG_LEN = 3 * 1024 * 1024
+RESPONSE_MAX_SIZE = 4 * 1024 * 1024
 
 def get_blueprint_id(request):
   blueprint_name = request.identifiers.blueprintName
@@ -34,44 +33,40 @@ def get_blueprint_id(request):
 def build_grpc_response(request_id, response):
   if response[CDS_IS_SUCCESSFUL_KEY]:
     status = CommandExecutor_pb2.SUCCESS
-    payload = json.dumps(response[RESULTS_KEY])
   else:
     status = CommandExecutor_pb2.FAILURE
-    # truncate error message if too heavy
-    if asizeof.asizeof(response[ERR_MSG_KEY]) > TRUNC_MSG_LEN:
-      response[ERR_MSG_KEY] = "{} [...]. Check command executor logs for more information.".format(response[ERR_MSG_KEY][:TRUNC_MSG_LEN])
-    payload = json.dumps(response[ERR_MSG_KEY])
 
-  # truncate cmd-exec logs if too heavy
-  response[RESULTS_LOG_KEY] = truncate_cmd_exec_logs(response[RESULTS_LOG_KEY])
+  response.pop(CDS_IS_SUCCESSFUL_KEY)
+  exec_logs = response.pop(RESULTS_LOG_KEY)
+
+  payload = json.dumps(response)
 
   timestamp = Timestamp()
   timestamp.GetCurrentTime()
 
-  return CommandExecutor_pb2.ExecutionOutput(requestId=request_id,
-                                             response=response[RESULTS_LOG_KEY],
+  execution_output = CommandExecutor_pb2.ExecutionOutput(requestId=request_id,
+                                             response=exec_logs,
                                              status=status,
                                              payload=payload,
                                              timestamp=timestamp)
 
+  return truncate_execution_output(execution_output)
+
 # build a ret data structure
-def build_ret_data(cds_is_successful, results={}, results_log=[], error=None):
-  ret_data = {
-            CDS_IS_SUCCESSFUL_KEY: cds_is_successful,
-            RESULTS_KEY: results,
-            RESULTS_LOG_KEY: results_log
-         }
+def build_ret_data(cds_is_successful, results_log=None, error=None):
+  ret_data = { CDS_IS_SUCCESSFUL_KEY: cds_is_successful }
   if error:
     ret_data[ERR_MSG_KEY] = error
+  if results_log:
+    ret_data[RESULTS_LOG_KEY] = results_log
   return ret_data
 
-def truncate_cmd_exec_logs(logs):
-    truncated_logs = []
-    truncated_logs_memsize = 0
-    for log in logs:
-        truncated_logs_memsize += asizeof.asizeof(log)
-        if truncated_logs_memsize > TRUNC_MSG_LEN:
-            truncated_logs.append("Execution logs exceeds the maximum size allowed. Check command executor logs to view the execute-command-logs.")
-            break
-        truncated_logs.append(log)
-    return truncated_logs
+# Truncate execution logs to make sure gRPC response doesn't exceed the buffer capacity
+def truncate_execution_output(execution_output):
+  sum_truncated_chars = 0
+  if execution_output.ByteSize() > RESPONSE_MAX_SIZE:
+    while execution_output.ByteSize() > RESPONSE_MAX_SIZE:
+        removed_item = execution_output.response.pop()
+        sum_truncated_chars += len(removed_item)
+    execution_output.response.append("[...] TRUNCATED CHARS : {}".format(sum_truncated_chars))
+  return execution_output

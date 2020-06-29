@@ -34,10 +34,10 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
 
         handler = CommandExecutorHandler(request)
         prepare_env_response = handler.prepare_env(request)
-        if prepare_env_response[utils.CDS_IS_SUCCESSFUL_KEY]:
-            self.logger.info("{} - Package installation logs {}".format(blueprint_id, prepare_env_response[utils.RESULTS_LOG_KEY]))
-        else:
-            self.logger.info("{} - Failed to prepare python environment. {}".format(blueprint_id, prepare_env_response[utils.ERR_MSG_KEY]))
+#         if prepare_env_response[utils.CDS_IS_SUCCESSFUL_KEY]:
+#             self.logger.info("{} - Package installation logs {}".format(blueprint_id, prepare_env_response[utils.RESULTS_LOG_KEY]))
+#         else:
+#             self.logger.info("{} - Failed to prepare python environment. {}".format(blueprint_id, prepare_env_response[utils.ERR_MSG_KEY]))
         self.logger.info("Prepare Env Response returned : %s" % prepare_env_response)
         return utils.build_grpc_response(request.requestId, prepare_env_response)
 
@@ -47,18 +47,14 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         if os.environ.get('CE_DEBUG','false') == "true":
             self.logger.info(request)
 
-        log_results = []
-        payload_result = {}
         handler = CommandExecutorHandler(request)
         exec_cmd_response = handler.execute_command(request)
         if exec_cmd_response[utils.CDS_IS_SUCCESSFUL_KEY]:
             self.logger.info("{} - Execution finished successfully.".format(blueprint_id))
-            self.logger.info("{} - Log Results {}: ".format(blueprint_id, exec_cmd_response[utils.RESULTS_LOG_KEY]))
-            self.logger.info("{} - Results : {}".format(blueprint_id, exec_cmd_response[utils.RESULTS_KEY]))
         else:
-            self.logger.info("{} - Failed to executeCommand. {}".format(blueprint_id, exec_cmd_response[utils.ERR_MSG_KEY]))
+            self.logger.info("{} - Failed to executeCommand. {}".format(blueprint_id, exec_cmd_response[utils.RESULTS_LOG_KEY]))
 
         ret = utils.build_grpc_response(request.requestId, exec_cmd_response)
-        self.logger.info("Response returned : {}".format(exec_cmd_response))
+        self.logger.info("Payload returned : {}".format(exec_cmd_response))
 
         return ret

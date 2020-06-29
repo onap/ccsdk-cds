@@ -148,16 +148,9 @@ class CommandExecutorHandler():
         # deactivate_venv(blueprint_id)
         #Since return code is only used to check if it's zero (success), we can just return success flag instead.
         self.logger.debug("python return_code : {}".format(rc))
-        if rc == 0:
-            return utils.build_ret_data(True, results=result, results_log=results_log)
-        else:
-            err_msg = ""
-            if len(results_log) > 0:
-                # get exception message
-                err_msg = "{} - {}".format(self.blueprint_id, results_log[-1:][0])
-            else:
-                err_msg = "{} - Process exited with return code {}".format(self.blueprint_id, rc)
-            return utils.build_ret_data(False, results=result, results_log=results_log, error=err_msg)
+        is_execution_successful = rc == 0
+        result.update(utils.build_ret_data(is_execution_successful, results_log=results_log))
+        return result
 
     def install_packages(self, request, type, f, results):
         success = self.install_python_packages('UTILITY', results)
