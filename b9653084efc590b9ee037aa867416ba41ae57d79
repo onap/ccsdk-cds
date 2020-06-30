@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85ae5131_ee6d5161",
+        "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-06-30T13:37:16Z",
+      "side": 1,
+      "message": "better to name it as message or remark instead artifacts",
+      "revId": "b9653084efc590b9ee037aa867416ba41ae57d79",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
