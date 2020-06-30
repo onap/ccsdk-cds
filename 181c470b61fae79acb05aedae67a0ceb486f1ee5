@@ -70,6 +70,24 @@
       "revId": "181c470b61fae79acb05aedae67a0ceb486f1ee5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "253b8185_dbf74f7d",
+        "filename": "ms/blueprintsprocessor/modules/services/workflow-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/workflow/BluePrintWorkflowExecutionServiceImpl.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-06-30T14:36:30Z",
+      "side": 1,
+      "message": "If exception is not handled we end up in catch clause ExecutionServiceHandler:120\nIn there we no longer have blueprintRuntimeService, we would have to load it again which is not a good idea. The try block actually wraps the first loading of blueprintRuntimeService, so if that would be the exception and we then try the same operation in the catch - you know what will happen :)",
+      "parentUuid": "84a2216f_259c4dcb",
+      "revId": "181c470b61fae79acb05aedae67a0ceb486f1ee5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
