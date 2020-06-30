@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a035a93_85c0ae4d",
+        "filename": "ms/blueprintsprocessor/modules/services/workflow-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/workflow/BluePrintWorkflowExecutionServiceImpl.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-06-30T13:58:19Z",
+      "side": 1,
+      "message": "shouldn\u0027t error be set in response somewhere ??",
+      "revId": "181c470b61fae79acb05aedae67a0ceb486f1ee5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
