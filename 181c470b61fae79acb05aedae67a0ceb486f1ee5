@@ -52,6 +52,24 @@
       "revId": "181c470b61fae79acb05aedae67a0ceb486f1ee5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84a2216f_259c4dcb",
+        "filename": "ms/blueprintsprocessor/modules/services/workflow-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/workflow/BluePrintWorkflowExecutionServiceImpl.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-06-30T14:29:15Z",
+      "side": 1,
+      "message": "if that\u0027s being handled at ExecutionServiceHandler why would there be need of try catch block here ?\n\nI hope if wasn\u0027t handling RuntimeException there and throws back, that\u0027s where you added try catch, but in catch you just logged the error didn\u0027t set errorMessage anywhere in response !!",
+      "parentUuid": "7b39f79f_0d31011b",
+      "revId": "181c470b61fae79acb05aedae67a0ceb486f1ee5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
