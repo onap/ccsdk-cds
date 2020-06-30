@@ -16,6 +16,24 @@
       "revId": "181c470b61fae79acb05aedae67a0ceb486f1ee5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed95f2a6_4eafeec5",
+        "filename": "ms/blueprintsprocessor/modules/services/workflow-service/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/workflow/BluePrintWorkflowExecutionServiceImpl.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-06-30T14:16:54Z",
+      "side": 1,
+      "message": "It is set in ExecusionServiceHandler:116",
+      "parentUuid": "7a035a93_85c0ae4d",
+      "revId": "181c470b61fae79acb05aedae67a0ceb486f1ee5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
