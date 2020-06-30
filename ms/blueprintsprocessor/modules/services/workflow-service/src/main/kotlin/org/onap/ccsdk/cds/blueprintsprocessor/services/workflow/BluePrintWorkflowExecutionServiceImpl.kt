@@ -90,12 +90,22 @@ open class BluePrintWorkflowExecutionServiceImpl(
         }
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
         executionServiceOutput.actionIdentifiers = executionServiceInput.actionIdentifiers
+
         // Resolve Workflow Outputs
-        val workflowOutputs = bluePrintRuntimeService.resolveWorkflowOutputs(workflowName)
+        var workflowOutputs: MutableMap<String, JsonNode>? = null
+        try {
+            workflowOutputs = bluePrintRuntimeService.resolveWorkflowOutputs(workflowName)
+        } catch (e: RuntimeException) {
+            log.error("Failed to resolve outputs for workflow: $workflowName", e)
+            e.message?.let { bluePrintRuntimeService.getBluePrintError().errors.add(it) }
+        }
 
         // Set the Response Payload
         executionServiceOutput.payload = JacksonUtils.objectMapper.createObjectNode()
-        executionServiceOutput.payload.set<JsonNode>("$workflowName-response", workflowOutputs.asObjectNode())
+        executionServiceOutput.payload.set<JsonNode>(
+                "$workflowName-response",
+                workflowOutputs?.asObjectNode() ?: JacksonUtils.objectMapper.createObjectNode()
+        )
         return executionServiceOutput
     }
 }
