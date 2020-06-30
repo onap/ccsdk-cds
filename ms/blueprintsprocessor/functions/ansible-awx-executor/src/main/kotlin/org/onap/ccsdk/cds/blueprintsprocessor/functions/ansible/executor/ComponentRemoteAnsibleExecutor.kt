@@ -20,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.ansible.executor
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.TextNode
+import kotlinx.coroutines.delay
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
@@ -172,7 +173,7 @@ open class ComponentRemoteAnsibleExecutor(
      * its execution. Finally, it retrieves the job results via the stdout api.
      * The status and output attributes are populated in the process.
      */
-    private fun runJobTemplateOnAWX(
+    private suspend fun runJobTemplateOnAWX(
         awxClient: BlueprintWebClientService,
         job_template_name: String?,
         jtId: String,
@@ -210,7 +211,7 @@ open class ComponentRemoteAnsibleExecutor(
                 val jobLaunched: JsonNode = mapper.readTree(response.body)
                 jobStatus = jobLaunched.at("/status").asText()
                 jobEndTime = jobLaunched.at("/finished").asText()
-                Thread.sleep(checkDelay)
+                delay(checkDelay)
             }
 
             log.info("Execution of job template $job_template_name in job #$jobId finished with status ($jobStatus) for requestId $processId")
