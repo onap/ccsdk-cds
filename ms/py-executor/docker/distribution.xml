@@ -68,12 +68,6 @@
             <fileMode>0666</fileMode>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/certs</directory>
-            <outputDirectory>opt/app/onap/python/certs</outputDirectory>
-            <useDefaultExcludes>true</useDefaultExcludes>
-            <fileMode>0666</fileMode>
-        </fileSet>
-        <fileSet>
             <directory>${project.basedir}/docker</directory>
             <outputDirectory>opt/app/onap/python</outputDirectory>
             <includes>

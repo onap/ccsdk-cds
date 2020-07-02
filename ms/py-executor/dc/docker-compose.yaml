@@ -9,6 +9,7 @@ services:
     restart: always
     volumes:
       - blueprints-deploy:/opt/app/onap/blueprints/deploy
+      - ../certs:/opt/app/onap/python/certs
     environment:
       APPLICATIONNAME: PythonExecutor
       BUNDLEVERSION: 1.0.0
