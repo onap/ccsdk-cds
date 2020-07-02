@@ -31,7 +31,7 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
         private sourceViewService: SourceViewService) {
         this.controllerSideBar = true;
     }
-    private _toggleSidebar1() {
+     _toggleSidebar1() {
         this.controllerSideBar = !this.controllerSideBar;
         if (this.controllerSideBar === false) {
           this.cl = 'editBar2';
