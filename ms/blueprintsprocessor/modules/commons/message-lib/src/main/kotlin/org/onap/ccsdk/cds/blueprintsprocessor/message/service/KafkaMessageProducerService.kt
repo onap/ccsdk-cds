@@ -79,7 +79,8 @@ class KafkaMessageProducerService(
             headers.forEach { (key, value) -> recordHeaders.add(RecordHeader(key, value.toByteArray())) }
         }
         val callback = Callback { metadata, exception ->
-            log.trace("message published to(${metadata.topic()}), offset(${metadata.offset()}), headers :$headers")
+            if (exception == null) log.trace("message published to(${metadata.topic()}), offset(${metadata.offset()}), headers :$headers")
+            else log.error("ERROR : ${exception.message}")
         }
         messageTemplate().send(record, callback)
         return true
