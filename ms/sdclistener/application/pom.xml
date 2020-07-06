@@ -21,12 +21,12 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.sdclistener</groupId>
         <artifactId>parent</artifactId>
-        <version>0.7.5-SNAPSHOT</version>
+        <version>0.7.5</version>
         <relativePath>../parent</relativePath>
     </parent>
 
     <artifactId>application</artifactId>
-    <version>0.7.5-SNAPSHOT</version>
+    <version>0.7.5</version>
     <packaging>jar</packaging>
 
     <name>SDC Listener Application</name>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
             <artifactId>health-api-common</artifactId>
-            <version>0.7.5-SNAPSHOT</version>
+            <version>0.7.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>

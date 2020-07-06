@@ -21,12 +21,12 @@
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
         <artifactId>blueprintsprocessor</artifactId>
-        <version>0.7.5-SNAPSHOT</version>
+        <version>0.7.5</version>
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
     <artifactId>parent</artifactId>
-    <version>0.7.5-SNAPSHOT</version>
+    <version>0.7.5</version>
     <packaging>pom</packaging>
 
     <name>Blueprints Processor Parent</name>
