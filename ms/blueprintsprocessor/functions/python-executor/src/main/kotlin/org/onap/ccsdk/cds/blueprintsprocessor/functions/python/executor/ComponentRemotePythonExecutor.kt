@@ -201,7 +201,7 @@ open class ComponentRemotePythonExecutor(
                     remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
                     command = scriptCommand,
                     properties = properties,
-                    timeOut = implementation.timeout.toLong())
+                    timeOut = executionTimeout.toLong())
 
                 val remoteExecutionOutputDeferred = GlobalScope.async {
                     remoteScriptExecutionService.executeCommand(remoteExecutionInput)
