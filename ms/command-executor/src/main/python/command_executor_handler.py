@@ -14,9 +14,9 @@
 # limitations under the License.
 #
 from builtins import Exception, open, dict
-from subprocess import CalledProcessError, PIPE
+from subprocess import CalledProcessError, PIPE, TimeoutExpired
 from google.protobuf.json_format import MessageToJson
-
+import tempfile
 import logging
 import os
 import re
@@ -25,8 +25,6 @@ import virtualenv
 import venv
 import utils
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
-import email.parser
-import json
 
 REQUIREMENTS_TXT = "requirements.txt"
 
@@ -37,6 +35,7 @@ class CommandExecutorHandler():
         self.request = request
         self.logger = logging.getLogger(self.__class__.__name__)
         self.blueprint_id = utils.get_blueprint_id(request)
+        self.execution_timeout = utils.get_blueprint_timeout(request)
         self.venv_home = '/opt/app/onap/blueprints/deploy/' + self.blueprint_id
         self.installed = self.venv_home + '/.installed'
 
@@ -78,8 +77,16 @@ class CommandExecutorHandler():
         # deactivate_venv(blueprint_id)
         return utils.build_ret_data(True, "")
 
+<<<<<<< HEAD   (eab2ad single /enrichandupload endpoint.)
     def execute_command(self, request, results):
         payload_result = {}
+=======
+    def execute_command(self, request):
+        # STDOUT/STDERR output of the process
+        results_log = []
+        # encoded payload returned by the process
+        result = {}
+>>>>>>> CHANGE (4ad951 cmd-exec server-side timeout.)
         # workaround for when packages are not specified, we may not want to go through the install step
         # can just call create_venv from here.
         if not self.is_installed():
@@ -105,8 +112,6 @@ class CommandExecutorHandler():
                 cmd = cmd + "; " + request.command + " -e 'ansible_python_interpreter=" + self.venv_home + "/bin/python'"
             else:
                 cmd = cmd + "; " + request.command + " " + re.escape(MessageToJson(request.properties))
-            payload_section = []
-            is_payload_section = False
 
             ### extract the original header request into sys-env variables
             ### RequestID
@@ -115,7 +120,9 @@ class CommandExecutorHandler():
             subrequest_id = request.correlationId
             request_id_map = {'CDS_REQUEST_ID':request_id, 'CDS_CORRELATION_ID':subrequest_id}
             updated_env =  { **os.environ, **request_id_map }
+            self.logger.info("Running blueprint {} with timeout: {}".format(self.blueprint_id, self.execution_timeout))
 
+<<<<<<< HEAD   (eab2ad single /enrichandupload endpoint.)
             with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                   shell=True, bufsize=1, universal_newlines=True, env=updated_env) as newProcess:
                 while True:
@@ -138,6 +145,20 @@ class CommandExecutorHandler():
                     else:
                         payload_section.append(output.strip())
                 rc = newProcess.poll()
+=======
+            with tempfile.TemporaryFile(mode="w+") as tmp:
+                try:
+                    completed_subprocess = subprocess.run(cmd, stdout=tmp, stderr=subprocess.STDOUT, shell=True,
+                                                env=updated_env, timeout=self.execution_timeout)
+                except TimeoutExpired:
+                    timeout_err_msg = "Running command {} failed due to timeout of {} seconds.".format(self.blueprint_id, self.execution_timeout)
+                    self.logger.error(timeout_err_msg)
+                    utils.parse_cmd_exec_output(tmp, self.logger, result, results_log)
+                    return utils.build_ret_data(False, results_log=results_log, error=timeout_err_msg)
+
+                utils.parse_cmd_exec_output(tmp, self.logger, result, results_log)
+                rc = completed_subprocess.returncode
+>>>>>>> CHANGE (4ad951 cmd-exec server-side timeout.)
         except Exception as e:
             err_msg = "{} - Failed to execute command. Error: {}".format(self.blueprint_id, e)
             self.logger.info(err_msg)
@@ -177,6 +198,7 @@ class CommandExecutorHandler():
         if REQUIREMENTS_TXT == package:
             command = ["pip", "install", "-r", self.venv_home + "/Environments/" + REQUIREMENTS_TXT]
         elif package == 'UTILITY':
+            # TODO: fix python version that is hardcoded here, may fail if python image is upgraded
             command = ["cp", "-r", "./cds_utils", self.venv_home + "/lib/python3.6/site-packages/"]
         else:
             command = ["pip", "install", package]
@@ -262,3 +284,5 @@ class CommandExecutorHandler():
         except Exception as err:
             self.logger.info(
                 "{} - Failed to deactivate Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
+
+
