@@ -440,6 +440,7 @@ open class BluePrintModelHandler(
 
     /**
      * This is a publishBlueprintModel method to change the status published to YES
+     * NOTE: this method is meant for enriched blueprints only.
      *
      * @param filePart filePart
      * @return BlueprintModelSearch
@@ -457,6 +458,31 @@ open class BluePrintModelHandler(
         } catch (e: Exception) {
             throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
                     "Error in Publishing CBA: ${e.message}", e.errorCauseOrDefault())
+        }
+    }
+
+    /**
+     * Enrich and publish the blueprint.
+     * NOTE: this method is meant for the unenriched vs publishBlueprint(filePart)
+     *       which is used for enriched blueprints.
+     *
+     * @param filePart filePart
+     * @return BlueprintModelSearch
+     * @throws BluePrintException BluePrintException
+     */
+    @Throws(BluePrintException::class)
+    open suspend fun enrichAndPublishBlueprint(filePart: FilePart): BlueprintModelSearch {
+        try {
+            val enhancedByteArray = enrichBlueprintFileSource(filePart)
+            return upload(enhancedByteArray, true)
+        } catch (e: BluePrintProcessorException) {
+            e.http(ErrorCatalogCodes.IO_FILE_INTERRUPT)
+            val errorMsg = "Error while enhancing and uploading the CBA package."
+            throw e.updateErrorMessage(DesignerApiDomains.DESIGNER_API, errorMsg,
+                "Wrong CBA file provided, please verify the source CBA.")
+        } catch (e: Exception) {
+            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                "EnrichBlueprint: ${e.message}", e.errorCauseOrDefault())
         }
     }
 
