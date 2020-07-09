@@ -16,6 +16,24 @@
       "revId": "90b49b479b13ffb17baf6de0ca73d1442da9c423",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "add94505_810d506d",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/handler/BluePrintModelHandler.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 5299
+      },
+      "writtenOn": "2020-07-09T18:01:35Z",
+      "side": 1,
+      "message": "I think what I wrote is correct..\n\n---BlueprintModelController.kt---\n\n    @PostMapping(\"/publish\", produces \u003d [MediaType.APPLICATION_JSON_VALUE])\n    @ResponseBody\n    @Throws(BluePrintException::class)\n    @PreAuthorize(\"hasRole(\u0027USER\u0027)\")\n    suspend fun publishBlueprint(@RequestPart(\"file\") file: FilePart): BlueprintModelSearch \u003d mdcWebCoroutineScope {\n        bluePrintModelHandler.publishBlueprint(file)\n    }\n----------------------------------\n\nThat takes an enriched CBA archive.",
+      "parentUuid": "fca12642_1b8f559f",
+      "revId": "90b49b479b13ffb17baf6de0ca73d1442da9c423",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
