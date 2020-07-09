@@ -178,6 +178,17 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         bluePrintModelHandler.enrichBlueprint(file)
     }
 
+    @PostMapping(
+        "/enrichandpublish", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
+        .MULTIPART_FORM_DATA_VALUE]
+    )
+    @ResponseBody
+    @Throws(BluePrintException::class)
+    @PreAuthorize("hasRole('USER')")
+    suspend fun enrichAndPubishlueprint(@RequestPart("file") file: FilePart): BlueprintModelSearch = mdcWebCoroutineScope {
+        bluePrintModelHandler.enrichAndPublishBlueprint(file)
+    }
+
     @PostMapping("/publish", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseBody
     @Throws(BluePrintException::class)
