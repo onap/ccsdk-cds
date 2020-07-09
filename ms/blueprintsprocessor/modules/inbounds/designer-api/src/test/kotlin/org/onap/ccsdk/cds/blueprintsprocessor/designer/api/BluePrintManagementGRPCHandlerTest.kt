@@ -29,6 +29,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.TokenAuthGrpcClientService
 import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
+import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
@@ -94,6 +95,7 @@ class BluePrintManagementGRPCHandlerTest {
             bootstrapOutput.status.message!!.contentEquals(BluePrintConstants.STATUS_SUCCESS),
             "failed to get success status"
         )
+        assertEquals(EventType.EVENT_COMPONENT_EXECUTED, bootstrapOutput.status.eventType)
         assertEquals(id, bootstrapOutput.commonHeader.requestId)
     }
 
@@ -109,6 +111,7 @@ class BluePrintManagementGRPCHandlerTest {
             output.status.message!!.contentEquals(BluePrintConstants.STATUS_SUCCESS),
             "failed to get success status"
         )
+        assertEquals(EventType.EVENT_COMPONENT_EXECUTED, output.status.eventType)
         assertEquals(id, output.commonHeader.requestId)
 
         val downloadId = "123_download"
@@ -120,6 +123,7 @@ class BluePrintManagementGRPCHandlerTest {
             downloadOutput.status.message!!.contentEquals(BluePrintConstants.STATUS_SUCCESS),
             "failed to get success status"
         )
+        assertEquals(EventType.EVENT_COMPONENT_EXECUTED, downloadOutput.status.eventType)
         assertNotNull(downloadOutput.fileChunk?.chunk, "failed to get cba file chunks")
         assertEquals(downloadId, downloadOutput.commonHeader.requestId)
     }
@@ -137,6 +141,7 @@ class BluePrintManagementGRPCHandlerTest {
             "failed to get success status"
         )
         assertEquals(id, output.commonHeader.requestId)
+        assertEquals(EventType.EVENT_COMPONENT_EXECUTED, output.status.eventType)
 
         val removeReq = createRemoveInputRequest(id)
         output = blockingStub.removeBlueprint(removeReq)

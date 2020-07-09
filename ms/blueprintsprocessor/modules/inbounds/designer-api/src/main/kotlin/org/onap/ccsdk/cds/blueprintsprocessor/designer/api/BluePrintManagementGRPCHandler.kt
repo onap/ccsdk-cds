@@ -24,6 +24,7 @@ import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
+import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -246,6 +247,7 @@ open class BluePrintManagementGRPCHandler(
             .setStatus(
                 Status.newBuilder()
                     .setTimestamp(currentTimestamp())
+                    .setEventType(EventType.EVENT_COMPONENT_EXECUTED)
                     .setMessage(BluePrintConstants.STATUS_SUCCESS)
                     .setCode(200)
                     .build()
@@ -265,6 +267,7 @@ open class BluePrintManagementGRPCHandler(
                 Status.newBuilder()
                     .setTimestamp(currentTimestamp())
                     .setMessage(BluePrintConstants.STATUS_SUCCESS)
+                    .setEventType(EventType.EVENT_COMPONENT_EXECUTED)
                     .setCode(200)
                     .build()
             )
@@ -284,6 +287,7 @@ open class BluePrintManagementGRPCHandler(
                         Status.newBuilder()
                                 .setTimestamp(currentTimestamp())
                                 .setMessage(BluePrintConstants.STATUS_FAILURE)
+                                .setEventType(EventType.EVENT_COMPONENT_FAILURE)
                                 .setErrorMessage("Error : $message \n Details: ${error.errorMessageOrDefault()}")
                                 .setCode(code)
                                 .build()
@@ -305,6 +309,7 @@ open class BluePrintManagementGRPCHandler(
                         Status.newBuilder()
                                 .setTimestamp(currentTimestamp())
                                 .setMessage(BluePrintConstants.STATUS_FAILURE)
+                                .setEventType(EventType.EVENT_COMPONENT_FAILURE)
                                 .setErrorMessage("Error : ${errorPayload.message}")
                                 .setCode(errorPayload.code)
                                 .build()
