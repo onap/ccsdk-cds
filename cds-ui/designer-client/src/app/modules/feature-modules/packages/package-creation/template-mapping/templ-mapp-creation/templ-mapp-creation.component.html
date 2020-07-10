@@ -5,14 +5,11 @@
                 class="fa fa-chevron-left mr-2"></i>Template List</button>
     </div>
     <div class="col text-right">
-
         <button data-toggle="modal" [hidden]="!edit" data-target="#templateDeletionModal2"
             class="btn btn-outline-danger" title="Delete Template">Delete</button>
-
-
         <button (click)="cancel()" [hidden]="fileName?.length <=0 || edit"
             class="btn btn-outline-secondary">Clear</button>
-        <button (click)="saveToStore()" [disabled]="fileName?.length <=0" class="btn btn-primary">Finish</button>
+        <button (click)="saveToStore()" [disabled]="fileName?.length <=0" title="Submit template and close" class="btn btn-primary">Finish</button>
     </div>
 </div>
 <div class="card creat-card">
@@ -74,7 +71,9 @@
                     <div class="create-template-import">Use the editor to add parameters or you can also
                         <a href="#" data-toggle="modal" (click)="allowedExt=[getFileExtension()]"
                             data-target="#templateModal"><b>Import
-                                File</b></a></div>
+                                File</b></a>. <br /> <span class="templateNote"><i class="icon-info"
+                                aria-hidden="true"></i> When you import new file, the new attributes will replace
+                            current attributes.</span></div>
                     <div class="editor-container mb-4">
                         <app-source-editor [lang]="'velocity'" (textChange)="textChanges($event,templateInfo.fileName)"
                             [(text)]="templateFileContent"></app-source-editor>
@@ -259,7 +258,7 @@
                                 <th width="40"><img src="assets/img/icon-file-code.svg" /></th>
                                 <th>{{ item.name }}</th>
                                 <th (click)="removeFile(i)" width="40" class="text-right"><img
-                                        src="assets/img/icon-remove-file.svg" /></th>
+                                        src="assets/img/icon-remove-file.svg" class="btn-modal-remove-file" /></th>
                             </tr>
                         </thead>
                     </table>
@@ -287,7 +286,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="templateDeletionModal2Label">Delete Script</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body">

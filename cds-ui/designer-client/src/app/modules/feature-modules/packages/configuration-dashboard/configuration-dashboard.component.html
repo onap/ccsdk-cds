@@ -111,11 +111,12 @@
                                 Mode
                             </button> -->
                             <!-- Button trigger modal - 1st Action -->
+
                             <button type="button" class="btn btn-sm btn-primary mb-2" data-toggle="modal"
                                 data-target="#exampleModalLong">
-                                Designer Mode
+                                <i class="icon-topologyView-active"></i> Designer Mode
                             </button>
-                            <!-- Modal -->
+                            <!-- Designer Modal -->
                             <div class="modal fade createActionModal" id="exampleModalLong" tabindex="-1" role="dialog"
                                 aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -658,7 +659,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-sm btn-outline-secondary" (click)="deployCurrentPackage()"><i
+                            <button type="button" class="btn btn-sm mb-2 btn-enrich" data-toggle="modal"
+                                data-target="#enrichModal">
+                                <i class="icon-enrich" aria-hidden="true"></i> Manual Enrich
+                            </button>
+
+
+                            <button class="btn btn-sm btn-deploy" (click)="deployCurrentPackage()"><i
                                     class="fa fa-play-circle"></i> Deploy
                             </button>
                         </div>
@@ -722,7 +729,35 @@
     </div>
 </div>
 
-
+<!-- Enrich Modal -->
+<div class="modal fade enrichModal" id="enrichModal" tabindex="-1" role="dialog" aria-labelledby="enrichModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="enrichModalLabel">Manual Enrich</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <img src="assets/img/icon-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="defintionsNote">
+                    <li><b>To do manual enrichment: </b></li>
+                    <li>1. Copy and paste "workflows" and "node_templates"</li>
+                    <li>2. Press <b>Enrich</b> button</li>
+                </ul>
+                <ace-editor [(text)]="dslDefinition.content" [mode]="'javascript'" [autoUpdateContent]="true"
+                    [durationBeforeCallback]="1000" (textChanged)="textChanged($event)" [theme]="'eclipse'" #editor
+                    style="height:300px;">
+                </ace-editor>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary btn-enrich">Enrich</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Delete Modal -->
 <div class="modal fade" id="removePackageModal" tabindex="-1" role="dialog" aria-labelledby="removePackageModalLabel"
     aria-hidden="true">
@@ -731,7 +766,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="removePackageModalLabel">Delete Script</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <i class="icon-action-close"></i>
                 </button>
             </div>
             <div class="modal-body">
