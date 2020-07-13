@@ -252,7 +252,11 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
     }
 
     override fun get(key: String): JsonNode {
-        return store[key] ?: throw BluePrintProcessorException("failed to get execution property($key)")
+        if(check(key)) {
+            return store[key]!!
+        } else {
+            throw BluePrintProcessorException("failed to get execution property($key)")
+        }
     }
 
     override fun check(key: String): Boolean {
