@@ -1,21 +1,20 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
-import { PackageCreationStore } from '../package-creation/package-creation.store';
-import { FilesContent, FolderNodeElement, MetaDataTabModel } from '../package-creation/mapping-models/metadata/MetaDataTab.model';
-import { MetadataTabComponent } from '../package-creation/metadata-tab/metadata-tab.component';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
+import {PackageCreationStore} from '../package-creation/package-creation.store';
+import {FilesContent, FolderNodeElement, MetaDataTabModel} from '../package-creation/mapping-models/metadata/MetaDataTab.model';
+import {MetadataTabComponent} from '../package-creation/metadata-tab/metadata-tab.component';
 import * as JSZip from 'jszip';
-import { ConfigurationDashboardService } from './configuration-dashboard.service';
-import { VlbDefinition } from '../package-creation/mapping-models/definitions/VlbDefinition';
-import { DslDefinition } from '../package-creation/mapping-models/CBAPacakge.model';
-import { PackageCreationUtils } from '../package-creation/package-creation.utils';
-import { PackageCreationModes } from '../package-creation/creationModes/PackageCreationModes';
-import { PackageCreationBuilder } from '../package-creation/creationModes/PackageCreationBuilder';
-import { saveAs } from 'file-saver';
-import { DesignerStore } from '../designer/designer.store';
-import { DesignerService } from '../designer/designer.service';
-import { ToastrService } from 'ngx-toastr';
-import { NgxFileDropEntry } from 'ngx-file-drop';
+import {ConfigurationDashboardService} from './configuration-dashboard.service';
+import {VlbDefinition} from '../package-creation/mapping-models/definitions/VlbDefinition';
+import {DslDefinition} from '../package-creation/mapping-models/CBAPacakge.model';
+import {PackageCreationUtils} from '../package-creation/package-creation.utils';
+import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
+import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
+import {saveAs} from 'file-saver';
+import {DesignerStore} from '../designer/designer.store';
+import {ToastrService} from 'ngx-toastr';
+import {NgxFileDropEntry} from 'ngx-file-drop';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -24,13 +23,13 @@ import { NgxFileDropEntry } from 'ngx-file-drop';
 })
 export class ConfigurationDashboardComponent implements OnInit {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
-    @ViewChild(MetadataTabComponent, { static: false })
+    @ViewChild(MetadataTabComponent, {static: false})
     metadataTabComponent: MetadataTabComponent;
     public customActionName = '';
 
     entryDefinitionKeys: string[] = ['template_tags', 'user-groups',
         'author-email', 'template_version', 'template_name', 'template_author', 'template_description'];
-    @ViewChild('nameit', { static: true })
+    @ViewChild('nameit', {static: true})
     elementRef: ElementRef;
     uploadedFiles = [];
     zipFile: JSZip = new JSZip();
@@ -72,32 +71,32 @@ export class ConfigurationDashboardComponent implements OnInit {
     private downloadCBAPackage(bluePrintDetailModels: BluePrintDetailModel) {
         this.configurationDashboardService.downloadResource(
             bluePrintDetailModels[0].artifactName + '/' + bluePrintDetailModels[0].artifactVersion).subscribe(response => {
-                const blob = new Blob([response], { type: 'application/octet-stream' });
-                this.currentBlob = blob;
-                this.zipFile.loadAsync(blob).then((zip) => {
-                    Object.keys(zip.files).forEach((filename) => {
-                        zip.files[filename].async('string').then((fileData) => {
-                            if (fileData) {
-                                if (filename.includes('Scripts/')) {
-                                    this.setScripts(filename, fileData);
-                                } else if (filename.includes('Templates/')) {
-                                    if (filename.includes('-mapping.')) {
-                                        this.setMapping(filename, fileData);
-                                    } else if (filename.includes('-template.')) {
-                                        this.setTemplates(filename, fileData);
-                                    }
-
-                                } else if (filename.includes('Definitions/')) {
-                                    this.setImports(filename, fileData, bluePrintDetailModels);
-                                } else if (filename.includes('TOSCA-Metadata/')) {
-                                    const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
-                                    this.setMetaData(metaDataTabInfo, bluePrintDetailModels[0]);
+            const blob = new Blob([response], {type: 'application/octet-stream'});
+            this.currentBlob = blob;
+            this.zipFile.loadAsync(blob).then((zip) => {
+                Object.keys(zip.files).forEach((filename) => {
+                    zip.files[filename].async('string').then((fileData) => {
+                        if (fileData) {
+                            if (filename.includes('Scripts/')) {
+                                this.setScripts(filename, fileData);
+                            } else if (filename.includes('Templates/')) {
+                                if (filename.includes('-mapping.')) {
+                                    this.setMapping(filename, fileData);
+                                } else if (filename.includes('-template.')) {
+                                    this.setTemplates(filename, fileData);
                                 }
+
+                            } else if (filename.includes('Definitions/')) {
+                                this.setImports(filename, fileData, bluePrintDetailModels);
+                            } else if (filename.includes('TOSCA-Metadata/')) {
+                                const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
+                                this.setMetaData(metaDataTabInfo, bluePrintDetailModels[0]);
                             }
-                        });
+                        }
                     });
                 });
             });
+        });
     }
 
     setScripts(filename: string, fileData: any) {
@@ -122,10 +121,10 @@ export class ConfigurationDashboardComponent implements OnInit {
             if (definition.topology_template && definition.topology_template.content) {
                 this.designerStore.saveSourceContent(definition.topology_template.content);
             }
-        } else {
-            this.packageCreationStore.addDefinition(filename, fileData);
 
         }
+        this.packageCreationStore.addDefinition(filename, fileData);
+
     }
 
     setTemplates(filename: string, fileData: any) {
@@ -173,7 +172,7 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({ type: 'blob' })
+        this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
                 this.packageCreationStore.saveBluePrint(blob).subscribe(
                     bluePrintDetailModels => {
@@ -198,6 +197,7 @@ export class ConfigurationDashboardComponent implements OnInit {
             console.log(err);
         });
     }
+
     create() {
         this.zipFile = new JSZip();
         FilesContent.getMapOfFilesNamesAndContent().forEach((value, key) => {
@@ -213,35 +213,25 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     downloadPackage(artifactName: string, artifactVersion: string) {
         this.configurationDashboardService.downloadResource(artifactName + '/' + artifactVersion).subscribe(response => {
-            const blob = new Blob([response], { type: 'application/octet-stream' });
+            const blob = new Blob([response], {type: 'application/octet-stream'});
             saveAs(blob, artifactName + '-' + artifactVersion + '-CBA.zip');
         });
     }
 
     deployCurrentPackage() {
         console.log('happened');
-        /*   this.zipFile.generateAsync({type: 'blob'})
-               .then(blob => {
-                   const formData = new FormData();
-                   formData.append('file', this.currentBlob);
-                   this.configurationDashboardService.deployPost(formData)
-                       .subscribe(data => {
-                       }, error => {
-                       });
-                   this.router.navigate(['/packages']);
-               });
-   */
         this.router.navigate(['/packages']);
     }
 
     goToDesignerMode(id) {
         //  this.designerService.setActionName(this.customActionName);
-        this.router.navigate(['/packages/designer', id, { actionName: this.customActionName }]);
+        this.router.navigate(['/packages/designer', id, {actionName: this.customActionName}]);
     }
 
     public dropped(files: NgxFileDropEntry[]) {
 
     }
+
     public fileOver(event) {
         console.log(event);
     }
@@ -251,6 +241,38 @@ export class ConfigurationDashboardComponent implements OnInit {
     }
 
     textChanged($event: {}) {
+        this.packageCreationStore.setEntryDefinition(this.dslDefinition.content);
+    }
 
+    enrichBluePrint() {
+
+        this.packageCreationStore.state$.subscribe(
+            cbaPackage => {
+                FilesContent.clear();
+                let packageCreationModes: PackageCreationModes;
+                cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
+                cbaPackage.metaData = PackageCreationModes.setEntryPoint(cbaPackage.metaData);
+                packageCreationModes = PackageCreationBuilder.getCreationMode(cbaPackage);
+                packageCreationModes.execute(cbaPackage, this.packageCreationUtils);
+                this.filesData.push(this.folder.TREE_DATA);
+                this.enrichPackage();
+
+            });
+    }
+
+    private enrichPackage() {
+        this.create();
+        this.zipFile.generateAsync({type: 'blob'})
+            .then(blob => {
+                this.packageCreationStore.enrichBluePrint(blob).subscribe(response => {
+                    console.log('success');
+                    const blob = new Blob([response], {type: 'application/octet-stream'});
+                    saveAs(blob, 'test' + '-' + '1.0.0' + '-CBA.zip');
+                    this.toastService.info('enriched successfully ');
+                });
+            }, error => {
+                this.toastService.error('error happened when editing ' + error.message);
+                console.log('Error -' + error.message);
+            });
     }
 }
