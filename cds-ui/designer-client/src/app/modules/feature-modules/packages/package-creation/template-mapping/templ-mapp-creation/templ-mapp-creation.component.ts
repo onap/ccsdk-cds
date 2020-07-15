@@ -10,6 +10,7 @@ import { PackageCreationUtils } from '../../package-creation.utils';
 import { JsonConvert, Any } from 'json2typescript';
 import { ToastrService } from 'ngx-toastr';
 import { SharedService } from '../shared-service';
+import { XmlParser } from '../utils/XmlParser';
 declare var $: any;
 
 @Component({
@@ -21,8 +22,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     @Output() showListView = new EventEmitter<any>();
     @Output() showCreationView = new EventEmitter<any>();
     public uploadedFiles: FileSystemFileEntry[] = [];
-     fileNames: Set<string> = new Set();
-     jsonConvert = new JsonConvert();
+    fileNames: Set<string> = new Set();
+    jsonConvert = new JsonConvert();
     public files: NgxFileDropEntry[] = [];
     fileName: any;
     templateInfo = new TemplateInfo();
@@ -132,6 +133,11 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         }
     }
 
+    fileExtensionFromString(filename: string): string {
+        const fileExtension = filename.substring(filename.lastIndexOf('.') + 1);
+        return fileExtension;
+    }
+
     public getTemplateVariable(fileContent: string) {
         const variables: string[] = [];
         const stringsSlittedByBraces = fileContent.split('${');
@@ -196,22 +202,26 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     uploadFile() {
         this.dependancies.clear();
         this.dependanciesSource.clear();
-        if (this.allowedExt.includes('.csv')) {
-            this.fetchCSVkeys();
+        if (this.allowedExt.includes('.csv') || this.allowedExt.includes('.xml')) {
+            this.fetchkeysfromfile();
         } else {
             this.setTemplateFilesToStore();
         }
         $('.btn-cancel').click();
-
-
     }
 
-    fetchCSVkeys() {
+    fetchkeysfromfile() {
         for (const droppedFile of this.uploadedFiles) {
             droppedFile.file((file: File) => {
                 const fileReader = new FileReader();
                 fileReader.onload = (e) => {
-                    this.variables = fileReader.result.toString().split(',');
+                    const fileExt = this.fileExtensionFromString(droppedFile.name);
+                    if (fileExt === 'csv') {
+                        this.variables = fileReader.result.toString().split(',');
+                    } else {
+                        const parser = new XmlParser();
+                        this.variables = parser.getVariables(fileReader.result.toString());
+                    }
                     console.log(this.variables);
                     this.getMappingTableFromTemplate(null);
 
