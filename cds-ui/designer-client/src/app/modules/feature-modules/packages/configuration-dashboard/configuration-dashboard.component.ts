@@ -39,6 +39,7 @@ export class ConfigurationDashboardComponent implements OnInit {
     id: any;
 
     currentBlob = new Blob();
+    dslDefinition: DslDefinition = new DslDefinition();
 
     constructor(
         private route: ActivatedRoute,
@@ -247,5 +248,9 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     public fileLeave(event) {
         console.log(event);
+    }
+
+    textChanged($event: {}) {
+
     }
 }
