@@ -19,16 +19,17 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import { Store } from '../../../../common/core/stores/Store';
+import {Store} from '../../../../common/core/stores/Store';
 
-import { CBAPackage, DslDefinition } from './mapping-models/CBAPacakge.model';
-import { PackageCreationService } from './package-creation.service';
-import { MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
-import { Observable } from 'rxjs';
-import { ResourceDictionary } from './mapping-models/ResourceDictionary.model';
-import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
+import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
+import {PackageCreationService} from './package-creation.service';
+import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import {Observable} from 'rxjs';
+import {ResourceDictionary} from './mapping-models/ResourceDictionary.model';
+import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
+import {TemplateTopology} from './mapping-models/definitions/VlbDefinition';
 
 
 @Injectable({
@@ -59,6 +60,7 @@ export class PackageCreationStore extends Store<CBAPackage> {
     istemplateExist(): boolean {
         return this.state.templates.files.size > 0 && this.state.mapping.files.size > 0;
     }
+
     changeDslDefinition(dslDefinition: DslDefinition) {
 
         this.setState({
@@ -100,6 +102,10 @@ export class PackageCreationStore extends Store<CBAPackage> {
         return this.packageCreationService.savePackage(blob);
     }
 
+    enrichBluePrint(blob): Observable<any> {
+        return this.packageCreationService.enrichPackage(blob);
+    }
+
     addTemplate(filePath: string, fileContent: string) {
         this.setState({
             ...this.state,
@@ -120,5 +126,16 @@ export class PackageCreationStore extends Store<CBAPackage> {
 
     clear() {
         this.setState(new CBAPackage());
+    }
+
+    setEntryDefinition(data: string) {
+        console.log('setting manual enrichment ');
+    }
+
+    addTopologyTemplate(templateTopology: TemplateTopology) {
+        this.setState({
+            ...this.state,
+            templateTopology
+        });
     }
 }
