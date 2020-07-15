@@ -4,11 +4,11 @@
             <p class="logo mb-0"></p>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb designer-breadcrumb mb-0">
-                    <li class="breadcrumb-item"> 
+                    <li class="breadcrumb-item">
                         <a href="#">CBA Packages</a>
                     </li>
-                    <i class="fa fa-angle-right ml-2 mr-2"></i> 
-                    <li class="breadcrumb-item"> 
+                    <i class="fa fa-angle-right ml-2 mr-2"></i>
+                    <li class="breadcrumb-item">
                         <a href="/package/{{viewedPackage.id}}">{{viewedPackage.artifactName}}</a>
                         <button type="button" class="btn package-info-btn" data-toggle="modal"
                             data-target="#exampleModalLong">
@@ -30,19 +30,23 @@
                                     <img src="assets/img/icon-close.svg" />
                                 </button>
                             </div>
-                            <div class="modal-body">
-                                <div class="row package-info">
+                            <div class="modal-body package-info">
+                                <div class="row">
                                     <div class="col">
                                         <h3>Test Package
                                             <span class="package-version">Version 1.0.2</span></h3>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col mb-3">
                                         <span class="badge badge-primary">test</span>
                                         <span class="badge badge-primary">vDNS-CDS</span>
                                         <span class="badge badge-primary">SCALE-OUT</span>
                                         <span class="badge badge-primary">MARCO</span>
                                     </div>
-                                    <div class="col-2">
+                                </div>
+                                <div class="row">
+                                    <div class="col-2 pr-0">
                                         <img src="/assets/img/img-user3.jpg" class="creator-pic">
                                     </div>
                                     <div class="col-10 pl-0">
@@ -120,11 +124,11 @@
                     </li>
                 </ul>
             </li>
-            
+
             <li class="nav-item">
                 <div class="btn-group viewBtns" role="group">
-                    <button (click)="convertAndOpenInDesingerView(viewedPackage.id)"
-                     type="button" class="btn btn-secondary topologySource">Designer</button>
+                    <button (click)="convertAndOpenInDesingerView(viewedPackage.id)" type="button"
+                        class="btn btn-secondary topologySource">Designer</button>
                     <button type="button" class="btn btn-secondary topologyView active">Scripting</button>
                 </div>
             </li>
@@ -148,9 +152,10 @@
         </div>
     </ng-sidebar>
 
-<div ng-sidebar-content id="board-paper">
-    <ace-editor [(text)]="content" [mode]="'json'" [autoUpdateContent]="true" [durationBeforeCallback]="1000"
-        [theme]="'tomorrow_night_bright'" #editor style="height:500px">
-    </ace-editor>
+    <div ng-sidebar-content id="board-paper">
+        <ace-editor [(text)]="content" [mode]="'json'" [autoUpdateContent]="true" [durationBeforeCallback]="1000"
+            [theme]="'tomorrow_night_bright'" #editor style="height:500px">
+        </ace-editor>
 
-   </div>
+    </div>
+    

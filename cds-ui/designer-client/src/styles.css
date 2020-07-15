@@ -915,6 +915,67 @@ height: 40px;
 .main-container{
   padding: 0 !important;
 }
+/*Profile & Help Area*/
+.profile-help .navbar{
+  padding: 0 !important;
+}
+.profile-help .dropdown{
+  width: 50px;
+}
+.profile-help .dropdown-text{
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 13px;
+  /* text-indent: -999px; */
+}
+.profile-help .dropdown-text img{
+  width: 33px;
+  height: 33px;
+  border: solid 1px #fff;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.profile-help .dropdown-toggle:hover ~ .dropdown-text{
+  background: #fff;
+}
+.profile-help .dropdown-toggle:hover ~ .dropdown-text img{
+  box-shadow: 0 2px 6px 6px rgba(47, 83, 151, .17);
+}
+.profile-help .dropdown-content{
+  right: 0;
+  top: 47px;
+  padding: 4px 0;
+  background-color: #fff;
+  border: 1px solid #ECEDF2;
+  border-radius: 2px;
+  box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.12) !important;
+}
+.profile-help .dropdown-content li:hover{
+  background-color: #ECEDF2;
+}
+.profile-help .dropdown-content a{
+  padding: 3px;
+  color: #1B3E6F;
+  font-size: 13px;
+}
+.profile-help .dropdown-content a:hover{
+  text-decoration: none;
+  background-color: transparent;
+}
+.help-btn{
+  border-right: solid 1px #ECEDF2;
+}
+.help-btn .nav-link{
+  padding: 7px 8px 0 !important;
+}
+.help-btn i{
+  font-size: 19px;
+  color: #C3CDDB;
+}
+.help-btn a:hover i{
+  color: #1B3E6F;
+}
 .header-button-save button{
   border-radius: 50px;
 }
@@ -1443,11 +1504,22 @@ ul.package-contributers{
   box-shadow: 0 10px 20px 0 rgba(27,62,111,.1);
   transition: 0.3s !important;
 }
+.createActionModal h3.mainHead{
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  color: #C1CDDD;
+}
 .createActionModal h1{
   margin-bottom: 21px;
   font-size: 22px;
+  font-weight: bold;
   text-align: center;
-  font-weight: normal;
+}
+.createActionModal .carousel-inner{
+  height: 510px;
 }
 .createActionModal .skip-btn{
   float: unset;
@@ -1458,6 +1530,12 @@ ul.package-contributers{
   border: solid 1px #F1F2FA;
   border-radius: 2px;
 }
+.createActionModal .skip-btn:hover{
+  background: #1273EB;
+  color: #fff;
+  box-shadow: 0 10px 20px 0 rgba(27,62,111,.1);
+}
+
 .actionType,
 .actionType:hover{
   text-align: center;
@@ -1932,9 +2010,11 @@ ul.package-contributers{
   width: auto !important;
   max-width: 280px !important;
   text-align: left!important;
+  /* color:#1B3E6F;
+  background-color: #fff !important; */
   color:#1B3E6F;
-  background-color: #fff !important;
-  border: solid 1px #E6EDF5;
+  background-color: #C3CDDB !important;
+  border: solid 1px #C3CDDB;
   border-radius: 3px !important;
   border-top-left-radius: 0 !important;
   font-size: 12px;
@@ -1942,16 +2022,16 @@ ul.package-contributers{
 } 
 
 .bs-tooltip-auto[x-placement^=top] .arrow::before, .bs-tooltip-top .arrow::before {
-  border-top-color: #E6EDF5 !important;
+  border-top-color: #C3CDDB !important;
 }
 .bs-tooltip-auto[x-placement^=right] .arrow::before, .bs-tooltip-right .arrow::before {
-  border-right-color: #E6EDF5 !important;
+  border-right-color: #C3CDDB !important;
 }
 .bs-tooltip-auto[x-placement^=bottom] .arrow::before, .bs-tooltip-bottom .arrow::before {
-  border-bottom-color: #E6EDF5 !important;
+  border-bottom-color: #C3CDDB !important;
 }
 .bs-tooltip-auto[x-placement^=left] .arrow::before, .bs-tooltip-left .arrow::before {
-  border-left-color: #E6EDF5 !important;
+  border-left-color: #C3CDDB !important;
 }
 
 .btn{
@@ -2732,7 +2812,7 @@ hr{
   border-right: 0px !important;
   color: #1B3E6F !important;
 }
-.ace-tm .ace_gutter-active-line{
+.ace_gutter-active-line{
   background-color: #265699 !important;
   color: #fff;
 }
