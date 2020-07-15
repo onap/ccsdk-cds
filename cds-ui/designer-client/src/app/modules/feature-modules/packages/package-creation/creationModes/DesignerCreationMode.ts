@@ -77,6 +77,8 @@ export class DesignerCreationMode extends PackageCreationModes {
         if (cbaPackage.definitions.dslDefinition.content) {
             vlbDefinition.dsl_definitions = JSON.parse(cbaPackage.definitions.dslDefinition.content);
         }
+
+        vlbDefinition.topology_template = cbaPackage.templateTopology;
         console.log(vlbDefinition);
         const value = packageCreationUtils.transformToJson(vlbDefinition);
         FilesContent.putData(filenameEntry, value);

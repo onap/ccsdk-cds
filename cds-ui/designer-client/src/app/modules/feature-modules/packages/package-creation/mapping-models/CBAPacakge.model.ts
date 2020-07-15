@@ -1,6 +1,5 @@
 import {MetaDataTabModel} from './metadata/MetaDataTab.model';
-
-
+import {TemplateTopology} from './definitions/VlbDefinition';
 
 export class Definition {
 
@@ -94,6 +93,7 @@ export class CBAPackage {
     public scripts: Scripts;
     public templates: Template;
     public mapping: Mapping;
+    public templateTopology: TemplateTopology;
 
 
     constructor() {
@@ -102,6 +102,7 @@ export class CBAPackage {
         this.metaData = new MetaDataTabModel();
         this.templates = new Template();
         this.mapping = new Mapping();
+        this.templateTopology = new TemplateTopology();
     }
 
 
