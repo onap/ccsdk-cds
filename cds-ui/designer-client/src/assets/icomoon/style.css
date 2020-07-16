@@ -40,7 +40,6 @@
 }
 .icon-rectangle:before {
   content: "\e906";
-  color: #ff6b6b;
 }
 .icon-file:before {
   content: "\e905";

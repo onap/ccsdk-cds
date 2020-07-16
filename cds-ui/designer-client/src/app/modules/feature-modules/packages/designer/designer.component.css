@@ -116,7 +116,7 @@ header{
 .btn-topology-action,
 .btn-topology-action:hover{
   margin: 0 6px;
-  padding: 4px 8px;
+  padding: 3px 8px;
   color: #fff;
   border-radius: 50%;
   border: solid .5px #fff;
@@ -125,9 +125,10 @@ header{
   margin-right: 0;
 }
 .btn-topology-action .fa{
-  width: 16px;
-  height: 16px;
+  /* width: 16px;
+  height: 16px; */
   text-align: center;
+  font-size: 14px;
 }
 .topology-actions .dropdown-text,
 .dropdown-toggle:hover ~ .dropdown-text, 
@@ -177,7 +178,7 @@ header{
   padding: 0 !important;
 }
 .package-info h3{
-  font-size: 15px;
+  font-size: 13px;
   font-weight: bold;
 }
 .package-info h3 span{
@@ -385,9 +386,9 @@ p.compType-4{
 }
 .new-action,
 .new-action:hover{
-  margin: 9px 0 4px 18px;
+  margin: 9px 0 4px 3px;
   padding: 6px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
   color: #1B3E6F;
 }
@@ -486,7 +487,7 @@ p.compType-4{
 /*CANVAS*/
 .source-button.editBar{
   position: absolute;
-  z-index: 9999999;
+  z-index: 1000 /*9999999*/;
   top: 60px;
   /* left: 50%; */
 }
@@ -527,6 +528,7 @@ p.compType-4{
 }
 .editBar .toggoleBtn.active,
 .editBar2 .toggoleBtn.active{
+  padding: 0 10px !important;
   background-color: #1B3E6F !important;
   color: #fff;
 }
@@ -791,7 +793,7 @@ p.compType-4{
   margin-top: 14px;
   padding-left: 30px!important;
   border: 0;
-  font-size: 12px;
+  font-size: 11px;
   color: #1B3E6F !important;
   background-color: #fff !important;
   background-repeat: no-repeat;
@@ -826,13 +828,14 @@ ul.templateLegend{
   color: #0ABDE3;
 }
 ul.editor{
-  margin-right: -40px;
+  /* margin-right: -40px; */
   margin-top: 16px;
 }
 .editor li{
   list-style: none;
 }
 .editor .btn {
+  padding: 0 8px !important;
   box-shadow: none;
 }
 .ace_editor{
@@ -848,3 +851,6 @@ ul.editor{
     margin-left: 12px;
     margin-right: 12px;
 } 
+.zoom-percent{
+  font-size: 12px;
+}
