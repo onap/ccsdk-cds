@@ -41,6 +41,10 @@ export class PackageCreationService {
         return this.api.post(BlueprintURLs.save, body, {responseType: 'text'});
     }
 
+    private enrichBlueprint(body: any | null, options?: any): Observable<any> {
+        return this.api.post(BlueprintURLs.enrich, body, {responseType: 'text'});
+    }
+
     async checkBluePrintNameAndVersion(name: string, version: string): Promise<boolean> {
         return await this.packagesListService.checkBluePrintIfItExists(name, version)
             .then(bluePrintModelsResult => bluePrintModelsResult != null && bluePrintModelsResult.length > 0);
@@ -51,11 +55,19 @@ export class PackageCreationService {
     }
 
     savePackage(blob) {
+        const formData = this.getFormData(blob);
+        return this.saveBlueprint(formData);
+    }
 
+    enrichPackage(blob) {
+        const formData = this.getFormData(blob);
+        return this.enrichBlueprint(formData);
+    }
+
+    private getFormData(blob) {
         const formData = new FormData();
         formData.append('file', blob);
-        return this.saveBlueprint(formData);
-
+        return formData;
     }
 
     getTemplateAndMapping(variables: string[]): Observable<ResourceDictionary[]> {
