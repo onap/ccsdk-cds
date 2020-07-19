@@ -48,6 +48,7 @@ export class MetadataTabComponent implements OnInit {
                 this.metaDataTab.version = element.metaData.version;
                 this.metaDataTab.description = element.metaData.description;
                 this.tags = element.metaData.templateTags;
+                this.tags.delete('');
                 this.metaDataTab.templateTags = this.tags;
                 console.log(element);
                 if (element.metaData.mode && element.metaData.mode.includes('DEFAULT')) {
