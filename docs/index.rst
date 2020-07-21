@@ -43,7 +43,7 @@ Design Studio is to create and populate a controller blueprint, create a
 configuration file from this Controller blueprint, and download this
 configuration file (configlet) to a VNF/PNF.
 
-|image1|
+|cdsArchitectureImage|
 
 
 Modeling Concept
@@ -115,7 +115,7 @@ https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_n
    :width: 7.88889in
    :height: 4.43750in
 
-.. |image1| image:: media/CDS_architecture.jpg
+.. |cdsArchitectureImage| image:: media/CDS_architecture_latest.png
    :height: 4.43750in
    :width: 7.88889in
 
