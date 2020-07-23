@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts
 
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Test
+// import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
@@ -69,3 +70,4 @@ class BlueprintJythonServiceTest {
             assertNotNull(abstractJythonComponent, "failed to get Jython component")
     }
 }
+*/
