@@ -55,7 +55,7 @@
         <sshd.version>2.2.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
         <jslt.version>0.1.8</jslt.version>
-        <jython.version>2.7.1</jython.version>
+        <jython.version>2.7.2</jython.version>
         <jinja.version>2.5.1</jinja.version>
         <guava.version>27.0.1-jre</guava.version>
         <json-patch.version>1.9</json-patch.version>
