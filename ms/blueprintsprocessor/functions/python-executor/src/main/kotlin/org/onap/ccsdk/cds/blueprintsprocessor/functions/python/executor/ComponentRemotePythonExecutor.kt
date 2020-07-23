@@ -160,7 +160,7 @@ open class ComponentRemotePythonExecutor(
 
                 // there are no artifacts for env. prepare, but we reuse it for err_log...
                 if (prepareEnvOutput.status != StatusType.SUCCESS) {
-                    setNodeOutputErrors(STEP_PREPARE_ENV, "".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
+                    setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
                     addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, logs.toString())
                 } else {
                     setNodeOutputProperties(prepareEnvOutput.status, STEP_PREPARE_ENV, logs, prepareEnvOutput.payload, isLogResponseEnabled)
@@ -177,14 +177,14 @@ open class ComponentRemotePythonExecutor(
             // no execution log in case of timeout (as cmd-exec side hasn't finished to transfer output)
             // set prepare-env-log to the error msg, and cmd-exec-log to empty
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, grpcErrMsg.asJsonPrimitive())
-            setNodeOutputErrors(STEP_PREPARE_ENV, "".asJsonPrimitive(), "".asJsonPrimitive(), isLogResponseEnabled)
+            setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), "{}".asJsonPrimitive(), isLogResponseEnabled)
             addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, grpcErrMsg)
             log.error(grpcErrMsg, grpcEx)
         } catch (e: Exception) {
             val catchallErrMsg = "Command executor failed during env. preparation.. catch-all case. timeout($envPrepTimeout) requestId ($processId). exception msg: ${e.message}"
             // no environment prepare log from executor in case of timeout (as cmd-exec side hasn't finished to transfer output), set it to error msg. Execution logs is empty.
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, catchallErrMsg.asJsonPrimitive())
-            setNodeOutputErrors(STEP_PREPARE_ENV, "".asJsonPrimitive(), "".asJsonPrimitive(), isLogResponseEnabled)
+            setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), "{}".asJsonPrimitive(), isLogResponseEnabled)
             addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, catchallErrMsg)
             log.error(catchallErrMsg, e)
         }
@@ -225,17 +225,17 @@ open class ComponentRemotePythonExecutor(
             } catch (timeoutEx: TimeoutCancellationException) {
                 val componentLevelWarningMsg = if (timeout < executionTimeout) "Note: component-level timeout ($timeout) is shorter than execution timeout ($executionTimeout). " else ""
                 val timeoutErrMsg = "Command executor execution timeout. DetailedMessage: (${timeoutEx.message}) requestId ($processId). $componentLevelWarningMsg"
-                setNodeOutputErrors(STEP_EXEC_CMD, timeoutErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
+                setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonPrimitive(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, timeoutErrMsg)
                 log.error(timeoutErrMsg, timeoutEx)
             } catch (grpcEx: io.grpc.StatusRuntimeException) {
                 val timeoutErrMsg = "Command executor timed out executing after $executionTimeout seconds requestId ($processId) grpcErr: ${grpcEx.status}"
-                setNodeOutputErrors(STEP_EXEC_CMD, timeoutErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
+                setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonPrimitive(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, timeoutErrMsg)
                 log.error(timeoutErrMsg, grpcEx)
             } catch (e: Exception) {
                 val catchAllErrMsg = "Command executor failed during process catch-all case requestId ($processId) timeout($envPrepTimeout) exception msg: ${e.message}"
-                setNodeOutputErrors(STEP_PREPARE_ENV, catchAllErrMsg.asJsonPrimitive(), logging = isLogResponseEnabled)
+                setNodeOutputErrors(STEP_PREPARE_ENV, listOf(catchAllErrMsg).asJsonPrimitive(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, catchAllErrMsg)
                 log.error(catchAllErrMsg, e)
             }
@@ -286,8 +286,8 @@ open class ComponentRemotePythonExecutor(
      */
     private fun setNodeOutputErrors(
         step: String,
-        executionLogs: JsonNode = "N/A".asJsonPrimitive(),
-        artifacts: JsonNode = "N/A".asJsonPrimitive(),
+        executionLogs: JsonNode = "[]".asJsonPrimitive(),
+        artifacts: JsonNode = "{}".asJsonPrimitive(),
         logging: Boolean = true
     ) {
         val status = StatusType.FAILURE.name
