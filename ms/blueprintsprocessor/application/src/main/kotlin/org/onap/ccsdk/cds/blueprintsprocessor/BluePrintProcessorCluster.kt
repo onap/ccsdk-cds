@@ -16,7 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterInfo
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
@@ -57,7 +58,7 @@ open class BluePrintProcessorCluster(private val bluePrintClusterService: BluePr
     private val log = logger(BluePrintProcessorCluster::class)
 
     @EventListener(ApplicationReadyEvent::class)
-    fun startAndJoinCluster() = runBlocking {
+    fun startAndJoinCluster() = GlobalScope.launch {
 
         if (BluePrintConstants.CLUSTER_ENABLED) {
 
