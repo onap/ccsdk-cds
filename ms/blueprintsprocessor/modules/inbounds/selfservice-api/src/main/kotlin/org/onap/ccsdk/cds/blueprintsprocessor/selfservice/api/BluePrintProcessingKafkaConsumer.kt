@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -55,7 +56,7 @@ open class BluePrintProcessingKafkaConsumer(
     }
 
     @EventListener(ApplicationReadyEvent::class)
-    fun setupMessageListener() = runBlocking {
+    fun setupMessageListener() = GlobalScope.launch {
         try {
             log.info(
                 "Setting up message consumer($CONSUMER_SELECTOR)" +
