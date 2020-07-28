@@ -140,7 +140,7 @@ open class ErrorCatalogLoadPropertyService(private var errorCatalogProperties: E
             log.error("Application ID: ${errorCatalogProperties.applicationId} > Fail to load property file " +
                     "'$propertyFileName' for message errors.")
         } finally {
-            inputStream!!.close()
+            inputStream?.close()
         }
         return props
     }
