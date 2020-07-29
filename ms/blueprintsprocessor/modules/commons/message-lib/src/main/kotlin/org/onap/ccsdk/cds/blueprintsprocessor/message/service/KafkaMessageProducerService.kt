@@ -23,6 +23,7 @@ import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.header.internals.RecordHeader
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageProducerProperties
@@ -79,8 +80,18 @@ class KafkaMessageProducerService(
             headers.forEach { (key, value) -> recordHeaders.add(RecordHeader(key, value.toByteArray())) }
         }
         val callback = Callback { metadata, exception ->
-            if (exception == null) log.trace("message published to(${metadata.topic()}), offset(${metadata.offset()}), headers :$headers")
-            else log.error("ERROR : ${exception.message}")
+            if (exception != null)
+                log.error(exception.message)
+            else {
+                var logMessage = when (clonedMessage) {
+                    is ExecutionServiceInput ->
+                        "Request published to ${metadata.topic()} for CBA: ${clonedMessage.actionIdentifiers.blueprintName} version: ${clonedMessage.actionIdentifiers.blueprintVersion}"
+                    is ExecutionServiceOutput ->
+                        "Response published to ${metadata.topic()} for CBA: ${clonedMessage.actionIdentifiers.blueprintName} version: ${clonedMessage.actionIdentifiers.blueprintVersion}"
+                    else -> "Message published to(${metadata.topic()}), offset(${metadata.offset()}), headers :$headers"
+                }
+                log.info(logMessage)
+            }
         }
         messageTemplate().send(record, callback)
         return true
