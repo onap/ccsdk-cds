@@ -104,11 +104,16 @@ class CommandExecutorHandler():
 
             cmd = "cd " + self.venv_home
 
+            ### if properties are defined we add them to the command
+            properties = ""
+            if request.properties is not None and len(request.properties) > 0:
+                properties = " " + re.escape(MessageToJson(request.properties))
+
             ### TODO: replace with os.environ['VIRTUAL_ENV']?
             if "ansible-playbook" in request.command:
                 cmd = cmd + "; " + request.command + " -e 'ansible_python_interpreter=" + self.venv_home + "/bin/python'"
             else:
-                cmd = cmd + "; " + request.command + " " + re.escape(MessageToJson(request.properties))
+                cmd = cmd + "; " + request.command + properties
 
             ### extract the original header request into sys-env variables
             ### RequestID
