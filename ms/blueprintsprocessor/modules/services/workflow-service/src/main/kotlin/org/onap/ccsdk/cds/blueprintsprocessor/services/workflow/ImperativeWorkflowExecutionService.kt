@@ -31,17 +31,14 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflow
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.AbstractBluePrintWorkFlowService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintWorkFlowService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.NodeExecuteMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.service.NodeSkipMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.service.WorkflowExecuteMessage
-import org.springframework.beans.factory.config.ConfigurableBeanFactory
-import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 @Service("imperativeWorkflowExecutionService")
 class ImperativeWorkflowExecutionService(
-    private val imperativeBluePrintWorkflowService: BluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>
+    private val nodeTemplateExecutionService: NodeTemplateExecutionService
 ) :
     BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
@@ -57,15 +54,11 @@ class ImperativeWorkflowExecutionService(
 
         val graph = bluePrintContext.workflowByName(workflowName).asGraph()
 
-        return imperativeBluePrintWorkflowService.executeWorkflow(
-            graph, bluePrintRuntimeService,
-            executionServiceInput
-        )
+        return ImperativeBluePrintWorkflowService(nodeTemplateExecutionService)
+                .executeWorkflow(graph, bluePrintRuntimeService, executionServiceInput)
     }
 }
 
-@Service
-@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionService: NodeTemplateExecutionService) :
     AbstractBluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>() {
 
