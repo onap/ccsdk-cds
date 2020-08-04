@@ -132,6 +132,7 @@ class KafkaStreamsConsumerServiceTest {
                     val headers: MutableMap<String, String> = hashMapOf()
                     headers["id"] = it.toString()
                     blueprintMessageProducerService.sendMessageNB(
+                        key = "mykey",
                         message = "this is my message($it)",
                         headers = headers
                     )

@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import kotlinx.coroutines.channels.Channel
 import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.streams.Topology
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
@@ -29,15 +30,15 @@ interface ConsumerFunction
 
 interface BlueprintMessageConsumerService {
 
-    suspend fun subscribe(): Channel<String> {
+    suspend fun subscribe(): Channel<ConsumerRecord<String, ByteArray>> {
         return subscribe(null)
     }
 
     /** Subscribe to the Kafka channel with [additionalConfig] */
-    suspend fun subscribe(additionalConfig: Map<String, Any>?): Channel<String>
+    suspend fun subscribe(additionalConfig: Map<String, Any>?): Channel<ConsumerRecord<String, ByteArray>>
 
     /** Subscribe to the Kafka channel with [additionalConfig] for dynamic [topics]*/
-    suspend fun subscribe(topics: List<String>, additionalConfig: Map<String, Any>? = null): Channel<String>
+    suspend fun subscribe(topics: List<String>, additionalConfig: Map<String, Any>? = null): Channel<ConsumerRecord<String, ByteArray>>
 
     /** Consume and execute dynamic function [consumerFunction] */
     suspend fun consume(consumerFunction: ConsumerFunction) {

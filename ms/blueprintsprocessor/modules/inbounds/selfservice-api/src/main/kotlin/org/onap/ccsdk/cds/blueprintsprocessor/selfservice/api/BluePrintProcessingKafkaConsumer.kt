@@ -31,6 +31,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
+import java.nio.charset.Charset
+import java.util.UUID
 import java.util.concurrent.Phaser
 import javax.annotation.PreDestroy
 
@@ -95,10 +97,12 @@ open class BluePrintProcessingKafkaConsumer(
                     launch {
                         try {
                             ph.register()
-                            log.trace("Consumed Message : $message")
-                            val executionServiceInput = message.jsonAsType<ExecutionServiceInput>()
+                            val key = message.key() ?: UUID.randomUUID().toString()
+                            val value = String(message.value(), Charset.defaultCharset())
+                            log.trace("Consumed Message : key($key) value($value)")
+                            val executionServiceInput = value.jsonAsType<ExecutionServiceInput>()
                             val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
-                            blueprintMessageProducerService.sendMessage(executionServiceOutput)
+                            blueprintMessageProducerService.sendMessage(key, executionServiceOutput)
                         } catch (e: Exception) {
                             log.error("failed in processing the consumed message : $message", e)
                         } finally {

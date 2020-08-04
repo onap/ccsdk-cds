@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import kotlinx.coroutines.channels.Channel
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.streams.KafkaStreams
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -39,11 +40,11 @@ open class KafkaStreamsConsumerService(private val messageConsumerProperties: Me
         return configProperties
     }
 
-    override suspend fun subscribe(additionalConfig: Map<String, Any>?): Channel<String> {
+    override suspend fun subscribe(additionalConfig: Map<String, Any>?): Channel<ConsumerRecord<String, ByteArray>> {
         throw BluePrintProcessorException("not implemented")
     }
 
-    override suspend fun subscribe(topics: List<String>, additionalConfig: Map<String, Any>?): Channel<String> {
+    override suspend fun subscribe(topics: List<String>, additionalConfig: Map<String, Any>?): Channel<ConsumerRecord<String, ByteArray>> {
         throw BluePrintProcessorException("not implemented")
     }
 

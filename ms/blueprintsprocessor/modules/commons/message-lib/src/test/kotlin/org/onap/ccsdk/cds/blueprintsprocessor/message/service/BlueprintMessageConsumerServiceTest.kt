@@ -51,6 +51,7 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
+import java.nio.charset.Charset
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -133,9 +134,14 @@ open class BlueprintMessageConsumerServiceTest {
 
             every { spyBlueprintMessageConsumerService.kafkaConsumer(any()) } returns mockKafkaConsumer
             val channel = spyBlueprintMessageConsumerService.subscribe(null)
+            var i = 0
             launch {
                 channel.consumeEach {
-                    assertTrue(it.startsWith("I am message"), "failed to get the actual message")
+                    ++i
+                    val key = it.key()
+                    val value = String(it.value(), Charset.defaultCharset())
+                    assertTrue(value.startsWith("I am message"), "failed to get the actual message")
+                    assertEquals("key_$i", key)
                 }
             }
             delay(10)
@@ -268,6 +274,7 @@ open class BlueprintMessageConsumerServiceTest {
                     val headers: MutableMap<String, String> = hashMapOf()
                     headers["id"] = it.toString()
                     blueprintMessageProducerService.sendMessageNB(
+                        key = "mykey",
                         message = "this is my message($it)",
                         headers = headers
                     )

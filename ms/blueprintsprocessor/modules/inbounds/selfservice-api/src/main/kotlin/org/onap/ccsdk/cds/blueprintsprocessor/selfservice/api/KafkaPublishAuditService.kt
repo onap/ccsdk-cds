@@ -71,9 +71,10 @@ class KafkaPublishAuditService(
      */
     override suspend fun publishExecutionInput(executionServiceInput: ExecutionServiceInput) {
         val secureExecutionServiceInput = hideSensitiveData(executionServiceInput)
+        val key = secureExecutionServiceInput.actionIdentifiers.blueprintName
         try {
             this.inputInstance = this.getInputInstance(INPUT_SELECTOR)
-            this.inputInstance!!.sendMessage(secureExecutionServiceInput)
+            this.inputInstance!!.sendMessage(key, secureExecutionServiceInput)
         } catch (e: Exception) {
             var errMsg =
                     if (e.message != null) "ERROR : ${e.message}"
@@ -89,9 +90,10 @@ class KafkaPublishAuditService(
      */
     override suspend fun publishExecutionOutput(correlationUUID: String, executionServiceOutput: ExecutionServiceOutput) {
         executionServiceOutput.correlationUUID = correlationUUID
+        val key = executionServiceOutput.actionIdentifiers.blueprintName
         try {
             this.outputInstance = this.getOutputInstance(OUTPUT_SELECTOR)
-            this.outputInstance!!.sendMessage(executionServiceOutput)
+            this.outputInstance!!.sendMessage(key, executionServiceOutput)
         } catch (e: Exception) {
             var errMsg =
                 if (e.message != null) "ERROR : $e"
