@@ -88,7 +88,7 @@ open class BlueprintMessageProducerServiceTest {
 
             every { spyBluePrintMessageProducerService.messageTemplate(any()) } returns mockKafkaTemplate
 
-            val response = spyBluePrintMessageProducerService.sendMessage("Testing message")
+            val response = spyBluePrintMessageProducerService.sendMessage("mykey", "Testing message")
             assertTrue(response, "failed to get command response")
         }
     }
