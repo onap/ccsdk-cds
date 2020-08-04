@@ -260,6 +260,7 @@ open class MessagePrioritizationConsumerTest {
                     val headers: MutableMap<String, String> = hashMapOf()
                     headers["id"] = it.id
                     blueprintMessageProducerService.sendMessageNB(
+                        key = "mykey",
                         message = it.asJsonString(false),
                         headers = headers
                     )
@@ -272,6 +273,7 @@ open class MessagePrioritizationConsumerTest {
                         val headers: MutableMap<String, String> = hashMapOf()
                         headers["id"] = it.id
                         blueprintMessageProducerService.sendMessageNB(
+                            key = "mykey",
                             message = it.asJsonString(false),
                             headers = headers
                         )
@@ -284,6 +286,7 @@ open class MessagePrioritizationConsumerTest {
                         val headers: MutableMap<String, String> = hashMapOf()
                         headers["id"] = it.id
                         blueprintMessageProducerService.sendMessageNB(
+                            key = "mykey",
                             message = it.asJsonString(false),
                             headers = headers
                         )

@@ -19,13 +19,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageConsumerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import java.nio.charset.Charset
 import java.time.Duration
 import kotlin.concurrent.thread
 
@@ -35,7 +34,7 @@ open class KafkaMessageConsumerService(
     BlueprintMessageConsumerService {
 
     val log = logger(KafkaMessageConsumerService::class)
-    val channel = Channel<String>()
+    val channel = Channel<ConsumerRecord<String, ByteArray>>()
     var kafkaConsumer: Consumer<String, ByteArray>? = null
 
     @Volatile
@@ -49,14 +48,14 @@ open class KafkaMessageConsumerService(
         return KafkaConsumer(configProperties)
     }
 
-    override suspend fun subscribe(additionalConfig: Map<String, Any>?): Channel<String> {
+    override suspend fun subscribe(additionalConfig: Map<String, Any>?): Channel<ConsumerRecord<String, ByteArray>> {
         /** get to topic names */
         val consumerTopic = messageConsumerProperties.topic?.split(",")?.map { it.trim() }
         check(!consumerTopic.isNullOrEmpty()) { "couldn't get topic information" }
         return subscribe(consumerTopic, additionalConfig)
     }
 
-    override suspend fun subscribe(topics: List<String>, additionalConfig: Map<String, Any>?): Channel<String> {
+    override suspend fun subscribe(topics: List<String>, additionalConfig: Map<String, Any>?): Channel<ConsumerRecord<String, ByteArray>> {
         /** Create Kafka consumer */
         kafkaConsumer = kafkaConsumer(additionalConfig)
 
@@ -78,14 +77,10 @@ open class KafkaMessageConsumerService(
                     runBlocking {
                         consumerRecords?.forEach { consumerRecord ->
                             /** execute the command block */
-                            consumerRecord.value()?.let {
-                                launch {
-                                    if (!channel.isClosedForSend) {
-                                        channel.send(String(it, Charset.defaultCharset()))
-                                    } else {
-                                        log.error("Channel is closed to receive message")
-                                    }
-                                }
+                            if (!channel.isClosedForSend) {
+                                channel.send(consumerRecord)
+                            } else {
+                                log.error("Channel is closed to receive message")
                             }
                         }
                     }

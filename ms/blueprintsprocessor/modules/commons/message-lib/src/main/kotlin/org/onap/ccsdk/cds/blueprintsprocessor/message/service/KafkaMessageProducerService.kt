@@ -29,7 +29,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageProducerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
-import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import org.slf4j.LoggerFactory
 import java.nio.charset.Charset
 
@@ -48,17 +47,13 @@ class KafkaMessageProducerService(
         const val MAX_ERR_MSG_LEN = 128
     }
 
-    override suspend fun sendMessageNB(message: Any): Boolean {
+    override suspend fun sendMessageNB(key: String, message: Any, headers: MutableMap<String, String>?): Boolean {
         checkNotNull(messageProducerProperties.topic) { "default topic is not configured" }
-        return sendMessageNB(messageProducerProperties.topic!!, message)
-    }
-
-    override suspend fun sendMessageNB(message: Any, headers: MutableMap<String, String>?): Boolean {
-        checkNotNull(messageProducerProperties.topic) { "default topic is not configured" }
-        return sendMessageNB(messageProducerProperties.topic!!, message, headers)
+        return sendMessageNB(key, messageProducerProperties.topic!!, message, headers)
     }
 
     override suspend fun sendMessageNB(
+        key: String,
         topic: String,
         message: Any,
         headers: MutableMap<String, String>?
@@ -73,7 +68,7 @@ class KafkaMessageProducerService(
             else -> clonedMessage.asJsonString().toByteArray(Charset.defaultCharset())
         }
 
-        val record = ProducerRecord<String, ByteArray>(topic, defaultToUUID(), byteArrayMessage)
+        val record = ProducerRecord<String, ByteArray>(topic, key, byteArrayMessage)
         val recordHeaders = record.headers()
         messageLoggerService.messageProducing(recordHeaders)
         headers?.let {
