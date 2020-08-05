@@ -22,6 +22,30 @@
       "revId": "ca363e3ad11c792c029e28ab66d5f86150329147",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53a2173f_982977c8",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/BluePrintProcessingKafkaConsumer.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 6331
+      },
+      "writtenOn": "2020-08-05T13:14:45Z",
+      "side": 1,
+      "message": "defaultToUUID gives this kind of output : StandaloneCoroutine{Active}@132228ca\nI\u0027d rather change default value of sendMessage methods in favor of a valid UUID. Just like it\u0027s done in that specific case.",
+      "parentUuid": "1a082b5e_40f4bba5",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 83
+      },
+      "revId": "ca363e3ad11c792c029e28ab66d5f86150329147",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
