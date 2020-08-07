@@ -242,4 +242,6 @@ object BluePrintConstants {
     const val PROPERTY_CLUSTER_CONFIG_FILE = "CLUSTER_CONFIG_FILE"
 
     const val NODE_TEMPLATE_TYPE_COMPONENT_RESOURCE_RESOLUTION = "component-resource-resolution"
+    const val NODE_TEMPLATE_TYPE_DG = "dg-generic"
+    const val PROPERTY_DG_DEPENDENCY_NODE_TEMPLATE = "dependency-node-templates"
 }
