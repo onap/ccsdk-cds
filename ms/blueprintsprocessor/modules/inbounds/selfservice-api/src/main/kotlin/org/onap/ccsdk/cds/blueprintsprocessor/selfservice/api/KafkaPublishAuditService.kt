@@ -85,7 +85,7 @@ class KafkaPublishAuditService(
         val key = secureExecutionServiceInput.actionIdentifiers.blueprintName
         try {
             this.inputInstance = this.getInputInstance(INPUT_SELECTOR)
-            this.inputInstance!!.sendMessage(secureExecutionServiceInput)
+            this.inputInstance!!.sendMessage(key, secureExecutionServiceInput)
         } catch (e: Exception) {
             var errMsg =
                     if (e.message != null) "ERROR : ${e.message}"
@@ -106,7 +106,7 @@ class KafkaPublishAuditService(
         val key = executionServiceOutput.actionIdentifiers.blueprintName
         try {
             this.outputInstance = this.getOutputInstance(OUTPUT_SELECTOR)
-            this.outputInstance!!.sendMessage(executionServiceOutput)
+            this.outputInstance!!.sendMessage(key, executionServiceOutput)
         } catch (e: Exception) {
             var errMsg =
                     if (e.message != null) "ERROR : $e"

@@ -17,34 +17,19 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import kotlinx.coroutines.runBlocking
+import java.util.UUID
 
 interface BlueprintMessageProducerService {
 
-    fun sendMessage(message: Any): Boolean {
-        return sendMessage(message = message, headers = null)
+    fun sendMessage(key: String = UUID.randomUUID().toString(), message: Any, headers: MutableMap<String, String>? = null): Boolean = runBlocking {
+        sendMessageNB(key, message, headers)
     }
 
-    fun sendMessage(topic: String, message: Any): Boolean {
-        return sendMessage(topic, message, null)
+    fun sendMessage(key: String = UUID.randomUUID().toString(), topic: String, message: Any, headers: MutableMap<String, String>? = null): Boolean = runBlocking {
+        sendMessageNB(key, topic, message, headers)
     }
 
-    fun sendMessage(message: Any, headers: MutableMap<String, String>?): Boolean = runBlocking {
-        sendMessageNB(message = message, headers = headers)
-    }
+    suspend fun sendMessageNB(key: String = UUID.randomUUID().toString(), message: Any, headers: MutableMap<String, String>? = null): Boolean
 
-    fun sendMessage(topic: String, message: Any, headers: MutableMap<String, String>?): Boolean = runBlocking {
-        sendMessageNB(topic, message, headers)
-    }
-
-    suspend fun sendMessageNB(message: Any): Boolean {
-        return sendMessageNB(message = message, headers = null)
-    }
-
-    suspend fun sendMessageNB(message: Any, headers: MutableMap<String, String>?): Boolean
-
-    suspend fun sendMessageNB(topic: String, message: Any): Boolean {
-        return sendMessageNB(topic, message, null)
-    }
-
-    suspend fun sendMessageNB(topic: String, message: Any, headers: MutableMap<String, String>?): Boolean
+    suspend fun sendMessageNB(key: String = UUID.randomUUID().toString(), topic: String, message: Any, headers: MutableMap<String, String>? = null): Boolean
 }
