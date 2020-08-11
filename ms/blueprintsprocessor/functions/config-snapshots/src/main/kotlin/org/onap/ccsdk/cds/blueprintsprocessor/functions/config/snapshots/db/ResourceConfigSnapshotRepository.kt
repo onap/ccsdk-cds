@@ -40,4 +40,60 @@ interface ResourceConfigSnapshotRepository : JpaRepository<ResourceConfigSnapsho
         resourceType: String,
         status: ResourceConfigSnapshot.Status
     )
+
+    /**
+     * Finds all ResourceConfigSnapshot for a given resourceId and status as search criterias,
+     * ordering the resulting list in reverse chronological order.
+     *
+     * @param resourceId a resource identifier, e.g. CLLI1234555
+     * @param status RUNNING or CANDIDATE
+     *
+     * @return A list of entries are found returns a list of ConfigSnapshot.
+     * If no entries are found, this method returns an empty list.
+     */
+    fun findByResourceIdAndStatusOrderByCreatedDateDesc(
+        resourceId: String,
+        status: ResourceConfigSnapshot.Status
+    ): List<ResourceConfigSnapshot>?
+
+    /**
+     * Finds all ResourceConfigSnapshot for a given resourceId,
+     * ordering the resulting list in reverse chronological order.
+     *
+     * @param resourceId a resource identifier, e.g. CLLI1234555
+     *
+     * @return A list of entries are found returns a list of ConfigSnapshot.
+     * If no entries are found, this method returns an empty list.
+     */
+    fun findByResourceIdOrderByCreatedDateDesc(
+        resourceId: String
+    ): List<ResourceConfigSnapshot>?
+
+    /**
+     * Finds all ResourceConfigSnapshot for a given resourceType and status as search criterias,
+     * ordering the resulting list in reverse chronological order.
+     *
+     * @param resourceType a resource type name, e.g full_config
+     * @param status RUNNING or CANDIDATE
+     *
+     * @return A list of entries are found returns a list of ConfigSnapshot.
+     * If no entries are found, this method returns an empty list.
+     */
+    fun findByResourceTypeAndStatusOrderByCreatedDateDesc(
+        resourceType: String,
+        status: ResourceConfigSnapshot.Status
+    ): List<ResourceConfigSnapshot>?
+
+    /**
+     * Finds all ResourceConfigSnapshot for a given resourceType,
+     * ordering the resulting list in reverse chronological order.
+     *
+     * @param resourceType a resource type name, e.g full_config
+     *
+     * @return A list of entries are found returns a list of ConfigSnapshot.
+     * If no entries are found, this method returns an empty list.
+     */
+    fun findByResourceTypeOrderByCreatedDateDesc(
+        resourceType: String
+    ): List<ResourceConfigSnapshot>?
 }

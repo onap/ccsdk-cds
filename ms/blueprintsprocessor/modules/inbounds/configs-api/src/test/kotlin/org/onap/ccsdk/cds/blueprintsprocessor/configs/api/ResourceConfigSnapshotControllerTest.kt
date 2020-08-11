@@ -140,6 +140,112 @@ class ResourceConfigSnapshotControllerTest {
         }
     }
 
+    @Test
+    fun `getAllByID returns 200 if entries found`() {
+        runBlocking {
+            post(resourceType, "3", "RUNNING")
+            post(resourceType, "2", "RUNNING")
+            post(resourceType, resourceId, "RUNNING")
+
+            webTestClient
+                    .get()
+                    .uri("/api/v1/configs/allByID?resourceId=$resourceId")
+                    .exchange()
+                    .expectStatus().is2xxSuccessful
+                    .expectBody()
+                    .jsonPath("$.length()")
+                    .isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `getAllByID with CANDIDATE status returns 200 if entries found`() {
+        runBlocking {
+            post(resourceType, "3", "RUNNING")
+            post(resourceType, "2", "RUNNING")
+            post(resourceType, resourceId, "CANDIDATE")
+
+            webTestClient
+                    .get()
+                    .uri("/api/v1/configs/allByID?resourceId=$resourceId&status=CANDIDATE")
+                    .exchange()
+                    .expectStatus().is2xxSuccessful
+                    .expectBody()
+                    .jsonPath("$.length()")
+                    .isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `getAllByID returns 400 error if missing parameter`() {
+        runBlocking {
+
+            webTestClient
+                    .get()
+                    .uri("/api/v1/configs/allByID")
+                    .exchange()
+                    .expectStatus().is4xxClientError
+                    .expectBody()
+        }
+    }
+
+    @Test
+    fun `getAllByID returns 400 error if wrong status parameter`() {
+        runBlocking {
+
+            webTestClient
+                    .get()
+                    .uri("/api/v1/configs/allByID?resourceId=$resourceId&status=NOTGOOD")
+                    .exchange()
+                    .expectStatus().is4xxClientError
+                    .expectBody()
+        }
+    }
+
+    @Test
+    fun `getAllByType returns 200 if entries found`() {
+        runBlocking {
+            post(resourceType, "3", "RUNNING")
+            post(resourceType + "DIFF", "2", "RUNNING")
+            post(resourceType, "1", "RUNNING")
+
+            webTestClient
+                    .get()
+                    .uri("/api/v1/configs/allByType?resourceType=$resourceType")
+                    .exchange()
+                    .expectStatus().is2xxSuccessful
+                    .expectBody()
+                    .jsonPath("$.length()")
+                    .isEqualTo(3)
+        }
+    }
+
+    @Test
+    fun `getAllByType returns 400 error if missing parameter`() {
+        runBlocking {
+
+            webTestClient
+                    .get()
+                    .uri("/api/v1/configs/allByType")
+                    .exchange()
+                    .expectStatus().is4xxClientError
+                    .expectBody()
+        }
+    }
+
+    @Test
+    fun `getAllByType returns 400 error if wrong status parameter`() {
+        runBlocking {
+
+            webTestClient
+                    .get()
+                    .uri("/api/v1/configs/allByType?resourceType=$resourceType&status=NOTGOOD")
+                    .exchange()
+                    .expectStatus().is4xxClientError
+                    .expectBody()
+        }
+    }
+
     private fun post(resourceType: String, resourceId: String, status: String) {
         webTestClient
             .post()
