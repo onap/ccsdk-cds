@@ -53,6 +53,8 @@ import org.springframework.web.bind.annotation.RestController
 )
 open class ResourceConfigSnapshotController(private val resourceConfigSnapshotService: ResourceConfigSnapshotService) {
 
+    private val JSON_MIME_TYPE = "application/json"
+
     @RequestMapping(
         path = ["/health-check"],
         method = [RequestMethod.GET],
@@ -156,5 +158,85 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
             )
 
         ResponseEntity.ok().body(resultStored)
+    }
+
+    @RequestMapping(
+            path = ["/allByID"],
+            method = [RequestMethod.GET],
+            produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ApiOperation(
+            value = "Retrieve all resource configuration snapshots identified by a given resource_id",
+            notes = "Retrieve all config snapshots, identified by its Resource Id, ordered by most recently created/modified date. "
+    )
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    fun getAllByID(
+        @ApiParam(value = "Resource Id associated of the resource configuration snapshots.", required = false)
+        @RequestParam(value = "resourceId", required = true) resourceId: String,
+        @ApiParam(value = "Status of the snapshot being retrieved.", defaultValue = "ANY", required = false)
+        @RequestParam(value = "status", required = false, defaultValue = "ANY") status: String
+    ): ResponseEntity<List<ResourceConfigSnapshot>?> = runBlocking {
+        var configSnapshots: List<ResourceConfigSnapshot>?
+
+        try {
+            if (status == "ANY") {
+                configSnapshots = resourceConfigSnapshotService.findAllByResourceId(resourceId)
+            } else {
+                configSnapshots = resourceConfigSnapshotService.findAllByResourceIdForStatus(
+                        resourceId, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase()))
+            }
+        } catch (ex: NoSuchElementException) {
+            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, ConfigsApiDomains.CONFIGS_API,
+                    "Could not find configuration snapshot entry for ID $resourceId",
+                    ex.errorCauseOrDefault())
+        } catch (ex: Exception) {
+            throw httpProcessorException(ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                    "Unexpected error while finding configuration snapshot entries for ID $resourceId",
+                    ex.errorCauseOrDefault())
+        }
+
+        val expectedMediaType: MediaType = MediaType.valueOf(JSON_MIME_TYPE)
+        ResponseEntity.ok().contentType(expectedMediaType).body(configSnapshots)
+    }
+
+    @RequestMapping(
+            path = ["allByType"],
+            method = [RequestMethod.GET],
+            produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ApiOperation(
+            value = "Retrieve all resource configuration snapshots for a given resource type.",
+            notes = "Retrieve all config snapshots matching a specified Resource Type, ordered by most recently created/modified date. "
+    )
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    fun getAllByType(
+        @ApiParam(value = "Resource Type associated of the resource configuration snapshot.", required = false)
+        @RequestParam(value = "resourceType", required = true) resourceType: String,
+        @ApiParam(value = "Status of the snapshot being retrieved.", defaultValue = "ANY", required = false)
+        @RequestParam(value = "status", required = false, defaultValue = "ANY") status: String
+    ): ResponseEntity<List<ResourceConfigSnapshot>?> = runBlocking {
+        var configSnapshots: List<ResourceConfigSnapshot>?
+
+        try {
+            if (status == "ANY") {
+                configSnapshots = resourceConfigSnapshotService.findAllByResourceType(resourceType)
+            } else {
+                configSnapshots = resourceConfigSnapshotService.findAllByResourceTypeForStatus(
+                        resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase()))
+            }
+        } catch (ex: NoSuchElementException) {
+            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, ConfigsApiDomains.CONFIGS_API,
+                    "Could not find configuration snapshot entry for ID $resourceType",
+                    ex.errorCauseOrDefault())
+        } catch (ex: Exception) {
+            throw httpProcessorException(ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                    "Unexpected error while finding configuration snapshot entries for type $resourceType",
+                    ex.errorCauseOrDefault())
+        }
+
+        val expectedMediaType: MediaType = MediaType.valueOf(JSON_MIME_TYPE)
+        ResponseEntity.ok().contentType(expectedMediaType).body(configSnapshots)
     }
 }

@@ -36,6 +36,36 @@ open class ResourceConfigSnapshotService(private val resourceConfigSnapshotRepos
 
     private val log = LoggerFactory.getLogger(ResourceConfigSnapshotService::class.toString())
 
+    suspend fun findAllByResourceIdForStatus(
+        resourceId: String,
+        status: ResourceConfigSnapshot.Status
+    ): List<ResourceConfigSnapshot>? =
+        withContext(Dispatchers.IO) {
+            resourceConfigSnapshotRepository.findByResourceIdAndStatusOrderByCreatedDateDesc(resourceId, status)
+        }
+
+    suspend fun findAllByResourceId(
+        resourceId: String
+    ): List<ResourceConfigSnapshot>? =
+        withContext(Dispatchers.IO) {
+            resourceConfigSnapshotRepository.findByResourceIdOrderByCreatedDateDesc(resourceId)
+        }
+
+    suspend fun findAllByResourceTypeForStatus(
+        resourceType: String,
+        status: ResourceConfigSnapshot.Status
+    ): List<ResourceConfigSnapshot>? =
+        withContext(Dispatchers.IO) {
+            resourceConfigSnapshotRepository.findByResourceTypeAndStatusOrderByCreatedDateDesc(resourceType, status)
+        }
+
+    suspend fun findAllByResourceType(
+        resourceType: String
+    ): List<ResourceConfigSnapshot>? =
+        withContext(Dispatchers.IO) {
+            resourceConfigSnapshotRepository.findByResourceTypeOrderByCreatedDateDesc(resourceType)
+        }
+
     suspend fun findByResourceIdAndResourceTypeAndStatus(
         resourceId: String,
         resourceType: String,
