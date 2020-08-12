@@ -43,6 +43,13 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                        <artifactId>cba-assembly-descriptor</artifactId>
+                        <version>1.0.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>cba</id>
@@ -52,9 +59,9 @@
                         </goals>
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
-                            <descriptors>
-                                <descriptor>Distribution/cba_zip.xml</descriptor>
-                            </descriptors>
+                            <descriptorRefs>
+                                <descriptorRef>cba_zip</descriptorRef>
+                            </descriptorRefs>
                         </configuration>
                     </execution>
                 </executions>

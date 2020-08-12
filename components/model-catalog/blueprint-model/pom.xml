@@ -35,5 +35,7 @@
 
     <modules>
         <module>test-blueprint</module>
+        <module>cba-assembly-descriptor</module>
+        <module>test-blueprint-kotlin-parent</module>
     </modules>
 </project>

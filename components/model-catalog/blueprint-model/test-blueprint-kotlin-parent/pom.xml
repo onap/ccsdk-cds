@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright © 2020 Bell Canada
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+        <artifactId>cba-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>test-blueprint-kotlin-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>CBA - Test Kotlin scripts</name>
+    <description>CBA - Test Kotlin scripts</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>execution-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+            <artifactId>resource-resolution</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+            <artifactId>netconf-executor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+            <artifactId>cli-executor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+            <artifactId>message-prioritizaion</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk</artifactId>
+            <version>1.10.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${project.basedir}/Scripts/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/Tests/kotlin</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/Environments</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>validate-kotlin</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true" classname="com.pinterest.ktlint.Main" classpathref="maven.plugin.classpath">
+                                    <arg value="Scripts/kotlin/**/*.kt"/>
+                                </java>
+                            </target>
+                            <skip>${format.skipValidate}</skip>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <!-- Built-in formatter So that you wouldn't have to fix all style violations by hand.-->
+                        <id>format-kotlin</id>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true" classname="com.pinterest.ktlint.Main" classpathref="maven.plugin.classpath">
+                                    <arg value="-F"/>
+                                    <arg value="Scripts/kotlin/**/*.kt"/>
+                                </java>
+                            </target>
+                            <skip>${format.skipExecute}</skip>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>pre-integration-test</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>post-integration-test</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>integration-tests</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.maven.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/Scripts/kotlin</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/Tests/kotlin</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-descriptor</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>check-license</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>check-style</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                        <artifactId>cba-assembly-descriptor</artifactId>
+                        <version>1.0.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>cba_zip</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>deploy-cba</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.gmaven</groupId>
+                        <artifactId>groovy-maven-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.squareup.okhttp3</groupId>
+                                <artifactId>okhttp</artifactId>
+                                <version>3.14.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>commons-io</groupId>
+                                <artifactId>commons-io</artifactId>
+                                <version>${commons-io-version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>deploy-cba</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <source>
+                                        import okhttp3.Credentials
+                                        import okhttp3.MediaType
+                                        import okhttp3.MultipartBody
+                                        import okhttp3.OkHttpClient
+                                        import okhttp3.Request
+                                        import okhttp3.RequestBody
+                                        import org.apache.commons.io.IOUtils
+
+                                        import java.io.File
+
+                                        target = "${basedir.absolutePath}/target"
+                                        userName = throwIfPropMissing('cds.username')
+                                        password = throwIfPropMissing('cds.password')
+                                        protocol = properties['cds.protocol'] ?: 'http'
+                                        host = properties['cds.host'] ?: 'localhost'
+                                        port = properties['cds.port'] ?: '8081'
+
+                                        def cba = "${project.artifact.artifactId}-${project.artifact.version}-cba.zip"
+                                        def enrichedCba = "${project.artifact.artifactId}-${project.artifact.version}-enriched-cba.zip"
+                                        def enrichEndpoint = properties['cds.enrich.endpoint'] ?: 'api/v1/blueprint-model/enrich'
+                                        def publishEndpoint = properties['cds.publish.endpoint'] ?: 'api/v1/blueprint-model/publish'
+
+                                        def throwIfPropMissing(prop) {
+                                            value = properties[prop]
+                                            if (!value || "".equals(value)) {
+                                                throw new RuntimeException("Property missing: $prop")
+                                            }
+                                            return value
+                                        }
+
+                                        def buildRequest(endpoint, fileName) {
+                                            body = new MultipartBody.Builder()
+                                              .setType(MultipartBody.FORM)
+                                              .addFormDataPart("file",
+                                                fileName,
+                                                RequestBody.create(MediaType.parse('application/zip'), new File(target, fileName)))
+                                              .build()
+
+                                            return new Request.Builder()
+                                              .url("$protocol://$host:$port/$endpoint")
+                                              .addHeader('Authorization', Credentials.basic(userName, password))
+                                              .post(body)
+                                              .build()
+                                        }
+
+                                        def logAndThrow(msg) {
+                                            if(response) {
+                                                log.error(response.body().string())
+                                            }
+                                            throw new RuntimeException(msg)
+                                        }
+
+                                        response = null
+                                        try {
+                                            def client = new OkHttpClient()
+
+                                            response = client.newCall(buildRequest(enrichEndpoint, cba)).execute()
+                                            if (!response || !response.isSuccessful()) {
+                                                logAndThrow("Failed to enrich CBA")
+                                            }
+
+                                            IOUtils.copy(
+                                              response.body().byteStream(),
+                                              new FileOutputStream(new File(target, enrichedCba))
+                                            )
+                                            log.info("Created enriched cba: $enrichedCba")
+
+                                            response = client.newCall(buildRequest(publishEndpoint, enrichedCba)).execute()
+                                            if (!response || !response.isSuccessful()) {
+                                                logAndThrow("Failed to publish CBA")
+                                            }
+
+                                            log.info("CBA Deployed")
+                                            log.info(response.body().string())
+                                        } finally {
+                                            if (response) {
+                                                response.close()
+                                            }
+                                        }
+                                    </source>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
