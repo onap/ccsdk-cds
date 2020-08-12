@@ -162,6 +162,8 @@ class PropertyDefinition {
     var description: String? = null
     var required: Boolean? = null
     lateinit var type: String
+    @get:JsonProperty("input-param")
+    var inputparam: Boolean? = null
     @get:JsonProperty("default")
     var defaultValue: JsonNode? = null
     var status: String? = null

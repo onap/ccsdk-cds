@@ -49,6 +49,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCach
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
 import org.onap.ccsdk.cds.error.catalog.core.utils.errorCauseOrDefault
 import org.onap.ccsdk.cds.error.catalog.core.utils.errorMessageOrDefault
@@ -63,6 +65,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.io.File
 import java.io.IOException
 import java.util.UUID
 
@@ -121,30 +124,54 @@ open class BluePrintModelHandler(
         workFlowData.workFlowName = req.workflowName
         workFlowData.inputs = workFlow.inputs
         workFlowData.outputs = workFlow.outputs
+        wfRes.workFlowData = workFlowData
 
         if (workFlow.inputs != null) {
             for ((k, v) in workFlow.inputs!!) {
-                addPropertyInfo(v, blueprintContext, wfRes)
+                addPropertyInfo(k, v, blueprintContext, wfRes)
             }
         }
 
         if (workFlow.outputs != null) {
             for ((k, v) in workFlow.outputs!!) {
-                addPropertyInfo(v, blueprintContext, wfRes)
+                addPropertyInfo(k, v, blueprintContext, wfRes)
             }
         }
 
-        wfRes.workFlowData = workFlowData
         return wfRes
     }
 
-    private fun addPropertyInfo(prop: PropertyDefinition, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
+    private fun addPropertyInfo(propName: String, prop: PropertyDefinition, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
+        updatePropertyInfo(propName, prop, ctx, res)
         addDataType(prop.type, ctx, res)
         if (prop.entrySchema != null && prop.entrySchema!!.type != null) {
             addDataType(prop.entrySchema!!.type, ctx, res)
         }
     }
 
+    private fun updatePropertyInfo(name: String, prop: PropertyDefinition, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
+        if (prop.inputparam == null || prop.inputparam == false) {
+            var workflow = ctx.workflowByName(res.workFlowData.workFlowName)
+            for ((k, v) in workflow.steps!!) {
+                var arts = ctx.nodeTemplateArtifacts(v.target!!)
+                if (arts != null) {
+                    for ((k, v) in arts.entries!!) {
+                        if (v.type == "artifact-mapping-resource") {
+                            val file: String = v.file
+                            val completePath = ctx.rootPath.plus(File.separator).plus(file)
+                            val resourceAssignment = JacksonUtils.getListFromFile(completePath, ResourceAssignment::class.java)
+                            for (res in resourceAssignment) {
+                                if (res.name == name && res.inputParameter) {
+                                    prop.inputparam = true
+                                    return
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     private fun addDataType(name: String, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
         var data = ctx.dataTypeByName(name)
         if (data != null) {
@@ -156,7 +183,7 @@ open class BluePrintModelHandler(
     private fun addParentDataType(data: DataType, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
         if (data.properties != null) {
             for ((k, v) in data.properties!!) {
-                addPropertyInfo(v, ctx, res)
+                addPropertyInfo(k, v, ctx, res)
             }
         }
     }
