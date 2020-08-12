@@ -13,7 +13,9 @@ The **C**\ ontroller **B**\ lueprint **A**\ rchive is the overall service design
 
 The CBA is **.zip** file, comprised of the following folder structure, the files may vary:
 
-.. code-block::
+.. code-block language is required for ReadTheDocs to render code-blocks. Python set as default.
+
+.. code-block:: python
 
    ├── Definitions
    │   ├── blueprint.json                   Overall TOSCA service template (worfklow + node_template)
