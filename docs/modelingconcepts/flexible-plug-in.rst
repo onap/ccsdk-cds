@@ -1,6 +1,6 @@
-.. This work is a derivative of https://wiki.onap.org/display/DW/Modeling+Concepts#Concepts-2026349199 by IBM 
-.. used under Creative Commons Attribution 4.0 International License.
-.. http://creativecommons.org/licenses/by/4.0
+.. This work is a derivative of https://wiki.onap.org/display/DW/Modeling+Concepts#Concepts-2026349199
+.. This work is licensed under a Creative Commons Attribution 4.0
+.. International License. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2020 Deutsche Telekom AG.
 
 External Systems support
