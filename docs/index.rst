@@ -118,7 +118,15 @@ https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_n
 
 .. |cdsArchitectureImage| image:: media/CDS_architecture_latest.png
    :scale: 30 %
-   
+
+Developer Guide
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   developerguide/developer-guide
+
 User Guide
 ----------
 
@@ -135,7 +143,7 @@ CDS Desginer UI
    :maxdepth: 1
 
    CDS_Designer_Guide
-  
+
 
 Controller Design Studio Presentation
 -------------------------------------
