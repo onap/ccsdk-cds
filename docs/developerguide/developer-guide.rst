@@ -6,10 +6,8 @@
 Developer Guide
 =================
 
-Table of Contents
-~~~~~~~~~~~~~~~~~~~
-
 .. toctree::
+   :caption: Table of Contents
    :maxdepth: 1
 
    running-bp-processor-in-ide
