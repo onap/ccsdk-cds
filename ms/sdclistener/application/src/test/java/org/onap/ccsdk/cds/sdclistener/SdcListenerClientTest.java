@@ -22,9 +22,7 @@ import mockit.Mock;
 import mockit.MockUp;
 import mockit.Tested;
 import mockit.VerificationsInOrder;
-import mockit.integration.junit4.JMockit;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.onap.ccsdk.cds.sdclistener.client.SdcListenerClient;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.exceptions.SdcListenerException;
@@ -34,7 +32,6 @@ import org.onap.sdc.impl.DistributionClientFactory;
 import org.onap.sdc.impl.DistributionClientResultImpl;
 import org.onap.sdc.utils.DistributionActionResultEnum;
 
-@RunWith(JMockit.class)
 public class SdcListenerClientTest {
 
     @Tested

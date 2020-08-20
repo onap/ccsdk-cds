@@ -42,7 +42,7 @@
         <dmaap.client.version>1.1.5</dmaap.client.version>
         <mockkserver.version>5.5.1</mockkserver.version>
         <sdc-distribution-client.version>1.4.0</sdc-distribution-client.version>
-        <jmockit.version>1.19</jmockit.version>
+        <jmockit.version>1.49</jmockit.version>
         <reactorcore.version>3.2.6.RELEASE</reactorcore.version>
     </properties>
 
@@ -170,11 +170,15 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <!-- Sets the VM argument line used when unit tests are run. -->
+                    <argLine>-javaagent:"${settings.localRepository}"/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar</argLine>
+                    <!-- Excludes integration tests when unit tests are run. -->
+                    <excludes>
+                        <exclude>**/IT*.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
