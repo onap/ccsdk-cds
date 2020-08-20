@@ -60,15 +60,11 @@
         <!-- Kotlin Dependencies -->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <artifactId>kotlin-stdlib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -101,6 +97,7 @@
                             <sourceDirs>
                                 <sourceDir>src/main/kotlin</sourceDir>
                             </sourceDirs>
+                            <jvmTarget>${kotlin.compiler.jvmTarget}</jvmTarget>
                         </configuration>
                     </execution>
                     <execution>
@@ -112,6 +109,7 @@
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
                             </sourceDirs>
+                            <jvmTarget>${kotlin.compiler.jvmTarget}</jvmTarget>
                         </configuration>
                     </execution>
                 </executions>

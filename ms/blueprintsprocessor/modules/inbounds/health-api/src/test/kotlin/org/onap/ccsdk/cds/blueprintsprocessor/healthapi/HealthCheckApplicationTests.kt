@@ -23,8 +23,10 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScript
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
@@ -43,6 +45,8 @@ import org.springframework.test.web.reactive.server.WebTestClient
         BluePrintCatalogService::class, ComponentScriptExecutor::class]
 )
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
+@EntityScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
+@EnableJpaRepositories
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class HealthCheckApplicationTests {
 

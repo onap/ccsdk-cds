@@ -62,6 +62,8 @@ limitations under the License.
         <!-- Properties for POM Format -->
         <format.skipValidate>false</format.skipValidate>
         <format.skipExecute>true</format.skipExecute>
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
     </properties>
 
     <build>
@@ -72,34 +74,35 @@ limitations under the License.
                 <version>${jacoco.version}</version>
             </plugin>
 
+            <!--TODO: This plugin is broken. Find replacement-->
             <!-- Plugin to Format/Validate POM Files -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>tidy-maven-plugin</artifactId>
-                <version>1.1.0</version>
-                <executions>
-                    <execution>
-                        <id>format-pom</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>pom</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${format.skipExecute}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>validate-pom</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${format.skipValidate}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>tidy-maven-plugin</artifactId>-->
+                <!--<version>1.1.0</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>format-pom</id>-->
+                        <!--<phase>process-sources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>pom</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<skip>${format.skipExecute}</skip>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>validate-pom</id>-->
+                        <!--<phase>validate</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>check</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<skip>${format.skipValidate}</skip>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
 
             <!-- Plugin to Format/Validate Kotlin Files -->
             <plugin>
@@ -148,7 +151,40 @@ limitations under the License.
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <!-- Sets the VM argument line used when unit tests are run. -->
+                    <argLine>--illegal-access=permit</argLine>
+                    <!-- Excludes integration tests when unit tests are run. -->
+                    <excludes>
+                        <exclude>**/IT*.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+                <executions>
+                    <!-- Ensures that both integration-test and verify goals of the Failsafe Maven plugin are executed. -->
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the VM argument line used when integration tests are run. -->
+                            <argLine>--illegal-access=permit</argLine>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
     </build>
 
     <profiles>
