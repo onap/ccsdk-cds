@@ -52,6 +52,7 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.6.1</version>
                 <configuration>
+                    <!--TODO: check latest version for protoc 3.13.0-->
                     <protocArtifact>
                         com.google.protobuf:protoc:3.10.0:exe:${os.detected.classifier}
                     </protocArtifact>
