@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 Bell Canada.
+# Copyright (C) 2019 - 2020 Bell Canada.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ class CommandExecutorHandler():
         self.execution_timeout = utils.get_blueprint_timeout(request)
         self.venv_home = '/opt/app/onap/blueprints/deploy/' + self.blueprint_id
         self.installed = self.venv_home + '/.installed'
+        self.extra = utils.getExtraLogData(request)
 
     def is_installed(self):
         return os.path.exists(self.installed)
@@ -48,13 +49,13 @@ class CommandExecutorHandler():
             create_venv_status = self.create_venv()
             if not create_venv_status[utils.CDS_IS_SUCCESSFUL_KEY]:
                 err_msg = "ERROR: failed to prepare environment for request {} due to error in creating virtual Python env. Original error {}".format(self.blueprint_id, create_venv_status[utils.ERR_MSG_KEY])
-                self.logger.error(err_msg)
+                self.logger.error(err_msg, extra=self.extra)
                 return utils.build_ret_data(False, error=err_msg)
 
             activate_venv_status = self.activate_venv()
             if not activate_venv_status[utils.CDS_IS_SUCCESSFUL_KEY]:
                 err_msg = "ERROR: failed to prepare environment for request {} due Python venv_activation. Original error {}".format(self.blueprint_id, activate_venv_status[utils.ERR_MSG_KEY])
-                self.logger.error(err_msg)
+                self.logger.error(err_msg, extra=self.extra)
                 return utils.build_ret_data(False, error=err_msg)
             try:
                 with open(self.installed, "w+") as f:
@@ -68,7 +69,7 @@ class CommandExecutorHandler():
                         return utils.build_ret_data(False, results_log=results_log, error=err_msg)
             except Exception as ex:
                 err_msg = "ERROR: failed to prepare environment for request {} during installing packages. Exception: {}".format(self.blueprint_id, ex)
-                self.logger.error(err_msg)
+                self.logger.error(err_msg, extra=self.extra)
                 return utils.build_ret_data(False, error=err_msg)
         else:
             try:
@@ -119,10 +120,14 @@ class CommandExecutorHandler():
             ### RequestID
             request_id = request.requestId
             ### Sub-requestID
-            subrequest_id = request.correlationId
-            request_id_map = {'CDS_REQUEST_ID':request_id, 'CDS_CORRELATION_ID':subrequest_id}
+            subrequest_id = request.subRequestId
+            ### OriginatorID
+            originator_id = request.originatorId
+            ### CorrelationID
+            correlation_id = request.correlationId
+            request_id_map = {'CDS_REQUEST_ID':request_id, 'CDS_SUBREQUEST_ID':subrequest_id, 'CDS_ORIGINATOR_ID': originator_id, 'CDS_CORRELATION_ID': correlation_id}
             updated_env =  { **os.environ, **request_id_map }
-            self.logger.info("Running blueprint {} with timeout: {}".format(self.blueprint_id, self.execution_timeout))
+            self.logger.info("Running blueprint {} with timeout: {}".format(self.blueprint_id, self.execution_timeout), extra=self.extra)
 
             with tempfile.TemporaryFile(mode="w+") as tmp:
                 try:
@@ -130,11 +135,11 @@ class CommandExecutorHandler():
                                                 env=updated_env, timeout=self.execution_timeout)
                 except TimeoutExpired:
                     timeout_err_msg = "Running command {} failed due to timeout of {} seconds.".format(self.blueprint_id, self.execution_timeout)
-                    self.logger.error(timeout_err_msg)
-                    utils.parse_cmd_exec_output(tmp, self.logger, result, results_log)
+                    self.logger.error(timeout_err_msg, extra=self.extra)
+                    utils.parse_cmd_exec_output(tmp, self.logger, result, results_log, self.extra)
                     return utils.build_ret_data(False, results_log=results_log, error=timeout_err_msg)
 
-                utils.parse_cmd_exec_output(tmp, self.logger, result, results_log)
+                utils.parse_cmd_exec_output(tmp, self.logger, result, results_log, self.extra)
                 rc = completed_subprocess.returncode
         except Exception as e:
             err_msg = "{} - Failed to execute command. Error: {}".format(self.blueprint_id, e)
@@ -143,7 +148,7 @@ class CommandExecutorHandler():
 
         # deactivate_venv(blueprint_id)
         #Since return code is only used to check if it's zero (success), we can just return success flag instead.
-        self.logger.debug("python return_code : {}".format(rc))
+        self.logger.debug("python return_code : {}".format(rc), extra=self.extra)
         is_execution_successful = rc == 0
         result.update(utils.build_ret_data(is_execution_successful, results_log=results_log))
         return result
@@ -168,7 +173,7 @@ class CommandExecutorHandler():
 
     def install_python_packages(self, package, results):
         self.logger.info(
-            "{} - Install Python package({}) in Python Virtual Environment".format(self.blueprint_id, package))
+            "{} - Install Python package({}) in Python Virtual Environment".format(self.blueprint_id, package), extra=self.extra)
 
         if REQUIREMENTS_TXT == package:
             command = ["pip", "install", "-r", self.venv_home + "/Environments/" + REQUIREMENTS_TXT]
@@ -181,21 +186,21 @@ class CommandExecutorHandler():
         env = dict(os.environ)
         if "https_proxy" in os.environ:
             env['https_proxy'] = os.environ['https_proxy']
-            self.logger.info("Using https_proxy: ", env['https_proxy'])
+            self.logger.info("Using https_proxy: ", env['https_proxy'], extra=self.extra)
 
         try:
             results.append(subprocess.run(command, check=True, stdout=PIPE, stderr=PIPE, env=env).stdout.decode())
             results.append("\n")
-            self.logger.info("install_python_packages {} succeeded".format(package))
+            self.logger.info("install_python_packages {} succeeded".format(package), extra=self.extra)
             return True
         except CalledProcessError as e:
             results.append(e.stderr.decode())
-            self.logger.error("install_python_packages {} failed".format(package))
+            self.logger.error("install_python_packages {} failed".format(package), extra=self.extra)
             return False
 
     def install_ansible_packages(self, package, results):
         self.logger.info(
-            "{} - Install Ansible Role package({}) in Python Virtual Environment".format(self.blueprint_id, package))
+            "{} - Install Ansible Role package({}) in Python Virtual Environment".format(self.blueprint_id, package), extra=self.extra)
         command = ["ansible-galaxy", "install", package, "-p", self.venv_home + "/Scripts/ansible/roles"]
 
         env = dict(os.environ)
@@ -216,23 +221,23 @@ class CommandExecutorHandler():
     # 'err_msg' indicates an error occurred. The presence of err_msg may not be fatal,
     # status should be set to False for fatal errors.
     def create_venv(self):
-        self.logger.info("{} - Create Python Virtual Environment".format(self.blueprint_id))
+        self.logger.info("{} - Create Python Virtual Environment".format(self.blueprint_id), extra=self.extra)
         try:
             bin_dir = self.venv_home + "/bin"
             # venv doesn't populate the activate_this.py script, hence we use from virtualenv
             venv.create(self.venv_home, with_pip=True, system_site_packages=True)
             virtualenv.writefile(os.path.join(bin_dir, "activate_this.py"), virtualenv.ACTIVATE_THIS)
-            self.logger.info("{} - Creation of Python Virtual Environment finished.".format(self.blueprint_id))
+            self.logger.info("{} - Creation of Python Virtual Environment finished.".format(self.blueprint_id), extra=self.extra)
             return utils.build_ret_data(True)
         except Exception as err:
             err_msg = "{} - Failed to provision Python Virtual Environment. Error: {}".format(self.blueprint_id, err)
-            self.logger.info(err_msg)
+            self.logger.info(err_msg, extra=self.extra)
             return utils.build_ret_data(False, error=err_msg)
 
     # return map cds_is_successful and err_msg. Status is True on success. err_msg may existence doesn't necessarily indicate fatal condition.
     # the 'status' should be set to False to indicate error.
     def activate_venv(self):
-        self.logger.info("{} - Activate Python Virtual Environment".format(self.blueprint_id))
+        self.logger.info("{} - Activate Python Virtual Environment".format(self.blueprint_id), extra=self.extra)
 
         # Fix: The python generated activate_this.py script concatenates the env bin dir to PATH on every call
         #      eventually this process PATH variable was so big (128Kb) that no child process could be spawn
@@ -244,20 +249,20 @@ class CommandExecutorHandler():
             with open(path) as activate_this_script:
                 exec (activate_this_script.read(), {'__file__': path})
             exec (fixpathenvvar)
-            self.logger.info("Running with PATH : {}".format(os.environ['PATH']))
+            self.logger.info("Running with PATH : {}".format(os.environ['PATH']), extra=self.extra)
             return utils.build_ret_data(True)
         except Exception as err:
             err_msg ="{} - Failed to activate Python Virtual Environment. Error: {}".format(self.blueprint_id, err)
-            self.logger.info( err_msg)
+            self.logger.info( err_msg, extra=self.extra)
             return utils.build_ret_data(False, error=err_msg)
 
     def deactivate_venv(self):
-        self.logger.info("{} - Deactivate Python Virtual Environment".format(self.blueprint_id))
+        self.logger.info("{} - Deactivate Python Virtual Environment".format(self.blueprint_id), extra=self.extra)
         command = ["deactivate"]
         try:
             subprocess.run(command, check=True)
         except Exception as err:
             self.logger.info(
-                "{} - Failed to deactivate Python Virtual Environment. Error: {}".format(self.blueprint_id, err))
+                "{} - Failed to deactivate Python Virtual Environment. Error: {}".format(self.blueprint_id, err), extra=self.extra)
 
 

@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2020 Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -129,6 +130,8 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         return PrepareEnvInput.newBuilder()
             .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
             .setRequestId(this.requestId)
+            .setSubRequestId(this.subRequestId)
+            .setOriginatorId(this.originatorId)
             .setCorrelationId(correlationId)
             .setTimeOut(this.timeOut.toInt())
             .addAllPackages(packageList)
@@ -140,6 +143,8 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         val correlationId = this.correlationId ?: this.requestId
         return ExecutionInput.newBuilder()
             .setRequestId(this.requestId)
+            .setSubRequestId(this.subRequestId)
+            .setOriginatorId(this.originatorId)
             .setCorrelationId(correlationId)
             .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
             .setCommand(this.command)

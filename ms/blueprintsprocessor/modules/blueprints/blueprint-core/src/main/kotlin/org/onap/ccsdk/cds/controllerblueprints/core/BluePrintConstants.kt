@@ -1,6 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
- * Modifications Copyright © 2018 - 2019 IBM, Bell Canada
+ * Modifications Copyright © 2018 - 2020 IBM, Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@ object BluePrintConstants {
     const val RESPONSE_HEADER_LATEST_VERSION: String = "X-LatestVersion"
 
     const val ONAP_REQUEST_ID = "X-ONAP-RequestID"
+    const val ONAP_SUBREQUEST_ID = "X-ONAP-SubRequestID"
+    const val ONAP_ORIGINATOR_ID = "X-ONAP-OriginatorID"
     const val ONAP_INVOCATION_ID = "X-ONAP-InvocationID"
     const val ONAP_PARTNER_NAME = "X-ONAP-PartnerName"
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 Bell Canada.
+# Copyright (C) 2019 - 2020 Bell Canada.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ def truncate_execution_output(execution_output):
 
 
 # Read temp file 'outputfile' into results_log and split out the returned payload into payload_result
-def parse_cmd_exec_output(outputfile, logger, payload_result, results_log):
+def parse_cmd_exec_output(outputfile, logger, payload_result, results_log, extra):
   payload_section = []
   is_payload_section = False
   outputfile.seek(0)
@@ -98,8 +98,17 @@ def parse_cmd_exec_output(outputfile, logger, payload_result, results_log):
       for part in msg.get_payload():
         payload_result.update(json.loads(part.get_payload()))
     if output and not is_payload_section:
-      logger.info(output.strip())
+      logger.info(output.strip(), extra=extra)
       results_log.append(output.strip())
     else:
       payload_section.append(output.strip())
 
+def getExtraLogData(request=None):
+    extra = {'request_id' : '', 'subrequest_id' : '', 'originator_id': ''}
+    if request is not None:
+        extra = {
+            'request_id' : request.requestId,
+            'subrequest_id' : request.subRequestId,
+            'originator_id': request.originatorId
+        }
+    return extra
