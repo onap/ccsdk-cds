@@ -145,7 +145,9 @@ open class ComponentRemotePythonExecutor(
             // If packages are defined, then install in remote server
             if (packages != null) {
                 val prepareEnvInput = PrepareRemoteEnvInput(
+                    originatorId = executionServiceInput.commonHeader.originatorId,
                     requestId = processId,
+                    subRequestId = executionServiceInput.commonHeader.subRequestId,
                     remoteIdentifier = RemoteIdentifier(
                         blueprintName = blueprintName,
                         blueprintVersion = blueprintVersion),
@@ -195,7 +197,9 @@ open class ComponentRemotePythonExecutor(
                 val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
 
                 val remoteExecutionInput = RemoteScriptExecutionInput(
+                    originatorId = executionServiceInput.commonHeader.originatorId,
                     requestId = processId,
+                    subRequestId = executionServiceInput.commonHeader.subRequestId,
                     remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
                     command = scriptCommand,
                     properties = properties,

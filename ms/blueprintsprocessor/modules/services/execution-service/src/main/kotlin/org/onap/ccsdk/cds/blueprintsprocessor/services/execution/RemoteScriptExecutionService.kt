@@ -129,6 +129,8 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         return PrepareEnvInput.newBuilder()
             .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
             .setRequestId(this.requestId)
+            .setSubRequestId(this.subRequestId)
+            .setOriginatorId(this.originatorId)
             .setCorrelationId(correlationId)
             .setTimeOut(this.timeOut.toInt())
             .addAllPackages(packageList)
@@ -140,6 +142,8 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         val correlationId = this.correlationId ?: this.requestId
         return ExecutionInput.newBuilder()
             .setRequestId(this.requestId)
+            .setSubRequestId(this.subRequestId)
+            .setOriginatorId(this.originatorId)
             .setCorrelationId(correlationId)
             .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
             .setCommand(this.command)
