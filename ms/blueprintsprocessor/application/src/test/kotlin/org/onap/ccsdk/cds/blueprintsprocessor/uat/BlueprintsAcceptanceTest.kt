@@ -64,7 +64,7 @@ class BlueprintsAcceptanceTest(
                 .map { file ->
                     arrayOf(
                         file.nameWithoutExtension,
-                        FileSystems.newFileSystem(file.canonicalFile.toPath(), null)
+                        FileSystems.getFileSystem(file.canonicalFile.toURI()) ?: FileSystems.newFileSystem(file.canonicalFile.toPath(), null)
                     )
                 }
         }

@@ -73,8 +73,7 @@
         <!-- Apache Kafka -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.11</artifactId>
-            <version>${kafka.version}</version>
+            <artifactId>kafka_2.13</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
