@@ -29,7 +29,9 @@ data class RemoteIdentifier(
 )
 
 data class RemoteScriptExecutionInput(
+    var originatorId: String,
     var requestId: String,
+    var subRequestId: String,
     var correlationId: String? = null,
     var remoteIdentifier: RemoteIdentifier? = null,
     var command: String,
@@ -46,7 +48,9 @@ data class RemoteScriptExecutionOutput(
 )
 
 data class PrepareRemoteEnvInput(
+    var originatorId: String,
     var requestId: String,
+    var subRequestId: String,
     var correlationId: String? = null,
     var remoteIdentifier: RemoteIdentifier? = null,
     var packages: JsonNode,

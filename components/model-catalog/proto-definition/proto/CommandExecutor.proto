@@ -17,6 +17,8 @@ message ExecutionInput {
     google.protobuf.Struct properties = 6;
     // Request Time Stamp
     google.protobuf.Timestamp timestamp = 7;
+    string subRequestId = 8;
+    string originatorId = 9;
 }
 
 message PrepareEnvInput {
@@ -28,6 +30,8 @@ message PrepareEnvInput {
     int32 timeOut = 5;
     google.protobuf.Struct properties = 6;
     google.protobuf.Timestamp timestamp = 7;
+    string subRequestId = 8;
+    string originatorId = 9;
 }
 
 message Identifiers {
