@@ -52,12 +52,12 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.6.1</version>
                 <configuration>
+                    <!--TODO: check latest version for protoc 3.13.0-->
                     <protocArtifact>
                         com.google.protobuf:protoc:3.10.0:exe:${os.detected.classifier}
                     </protocArtifact>
                     <protoSourceRoot>${project.basedir}/../../../../../components/model-catalog/proto-definition/proto
                     </protoSourceRoot>
-                    <jvmTarget>11</jvmTarget>
                 </configuration>
                 <executions>
                     <execution>
@@ -95,7 +95,6 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.maven.version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
