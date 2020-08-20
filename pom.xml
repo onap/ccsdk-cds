@@ -72,34 +72,35 @@ limitations under the License.
                 <version>${jacoco.version}</version>
             </plugin>
 
+            <!--TODO: This plugin is broken. Find replacement-->
             <!-- Plugin to Format/Validate POM Files -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>tidy-maven-plugin</artifactId>
-                <version>1.1.0</version>
-                <executions>
-                    <execution>
-                        <id>format-pom</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>pom</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${format.skipExecute}</skip>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>validate-pom</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${format.skipValidate}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>tidy-maven-plugin</artifactId>-->
+                <!--<version>1.1.0</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>format-pom</id>-->
+                        <!--<phase>process-sources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>pom</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<skip>${format.skipExecute}</skip>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>validate-pom</id>-->
+                        <!--<phase>validate</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>check</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<skip>${format.skipValidate}</skip>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
 
             <!-- Plugin to Format/Validate Kotlin Files -->
             <plugin>
