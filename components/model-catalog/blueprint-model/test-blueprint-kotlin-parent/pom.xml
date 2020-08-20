@@ -213,6 +213,8 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <!--<version>${maven-surefire-plugin.version}</version>-->
+                <version>3.0.0-M5</version>
                 <executions>
                     <execution>
                         <id>default-test</id>
