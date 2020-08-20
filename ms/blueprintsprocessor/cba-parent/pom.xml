@@ -54,6 +54,7 @@
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/Scripts/kotlin</sourceDir>
                             </sourceDirs>
+                            <jvmTarget>${kotlin.compiler.jvmTarget}</jvmTarget>
                         </configuration>
                     </execution>
                     <execution>
@@ -66,6 +67,7 @@
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/Tests/kotlin</sourceDir>
                             </sourceDirs>
+                            <jvmTarget>${kotlin.compiler.jvmTarget}</jvmTarget>
                         </configuration>
                     </execution>
                 </executions>

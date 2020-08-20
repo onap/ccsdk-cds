@@ -210,9 +210,13 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <jvmTarget>${kotlin.compiler.jvmTarget}</jvmTarget>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>default-test</id>

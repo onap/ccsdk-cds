@@ -17,7 +17,7 @@ class TemplateResolutionServiceTest {
 
     private val templateResolutionRepository = mockk<TemplateResolutionRepository>()
 
-    private val templateResolutionService = TemplateResolutionService(templateResolutionRepository)
+    private val templateResolutionService = mockk<TemplateResolutionService>()
 
     private val resolutionKey = "resolutionKey"
     private val resourceId = "1"
