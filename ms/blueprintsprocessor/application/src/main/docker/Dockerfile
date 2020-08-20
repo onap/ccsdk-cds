@@ -5,20 +5,18 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && rm -rf /source.tar.gz \
  && rm -rf /tmp/@project.build.finalName@
 
-FROM omahoco1/alpine-java-python
-
+FROM onap/ccsdk-alpine-j11-image
 # add entrypoint
 COPY startService.sh /startService.sh
-RUN addgroup -S -g 1000 onap && adduser -u 1000 -S onap -G onap
-RUN chown onap:onap /startService.sh
-RUN touch /velocity.log && chmod 777 /velocity.log
-RUN chown onap:onap /velocity.log
-RUN chmod 777 /startService.sh && dos2unix /startService.sh
+RUN addgroup -S -g 1000 onap && adduser -S onap -u 1000 -G onap \
+ && chown onap:onap /startService.sh \
+ && touch /velocity.log && chmod 755 /velocity.log && chown onap:onap /velocity.log \
+ && chmod 755 /startService.sh
+# dos2unix /startService.sh is redundant. Pls fix your git settings!
 
 # add application
 COPY --from=extractor /opt /opt
-RUN mkdir -p /opt/app/onap/blueprints/deploy
-RUN chown onap:onap /opt -R
+RUN mkdir -p /opt/app/onap/blueprints/deploy && chown onap:onap /opt -R
 USER onap
 
 ENTRYPOINT [ "/startService.sh" ]
