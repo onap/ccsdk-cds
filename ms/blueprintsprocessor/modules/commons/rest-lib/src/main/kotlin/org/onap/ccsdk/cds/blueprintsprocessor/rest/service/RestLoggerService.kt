@@ -1,5 +1,6 @@
 /*
  * Copyright © 2018-2019 AT&T Intellectual Property.
+ * Modifications Copyright © 2020 Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +31,10 @@ import kotlinx.coroutines.withContext
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVOCATION_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_ORIGINATOR_ID
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_PARTNER_NAME
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_REQUEST_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_SUBREQUEST_ID
 import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
@@ -68,10 +71,14 @@ class RestLoggerService {
         val localhost = InetAddress.getLocalHost()
         val headers = request.headers
         val requestID = headers.getFirst(ONAP_REQUEST_ID).defaultToUUID()
+        val subrequestID = headers.getFirst(ONAP_SUBREQUEST_ID).defaultToEmpty()
+        val originatorID = headers.getFirst(ONAP_ORIGINATOR_ID).defaultToEmpty()
         val invocationID = headers.getFirst(ONAP_INVOCATION_ID).defaultToUUID()
         val partnerName = headers.getFirst(ONAP_PARTNER_NAME).defaultToEmpty()
         MDC.put("InvokeTimestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT))
         MDC.put("RequestID", requestID)
+        MDC.put("SubRequestID", subrequestID)
+        MDC.put("OriginatorID", originatorID)
         MDC.put("InvocationID", invocationID)
         MDC.put("PartnerName", partnerName)
         MDC.put("ClientIPAddress", request.remoteAddress?.address?.hostAddress.defaultToEmpty())
@@ -86,6 +93,8 @@ class RestLoggerService {
             val reqHeaders = request.headers
             val resHeaders = response.headers
             resHeaders[ONAP_REQUEST_ID] = MDC.get("RequestID")
+            resHeaders[ONAP_SUBREQUEST_ID] = MDC.get("SubRequestID")
+            resHeaders[ONAP_ORIGINATOR_ID] = MDC.get("OriginatorID")
             resHeaders[ONAP_INVOCATION_ID] = MDC.get("InvocationID")
             resHeaders[ONAP_PARTNER_NAME] = BluePrintConstants.APP_NAME
         } catch (e: Exception) {
