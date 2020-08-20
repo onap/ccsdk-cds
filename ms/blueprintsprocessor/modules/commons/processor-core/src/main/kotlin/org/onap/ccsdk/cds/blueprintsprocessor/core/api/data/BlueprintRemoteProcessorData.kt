@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2020 Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,7 +30,9 @@ data class RemoteIdentifier(
 )
 
 data class RemoteScriptExecutionInput(
+    var originatorId: String,
     var requestId: String,
+    var subRequestId: String,
     var correlationId: String? = null,
     var remoteIdentifier: RemoteIdentifier? = null,
     var command: String,
@@ -46,7 +49,9 @@ data class RemoteScriptExecutionOutput(
 )
 
 data class PrepareRemoteEnvInput(
+    var originatorId: String,
     var requestId: String,
+    var subRequestId: String,
     var correlationId: String? = null,
     var remoteIdentifier: RemoteIdentifier? = null,
     var packages: JsonNode,
