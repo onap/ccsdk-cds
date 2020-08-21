@@ -9,7 +9,7 @@ Running Blueprints Processor Microservice in an IDE
 Objective
 ~~~~~~~~~~~~
 
-Have the processor running locally is to use the IDE to run the code, while having the database running in a container. 
+Have the blueprint processor running locally is to use the IDE to run the code, while having the database running in a container.
 This way, code changes can be conveniently tested and debugged.
 
 
@@ -30,10 +30,10 @@ In the checked out directory, type
 Spin up a Docker container with the database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Blueprints Processor project uses a database to store information about the blueprints 
+The Blueprints Processor project uses a database to store information about the blueprints
 and therefore it needs to be online before attempting to run it.
 
-One way to create the database is by using the :file:`docker-compose.yaml` 
+One way to create the database is by using the :file:`docker-compose.yaml`
 file present on the distribution module. This database will require a local directory to mount a volume, before running docker-compose remember to create following directory:
 
 .. code-block:: bash
@@ -106,197 +106,224 @@ Execute the following commands to create the needed directories, and grant acces
    mkdir -p -m 755 /opt/app/onap/scripts
    sudo chown -R $(id -u):$(id -g) /opt/app/onap/
 
-Import the project on the IDE
+Import the project into the IDE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For this page, the chosen IDE is IntelliJ, but the instructions present here can
-be adapted to be used in other IDEs as well.
+.. tabs ::
 
-Go to *File | Open* and choose the :file:`pom.xml` file of the cds directory:
+   .. group-tab:: IntelliJ IDEA
 
-|imageImportProject|
+      Go to *File | Open* and choose the :file:`pom.xml` file of the cds directory:
 
-Sometimes it may be necessary to reimport Maven project:
+      |imageImportProject|
 
-|imageReimportMaven|
+      Sometimes it may be necessary to reimport Maven project:
+
+      |imageReimportMaven|
 
 
-Override some application properties
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Override some application properties
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After the project is compiled, a Run Configuration profile overriding some application properties
-with custom values needs to be created, to reflect the local environment characteristics.
+      After the project is compiled, a Run Configuration profile overriding some application properties
+      with custom values needs to be created, to reflect the local environment characteristics.
 
-.. tabs::
+      .. tabs::
 
-   .. group-tab:: Latest
+         .. group-tab:: Latest
 
-      Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
+            Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
 
-      ``ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.kt``.
+            ``ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.kt``.
 
-      Right-click inside it, at any point, to load the context menu and select create 
-      BlueprintProcessorApplication configuration from context:
+            Right-click inside it, at any point, to load the context menu and select create
+            BlueprintProcessorApplication configuration from context:
 
-      |imageCreateRunConfigkt|
+            |imageCreateRunConfigkt|
 
-      **The following window will open:**
+            **The following window will open:**
 
-      |imageRunConfigKt|
+            |imageRunConfigKt|
 
-      **Add the following in the field `VM Options`:**
+            **Add the following in the field `VM Options`:**
 
-      .. code-block:: bash
-         :caption: **Custom values for properties**
+            .. code-block:: bash
+               :caption: **Custom values for properties**
 
-         -Dspring.profiles.active=dev
+               -Dspring.profiles.active=dev
 
-      You can override any value from **application-dev.properties** file here. Use the following pattern:
+            You can override any value from **application-dev.properties** file here. Use the following pattern:
+
+            .. code-block:: java
+
+               -D<application-dev.properties key>=<application-dev.properties value>
+
+         .. group-tab:: Frankfurt
+
+            Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
+
+            ``ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.kt``.
+
+            Right-click inside it, at any point, to load the context menu and select create
+            BlueprintProcessorApplication configuration from context:
+
+            |imageCreateRunConfigkt|
+
+            **The following window will open:**
+
+            |imageRunConfigKt|
+
+            **Add the following in the field `VM Options`:**
+
+            .. code-block:: bash
+               :caption: **Custom values for properties**
+
+               -Dspring.profiles.active=dev
+
+            You can override any value from **application-dev.properties** file here. Use the following pattern:
+
+            .. code-block:: java
+
+               -D<application-dev.properties key>=<application-dev.properties value>
+
+         .. group-tab:: El Alto
+
+            Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
+
+            ``ms/blueprintsprocessor/application/src/main/java/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.java.``
+
+            Right-click inside it, at any point, to load the context menu and select create
+            BlueprintProcessorApplication configuration from context:
+
+            |imageCreateRunConfigJava|
+
+            **The following window will open:**
+
+            |imageRunConfigJava|
+
+            **Add the following in the field `VM Options`:**
+
+            .. code-block:: bash
+               :caption: **Custom values for properties**
+
+               -Dspring.profiles.active=dev
+
+            You can override any value from **application-dev.properties** file here. Use the following pattern:
+
+            .. code-block:: java
+
+               -D<application-dev.properties key>=<application-dev.properties value>
+
+         .. group-tab:: Dublin
+
+            Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
+
+            ``ms/blueprintsprocessor/application/src/main/java/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.java``.
+
+            Right-click inside it, at any point, to load the context menu and select create
+            BlueprintProcessorApplication configuration from context:
+
+            |imageCreateRunConfigJava|
+
+            **The following window will open:**
+
+            |imageRunConfigJava|
+
+            **Add the following in that field:**
+
+            .. code-block:: java
+               :caption: **Custom values for properties**
+
+               -DappName=ControllerBluePrints
+               -Dms_name=org.onap.ccsdk.apps.controllerblueprints
+               -DappVersion=1.0.0
+               -Dspring.config.location=opt/app/onap/config/
+               -Dspring.datasource.url=jdbc:mysql://127.0.0.1:3306/sdnctl
+               -Dspring.datasource.username=sdnctl
+               -Dspring.datasource.password=sdnctl
+               -Dcontrollerblueprints.loadInitialData=true
+               -Dblueprintsprocessor.restclient.sdncodl.url=http://localhost:8282/
+               -Dblueprintsprocessor.db.primary.url=jdbc:mysql://localhost:3306/sdnctl
+               -Dblueprintsprocessor.db.primary.username=sdnctl
+               -Dblueprintsprocessor.db.primary.password=sdnctl
+               -Dblueprintsprocessor.db.primary.driverClassName=org.mariadb.jdbc.Driver
+               -Dblueprintsprocessor.db.primary.hibernateHbm2ddlAuto=update
+               -Dblueprintsprocessor.db.primary.hibernateDDLAuto=none
+               -Dblueprintsprocessor.db.primary.hibernateNamingStrategy=org.hibernate.cfg.ImprovedNamingStrategy
+               -Dblueprintsprocessor.db.primary.hibernateDialect=org.hibernate.dialect.MySQL5InnoDBDialect
+               -Dblueprints.processor.functions.python.executor.executionPath=./components/scripts/python/ccsdk_blueprints
+               -Dblueprints.processor.functions.python.executor.modulePaths=./components/scripts/python/ccsdk_blueprints,./components/scripts/python/ccsdk_netconf,./components/scripts/python/ccsdk_restconf
+               -Dblueprintsprocessor.restconfEnabled=true
+               -Dblueprintsprocessor.restclient.sdncodl.type=basic-auth
+               -Dblueprintsprocessor.restclient.sdncodl.url=http://localhost:8282/
+               -Dblueprintsprocessor.restclient.sdncodl.username=admin
+               -Dblueprintsprocessor.restclient.sdncodl.password=Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
+               -Dblueprintsprocessor.grpcEnable=false
+               -Dblueprintsprocessor.grpcPort=9111
+               -Dblueprintsprocessor.blueprintDeployPath=/opt/app/onap/blueprints/deploy
+               -Dblueprintsprocessor.blueprintArchivePath=/opt/app/onap/blueprints/archive
+               -Dblueprintsprocessor.blueprintWorkingPath=/opt/app/onap/blueprints/work
+               -Dsecurity.user.password={bcrypt}$2a$10$duaUzVUVW0YPQCSIbGEkQOXwafZGwQ/b32/Ys4R1iwSSawFgz7QNu
+               -Dsecurity.user.name=ccsdkapps
+               -Dblueprintsprocessor.messageclient.self-service-api.kafkaEnable=false
+               -Dblueprintsprocessor.messageclient.self-service-api.topic=producer.t
+               -Dblueprintsprocessor.messageclient.self-service-api.type=kafka-basic-auth
+               -Dblueprintsprocessor.messageclient.self-service-api.bootstrapServers=127.0.0.1:9092
+               -Dblueprintsprocessor.messageclient.self-service-api.consumerTopic=receiver.t
+               -Dblueprintsprocessor.messageclient.self-service-api.groupId=receiver-id
+               -Dblueprintsprocessor.messageclient.self-service-api.clientId=default-client-id
+               -Dspring.profiles.active=dev
+               -Dblueprintsprocessor.httpPort=8080
+               -Dserver.port=55555
+
+
+      Add/replace the following in Blueprint's application-dev.properties file:
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
       .. code-block:: java
 
-         -D<application-dev.properties key>=<application-dev.properties value>
+         blueprintsprocessor.grpcclient.remote-python.type=token-auth
+         blueprintsprocessor.grpcclient.remote-python.host=localhost
+         blueprintsprocessor.grpcclient.remote-python.port=50051
+         blueprintsprocessor.grpcclient.remote-python.token=Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
 
-   .. group-tab:: Frankfurt
-
-      Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
-
-      ``ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.kt``.
-
-      Right-click inside it, at any point, to load the context menu and select create 
-      BlueprintProcessorApplication configuration from context:
-
-      |imageCreateRunConfigkt|
-
-      **The following window will open:**
-
-      |imageRunConfigKt|
-
-      **Add the following in the field `VM Options`:**
-
-      .. code-block:: bash
-         :caption: **Custom values for properties**
-
-         -Dspring.profiles.active=dev
-
-      You can override any value from **application-dev.properties** file here. Use the following pattern:
-
-      .. code-block:: java
-
-         -D<application-dev.properties key>=<application-dev.properties value>
-
-   .. group-tab:: El Alto
-
-      Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
-
-      ``ms/blueprintsprocessor/application/src/main/java/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.java.``
-
-      Right-click inside it, at any point, to load the context menu and select create 
-      BlueprintProcessorApplication configuration from context:
-
-      |imageCreateRunConfigJava|
-
-      **The following window will open:**
-
-      |imageRunConfigJava|
-
-      **Add the following in the field `VM Options`:**
-
-      .. code-block:: bash
-         :caption: **Custom values for properties**
-
-         -Dspring.profiles.active=dev
-
-      You can override any value from **application-dev.properties** file here. Use the following pattern:
-
-      .. code-block:: java
-
-         -D<application-dev.properties key>=<application-dev.properties value>
-
-   .. group-tab:: Dublin
-
-      Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
-
-      ``ms/blueprintsprocessor/application/src/main/java/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.java``.
-
-      Right-click inside it, at any point, to load the context menu and select create
-      BlueprintProcessorApplication configuration from context:
-
-      |imageCreateRunConfigJava|
-
-      **The following window will open:**
-
-      |imageRunConfigJava|
-
-      **Add the following in that field:**
-
-      .. code-block:: java
-         :caption: **Custom values for properties**
-
-         -DappName=ControllerBluePrints
-         -Dms_name=org.onap.ccsdk.apps.controllerblueprints
-         -DappVersion=1.0.0
-         -Dspring.config.location=opt/app/onap/config/
-         -Dspring.datasource.url=jdbc:mysql://127.0.0.1:3306/sdnctl
-         -Dspring.datasource.username=sdnctl
-         -Dspring.datasource.password=sdnctl
-         -Dcontrollerblueprints.loadInitialData=true
-         -Dblueprintsprocessor.restclient.sdncodl.url=http://localhost:8282/
-         -Dblueprintsprocessor.db.primary.url=jdbc:mysql://localhost:3306/sdnctl
-         -Dblueprintsprocessor.db.primary.username=sdnctl
-         -Dblueprintsprocessor.db.primary.password=sdnctl
-         -Dblueprintsprocessor.db.primary.driverClassName=org.mariadb.jdbc.Driver
-         -Dblueprintsprocessor.db.primary.hibernateHbm2ddlAuto=update
-         -Dblueprintsprocessor.db.primary.hibernateDDLAuto=none
-         -Dblueprintsprocessor.db.primary.hibernateNamingStrategy=org.hibernate.cfg.ImprovedNamingStrategy
-         -Dblueprintsprocessor.db.primary.hibernateDialect=org.hibernate.dialect.MySQL5InnoDBDialect
-         -Dblueprints.processor.functions.python.executor.executionPath=./components/scripts/python/ccsdk_blueprints
-         -Dblueprints.processor.functions.python.executor.modulePaths=./components/scripts/python/ccsdk_blueprints,./components/scripts/python/ccsdk_netconf,./components/scripts/python/ccsdk_restconf
-         -Dblueprintsprocessor.restconfEnabled=true
-         -Dblueprintsprocessor.restclient.sdncodl.type=basic-auth
-         -Dblueprintsprocessor.restclient.sdncodl.url=http://localhost:8282/
-         -Dblueprintsprocessor.restclient.sdncodl.username=admin
-         -Dblueprintsprocessor.restclient.sdncodl.password=Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
-         -Dblueprintsprocessor.grpcEnable=false
-         -Dblueprintsprocessor.grpcPort=9111
-         -Dblueprintsprocessor.blueprintDeployPath=/opt/app/onap/blueprints/deploy
-         -Dblueprintsprocessor.blueprintArchivePath=/opt/app/onap/blueprints/archive
-         -Dblueprintsprocessor.blueprintWorkingPath=/opt/app/onap/blueprints/work
-         -Dsecurity.user.password={bcrypt}$2a$10$duaUzVUVW0YPQCSIbGEkQOXwafZGwQ/b32/Ys4R1iwSSawFgz7QNu
-         -Dsecurity.user.name=ccsdkapps
-         -Dblueprintsprocessor.messageclient.self-service-api.kafkaEnable=false
-         -Dblueprintsprocessor.messageclient.self-service-api.topic=producer.t
-         -Dblueprintsprocessor.messageclient.self-service-api.type=kafka-basic-auth
-         -Dblueprintsprocessor.messageclient.self-service-api.bootstrapServers=127.0.0.1:9092
-         -Dblueprintsprocessor.messageclient.self-service-api.consumerTopic=receiver.t
-         -Dblueprintsprocessor.messageclient.self-service-api.groupId=receiver-id
-         -Dblueprintsprocessor.messageclient.self-service-api.clientId=default-client-id
-         -Dspring.profiles.active=dev
-         -Dblueprintsprocessor.httpPort=8080
-         -Dserver.port=55555
+         blueprintprocessor.remoteScriptCommand.enabled=true
 
 
-Add/replace the following in Blueprint's application-dev.properties file:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Run the application
+      ~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: java
+      Select either run or debug for this Run Configuration to start the Blueprints Processor:
 
-   blueprintsprocessor.grpcclient.remote-python.type=token-auth
-   blueprintsprocessor.grpcclient.remote-python.host=localhost
-   blueprintsprocessor.grpcclient.remote-python.port=50051
-   blueprintsprocessor.grpcclient.remote-python.token=Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
+      |imageRunDebug|
 
-   blueprintprocessor.remoteScriptCommand.enabled=true
+      |imageBuildLogs|
 
+   .. group-tab:: Visual Studio Code
 
-Run the application
-~~~~~~~~~~~~~~~~~~~
+      * **Step #1** - Make sure your installation of Visual Studio Code is up to date. This guide was writen using version 1.48
+      * **Step #2** - Install `Kotlin extension from the Visual Studio Code Marketplace <https://marketplace.visualstudio.com/items?itemName=fwcd.kotlin>`_
+      * **Step #3** - On the top menu click *Run | Open Configurations*
 
-Select either run or debug for this Run Configuration to start the Blueprints Processor:
+        .. warning:: This should open the file called `launch.json` but in some cases you'll need to wait for the Kotlin Language Server to be installed before you can do anything.
+           Please watch the bottom bar in Visual Studio Code for messages about things getting installed.
 
-|imageRunDebug|
+      * **Step #4** - add configuration shown below to your configurations list.
 
-|imageBuildLogs|
+        .. code-block:: json
+
+           {
+               "type": "kotlin",
+               "request": "launch",
+               "name": "Blueprint Processor",
+               "projectRoot": "${workspaceFolder}/ms/blueprintsprocessor/application",
+               "mainClass": "-Dspring.profiles.active=dev org.onap.ccsdk.cds.blueprintsprocessor.BlueprintProcessorApplicationKt"
+           }
+
+        .. warning:: The `projectRoot` path assumes that you created your Workspace in the main CDS repository folder. If not - please change the path accordingly
+
+        .. note:: The `mainClass` contains a spring profile param before the full class name. This is done because `args` is not supported by Kotlin launch.json configuration.
+           If you have a cleaner idea how to solve this - please let us know.
 
 
 Testing the application
