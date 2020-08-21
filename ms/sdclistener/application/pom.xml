@@ -34,6 +34,7 @@
     <properties>
         <protobuf.version>3.6.1</protobuf.version>
         <project.version>${project.parent.version}</project.version>
+        <ccsdk.sli.core.version>1.0.1-SNAPSHOT</ccsdk.sli.core.version>
     </properties>
 
     <dependencies>
@@ -77,7 +78,12 @@
             <artifactId>jmockit</artifactId>
             <scope>test</scope>
         </dependency>
-
+		<dependency>
+			<groupId>org.jacorb</groupId>
+			<artifactId>jacorb-omgapi</artifactId>
+			<version>3.8</version>
+			<scope>test</scope>
+		</dependency>
         <!-- GRPC Dependencies -->
         <dependency>
             <groupId>io.grpc</groupId>
@@ -122,4 +128,33 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+    	    <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <phase>test</phase>
+                        <goals>
+                        <goal>test</goal>
+                        </goals>
+                        <configuration>
+                        <argLine>-Djdk.attach.allowAttachSelf=true ${surefireArgLine}</argLine>
+                        <excludes>
+                            <exclude>**/IT*.java</exclude>
+                        </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                <argLine>${surefireArgLine}</argLine>
+                <excludes>
+                    <exclude>**/IT*.java</exclude>
+                </excludes>
+                </configuration>
+            </plugin>
+    	</plugins>
+    </build>
 </project>

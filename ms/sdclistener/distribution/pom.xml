@@ -41,6 +41,7 @@
         <docker.verbose>true</docker.verbose>
         <ccsdk.project.version>${project.version}</ccsdk.project.version>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
+        <ccsdk.sli.core.version>1.0.1-SNAPSHOT</ccsdk.sli.core.version>
     </properties>
 
     <dependencies>
