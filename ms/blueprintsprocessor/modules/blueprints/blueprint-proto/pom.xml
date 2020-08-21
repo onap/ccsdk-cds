@@ -38,6 +38,11 @@
             <groupId>com.github.marcoferrer.krotoplus</groupId>
             <artifactId>kroto-plus-coroutines</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jsr250-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -52,6 +57,7 @@
                     </protocArtifact>
                     <protoSourceRoot>${project.basedir}/../../../../../components/model-catalog/proto-definition/proto
                     </protoSourceRoot>
+                    <jvmTarget>11</jvmTarget>
                 </configuration>
                 <executions>
                     <execution>
@@ -66,8 +72,7 @@
                         </goals>
                         <configuration>
                             <pluginId>grpc-java</pluginId>
-                            <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
-                            </pluginArtifact>
+                            <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
                         </configuration>
                     </execution>
                     <!--
