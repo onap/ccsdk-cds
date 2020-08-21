@@ -33,6 +33,7 @@
     <description>Blueprints Processor Parent</description>
 
     <properties>
+    	<ccsdk.sli.core.version>1.0.1-SNAPSHOT</ccsdk.sli.core.version>
         <sli.version>${ccsdk.sli.core.version}</sli.version>
         <!-- Override CDS version from parent to be project.version -->
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
