@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b1906f0_38e16697",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-proto/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-08-21T15:15:11Z",
+      "side": 1,
+      "message": "it should pick global configuration defined at #60, why to redefine same ?",
+      "revId": "8031ff0a218a37405362fe8950b64e740fdf5f00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49ab31b1_1aa614c5",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-proto/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-08-21T15:15:11Z",
+      "side": 1,
+      "message": "same as above !",
+      "revId": "8031ff0a218a37405362fe8950b64e740fdf5f00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4a37e65_b3d4b4e9",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-08-21T15:15:11Z",
+      "side": 1,
+      "message": "why is that required ?",
+      "revId": "8031ff0a218a37405362fe8950b64e740fdf5f00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb1883d3_85f0b399",
+        "filename": "ms/sdclistener/application/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-08-21T15:15:11Z",
+      "side": 1,
+      "message": "why it\u0027s required ?",
+      "revId": "8031ff0a218a37405362fe8950b64e740fdf5f00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec477e82_3d290662",
+        "filename": "ms/sdclistener/distribution/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-08-21T15:15:11Z",
+      "side": 1,
+      "message": "why ?",
+      "revId": "8031ff0a218a37405362fe8950b64e740fdf5f00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
