@@ -15,7 +15,6 @@ import {saveAs} from 'file-saver';
 import {DesignerStore} from '../designer/designer.store';
 import {ToastrService} from 'ngx-toastr';
 import {NgxFileDropEntry} from 'ngx-file-drop';
-import {TopologyTemplate} from '../designer/model/designer.topologyTemplate.model';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -56,6 +55,10 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.vlbDefinition.topology_template = new TemplateTopology();
 
         this.elementRef.nativeElement.focus();
+        this.refreshCurrentPackage();
+    }
+
+    private refreshCurrentPackage() {
         this.id = this.route.snapshot.paramMap.get('id');
         this.configurationDashboardService.getPagedPackages(this.id).subscribe(
             (bluePrintDetailModels) => {
@@ -65,10 +68,6 @@ export class ConfigurationDashboardComponent implements OnInit {
                     this.packageCreationStore.clear();
                 }
             });
-
-        if (this.route.snapshot.paramMap.has('id')) {
-            console.log('The id is equal to ' + this.route.snapshot.paramMap.get('id'));
-        }
     }
 
     private downloadCBAPackage(bluePrintDetailModels: BluePrintDetailModel) {
@@ -210,8 +209,8 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     }
 
-    goBacktoDashboard() {
-        this.router.navigate(['/packages']);
+    discardChanges() {
+        this.refreshCurrentPackage();
     }
 
     downloadPackage(artifactName: string, artifactVersion: string) {
@@ -244,7 +243,7 @@ export class ConfigurationDashboardComponent implements OnInit {
     }
 
     textChanged($event: {}) {
-    this.packageCreationStore.addTopologyTemplate(this.vlbDefinition.topology_template);
+        this.packageCreationStore.addTopologyTemplate(this.vlbDefinition.topology_template);
     }
 
     enrichBluePrint() {
