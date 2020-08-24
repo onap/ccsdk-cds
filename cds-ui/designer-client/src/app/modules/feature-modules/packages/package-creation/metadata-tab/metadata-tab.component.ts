@@ -22,7 +22,7 @@ export class MetadataTabComponent implements OnInit {
     modeType = this.modes[0].name;
     metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     errorMessage: string;
-    versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
+    versionPattern = '(\d+)\.(\d+)\.(\d+)';
 
     constructor(
         private route: ActivatedRoute,
@@ -74,7 +74,7 @@ export class MetadataTabComponent implements OnInit {
         console.log(value);
         if (value && value.trim().length > 0) {
             event.target.value = '';
-            this.tags.add(value);
+            this.tags.add(value.trim());
         }
     }
 
