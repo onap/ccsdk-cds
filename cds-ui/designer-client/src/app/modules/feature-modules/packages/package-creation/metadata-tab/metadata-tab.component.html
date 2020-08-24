@@ -45,7 +45,7 @@
         <label class="label-name">Version <span>*</span></label>
         <div class="label-input">
             <input type="input" [readOnly]="!packageNameAndVersionEnables" (change)="checkRequiredElements()" [(ngModel)]="metaDataTab.version"
-                (input)="validatePackageNameAndVersion()" [pattern]="versionPattern" placeholder="Example: 1.0.0">
+                (input)="validatePackageNameAndVersion()" pattern="(\d+)\.(\d+)\.(\d+)" placeholder="Example: 1.0.0">
         </div>
         <div class="model-note-container error-message">{{errorMessage}}</div>
     </div>
@@ -59,9 +59,9 @@
     <div class="single-line-model">
         <label class="label-name">Tags</label>
         <div class="label-input">
-            <input type="input" (keyup.enter)="addTag($event)" placeholder="Ex., vDNS-CDS">
+            <input type="input" (keyup.enter)="addTag($event)" (keyup.Space)="addTag($event)" placeholder="Ex., vDNS-CDS">
         </div>
-        <div class="model-note-container tag-notes">Use ENTER to add tag</div>
+        <div class="model-note-container tag-notes">Use ENTER/SPACE to add tag</div>
         <div class="model-note-container tages-container">
             <span *ngFor="let tag of tags" class="single-tage">{{tag}}
                 <i (click)="removeTag(tag)" class="fa fa-times-circle"></i>
