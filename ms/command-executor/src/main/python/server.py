@@ -2,7 +2,7 @@
 #!/usr/bin/python
 
 #
-# Copyright (C) 2019 Bell Canada.
+# Copyright (C) 2019 - 2020 Bell Canada.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ from concurrent import futures
 import logging
 import time
 import sys
+import utils
 
 import grpc
 
@@ -52,7 +53,7 @@ def serve():
     server.add_insecure_port('[::]:' + port)
     server.start()
 
-    logger.info("Command Executor Server started on %s" % port)
+    logger.info("Command Executor Server started on %s" % port, extra=utils.getExtraLogData())
 
     try:
         while True:
@@ -62,7 +63,7 @@ def serve():
 
 
 if __name__ == '__main__':
-    logging_formater = '%(asctime)s - %(name)s - %(threadName)s - %(levelname)s - %(message)s'
+    logging_formater = '%(asctime)s|%(request_id)s|%(subrequest_id)s|%(originator_id)s|%(threadName)s|%(name)s|%(levelname)s|%(message)s'
     logging.basicConfig(filename='/opt/app/onap/logs/application.log', level=logging.DEBUG,
                         format=logging_formater)
     console = logging.StreamHandler()

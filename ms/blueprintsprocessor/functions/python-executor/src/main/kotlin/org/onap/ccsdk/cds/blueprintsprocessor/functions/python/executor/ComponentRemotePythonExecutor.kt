@@ -1,5 +1,6 @@
 /*
  *  Copyright Â© 2019 IBM.
+ *  Modifications Copyright © 2020 Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -145,7 +146,9 @@ open class ComponentRemotePythonExecutor(
             // If packages are defined, then install in remote server
             if (packages != null) {
                 val prepareEnvInput = PrepareRemoteEnvInput(
+                    originatorId = executionServiceInput.commonHeader.originatorId,
                     requestId = processId,
+                    subRequestId = executionServiceInput.commonHeader.subRequestId,
                     remoteIdentifier = RemoteIdentifier(
                         blueprintName = blueprintName,
                         blueprintVersion = blueprintVersion),
@@ -195,7 +198,9 @@ open class ComponentRemotePythonExecutor(
                 val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
 
                 val remoteExecutionInput = RemoteScriptExecutionInput(
+                    originatorId = executionServiceInput.commonHeader.originatorId,
                     requestId = processId,
+                    subRequestId = executionServiceInput.commonHeader.subRequestId,
                     remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
                     command = scriptCommand,
                     properties = properties,
