@@ -19,22 +19,26 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Injectable} from '@angular/core';
-import {BluePrintPage} from './model/BluePrint.model';
-import {Store} from '../../../common/core/stores/Store';
-import {PackagesApiService} from './packages-api.service';
-import {PackagesDashboardState} from './model/packages-dashboard.state';
-import {Observable, of} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BluePrintPage } from './model/BluePrint.model';
+import { Store } from '../../../common/core/stores/Store';
+import { PackagesApiService } from './packages-api.service';
+import { PackagesDashboardState } from './model/packages-dashboard.state';
+import { Observable, of } from 'rxjs';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PackagesStore extends Store<PackagesDashboardState> {
     // TDOD fixed for now as there is no requirement to change it from UI
-    public pageSize = 15;
+    public pageSize = 5;
     private bluePrintContent: BluePrintPage = new BluePrintPage();
 
-    constructor(private packagesServiceList: PackagesApiService) {
+    constructor(
+        private packagesServiceList: PackagesApiService,
+        private ngxLoader: NgxUiLoaderService
+    ) {
         super(new PackagesDashboardState());
     }
 
@@ -92,6 +96,10 @@ export class PackagesStore extends Store<PackagesDashboardState> {
                     tags: [],
                     sortBy
                 });
+            }, err => {
+                console.log(err)
+            }, () => {
+                this.ngxLoader.stop();
             });
     }
 
@@ -108,6 +116,10 @@ export class PackagesStore extends Store<PackagesDashboardState> {
                     tags: [],
                     sortBy
                 });
+            }, err => {
+                console.log(err)
+            }, () => {
+                this.ngxLoader.stop(); // start master loader
             });
     }
 

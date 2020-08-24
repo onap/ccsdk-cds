@@ -29,6 +29,7 @@ import { TemplMappCreationComponent } from './package-creation/template-mapping/
 import { TemplMappListingComponent } from './package-creation/template-mapping/templ-mapp-listing/templ-mapp-listing.component';
 import { DataTablesModule } from 'angular-datatables';
 import { DesignerSourceViewComponent } from './designer/source-view/source-view.component';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -61,7 +62,9 @@ import { DesignerSourceViewComponent } from './designer/source-view/source-view.
         FormsModule,
         NgxFileDropModule,
         AceEditorModule,
-        DataTablesModule
+        DataTablesModule,
+        // Import NgxUiLoaderModule
+        NgxUiLoaderModule
     ],
     providers: [ApiService, JsonPipe],
     bootstrap: []
