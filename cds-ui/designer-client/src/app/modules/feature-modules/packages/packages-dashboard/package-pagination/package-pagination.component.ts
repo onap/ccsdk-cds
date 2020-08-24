@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {PackagesStore} from '../../packages.store';
+import { Component, OnInit } from '@angular/core';
+import { PackagesStore } from '../../packages.store';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
     selector: 'app-package-pagination',
@@ -12,7 +13,10 @@ export class PackagePaginationComponent implements OnInit {
     pageSize: number;
     previousPage: number;
 
-    constructor(private packagesStore: PackagesStore) {
+    constructor(
+        private packagesStore: PackagesStore,
+        private ngxLoader: NgxUiLoaderService
+    ) {
         this.pageSize = packagesStore.pageSize;
 
         this.packagesStore.state$
@@ -32,6 +36,7 @@ export class PackagePaginationComponent implements OnInit {
             console.log('page change to first...', page);
         }
         if (this.previousPage !== page) {
+            this.ngxLoader.start(); // start master loader
             this.packagesStore.getPage(page - 1, this.packagesStore.pageSize);
             this.previousPage = page;
         }
