@@ -9,10 +9,10 @@
         </li>
         <li *ngFor="let tag of viewedTags">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" (click)="reloadPackages($event)" class="custom-control-input" id={{tag}}>
+                <input type="checkbox" (click)="reloadPackages($event)" class="custom-control-input" id={{tag}} #checkboxes>
                 <label class="custom-control-label" for={{tag}}>{{tag}}</label>
             </div>
         </li>
-        <li class="reset-filter"><a href="">Reset filter</a></li>
+        <li class="reset-filter"><a (click)="resetFilter()">Reset filter</a></li>
     </ul>
 </div>

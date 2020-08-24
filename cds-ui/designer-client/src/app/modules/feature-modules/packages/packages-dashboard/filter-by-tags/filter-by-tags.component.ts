@@ -19,9 +19,9 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PackagesStore } from '../../packages.store';
-import { BlueprintModel, BluePrintPage } from '../../model/BluePrint.model';
+import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {PackagesStore} from '../../packages.store';
+import {BlueprintModel, BluePrintPage} from '../../model/BluePrint.model';
 
 @Component({
     selector: 'app-filter-by-tags',
@@ -38,9 +38,14 @@ export class TagsFilteringComponent implements OnInit {
     viewedPackages: BlueprintModel[] = [];
     checkBoxTages = '';
     currentPage = 0;
+    @ViewChildren('checkboxes') checkboxes: QueryList<ElementRef>;
 
     constructor(private packagesStore: PackagesStore,
     ) {
+        this.refreshTags();
+    }
+
+    private refreshTags() {
         this.packagesStore.state$.subscribe(state => {
             console.log(state);
             if (state.page) {
@@ -55,7 +60,7 @@ export class TagsFilteringComponent implements OnInit {
                         this.tags.push(tag.trim());
                     });
                     this.tags.push('All');
-                    this.tags = this.tags.filter((value, index, self) => self.indexOf(value) === index);
+                    this.tags = this.tags.filter((value, index, self) => self.indexOf(value) === index && value);
                     this.assignTags();
                 });
             }
@@ -82,6 +87,8 @@ export class TagsFilteringComponent implements OnInit {
         this.viewedTags = this.tags.filter(
             item => item.toLowerCase().indexOf(value.toLowerCase()) > -1
         );
+
+
     }
 
     reloadPackages(event: any) {
@@ -98,8 +105,15 @@ export class TagsFilteringComponent implements OnInit {
         }).map((item) => {
             return item.trim();
         });
+
         this.packagesStore.filterByTags(tagsSelected);
     }
 
 
+    resetFilter() {
+        this.checkBoxTages = '';
+        this.checkboxes.forEach((element) => {
+            element.nativeElement.checked = false;
+        });
+    }
 }
