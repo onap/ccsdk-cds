@@ -32,7 +32,7 @@
     <div class="single-line-model">
         <label class="label-name">Name <span>*</span></label>
         <div class="label-input">
-            <input type="input" [readOnly]="!packageNameAndVersionEnables" (change)="checkRequiredElements()" [(ngModel)]="metaDataTab.name"
+            <input type="input" (change)="checkRequiredElements()" [(ngModel)]="metaDataTab.name"
                 placeholder="Package name">
         </div>
         <!--<div class="model-note-container error-message">
@@ -44,7 +44,7 @@
     <div class="single-line-model">
         <label class="label-name">Version <span>*</span></label>
         <div class="label-input">
-            <input type="input" [readOnly]="!packageNameAndVersionEnables" (change)="checkRequiredElements()" [(ngModel)]="metaDataTab.version"
+            <input type="input" (change)="checkRequiredElements()" [(ngModel)]="metaDataTab.version"
                 (input)="validatePackageNameAndVersion()" pattern="(\d+)\.(\d+)\.(\d+)" placeholder="Example: 1.0.0">
         </div>
         <div class="model-note-container error-message">{{errorMessage}}</div>

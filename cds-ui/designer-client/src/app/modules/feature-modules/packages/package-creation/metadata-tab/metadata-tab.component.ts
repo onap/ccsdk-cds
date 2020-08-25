@@ -11,7 +11,7 @@ import {ActivatedRoute} from '@angular/router';
     styleUrls: ['./metadata-tab.component.css']
 })
 export class MetadataTabComponent implements OnInit {
-    packageNameAndVersionEnables = true;
+
     counter = 0;
     tags = new Set<string>();
     customKeysMap = new Map();
@@ -22,7 +22,7 @@ export class MetadataTabComponent implements OnInit {
     modeType = this.modes[0].name;
     metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     errorMessage: string;
-    versionPattern = '(\d+)\.(\d+)\.(\d+)';
+    versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
 
     constructor(
         private route: ActivatedRoute,
@@ -37,9 +37,6 @@ export class MetadataTabComponent implements OnInit {
         this.metaDataTab.mapOfCustomKey = this.customKeysMap;
         this.metaDataTab.mode = this.modeType;
 
-        const id = this.route.snapshot.paramMap.get('id');
-        id ? this.packageNameAndVersionEnables = false :
-            this.packageNameAndVersionEnables = true;
         this.packageCreationStore.state$.subscribe(element => {
 
             if (element && element.metaData) {

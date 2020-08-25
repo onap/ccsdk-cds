@@ -22,20 +22,20 @@
             <div class="container">
                 <div class="creat-action-container">
 
-                    <a class="action-button save" (click)="editBluePrint()">
+                    <button class="action-button save" (click)="editBluePrint()" [disabled]="!isSaveEnabled">
                         <i class="icon-save-sm" aria-hidden="true"></i>
                         <span>Save</span>
-                    </a>
-                    <a class="action-button" (click)="discardChanges()">
+                    </button>
+                    <button data-target="#discardChangesModal" data-toggle="modal" class="action-button" [disabled]="!isSaveEnabled">
                         <i class="icon-discard-sm" aria-hidden="true"></i>
                         <span>Discard Changes</span>
-                    </a>
+                    </button>
 
                     <hr>
-                    <a class="action-button">
+                    <button class="action-button">
                         <i class="icon-clone-sm" aria-hidden="true"></i>
                         <span>Clone</span>
-                    </a>
+                    </button>
 
                     <a href="#" class="action-button">
                         <i class="icon-archive-sm" aria-hidden="true"></i>
@@ -785,6 +785,29 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" (click)="deletePackage()" data-dismiss="modal"
                         class="btn btn-primary">Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="discardChangesModal" tabindex="-1" role="dialog" aria-labelledby="discardChangesModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="discardChangesModalLabel">Discard Changes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i class="icon-action-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to discard the changes?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" (click)="discardChanges()" data-dismiss="modal"
+                        class="btn btn-primary">Discard Changes
                 </button>
             </div>
         </div>
