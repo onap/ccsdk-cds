@@ -1,6 +1,8 @@
 /*
  *  Copyright © 2019 IBM.
  *
+ *  Modifications Copyright © 2020 IBM, Bell Canada.
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -21,6 +23,7 @@ open class SshClientProperties {
     lateinit var host: String
     var port: Int = 22
     var connectionTimeOut: Long = 3000
+    var logging: Boolean = false // print command result in cds logs
 }
 
 open class BasicAuthSshClientProperties : SshClientProperties() {

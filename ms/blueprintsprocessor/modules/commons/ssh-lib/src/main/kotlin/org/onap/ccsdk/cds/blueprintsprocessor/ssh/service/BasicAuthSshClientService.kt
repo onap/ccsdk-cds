@@ -1,7 +1,7 @@
 /*
  *  Copyright © 2019 IBM.
  *
- *  Modifications Copyright © 2018-2019 IBM, Bell Canada
+ *  Modifications Copyright © 2018-2020 IBM, Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -118,7 +118,9 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         }
 
         val commandResult = CommandResult(command, deviceOutput, isSuccessful)
-        log.info("Command Response: ({}) $newLine", commandResult)
+        if (basicAuthSshClientProperties.logging) {
+            log.info("Command Response: ({}) $newLine", commandResult)
+        }
         return commandResult
     }
 

@@ -1,6 +1,8 @@
 /*
  * Copyright © 2018-2019 AT&T Intellectual Property.
  *
+ * Modifications Copyright © 2020 Bell Canada.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -94,6 +96,10 @@ open class SshClientPropertiesAssignmentBuilder : PropertiesAssignmentBuilder() 
     fun host(host: String) = host(host.asJsonPrimitive())
 
     fun host(host: JsonNode) = property(SshClientProperties::host.name, host)
+
+    fun logging(logging: Boolean) = logging(logging.asJsonPrimitive())
+
+    fun logging(logging: JsonNode) = property(SshClientProperties::logging.name, logging)
 }
 
 class BasicAuthSshClientPropertiesAssignmentBuilder : SshClientPropertiesAssignmentBuilder() {
