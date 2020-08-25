@@ -39,6 +39,8 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     currentBlob = new Blob();
     vlbDefinition: VlbDefinition = new VlbDefinition();
+    isSaveEnabled = false;
+    versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
 
     constructor(
         private route: ActivatedRoute,
@@ -56,6 +58,17 @@ export class ConfigurationDashboardComponent implements OnInit {
 
         this.elementRef.nativeElement.focus();
         this.refreshCurrentPackage();
+
+        const regexp = RegExp(this.versionPattern);
+        this.packageCreationStore.state$.subscribe(cbaPackage => {
+            if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.description
+                && cbaPackage.metaData.name && cbaPackage.metaData.version &&
+                regexp.test(cbaPackage.metaData.version)) {
+                this.isSaveEnabled = true;
+            } else {
+                this.isSaveEnabled = false;
+            }
+        });
     }
 
     private refreshCurrentPackage() {
