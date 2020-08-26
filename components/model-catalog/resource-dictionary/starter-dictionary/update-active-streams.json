@@ -1,0 +1,37 @@
+{
+  "name": "update-active-streams",
+  "tags": "update-active-streams",
+  "property": {
+    "description": "update-active-streams",
+    "type": "string"
+  },
+  "updated-by": "Bruno Sakoto <bruno.sakoto@bell.ca>",
+  "sources": {
+    "default": {
+      "type": "source-default",
+      "properties": {}
+    },
+    "sdnc": {
+      "type": "source-rest",
+      "properties": {
+        "verb": "PUT",
+        "type": "JSON",
+        "path": "",
+        "url-path": "$vpg_onap_private_ip_0:8183/restconf/config/stream-count:stream-count/streams",
+        "input-key-mapping": {
+          "vpg_onap_private_ip_0": "vpg_onap_private_ip_0",
+          "data": "data"
+        },
+        "output-key-mapping": {
+        },
+        "key-dependencies": [
+          "vpg_onap_private_ip_0",
+          "data"
+        ],
+        "endpoint-selector": "vpkg-rest-api",
+        "payload": "{\"streams\": $data}"
+      }
+    }
+  }
+}
+
