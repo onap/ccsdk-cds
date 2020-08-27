@@ -109,9 +109,9 @@ Execute the following commands to create the needed directories, and grant acces
 Import the project into the IDE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. tabs ::
+.. tabs::
 
-   .. group-tab:: IntelliJ IDEA
+   .. tab:: IntelliJ IDEA
 
       Go to *File | Open* and choose the :file:`pom.xml` file of the cds directory:
 
@@ -122,8 +122,7 @@ Import the project into the IDE
       |imageReimportMaven|
 
 
-      Override some application properties
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      **Override some application properties:**
 
       After the project is compiled, a Run Configuration profile overriding some application properties
       with custom values needs to be created, to reflect the local environment characteristics.
@@ -277,8 +276,7 @@ Import the project into the IDE
                -Dserver.port=55555
 
 
-      Add/replace the following in Blueprint's application-dev.properties file:
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      **Add/replace the following in Blueprint's application-dev.properties file:**
 
       .. code-block:: java
 
@@ -290,8 +288,7 @@ Import the project into the IDE
          blueprintprocessor.remoteScriptCommand.enabled=true
 
 
-      Run the application
-      ~~~~~~~~~~~~~~~~~~~
+      **Run the application:**
 
       Select either run or debug for this Run Configuration to start the Blueprints Processor:
 
@@ -299,31 +296,80 @@ Import the project into the IDE
 
       |imageBuildLogs|
 
-   .. group-tab:: Visual Studio Code
+   .. tab:: Visual Studio Code
 
-      * **Step #1** - Make sure your installation of Visual Studio Code is up to date. This guide was writen using version 1.48
-      * **Step #2** - Install `Kotlin extension from the Visual Studio Code Marketplace <https://marketplace.visualstudio.com/items?itemName=fwcd.kotlin>`_
-      * **Step #3** - On the top menu click *Run | Open Configurations*
+      .. tabs::
 
-        .. warning:: This should open the file called `launch.json` but in some cases you'll need to wait for the Kotlin Language Server to be installed before you can do anything.
-           Please watch the bottom bar in Visual Studio Code for messages about things getting installed.
+         .. group-tab:: Latest
 
-      * **Step #4** - add configuration shown below to your configurations list.
+            * **Step #1** - Make sure your installation of Visual Studio Code is up to date. This guide was writen using version 1.48
+            * **Step #2** - Install `Kotlin extension from the Visual Studio Code Marketplace <https://marketplace.visualstudio.com/items?itemName=fwcd.kotlin>`_
+            * **Step #3** - On the top menu click *Run | Open Configurations*
 
-        .. code-block:: json
+            .. warning:: This should open the file called `launch.json` but in some cases you'll need to wait for the Kotlin Language Server to be installed before you can do anything.
+               Please watch the bottom bar in Visual Studio Code for messages about things getting installed.
 
-           {
-               "type": "kotlin",
-               "request": "launch",
-               "name": "Blueprint Processor",
-               "projectRoot": "${workspaceFolder}/ms/blueprintsprocessor/application",
-               "mainClass": "-Dspring.profiles.active=dev org.onap.ccsdk.cds.blueprintsprocessor.BlueprintProcessorApplicationKt"
-           }
+            * **Step #4** - add configuration shown below to your configurations list.
 
-        .. warning:: The `projectRoot` path assumes that you created your Workspace in the main CDS repository folder. If not - please change the path accordingly
+            .. code-block:: json
 
-        .. note:: The `mainClass` contains a spring profile param before the full class name. This is done because `args` is not supported by Kotlin launch.json configuration.
-           If you have a cleaner idea how to solve this - please let us know.
+               {
+                     "type": "kotlin",
+                     "request": "launch",
+                     "name": "Blueprint Processor",
+                     "projectRoot": "${workspaceFolder}/ms/blueprintsprocessor/application",
+                     "mainClass": "-Dspring.profiles.active=dev org.onap.ccsdk.cds.blueprintsprocessor.BlueprintProcessorApplicationKt"
+               }
+
+            .. warning:: The `projectRoot` path assumes that you created your Workspace in the main CDS repository folder. If not - please change the path accordingly
+
+            .. note:: The `mainClass` contains a spring profile param before the full class name. This is done because `args` is not supported by Kotlin launch.json configuration.
+               If you have a cleaner idea how to solve this - please let us know.
+
+            **Add/replace the following in Blueprint's application-dev.properties file:**
+
+            .. code-block:: java
+
+               blueprintsprocessor.grpcclient.remote-python.type=token-auth
+               blueprintsprocessor.grpcclient.remote-python.host=localhost
+               blueprintsprocessor.grpcclient.remote-python.port=50051
+               blueprintsprocessor.grpcclient.remote-python.token=Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
+
+               blueprintprocessor.remoteScriptCommand.enabled=true
+
+            **Currently the following entries need to be added in VSC too:**
+
+            .. code-block:: java
+
+               logging.level.web=DEBUG
+               logging.level.org.springframework.web: DEBUG
+
+               #Encrypted username and password for health check service
+               endpoints.user.name=eHbVUbJAj4AG2522cSbrOQ==
+               endpoints.user.password=eHbVUbJAj4AG2522cSbrOQ==
+
+               #BaseUrls for health check blueprint processor services
+               blueprintprocessor.healthcheck.baseUrl=http://localhost:8080/
+               blueprintprocessor.healthcheck.mapping-service-name-with-service-link=[Execution service,/api/v1/execution-service/health-check],[Resources service,/api/v1/resources/health-check],[Template service,/api/v1/template/health-check]
+
+               #BaseUrls for health check Cds Listener services
+               cdslistener.healthcheck.baseUrl=http://cds-sdc-listener:8080/
+               cdslistener.healthcheck.mapping-service-name-with-service-link=[SDC Listener service,/api/v1/sdclistener/healthcheck]
+
+               #Actuator properties
+               management.endpoints.web.exposure.include=*
+               management.endpoint.health.show-details=always
+               management.info.git.mode=full
+
+            In VSC the properties are read from target folder, thats why the following maven command needs to be rerun:
+
+            .. code-block:: bash
+
+               mvn clean install -DskipTests=true -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dadditionalparam=-Xdoclint:none
+
+            Click Run in Menu bar.
+
+            |imageLogsVSC|
 
 
 Testing the application
@@ -355,38 +401,45 @@ Compilation error?
 
 * Change Java Version to 11 or 8
 
+
+.. image alignment inside tabs doesn't work
+
 .. |imageRunConfigJava| image:: media/run_config_java.png
-   :scale: 100 %
+   :scale: 75 %
    :align: middle
 
 .. |imageRunConfigKt| image:: media/run_config_kt.png
-   :scale: 100 %
+   :scale: 75 %
    :align: middle
 
 .. |imageCreateRunConfigJava| image:: media/create_run_config_java.png
-   :scale: 100 %
+   :scale: 75 %
    :align: middle
 
 .. |imageCreateRunConfigKt| image:: media/create_run_config_kt.png
-   :scale: 100 %
+   :scale: 75 %
    :align: middle
 
 .. |imageImportProject| image:: media/import_project.png
-   :scale: 100 %
+   :scale: 75 %
    :align: middle
 
 .. |imageReimportMaven| image:: media/reimport_maven.png
-   :scale: 70 %
+   :scale: 75 %
    :align: middle
 
 .. |imageRunDebug| image:: media/run_debug.png
-   :scale: 100 %
+   :scale: 75 %
    :align: middle
 
 .. |imageRunDebug| image:: media/run_debug.png
    :align: middle
-   :scale: 100 %
+   :scale: 75 %
 
 .. |imageBuildLogs| image:: media/build_logs.png
    :align: middle
-   :scale: 100 %
+   :scale: 75 %
+
+.. |imageLogsVSC| image:: media/vsc_logs.png
+   :align: middle
+   :scale: 75 %
