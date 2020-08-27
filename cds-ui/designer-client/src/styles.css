@@ -2404,12 +2404,50 @@ hr{
   font-size: 11px;
   color: #C3CDDB;
 }
-.action-button.save{
+/* .action-button.save{
   color: #1273EB !important;
 }
 .action-button.save:hover{
   opacity: .9;
+} */
+
+
+.action-button.save{
+  color: #66BB00 !important;
 }
+/*Flash Glowing button style*/
+.action-button.save i{
+background-color: #66BB00;
+-webkit-animation: glowing 1500ms infinite;
+-moz-animation: glowing 1500ms infinite;
+-o-animation: glowing 1500ms infinite;
+animation: glowing 1500ms infinite;
+}
+@-webkit-keyframes glowing {
+  0% { background-color: #66BB00; -webkit-box-shadow: 0 0 3px #66BB00; }
+  50% { background-color: #7CD116; -webkit-box-shadow: 0 0 40px #7CD116; }
+  100% { background-color: #66BB00; -webkit-box-shadow: 0 0 3px #66BB00; }
+}
+
+@-moz-keyframes glowing {
+  0% { background-color: #66BB00; -moz-box-shadow: 0 0 3px #66BB00; }
+  50% { background-color: #7CD116; -moz-box-shadow: 0 0 40px #7CD116; }
+  100% { background-color: #66BB00; -moz-box-shadow: 0 0 3px #66BB00; }
+}
+
+@-o-keyframes glowing {
+  0% { background-color: #66BB00; box-shadow: 0 0 3px #66BB00; }
+  50% { background-color: #7CD116; box-shadow: 0 0 40px #7CD116; }
+  100% { background-color: #66BB00; box-shadow: 0 0 3px #66BB00; }
+}
+
+@keyframes glowing {
+  0% { background-color: #66BB00; box-shadow: 0 0 3px #66BB00; }
+  50% { background-color: #7CD116; box-shadow: 0 0 40px #7CD116; }
+  100% { background-color: #66BB00; box-shadow: 0 0 3px #66BB00; }
+}
+
+
 .action-button.delete i{
   color: #BABBC3;
 }
@@ -3246,6 +3284,40 @@ table.dataTable.no-footer{
 
 
 
+/* panel layout mechanics */
+.panel-wrap {
+  position: fixed;
+  top: 100px;
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  height: 180px;
+  transform: translateX(100%);
+  transition: .3s ease-out;
+  z-index: 2000;
+}
+.panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #333;
+  color: #eee;
+  overflow: auto;
+  padding: 1em;
+  font-size: 13px;
+}
+
+/* simulate panel state control --
+this can also be triggered by a 
+class name added to the body tag. 
+Just using a checkbox sibling here
+for simplicity
+*/ 
+[type="checkbox"]:checked ~ .panel-wrap {
+  transform: translateX(0%);
+}
 
 
 
