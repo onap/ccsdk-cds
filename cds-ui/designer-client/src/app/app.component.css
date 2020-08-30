@@ -1,0 +1,9 @@
+.cdk-overlay-container {
+    position: none;
+    z-index: 0;
+}
+
+.cdk-overlay-backdrop {
+    position: none;
+    z-index: 0;
+}
