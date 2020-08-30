@@ -1,20 +1,24 @@
 <app-header>
 </app-header>
+<tour-step-template></tour-step-template>
 <div class="new-wrapper">
     <div class="container-fluid main-container">
         <app-packages-header></app-packages-header>
         <div class="container-fluid body-container">
             <!--Tour Starter-->
-            <input id="clicker" type="checkbox" />
-            <label for="clicker">Start the tour</label>
+            <input id="clicker" [checked]="startTour" type="checkbox" />
+            <label class="ml-1" for="clicker">Start the tour</label>
 
             <div class="panel-wrap">
                 <div class="panel">
-                    <button id="clicker1" type="button"><label for="clicker">Dismiss</label>
+                    <button id="clicker1" class="close" type="button" (click)="stopTour()">
+                        <label for="clicker">&times;</label>
                     </button>
+
                     <h3>Welcome to CDS</h3>
                     <p>Want a tour? Our helpful guide will introduce you to new CDS Designer UI.</p>
-                    <button type="button" class="btn" style="background-color: #fff;">Let's get started</button>
+                    <button type="button" class="btn" style="background-color: #fff;margin:0">
+                        <label style="margin: 0;" (click)="start()" for="clicker">Let's get started</label></button>
                 </div>
             </div>
             <!---->
@@ -22,12 +26,13 @@
                 <!--Nav Tabs-->
                 <div class="col pr-0">
                     <div class="nav nav-tabs " id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
-                            role="tab" aria-controls="nav-home" aria-selected="true">All</a>
+                        <a tourAnchor="allTab" class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab"
+                            href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">All</a>
                         <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
                             role="tab" aria-controls="nav-profile" aria-selected="false">Deployed</a>
-                        <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
-                            role="tab" aria-controls="nav-contact" aria-selected="false">Under Construction</a>
+                        <a tourAnchor="test3" class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"
+                            href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Under
+                            Construction</a>
                         <a class="nav-item nav-link" id="nav-contact1-tab" data-toggle="tab" href="#nav-contact1"
                             role="tab" aria-controls="nav-contact1" aria-selected="false">Archived</a>
                     </div>
@@ -38,7 +43,7 @@
                         <div class="col-7">
                             <app-packages-search></app-packages-search>
                         </div>
-                        <div class="col-5 pl-2">
+                        <div class="col-5 pl-2" tourAnchor="tagFilter">
                             <app-filter-by-tags class="w-100"></app-filter-by-tags>
                         </div>
 

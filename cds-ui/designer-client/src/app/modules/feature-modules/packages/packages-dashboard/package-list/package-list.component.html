@@ -7,13 +7,13 @@
             </div>
             <div class="card-footer row">
                 <div class="col text-center">
-                    <a routerLink="/packages/createPackage" role="button" aria-pressed="true"
+                    <a tourAnchor="create" routerLink="/packages/createPackage" role="button" aria-pressed="true"
                         class="btn-create-package float"><i class="icon-create-white" aria-hidden="true"></i>Create
                         Package
                     </a>
                     <br />
-                    <a href="#" role="button" aria-pressed="true" class="btn-import-package float"><i
-                            class="icon-import-blue" aria-hidden="true"></i>Import Package
+                    <a href="#" id="clone-btn" role="button" aria-pressed="true" class="btn-import-package float"><i
+                            tourAnchor="import" class="icon-import-blue" aria-hidden="true"></i>Import Package
                     </a>
                     <ngx-ui-loader></ngx-ui-loader>
                 </div>
@@ -76,9 +76,8 @@
                     <div class="col">
                         <p class="mb-0 mt-1">Last modified {{ bluePrint.createdDate | date:'short' }}
                         </p>
-                       <p class="mb-2">By {{bluePrint.updatedBy.split('<')[0]}}</p>
-                        <p class="package-desc" [delay]="300"
-                            tooltip="{{bluePrint.artifactDescription}}"
+                        <p class="mb-2">By {{bluePrint.updatedBy.split('<')[0]}}</p>
+                        <p class="package-desc" [delay]="300" tooltip="{{bluePrint.artifactDescription}}"
                             placement="bottom left">{{bluePrint.artifactDescription}}</p>
                         <ul class="package-contributers">
                             <li>
@@ -105,7 +104,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        
+
                         <div class="col">
                             <button type="button" (click)="view(bluePrint.id)" class="btn btn-card-config"><i
                                     class="icon-btn-card-config" aria-hidden="true"></i>Configuration</button>

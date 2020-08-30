@@ -30,6 +30,7 @@ import { TemplMappListingComponent } from './package-creation/template-mapping/t
 import { DataTablesModule } from 'angular-datatables';
 import { DesignerSourceViewComponent } from './designer/source-view/source-view.component';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import {TourMatMenuModule} from 'ngx-tour-md-menu';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -64,7 +65,8 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
         AceEditorModule,
         DataTablesModule,
         // Import NgxUiLoaderModule
-        NgxUiLoaderModule
+        NgxUiLoaderModule,
+        TourMatMenuModule.forRoot()
     ],
     providers: [ApiService, JsonPipe],
     bootstrap: []

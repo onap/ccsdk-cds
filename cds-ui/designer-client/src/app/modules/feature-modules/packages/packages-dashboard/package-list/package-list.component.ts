@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {BlueprintModel} from '../../model/BluePrint.model';
-import {PackagesStore} from '../../packages.store';
-import {Router} from '@angular/router';
-import {ConfigurationDashboardService} from '../../configuration-dashboard/configuration-dashboard.service';
-import {saveAs} from 'file-saver';
+import { Component, OnInit } from '@angular/core';
+import { BlueprintModel } from '../../model/BluePrint.model';
+import { PackagesStore } from '../../packages.store';
+import { Router } from '@angular/router';
+import { ConfigurationDashboardService } from '../../configuration-dashboard/configuration-dashboard.service';
+import { saveAs } from 'file-saver';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { TourService } from 'ngx-tour-md-menu';
 
 @Component({
     selector: 'app-packages-list',
@@ -15,9 +17,17 @@ export class PackageListComponent implements OnInit {
     viewedPackages: BlueprintModel[] = [];
 
 
-    constructor(private packagesStore: PackagesStore, private router: Router
-              , private configurationDashboardService: ConfigurationDashboardService) {
+    constructor(
+        private packagesStore: PackagesStore,
+        private router: Router,
+        private configurationDashboardService: ConfigurationDashboardService,
+        private ngxLoader: NgxUiLoaderService,
+        private tourService: TourService,
+    ) {
         console.log('PackageListComponent');
+
+
+
         this.packagesStore.state$.subscribe(state => {
             console.log(state);
             if (state.filteredPackages) {
@@ -26,8 +36,13 @@ export class PackageListComponent implements OnInit {
         });
     }
 
+
     ngOnInit() {
         this.packagesStore.getAll();
+
+
+
+
     }
 
     view(id) {
@@ -40,7 +55,7 @@ export class PackageListComponent implements OnInit {
 
     downloadPackage(artifactName: string, artifactVersion: string) {
         this.configurationDashboardService.downloadResource(artifactName + '/' + artifactVersion).subscribe(response => {
-            const blob = new Blob([response], {type: 'application/octet-stream'});
+            const blob = new Blob([response], { type: 'application/octet-stream' });
             saveAs(blob, artifactName + '-' + artifactVersion + '-CBA.zip');
         });
     }
