@@ -67,6 +67,7 @@ export class PackageCreationComponent implements OnInit {
     @ViewChild('nameit', {static: true})
     elementRef: ElementRef;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
+    metadataClasses = 'nav-item nav-link active complete';
 
     ngOnInit() {
         this.elementRef.nativeElement.focus();
@@ -76,8 +77,14 @@ export class PackageCreationComponent implements OnInit {
                 && cbaPackage.metaData.name && cbaPackage.metaData.version &&
                 regexp.test(cbaPackage.metaData.version)) {
                 this.isSaveEnabled = true;
+                if (!this.metadataClasses.includes('complete')) {
+                    console.log('added');
+                    this.metadataClasses += 'complete';
+                }
+                console.log('perhaps it is been added');
             } else {
                 this.isSaveEnabled = false;
+                this.metadataClasses = this.metadataClasses.replace('complete', '');
             }
         });
     }
@@ -127,11 +134,14 @@ export class PackageCreationComponent implements OnInit {
 
     }
 
-    test() {
-        this.metadataTabComponent.saveMetaDataToStore();
-    }
 
     goBackToDashBorad() {
         this.router.navigate(['/packages']);
+    }
+
+    saveMetaData() {
+        console.log('executed change');
+        this.metadataTabComponent.saveMetaDataToStore();
+
     }
 }
