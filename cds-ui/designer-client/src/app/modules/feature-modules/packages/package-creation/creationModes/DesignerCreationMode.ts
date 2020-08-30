@@ -69,7 +69,9 @@ export class DesignerCreationMode extends PackageCreationModes {
         vlbDefinition.metadata = metadata;
         const files: Import[] = [];
         cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
-            files.push({file: key});
+            if (!key.includes(cbaPackage.metaData.name)) {
+                files.push({file: key});
+            }
         });
         console.log(vlbDefinition);
         vlbDefinition.imports = files;
