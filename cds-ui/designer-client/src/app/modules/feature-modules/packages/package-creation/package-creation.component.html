@@ -36,7 +36,7 @@
                         <div class="nav nav-tabs " id="nav-tab" role="tablist">
                             <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
                                href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="false"
-                               autofocus #nameit (focusout)="test()">METADATA</a>
+                               autofocus #nameit (focusout)="saveMetaData()" [classList]="metadataClasses">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
                                role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
                             <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
@@ -53,7 +53,7 @@
                 <div class="row mt-4">
                     <div class="col">
                         <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
+                            <div  class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
                                  aria-labelledby="nav-metadata-tab">
                                 <app-metadata-tab></app-metadata-tab>
                             </div>

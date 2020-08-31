@@ -41,6 +41,7 @@ export class ConfigurationDashboardComponent implements OnInit {
     vlbDefinition: VlbDefinition = new VlbDefinition();
     isSaveEnabled = false;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
+    metadataClasses = 'nav-item nav-link active';
 
     constructor(
         private route: ActivatedRoute,
@@ -58,17 +59,22 @@ export class ConfigurationDashboardComponent implements OnInit {
 
         this.elementRef.nativeElement.focus();
         this.refreshCurrentPackage();
-
         const regexp = RegExp(this.versionPattern);
-        this.packageCreationStore.state$.subscribe(cbaPackage => {
-            if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.description
-                && cbaPackage.metaData.name && cbaPackage.metaData.version &&
-                regexp.test(cbaPackage.metaData.version)) {
-                this.isSaveEnabled = true;
-            } else {
-                this.isSaveEnabled = false;
-            }
-        });
+        this.packageCreationStore.state$.subscribe(
+            cbaPackage => {
+                if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.description
+                    && cbaPackage.metaData.name && cbaPackage.metaData.version &&
+                    regexp.test(cbaPackage.metaData.version)) {
+                    this.isSaveEnabled = true;
+                    if (!this.metadataClasses.includes('complete')) {
+                        this.metadataClasses += 'complete';
+                    }
+                } else {
+                    this.metadataClasses = this.metadataClasses.replace('complete', '');
+                    this.isSaveEnabled = false;
+                }
+
+            });
     }
 
     private refreshCurrentPackage() {
@@ -172,6 +178,7 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     saveMetaData() {
         this.metadataTabComponent.saveMetaDataToStore();
+
     }
 
     getMetaDataTabInfo(fileData: string) {
@@ -291,5 +298,9 @@ export class ConfigurationDashboardComponent implements OnInit {
                 this.toastService.error('error happened when editing ' + error.message);
                 console.log('Error -' + error.message);
             });
+    }
+
+    clickEvent() {
+        this.isSaveEnabled = true;
     }
 }
