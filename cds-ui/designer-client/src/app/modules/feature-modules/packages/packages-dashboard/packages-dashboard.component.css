@@ -1,0 +1,17 @@
+.panel-wrap button label{
+    cursor: pointer;
+}
+
+.panel-wrap .panel{
+    border-radius: 8px;
+}
+
+.cdk-overlay-container {
+    position: none;
+    z-index: 0;
+}
+
+.cdk-overlay-backdrop {
+    position: none;
+    z-index: 0;
+}
