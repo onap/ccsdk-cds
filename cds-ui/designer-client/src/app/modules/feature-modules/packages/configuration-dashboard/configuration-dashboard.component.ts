@@ -65,13 +65,13 @@ export class ConfigurationDashboardComponent implements OnInit {
                 if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.description
                     && cbaPackage.metaData.name && cbaPackage.metaData.version &&
                     regexp.test(cbaPackage.metaData.version)) {
-                    this.isSaveEnabled = true;
+                    //this.isSaveEnabled = true;
                     if (!this.metadataClasses.includes('complete')) {
-                        this.metadataClasses += 'complete';
+                        this.metadataClasses += ' complete';
                     }
                 } else {
                     this.metadataClasses = this.metadataClasses.replace('complete', '');
-                    this.isSaveEnabled = false;
+                   // this.isSaveEnabled = false;
                 }
 
             });
