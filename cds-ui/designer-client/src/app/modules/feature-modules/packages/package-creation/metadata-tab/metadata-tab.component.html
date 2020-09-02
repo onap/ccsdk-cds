@@ -1,3 +1,4 @@
+<tour-step-template></tour-step-template>
 <div class="card creat-card">
     <div class="single-line-model">
         <label class="label-name">Mode</label>
@@ -32,8 +33,8 @@
     <div class="single-line-model">
         <label class="label-name">Name <span>*</span></label>
         <div class="label-input">
-            <input type="input" (change)="checkRequiredElements()" [(ngModel)]="metaDataTab.name"
-                placeholder="Package name">
+            <input tourAnchor="mt-packageName" type="input" (change)="checkRequiredElements()"
+                [(ngModel)]="metaDataTab.name" placeholder="Package name">
         </div>
         <!--<div class="model-note-container error-message">
             Package name already exists with this version. Please enter a different name or enter different version
@@ -44,22 +45,25 @@
     <div class="single-line-model">
         <label class="label-name">Version <span>*</span></label>
         <div class="label-input">
-            <input type="input" (change)="checkRequiredElements()" [(ngModel)]="metaDataTab.version"
-                (input)="validatePackageNameAndVersion()" pattern="(\d+)\.(\d+)\.(\d+)" placeholder="Example: 1.0.0">
+            <input tourAnchor="mt-packageVersion" type="input" (change)="checkRequiredElements()"
+                [(ngModel)]="metaDataTab.version" (input)="validatePackageNameAndVersion()"
+                pattern="(\d+)\.(\d+)\.(\d+)" placeholder="Example: 1.0.0">
         </div>
         <div class="model-note-container error-message">{{errorMessage}}</div>
     </div>
     <div class="single-line-model">
         <label class="label-name">Description <span>*</span></label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.description" (change)="checkRequiredElements()" placeholder="Descripe the package">
+            <input tourAnchor="mt-packageDescription" type="input" [(ngModel)]="metaDataTab.description"
+                (change)="checkRequiredElements()" placeholder="Descripe the package">
         </div>
     </div>
 
     <div class="single-line-model">
         <label class="label-name">Tags</label>
         <div class="label-input">
-            <input type="input" (keyup.enter)="addTag($event)" (keyup.Space)="addTag($event)" placeholder="Ex., vDNS-CDS">
+            <input tourAnchor="mt-packageTags" type="input" (keyup.enter)="addTag($event)" (keyup.Space)="addTag($event)"
+                placeholder="Ex., vDNS-CDS">
         </div>
         <div class="model-note-container tag-notes">Use ENTER/SPACE to add tag</div>
         <div class="model-note-container tages-container">
@@ -72,14 +76,14 @@
 <div id="container">
     <div id="target">
         <div class="card creat-card">
-            <div class="single-line customKeyTitle">
+            <div  class="single-line customKeyTitle">
                 <h5 class="label-name w-100 ">
                     Custom key
                 </h5>
                 <span>To add New Custom Key, fill the first key then <b>Press ENTER</b></span>
 
             </div>
-            <div *ngFor="let map of  this.metaDataTab.mapOfCustomKey | keyvalue; let i=index" class="single-custom-key">
+            <div tourAnchor="mt-packageKeys" *ngFor="let map of  this.metaDataTab.mapOfCustomKey | keyvalue; let i=index" class="single-custom-key">
                 <div class="single-line-custom-key">
                     <label class="label-name"><span>{{i + 1}}.</span> Name</label>
                     <div class="label-input">
@@ -102,7 +106,7 @@
                 <div class="single-line-custom-key">
                     <label class="label-name"><span>{{customKeysMap.size + 1}}.</span> Name</label>
                     <div class="label-input">
-                        <input (keyup.enter)="addCustomKey()" name="key" type="input" class="mapKey"
+                        <input tourAnchor="mt-packageKeys" (keyup.enter)="addCustomKey()" name="key" type="input" class="mapKey"
                             placeholder="Enter name">
                     </div>
                 </div>

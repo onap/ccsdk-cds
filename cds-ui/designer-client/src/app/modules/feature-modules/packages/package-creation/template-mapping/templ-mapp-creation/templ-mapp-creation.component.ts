@@ -11,6 +11,7 @@ import { JsonConvert, Any } from 'json2typescript';
 import { ToastrService } from 'ngx-toastr';
 import { SharedService } from '../shared-service';
 import { XmlParser } from '../utils/XmlParser';
+import { TourService } from 'ngx-tour-md-menu';
 declare var $: any;
 
 @Component({
@@ -55,7 +56,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         private templateStore: TemplateStore,
         private packageCreationUtils: PackageCreationUtils,
         private toastr: ToastrService,
-        private sharedService: SharedService
+        private sharedService: SharedService,
+        private tourService: TourService,
     ) {
     }
 
@@ -348,6 +350,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 this.fileName = '';
                 this.toastr.success('File is created', 'success');
                 this.openListView();
+                console.log(this.tourService.getStatus());
+                this.tourService.goto('tm-templateEdit');
             } else {
                 console.log('this file already exist');
                 this.toastr.error('File name already exist', 'Error');
