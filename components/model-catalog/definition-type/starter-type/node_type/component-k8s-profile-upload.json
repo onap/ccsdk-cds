@@ -1,0 +1,68 @@
+{
+  "description": "Todo",
+  "version": "1.0.0",
+  "attributes": {
+    "assignment-params": {
+      "description": "Holds resolved template, resolution-summary or key-value",
+      "required": true,
+      "type": "string"
+    },
+    "assignment-map": {
+      "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+      "required": true,
+      "type": "map"
+    }
+  },
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "interfaces": {
+    "K8sProfileUploadComponent": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "k8s-profile-name": {
+                "description": "TODO",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-definition-name": {
+                "description": "TODO",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-definition-version": {
+                "description": "TODO",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-profile-namespace": {
+                "description": "TODO",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-profile-source": {
+                "description": "TODO",
+                "required": false,
+                "type": "string"
+            },
+            "resource-assignment-map": {
+                "description": "TODO",
+                "required": false,
+                "type": "json"
+            }
+          },
+          "outputs": {
+            "status": {
+                "required": true,
+                "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}
