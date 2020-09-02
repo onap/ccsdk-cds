@@ -4,8 +4,8 @@
             <input class="ng-pristine ng-valid ng-touched" placeholder="Enter file URL then ENTER" type="input">
             <a class="enter-link" href="#"><i class="icon-enter-link"></i></a>
         </div>
-        <span class="import-container-span">Or you can also <a data-target="#scriptsModal" data-toggle="modal"
-                (click)="resetTheUploadedFiles()" href="#"><b>Import File</b></a></span>
+        <span tourAnchor="st-scriptsImport" class="import-container-span">Or you can also <a data-target="#scriptsModal"
+                data-toggle="modal" (click)="resetTheUploadedFiles()" href="#"><b>Import File</b></a></span>
 
     </div>
 
@@ -60,8 +60,8 @@
                     data-parent="#accordion-script">
                     <div class="card-body">
                         <ace-editor [(text)]="file.value" (textChange)="textChanges($event,file.key)" [mode]="'kotlin'"
-                            [autoUpdateContent]="true" [durationBeforeCallback]="1000" [theme]="'eclipse'"
-                            #editor style="height:300px;">
+                            [autoUpdateContent]="true" [durationBeforeCallback]="1000" [theme]="'eclipse'" #editor
+                            style="height:300px;">
                         </ace-editor>
                     </div>
                 </div>
@@ -106,7 +106,8 @@
                             <tr *ngFor="let item of uploadedFiles; let i=index">
                                 <th width="40"><img src="assets/img/icon-file-code.svg" /></th>
                                 <th>{{ item.name }}</th>
-                                <th (click)="removeInitFile(i)" width="40" class="text-right"><img src="assets/img/icon-remove-file.svg" /></th>
+                                <th (click)="removeInitFile(i)" width="40" class="text-right"><img
+                                        src="assets/img/icon-remove-file.svg" /></th>
                             </tr>
                         </thead>
                     </table>
@@ -116,7 +117,8 @@
                 <button (click)="resetTheUploadedFiles()" class="btn btn-sm btn-secondary" data-dismiss="modal"
                     type="button">Cancel
                 </button>
-                <button (click)="setFilesToStore()" class="btn btn-sm btn-primary" [disabled]="uploadedFiles?.length<=0" data-dismiss="modal" type="button">
+                <button (click)="setFilesToStore()" class="btn btn-sm btn-primary" [disabled]="uploadedFiles?.length<=0"
+                    data-dismiss="modal" type="button">
                     Import
                 </button>
             </div>
