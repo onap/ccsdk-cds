@@ -7,7 +7,7 @@
   },
   "commonHeader": {
     "flags": {
-      "force": true,
+      "isForce": true,
       "ttl": 3600
     },
     "originatorId": "sdnc",
