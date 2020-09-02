@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c565279_7a637a89",
+        "filename": "ms/blueprintsprocessor/application/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-09-02T13:03:49Z",
+      "side": 1,
+      "message": "add same in blueprint parent pom as dependency management, so that version can be removed here.",
+      "revId": "00f1555b99f80d59da1c953fa0e5a24f26443ee9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
