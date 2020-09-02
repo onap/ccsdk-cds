@@ -54,10 +54,6 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
             <scope>test</scope>
         </dependency>
@@ -253,6 +249,12 @@
                         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                         <artifactId>cba-assembly-descriptor</artifactId>
                         <version>1.0.0-SNAPSHOT</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>*</groupId>
+                                <artifactId>*</artifactId>
+                            </exclusion>
+                        </exclusions>
                     </dependency>
                 </dependencies>
                 <executions>
