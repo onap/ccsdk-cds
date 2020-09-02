@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10b82435_bfa154f3",
+        "filename": "components/model-catalog/definition-type/starter-type/node_type/component-k8s-profile-upload.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-02T17:59:54Z",
+      "side": 1,
+      "message": "There are alot of TODO\u0027s left here",
+      "revId": "9d2c0b2f385b75800d51e4b42fd297338b179840",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f40b6419_2804ac60",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-02T17:59:54Z",
+      "side": 1,
+      "message": "What is the purpose of OUTPUT_RESOURCE_ASSIGNMENT_MAP?",
+      "revId": "9d2c0b2f385b75800d51e4b42fd297338b179840",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e4f90f9_a729c90d",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-02T17:59:54Z",
+      "side": 1,
+      "message": "Looks like these errors are only logged? They should be propagated so that the step can fail and message be included in the cds response. Either use addError method or throw an exception so that recoverNB runs and it gets added that way.",
+      "revId": "9d2c0b2f385b75800d51e4b42fd297338b179840",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa855c92_a37b57b6",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-02T17:59:54Z",
+      "side": 1,
+      "message": "This forces the user to pass \"template-prefix\" in the request, its probably how it will be used most of the time, but to keep things flexible it\u0027s better to get this value from the nodeTemplate input as we do for ResourceResolution component. Example\n \n            \"ResourceResolutionComponent\" : {\n              \"operations\" : {\n                \"process\" : {\n                  \"inputs\" : {\n                    \"artifact-prefix-names\" : {\n                      \"get_input\": \"template-prefix\"\n                    },",
+      "revId": "9d2c0b2f385b75800d51e4b42fd297338b179840",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35c62dd6_779b5bea",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-02T17:59:54Z",
+      "side": 1,
+      "message": "I would suggest some line breaks here to make it more readable, and maybe skip the variable too\n\n        return Paths.get(\n                bluePrintBasePath.plus(File.separator)\n                        .plus(\"Templates\")\n                        .plus(File.separator)\n                        .plus(\"k8s-profiles\")\n                        .plus(File.separator)\n                        .plus(\"$k8sRbProfileName.tar.gz\")\n        )",
+      "revId": "9d2c0b2f385b75800d51e4b42fd297338b179840",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdf6a903_be3ae52a",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-02T17:59:54Z",
+      "side": 1,
+      "message": "IntelliJ gives alot of nice hints for this one. If statement is redundant and could be a range check instead\n\nreturn result.status in 200..299",
+      "revId": "9d2c0b2f385b75800d51e4b42fd297338b179840",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
