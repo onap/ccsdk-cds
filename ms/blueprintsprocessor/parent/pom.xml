@@ -490,6 +490,11 @@
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+                <artifactId>k8s-profile-upload</artifactId>
+                <version>${ccsdk.cds.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
                 <artifactId>health-api</artifactId>
                 <version>${ccsdk.cds.version}</version>
@@ -499,7 +504,6 @@
                 <artifactId>health-api-common</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
-
             <!-- Diff capability providers for config-snapshots -->
             <dependency>
                 <groupId>com.github.fge</groupId>
