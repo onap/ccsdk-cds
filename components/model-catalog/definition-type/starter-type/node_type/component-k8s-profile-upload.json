@@ -1,0 +1,63 @@
+{
+  "description": "This component is rendering and sending the k8s profile to the multicloud plugin.",
+  "version": "1.0.0",
+  "attributes": {
+    "assignment-map": {
+      "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+      "required": true,
+      "type": "map"
+    }
+  },
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "interfaces": {
+    "K8sProfileUploadComponent": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "k8s-rb-profile-name": {
+                "description": "K8s profile name",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-rb-definition-name": {
+                "description": "K8s definition name",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-rb-definition-version": {
+                "description": "Version of the definition",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-rb-profile-namespace": {
+                "description": "a K8s namespace for the profile",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-rb-profile-source": {
+                "description": "Source (tgz/folder) for the template in CBA",
+                "required": false,
+                "type": "string"
+            },
+            "resource-assignment-map": {
+                "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+                "required": false,
+                "type": "json"
+            }
+          },
+          "outputs": {
+            "status": {
+                "required": true,
+                "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}
