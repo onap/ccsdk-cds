@@ -5,6 +5,7 @@ import { TemplateInfo, TemplateStore } from '../../template.store';
 import { TemplateAndMapping } from '../TemplateAndMapping';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from '../shared-service';
+import { TourService } from 'ngx-tour-md-menu';
 
 
 @Component({
@@ -27,7 +28,9 @@ export class TemplMappListingComponent implements OnInit {
         private packageCreationStore: PackageCreationStore,
         private templateStore: TemplateStore,
         private route: ActivatedRoute,
-        private sharedService: SharedService
+        private sharedService: SharedService,
+        private tourService: TourService,
+
     ) {
     }
 
@@ -99,6 +102,7 @@ export class TemplMappListingComponent implements OnInit {
     createNewTemplate() {
         this.openCreationView();
         this.sharedService.disableEdit();
+        this.tourService.goto('tm-templateName');
     }
     openCreationView() {
         this.showCreationView.emit('tell parent to open create views');
