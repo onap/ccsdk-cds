@@ -1,42 +1,42 @@
 <app-header></app-header>
-
+<tour-step-template></tour-step-template>
 <div class="new-wrapper">
-    <div class="container-fluid main-container">
-        <header class="page-title">
-            <div class="row">
-                <h2 class="col m-0 pb-0">
-                    <ul class="breadcrumb-header">
-                        <li><a routerLink="/packages">CBA Packages</a></li>
-                        <i class="fa fa-angle-right ml-2 mr-2"></i>
-                        <li>Package Name</li>
-                    </ul>
-                </h2>
-                <div class="col profile-help">
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                          <ul class="navbar-nav ml-auto">
-                            <li class="nav-item help-btn">
-                              <a class="nav-link mr-2" href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank" [delay]="300"
-                              tooltip="Help" placement="bottom"><i class="icon-info" aria-hidden="true"></i></a>
-                            </li>
-                            <div class="nav-item dropdown">
-                                <input class="dropdown-toggle" type="text">
-                                <div class="dropdown-text"><img src="../assets/img/img-user.jpeg" align="right"></div>
-                                <ul class="dropdown-content">
-                                  <li>
-                                    <a href="#">Username</a>
-                                  </li>
-                                  <li>
-                                    <a href="#">Settings</a>
-                                  </li>
-                                  <li>
-                                    <a href="#">Projects</a>
-                                  </li>
-                                  <li>
-                                    <a href="#">Log out</a>
-                                  </li>
-                                </ul>
-                              </div>
-                            <!-- <li class="nav-item dropdown">
+  <div class="container-fluid main-container">
+    <header class="page-title">
+      <div class="row">
+        <h2 class="col m-0 pb-0">
+          <ul class="breadcrumb-header">
+            <li><a routerLink="/packages">CBA Packages</a></li>
+            <i class="fa fa-angle-right ml-2 mr-2"></i>
+            <li>Package Name</li>
+          </ul>
+        </h2>
+        <div class="col profile-help">
+          <nav class="navbar navbar-expand-lg navbar-light">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item help-btn">
+                <a class="nav-link mr-2" href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank"
+                  [delay]="300" tooltip="Help" placement="bottom"><i class="icon-info" aria-hidden="true"></i></a>
+              </li>
+              <div class="nav-item dropdown">
+                <input class="dropdown-toggle" type="text">
+                <div class="dropdown-text"><img src="../assets/img/img-user.jpeg" align="right"></div>
+                <ul class="dropdown-content">
+                  <li>
+                    <a href="#">Username</a>
+                  </li>
+                  <li>
+                    <a href="#">Settings</a>
+                  </li>
+                  <li>
+                    <a href="#">Projects</a>
+                  </li>
+                  <li>
+                    <a href="#">Log out</a>
+                  </li>
+                </ul>
+              </div>
+              <!-- <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Dropdown
                               </a>
@@ -47,9 +47,9 @@
                                 <a class="dropdown-item" href="#">Something else here</a>
                               </div>
                             </li> -->
-                          </ul>
-                      </nav>
-                    <!-- <ul class="menu-dropdown userProfile">
+            </ul>
+          </nav>
+          <!-- <ul class="menu-dropdown userProfile">
                         <li><button type="button" class="btn package-info-btn" data-toggle="modal"
                           data-target="#exampleModalLong">
                           <i class="icon-info" aria-hidden="true"></i>
@@ -72,75 +72,77 @@
                         </div>
                       </li>
                     </ul> -->
-                </div>
-            </div>
-        </header>
+        </div>
+      </div>
+    </header>
 
-        <div class="container-fluid body-container">
-            <div class="container">
-                <div class="creat-action-container">
-                    <!--  <a class="action-button save" [hidden]="!isSaveEnabled" (click)="saveBluePrint()">
+    <div class="container-fluid body-container">
+      <div class="container">
+        <div class="creat-action-container">
+          <!--  <a class="action-button save" [hidden]="!isSaveEnabled" (click)="saveBluePrint()">
                           <i class="icon-save-sm" aria-hidden="true"></i>
                           <span>Save</span>-->
-                    <button (click)="saveBluePrint()" [disabled]="!isSaveEnabled"
-                            class="action-button save" aria-hidden="true"><i class="icon-save-sm"
-                                                                                          aria-hidden="true"></i>
-                        <span>Save</span></button>
-                </div>
-
-
-                <nav class="row">
-                    <!--Nav Tabs-->
-                    <div class="col">
-                        <div class="nav nav-tabs " id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
-                               href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="false"
-                               autofocus #nameit (focusout)="saveMetaData()" [classList]="metadataClasses">METADATA</a>
-                            <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
-                               role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
-                            <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
-                               role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
-                            <!-- <a class="nav-item nav-link" id="nav-imports-tab" data-toggle="tab" href="#nav-imports"
-                               role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a> -->
-                            <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab"
-                               href="#nav-authentication" role="tab" aria-controls="nav-authentication"
-                               aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
-                        </div>
-                    </div>
-
-                </nav>
-                <div class="row mt-4">
-                    <div class="col">
-                        <div class="tab-content" id="nav-tabContent">
-                            <div  class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
-                                 aria-labelledby="nav-metadata-tab">
-                                <app-metadata-tab></app-metadata-tab>
-                            </div>
-                            <div class="tab-pane fade" id="nav-template" role="tabpanel"
-                                 aria-labelledby="nav-template-tab">
-                                <app-template-mapping></app-template-mapping>
-                            </div>
-                            <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
-                                 aria-labelledby="nav-scripts-tab">
-                                <app-scripts-tab></app-scripts-tab>
-                            </div>
-                            <div class="tab-pane fade" id="nav-imports" role="tabpanel"
-                                 aria-labelledby="nav-imports-tab">
-                                <app-imports-tab></app-imports-tab>
-
-                            </div>
-                            <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
-                                 aria-labelledby="nav-authentication-tab">
-                                <div class="card creat-card">
-                                    <div class="editor-container">
-                                        <app-dsl-definitions-tab></app-dsl-definitions-tab>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <button tourAnchor="packageSave" (click)="saveBluePrint()" [disabled]="!isSaveEnabled"
+            class="action-button save" aria-hidden="true"><i class="icon-save-sm" aria-hidden="true"></i>
+            <span>Save</span></button>
         </div>
+
+
+        <nav class="row">
+          <!--Nav Tabs-->
+          <div class="col">
+            <div class="nav nav-tabs " id="nav-tab" role="tablist">
+              <a (click)="openTourGuide('metadataTab')" tourAnchor="metadataTab" class="nav-item nav-link active"
+                id="nav-metadata-tab" data-toggle="tab" href="#nav-metadata" role="tab" aria-controls="nav-metadata"
+                aria-selected="false" autofocus #nameit (focusout)="saveMetaData()"
+                [classList]="metadataClasses">METADATA</a>
+              <a (click)="openTourGuide('tm-templateTab')" tourAnchor="tm-templateTab" class="nav-item nav-link"
+                id="nav-template-tab" data-toggle="tab" href="#nav-template" role="tab" aria-controls="nav-template"
+                aria-selected="false">TEMPLATE &
+                MAPPING</a>
+              <a (click)="openTourGuide('st-scriptsTab')" tourAnchor="st-scriptsTab" class="nav-item nav-link"
+                id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts" role="tab" aria-controls="nav-scripts"
+                aria-selected="false">SCRIPTS</a>
+              <!-- <a class="nav-item nav-link" id="nav-imports-tab" data-toggle="tab" href="#nav-imports"
+                               role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a> -->
+              <a (click)="openTourGuide('dslTab')" tourAnchor="dslTab" class="nav-item nav-link"
+                id="nav-authentication-tab" data-toggle="tab" href="#nav-authentication" role="tab"
+                aria-controls="nav-authentication" aria-selected="false">EXTERNAL
+                SYSTEM AUTHENTICATION
+                PROPERTIES</a>
+            </div>
+          </div>
+
+        </nav>
+        <div class="row mt-4">
+          <div class="col">
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
+                aria-labelledby="nav-metadata-tab">
+                <app-metadata-tab></app-metadata-tab>
+              </div>
+              <div class="tab-pane fade" id="nav-template" role="tabpanel" aria-labelledby="nav-template-tab">
+                <app-template-mapping></app-template-mapping>
+              </div>
+              <div class="tab-pane fade" id="nav-scripts" role="tabpanel" aria-labelledby="nav-scripts-tab">
+                <app-scripts-tab></app-scripts-tab>
+              </div>
+              <div class="tab-pane fade" id="nav-imports" role="tabpanel" aria-labelledby="nav-imports-tab">
+                <app-imports-tab></app-imports-tab>
+
+              </div>
+              <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
+                aria-labelledby="nav-authentication-tab">
+                <div class="card creat-card">
+                  <div class="editor-container">
+                    <app-dsl-definitions-tab></app-dsl-definitions-tab>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

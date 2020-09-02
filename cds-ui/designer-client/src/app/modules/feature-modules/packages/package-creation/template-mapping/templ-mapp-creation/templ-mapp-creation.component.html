@@ -9,7 +9,8 @@
             class="btn btn-outline-danger" title="Delete Template">Delete</button>
         <button (click)="cancel()" [hidden]="fileName?.length <=0 || edit"
             class="btn btn-outline-secondary">Clear</button>
-        <button (click)="saveToStore()" [disabled]="fileName?.length <=0" title="Submit template and close" class="btn btn-primary">Finish</button>
+        <button tourAnchor="tm-templateFinish" (click)="saveToStore()" [disabled]="fileName?.length <=0" title="Submit template and close"
+            class="btn btn-primary">Finish</button>
     </div>
 </div>
 <div class="card creat-card">
@@ -19,8 +20,8 @@
         </label>
 
         <div class="label-input">
-            <input type="input" [disabled]="edit" [(ngModel)]="fileName" placeholder="Template name" name="templateName"
-                autofocus [autofocus]="true">
+            <input tourAnchor="tm-templateName" type="input" [disabled]="edit" [(ngModel)]="fileName"
+                placeholder="Template name" name="templateName" autofocus [autofocus]="true">
         </div>
     </div>
 </div>
@@ -40,7 +41,7 @@
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                    <div class="single-line">
+                    <div tourAnchor="tm-templateType" class="single-line">
                         <label class="label-name">Template Type</label>
                         <div class="label-input">
                             <label name="trst" (click)="allowedExt=['.vtl']">
@@ -58,7 +59,7 @@
                                     Jinja
                                 </span>
                             </label>
-                            <label name="trst" (click)="allowedExt=['.kt']">
+                            <label tourAnchor="tm-templateContent" name="trst" (click)="allowedExt=['.kt']">
                                 <input class="form-check-input" [(ngModel)]="templateExt" type="radio"
                                     name="exampleRadios" id="exampleRadios1" value=Kotlin>
 
@@ -76,7 +77,8 @@
                             current attributes.</span></div>
                     <div class="editor-container mb-4">
                         <app-source-editor [lang]="'velocity'" (textChange)="textChanges($event,templateInfo.fileName)"
-                            [(text)]="templateFileContent"></app-source-editor>
+                            [(text)]="templateFileContent">
+                        </app-source-editor>
                     </div>
                 </div>
             </div>
@@ -84,8 +86,8 @@
         <div class="card">
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                        aria-expanded="false" aria-controls="collapseTwo">
+                    <button tourAnchor="tm-mappingContent" class="btn btn-link collapsed" id="mappingTab" data-toggle="collapse"
+                        data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                         2. Manage Mapping <span
                             class="accordian-title">{{currentMapping?.fileName?.split('/')[1]}}</span>
                     </button>
@@ -102,8 +104,8 @@
                             <br />
                             <span>Use Current Template Instance</span>
                         </button>
-                        <a href="#" (click)="allowedExt=['.csv','.xml']" data-toggle="modal" data-target="#templateModal"
-                            class="mapping-source-load">
+                        <a href="#" (click)="allowedExt=['.csv','.xml']" data-toggle="modal"
+                            data-target="#templateModal" class="mapping-source-load">
                             <i class="icon-upload-attributes"></i>
                             <br />
                             <div>Upload Attributes List</div>
