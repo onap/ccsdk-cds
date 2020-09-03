@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48dfe29b_15686f6d",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 6
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-09-03T09:35:15Z",
+      "side": 1,
+      "message": "http://multicloud-k8s:9015/",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 60
+      },
+      "revId": "445a79392a1d42200d90fed2aa0166ef98e0f5b0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}

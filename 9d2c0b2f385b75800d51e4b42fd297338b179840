@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "eaf0d584_25e5e1ae",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-09-03T09:35:15Z",
+      "side": 1,
+      "message": "Do you mean to pass additional input parameter to the component in the TOSCA definition itself? With this solution this inpit is not required as we just analyse request.",
+      "parentUuid": "aa855c92_a37b57b6",
+      "revId": "9d2c0b2f385b75800d51e4b42fd297338b179840",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35c62dd6_779b5bea",
         "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
         "patchSetId": 5
