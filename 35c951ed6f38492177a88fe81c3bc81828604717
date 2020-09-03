@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4de9dc0c_b534dcd9",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 10
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-03T13:27:37Z",
+      "side": 1,
+      "message": "Is there an advantage to have this as an inner class? Would be cleaner to move all these classes to individual files.",
+      "revId": "35c951ed6f38492177a88fe81c3bc81828604717",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
