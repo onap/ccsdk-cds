@@ -96,8 +96,8 @@ class BlueprintSshClientServiceTest {
             blueprintSshClientService.startSession()
             // Preparing response
             val commandResults = arrayListOf<CommandResult>()
-            commandResults.add(CommandResult("echo 1", "echo 1\n#", true))
-            commandResults.add(CommandResult("echo 2", "echo 1\n#echo 2\n#", true))
+            commandResults.add(CommandResult("echo 1", "1\n", true))
+            commandResults.add(CommandResult("echo 2", "2\n", true))
             val response = blueprintSshClientService.executeCommands(arrayListOf("echo 1", "echo 2"), 2000)
             blueprintSshClientService.closeSession()
 
@@ -113,7 +113,7 @@ class BlueprintSshClientServiceTest {
             val response = blueprintSshClientService.executeCommand("echo 1", 2000)
             blueprintSshClientService.closeSession()
 
-            assertEquals(response, CommandResult("echo 1", "echo 1\n#", true), "failed to get command response")
+            assertEquals(response, CommandResult("echo 1", "1\n", true), "failed to get command response")
         }
     }
 
