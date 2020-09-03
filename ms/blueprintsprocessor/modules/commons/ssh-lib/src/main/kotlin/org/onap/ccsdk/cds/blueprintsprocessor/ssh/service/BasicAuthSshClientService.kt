@@ -18,9 +18,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh.service
 
-import org.apache.commons.io.output.TeeOutputStream
 import org.apache.sshd.client.SshClient
-import org.apache.sshd.client.channel.ChannelShell
+import org.apache.sshd.client.channel.ChannelExec
 import org.apache.sshd.client.channel.ClientChannelEvent
 import org.apache.sshd.client.keyverifier.AcceptAllServerKeyVerifier
 import org.apache.sshd.client.session.ClientSession
@@ -28,9 +27,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BasicAuthSshClientProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.PipedInputStream
-import java.io.PipedOutputStream
 import java.util.Collections
 import java.util.EnumSet
 import java.util.Scanner
@@ -41,8 +37,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
 
     private val log = LoggerFactory.getLogger(BasicAuthSshClientService::class.java)!!
     private val newLine = "\n".toByteArray()
-    private var channel: ChannelShell? = null
-    private var teeOutput: TeeOutputStream? = null
+    private var channel: ChannelExec? = null
 
     private lateinit var sshClient: SshClient
     private lateinit var clientSession: ClientSession
@@ -59,23 +54,19 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
 
         clientSession.addPasswordIdentity(basicAuthSshClientProperties.password)
         clientSession.auth().verify(basicAuthSshClientProperties.connectionTimeOut)
-        startChannel()
 
         log.info("SSH client session($clientSession) created")
         return clientSession
     }
 
-    private fun startChannel() {
+    private fun startChannel(command: String) {
         try {
-            channel = clientSession.createShellChannel()
-            val pipedIn = PipedOutputStream()
-            channel!!.setIn(PipedInputStream(pipedIn))
-            teeOutput = TeeOutputStream(ByteArrayOutputStream(), pipedIn)
+            channel = clientSession.createExecChannel(command)
             channel!!.out = ByteArrayOutputStream()
             channel!!.err = ByteArrayOutputStream()
-            channel!!.open()
+            channel!!.open().await()
         } catch (e: Exception) {
-            throw BluePrintProcessorException("Failed to start Shell channel: ${e.message}")
+            throw BluePrintProcessorException("Failed to start execution channel: ${e.message}")
         }
     }
 
@@ -102,20 +93,10 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
     }
 
     override suspend fun executeCommandNB(command: String, timeOut: Long): CommandResult {
-        val deviceOutput: String
-        var isSuccessful = true
-        try {
-            teeOutput!!.write(command.toByteArray())
-            teeOutput!!.write(newLine)
-            teeOutput!!.flush()
-            deviceOutput = waitForPrompt(timeOut)
-        } catch (e: IOException) {
-            throw BluePrintProcessorException("Exception during command execution:  ${e.message}", e)
-        }
+        startChannel(command)
 
-        if (detectFailure(deviceOutput)) {
-            isSuccessful = false
-        }
+        val deviceOutput = waitForPrompt(timeOut)
+        val isSuccessful = isSuccessful(deviceOutput)
 
         val commandResult = CommandResult(command, deviceOutput, isSuccessful)
         if (basicAuthSshClientProperties.logging) {
@@ -151,7 +132,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
     }
 
     // TODO filter output to check error message
-    private fun detectFailure(output: String): Boolean {
+    private fun isSuccessful(output: String): Boolean {
         if (output.isNotBlank()) {
             // Output can be multiline, need to check if any of the line starts with %
             Scanner(output).use { scanner ->
@@ -159,12 +140,12 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
                     val temp = scanner.nextLine()
                     if (temp.isNotBlank() && (temp.trim { it <= ' ' }.startsWith("%") ||
                                     temp.trim { it <= ' ' }.startsWith("syntax error"))) {
-                        return true
+                        return false
                     }
                 }
             }
         }
-        return false
+        return true
     }
 }
 
