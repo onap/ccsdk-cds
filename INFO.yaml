@@ -1,7 +1,7 @@
 ---
 project: 'ccsdk-cds'
 project_creation_date: '2018-07-16'
-lifecycle_state: 'Incubation'
+lifecycle_state: 'Mature'
 project_category: ''
 project_lead: &onap_releng_ptl
     name: 'Dan Timoney'
