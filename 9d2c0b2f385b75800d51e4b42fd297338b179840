@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "f12e4991_6590757d",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-03T13:13:39Z",
+      "side": 1,
+      "message": "Yes. I think you will get a Nullpointer if its not there? Anyhow my point is to give users flexibility for the request, for instance using dynamic properties\n\nresource-assignment-request: {\n  resource-assignment-properties: {\n    template-prefixes: [\u0027a\u0027, \u0027b\u0027, \u0027c\u0027]\n  }\n}",
+      "parentUuid": "eaf0d584_25e5e1ae",
+      "revId": "9d2c0b2f385b75800d51e4b42fd297338b179840",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "35c62dd6_779b5bea",
         "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
         "patchSetId": 5
