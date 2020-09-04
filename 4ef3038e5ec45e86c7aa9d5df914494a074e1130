@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1b9d432f_136d04a0",
+        "filename": "components/model-catalog/definition-type/starter-type/node_type/component-k8s-profile-upload.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6334
+      },
+      "writtenOn": "2020-09-04T09:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b9e0e3e_612cc2bf",
+      "revId": "4ef3038e5ec45e86c7aa9d5df914494a074e1130",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8c56b91_40e57d32",
         "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
         "patchSetId": 9
@@ -33,6 +51,24 @@
       "revId": "4ef3038e5ec45e86c7aa9d5df914494a074e1130",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5d301d3_8daad69c",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 9
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 6334
+      },
+      "writtenOn": "2020-09-04T09:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8c56b91_40e57d32",
+      "revId": "4ef3038e5ec45e86c7aa9d5df914494a074e1130",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
