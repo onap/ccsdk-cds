@@ -228,6 +228,7 @@ object BluePrintConstants {
     const val MODEL_TYPE_ARTIFACT_SCRIPT_KOTLIN = "artifact-script-kotlin"
     const val MODEL_TYPE_ARTIFACT_DIRECTED_GRAPH = "artifact-directed-graph"
     const val MODEL_TYPE_ARTIFACT_COMPONENT_JAR = "artifact-component-jar"
+    const val MODEL_TYPE_ARTIFACT_K8S_PROFILE = "artifact-k8sprofile-content"
 
     const val TOSCA_SPEC = "TOSCA"
 
