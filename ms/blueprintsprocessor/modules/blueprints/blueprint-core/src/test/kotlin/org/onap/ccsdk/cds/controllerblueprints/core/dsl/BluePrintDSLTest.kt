@@ -110,6 +110,7 @@ class BluePrintDSLTest {
             artifactTypeScriptKotlin()
             artifactTypeMappingResource()
             artifactTypeComponentJar()
+            artifactTypeK8sProfileFolder()
 
             relationshipTypeConnectsTo()
             relationshipTypeDependsOn()
