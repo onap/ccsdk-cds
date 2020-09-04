@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a6f79e8_8ef02aed",
+        "filename": "ms/blueprintsprocessor/application/src/main/docker/Dockerfile",
+        "patchSetId": 33
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2020-09-04T13:41:30Z",
+      "side": 1,
+      "message": "We are required to use ONAP common base images for Guilin.\nFor CCSDK, we provide a common base image based on that ONAP\nbase (onap/integration-java11) so that we can standardize installation of common add-on packages\n\nPlease use common CCSDK alpine base image:\nonap/ccsdk-odl-sodium-alpine-image:${ccsdk.docker.version}\nccsdk.docker.version should be set in pom.xml to 1.0-STAGING-latest\nfor now (will be changed to a released version before we do a release build)",
+      "revId": "634b9e1e33df2db2c003fbbee9696ee638aa4b40",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7672804_78062a31",
+        "filename": "ms/sdclistener/distribution/src/main/docker/Dockerfile",
+        "patchSetId": 33
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2020-09-04T13:41:30Z",
+      "side": 1,
+      "message": "Same comment as on other Dockerfile change - please use common CCSDK alpine base to ensure compliance with Guilin requirement to use standard ONAP base image.",
+      "revId": "634b9e1e33df2db2c003fbbee9696ee638aa4b40",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
