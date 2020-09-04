@@ -311,6 +311,22 @@ fun BluePrintTypes.artifactTypeScriptKotlin(): ArtifactType {
     }
 }
 
+fun ServiceTemplateBuilder.artifactTypeK8sProfileFolder() {
+    val artifactType = BluePrintTypes.artifactTypeK8sProfileFolder()
+    if (this.artifactTypes == null) this.artifactTypes = hashMapOf()
+    this.artifactTypes!![artifactType.id!!] = artifactType
+}
+
+fun BluePrintTypes.artifactTypeK8sProfileFolder(): ArtifactType {
+    return artifactType(
+            id = BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE,
+            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+            description = "K8s Profile Folder Artifact"
+    ) {
+    }
+}
+
 @Deprecated("CDS won't support, use implerative workflow definitions.")
 fun BluePrintTypes.artifactTypeDirectedGraph(): ArtifactType {
     return artifactType(
