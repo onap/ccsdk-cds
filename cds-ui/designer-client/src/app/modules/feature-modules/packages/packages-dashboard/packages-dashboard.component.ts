@@ -40,7 +40,34 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
 
         console.log('PackagesDashboardComponent');
 
-        this.tourService.initialize([...steps]);
+        this.tourService.initialize([
+            {
+                anchorId: 'allTab',
+                content: 'Package list is where you get access to your all and most recent CBA packages.',
+                title: 'Managing your CBA packages',
+            },
+            {
+                anchorId: 'search',
+                content: 'Search for Package by name, version, tags and type',
+                title: 'Search',
+            },
+            {
+                anchorId: 'tagFilter',
+                content: 'Filter Packages by tags',
+                title: 'Tag Filter',
+            },
+            {
+                anchorId: 'create',
+                content: 'Start creating a full CBA packages from built-in forms without programming.',
+                title: 'Create new package',
+            },
+            {
+                anchorId: 'metadataTab',
+                content: 'Set your package basic information',
+                title: 'Metadata Tab',
+                route: 'packages/createPackage'
+            },
+        ]);
         this.checkTour();
     }
 
