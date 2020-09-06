@@ -1,70 +1,97 @@
 <!--Page Title-->
 <header class="page-title" style="padding-top: 14px;padding-bottom: 13px;">
-    <div class="row">
-        <h2 class="col m-0" style="line-height: 33px;">CBA Packages
-            <span id="numberOfPackages">({{numberOfPackages}} packages)</span>
-        </h2>
-        <div class="col profile-help">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                  <ul class="navbar-nav ml-auto">
-                    <li class="nav-item help-btn">
-                      <a class="nav-link mr-2" href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank" [delay]="300"
-                      tooltip="Help" placement="bottom"><i class="icon-info" aria-hidden="true"></i></a>
-                    </li>
-                    <div class="nav-item dropdown">
-                        <input class="dropdown-toggle" type="text">
-                        <div class="dropdown-text"><img src="../assets/img/img-user.jpeg" align="right"></div>
-                        <ul class="dropdown-content">
-                          <li>
-                            <a href="#">Username</a>
-                          </li>
-                          <li>
-                            <a href="#">Settings</a>
-                          </li>
-                          <li>
-                            <a href="#">Projects</a>
-                          </li>
-                          <li>
-                            <a href="#">Log out</a>
-                          </li>
-                        </ul>
-                      </div>
-                    <!-- <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                      </div>
-                    </li> -->
-                  </ul>
-              </nav>
-            <!-- <ul class="menu-dropdown userProfile">
-                <li><button type="button" class="btn package-info-btn" data-toggle="modal"
-                  data-target="#exampleModalLong">
-                  <i class="icon-info" aria-hidden="true"></i>
-              </button></li>
+  <div class="row">
+    <h2 class="col m-0" style="line-height: 33px;">CBA Packages
+      <span id="numberOfPackages">({{numberOfPackages}} packages)</span>
+    </h2>
+    <div class="col profile-help">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <ul class="navbar-nav ml-auto">
+          <!-- <li class="nav-item help-btn">
+            <a class="nav-link mr-2" href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank"
+              [delay]="300" tooltip="Help" placement="bottom"><i class="icon-info" aria-hidden="true"></i></a>
+          </li> -->
+          <!--Help Menu-->
+          <div class="nav-item dropdown helpMenu">
+            <input class="dropdown-toggle" type="text">
+            <div class="dropdown-text"><i class="icon-info" aria-hidden="true"></i></div>
+            <ul class="dropdown-content">
               <li>
-                <div class="dropdown">
-                  <input class="dropdown-toggle" type="text">
-                  <div class="dropdown-text">User name</div>
-                  <ul class="dropdown-content">
-                    <li>
-                      <a href="#">Settings</a>
-                    </li>
-                    <li>
-                      <a href="#">Projects</a>
-                    </li>
-                    <li>
-                      <a href="#">Log out</a>
-                    </li>
-                  </ul>
-                </div>
+                <i class="icon-get_started" aria-hidden="true"></i>
+                <p>
+                  <input id="clicker3" [checked]="startTour" type="checkbox" />
+                  <label for="clicker">
+                    Getting Started
+                    <span>Quick steps to help you get started</span>
+                  </label>
+                </p>
               </li>
-            </ul> -->
-        </div>
+              <li>
+                <a href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank">
+                  <i class="icon-user_guide" aria-hidden="true"></i>
+                  <p>
+                    Tutorials
+                    <span>CDS Designer's User Guide</span>
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <!--User Menu-->
+          <div class="nav-item dropdown userMenu">
+            <input class="dropdown-toggle" type="text">
+            <div class="dropdown-text"><img src="../assets/img/img-user.jpeg" align="right"></div>
+            <ul class="dropdown-content">
+              <li>
+                <a href="#">Username</a>
+              </li>
+              <li>
+                <a href="#">Settings</a>
+              </li>
+              <li>
+                <a href="#">Projects</a>
+              </li>
+              <li>
+                <a href="#">Log out</a>
+              </li>
+            </ul>
+          </div>
+          <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                  </li> -->
+        </ul>
+      </nav>
+      <!-- <ul class="menu-dropdown userProfile">
+              <li><button type="button" class="btn package-info-btn" data-toggle="modal"
+                data-target="#exampleModalLong">
+                <i class="icon-info" aria-hidden="true"></i>
+            </button></li>
+            <li>
+              <div class="dropdown">
+                <input class="dropdown-toggle" type="text">
+                <div class="dropdown-text">User name</div>
+                <ul class="dropdown-content">
+                  <li>
+                    <a href="#">Settings</a>
+                  </li>
+                  <li>
+                    <a href="#">Projects</a>
+                  </li>
+                  <li>
+                    <a href="#">Log out</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul> -->
     </div>
+  </div>
 </header>

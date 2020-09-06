@@ -9,25 +9,31 @@
             <input id="clicker" [checked]="startTour" type="checkbox" />
             <label class="ml-1" for="clicker">Start the tour</label>
 
-            <div class="panel-wrap">
+            <div class="panel-wrap packageWizard">
                 <div class="panel">
                     <button id="clicker1" class="close" type="button" (click)="stopTour()">
-                        <label for="clicker">&times;</label>
+                        <label for="clicker"><img src="assets/img/icon-close.svg" /></label>
                     </button>
-
-                    <h3>Welcome to CDS</h3>
-                    <p>Want a tour? Our helpful guide will introduce you to new CDS Designer UI.</p>
-                    <button type="button" class="btn" style="background-color: #fff;margin:0">
-                        <label style="margin: 0;" (click)="start()" for="clicker">Let's get started</label></button>
+                    <br />
+                    <h3>Welcome to CDS Designer UI</h3>
+                    <p>CDS has new look and new way of delivering a reusable and simplified self-service experience.</p>
+                    <!-- <span>Tab through these quick steps to help you get started.</span>
+                    <br /> -->
+                    <button id="clicker2" class="closeWizard mr-2" type="button" (click)="stopTour()">
+                        <label for="clicker">No Thanks</label>
+                    </button>
+                    <button type="button" class="startTour float">
+                        <label (click)="start()" for="clicker" class="m-0">Start Tour</label>
+                    </button>
                 </div>
             </div>
             <!---->
-            <nav class="row">
+            <nav class="row" tourAnchor="allTab">
                 <!--Nav Tabs-->
                 <div class="col pr-0">
                     <div class="nav nav-tabs " id="nav-tab" role="tablist">
-                        <a tourAnchor="allTab" class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab"
-                            href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">All</a>
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
+                            role="tab" aria-controls="nav-home" aria-selected="true">All</a>
                         <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
                             role="tab" aria-controls="nav-profile" aria-selected="false">Deployed</a>
                         <a tourAnchor="test3" class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"
