@@ -106,6 +106,10 @@ export class PackageCreationStore extends Store<CBAPackage> {
         return this.packageCreationService.enrichPackage(blob);
     }
 
+    deployBluePrint(blob): Observable<BluePrintDetailModel> {
+        return this.packageCreationService.deploy(blob);
+    }
+
     addTemplate(filePath: string, fileContent: string) {
         this.setState({
             ...this.state,
