@@ -57,6 +57,9 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
         this.tourService.start();
         this.tourService.events$.subscribe(res => {
             console.log(res);
+            if (res.value && res.value.anchorId && res.value.anchorId.includes('mt-')) {
+                $('#nav-metadata-tab').trigger('click');
+            }
             if (res.value && res.value.anchorId && res.value.anchorId.includes('tm-')) {
                 $('#nav-template-tab').trigger('click');
             }

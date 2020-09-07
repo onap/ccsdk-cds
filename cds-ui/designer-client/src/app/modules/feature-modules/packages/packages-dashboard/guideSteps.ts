@@ -54,11 +54,11 @@ export const steps = [
         title: 'Package tag',
     },
     // -------
-    {
-        anchorId: 'mt-packageKeys',
-        content: 'Set your package custom keys (Optional)',
-        title: 'Package keys',
-    },
+    // {
+    //     anchorId: 'mt-packageKeys',
+    //     content: 'Set your package custom keys (Optional)',
+    //     title: 'Package keys',
+    // },
     // Temaplate & Mapping
     {
         anchorId: 'tm-templateTab',
