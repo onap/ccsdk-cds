@@ -1,11 +1,11 @@
 
 
 export const steps = [
-    // {
-    //     anchorId: 'allTab',
-    //     content: 'This Tab contain all packages you created before',
-    //     title: 'All Package',
-    // },
+    {
+        anchorId: 'allTab',
+        content: 'Package list is where you get access to your all and most recent CBA packages.',
+        title: 'Managing your CBA packages',
+    },
     // {
     //     anchorId: 'search',
     //     content: 'Search for Package by name, version, tags and type',
@@ -16,22 +16,16 @@ export const steps = [
     //     content: 'Filter Packages by tags',
     //     title: 'Tag Filter',
     // },
-    // {
-    //     anchorId: 'import',
-    //     content: 'Import a package to CDS',
-    //     title: 'Import',
-    // },
     {
         anchorId: 'create',
-        content: 'Create a new Package',
-        title: 'Create',
+        content: 'Start creating a full CBA packages from built-in forms without programming.',
+        title: 'Create new package',
     },
     {
         anchorId: 'metadataTab',
         content: 'Set your package basic information',
         title: 'Metadata Tab',
-        route: 'packages/createPackage',
-        stepId: 'metadataTab'
+        route: 'packages/createPackage'
     },
     {
         anchorId: 'mt-packageName',
@@ -53,7 +47,6 @@ export const steps = [
         content: 'Set your package Tags (Optional)',
         title: 'Package tag',
     },
-    // -------
     // {
     //     anchorId: 'mt-packageKeys',
     //     content: 'Set your package custom keys (Optional)',

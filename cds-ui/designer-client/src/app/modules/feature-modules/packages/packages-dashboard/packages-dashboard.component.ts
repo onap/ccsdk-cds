@@ -40,34 +40,7 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
 
         console.log('PackagesDashboardComponent');
 
-        this.tourService.initialize([
-            {
-                anchorId: 'allTab',
-                content: 'Package list is where you get access to your all and most recent CBA packages.',
-                title: 'Managing your CBA packages',
-            },
-            {
-                anchorId: 'search',
-                content: 'Search for Package by name, version, tags and type',
-                title: 'Search',
-            },
-            {
-                anchorId: 'tagFilter',
-                content: 'Filter Packages by tags',
-                title: 'Tag Filter',
-            },
-            {
-                anchorId: 'create',
-                content: 'Start creating a full CBA packages from built-in forms without programming.',
-                title: 'Create new package',
-            },
-            {
-                anchorId: 'metadataTab',
-                content: 'Set your package basic information',
-                title: 'Metadata Tab',
-                route: 'packages/createPackage'
-            },
-        ]);
+        this.tourService.initialize([...steps]);
         this.checkTour();
     }
 
@@ -84,20 +57,25 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
         this.tourService.start();
         this.tourService.events$.subscribe(res => {
             console.log(res);
-            if (res.value && res.value.anchorId && res.value.anchorId.includes('mt-')) {
-                $('#nav-metadata-tab').trigger('click');
-            }
-            if (res.value && res.value.anchorId && res.value.anchorId.includes('tm-')) {
-                $('#nav-template-tab').trigger('click');
-            }
-            if (res.value && res.value.anchorId && res.value.anchorId === 'tm-mappingContent') {
-                $('#mappingTab').trigger('click');
-            }
-            if (res.value && res.value.anchorId && res.value.anchorId === 'dslTab') {
-                $('#nav-authentication-tab').trigger('click');
-            }
-            if (res.value && res.value.anchorId && res.value.anchorId.includes('st-')) {
-                $('#nav-scripts-tab').trigger('click');
+            if (res.value && res.value.anchorId) {
+                if (res.value.anchorId.includes('mt-')) {
+                    $('#nav-metadata-tab').trigger('click');
+                }
+                if (res.value.anchorId.includes('tm-')) {
+                    $('#nav-template-tab').trigger('click');
+                }
+                if (res.value.anchorId === 'tm-mappingContent') {
+                    $('#mappingTab').trigger('click');
+                }
+                if (res.value.anchorId === 'tm-templateContent') {
+                    //  $('#templateTab').trigger('click');
+                }
+                if (res.value.anchorId === 'dslTab') {
+                    $('#nav-authentication-tab').trigger('click');
+                }
+                if (res.value.anchorId.includes('st-')) {
+                    $('#nav-scripts-tab').trigger('click');
+                }
             }
         });
     }
