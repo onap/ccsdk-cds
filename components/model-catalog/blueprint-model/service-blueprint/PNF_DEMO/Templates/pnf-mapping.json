@@ -1,0 +1,109 @@
+[{
+		"name": "pnf-id",
+		"property": {
+			"description": "",
+			"required": true,
+			"type": "string",
+			"status": "",
+			"constraints": [{}],
+			"entry_schema": {
+				"type": ""
+			}
+		},
+		"input-param": true,
+		"dictionary-name": "pnf-id",
+		"dictionary-source": "input",
+		"dependencies": [],
+		"version": 0
+	},
+	{
+		"name": "pnf-ipv4-address",
+		"property": {
+			"description": "",
+			"required": true,
+			"type": "string",
+			"status": "",
+			"constraints": [{}],
+			"entry_schema": {
+				"type": ""
+			}
+		},
+		"input-param": true,
+		"dictionary-name": "pnf-ipv4-address",
+		"dictionary-source": "input",
+		"dependencies": [],
+		"version": 0
+	},
+	{
+		"name": "netconf-password",
+		"property": {
+			"description": "",
+			"required": true,
+			"type": "string",
+			"status": "",
+			"constraints": [{}],
+			"entry_schema": {
+				"type": ""
+			}
+		},
+		"input-param": true,
+		"dictionary-name": "netconf-password",
+		"dictionary-source": "input",
+		"dependencies": [],
+		"version": 0
+	},
+	{
+		"name": "netconf-username",
+		"property": {
+			"description": "",
+			"required": true,
+			"type": "string",
+			"status": "",
+			"constraints": [{}],
+			"entry_schema": {
+				"type": ""
+			}
+		},
+		"input-param": true,
+		"dictionary-name": "netconf-username",
+		"dictionary-source": "input",
+		"dependencies": [],
+		"version": 0
+	},
+	{
+		"name": "netconf-server-port",
+		"property": {
+			"description": "",
+			"required": true,
+			"type": "string",
+			"status": "",
+			"constraints": [{}],
+			"entry_schema": {
+				"type": ""
+			}
+		},
+		"input-param": true,
+		"dictionary-name": "netconf-server-port",
+		"dictionary-source": "input",
+		"dependencies": [],
+		"version": 0
+	},
+	{
+		"name": "stream-count",
+		"property": {
+			"description": "",
+			"required": true,
+			"type": "string",
+			"status": "",
+			"constraints": [{}],
+			"entry_schema": {
+				"type": ""
+			}
+		},
+		"input-param": true,
+		"dictionary-name": "stream-count",
+		"dictionary-source": "input",
+		"dependencies": [],
+		"version": 0
+	}
+]

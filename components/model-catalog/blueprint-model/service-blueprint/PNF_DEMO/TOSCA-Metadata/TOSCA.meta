@@ -1,0 +1,7 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Aarna Services
+Entry-Definitions: Definitions/pnf_netconf.json
+Template-Name: pnf_netconf
+Template-Version: 1.0.0
+Template-Tags: pnf_netconf
