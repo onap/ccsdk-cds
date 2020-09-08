@@ -276,6 +276,9 @@ Import the project into the IDE
                -Dserver.port=55555
 
 
+      **Browse Working Directory to your application path**  ``.../cds/ms/blueprintsprocessor/application`` 
+      **if path is not already specified correctly.**
+
       **Add/replace the following in Blueprint's application-dev.properties file:**
 
       .. code-block:: java
@@ -376,15 +379,16 @@ Testing the application
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 There are two main features of the Blueprints Processor that can be of interest of a developer:
-blueprint upload and blueprint process.
+blueprint publish and blueprint process.
 
-To upload custom blueprints,  the endpoint ``api/v1/execution-service/upload`` is used.
+To upload custom blueprints,  the endpoint ``api/v1/execution-service/publish`` is used.
 
 To process, the endpoint is ``api/v1/execution-service/process``.
 
 Postman is a software that can be used to send these request, and an example of
 them is present on https://www.getpostman.com/collections/b99863b0cde7565a32fc.
 
+A detailed description of the usage of different APIs of CDS will follow.
 
 Possible Fixes
 ~~~~~~~~~~~~~~~~~~~

@@ -27,11 +27,11 @@ Tosca meta file captures the model entities that compose the cba package name, v
    * - Created-By
      - Required
      - String
-     - The attribute that holds the entry points
+     - The user/s that created the CBA
    * - Entry-Definitions
      - Required
      - String
-     - The attribute that holds the entry points file PATH to the main cba tosca definition file 
+     - The attribute that holds the entry points file PATH to the main cba tosca definition file
        or non tosca script file.
    * - Template-Name
      - Required
