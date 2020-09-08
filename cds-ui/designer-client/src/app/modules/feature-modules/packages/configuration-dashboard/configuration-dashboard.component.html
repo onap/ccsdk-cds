@@ -755,9 +755,9 @@
                 </nav>
                 <div class="row mt-4">
                     <div class="col">
-                        <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-content" id="nav-tabContent" (change)="clickEvent()">
                             <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
-                                 aria-labelledby="nav-metadata-tab" (change)="clickEvent()">
+                                 aria-labelledby="nav-metadata-tab" >
                                 <app-metadata-tab></app-metadata-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-template" role="tabpanel"

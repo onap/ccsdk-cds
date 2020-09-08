@@ -70,6 +70,7 @@ export class ConfigurationDashboardComponent implements OnInit {
                     }
                 } else {
                     this.metadataClasses = this.metadataClasses.replace('complete', '');
+                    this.isSaveEnabled = false;
                 }
 
             });
@@ -92,27 +93,32 @@ export class ConfigurationDashboardComponent implements OnInit {
             bluePrintDetailModels[0].artifactName + '/' + bluePrintDetailModels[0].artifactVersion).subscribe(response => {
             const blob = new Blob([response], {type: 'application/octet-stream'});
             this.currentBlob = blob;
-            this.zipFile.loadAsync(blob).then((zip) => {
-                Object.keys(zip.files).forEach((filename) => {
-                    zip.files[filename].async('string').then((fileData) => {
-                        if (fileData) {
-                            if (filename.includes('Scripts/')) {
-                                this.setScripts(filename, fileData);
-                            } else if (filename.includes('Templates/')) {
-                                if (filename.includes('-mapping.')) {
-                                    this.setMapping(filename, fileData);
-                                } else if (filename.includes('-template.')) {
-                                    this.setTemplates(filename, fileData);
-                                }
+            this.extractBlobToStore(blob, bluePrintDetailModels);
+        });
+    }
 
-                            } else if (filename.includes('Definitions/')) {
-                                this.setImports(filename, fileData, bluePrintDetailModels);
-                            } else if (filename.includes('TOSCA-Metadata/')) {
-                                const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
-                                this.setMetaData(metaDataTabInfo, bluePrintDetailModels[0]);
+    private extractBlobToStore(blob: Blob, bluePrintDetailModels: BluePrintDetailModel) {
+        this.zipFile.loadAsync(blob).then((zip) => {
+            Object.keys(zip.files).forEach((filename) => {
+                zip.files[filename].async('string').then((fileData) => {
+                    console.log(filename);
+                    if (fileData) {
+                        if (filename.includes('Scripts/')) {
+                            this.setScripts(filename, fileData);
+                        } else if (filename.includes('Templates/')) {
+                            if (filename.includes('-mapping.')) {
+                                this.setMapping(filename, fileData);
+                            } else if (filename.includes('-template.')) {
+                                this.setTemplates(filename, fileData);
                             }
+
+                        } else if (filename.includes('Definitions/')) {
+                            this.setImports(filename, fileData, bluePrintDetailModels);
+                        } else if (filename.includes('TOSCA-Metadata/')) {
+                            const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
+                            this.setMetaData(metaDataTabInfo, bluePrintDetailModels[0]);
                         }
-                    });
+                    }
                 });
             });
         });
@@ -239,8 +245,9 @@ export class ConfigurationDashboardComponent implements OnInit {
     }
 
     deployCurrentPackage() {
-        console.log('happened');
-        this.router.navigate(['/packages']);
+        this.collectZipFileFromStore();
+        this.deployPackage();
+
     }
 
     goToDesignerMode(id) {
@@ -266,19 +273,21 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     enrichBluePrint() {
 
+        this.collectZipFileFromStore();
+        this.enrichPackage();
+    }
+
+    private collectZipFileFromStore() {
         this.packageCreationStore.state$.subscribe(
             cbaPackage => {
                 FilesContent.clear();
                 console.log(cbaPackage);
-
                 let packageCreationModes: PackageCreationModes;
                 cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
                 cbaPackage.metaData = PackageCreationModes.setEntryPoint(cbaPackage.metaData);
                 packageCreationModes = PackageCreationBuilder.getCreationMode(cbaPackage);
                 packageCreationModes.execute(cbaPackage, this.packageCreationUtils);
                 this.filesData.push(this.folder.TREE_DATA);
-                this.enrichPackage();
-
             });
     }
 
@@ -289,11 +298,38 @@ export class ConfigurationDashboardComponent implements OnInit {
                 this.packageCreationStore.enrichBluePrint(blob).subscribe(response => {
                     console.log('success');
                     const blobInfo = new Blob([response], {type: 'application/octet-stream'});
-                    saveAs(blobInfo, 'test' + '-' + '1.0.0' + '-CBA.zip');
-                    this.toastService.info('enriched successfully ');
+                    this.configurationDashboardService.getPagedPackages(this.id).subscribe(
+                        (bluePrintDetailModels) => {
+                            if (bluePrintDetailModels) {
+                                this.packageCreationStore.clear();
+                                this.extractBlobToStore(blob, bluePrintDetailModels);
+                                this.isSaveEnabled = true;
+                                this.toastService.info('enriched successfully ');
+                            }
+                        });
+
+                    // saveAs(blobInfo, 'test' + '-' + '1.0.0' + '-CBA.zip');
+
                 });
             }, error => {
                 this.toastService.error('error happened when editing ' + error.message);
+                console.log('Error -' + error.message);
+            });
+    }
+
+    private deployPackage() {
+        this.create();
+        this.zipFile.generateAsync({type: 'blob'})
+            .then(blob => {
+                this.packageCreationStore.deployBluePrint(blob).subscribe(response => {
+                    console.log('success');
+                    console.log(response);
+
+                    // saveAs(blobInfo, 'test' + '-' + '1.0.0' + '-CBA.zip');
+
+                });
+            }, error => {
+                this.toastService.error('error happened when deploying ' + error.message);
                 console.log('Error -' + error.message);
             });
     }
