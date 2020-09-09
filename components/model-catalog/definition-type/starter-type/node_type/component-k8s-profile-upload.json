@@ -42,6 +42,14 @@
                 "required": false,
                 "type": "string"
             },
+            "artifact-prefix-names": {
+              "description": "Resource Assignment Artifact Prefix names",
+              "required": false,
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
+            },
             "resource-assignment-map": {
                 "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
                 "required": false,
