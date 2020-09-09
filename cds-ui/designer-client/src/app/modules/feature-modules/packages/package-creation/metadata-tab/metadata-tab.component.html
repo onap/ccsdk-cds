@@ -49,6 +49,7 @@
                 [(ngModel)]="metaDataTab.version" (input)="validatePackageNameAndVersion()"
                 pattern="(\d+)\.(\d+)\.(\d+)" placeholder="Example: 1.0.0">
         </div>
+        <div class="model-note-container tag-notes">Must follow this format (1.0.0)</div>
         <div class="model-note-container error-message">{{errorMessage}}</div>
     </div>
     <div class="single-line-model">
