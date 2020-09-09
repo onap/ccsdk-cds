@@ -7,7 +7,7 @@ import {MetadataTabComponent} from '../package-creation/metadata-tab/metadata-ta
 import * as JSZip from 'jszip';
 import {ConfigurationDashboardService} from './configuration-dashboard.service';
 import {TemplateTopology, VlbDefinition} from '../package-creation/mapping-models/definitions/VlbDefinition';
-import {DslDefinition} from '../package-creation/mapping-models/CBAPacakge.model';
+import {CBAPackage, DslDefinition} from '../package-creation/mapping-models/CBAPacakge.model';
 import {PackageCreationUtils} from '../package-creation/package-creation.utils';
 import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
 import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
@@ -15,6 +15,7 @@ import {saveAs} from 'file-saver';
 import {DesignerStore} from '../designer/designer.store';
 import {ToastrService} from 'ngx-toastr';
 import {NgxFileDropEntry} from 'ngx-file-drop';
+import {PackageCreationService} from '../package-creation/package-creation.service';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -42,16 +43,22 @@ export class ConfigurationDashboardComponent implements OnInit {
     isSaveEnabled = false;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     metadataClasses = 'nav-item nav-link active';
+    private cbaPackage: CBAPackage = new CBAPackage();
 
     constructor(
         private route: ActivatedRoute,
         private configurationDashboardService: ConfigurationDashboardService,
         private packageCreationStore: PackageCreationStore,
+        private packageCreationService: PackageCreationService,
         private packageCreationUtils: PackageCreationUtils,
         private router: Router,
         private designerStore: DesignerStore,
         private toastService: ToastrService
     ) {
+        this.packageCreationStore.state$.subscribe(
+            cbaPackage => {
+                this.cbaPackage = cbaPackage;
+            });
     }
 
     ngOnInit() {
@@ -60,20 +67,18 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.elementRef.nativeElement.focus();
         this.refreshCurrentPackage();
         const regexp = RegExp(this.versionPattern);
-        this.packageCreationStore.state$.subscribe(
-            cbaPackage => {
-                if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.description
-                    && cbaPackage.metaData.name && cbaPackage.metaData.version &&
-                    regexp.test(cbaPackage.metaData.version)) {
-                    if (!this.metadataClasses.includes('complete')) {
-                        this.metadataClasses += ' complete';
-                    }
-                } else {
-                    this.metadataClasses = this.metadataClasses.replace('complete', '');
-                    this.isSaveEnabled = false;
-                }
+        if (this.cbaPackage && this.cbaPackage.metaData && this.cbaPackage.metaData.description
+            && this.cbaPackage.metaData.name && this.cbaPackage.metaData.version &&
+            regexp.test(this.cbaPackage.metaData.version)) {
+            if (!this.metadataClasses.includes('complete')) {
+                this.metadataClasses += ' complete';
+            }
+        } else {
+            this.metadataClasses = this.metadataClasses.replace('complete', '');
+            this.isSaveEnabled = false;
+        }
 
-            });
+
     }
 
     private refreshCurrentPackage() {
@@ -161,17 +166,20 @@ export class ConfigurationDashboardComponent implements OnInit {
     }
 
     editBluePrint() {
-        this.packageCreationStore.state$.subscribe(
-            cbaPackage => {
-                FilesContent.clear();
-                let packageCreationModes: PackageCreationModes;
-                cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
-                cbaPackage.metaData = PackageCreationModes.setEntryPoint(cbaPackage.metaData);
-                packageCreationModes = PackageCreationBuilder.getCreationMode(cbaPackage);
-                packageCreationModes.execute(cbaPackage, this.packageCreationUtils);
-                this.filesData.push(this.folder.TREE_DATA);
-                this.saveBluePrintToDataBase();
-            });
+        if (this.cbaPackage) {
+            this.formTreeData();
+            this.saveBluePrintToDataBase();
+        }
+    }
+
+    private formTreeData() {
+        FilesContent.clear();
+        let packageCreationModes: PackageCreationModes;
+        this.cbaPackage = PackageCreationModes.mapModeType(this.cbaPackage);
+        this.cbaPackage.metaData = PackageCreationModes.setEntryPoint(this.cbaPackage.metaData);
+        packageCreationModes = PackageCreationBuilder.getCreationMode(this.cbaPackage);
+        packageCreationModes.execute(this.cbaPackage, this.packageCreationUtils);
+        this.filesData.push(this.folder.TREE_DATA);
     }
 
     setMetaData(metaDataObject: MetaDataTabModel, bluePrintDetailModel: BluePrintDetailModel) {
@@ -200,7 +208,7 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.create();
         this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
-                this.packageCreationStore.saveBluePrint(blob).subscribe(
+                this.packageCreationService.savePackage(blob).subscribe(
                     bluePrintDetailModels => {
                         if (bluePrintDetailModels) {
                             const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
@@ -245,7 +253,7 @@ export class ConfigurationDashboardComponent implements OnInit {
     }
 
     deployCurrentPackage() {
-        this.collectZipFileFromStore();
+        this.formTreeData();
         this.deployPackage();
 
     }
@@ -273,29 +281,16 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     enrichBluePrint() {
 
-        this.collectZipFileFromStore();
+        this.formTreeData();
         this.enrichPackage();
     }
 
-    private collectZipFileFromStore() {
-        this.packageCreationStore.state$.subscribe(
-            cbaPackage => {
-                FilesContent.clear();
-                console.log(cbaPackage);
-                let packageCreationModes: PackageCreationModes;
-                cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
-                cbaPackage.metaData = PackageCreationModes.setEntryPoint(cbaPackage.metaData);
-                packageCreationModes = PackageCreationBuilder.getCreationMode(cbaPackage);
-                packageCreationModes.execute(cbaPackage, this.packageCreationUtils);
-                this.filesData.push(this.folder.TREE_DATA);
-            });
-    }
 
     private enrichPackage() {
         this.create();
         this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
-                this.packageCreationStore.enrichBluePrint(blob).subscribe(response => {
+                this.packageCreationService.enrichPackage(blob).subscribe(response => {
                     console.log('success');
                     const blobInfo = new Blob([response], {type: 'application/octet-stream'});
                     this.configurationDashboardService.getPagedPackages(this.id).subscribe(
@@ -321,12 +316,9 @@ export class ConfigurationDashboardComponent implements OnInit {
         this.create();
         this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
-                this.packageCreationStore.deployBluePrint(blob).subscribe(response => {
+                this.packageCreationService.enrichPackage(blob).subscribe(response => {
                     console.log('success');
                     console.log(response);
-
-                    // saveAs(blobInfo, 'test' + '-' + '1.0.0' + '-CBA.zip');
-
                 });
             }, error => {
                 this.toastService.error('error happened when deploying ' + error.message);

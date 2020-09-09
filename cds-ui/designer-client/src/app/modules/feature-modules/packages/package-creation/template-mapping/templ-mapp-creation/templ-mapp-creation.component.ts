@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SharedService } from '../shared-service';
 import { XmlParser } from '../utils/XmlParser';
 import { TourService } from 'ngx-tour-md-menu';
+import {PackageCreationService} from '../../package-creation.service';
 declare var $: any;
 
 @Component({
@@ -57,6 +58,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         private packageCreationUtils: PackageCreationUtils,
         private toastr: ToastrService,
         private sharedService: SharedService,
+        private packageCreationService: PackageCreationService,
         private tourService: TourService,
     ) {
     }
@@ -294,7 +296,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         }
         if (this.variables && this.variables.length > 0) {
             console.log('base');
-            this.packageCreationStore.getTemplateAndMapping(this.variables).subscribe(res => {
+            this.packageCreationService.getTemplateAndMapping(this.variables).subscribe(res => {
                 let message = 'Attributes are Fetched';
                 this.mappingRes = [];
                 this.resourceDictionaryRes = res;

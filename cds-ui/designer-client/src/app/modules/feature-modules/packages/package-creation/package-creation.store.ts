@@ -38,7 +38,7 @@ import {TemplateTopology} from './mapping-models/definitions/VlbDefinition';
 export class PackageCreationStore extends Store<CBAPackage> {
 
 
-    constructor(private packageCreationService: PackageCreationService) {
+    constructor() {
         super(new CBAPackage());
     }
 
@@ -98,17 +98,6 @@ export class PackageCreationStore extends Store<CBAPackage> {
         this.state.definitions.imports.delete(filename);
     }
 
-    saveBluePrint(blob): Observable<BluePrintDetailModel> {
-        return this.packageCreationService.savePackage(blob);
-    }
-
-    enrichBluePrint(blob): Observable<any> {
-        return this.packageCreationService.enrichPackage(blob);
-    }
-
-    deployBluePrint(blob): Observable<BluePrintDetailModel> {
-        return this.packageCreationService.deploy(blob);
-    }
 
     addTemplate(filePath: string, fileContent: string) {
         this.setState({
@@ -122,10 +111,6 @@ export class PackageCreationStore extends Store<CBAPackage> {
             ...this.state,
             mapping: this.state.mapping.setContent(filePath, fileContent)
         });
-    }
-
-    getTemplateAndMapping(variables: string[]): Observable<ResourceDictionary[]> {
-        return this.packageCreationService.getTemplateAndMapping(variables);
     }
 
     clear() {

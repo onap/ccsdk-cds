@@ -19,19 +19,20 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FilesContent, FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {FilesContent, FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
 
 import * as JSZip from 'jszip';
-import { PackageCreationStore } from './package-creation.store';
-import { Definition } from './mapping-models/CBAPacakge.model';
-import { PackageCreationModes } from './creationModes/PackageCreationModes';
-import { PackageCreationBuilder } from './creationModes/PackageCreationBuilder';
-import { PackageCreationUtils } from './package-creation.utils';
-import { MetadataTabComponent } from './metadata-tab/metadata-tab.component';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { TourService } from 'ngx-tour-md-menu';
+import {PackageCreationStore} from './package-creation.store';
+import {Definition} from './mapping-models/CBAPacakge.model';
+import {PackageCreationModes} from './creationModes/PackageCreationModes';
+import {PackageCreationBuilder} from './creationModes/PackageCreationBuilder';
+import {PackageCreationUtils} from './package-creation.utils';
+import {MetadataTabComponent} from './metadata-tab/metadata-tab.component';
+import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {TourService} from 'ngx-tour-md-menu';
+import {PackageCreationService} from './package-creation.service';
 
 
 @Component({
@@ -46,6 +47,7 @@ export class PackageCreationComponent implements OnInit {
 
     constructor(
         private packageCreationStore: PackageCreationStore,
+        private packageCreationService: PackageCreationService,
         private packageCreationUtils: PackageCreationUtils,
         private router: Router,
         private tourService: TourService,
@@ -54,8 +56,8 @@ export class PackageCreationComponent implements OnInit {
 
     counter = 0;
     modes: object[] = [
-        { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' },
-        { name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode' }];
+        {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
+        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}];
     metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     folder: FolderNodeElement = new FolderNodeElement();
     zipFile: JSZip = new JSZip();
@@ -63,10 +65,10 @@ export class PackageCreationComponent implements OnInit {
     definition: Definition = new Definition();
     isSaveEnabled = false;
 
-    @ViewChild(MetadataTabComponent, { static: false })
+    @ViewChild(MetadataTabComponent, {static: false})
     metadataTabComponent: MetadataTabComponent;
 
-    @ViewChild('nameit', { static: true })
+    @ViewChild('nameit', {static: true})
     elementRef: ElementRef;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     metadataClasses = 'nav-item nav-link active complete';
@@ -115,9 +117,9 @@ export class PackageCreationComponent implements OnInit {
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({ type: 'blob' })
+        this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
-                this.packageCreationStore.saveBluePrint(blob).subscribe(
+                this.packageCreationService.savePackage(blob).subscribe(
                     bluePrintDetailModels => {
                         if (bluePrintDetailModels) {
                             const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
