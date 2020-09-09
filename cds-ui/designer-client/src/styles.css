@@ -1627,6 +1627,7 @@ ul.package-contributers{
   margin-bottom: 26px;
   width: 100px;
   height: 30px;
+  line-height: 15px;
   background: #1B3E6F;
   color: #fff;
   font-size: 12px;
@@ -3366,10 +3367,10 @@ table.dataTable.no-footer{
   overflow: auto;
   padding: 20px;
   padding-top: 9px;
-  background: #fff;
-  color: #1B3E6F;
+  background: #1B3E6F;
+  color: #fff;
   border-top: solid 6px #1273EB;
-  box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.18) !important;
+  box-shadow: 0 2px 13px 6px rgba(47, 83, 151, .17) !important;
   border-radius: 3px !important;
   /* border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important; */
@@ -3413,12 +3414,12 @@ for simplicity
   border: 0;
   background: none;
   font-weight: normal;
-  color: #1273EB;
+  color: #E0E8F2;
   font-size: 12px;
 }
 /*Wizard Content*/
 .mat-menu-panel{
-  box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.18) !important;
+  box-shadow: 0 2px 13px 6px rgba(47, 83, 151, .17) !important;
   border-radius: 3px !important;
   border-bottom: solid 3px #1273EB;
 }
@@ -3430,13 +3431,13 @@ for simplicity
   position: absolute;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-bottom: 8px solid #fff;
+  border-bottom: 8px solid #1B3E6F;
   left: 9px;
   top: -8px;
 }
 .mat-card{
-  background: #fff !important;
-  color: #1B3E6F !important;
+  background: #1B3E6F !important;
+  color: #fff !important;
   font-family: inherit !important;
   border-radius: 0 !important;
 }
@@ -3450,7 +3451,7 @@ for simplicity
   font-size: 16px !important;
 }
 .mat-icon-button[disabled]{
-  color: rgba(27, 62, 111, .5) !important;
+  color: rgba(224, 232, 242, .5) !important;
 }
 
 
