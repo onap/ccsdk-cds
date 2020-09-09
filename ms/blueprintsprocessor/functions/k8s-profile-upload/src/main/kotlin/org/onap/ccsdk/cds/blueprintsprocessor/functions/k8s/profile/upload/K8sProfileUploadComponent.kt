@@ -20,6 +20,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
@@ -63,6 +64,7 @@ open class K8sProfileUploadComponent(
         const val INPUT_K8S_PROFILE_NAMESPACE = "k8s-rb-profile-namespace"
         const val INPUT_K8S_PROFILE_SOURCE = "k8s-rb-profile-source"
         const val INPUT_RESOURCE_ASSIGNMENT_MAP = "resource-assignment-map"
+        const val INPUT_ARTIFACT_PREFIX_NAMES = "artifact-prefix-names"
 
         const val OUTPUT_STATUSES = "statuses"
         const val OUTPUT_SKIPPED = "skipped"
@@ -80,7 +82,8 @@ open class K8sProfileUploadComponent(
             INPUT_K8S_DEFINITION_NAME,
             INPUT_K8S_DEFINITION_VERSION,
             INPUT_K8S_PROFILE_NAMESPACE,
-            INPUT_K8S_PROFILE_SOURCE
+            INPUT_K8S_PROFILE_SOURCE,
+            INPUT_ARTIFACT_PREFIX_NAMES
         )
         var outputPrefixStatuses = mutableMapOf<String, String>()
         var inputParamsMap = mutableMapOf<String, JsonNode?>()
@@ -90,7 +93,7 @@ open class K8sProfileUploadComponent(
         }
 
         log.info("Getting the template prefixes")
-        val prefixList: ArrayList<String> = getTemplatePrefixList(executionRequest)
+        val prefixList: ArrayList<String> = getTemplatePrefixList(inputParamsMap[INPUT_ARTIFACT_PREFIX_NAMES])
 
         log.info("Iterating over prefixes in resource assignment map.")
         for (prefix in prefixList) {
@@ -175,10 +178,18 @@ open class K8sProfileUploadComponent(
         bluePrintRuntimeService.getBluePrintError().addError(runtimeException.message!!)
     }
 
-    fun getTemplatePrefixList(executionRequest: ExecutionServiceInput): ArrayList<String> {
-        val result = ArrayList<String>()
-        for (prefix in executionRequest.payload.get("resource-assignment-request").get("template-prefix").elements())
-            result.add(prefix.asText())
+    private fun getTemplatePrefixList(node: JsonNode?): ArrayList<String> {
+        var result = ArrayList<String>()
+        when (node) {
+            is ArrayNode -> {
+                val arrayNode = node.toList()
+                for (prefixNode in arrayNode)
+                    result.add(prefixNode.asText())
+            }
+            is ObjectNode -> {
+                result.add(node.asText())
+            }
+        }
         return result
     }
 
