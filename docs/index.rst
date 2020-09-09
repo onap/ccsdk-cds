@@ -123,7 +123,7 @@ Developer Guide
 ----------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    developerguide/developer-guide
 
@@ -135,6 +135,14 @@ User Guide
 
    installation
    designtime
+
+Use Cases
+----------
+
+.. toctree::
+   :maxdepth: 2
+
+   usecases/use-cases
 
 CDS Desginer UI
 ---------------
