@@ -102,7 +102,9 @@ export class TemplMappListingComponent implements OnInit {
     createNewTemplate() {
         this.openCreationView();
         this.sharedService.disableEdit();
-        this.tourService.goto('tm-templateName');
+        if (localStorage.getItem('tour-guide') !== 'end' && localStorage.getItem('tour-guide') !== 'false') {
+            this.tourService.goto('tm-templateName');
+        }
     }
     openCreationView() {
         this.showCreationView.emit('tell parent to open create views');

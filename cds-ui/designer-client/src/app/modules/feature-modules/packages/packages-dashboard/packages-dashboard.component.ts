@@ -39,8 +39,6 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
     ngOnInit() {
 
         console.log('PackagesDashboardComponent');
-
-        this.tourService.initialize([...steps]);
         this.checkTour();
     }
 
@@ -53,10 +51,17 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
     }
 
     start() {
+
+        this.tourService.initialize([...steps]);
         console.log('start .................');
         this.tourService.start();
+        localStorage.setItem('tour-guide', 'start');
         this.tourService.events$.subscribe(res => {
             console.log(res);
+
+            if (res.name === 'end') {
+                localStorage.setItem('tour-guide', 'end');
+            }
             if (res.value && res.value.anchorId) {
                 if (res.value.anchorId.includes('mt-')) {
                     $('#nav-metadata-tab').trigger('click');
@@ -76,6 +81,7 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
                 if (res.value.anchorId.includes('st-')) {
                     $('#nav-scripts-tab').trigger('click');
                 }
+
             }
         });
     }

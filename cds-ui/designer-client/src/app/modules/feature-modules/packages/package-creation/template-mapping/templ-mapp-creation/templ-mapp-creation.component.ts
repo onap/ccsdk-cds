@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SharedService } from '../shared-service';
 import { XmlParser } from '../utils/XmlParser';
 import { TourService } from 'ngx-tour-md-menu';
-import {PackageCreationService} from '../../package-creation.service';
+import { PackageCreationService } from '../../package-creation.service';
 declare var $: any;
 
 @Component({
@@ -352,8 +352,9 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 this.fileName = '';
                 this.toastr.success('File is created', 'success');
                 this.openListView();
-                console.log(this.tourService.getStatus());
-                this.tourService.goto('tm-templateEdit');
+                if (localStorage.getItem('tour-guide') !== 'end' && localStorage.getItem('tour-guide') !== 'false') {
+                    this.tourService.goto('tm-templateEdit');
+                }
             } else {
                 console.log('this file already exist');
                 this.toastr.error('File name already exist', 'Error');
