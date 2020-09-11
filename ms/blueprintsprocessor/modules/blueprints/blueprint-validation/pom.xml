@@ -21,14 +21,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-       <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-       <artifactId>blueprints</artifactId>
-       <version>1.0.0-SNAPSHOT</version>
+        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+        <artifactId>modules-blueprints</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
     <artifactId>blueprint-validation</artifactId>
 
-    <name>Controller Blueprints Validation Service</name>
+    <name>MS Blueprints Processor Modules - Blueprints - Blueprints Validation Service</name>
 
     <dependencies>
         <dependency>
@@ -40,12 +41,12 @@
             <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
-           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-           <artifactId>blueprint-core</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>blueprint-core</artifactId>
         </dependency>
         <dependency>
-           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-           <artifactId>resource-dict</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>resource-dict</artifactId>
         </dependency>
 
         <!--Testing dependencies-->

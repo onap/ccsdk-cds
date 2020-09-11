@@ -24,15 +24,15 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>commons</artifactId>
+        <artifactId>modules-commons</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
     <artifactId>dmaap-lib</artifactId>
     <packaging>jar</packaging>
 
-    <name>Blueprints Processor Dmaap Lib</name>
-    <description>Blueprints Processor Dmaap Lib</description>
+    <name>MS Blueprints Processor Modules - Commons - Dmaap Lib</name>
 
     <dependencies>
         <dependency>
@@ -46,7 +46,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
@@ -77,7 +76,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>processor-core</artifactId>
         </dependency>
     </dependencies>

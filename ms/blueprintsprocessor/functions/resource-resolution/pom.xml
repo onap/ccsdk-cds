@@ -20,7 +20,7 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>functions</artifactId>
+        <artifactId>blueprintsprocessor-functions</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
@@ -29,12 +29,12 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Blueprints Processor Function - Resource Resolution</name>
+    <name>MS Blueprints Processor Functions - Resource Resolution</name>
     <description>Blueprints Processor Function - Resource Resolution</description>
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>db-lib</artifactId>
         </dependency>
         <dependency>

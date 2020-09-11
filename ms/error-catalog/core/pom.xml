@@ -26,7 +26,7 @@
 
     <artifactId>error-catalog-core</artifactId>
 
-    <name>Error Catalog Core</name>
+    <name>MS Error Catalog Core</name>
     <description>Error Catalog Core</description>
 
     <properties>

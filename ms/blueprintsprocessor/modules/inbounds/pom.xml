@@ -21,15 +21,14 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>blueprintsprocessor-modules</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>inbounds</artifactId>
+    <artifactId>modules-inbounds</artifactId>
     <packaging>pom</packaging>
 
-    <name>Blueprints Processor Inbounds POM</name>
-    <description>Blueprints Processor Inbounds</description>
+    <name>MS Blueprints Processor Modules - Inbounds</name>
 
     <modules>
         <module>configs-api</module>
@@ -46,7 +45,7 @@
             <artifactId>spring-security-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>workflow-service</artifactId>
         </dependency>
         <dependency>
@@ -90,7 +89,6 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

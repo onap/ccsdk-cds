@@ -20,14 +20,14 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>functions</artifactId>
+        <artifactId>blueprintsprocessor-functions</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
     <artifactId>python-executor</artifactId>
 
-    <name>Blueprints Processor Function - Python Executor</name>
+    <name>MS Blueprints Processor Functions - Python Executor</name>
     <description>Blueprints Processor Function - Python Executor</description>
 
     <dependencies>

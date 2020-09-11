@@ -20,14 +20,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-       <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-       <artifactId>blueprints</artifactId>
-       <version>1.0.0-SNAPSHOT</version>
+        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+        <artifactId>modules-blueprints</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
     <artifactId>blueprint-core</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
-    <name>Controller Blueprints Core</name>
+    <name>MS Blueprints Processor Modules - Blueprints - Blueprints Core</name>
 
     <dependencies>
         <!-- Compiler Service -->
@@ -53,7 +55,6 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-script-runtime</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>

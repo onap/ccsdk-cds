@@ -23,15 +23,14 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>blueprintsprocessor-modules</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>services</artifactId>
+    <artifactId>modules-services</artifactId>
     <packaging>pom</packaging>
 
-    <name>Blueprints Processor Service POM</name>
-    <description>Blueprints Processor Service</description>
+    <name>MS Blueprints Processor Modules - Services</name>
 
     <modules>
         <module>execution-service</module>

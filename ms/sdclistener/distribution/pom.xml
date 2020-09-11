@@ -20,15 +20,15 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.sdclistener</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>sdclistener-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
 
-    <artifactId>distribution</artifactId>
+    <artifactId>sdclistener-distribution</artifactId>
     <packaging>pom</packaging>
 
-    <name>SDC Listener Distribution</name>
+    <name>MS SDC Listener - Distribution</name>
 
     <properties>
         <assembly.id>maven</assembly.id>
@@ -39,14 +39,13 @@
         <!--<docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>-->
         <docker.push.phase>deploy</docker.push.phase>
         <docker.verbose>true</docker.verbose>
-        <ccsdk.project.version>${project.version}</ccsdk.project.version>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.cds.sdclistener</groupId>
-            <artifactId>application</artifactId>
+            <artifactId>sdclistener-application</artifactId>
         </dependency>
     </dependencies>
 

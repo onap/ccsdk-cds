@@ -20,20 +20,20 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>functions</artifactId>
+        <artifactId>blueprintsprocessor-functions</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
     <artifactId>restful-executor</artifactId>
 
-    <name>Blueprints Processor Function - NRM Restful executor</name>
+    <name>MS Blueprints Processor Functions - NRM Restful executor</name>
     <description>Blueprints Processor Function - NRM Restful executor</description>
 
     <dependencies>
         <dependency>
-           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-           <artifactId>processor-core</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>processor-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

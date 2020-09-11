@@ -20,15 +20,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.onap.ccsdk.cds.cba</groupId>
+        <groupId>org.onap.ccsdk.cds.components.cba</groupId>
         <artifactId>test-blueprint-model</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>capability_cli</artifactId>
 
-    <name>CBA - Test Capability CLI</name>
-    <description>CBA - Test Capability CLI</description>
+    <name>Components Model Catalog - Blueprints Model - Test Blueprints - Capability CLI</name>
 
     <dependencies>
         <dependency>
@@ -43,9 +42,9 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <dependencies>
                     <dependency>
-                        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                        <groupId>org.onap.ccsdk.cds.components.cba</groupId>
                         <artifactId>cba-assembly-descriptor</artifactId>
-                        <version>1.0.0-SNAPSHOT</version>
+                        <version>${ccsdk.cds.version}</version>
                         <exclusions>
                             <exclusion>
                                 <groupId>*</groupId>
