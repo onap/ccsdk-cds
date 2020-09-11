@@ -19,15 +19,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.onap.ccsdk.cds.cba</groupId>
+        <groupId>org.onap.ccsdk.cds.components.cba</groupId>
         <artifactId>blueprint-model</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
     <artifactId>cba-assembly-descriptor</artifactId>
 
-    <name>CBA - Assembly Descriptor</name>
+    <name>Components Model Catalog - Blueprints Model - CBA Assembly Descriptor</name>
     <description>Shared assembly descriptor</description>
 
     <build>

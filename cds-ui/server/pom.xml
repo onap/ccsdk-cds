@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 ============LICENSE_START==========================================
 ===================================================================
 Copyright (C) 2018-19 IBM Intellectual Property. All rights reserved.
@@ -24,16 +24,16 @@ limitations under the License.
 
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
-        <artifactId>ui</artifactId>
+        <artifactId>cds-ui</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>ui-server</artifactId>
+    <artifactId>cds-ui-server</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>CDS UI Server</name>
+    <name>UI Server</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -59,9 +59,9 @@ limitations under the License.
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                                    <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                                     <artifactId>blueprint-proto</artifactId>
-                                    <version>${project.version}</version>
+                                    <version>${ccsdk.cds.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/generated/proto-definition/proto</outputDirectory>

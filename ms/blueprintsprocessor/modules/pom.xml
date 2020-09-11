@@ -22,16 +22,15 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>blueprintsprocessor-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
 
-    <artifactId>modules</artifactId>
+    <artifactId>blueprintsprocessor-modules</artifactId>
     <packaging>pom</packaging>
 
-    <name>Blueprints Processor Modules</name>
-    <description>Blueprints Processor Modules</description>
+    <name>MS Blueprints Processor Modules (Root)</name>
 
     <modules>
         <module>blueprints</module>

@@ -21,51 +21,49 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>services</artifactId>
+        <artifactId>modules-services</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
     <artifactId>execution-service</artifactId>
     <packaging>jar</packaging>
 
-    <name>Blueprints Processor Execution Service</name>
-    <description>Blueprints Processor Execution Service</description>
+    <name>MS Blueprints Processor Modules - Services - Execution Service</name>
 
     <dependencies>
         <dependency>
-           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-           <artifactId>blueprint-core</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>blueprint-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>processor-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>db-lib</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>rest-lib</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>grpc-lib</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>nats-lib</artifactId>
         </dependency>
         <dependency>
-           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-           <artifactId>resource-dict</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>resource-dict</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.onap.ccsdk.sli.core</groupId>
             <artifactId>sli-provider</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-testing</artifactId>

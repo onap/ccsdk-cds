@@ -20,7 +20,7 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>functions</artifactId>
+        <artifactId>blueprintsprocessor-functions</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
@@ -28,7 +28,7 @@
     <artifactId>ansible-awx-executor</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>Blueprints Processor Function - Ansible AWX Executor</name>
+    <name>MS Blueprints Processor Functions - Ansible AWX Executor</name>
     <description>Blueprints Processor Function - Ansible Executor</description>
 
     <dependencies>
@@ -37,15 +37,15 @@
             <artifactId>jython-standalone</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>rest-lib</artifactId>
         </dependency>
         <dependency>
-           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-           <artifactId>blueprint-core</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>blueprint-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>processor-core</artifactId>
         </dependency>
         <dependency>

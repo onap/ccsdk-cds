@@ -23,16 +23,15 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>blueprintsprocessor-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
 
-    <artifactId>application</artifactId>
+    <artifactId>blueprintsprocessor-application</artifactId>
     <packaging>jar</packaging>
 
-    <name>Blueprints Processor Application</name>
-    <description>Blueprints Processor Application</description>
+    <name>MS Blueprints Processor Application</name>
 
     <properties>
         <assembly.id>maven</assembly.id>
@@ -41,13 +40,12 @@
         <image.name>onap/ccsdk-blueprintsprocessor</image.name>
         <docker.push.phase>deploy</docker.push.phase>
         <docker.verbose>true</docker.verbose>
-        <ccsdk.project.version>${project.version}</ccsdk.project.version>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>blueprint-core</artifactId>
             <exclusions>
                 <exclusion>
@@ -73,29 +71,29 @@
             <artifactId>error-catalog-services</artifactId>
         </dependency>
 
-        <!-- North Bound -->
+        <!-- North Bound - Modules -->
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>designer-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>resource-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>selfservice-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>configs-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>health-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>health-api-common</artifactId>
         </dependency>
 
@@ -132,6 +130,8 @@
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
             <artifactId>k8s-profile-upload</artifactId>
         </dependency>
+
+        <!-- Test Dependencies -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -156,6 +156,7 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!-- BEGIN UAT -->
         <dependency>
             <groupId>org.skyscreamer</groupId>
@@ -197,7 +198,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

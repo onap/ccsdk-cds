@@ -25,11 +25,11 @@ package org.onap.ccsdk.cds
 
 
 def versionArray;
-if ( project.properties['ccsdk.project.version'] != null ) {
-	versionArray = project.properties['ccsdk.project.version'].split('\\.');
+if ( project.properties['ccsdk.cds.version'] != null ) {
+	versionArray = project.properties['ccsdk.cds.version'].split('\\.');
 }
 
-if ( project.properties['ccsdk.project.version'].endsWith("-SNAPSHOT") ) {
+if ( project.properties['ccsdk.cds.version'].endsWith("-SNAPSHOT") ) {
 	patchArray = versionArray[2].split('-');
 	project.properties['project.docker.latestminortag.version']=versionArray[0] + '.' + versionArray[1] + "-SNAPSHOT-latest";
 	project.properties['project.docker.latestfulltag.version']=versionArray[0] + '.' + versionArray[1] + '.' + patchArray[0] + "-SNAPSHOT-latest";

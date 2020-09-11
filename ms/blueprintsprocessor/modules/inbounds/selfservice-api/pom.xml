@@ -23,24 +23,24 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>inbounds</artifactId>
+        <artifactId>modules-inbounds</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
     <artifactId>selfservice-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>Blueprints Processor Selfservice API</name>
-    <description>Blueprints Processor Selfservice API</description>
+    <name>MS Blueprints Processor Modules - Inbound - Self Service API</name>
 
     <dependencies>
         <dependency>
-           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-           <artifactId>blueprint-core</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>blueprint-core</artifactId>
         </dependency>
         <dependency>
-           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-           <artifactId>blueprint-validation</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>blueprint-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
@@ -49,7 +49,7 @@
 
         <!-- For Message libraries -->
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>message-lib</artifactId>
         </dependency>
 

@@ -24,21 +24,19 @@ limitations under the License.
 
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
-        <artifactId>ui</artifactId>
+        <artifactId>cds-ui</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>application</artifactId>
+    <artifactId>cds-ui-application</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>CDS UI Application</name>
+    <name>UI Application</name>
 
     <properties>
         <image.name>onap/ccsdk-cds-ui</image.name>
-        <ccsdk.project.version>${project.version}</ccsdk.project.version>
-        <ccsdk.distribution.version>${project.version}</ccsdk.distribution.version>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
         <docker.verbose>true</docker.verbose>

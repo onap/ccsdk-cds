@@ -20,13 +20,13 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
-        <artifactId>ms</artifactId>
+        <artifactId>cds-ms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>py-executor</artifactId>
 
-    <name>Python Script Executor</name>
+    <name>MS Python Script Executor</name>
     <description>Micro-service providing python environment with gRPC binding for python script execution</description>
 
     <properties>
@@ -34,7 +34,6 @@
         <image.name>onap/ccsdk-py-executor</image.name>
         <docker.push.phase>deploy</docker.push.phase>
         <docker.verbose>true</docker.verbose>
-        <ccsdk.project.version>${project.version}</ccsdk.project.version>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
         <sonar.skip>true</sonar.skip>

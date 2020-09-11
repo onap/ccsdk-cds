@@ -20,13 +20,12 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>blueprintsprocessor-modules</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>outbounds</artifactId>
+    <artifactId>modules-outbounds</artifactId>
     <packaging>pom</packaging>
 
-    <name>Blueprints Processor Outbounds POM</name>
-    <description>Blueprints Processor Outbounds</description>
+    <name>MS Blueprints Processor Modules - Outbounds</name>
 </project>

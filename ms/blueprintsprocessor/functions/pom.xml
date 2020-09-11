@@ -21,16 +21,15 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>blueprintsprocessor-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
 
-    <artifactId>functions</artifactId>
+    <artifactId>blueprintsprocessor-functions</artifactId>
     <packaging>pom</packaging>
 
-    <name>Blueprints Processor Functions</name>
-    <description>Blueprints Processor Functions</description>
+    <name>MS Blueprints Processor Functions (Root)</name>
 
     <modules>
         <module>resource-resolution</module>
@@ -47,7 +46,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>execution-service</artifactId>
         </dependency>
         <!-- Test Dependencies -->

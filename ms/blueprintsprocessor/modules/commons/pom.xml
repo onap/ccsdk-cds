@@ -23,15 +23,14 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>blueprintsprocessor-modules</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>commons</artifactId>
+    <artifactId>modules-commons</artifactId>
     <packaging>pom</packaging>
 
-    <name>Blueprints Processor Commons POM</name>
-    <description>Blueprints Processor Commons</description>
+    <name>MS Blueprints Processor Modules - Commons</name>
 
     <modules>
         <module>processor-core</module>
@@ -46,8 +45,8 @@
 
     <dependencies>
         <dependency>
-           <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-           <artifactId>resource-dict</artifactId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>resource-dict</artifactId>
         </dependency>
         <!-- Test Dependencies -->
         <dependency>
