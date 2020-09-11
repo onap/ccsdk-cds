@@ -21,7 +21,7 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
-        <artifactId>ms</artifactId>
+        <artifactId>cds-ms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
@@ -29,12 +29,10 @@
     <artifactId>blueprintsprocessor</artifactId>
     <packaging>pom</packaging>
 
-    <name>Blueprints Processor Root</name>
-    <description>Blueprints Processor Root</description>
+    <name>MS Blueprints Processor (Root)</name>
 
     <modules>
         <module>parent</module>
-        <module>cba-parent</module>
         <module>modules</module>
         <module>functions</module>
         <module>application</module>
@@ -46,6 +44,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
         <build.number>${maven.build.timestamp}</build.number>
-        <ccsdk.project.version>${project.version}</ccsdk.project.version>
+        <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
     </properties>
 </project>

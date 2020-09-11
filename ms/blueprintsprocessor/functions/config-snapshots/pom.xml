@@ -20,7 +20,7 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>functions</artifactId>
+        <artifactId>blueprintsprocessor-functions</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
@@ -28,7 +28,7 @@
     <artifactId>config-snapshots</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>Blueprints Processor Function - Config Snapshots</name>
+    <name>MS Blueprints Processor Functions - Config Snapshots</name>
     <description>Blueprints Processor Function - Config Snapshots</description>
 
     <dependencies>

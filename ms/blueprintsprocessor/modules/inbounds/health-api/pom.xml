@@ -21,22 +21,21 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>inbounds</artifactId>
+        <artifactId>modules-inbounds</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
     <artifactId>health-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>Blueprints Processor Health API</name>
-    <description>checking system check health endpoints</description>
+    <name>MS Blueprints Processor Modules - Inbound - Health API</name>
 
     <dependencies>
-
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>health-api-common</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${ccsdk.cds.version}</version>
         </dependency>
     </dependencies>
 </project>

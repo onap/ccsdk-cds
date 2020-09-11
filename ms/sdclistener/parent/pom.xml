@@ -27,11 +27,10 @@
     </parent>
 
     <groupId>org.onap.ccsdk.cds.sdclistener</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>sdclistener-parent</artifactId>
     <packaging>pom</packaging>
 
-    <name>SDC Listener Parent</name>
-    <description>SDC Listener Parent</description>
+    <name>MS SDC Listener - Parent</name>
 
     <properties>
         <eelf.version>1.0.0</eelf.version>
@@ -44,6 +43,7 @@
         <sdc-distribution-client.version>1.4.0</sdc-distribution-client.version>
         <jmockit.version>1.49</jmockit.version>
         <reactorcore.version>3.2.6.RELEASE</reactorcore.version>
+        <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
     </properties>
 
     <dependencyManagement>
@@ -78,8 +78,7 @@
                 <artifactId>commons-compress</artifactId>
                 <version>1.15</version>
             </dependency>
-
-            <dependency>
+        <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
@@ -127,7 +126,7 @@
                 <version>${protobuff.java.utils.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>blueprint-proto</artifactId>
                 <version>${project.version}</version>
                 <exclusions>
@@ -155,7 +154,7 @@
             <!-- SDC Distribution client dependency -->
             <dependency>
                 <groupId>org.onap.ccsdk.cds.sdclistener</groupId>
-                <artifactId>application</artifactId>
+                <artifactId>sdclistener-application</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

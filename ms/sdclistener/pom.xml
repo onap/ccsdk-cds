@@ -20,7 +20,7 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
-        <artifactId>ms</artifactId>
+        <artifactId>cds-ms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
@@ -28,8 +28,7 @@
     <artifactId>sdclistener</artifactId>
     <packaging>pom</packaging>
 
-    <name>SDC Listener Root</name>
-    <description>SDC Listener Root</description>
+    <name>MS SDC Listener (Root)</name>
 
     <modules>
         <module>parent</module>
@@ -43,6 +42,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
         <build.number>${maven.build.timestamp}</build.number>
-        <ccsdk.project.version>${project.version}</ccsdk.project.version>
+        <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
     </properties>
 </project>

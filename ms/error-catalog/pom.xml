@@ -20,7 +20,7 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
-        <artifactId>ms</artifactId>
+        <artifactId>cds-ms</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
@@ -29,7 +29,7 @@
     <artifactId>error-catalog</artifactId>
     <packaging>pom</packaging>
 
-    <name>Error Catalog Lib</name>
+    <name>MS Error Catalog Lib</name>
     <description>Error Catalog Lib for ONAP Components</description>
 
     <modules>

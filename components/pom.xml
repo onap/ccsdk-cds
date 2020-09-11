@@ -20,19 +20,19 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>cds-aggregator</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>components</artifactId>
+    <artifactId>cds-components</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Components Root</name>
-    <description>Components</description>
+    <name>Components (Root)</name>
 
     <modules>
+        <module>cba-parent</module>
         <module>model-catalog/blueprint-model</module>
     </modules>
 </project>

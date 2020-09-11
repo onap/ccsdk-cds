@@ -25,16 +25,16 @@ limitations under the License.
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.1-SNAPSHOT</version>
+        <version>2.0.1</version>
         <relativePath/>
     </parent>
 
     <groupId>org.onap.ccsdk.cds</groupId>
-    <artifactId>ui</artifactId>
+    <artifactId>cds-ui</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>CDS UI Parent</name>
+    <name>UI Parent</name>
     <description>Creates Controller Design Studio UI Docker container</description>
 
     <modules>
@@ -46,8 +46,7 @@ limitations under the License.
 
     <properties>
         <image.name>onap/ccsdk-cds-ui</image.name>
-        <ccsdk.project.version>${project.version}</ccsdk.project.version>
-        <ccsdk.distribution.version>${project.version}</ccsdk.distribution.version>
+        <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
         <docker.verbose>true</docker.verbose>

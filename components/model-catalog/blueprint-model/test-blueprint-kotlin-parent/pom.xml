@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.onap.ccsdk.cds.cba</groupId>
+        <groupId>org.onap.ccsdk.cds.components.cba</groupId>
         <artifactId>blueprint-model</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -28,12 +28,11 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>CBA - Test Kotlin scripts</name>
-    <description>CBA - Test Kotlin scripts</description>
+    <name>Components Model Catalog - Blueprints Model - Test Kotlin Parent</name>
 
     <dependencies>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>execution-service</artifactId>
         </dependency>
         <dependency>
@@ -62,7 +61,6 @@
             <artifactId>kotlinx-coroutines-test</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -219,9 +217,9 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <dependencies>
                     <dependency>
-                        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                        <groupId>org.onap.ccsdk.cds.components.cba</groupId>
                         <artifactId>cba-assembly-descriptor</artifactId>
-                        <version>1.0.0-SNAPSHOT</version>
+                        <version>${ccsdk.cds.version}</version>
                         <exclusions>
                             <exclusion>
                                 <groupId>*</groupId>
@@ -300,61 +298,61 @@
                                         def publishEndpoint = properties['cds.publish.endpoint'] ?: 'api/v1/blueprint-model/publish'
 
                                         def throwIfPropMissing(prop) {
-                                            value = properties[prop]
-                                            if (!value || "".equals(value)) {
-                                                throw new RuntimeException("Property missing: $prop")
-                                            }
-                                            return value
+                                        value = properties[prop]
+                                        if (!value || "".equals(value)) {
+                                        throw new RuntimeException("Property missing: $prop")
+                                        }
+                                        return value
                                         }
 
                                         def buildRequest(endpoint, fileName) {
-                                            body = new MultipartBody.Builder()
-                                              .setType(MultipartBody.FORM)
-                                              .addFormDataPart("file",
-                                                fileName,
-                                                RequestBody.create(MediaType.parse('application/zip'), new File(target, fileName)))
-                                              .build()
+                                        body = new MultipartBody.Builder()
+                                        .setType(MultipartBody.FORM)
+                                        .addFormDataPart("file",
+                                        fileName,
+                                        RequestBody.create(MediaType.parse('application/zip'), new File(target, fileName)))
+                                        .build()
 
-                                            return new Request.Builder()
-                                              .url("$protocol://$host:$port/$endpoint")
-                                              .addHeader('Authorization', Credentials.basic(userName, password))
-                                              .post(body)
-                                              .build()
+                                        return new Request.Builder()
+                                        .url("$protocol://$host:$port/$endpoint")
+                                        .addHeader('Authorization', Credentials.basic(userName, password))
+                                        .post(body)
+                                        .build()
                                         }
 
                                         def logAndThrow(msg) {
-                                            if(response) {
-                                                log.error(response.body().string())
-                                            }
-                                            throw new RuntimeException(msg)
+                                        if(response) {
+                                        log.error(response.body().string())
+                                        }
+                                        throw new RuntimeException(msg)
                                         }
 
                                         response = null
                                         try {
-                                            def client = new OkHttpClient()
+                                        def client = new OkHttpClient()
 
-                                            response = client.newCall(buildRequest(enrichEndpoint, cba)).execute()
-                                            if (!response || !response.isSuccessful()) {
-                                                logAndThrow("Failed to enrich CBA")
-                                            }
+                                        response = client.newCall(buildRequest(enrichEndpoint, cba)).execute()
+                                        if (!response || !response.isSuccessful()) {
+                                        logAndThrow("Failed to enrich CBA")
+                                        }
 
-                                            IOUtils.copy(
-                                              response.body().byteStream(),
-                                              new FileOutputStream(new File(target, enrichedCba))
-                                            )
-                                            log.info("Created enriched cba: $enrichedCba")
+                                        IOUtils.copy(
+                                        response.body().byteStream(),
+                                        new FileOutputStream(new File(target, enrichedCba))
+                                        )
+                                        log.info("Created enriched cba: $enrichedCba")
 
-                                            response = client.newCall(buildRequest(publishEndpoint, enrichedCba)).execute()
-                                            if (!response || !response.isSuccessful()) {
-                                                logAndThrow("Failed to publish CBA")
-                                            }
+                                        response = client.newCall(buildRequest(publishEndpoint, enrichedCba)).execute()
+                                        if (!response || !response.isSuccessful()) {
+                                        logAndThrow("Failed to publish CBA")
+                                        }
 
-                                            log.info("CBA Deployed")
-                                            log.info(response.body().string())
+                                        log.info("CBA Deployed")
+                                        log.info(response.body().string())
                                         } finally {
-                                            if (response) {
-                                                response.close()
-                                            }
+                                        if (response) {
+                                        response.close()
+                                        }
                                         }
                                     </source>
                                 </configuration>

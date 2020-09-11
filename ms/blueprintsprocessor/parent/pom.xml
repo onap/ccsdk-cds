@@ -25,17 +25,14 @@
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>blueprintsprocessor-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Blueprints Processor Parent</name>
-    <description>Blueprints Processor Parent</description>
+    <name>MS Blueprints Processor Parent</name>
 
     <properties>
-        <sli.version>${ccsdk.sli.core.version}</sli.version>
         <!-- Override CDS version from parent to be project.version -->
-        <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
         <error.catalog.version>${project.version}</error.catalog.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
         <!-- Should be using released artifact as soon as available: -->
@@ -76,7 +73,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
@@ -270,7 +266,6 @@
                 <artifactId>jsch</artifactId>
                 <version>${jsch.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.kafka</groupId>
                 <artifactId>kafka-clients</artifactId>
@@ -310,7 +305,7 @@
             <dependency>
                 <groupId>org.onap.ccsdk.sli.core</groupId>
                 <artifactId>sli-provider</artifactId>
-                <version>${sli.version}</version>
+                <version>${ccsdk.sli.core.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-lang</groupId>
@@ -353,82 +348,82 @@
 
             <!-- Blueprint Processor Application Module Dependencies -->
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>processor-core</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>db-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>rest-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>nats-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>ssh-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
 
             <!-- message-lib dependency -->
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>message-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>dmaap-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>grpc-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>execution-service</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>workflow-service</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
 
             <!-- North Bound -->
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>configs-api</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>designer-api</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>resource-api</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>selfservice-api</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-                <artifactId>application</artifactId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+                <artifactId>blueprintsprocessor-application</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
 
@@ -484,12 +479,12 @@
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>health-api</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>health-api-common</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
@@ -507,22 +502,22 @@
 
             <!-- Controller Blueprints Application Dependency -->
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>resource-dict</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>blueprint-core</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>blueprint-proto</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>blueprint-validation</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>

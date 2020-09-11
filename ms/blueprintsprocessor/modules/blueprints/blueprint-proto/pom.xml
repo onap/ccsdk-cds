@@ -19,15 +19,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-       <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-       <artifactId>blueprints</artifactId>
-       <version>1.0.0-SNAPSHOT</version>
+        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+        <artifactId>modules-blueprints</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
     <artifactId>blueprint-proto</artifactId>
 
-    <name>Controller Blueprints Proto</name>
-    <description>Controller Blueprints Proto</description>
+    <name>MS Blueprints Processor Modules - Blueprints - Blueprints Proto</name>
 
     <properties>
         <sonar.skip>true</sonar.skip>

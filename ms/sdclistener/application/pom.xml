@@ -20,16 +20,16 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds.sdclistener</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>sdclistener-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
 
-    <artifactId>application</artifactId>
+    <artifactId>sdclistener-application</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>SDC Listener Application</name>
+    <name>MS SDC Listener - Application</name>
 
     <properties>
         <protobuf.version>3.6.1</protobuf.version>
@@ -53,11 +53,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>health-api-common</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${ccsdk.cds.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
@@ -71,19 +70,18 @@
             <groupId>org.onap.sdc.sdc-distribution-client</groupId>
             <artifactId>sdc-distribution-client</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.jmockit</groupId>
             <artifactId>jmockit</artifactId>
             <version>${jmockit.version}</version>
             <scope>test</scope>
         </dependency>
-		<dependency>
-			<groupId>org.jacorb</groupId>
-			<artifactId>jacorb-omgapi</artifactId>
-			<version>3.8</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.jacorb</groupId>
+            <artifactId>jacorb-omgapi</artifactId>
+            <version>3.8</version>
+            <scope>test</scope>
+        </dependency>
         <!-- GRPC Dependencies -->
         <dependency>
             <groupId>io.grpc</groupId>
@@ -119,10 +117,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>blueprint-proto</artifactId>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

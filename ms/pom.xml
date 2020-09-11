@@ -20,17 +20,17 @@
 
     <parent>
         <groupId>org.onap.ccsdk.cds</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>cds-aggregator</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
 
-    <artifactId>ms</artifactId>
+    <artifactId>cds-ms</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Micro-services Root</name>
-    <description>Micro-services</description>
+    <name>MS (Root)</name>
+    <description>CDS Micro-services</description>
 
     <modules>
         <module>error-catalog</module>
