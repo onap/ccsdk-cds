@@ -114,6 +114,7 @@ export class TagsFilteringComponent implements OnInit {
         this.checkBoxTages = '';
         this.checkboxes.forEach((element) => {
             element.nativeElement.checked = false;
+            this.packagesStore.getAll();
         });
     }
 }

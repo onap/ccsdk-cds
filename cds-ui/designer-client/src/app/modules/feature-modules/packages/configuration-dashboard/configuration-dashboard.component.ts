@@ -167,8 +167,11 @@ export class ConfigurationDashboardComponent implements OnInit {
 
     editBluePrint() {
         if (this.cbaPackage) {
-            this.formTreeData();
-            this.saveBluePrintToDataBase();
+            this.configurationDashboardService.deletePackage(this.viewedPackage.id).subscribe(res => {
+                this.formTreeData();
+                this.saveBluePrintToDataBase();
+            });
+
         }
     }
 
@@ -329,4 +332,5 @@ export class ConfigurationDashboardComponent implements OnInit {
     clickEvent() {
         this.isSaveEnabled = true;
     }
+
 }
