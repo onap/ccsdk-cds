@@ -16,13 +16,14 @@ import {DesignerStore} from '../designer/designer.store';
 import {ToastrService} from 'ngx-toastr';
 import {NgxFileDropEntry} from 'ngx-file-drop';
 import {PackageCreationService} from '../package-creation/package-creation.service';
+import {ComponentCanDeactivate} from '../../../../common/core/canDactivate/ComponentCanDeactivate';
 
 @Component({
     selector: 'app-configuration-dashboard',
     templateUrl: './configuration-dashboard.component.html',
     styleUrls: ['./configuration-dashboard.component.css'],
 })
-export class ConfigurationDashboardComponent implements OnInit {
+export class ConfigurationDashboardComponent extends ComponentCanDeactivate implements OnInit {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     @ViewChild(MetadataTabComponent, {static: false})
     metadataTabComponent: MetadataTabComponent;
@@ -55,6 +56,7 @@ export class ConfigurationDashboardComponent implements OnInit {
         private designerStore: DesignerStore,
         private toastService: ToastrService
     ) {
+        super();
         this.packageCreationStore.state$.subscribe(
             cbaPackage => {
                 this.cbaPackage = cbaPackage;
@@ -329,4 +331,9 @@ export class ConfigurationDashboardComponent implements OnInit {
     clickEvent() {
         this.isSaveEnabled = true;
     }
+
+    canDeactivate(): boolean {
+        return this.isSaveEnabled;
+    }
+
 }

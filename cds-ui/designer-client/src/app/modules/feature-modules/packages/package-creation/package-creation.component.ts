@@ -33,6 +33,7 @@ import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {TourService} from 'ngx-tour-md-menu';
 import {PackageCreationService} from './package-creation.service';
+import {ComponentCanDeactivate} from '../../../../common/core/canDactivate/ComponentCanDeactivate';
 
 
 @Component({
@@ -40,7 +41,8 @@ import {PackageCreationService} from './package-creation.service';
     templateUrl: './package-creation.component.html',
     styleUrls: ['./package-creation.component.css']
 })
-export class PackageCreationComponent implements OnInit {
+export class PackageCreationComponent extends ComponentCanDeactivate implements OnInit {
+
 
     // adding initial referencing to designer mode
 
@@ -52,6 +54,8 @@ export class PackageCreationComponent implements OnInit {
         private router: Router,
         private tourService: TourService,
         private toastService: ToastrService) {
+
+        super();
     }
 
     counter = 0;
@@ -151,5 +155,9 @@ export class PackageCreationComponent implements OnInit {
         console.log('executed change');
         this.metadataTabComponent.saveMetaDataToStore();
 
+    }
+
+    canDeactivate(): boolean {
+        return this.isSaveEnabled;
     }
 }
