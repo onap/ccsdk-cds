@@ -98,11 +98,11 @@ export class ConfigurationDashboardComponent implements OnInit {
             bluePrintDetailModels[0].artifactName + '/' + bluePrintDetailModels[0].artifactVersion).subscribe(response => {
             const blob = new Blob([response], {type: 'application/octet-stream'});
             this.currentBlob = blob;
-            this.extractBlobToStore(blob, bluePrintDetailModels);
+            this.extractBlobToStore(blob, bluePrintDetailModels[0]);
         });
     }
 
-    private extractBlobToStore(blob: Blob, bluePrintDetailModels: BluePrintDetailModel) {
+    private extractBlobToStore(blob: Blob, bluePrintDetailModel: BluePrintDetailModel) {
         this.zipFile.loadAsync(blob).then((zip) => {
             Object.keys(zip.files).forEach((filename) => {
                 zip.files[filename].async('string').then((fileData) => {
@@ -118,10 +118,10 @@ export class ConfigurationDashboardComponent implements OnInit {
                             }
 
                         } else if (filename.includes('Definitions/')) {
-                            this.setImports(filename, fileData, bluePrintDetailModels);
+                            this.setImports(filename, fileData, bluePrintDetailModel);
                         } else if (filename.includes('TOSCA-Metadata/')) {
                             const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
-                            this.setMetaData(metaDataTabInfo, bluePrintDetailModels[0]);
+                            this.setMetaData(metaDataTabInfo, bluePrintDetailModel);
                         }
                     }
                 });
@@ -134,7 +134,8 @@ export class ConfigurationDashboardComponent implements OnInit {
     }
 
     setImports(filename: string, fileData: any, bluePrintDetailModels: BluePrintDetailModel) {
-        if (filename.includes(bluePrintDetailModels[0].artifactName)) {
+        console.log(filename);
+        if (filename.includes(bluePrintDetailModels.artifactName)) {
             let definition = new VlbDefinition();
             definition = fileData as VlbDefinition;
             definition = JSON.parse(fileData);
@@ -293,22 +294,15 @@ export class ConfigurationDashboardComponent implements OnInit {
                 this.packageCreationService.enrichPackage(blob).subscribe(response => {
                     console.log('success');
                     const blobInfo = new Blob([response], {type: 'application/octet-stream'});
-                    this.configurationDashboardService.getPagedPackages(this.id).subscribe(
-                        (bluePrintDetailModels) => {
-                            if (bluePrintDetailModels) {
-                                this.packageCreationStore.clear();
-                                this.extractBlobToStore(blob, bluePrintDetailModels);
-                                this.isSaveEnabled = true;
-                                this.toastService.info('enriched successfully ');
-                            }
-                        });
-
-                    // saveAs(blobInfo, 'test' + '-' + '1.0.0' + '-CBA.zip');
-
+                    this.currentBlob = blobInfo;
+                    this.packageCreationStore.clear();
+                    this.extractBlobToStore(this.currentBlob, this.viewedPackage);
+                    this.isSaveEnabled = true;
+                    this.toastService.info('enriched successfully ');
                 });
             }, error => {
-                this.toastService.error('error happened when editing ' + error.message);
-                console.log('Error -' + error.message);
+                this.toastService.error('error happened when enrich ' + error.message);
+                console.error('Error -' + error.message);
             });
     }
 

@@ -42,7 +42,7 @@ export class PackageCreationService {
     }
 
     private enrichBlueprint(body: any | null, options?: any): Observable<any> {
-        return this.api.post(BlueprintURLs.enrich, body, {responseType: 'text'});
+        return this.api.post(BlueprintURLs.enrich, body, { responseType: 'blob' });
     }
 
     private deployBluePrint(body: any | null, options?: any): Observable<any> {
