@@ -20,8 +20,8 @@ Presentation of Gerald Karam (2020-09-08)
 .. raw:: html
 
    <!-- original size of video is 1920x1080-->
-   <div style="position: relative; overflow: hidden; max-width: 100%; height: auto;">
-      <iframe width="1366" height="768" src="https://www.youtube.com/embed/mgMpI_irp4I" frameborder="0"
+   <div style="position: relative; max-width: 100%; height: auto;">
+      <iframe width="800" height="450" src="https://www.youtube.com/embed/mgMpI_irp4I" frameborder="0"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
    </div>
 
