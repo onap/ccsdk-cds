@@ -169,10 +169,11 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     }
 
     editBluePrint() {
-        if (this.cbaPackage) {
+        this.configurationDashboardService.deletePackage(this.viewedPackage.id).subscribe(res => {
             this.formTreeData();
             this.saveBluePrintToDataBase();
-        }
+
+        });
     }
 
     private formTreeData() {

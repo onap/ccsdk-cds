@@ -23,6 +23,7 @@ export class MetadataTabComponent implements OnInit {
     metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     errorMessage: string;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
+    isNameEditable = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -36,7 +37,7 @@ export class MetadataTabComponent implements OnInit {
         this.metaDataTab.templateTags = this.tags;
         this.metaDataTab.mapOfCustomKey = this.customKeysMap;
         this.metaDataTab.mode = this.modeType;
-
+        this.isNameEditable = this.route.snapshot.paramMap.get('id') == null;
         this.packageCreationStore.state$.subscribe(element => {
 
             if (element && element.metaData) {
