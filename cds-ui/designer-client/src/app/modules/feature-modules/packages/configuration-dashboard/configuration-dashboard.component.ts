@@ -313,9 +313,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         this.create();
         this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
-                this.packageCreationService.enrichPackage(blob).subscribe(response => {
-                    console.log('success');
-                    console.log(response);
+                this.packageCreationService.deploy(blob).subscribe(response => {
+                    this.toastService.info('deployed successfully ');
+                    const id = response.toString().split('id')[1].split(':')[1].split('"')[1];
+                    this.router.navigate(['/packages/package/' + id]);
                 });
             }, error => {
                 this.toastService.error('error happened when deploying ' + error.message);
