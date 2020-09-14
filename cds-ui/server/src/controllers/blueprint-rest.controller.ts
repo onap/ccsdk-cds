@@ -307,7 +307,7 @@ export class BlueprintRestController {
         if (appConfig.action.grpcEnabled)
           return this.uploadFileToBlueprintProcessorGrpc(file, 'PUBLISH', response);
         else
-          return this.uploadFileToBlueprintProcessor(file, '/execution-service/upload/', response);
+          return this.uploadFileToBlueprintProcessor(file, '/blueprint-model/publish', response);
       }, err => {
         reject(err);
       });
