@@ -16,6 +16,24 @@
       "revId": "0c8e6e4b5a21e5182f47066cf5f0fac8f8dbdcf8",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bafb7064_2e03e4ea",
+        "filename": "docs/usecases/wordpress-cnf-poc.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6780
+      },
+      "writtenOn": "2020-09-15T08:24:54Z",
+      "side": 1,
+      "message": "Hi Kapil, i didnt got you 100%, you mean to use width (800)  in \u003cdiv\u003e width also? I think there is no advantage for that?",
+      "parentUuid": "7bb75dcb_114e1207",
+      "revId": "0c8e6e4b5a21e5182f47066cf5f0fac8f8dbdcf8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
