@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d9260e9_0f05d9f8",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2020-09-15T17:28:53Z",
+      "side": 1,
+      "message": "Need to add USER root before this to make sure you are running as root - integration images run as user onap",
+      "revId": "9910a4e0bbdbbbd4918a821b0ca5027bc5558e02",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b4e634a_121d0bbc",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2020-09-15T17:28:53Z",
+      "side": 1,
+      "message": "Should not need this - integration image already creates user onap",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 63
+      },
+      "revId": "9910a4e0bbdbbbd4918a821b0ca5027bc5558e02",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5686f1d8_c4e61f94",
+        "filename": "ms/py-executor/docker/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2020-09-15T17:28:53Z",
+      "side": 1,
+      "message": "Should not longer need this - integration image creates (and runs as) user ONAP",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 63
+      },
+      "revId": "9910a4e0bbdbbbd4918a821b0ca5027bc5558e02",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
