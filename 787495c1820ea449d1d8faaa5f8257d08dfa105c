@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "802cc483_6d6e502c",
+        "filename": "ms/blueprintsprocessor/application/src/main/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2020-09-15T15:01:11Z",
+      "side": 1,
+      "message": "Should use standard CCSDK java11 image, which is based on approved ONAP image:\n\nonap/ccsdk-alpine-j11-image:2.0.1",
+      "range": {
+        "startLine": 1,
+        "startChar": 5,
+        "endLine": 1,
+        "endChar": 19
+      },
+      "revId": "787495c1820ea449d1d8faaa5f8257d08dfa105c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70e4f549_e23278dd",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2020-09-15T15:01:11Z",
+      "side": 1,
+      "message": "Should use approved ONAP python3 base image : onap/integration-python:7.0.1",
+      "range": {
+        "startLine": 1,
+        "startChar": 5,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "787495c1820ea449d1d8faaa5f8257d08dfa105c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd583499_b500d5e5",
+        "filename": "ms/py-executor/docker/Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2020-09-15T15:01:11Z",
+      "side": 1,
+      "message": "Same comment as above - please use approved ONAP base image\nonap/integration-python:7.0.1",
+      "range": {
+        "startLine": 1,
+        "startChar": 5,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "787495c1820ea449d1d8faaa5f8257d08dfa105c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
