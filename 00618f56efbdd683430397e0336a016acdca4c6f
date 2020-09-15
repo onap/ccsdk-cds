@@ -16,6 +16,24 @@
       "revId": "00618f56efbdd683430397e0336a016acdca4c6f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db769492_12bf5016",
+        "filename": "ms/py-executor/docker/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-09-15T18:54:04Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "7c75a48b_0ec268f6",
+      "revId": "00618f56efbdd683430397e0336a016acdca4c6f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
