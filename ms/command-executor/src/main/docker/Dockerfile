@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM onap/integration-python:7.0.1
 
 ENV GRPC_PYTHON_VERSION 1.20.0
 RUN python -m pip install --upgrade pip
@@ -7,8 +7,8 @@ RUN pip install virtualenv==16.7.9
 
 RUN groupadd -r -g 1000 onap && useradd -r -u 1000 -g onap onap
 
-COPY start.sh /opt/app/onap/start.sh
-RUN chmod u+x /opt/app/onap/start.sh
+COPY start.sh /opt/app/onap/command-executor/start.sh
+RUN chmod u+x /opt/app/onap/command-executor/start.sh
 
 RUN mkdir -p /opt/app/onap/logs/ && touch /opt/app/onap/logs/application.log
 
@@ -22,5 +22,6 @@ RUN mkdir -p /opt/app/onap/blueprints/deploy
 RUN chown onap:onap /opt -R
 
 VOLUME /opt/app/onap/blueprints/deploy/
+
 USER onap
-ENTRYPOINT /opt/app/onap/start.sh
+ENTRYPOINT /opt/app/onap/command-executor/start.sh

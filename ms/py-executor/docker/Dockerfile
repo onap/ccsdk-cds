@@ -1,4 +1,4 @@
-FROM python:3.7-slim
+FROM onap/integration-python:7.0.1
 
 RUN groupadd -r -g 1000 onap && useradd -u 1000 -r -g onap onap
 
@@ -16,5 +16,6 @@ RUN mkdir -p /opt/app/onap/blueprints/deploy
 RUN chown onap:onap /opt -R
 
 VOLUME /opt/app/onap/blueprints/deploy/
+
 USER onap
 ENTRYPOINT /opt/app/onap/python/start.sh
