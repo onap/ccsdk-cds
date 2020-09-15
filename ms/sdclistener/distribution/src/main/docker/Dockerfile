@@ -1,8 +1,11 @@
 FROM onap/ccsdk-alpine-j11-image:1.0.1
 
+USER root
 # add entrypoint
-COPY startService.sh /startService.sh
-RUN chown onap:onap /startService.sh && chmod 755 /startService.sh
+COPY startService.sh /opt/app/onap/sdc-listener/startService.sh
+RUN chown onap:onap /opt/app/onap/sdc-listener/startService.sh \
+ && chmod 755 /opt/app/onap/sdc-listener/startService.sh
+
 # add application
 COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
 RUN tar -xzf /source.tar.gz -C /tmp \
@@ -13,4 +16,4 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && chown onap:onap /opt -R
 
 USER onap
-ENTRYPOINT /startService.sh
+ENTRYPOINT /opt/app/onap/sdc-listener/startService.sh

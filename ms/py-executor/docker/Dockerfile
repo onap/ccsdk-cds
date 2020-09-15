@@ -16,5 +16,6 @@ RUN mkdir -p /opt/app/onap/blueprints/deploy
 RUN chown onap:onap /opt -R
 
 VOLUME /opt/app/onap/blueprints/deploy/
+
 USER onap
 ENTRYPOINT /opt/app/onap/python/start.sh
