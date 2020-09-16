@@ -65,6 +65,8 @@ limitations under the License.
         <java.version>11</java.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
+
+        <grpc.version>1.32.1</grpc.version>
     </properties>
 
     <build>

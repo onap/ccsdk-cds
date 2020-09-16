@@ -9,7 +9,7 @@ COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
 RUN tar -xzf /source.tar.gz -C /tmp \
  && cp -rf /tmp/@project.build.finalName@/opt / \
  && rm -rf /source.tar.gz \
- && rm -rf /tmp/@project.build.finalName@
+ && rm -rf /tmp/@project.build.finalName@ \
  && touch /velocity.log \
  && chown onap:onap /velocity.log \
  && chmod 755 /velocity.log \
