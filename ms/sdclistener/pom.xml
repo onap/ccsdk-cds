@@ -38,10 +38,6 @@
 
     <properties>
         <service.name>sdclistener</service.name>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
-        <build.number>${maven.build.timestamp}</build.number>
-        <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
+
     </properties>
 </project>

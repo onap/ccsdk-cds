@@ -36,11 +36,7 @@ limitations under the License.
     <name>UI Server</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <npm.executable>npm</npm.executable>
-        <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
         <image.name>onap/ccsdk-cds-ui-server</image.name>
-        <docker.push.phase>deploy</docker.push.phase>
     </properties>
 
     <build>
@@ -148,7 +144,7 @@ limitations under the License.
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.26.1</version>
+                        <version>0.34.0</version>
                         <inherited>false</inherited>
                         <configuration>
                             <images>
@@ -165,18 +161,12 @@ limitations under the License.
                                     </build>
                                 </image>
                             </images>
-                            <verbose>true</verbose>
+                            <verbose>${docker.verbose}</verbose>
+                            <skipPush>${docker.skip.push}</skipPush>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>generate-images</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>build</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>push-images</id>
+                                <id>build-push-images</id>
                                 <phase>${docker.push.phase}</phase>
                                 <goals>
                                     <goal>build</goal>

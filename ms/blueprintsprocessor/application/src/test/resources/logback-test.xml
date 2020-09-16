@@ -29,8 +29,8 @@
         </sift>
     </appender>
 
-    <logger name="org.springframework.web.HttpLogging" level="trace"/>
-    <logger name="org.springframework.web.reactive.function.client.ExchangeFunctions" level="trace"/>
+    <logger name="org.springframework.web.HttpLogging" level="debug"/>
+    <logger name="org.springframework.web.reactive.function.client.ExchangeFunctions" level="debug"/>
 
     <!-- Helpful to optimize Spring Context caching to speed-up tests
          and prevent resorting to @DirtiesContext as much as possible -->
@@ -39,7 +39,7 @@
     <!-- Please refer to https://thoughts-on-java.org/hibernate-logging-guide/
          for a lengthy discussion on good Hibernate logging practices -->
     <logger name="org.hibernate.SQL" level="debug"/>
-    <logger name="org.hibernate.type.descriptor.sql" level="trace"/>
+    <logger name="org.hibernate.type.descriptor.sql" level="debug"/>
 
     <logger name="org.apache.http" level="debug"/>
     <logger name="org.apache.http.wire" level="error"/>

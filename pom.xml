@@ -65,6 +65,13 @@ limitations under the License.
         <java.version>11</java.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
+
+        <!-- docker related properties -->
+        <docker.verbose>true</docker.verbose>
+        <docker.skip.push>false</docker.skip.push>
+        <docker.push.phase>deploy</docker.push.phase>
+
+        <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
     </properties>
 
     <build>
