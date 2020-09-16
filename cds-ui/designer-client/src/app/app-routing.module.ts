@@ -20,13 +20,17 @@ limitations under the License.
 */
 
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 
 const routes: Routes = [
-    {path: 'packages',
-     loadChildren: './modules/feature-modules/packages/packages.module#PackagesModule'},
-    {path: 'resource-dictionary',
-     loadChildren: './modules/feature-modules/resource-dictionary/resource-dictionary.module#ResourceDictionaryModule'},
+    {
+        path: 'packages',
+        loadChildren: './modules/feature-modules/packages/packages.module#PackagesModule'
+    },
+    {
+        path: 'resource-dictionary',
+        loadChildren: './modules/feature-modules/resource-dictionary/resource-dictionary.module#ResourceDictionaryModule'
+    },
     // { path: '', component: MainAppComponent },
     {
         path: '',
@@ -36,7 +40,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    imports: [RouterModule.forRoot(routes, {useHash: true})],
     exports: [RouterModule]
 })
 export class AppRoutingModule {
