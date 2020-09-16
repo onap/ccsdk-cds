@@ -45,10 +45,12 @@ limitations under the License.
     </modules>
 
     <properties>
+        <npm.executable>npm</npm.executable>
         <image.name>onap/ccsdk-cds-ui</image.name>
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
+        <docker.push.phase>deploy</docker.push.phase>
         <docker.verbose>true</docker.verbose>
     </properties>
 </project>

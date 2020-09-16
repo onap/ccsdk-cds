@@ -37,9 +37,6 @@ limitations under the License.
 
     <properties>
         <image.name>onap/ccsdk-cds-ui</image.name>
-        <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
-        <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
-        <docker.verbose>true</docker.verbose>
     </properties>
 
     <build>
@@ -71,7 +68,7 @@ limitations under the License.
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.28.0</version>
+                        <version>0.34.0</version>
                         <inherited>false</inherited>
                         <configuration>
                             <images>
@@ -96,7 +93,6 @@ limitations under the License.
                                     <goal>build</goal>
                                 </goals>
                             </execution>
-
                             <execution>
                                 <id>push-images</id>
                                 <phase>deploy</phase>

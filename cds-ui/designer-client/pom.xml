@@ -35,12 +35,6 @@ limitations under the License.
 
     <name>UI designer Client</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <npm.executable>npm</npm.executable>
-        <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
-    </properties>
-
     <build>
         <plugins>
             <plugin>

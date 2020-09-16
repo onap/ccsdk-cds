@@ -34,10 +34,6 @@
     <properties>
         <assembly.id>maven</assembly.id>
         <image.name>onap/ccsdk-commandexecutor</image.name>
-        <docker.push.phase>deploy</docker.push.phase>
-        <docker.verbose>true</docker.verbose>
-        <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
-        <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
     </properties>
 
     <build>
@@ -115,7 +111,7 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.26.1</version>
+                        <version>0.34.0</version>
                         <inherited>false</inherited>
                         <configuration>
                             <images>

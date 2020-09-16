@@ -37,9 +37,6 @@
         <image.name>onap/ccsdk-sdclistener</image.name>
         <!--disabled for now to mirror #85964 https://gerrit.onap.org/r/#/c/85964/2/ms/command-executor/pom.xml-->
         <!--<docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>-->
-        <docker.push.phase>deploy</docker.push.phase>
-        <docker.verbose>true</docker.verbose>
-        <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
     </properties>
 
     <dependencies>
@@ -143,7 +140,7 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.26.1</version>
+                        <version>0.34.0</version>
                         <inherited>false</inherited>
                         <configuration>
                             <images>
