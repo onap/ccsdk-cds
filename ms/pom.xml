@@ -35,8 +35,8 @@
     <modules>
         <module>error-catalog</module>
         <module>blueprintsprocessor</module>
-        <module>py-executor</module>
         <module>command-executor</module>
+        <module>py-executor</module>
         <module>sdclistener</module>
     </modules>
 
