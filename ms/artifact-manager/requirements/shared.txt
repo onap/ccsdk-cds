@@ -1,3 +1,3 @@
-grpcio-tools==1.25.0
+grpcio-tools==1.32.0
 onappylog==1.0.9
 click==7.0

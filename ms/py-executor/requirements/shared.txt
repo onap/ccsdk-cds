@@ -1,5 +1,5 @@
-grpcio==1.25.0
-grpcio-tools==1.25.0
+grpcio==1.32.0
+grpcio-tools==1.32.0
 configparser==4.0.2
 requests==2.22.0
 ncclient==0.6.6
