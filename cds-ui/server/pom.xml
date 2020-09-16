@@ -148,7 +148,7 @@ limitations under the License.
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.26.1</version>
+                        <version>0.34.0</version>
                         <inherited>false</inherited>
                         <configuration>
                             <images>

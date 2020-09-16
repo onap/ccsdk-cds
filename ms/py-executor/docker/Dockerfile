@@ -1,8 +1,6 @@
 FROM onap/integration-python:7.0.1
 
 USER root
-RUN python -m pip install --upgrade pip
-RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements/docker.txt
 RUN mkdir -p /opt/app/onap/logs/ && touch /opt/app/onap/logs/application.log
 
 # add entrypoint
@@ -17,6 +15,9 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && mkdir -p /opt/app/onap/blueprints/deploy \
  && chown onap:onap /opt -R \
  && chmod 755 /opt/app/onap/py-executor/start.sh
+
+RUN python -m pip install --upgrade pip
+RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements/docker.txt
 
 VOLUME /opt/app/onap/blueprints/deploy/
 
