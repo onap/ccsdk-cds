@@ -143,7 +143,7 @@
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.26.1</version>
+                        <version>0.34.0</version>
                         <inherited>false</inherited>
                         <configuration>
                             <images>
@@ -161,6 +161,7 @@
                                 </image>
                             </images>
                             <verbose>true</verbose>
+                            <skipPush>${docker.skip.push}</skipPush>
                         </configuration>
                         <executions>
                             <execution>

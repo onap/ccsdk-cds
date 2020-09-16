@@ -71,7 +71,7 @@ limitations under the License.
                     <plugin>
                         <groupId>io.fabric8</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
-                        <version>0.28.0</version>
+                        <version>0.34.0</version>
                         <inherited>false</inherited>
                         <configuration>
                             <images>
@@ -87,6 +87,7 @@ limitations under the License.
                                     </build>
                                 </image>
                             </images>
+                            <skipPush>${docker.skip.push}</skipPush>
                         </configuration>
                         <executions>
                             <execution>
@@ -96,7 +97,6 @@ limitations under the License.
                                     <goal>build</goal>
                                 </goals>
                             </execution>
-
                             <execution>
                                 <id>push-images</id>
                                 <phase>deploy</phase>
