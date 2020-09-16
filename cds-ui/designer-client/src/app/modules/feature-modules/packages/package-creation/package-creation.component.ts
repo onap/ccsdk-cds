@@ -128,6 +128,7 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
                         if (bluePrintDetailModels) {
                             const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
                             this.toastService.info('package updated successfully ');
+                            this.isSaveEnabled = false;
                             this.router.navigate(['/packages/package/' + id]);
                         }
                     }, error => {

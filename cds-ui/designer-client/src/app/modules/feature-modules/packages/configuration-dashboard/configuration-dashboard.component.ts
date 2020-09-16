@@ -217,6 +217,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                         if (bluePrintDetailModels) {
                             const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
                             this.toastService.info('package updated successfully ');
+                            this.isSaveEnabled = false;
                             this.router.navigate(['/packages/package/' + id]);
                         }
                     }, error => {
@@ -230,6 +231,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         this.configurationDashboardService.deletePackage(this.id).subscribe(res => {
             console.log('Deleted');
             console.log(res);
+            this.isSaveEnabled = false;
             this.router.navigate(['/packages']);
         }, err => {
             console.log(err);
@@ -316,6 +318,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                 this.packageCreationService.deploy(blob).subscribe(response => {
                     this.toastService.info('deployed successfully ');
                     const id = response.toString().split('id')[1].split(':')[1].split('"')[1];
+                    this.isSaveEnabled = false;
                     this.router.navigate(['/packages/package/' + id]);
                 });
             }, error => {
