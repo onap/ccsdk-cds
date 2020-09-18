@@ -38,6 +38,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -112,6 +113,63 @@ class ExecutionServiceHandlerTest {
             publishAuditService.publishExecutionInput(executionServiceInput)
             publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput!!)
         }
+    }
+
+    @Test
+    fun testGetUnResolvedPropsWithAllUnresolved() {
+        val publishAuditService = mockk<KafkaPublishAuditService>(relaxed = true)
+        val executionServiceHandler = ExecutionServiceHandler(
+                mockk(),
+                mockk(),
+                mockk(),
+                publishAuditService
+        )
+        val res = "{\n  \"ServiceName\" : \"\${ServiceName}\"," +
+                "\n  \"ce_ipaddress_id\" : \"test\"," +
+                "\n  \"device\" : \"\${device}\",\n  \"interface\" : \"\${interface}\"," +
+                "\n  \"ipaddress\" : \"\${ipaddress}\",\n  \"isCE\" : \"\${isCE}\"," +
+                "\n  \"pe_ipaddress_id\" : \"\${pe_ipaddress_id}\",\n  \"sdnc_secret\" : \"\${sdnc_secret}\"," +
+                "\n  \"vlan\" : \"\${vlan}\",\n  \"vlanID\" : \"\${vlanID}\",\n  \"wan_ce_ipaddress\" : \"\${wan_ce_ipaddress}\"," +
+                "\n  \"wan_ip_prefix_id\" : \"98\"\n}"
+        val list = executionServiceHandler.getUnResolvedProps(res)
+        assertEquals(list.size, 10, "Unresolved resources must be equal to 12")
+    }
+
+    @Test
+    fun testGetUnResolvedPropsWithSomeUnresolved() {
+        val publishAuditService = mockk<KafkaPublishAuditService>(relaxed = true)
+        val executionServiceHandler = ExecutionServiceHandler(
+                mockk(),
+                mockk(),
+                mockk(),
+                publishAuditService
+        )
+        val res = "{\n  \"ServiceName\" : \"name\"," +
+                "\n  \"ce_ipaddress_id\" : \"192.22.54.1\"," +
+                "\n  \"device\" : \"device\",\n  \"interface\" : \"\${interface}\"," +
+                "\n  \"ipaddress\" : \"\${ipaddress}\",\n  \"isCE\" : \"\${isCE}\"," +
+                "\n  \"pe_ipaddress_id\" : \"\${pe_ipaddress_id}\",\n  \"sdnc_secret\" : \"\${sdnc_secret}\"," +
+                "\n  \"vlan\" : \"\${vlan}\",\n  \"vlanID\" : \"\${vlanID}\",\n  \"wan_ce_ipaddress\" : \"\${wan_ce_ipaddress}\"," +
+                "\n  \"wan_ip_prefix_id\" : \"98\"\n}"
+        val list = executionServiceHandler.getUnResolvedProps(res)
+        assertEquals(list.size, 8, "Unresolved resources must be equal to 8")
+    }
+
+    @Test
+    fun testGetUnResolvedPropsWithAllResolved() {
+        val publishAuditService = mockk<KafkaPublishAuditService>(relaxed = true)
+        val executionServiceHandler = ExecutionServiceHandler(
+                mockk(),
+                mockk(),
+                mockk(),
+                publishAuditService
+        )
+        val res = "{\n  \"ServiceName\" : \"servuicename\"," +
+                "\n  \"ce_ipaddress_id\" : \"test\"," +
+                " \"wan_ce_ipaddress\" : \"12.45\"," +
+                "\n  \"wan_ip_prefix_id\" : \"98\"\n}"
+        val list = executionServiceHandler.getUnResolvedProps(res)git
+        assertEquals(list.size, 0, "unResolved resources must be equal to 0")
     }
 }
 
