@@ -41,18 +41,18 @@ import java.util.stream.Collectors
 
 @Service
 class ExecutionServiceHandler(
-    private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-    private val blueprintsProcessorCatalogService: BluePrintCatalogService,
-    private val bluePrintWorkflowExecutionService:
-    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>,
-    private val publishAuditService: PublishAuditService
+        private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+        private val blueprintsProcessorCatalogService: BluePrintCatalogService,
+        private val bluePrintWorkflowExecutionService:
+        BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>,
+        private val publishAuditService: PublishAuditService
 ) {
 
     private val log = LoggerFactory.getLogger(ExecutionServiceHandler::class.toString())
 
     suspend fun process(
-        executionServiceInput: ExecutionServiceInput,
-        responseObserver: StreamObserver<org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput>
+            executionServiceInput: ExecutionServiceInput,
+            responseObserver: StreamObserver<org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput>
     ) {
         when {
             executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC -> {
@@ -106,8 +106,8 @@ class ExecutionServiceHandler(
                 val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
                 executionServiceOutput = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(
-                    blueprintRuntimeService,
-                    executionServiceInput, hashMapOf()
+                        blueprintRuntimeService,
+                        executionServiceInput, hashMapOf()
                 )
 
                 val errors = blueprintRuntimeService.getBluePrintError().errors
@@ -116,13 +116,37 @@ class ExecutionServiceHandler(
                     setErrorStatus(errorMessage, executionServiceOutput.status)
                 }
             }
+
+            val res: String = executionServiceOutput.payload?.get("resource-assignment-response")?.get("meshed-template")?.get("extra-vars").toString()
+            val props = getUnResolvedProps(res)
+            if (props.isNotEmpty()) {
+                log.info("cannot resolve {} variable/s {}", props.size, props.toString())
+                executionServiceOutput.status.errorMessage = "cannot resolve ${props.size} variable/s ${props.toString()}"
+            }
+
         } catch (e: Exception) {
             log.error("fail processing request id $requestId", e)
-            executionServiceOutput = response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
+            executionServiceOutput = response(executionServiceInput, e.localizedMessage ?: e.message
+            ?: e.toString(), true)
         }
+
 
         publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput)
         return executionServiceOutput
+    }
+
+    fun getUnResolvedProps(str: String): List<String> {
+        val props = ArrayList<String>()
+        if (str?.contains("\${")) {
+            str.split("\${").forEach {
+                if (it.contains("}")) {
+                    val propName = it.substring(0, it.indexOf("}"));
+                    // println(propName)
+                    props.add(propName)
+                }
+            }
+        }
+        return props
     }
 
     /** If the blueprint name is default, It means no blueprint is needed for the execution */
@@ -147,9 +171,9 @@ class ExecutionServiceHandler(
     }
 
     private fun response(
-        executionServiceInput: ExecutionServiceInput,
-        errorMessage: String = "",
-        failure: Boolean = false
+            executionServiceInput: ExecutionServiceInput,
+            errorMessage: String = "",
+            failure: Boolean = false
     ): ExecutionServiceOutput {
         val executionServiceOutput = ExecutionServiceOutput()
         executionServiceOutput.commonHeader = executionServiceInput.commonHeader
