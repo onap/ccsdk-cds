@@ -32,6 +32,7 @@ import {DesignerSourceViewComponent} from './designer/source-view/source-view.co
 import {NgxUiLoaderModule} from 'ngx-ui-loader';
 import {TourMatMenuModule} from 'ngx-tour-md-menu';
 import {ComponentCanDeactivateGuard} from '../../../common/core/canDactivate/ComponentCanDeactivateGuard';
+import { ImportPackageComponent } from './packages-dashboard/import-package/import-package.component';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -54,6 +55,7 @@ import {ComponentCanDeactivateGuard} from '../../../common/core/canDactivate/Com
         MetadataTabComponent,
         DslDefinitionsTabComponent,
         DesignerSourceViewComponent,
+        ImportPackageComponent,
 
     ],
     imports: [

@@ -37,9 +37,11 @@ export class DesignerCreationMode extends PackageCreationModes {
     }
 
     private createDefinitionsFolder(cbaPackage: CBAPackage, packageCreationUtils: PackageCreationUtils) {
-        cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
-            FilesContent.putData(key, valueOfFile);
-        });
+        if (cbaPackage.definitions.imports && cbaPackage.definitions.imports.size > 0) {
+            cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
+                FilesContent.putData(key, valueOfFile);
+            });
+        }
 
         const filenameEntry = 'Definitions/' + cbaPackage.metaData.name + '.json';
         const vlbDefinition: VlbDefinition = new VlbDefinition();
@@ -51,28 +53,34 @@ export class DesignerCreationMode extends PackageCreationModes {
         metadata['author-email'] = 'shaaban.eltanany.ext@orange.com';
         metadata['user-groups'] = 'test';
         metadata.template_description = cbaPackage.metaData.description;
-        cbaPackage.metaData.mapOfCustomKey.forEach((customKeyValue, key) => {
-            metadata[key] = customKeyValue;
-        });
+        if (cbaPackage.metaData.mapOfCustomKey && cbaPackage.metaData.mapOfCustomKey.size > 0) {
+            cbaPackage.metaData.mapOfCustomKey.forEach((customKeyValue, key) => {
+                metadata[key] = customKeyValue;
+            });
+        }
         // create Tags
         let fullTags = '';
         let setCount = 0;
-        cbaPackage.metaData.templateTags.forEach(val => {
-            setCount++;
-            if (setCount === cbaPackage.metaData.templateTags.size) {
-                fullTags += val;
-            } else {
-                fullTags += val + ', ';
-            }
-        });
+        if (cbaPackage.metaData.templateTags && cbaPackage.metaData.templateTags.size > 0) {
+            cbaPackage.metaData.templateTags.forEach(val => {
+                setCount++;
+                if (setCount === cbaPackage.metaData.templateTags.size) {
+                    fullTags += val;
+                } else {
+                    fullTags += val + ', ';
+                }
+            });
+        }
         metadata.template_tags = fullTags;
         vlbDefinition.metadata = metadata;
         const files: Import[] = [];
-        cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
-            if (!key.includes(cbaPackage.metaData.name)) {
-                files.push({file: key});
-            }
-        });
+        if (cbaPackage.definitions.imports && cbaPackage.definitions.imports.size > 0) {
+            cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
+                if (!key.includes(cbaPackage.metaData.name)) {
+                    files.push({file: key});
+                }
+            });
+        }
         console.log(vlbDefinition);
         vlbDefinition.imports = files;
         console.log(cbaPackage.definitions.dslDefinition.content);
@@ -83,6 +91,7 @@ export class DesignerCreationMode extends PackageCreationModes {
             vlbDefinition.topology_template = JSON.parse(cbaPackage.templateTopology.content);
         }
         console.log(vlbDefinition);
+
         const value = packageCreationUtils.transformToJson(vlbDefinition);
         FilesContent.putData(filenameEntry, value);
         console.log('hello there');

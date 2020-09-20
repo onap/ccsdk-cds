@@ -1,0 +1,54 @@
+<div class="modal fade" id="importPackageModal" tabindex="-1" role="dialog" aria-labelledby="importPackageModal"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel">Import File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                    <img src="assets/img/icon-close.svg"/>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ngx-file-drop accept=".zip" dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)"
+                               (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+                    <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                        <div class="folder-upload">
+                            <img src="assets/img/folder-upload.svg"/>
+                        </div>
+                        <div class="folder-upload-text">
+                            Drag & Drop file
+                        </div>
+                        <div class="folder-upload-text">or
+                            <button type="button" class="btn btn-sm btn-primary" (click)="openFileSelector()">Browse
+                                Files
+                            </button>
+                        </div>
+                        <div class="folder-upload-type">Allowed file type: zip</div>
+                    </ng-template>
+                </ngx-file-drop>
+                <div class="upload-table">
+                    <table class="table">
+                        <thead>
+                        <tr *ngFor="let item of uploadedFiles; let i=index">
+                            <th width="40"><img src="assets/img/icon-file-code.svg"/></th>
+                            <th>{{ item.name }}</th>
+                            <th (click)="removeInitFile(i)" width="40" class="text-right"><img
+                                    src="assets/img/icon-remove-file.svg"/></th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal"
+                        (click)="resetTheUploadedFiles()">Cancel
+                </button>
+                <button type="button" class="btn btn-sm btn-primary" [disabled]="uploadedFiles?.length<=0"
+                        data-dismiss="modal" (click)="openFilesInCreationPackage();saveFileToStore()">
+                    Import
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

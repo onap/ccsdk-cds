@@ -1,7 +1,7 @@
-import { CBAPackage } from '../mapping-models/CBAPacakge.model';
-import { ModeType } from '../mapping-models/ModeType';
-import { FilesContent, MetaDataTabModel } from '../mapping-models/metadata/MetaDataTab.model';
-import { PackageCreationUtils } from '../package-creation.utils';
+import {CBAPackage} from '../mapping-models/CBAPacakge.model';
+import {ModeType} from '../mapping-models/ModeType';
+import {FilesContent, MetaDataTabModel} from '../mapping-models/metadata/MetaDataTab.model';
+import {PackageCreationUtils} from '../package-creation.utils';
 
 
 export abstract class PackageCreationModes {
@@ -21,25 +21,28 @@ export abstract class PackageCreationModes {
 
     public static mapModeType(cbaPackage: CBAPackage) {
         console.log(cbaPackage.metaData.mode);
-        if (cbaPackage.metaData.mode.includes('Scripting')) {
-            cbaPackage.metaData.mode = ModeType.Scripting;
-        } else if (cbaPackage.metaData.mode.includes('Designer') || cbaPackage.metaData.mode.includes('DEFAULT') ) {
-            cbaPackage.metaData.mode = ModeType.Designer;
-        } else {
-            cbaPackage.metaData.mode = ModeType.Generic;
-        }
+        /* if (cbaPackage.metaData.mode.includes('Scripting')) {
+             cbaPackage.metaData.mode = ModeType.Scripting;
+         } else if (cbaPackage.metaData.mode.includes('Designer') || cbaPackage.metaData.mode.includes('DEFAULT') ) {
+             cbaPackage.metaData.mode = ModeType.Designer;
+         } else {
+             cbaPackage.metaData.mode = ModeType.Generic;
+         }*/
+        cbaPackage.metaData.mode = ModeType.Designer;
         return cbaPackage;
     }
 
     getValueOfMetaData(metaDataTab: MetaDataTabModel): string {
         let tags = '';
         let count = 0;
-        for (const tag of metaDataTab.templateTags) {
-            count++;
-            if (count === metaDataTab.templateTags.size) {
-                tags += tag;
-            } else {
-                tags += tag + ', ';
+        if (metaDataTab.templateTags && metaDataTab.templateTags.size > 0) {
+            for (const tag of metaDataTab.templateTags) {
+                count++;
+                if (count === metaDataTab.templateTags.size) {
+                    tags += tag;
+                } else {
+                    tags += tag + ', ';
+                }
             }
         }
         return 'TOSCA-Meta-File-Version: 1.0.0\n' +
