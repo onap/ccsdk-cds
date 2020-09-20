@@ -34,6 +34,7 @@ import {ToastrService} from 'ngx-toastr';
 import {TourService} from 'ngx-tour-md-menu';
 import {PackageCreationService} from './package-creation.service';
 import {ComponentCanDeactivate} from '../../../../common/core/canDactivate/ComponentCanDeactivate';
+import {DesignerStore} from '../designer/designer.store';
 
 
 @Component({
@@ -53,7 +54,8 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
         private packageCreationUtils: PackageCreationUtils,
         private router: Router,
         private tourService: TourService,
-        private toastService: ToastrService) {
+        private toastService: ToastrService,
+        private designerStore: DesignerStore) {
 
         super();
     }
@@ -110,6 +112,7 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
                 cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
                 cbaPackage.metaData = PackageCreationModes.setEntryPoint(cbaPackage.metaData);
                 packageCreationModes = PackageCreationBuilder.getCreationMode(cbaPackage);
+                cbaPackage.templateTopology.content = this.designerStore.state.sourceContent;
                 packageCreationModes.execute(cbaPackage, this.packageCreationUtils);
                 this.filesData.push(this.folder.TREE_DATA);
                 this.saveBluePrintToDataBase();
