@@ -48,7 +48,6 @@ export class MetadataTabComponent implements OnInit {
                 this.tags = element.metaData.templateTags;
                 this.tags.delete('');
                 this.metaDataTab.templateTags = this.tags;
-                console.log(element);
                 if (element.metaData.mode && element.metaData.mode.includes('DEFAULT')) {
                     this.metaDataTab.mode = 'Designer Mode';
                     this.modeType = this.metaDataTab.mode;
@@ -56,7 +55,11 @@ export class MetadataTabComponent implements OnInit {
 
                 this.customKeysMap = element.metaData.mapOfCustomKey;
                 this.metaDataTab.mapOfCustomKey = this.customKeysMap;
+                if (this.isNameEditable) {
+                    this.validatePackageNameAndVersion();
+                }
                 // this.tags = element.metaData.templateTags;
+
 
             }
         });
@@ -99,6 +102,8 @@ export class MetadataTabComponent implements OnInit {
     }
 
     validatePackageNameAndVersion() {
+        console.log('in validate');
+        console.log('in this.metaDataTab.name' + this.metaDataTab.name);
         if (this.metaDataTab.name && this.metaDataTab.version) {
             this.packageCreationService.checkBluePrintNameAndVersion(this.metaDataTab.name, this.metaDataTab.version).then(element => {
                 if (element) {

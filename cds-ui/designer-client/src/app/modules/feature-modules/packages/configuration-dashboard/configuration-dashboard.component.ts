@@ -267,6 +267,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
 
     goToDesignerMode(id) {
         //  this.designerService.setActionName(this.customActionName);
+        this.packageCreationStore.state$.subscribe(cba => {
+            console.log(cba);
+            sessionStorage.setItem('cba', this.packageCreationUtils.transformToJson(cba));
+        });
         this.router.navigate(['/packages/designer', id, {actionName: this.customActionName}]);
     }
 

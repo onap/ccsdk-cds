@@ -24,11 +24,7 @@ import {Injectable} from '@angular/core';
 import {Store} from '../../../../common/core/stores/Store';
 
 import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
-import {PackageCreationService} from './package-creation.service';
 import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
-import {Observable} from 'rxjs';
-import {ResourceDictionary} from './mapping-models/ResourceDictionary.model';
-import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
 import {TemplateTopology} from './mapping-models/definitions/VlbDefinition';
 
 
@@ -126,5 +122,9 @@ export class PackageCreationStore extends Store<CBAPackage> {
             ...this.state,
             templateTopology
         });
+    }
+
+    getMetaData() {
+        return this.state.metaData;
     }
 }
