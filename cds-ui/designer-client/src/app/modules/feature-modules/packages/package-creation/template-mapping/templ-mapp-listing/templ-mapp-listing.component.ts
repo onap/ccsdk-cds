@@ -6,6 +6,8 @@ import { TemplateAndMapping } from '../TemplateAndMapping';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from '../shared-service';
 import { TourService } from 'ngx-tour-md-menu';
+import { TemplateType } from '../utils/TemplateType';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -22,7 +24,7 @@ export class TemplMappListingComponent implements OnInit {
     isCreate = true;
     currentFile: string;
     edit = false;
-    fileToDelete: any = {};
+    fileToDelete = '';
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -117,19 +119,25 @@ export class TemplMappListingComponent implements OnInit {
 
     setSourceCodeEditor(key: string) {
         this.currentFile = key;
-        const templateKey = 'Templates/' + key + '-template.vtl';
+        const templateKey = 'Templates/' + key + '-template';
         this.packageCreationStore.state$.subscribe(cba => {
             console.log('cba ------');
             console.log(cba);
             console.log(key);
             console.log(this.templateAndMappingMap);
             const templateInfo = new TemplateInfo();
-            if (cba.templates && cba.templates.files.has(templateKey)) {
-                const fileContent = cba.templates.getValue(templateKey.trim());
-                console.log(fileContent);
-                templateInfo.fileContent = fileContent;
-                templateInfo.fileName = templateKey;
-                templateInfo.type = 'template';
+            // tslint:disable-next-line: forin
+            for (const templateType in TemplateType) {
+                const fileName = templateKey + '.' + TemplateType[templateType];
+                if (cba.templates && cba.templates.files.has(fileName)) {
+                    const fileContent = cba.templates.getValue(fileName.trim());
+                    console.log(templateType + '......ccccccc.... ' + fileName);
+                    templateInfo.fileContent = fileContent;
+                    templateInfo.fileName = fileName;
+                    templateInfo.ext = TemplateType[templateType];
+                    templateInfo.type = 'template';
+                    break;
+                }
             }
             const mappingKey = 'Templates/' + key + '-mapping.json';
             if (cba.mapping && cba.mapping.files.has(mappingKey)) {
@@ -153,18 +161,29 @@ export class TemplMappListingComponent implements OnInit {
     }
     initDelete(file) {
         console.log(file);
-        this.fileToDelete = file;
+        const templateKey = 'Templates/' + file + '-template';
+        // tslint:disable-next-line: forin
+        for (const templateType in TemplateType) {
+            const fileName = templateKey + '.' + TemplateType[templateType];
+            if (this.packageCreationStore.state.templates.files.has(fileName)) {
+                this.fileToDelete = fileName;
+                break;
+            }
+        }
+
     }
     condifrmDelete() {
-        console.log(this.templateAndMappingMap);
-        this.templateAndMappingMap.delete(this.fileToDelete);
+        const file = this.fileToDelete.split('/')[1].split('-')[0];
+        const ext = this.fileToDelete.split('/')[1].split('.')[1];
+        this.templateAndMappingMap.delete(file);
         if (this.templateAndMappingMap.size <= 0) {
             this.openCreationView();
         }
         // Delete from templates
-        this.packageCreationStore.state.templates.files.delete('Templates/' + this.fileToDelete + '-template.vtl');
+        this.packageCreationStore.state.templates.files.delete('Templates/' + file + '-template.' + ext);
         // Delete from Mapping
-        this.packageCreationStore.state.mapping.files.delete('Templates/' + this.fileToDelete + '-mapping.json');
+        this.packageCreationStore.state.mapping.files.delete('Templates/' + file + '-mapping.json');
+        console.log(this.templateAndMappingMap);
 
     }
 

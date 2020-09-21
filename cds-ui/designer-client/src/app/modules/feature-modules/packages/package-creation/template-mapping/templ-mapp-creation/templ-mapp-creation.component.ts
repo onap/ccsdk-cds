@@ -10,9 +10,11 @@ import { PackageCreationUtils } from '../../package-creation.utils';
 import { JsonConvert, Any } from 'json2typescript';
 import { ToastrService } from 'ngx-toastr';
 import { SharedService } from '../shared-service';
-import { XmlParser } from '../utils/XmlParser';
+import { XmlParser } from '../utils/ParserFactory/XmlParser';
 import { TourService } from 'ngx-tour-md-menu';
 import { PackageCreationService } from '../../package-creation.service';
+import { ParserFactory } from '../utils/ParserFactory/ParserFactory';
+import { TemplateType, FileExtension } from '../utils/TemplateType';
 declare var $: any;
 
 @Component({
@@ -43,7 +45,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     MappingAdapter: MappingAdapter;
     mapping = new Map();
     templateFileContent: string;
-    templateExt = 'Velcoity';
+    templateExt = 'vtl';
     dependancies = new Map<string, Array<string>>();
     dependanciesSource = new Map<string, string>();
     mappingRes = [];
@@ -51,6 +53,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     currentMapping: any;
     edit = false;
     fileToDelete: any = {};
+    parserFactory = new ParserFactory();
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -82,12 +85,16 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             } else {
                 this.mappingRes = [];
                 this.currentMapping = Any;
+                this.resourceDictionaryRes = [];
             }
             this.templateFileContent = templateInfo.fileContent;
+            this.templateExt = this.templateInfo.ext || this.templateExt ;
             this.currentTemplate = Object.assign({}, templateInfo);
 
             if (templateInfo.type === 'template' || templateInfo.type.includes('template')) {
-                this.currentTemplate.fileName = 'Templates/' + this.fileName + '-template.vtl';
+                console.log('template extension ' + this.templateExt);
+                this.currentTemplate.fileName = 'Templates/' + this.fileName + '-template.' + this.templateExt;
+                console.log(this.currentTemplate.fileName);
             } else {
                 this.currentTemplate = Any;
             }
@@ -95,7 +102,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         });
 
         this.sharedService.isEdit().subscribe(res => {
-            console.log('------------------------');
+            console.log('------------------------....');
             console.log(res);
             this.edit = res;
 
@@ -126,11 +133,11 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
 
     getFileExtension() {
         switch (this.templateExt) {
-            case 'Velcoity':
+            case 'vtl':
                 return '.vtl';
-            case 'Koltin':
+            case 'kt':
                 return '.ktl';
-            case 'Jinja':
+            case 'j2':
                 return '.j2';
             default:
                 return '.vtl';
@@ -143,34 +150,10 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     }
 
     public getTemplateVariable(fileContent: string) {
-        const variables: string[] = [];
-        const stringsSlittedByBraces = fileContent.split('${');
-        const stringsDefaultByDollarSignOnly = fileContent.split('"$');
-
-        for (let i = 1; i < stringsSlittedByBraces.length; i++) {
-            const element = stringsSlittedByBraces[i];
-            if (element) {
-                const firstElement = element.split('}')[0];
-                if (!variables.includes(firstElement)) {
-                    variables.push(firstElement);
-                } else {
-                    console.log(firstElement);
-                }
-            }
-        }
-
-        for (let i = 1; i < stringsDefaultByDollarSignOnly.length; i++) {
-            const element = stringsDefaultByDollarSignOnly[i];
-            if (element && !element.includes('$')) {
-                const firstElement = element.split('"')[0]
-                    .replace('{', '')
-                    .replace('}', '').trim();
-                if (!variables.includes(firstElement)) {
-                    variables.push(firstElement);
-                }
-            }
-        }
-        return variables;
+        // TODO: implement factory Pattern for parser
+        console.log('start parsing........ ' + this.templateExt);
+        const parser = this.parserFactory.getParser(fileContent, this.templateExt);
+        return parser.getVariables(fileContent);
     }
 
     public dropped(files: NgxFileDropEntry[]) {
@@ -253,6 +236,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 fileReader.onload = (e) => {
                     this.templateFileContent = fileReader.result.toString();
                     this.variables = this.getTemplateVariable(this.templateFileContent);
+                    console.log(this.variables);
 
                 };
                 fileReader.readAsText(file);
@@ -395,18 +379,6 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
 
     rerender(): void {
         this.dtTrigger.next();
-
-        // if (this.dtElement.dtInstance) {
-        //     console.log('rerender');
-        //     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        //         dtInstance.destroy();
-        //         this.dtElement.dtOptions = this.dtOptions;
-        //         this.dtElement.dtTrigger.next();
-        //         dtInstance.draw();
-        //     });
-        // } else {
-        //     this.dtTrigger.next();
-        // }
     }
 
     ngOnDestroy(): void {

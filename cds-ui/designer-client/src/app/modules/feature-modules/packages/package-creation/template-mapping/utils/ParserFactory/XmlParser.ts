@@ -1,5 +1,4 @@
 import { Parser } from './Parser';
-import { variable } from '@angular/compiler/src/output/output_ast';
 
 export class XmlParser implements Parser {
     getVariables(fileContent: string): string[] {

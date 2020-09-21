@@ -28,6 +28,7 @@ export class TemplateInfo {
     fileName: string;
     fileContent: string;
     type: string;
+    ext: string;
     mapping = [];
 
 
@@ -35,6 +36,7 @@ export class TemplateInfo {
         this.fileName = '';
         this.fileContent = '';
         this.type = '';
+        this.ext = '';
     }
 
 
