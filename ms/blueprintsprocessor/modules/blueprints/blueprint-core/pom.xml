@@ -27,7 +27,6 @@
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
     <artifactId>blueprint-core</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
 
     <name>MS Blueprints Processor Modules - Blueprints - Blueprints Core</name>
 

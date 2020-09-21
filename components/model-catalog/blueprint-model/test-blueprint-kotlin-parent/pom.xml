@@ -25,7 +25,6 @@
     </parent>
 
     <artifactId>test-blueprint-kotlin-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Components Model Catalog - Blueprints Model - Test Kotlin Parent</name>

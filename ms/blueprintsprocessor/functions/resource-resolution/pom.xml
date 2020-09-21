@@ -26,7 +26,6 @@
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
     <artifactId>resource-resolution</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>MS Blueprints Processor Functions - Resource Resolution</name>

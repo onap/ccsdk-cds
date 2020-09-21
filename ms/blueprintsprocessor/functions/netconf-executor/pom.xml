@@ -26,7 +26,6 @@
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
     <artifactId>netconf-executor</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
 
     <name>MS Blueprints Processor Functions - Netconf Executor</name>
     <description>Blueprints Processor Function - Netconf Executor</description>

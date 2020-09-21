@@ -30,7 +30,6 @@ limitations under the License.
     </parent>
 
     <artifactId>cds-ui-client</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>UI Client</name>
