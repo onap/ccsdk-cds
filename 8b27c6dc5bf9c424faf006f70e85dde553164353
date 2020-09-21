@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "2be0a0ae_e33ddaed",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/ExecutionServiceHandler.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-21T11:33:51Z",
+      "side": 1,
+      "message": "meshed-template and extra vars are defined by the cba and are not static, they could just as well be \"resolved-values\" and \"extra-props\" in another cba. We shouldn\u0027t implement code that creates cba design dependencies. \n\nThis is not the right solution for the problem. It breaks current behaviour, by forcing the workflow to fail because RR failed. It is not always the case that a workflow should fail because one resource was not resolved properly. \n\nExecutionServiceHandler should be decoupled from components, I would suggest to implement this logic in ResourceResolutionComponent. Introduce a new attribute for failed-resolutions and populate it alongside the other attributes. This way it is up to the cba to include this in the workflow output. Maybe also add a new input property (allow-component-fail: true) to conditionally allow the component to fail if not all resources were resolved properly.",
+      "revId": "8b27c6dc5bf9c424faf006f70e85dde553164353",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0675da4e_e22f254d",
         "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/ExecutionServiceHandler.kt",
         "patchSetId": 5
