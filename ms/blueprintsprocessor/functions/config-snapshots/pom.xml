@@ -26,7 +26,6 @@
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
     <artifactId>config-snapshots</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
 
     <name>MS Blueprints Processor Functions - Config Snapshots</name>
     <description>Blueprints Processor Function - Config Snapshots</description>
