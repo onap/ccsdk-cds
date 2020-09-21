@@ -2510,9 +2510,11 @@ animation: glowing 1500ms infinite;
 }
 
 
-.action-button.delete i{
+/* .action-button.delete i{
   color: #BABBC3;
-}
+} */
+.action-button.delete,
+.action-button.delete i,
 .action-button.delete:hover,
 .action-button.delete:hover .icon-delete-sm{
   color: #FF6469 !important;
@@ -3421,7 +3423,7 @@ for simplicity
 .mat-menu-panel{
   box-shadow: 0 2px 13px 6px rgba(47, 83, 151, .17) !important;
   border-radius: 3px !important;
-  border-bottom: solid 3px #1273EB;
+  border-top: solid 3px #1273EB;
 }
 .mat-menu-panel::after {
   content: '';
@@ -3431,7 +3433,7 @@ for simplicity
   position: absolute;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-bottom: 8px solid #1B3E6F;
+  border-bottom: 8px solid #1273EB;
   left: 9px;
   top: -8px;
 }
