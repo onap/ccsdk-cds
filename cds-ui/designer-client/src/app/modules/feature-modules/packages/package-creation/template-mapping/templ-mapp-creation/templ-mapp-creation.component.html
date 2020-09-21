@@ -44,24 +44,24 @@
                     <div tourAnchor="tm-templateType" class="single-line">
                         <label class="label-name">Template Type</label>
                         <div class="label-input">
-                            <label name="trst" (click)="allowedExt=['.vtl']">
+                            <label name="trst" (click)="allowedExt=['.vtl'];templateExt='vtl'">
                                 <input class="form-check-input" [(ngModel)]="templateExt" type="radio"
-                                    name="exampleRadios" id="exampleRadios1" value=Velcoity>
+                                    name="exampleRadios" id="exampleRadios1" value=vtl>
                                 <span>
-                                    Velcoity
+                                    Velocity
                                 </span>
                             </label>
-                            <label name="trst" (click)="allowedExt=['.j2','.jinja2']">
+                            <label name="trst" (click)="allowedExt=['.j2','.jinja2'];templateExt='j2'">
                                 <input class="form-check-input" [(ngModel)]="templateExt" type="radio"
-                                    name="exampleRadios" id="exampleRadios1" value=Jinja>
+                                    name="exampleRadios" id="exampleRadios1" value=j2>
 
                                 <span>
                                     Jinja
                                 </span>
                             </label>
-                            <label tourAnchor="tm-templateContent" name="trst" (click)="allowedExt=['.kt']">
+                            <label tourAnchor="tm-templateContent" name="trst" (click)="allowedExt=['.kt'];templateExt='kt'">
                                 <input class="form-check-input" [(ngModel)]="templateExt" type="radio"
-                                    name="exampleRadios" id="exampleRadios1" value=Kotlin>
+                                    name="exampleRadios" id="exampleRadios1" value=kt>
 
                                 <span>
                                     Kotlin
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div class="create-template-import">Use the editor to add parameters or you can also
-                        <a href="#" data-toggle="modal" (click)="allowedExt=[getFileExtension()]"
+                        <a href="#" data-toggle="modal" 
                             data-target="#templateModal"><b>Import
                                 File</b></a>. <br /> <span class="templateNote"><i class="icon-info"
                                 aria-hidden="true"></i> When you import new file, the new attributes will replace
