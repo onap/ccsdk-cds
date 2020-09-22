@@ -110,7 +110,9 @@ export class PackageCreationStore extends Store<CBAPackage> {
     }
 
     clear() {
+        console.log('clearing the store');
         this.setState(new CBAPackage());
+        console.log('it should be empty');
     }
 
     setEntryDefinition(data: string) {

@@ -23,8 +23,8 @@ import {Injectable} from '@angular/core';
 import {Store} from '../../../../common/core/stores/Store';
 import {DesignerService} from './designer.service';
 import {DesignerDashboardState} from './model/designer.dashboard.state';
-import { DeclarativeWorkflow } from './model/designer.workflow';
-import { NodeTemplate } from './model/desinger.nodeTemplate.model';
+import {DeclarativeWorkflow} from './model/designer.workflow';
+import {NodeTemplate} from './model/desinger.nodeTemplate.model';
 
 
 @Injectable({
@@ -54,7 +54,7 @@ export class DesignerStore extends Store<DesignerDashboardState> {
         });
     }
 
-    addStepToDeclarativeWorkFlow(workflowName: string, stepName: string,  stepType: string) {
+    addStepToDeclarativeWorkFlow(workflowName: string, stepName: string, stepType: string) {
         this.setState({
             ...this.state,
             template: {
@@ -76,12 +76,15 @@ export class DesignerStore extends Store<DesignerDashboardState> {
     }
 
     saveSourceContent(code: string) {
-        const topologyTemplate = JSON.parse(code);
-        this.setState({
-            ...this.state,
-            sourceContent: code,
-            template: topologyTemplate
-        });
+        console.log(code);
+        if (code) {
+            const topologyTemplate = JSON.parse(code);
+            this.setState({
+                ...this.state,
+                sourceContent: code,
+                template: topologyTemplate
+            });
+        }
     }
 
 

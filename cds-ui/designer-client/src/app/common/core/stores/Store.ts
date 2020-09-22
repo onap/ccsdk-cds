@@ -17,6 +17,7 @@ export class Store<T> {
     protected setState(nextState: T): void {
         console.log('setting state', this.subject);
         this.subject.next(nextState);
+        console.log('current state', this.subject);
     }
 
     public unsubscribe() {

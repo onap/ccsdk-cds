@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
 import {PackageCreationExtractionService} from '../../package-creation/package-creation-extraction.service';
 import {Router} from '@angular/router';
+import {PackageCreationStore} from '../../package-creation/package-creation.store';
 
 @Component({
     selector: 'app-import-package',
@@ -16,10 +17,13 @@ export class ImportPackageComponent implements OnInit {
     public files: NgxFileDropEntry[] = [];
 
     constructor(private packageCreationExtractionService: PackageCreationExtractionService,
+                private packageCreationStore: PackageCreationStore,
                 private router: Router) {
+        this.packageCreationStore.clear();
     }
 
     ngOnInit() {
+        this.packageCreationStore.clear();
     }
 
     removeInitFile(index) {
@@ -70,10 +74,10 @@ export class ImportPackageComponent implements OnInit {
     }
 
     saveFileToStore() {
-        for (const droppedFile of this.uploadedFiles) {
-            const file = this.getFile(droppedFile);
-            this.packageCreationExtractionService.extractBlobToStore(file);
-        }
+        console.log(this.uploadedFiles.length);
+        const file = this.getFile(this.uploadedFiles[this.uploadedFiles.length - 1]);
+        this.packageCreationStore.clear();
+        this.packageCreationExtractionService.extractBlobToStore(file);
     }
 
     openFilesInCreationPackage() {

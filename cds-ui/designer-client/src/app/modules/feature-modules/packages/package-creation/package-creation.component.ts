@@ -24,7 +24,7 @@ import {FilesContent, FolderNodeElement, MetaDataTabModel} from './mapping-model
 
 import * as JSZip from 'jszip';
 import {PackageCreationStore} from './package-creation.store';
-import {Definition} from './mapping-models/CBAPacakge.model';
+import {CBAPackage, Definition} from './mapping-models/CBAPacakge.model';
 import {PackageCreationModes} from './creationModes/PackageCreationModes';
 import {PackageCreationBuilder} from './creationModes/PackageCreationBuilder';
 import {PackageCreationUtils} from './package-creation.utils';
@@ -78,11 +78,13 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
     elementRef: ElementRef;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     metadataClasses = 'nav-item nav-link active complete';
+    private cbaPackage: CBAPackage;
 
     ngOnInit() {
         this.elementRef.nativeElement.focus();
         const regexp = RegExp(this.versionPattern);
         this.packageCreationStore.state$.subscribe(cbaPackage => {
+            this.cbaPackage = cbaPackage;
             if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.description
                 && cbaPackage.metaData.name && cbaPackage.metaData.version &&
                 regexp.test(cbaPackage.metaData.version)) {
@@ -104,19 +106,17 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
     }
 
     saveBluePrint() {
-        this.packageCreationStore.state$.subscribe(
-            cbaPackage => {
-                console.log(cbaPackage);
-                FilesContent.clear();
-                let packageCreationModes: PackageCreationModes;
-                cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
-                cbaPackage.metaData = PackageCreationModes.setEntryPoint(cbaPackage.metaData);
-                packageCreationModes = PackageCreationBuilder.getCreationMode(cbaPackage);
-                cbaPackage.templateTopology.content = this.designerStore.state.sourceContent;
-                packageCreationModes.execute(cbaPackage, this.packageCreationUtils);
-                this.filesData.push(this.folder.TREE_DATA);
-                this.saveBluePrintToDataBase();
-            });
+        console.log(this.cbaPackage);
+        FilesContent.clear();
+        let packageCreationModes: PackageCreationModes;
+        this.cbaPackage = PackageCreationModes.mapModeType(this.cbaPackage);
+        this.cbaPackage.metaData = PackageCreationModes.setEntryPoint(this.cbaPackage.metaData);
+        packageCreationModes = PackageCreationBuilder.getCreationMode(this.cbaPackage);
+
+        // this.cbaPackage.templateTopology.content = this.designerStore.state.sourceContent;
+        packageCreationModes.execute(this.cbaPackage, this.packageCreationUtils);
+        this.filesData.push(this.folder.TREE_DATA);
+        this.saveBluePrintToDataBase();
 
 
     }

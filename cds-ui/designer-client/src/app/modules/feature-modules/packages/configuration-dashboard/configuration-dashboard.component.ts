@@ -17,6 +17,7 @@ import {ToastrService} from 'ngx-toastr';
 import {NgxFileDropEntry} from 'ngx-file-drop';
 import {PackageCreationService} from '../package-creation/package-creation.service';
 import {ComponentCanDeactivate} from '../../../../common/core/canDactivate/ComponentCanDeactivate';
+import {PackageCreationExtractionService} from '../package-creation/package-creation-extraction.service';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -54,13 +55,17 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         private packageCreationUtils: PackageCreationUtils,
         private router: Router,
         private designerStore: DesignerStore,
-        private toastService: ToastrService
+        private toastService: ToastrService,
+        private packageCreationExtractionService: PackageCreationExtractionService
     ) {
         super();
+
         this.packageCreationStore.state$.subscribe(
             cbaPackage => {
                 this.cbaPackage = cbaPackage;
             });
+
+
     }
 
     ngOnInit() {
@@ -83,9 +88,12 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
 
     }
 
-    private refreshCurrentPackage() {
+
+    private refreshCurrentPackage(id?) {
         this.id = this.route.snapshot.paramMap.get('id');
-        this.configurationDashboardService.getPagedPackages(this.id).subscribe(
+        console.log(this.id);
+        id = id ? id : this.id;
+        this.configurationDashboardService.getPagedPackages(id).subscribe(
             (bluePrintDetailModels) => {
                 if (bluePrintDetailModels) {
                     this.viewedPackage = bluePrintDetailModels[0];
@@ -97,10 +105,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
 
     private downloadCBAPackage(bluePrintDetailModels: BluePrintDetailModel) {
         this.configurationDashboardService.downloadResource(
-            bluePrintDetailModels[0].artifactName + '/' + bluePrintDetailModels[0].artifactVersion).subscribe(response => {
+            this.viewedPackage.artifactName + '/' + this.viewedPackage.artifactVersion).subscribe(response => {
             const blob = new Blob([response], {type: 'application/octet-stream'});
             this.currentBlob = blob;
-            this.extractBlobToStore(blob, bluePrintDetailModels[0]);
+            this.extractBlobToStore(blob, this.viewedPackage);
         });
     }
 
@@ -218,8 +226,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                             const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
                             this.toastService.info('package updated successfully ');
                             this.isSaveEnabled = false;
-                            this.id = id;
                             this.router.navigate(['/packages/package/' + id]);
+                            this.refreshCurrentPackage(id);
                         }
                     }, error => {
                         this.toastService.error('error happened when editing ' + error.message);
@@ -266,11 +274,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     }
 
     goToDesignerMode(id) {
-        //  this.designerService.setActionName(this.customActionName);
-        this.packageCreationStore.state$.subscribe(cba => {
-            console.log(cba);
-            sessionStorage.setItem('cba', this.packageCreationUtils.transformToJson(cba));
-        });
+
         this.router.navigate(['/packages/designer', id, {actionName: this.customActionName}]);
     }
 
