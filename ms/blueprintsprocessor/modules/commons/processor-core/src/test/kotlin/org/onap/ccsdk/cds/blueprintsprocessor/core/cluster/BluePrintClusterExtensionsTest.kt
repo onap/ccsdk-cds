@@ -24,7 +24,6 @@ import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import java.lang.RuntimeException
 import kotlin.test.assertEquals
 
 class BluePrintClusterExtensionsTest {
@@ -58,7 +57,8 @@ class BluePrintClusterExtensionsTest {
 
             try {
                 clusterLockMock.executeWithLock(1_000) { throw RuntimeException("It crashed") }
-            } catch (e: Exception) { }
+            } catch (e: Exception) {
+            }
 
             verify { runBlocking { clusterLockMock.unLock() } }
         }

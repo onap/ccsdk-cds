@@ -36,9 +36,11 @@ import kotlin.script.experimental.jvm.util.classpathFromClasspathProperty
 import kotlin.system.measureTimeMillis
 
 open class BluePrintCompileService {
+
     val log = logger(BluePrintCompileService::class)
 
     companion object {
+
         val classPaths = classpathFromClasspathProperty()?.joinToString(File.pathSeparator) {
             it.absolutePath
         }
@@ -85,10 +87,12 @@ open class BluePrintCompileService {
                 }
                 val deferredCompile = async {
                     val k2jvmCompiler = K2JVMCompiler()
+
                     /** Construct Arguments */
                     val arguments = k2jvmCompiler.createArguments()
                     parseCommandLineArguments(args, arguments)
                     val messageCollector = CompilationMessageCollector()
+
                     /** Compile with arguments */
                     val exitCode: ExitCode = k2jvmCompiler.exec(messageCollector, Services.EMPTY, arguments)
                     when (exitCode) {

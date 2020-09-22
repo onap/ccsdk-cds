@@ -25,7 +25,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.GrpcClientProperties
@@ -66,7 +65,7 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
     private val grpcChannels: MutableMap<String, ManagedChannel> = hashMapOf()
 
     private val commChannels: MutableMap<String,
-            ClientBidiCallChannel<ExecutionServiceInput, ExecutionServiceOutput>> = hashMapOf()
+        ClientBidiCallChannel<ExecutionServiceInput, ExecutionServiceOutput>> = hashMapOf()
 
     /**
      * Open new channel to send and receive for grpc properties [selector] for [txId],
@@ -120,28 +119,28 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
      */
     @ExperimentalCoroutinesApi
     override suspend fun sendNonInteractive(selector: Any, txId: String, input: ExecutionServiceInput, timeOutMill: Long):
-            ExecutionServiceOutput {
+        ExecutionServiceOutput {
 
-        var output: ExecutionServiceOutput? = null
-        val flow = openSubscription(selector, txId)
+            var output: ExecutionServiceOutput? = null
+            val flow = openSubscription(selector, txId)
 
-        /** Send the request */
-        val sendChannel = commChannels[txId]?.requestChannel
-            ?: throw BluePrintException("failed to get transactionId($txId) send channel")
-        sendChannel.send(input)
+            /** Send the request */
+            val sendChannel = commChannels[txId]?.requestChannel
+                ?: throw BluePrintException("failed to get transactionId($txId) send channel")
+            sendChannel.send(input)
 
-        /** Receive the response with timeout */
-        withTimeout(timeOutMill) {
-            flow.collect {
-                log.trace("Received non-interactive transactionId($txId) response : ${it.status.eventType}")
-                if (it.status.eventType == EventType.EVENT_COMPONENT_EXECUTED) {
-                    output = it
-                    cancelSubscription(txId)
+            /** Receive the response with timeout */
+            withTimeout(timeOutMill) {
+                flow.collect {
+                    log.trace("Received non-interactive transactionId($txId) response : ${it.status.eventType}")
+                    if (it.status.eventType == EventType.EVENT_COMPONENT_EXECUTED) {
+                        output = it
+                        cancelSubscription(txId)
+                    }
                 }
             }
+            return output!!
         }
-        return output!!
-    }
 
     /** Cancel the Subscription for the [txId], This closes communication channel **/
     @ExperimentalCoroutinesApi

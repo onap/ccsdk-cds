@@ -37,13 +37,13 @@ interface BlueprintModelSearchRepository : JpaRepository<BlueprintModelSearch, L
      *
      * @param id id
      * @return Optional<BlueprintModelSearch>
-    </BlueprintModelSearch> */
+     </BlueprintModelSearch> */
     fun findById(id: String): BlueprintModelSearch?
 
     /**
      * This is a findAll method
      * @return List<BlueprintModelSearch>
-    </BlueprintModelSearch> */
+     </BlueprintModelSearch> */
     override fun findAll(): List<BlueprintModelSearch>
 
     /**
@@ -52,7 +52,7 @@ interface BlueprintModelSearchRepository : JpaRepository<BlueprintModelSearch, L
      * @param artifactName artifactName
      * @param artifactVersion artifactVersion
      * @return Optional<AsdcArtifacts>
-    </AsdcArtifacts> */
+     </AsdcArtifacts> */
     fun findByArtifactNameAndArtifactVersion(artifactName: String, artifactVersion: String): BlueprintModelSearch?
 
     /**
@@ -60,7 +60,7 @@ interface BlueprintModelSearchRepository : JpaRepository<BlueprintModelSearch, L
      *
      * @param tags
      * @return Optional<BlueprintModelSearch>
-    </BlueprintModelSearch> */
+     </BlueprintModelSearch> */
     fun findByTagsContainingIgnoreCase(tags: String): List<BlueprintModelSearch>
 
     /**
@@ -74,7 +74,7 @@ interface BlueprintModelSearchRepository : JpaRepository<BlueprintModelSearch, L
      * @param artifactVersion
      * @param artifactType
      * @return Optional<BlueprintModelSearch>
-    </BlueprintModelSearch>
+     </BlueprintModelSearch>
      */
     fun findByUpdatedByOrTagsOrOrArtifactNameOrOrArtifactVersionOrArtifactType(
         updatedBy: String,

@@ -45,8 +45,10 @@ import kotlin.test.assertTrue
 @EnableAutoConfiguration
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor"])
 @ContextConfiguration(
-    classes = [BlueprintProcessorCatalogServiceImpl::class, BluePrintCoreConfiguration::class,
-        MockBlueprintProcessorCatalogServiceImpl::class]
+    classes = [
+        BlueprintProcessorCatalogServiceImpl::class, BluePrintCoreConfiguration::class,
+        MockBlueprintProcessorCatalogServiceImpl::class
+    ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BlueprintProcessorCatalogServiceImplTest {
@@ -123,7 +125,8 @@ class BlueprintProcessorCatalogServiceImplTest {
             File(
                 blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath +
                     "/baseconfiguration"
-            ).deleteRecursively(), "Couldn't get blueprint archive " +
+            ).deleteRecursively(),
+            "Couldn't get blueprint archive " +
                 "${blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath}/baseconfiguration " +
                 "from data base."
         )

@@ -90,7 +90,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
             else -> {
                 throw BluePrintProcessorException(
                     "Rest adaptor($type) is" +
-                            " not supported"
+                        " not supported"
                 )
             }
         }
@@ -128,91 +128,93 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
     }
 
     private fun blueprintWebClientService(restClientProperties: RestClientProperties):
-            BlueprintWebClientService {
+        BlueprintWebClientService {
 
-        when (restClientProperties) {
-            is SSLRestClientProperties -> {
-                return SSLRestClientService(restClientProperties)
-            }
-            is TokenAuthRestClientProperties -> {
-                return TokenAuthRestClientService(restClientProperties)
-            }
-            is BasicAuthRestClientProperties -> {
-                return BasicAuthRestClientService(restClientProperties)
-            }
-            else -> {
-                throw BluePrintProcessorException("couldn't get rest service for type:${restClientProperties.type}  uri: ${restClientProperties.url}")
+            when (restClientProperties) {
+                is SSLRestClientProperties -> {
+                    return SSLRestClientService(restClientProperties)
+                }
+                is TokenAuthRestClientProperties -> {
+                    return TokenAuthRestClientService(restClientProperties)
+                }
+                is BasicAuthRestClientProperties -> {
+                    return BasicAuthRestClientService(restClientProperties)
+                }
+                else -> {
+                    throw BluePrintProcessorException("couldn't get rest service for type:${restClientProperties.type}  uri: ${restClientProperties.url}")
+                }
             }
         }
-    }
 
     private fun tokenRestClientProperties(prefix: String):
-            TokenAuthRestClientProperties {
-        return bluePrintPropertiesService.propertyBeanType(
-            prefix, TokenAuthRestClientProperties::class.java
-        )
-    }
+        TokenAuthRestClientProperties {
+            return bluePrintPropertiesService.propertyBeanType(
+                prefix, TokenAuthRestClientProperties::class.java
+            )
+        }
 
     private fun basicAuthRestClientProperties(prefix: String):
-            BasicAuthRestClientProperties {
-        return bluePrintPropertiesService.propertyBeanType(
-            prefix, BasicAuthRestClientProperties::class.java
-        )
-    }
-
-    private fun sslBasicAuthRestClientProperties(prefix: String):
-            SSLRestClientProperties {
-
-        val sslProps: SSLBasicAuthRestClientProperties =
-            bluePrintPropertiesService.propertyBeanType(
-                prefix, SSLBasicAuthRestClientProperties::class.java
-            )
-        val basicProps: BasicAuthRestClientProperties =
-            bluePrintPropertiesService.propertyBeanType(
+        BasicAuthRestClientProperties {
+            return bluePrintPropertiesService.propertyBeanType(
                 prefix, BasicAuthRestClientProperties::class.java
             )
-        sslProps.basicAuth = basicProps
-        return sslProps
-    }
+        }
+
+    private fun sslBasicAuthRestClientProperties(prefix: String):
+        SSLRestClientProperties {
+
+            val sslProps: SSLBasicAuthRestClientProperties =
+                bluePrintPropertiesService.propertyBeanType(
+                    prefix, SSLBasicAuthRestClientProperties::class.java
+                )
+            val basicProps: BasicAuthRestClientProperties =
+                bluePrintPropertiesService.propertyBeanType(
+                    prefix, BasicAuthRestClientProperties::class.java
+                )
+            sslProps.basicAuth = basicProps
+            return sslProps
+        }
 
     private fun sslTokenAuthRestClientProperties(prefix: String):
-            SSLRestClientProperties {
+        SSLRestClientProperties {
 
-        val sslProps: SSLTokenAuthRestClientProperties =
-            bluePrintPropertiesService.propertyBeanType(
-                prefix,
-                SSLTokenAuthRestClientProperties::class.java
-            )
-        val basicProps: TokenAuthRestClientProperties =
-            bluePrintPropertiesService.propertyBeanType(
-                prefix,
-                TokenAuthRestClientProperties::class.java
-            )
-        sslProps.tokenAuth = basicProps
-        return sslProps
-    }
+            val sslProps: SSLTokenAuthRestClientProperties =
+                bluePrintPropertiesService.propertyBeanType(
+                    prefix,
+                    SSLTokenAuthRestClientProperties::class.java
+                )
+            val basicProps: TokenAuthRestClientProperties =
+                bluePrintPropertiesService.propertyBeanType(
+                    prefix,
+                    TokenAuthRestClientProperties::class.java
+                )
+            sslProps.tokenAuth = basicProps
+            return sslProps
+        }
 
     private fun sslNoAuthRestClientProperties(prefix: String):
-            SSLRestClientProperties {
-        return bluePrintPropertiesService.propertyBeanType(
-            prefix, SSLRestClientProperties::class.java
-        )
-    }
+        SSLRestClientProperties {
+            return bluePrintPropertiesService.propertyBeanType(
+                prefix, SSLRestClientProperties::class.java
+            )
+        }
 
     private fun policyManagerRestClientProperties(prefix: String):
-            PolicyManagerRestClientProperties {
-        return bluePrintPropertiesService.propertyBeanType(
-            prefix, PolicyManagerRestClientProperties::class.java
-        )
-    }
+        PolicyManagerRestClientProperties {
+            return bluePrintPropertiesService.propertyBeanType(
+                prefix, PolicyManagerRestClientProperties::class.java
+            )
+        }
 
     interface PreInterceptor {
+
         fun getInstance(jsonNode: JsonNode): BlueprintWebClientService?
 
         fun getInstance(selector: String): BlueprintWebClientService?
     }
 
     interface PostInterceptor {
+
         fun getInstance(jsonNode: JsonNode, service: BlueprintWebClientService): BlueprintWebClientService
 
         fun getInstance(selector: String, service: BlueprintWebClientService): BlueprintWebClientService

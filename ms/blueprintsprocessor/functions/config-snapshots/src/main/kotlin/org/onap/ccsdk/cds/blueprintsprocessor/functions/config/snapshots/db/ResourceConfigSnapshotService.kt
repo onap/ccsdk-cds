@@ -97,7 +97,7 @@ open class ResourceConfigSnapshotService(private val resourceConfigSnapshotRepos
                     ?.let {
                         log.info(
                             "Overwriting configuration snapshot entry for resourceId=($resId), " +
-                                    "resourceType=($resType), status=($status)"
+                                "resourceType=($resType), status=($status)"
                         )
                         resourceConfigSnapshotRepository.deleteByResourceIdAndResourceTypeAndStatus(resId, resType, status)
                     }
@@ -107,8 +107,8 @@ open class ResourceConfigSnapshotService(private val resourceConfigSnapshotRepos
                 storedSnapshot = resourceConfigSnapshotRepository.saveAndFlush(resourceConfigSnapshotEntry)
                 log.info(
                     "Stored configuration snapshot for resourceId=($resId), " +
-                            "resourceType=($resType), status=($status), " +
-                            "dated=(${storedSnapshot.createdDate})"
+                        "resourceType=($resType), status=($status), " +
+                        "dated=(${storedSnapshot.createdDate})"
                 )
             } catch (ex: DataIntegrityViolationException) {
                 throw BluePrintException("Failed to store configuration snapshot entry.", ex)

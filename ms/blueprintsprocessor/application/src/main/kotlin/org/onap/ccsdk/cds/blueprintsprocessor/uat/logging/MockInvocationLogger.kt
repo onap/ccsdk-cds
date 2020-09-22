@@ -59,6 +59,7 @@ class MockInvocationLogger(private val marker: Marker) : InvocationListener {
     }
 
     companion object {
+
         private const val INDENT = "    "
         private val log = LoggerFactory.getLogger(MockInvocationLogger::class.java)
     }

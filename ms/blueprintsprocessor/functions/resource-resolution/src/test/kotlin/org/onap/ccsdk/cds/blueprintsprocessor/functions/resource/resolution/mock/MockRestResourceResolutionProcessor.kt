@@ -33,7 +33,7 @@ import java.util.HashMap
 
 class MockRestResourceResolutionProcessor(
     private val blueprintRestLibPropertyService:
-    MockBluePrintRestLibPropertyService
+        MockBluePrintRestLibPropertyService
 ) : ResourceAssignmentProcessor() {
 
     private val logger = LoggerFactory.getLogger(MockRestResourceResolutionProcessor::class.java)

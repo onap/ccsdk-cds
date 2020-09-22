@@ -97,14 +97,14 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
     suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>):
         ResourceAssignmentProcessor {
 
-        log.info("creating resource resolution of script type($scriptType), reference name($scriptClassReference)")
+            log.info("creating resource resolution of script type($scriptType), reference name($scriptClassReference)")
 
-        val scriptComponent = componentFunctionScriptingService
-            .scriptInstance<ResourceAssignmentProcessor>(
-                raRuntimeService.bluePrintContext(), scriptType,
-                scriptClassReference
-            )
+            val scriptComponent = componentFunctionScriptingService
+                .scriptInstance<ResourceAssignmentProcessor>(
+                    raRuntimeService.bluePrintContext(), scriptType,
+                    scriptClassReference
+                )
 
-        return scriptComponent
-    }
+            return scriptComponent
+        }
 }

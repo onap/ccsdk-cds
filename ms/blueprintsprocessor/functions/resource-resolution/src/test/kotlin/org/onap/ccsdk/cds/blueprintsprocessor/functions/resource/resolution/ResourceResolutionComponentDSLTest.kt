@@ -48,7 +48,8 @@ class ResourceResolutionComponentDSLTest {
                         "prop1" : "1234",
                         "prop2" : true,
                         "prop3" : 23
-                    }""".trimIndent()
+                    }
+                        """.trimIndent()
                     )
                 }
                 outputs {

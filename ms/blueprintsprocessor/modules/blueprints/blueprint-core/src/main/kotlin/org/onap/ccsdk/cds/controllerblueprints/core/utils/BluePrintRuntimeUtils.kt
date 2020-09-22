@@ -40,7 +40,7 @@ object BluePrintRuntimeUtils {
         bluePrintContext: BluePrintContext,
         fileName: String,
         context: MutableMap<String,
-                JsonNode>
+            JsonNode>
     ) {
         val jsonNode = JacksonUtils.jsonNodeFromClassPathFile(fileName)
         return assignInputs(bluePrintContext, jsonNode, context)

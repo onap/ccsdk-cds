@@ -59,36 +59,39 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @DirtiesContext
 @ContextConfiguration(
-    classes = [BluePrintMessageLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+    classes = [
+        BluePrintMessageLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
     properties =
-    ["blueprintsprocessor.messageconsumer.sample.type=kafka-scram-ssl-auth",
-        "blueprintsprocessor.messageconsumer.sample.bootstrapServers=127.0.0.1:9092",
-        "blueprintsprocessor.messageconsumer.sample.groupId=sample-group",
-        "blueprintsprocessor.messageconsumer.sample.topic=default-topic",
-        "blueprintsprocessor.messageconsumer.sample.clientId=default-client-id",
-        "blueprintsprocessor.messageconsumer.sample.pollMillSec=10",
-        "blueprintsprocessor.messageconsumer.sample.pollRecords=1",
-        "blueprintsprocessor.messageconsumer.sample.truststore=/path/to/truststore.jks",
-        "blueprintsprocessor.messageconsumer.sample.truststorePassword=secretpassword",
-        "blueprintsprocessor.messageconsumer.sample.keystore=/path/to/keystore.jks",
-        "blueprintsprocessor.messageconsumer.sample.keystorePassword=secretpassword",
-        "blueprintsprocessor.messageconsumer.sample.scramUsername=sample-user",
-        "blueprintsprocessor.messageconsumer.sample.scramPassword=secretpassword",
+        [
+            "blueprintsprocessor.messageconsumer.sample.type=kafka-scram-ssl-auth",
+            "blueprintsprocessor.messageconsumer.sample.bootstrapServers=127.0.0.1:9092",
+            "blueprintsprocessor.messageconsumer.sample.groupId=sample-group",
+            "blueprintsprocessor.messageconsumer.sample.topic=default-topic",
+            "blueprintsprocessor.messageconsumer.sample.clientId=default-client-id",
+            "blueprintsprocessor.messageconsumer.sample.pollMillSec=10",
+            "blueprintsprocessor.messageconsumer.sample.pollRecords=1",
+            "blueprintsprocessor.messageconsumer.sample.truststore=/path/to/truststore.jks",
+            "blueprintsprocessor.messageconsumer.sample.truststorePassword=secretpassword",
+            "blueprintsprocessor.messageconsumer.sample.keystore=/path/to/keystore.jks",
+            "blueprintsprocessor.messageconsumer.sample.keystorePassword=secretpassword",
+            "blueprintsprocessor.messageconsumer.sample.scramUsername=sample-user",
+            "blueprintsprocessor.messageconsumer.sample.scramPassword=secretpassword",
 
-        "blueprintsprocessor.messageproducer.sample.type=kafka-scram-ssl-auth",
-        "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
-        "blueprintsprocessor.messageproducer.sample.topic=default-topic",
-        "blueprintsprocessor.messageproducer.sample.clientId=default-client-id",
-        "blueprintsprocessor.messageproducer.sample.truststore=/path/to/truststore.jks",
-        "blueprintsprocessor.messageproducer.sample.truststorePassword=secretpassword",
-        "blueprintsprocessor.messageproducer.sample.keystore=/path/to/keystore.jks",
-        "blueprintsprocessor.messageproducer.sample.keystorePassword=secretpassword",
-        "blueprintsprocessor.messageproducer.sample.scramUsername=sample-user",
-        "blueprintsprocessor.messageproducer.sample.scramPassword=secretpassword"
-    ]
+            "blueprintsprocessor.messageproducer.sample.type=kafka-scram-ssl-auth",
+            "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
+            "blueprintsprocessor.messageproducer.sample.topic=default-topic",
+            "blueprintsprocessor.messageproducer.sample.clientId=default-client-id",
+            "blueprintsprocessor.messageproducer.sample.truststore=/path/to/truststore.jks",
+            "blueprintsprocessor.messageproducer.sample.truststorePassword=secretpassword",
+            "blueprintsprocessor.messageproducer.sample.keystore=/path/to/keystore.jks",
+            "blueprintsprocessor.messageproducer.sample.keystorePassword=secretpassword",
+            "blueprintsprocessor.messageproducer.sample.scramUsername=sample-user",
+            "blueprintsprocessor.messageproducer.sample.scramPassword=secretpassword"
+        ]
 )
 open class BlueprintMessageConsumerServiceTest {
 
@@ -206,46 +209,52 @@ open class BlueprintMessageConsumerServiceTest {
     fun testKafkaScramSslAuthConfig() {
 
         val expectedConfig = mapOf<String, Any>(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to "127.0.0.1:9092",
-                ConsumerConfig.GROUP_ID_CONFIG to "sample-group",
-                ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to true,
-                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "latest",
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to ByteArrayDeserializer::class.java,
-                ConsumerConfig.CLIENT_ID_CONFIG to "default-client-id",
-                CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to SecurityProtocol.SASL_SSL.toString(),
-                SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG to "JKS",
-                SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG to "/path/to/truststore.jks",
-                SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG to "secretpassword",
-                SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG to "/path/to/keystore.jks",
-                SslConfigs.SSL_KEYSTORE_TYPE_CONFIG to "JKS",
-                SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG to "secretpassword",
-                SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG to SslConfigs.DEFAULT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM,
-                SaslConfigs.SASL_MECHANISM to "SCRAM-SHA-512",
-                SaslConfigs.SASL_JAAS_CONFIG to "${ScramLoginModule::class.java.canonicalName} required " +
-                        "username=\"sample-user\" " +
-                        "password=\"secretpassword\";"
-                )
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to "127.0.0.1:9092",
+            ConsumerConfig.GROUP_ID_CONFIG to "sample-group",
+            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to true,
+            ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "latest",
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to ByteArrayDeserializer::class.java,
+            ConsumerConfig.CLIENT_ID_CONFIG to "default-client-id",
+            CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to SecurityProtocol.SASL_SSL.toString(),
+            SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG to "JKS",
+            SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG to "/path/to/truststore.jks",
+            SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG to "secretpassword",
+            SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG to "/path/to/keystore.jks",
+            SslConfigs.SSL_KEYSTORE_TYPE_CONFIG to "JKS",
+            SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG to "secretpassword",
+            SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG to SslConfigs.DEFAULT_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM,
+            SaslConfigs.SASL_MECHANISM to "SCRAM-SHA-512",
+            SaslConfigs.SASL_JAAS_CONFIG to "${ScramLoginModule::class.java.canonicalName} required " +
+                "username=\"sample-user\" " +
+                "password=\"secretpassword\";"
+        )
 
         val messageConsumerProperties = bluePrintMessageLibPropertyService
-                .messageConsumerProperties("${MessageLibConstants.PROPERTY_MESSAGE_CONSUMER_PREFIX}sample")
+            .messageConsumerProperties("${MessageLibConstants.PROPERTY_MESSAGE_CONSUMER_PREFIX}sample")
 
         val configProps = messageConsumerProperties.getConfig()
 
-        assertEquals(messageConsumerProperties.topic,
-                "default-topic",
-                "Topic doesn't match the expected value"
+        assertEquals(
+            messageConsumerProperties.topic,
+            "default-topic",
+            "Topic doesn't match the expected value"
         )
-        assertEquals(messageConsumerProperties.type,
-                "kafka-scram-ssl-auth",
-                "Authentication type doesn't match the expected value")
+        assertEquals(
+            messageConsumerProperties.type,
+            "kafka-scram-ssl-auth",
+            "Authentication type doesn't match the expected value"
+        )
 
         expectedConfig.forEach {
-            assertTrue(configProps.containsKey(it.key),
-                    "Missing expected kafka config key : ${it.key}")
-            assertEquals(configProps[it.key],
-                    it.value,
-                    "Unexpected value for ${it.key} got ${configProps[it.key]} instead of ${it.value}"
+            assertTrue(
+                configProps.containsKey(it.key),
+                "Missing expected kafka config key : ${it.key}"
+            )
+            assertEquals(
+                configProps[it.key],
+                it.value,
+                "Unexpected value for ${it.key} got ${configProps[it.key]} instead of ${it.value}"
             )
         }
     }

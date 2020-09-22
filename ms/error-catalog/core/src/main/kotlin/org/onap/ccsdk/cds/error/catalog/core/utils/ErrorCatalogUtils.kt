@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.error.catalog.core.utils
 import org.apache.commons.lang3.exception.ExceptionUtils
 
 object ErrorCatalogUtils {
+
     private const val REGEX_PATTERN = "^cause=(.*),action=(.*)"
     private val regex = REGEX_PATTERN.toRegex()
 

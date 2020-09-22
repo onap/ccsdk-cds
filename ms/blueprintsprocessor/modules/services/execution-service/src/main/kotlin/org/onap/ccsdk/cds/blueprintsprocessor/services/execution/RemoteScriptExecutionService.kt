@@ -26,7 +26,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteIdentifier
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionOutput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcLibPropertyService
 import org.onap.ccsdk.cds.controllerblueprints.command.api.CommandExecutorServiceGrpc
@@ -35,7 +34,6 @@ import org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutput
 import org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers
 import org.onap.ccsdk.cds.controllerblueprints.command.api.Packages
 import org.onap.ccsdk.cds.controllerblueprints.command.api.PrepareEnvInput
-import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -45,6 +43,7 @@ import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 
 interface RemoteScriptExecutionService {
+
     suspend fun init(selector: Any)
     suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput
     suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput): RemoteScriptExecutionOutput

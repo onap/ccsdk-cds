@@ -18,7 +18,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.grpc.service
 
 import com.github.marcoferrer.krotoplus.coroutines.client.clientCallBidiStreaming
 import com.google.protobuf.util.JsonFormat
-import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC

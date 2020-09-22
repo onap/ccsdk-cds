@@ -32,6 +32,7 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
     AbstractComponentFunction() {
 
     companion object {
+
         const val INPUT_SCRIPT_TYPE = "script-type"
         const val INPUT_SCRIPT_CLASS_REFERENCE = "script-class-reference"
         const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"

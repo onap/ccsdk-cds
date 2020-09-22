@@ -17,7 +17,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.asJsonType
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.createActionIdentifiersProto
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.createCommonHeaderProto
@@ -43,6 +42,7 @@ open class ComponentRemoteScriptExecutor(
 ) : AbstractComponentFunction() {
 
     companion object {
+
         const val INPUT_SELECTOR = "selector"
         const val INPUT_BLUEPRINT_NAME = "blueprint-name"
         const val INPUT_BLUEPRINT_VERSION = "blueprint-version"

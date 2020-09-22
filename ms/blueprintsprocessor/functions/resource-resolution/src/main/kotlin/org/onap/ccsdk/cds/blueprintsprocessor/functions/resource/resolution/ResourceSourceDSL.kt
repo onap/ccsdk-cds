@@ -247,6 +247,7 @@ class SourceDbNodeTemplateBuilder(id: String, description: String) :
     ) {
 
     class PropertiesBuilder : PropertiesAssignmentBuilder() {
+
         fun type(type: String) = type(type.asJsonPrimitive())
 
         fun type(type: JsonNode) {
@@ -286,6 +287,7 @@ class SourceDbNodeTemplateBuilder(id: String, description: String) :
 }
 
 class KeyMappingBuilder() {
+
     val map: MutableMap<String, String> = hashMapOf()
     fun map(key: String, value: String) {
         map[key] = value
@@ -312,6 +314,7 @@ class SourceRestNodeTemplateBuilder(id: String, description: String) :
     ) {
 
     class PropertiesBuilder : PropertiesAssignmentBuilder() {
+
         fun type(type: String) = type(type.asJsonPrimitive())
 
         fun type(type: JsonNode) {
@@ -390,6 +393,7 @@ class SourceCapabilityNodeTemplateBuilder(id: String, description: String) :
     ) {
 
     class PropertiesBuilder : PropertiesAssignmentBuilder() {
+
         fun type(type: String) = type(type.asJsonPrimitive())
 
         fun type(type: JsonNode) {

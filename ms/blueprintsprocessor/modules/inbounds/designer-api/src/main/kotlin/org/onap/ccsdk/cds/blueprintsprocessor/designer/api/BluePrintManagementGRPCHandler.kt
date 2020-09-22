@@ -29,7 +29,6 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
-import org.onap.ccsdk.cds.controllerblueprints.core.emptyTONull
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.currentTimestamp
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintBootstrapInput
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintDownloadInput
@@ -71,6 +70,7 @@ open class BluePrintManagementGRPCHandler(
             try {
                 /** Get the file byte array */
                 val byteArray = request.fileChunk.chunk.toByteArray()
+
                 /** Get the Upload Action */
                 val uploadAction = request.actionIdentifiers?.actionName.emptyTONull()
                     ?: UploadAction.DRAFT.toString()
@@ -169,7 +169,7 @@ open class BluePrintManagementGRPCHandler(
     override fun removeBlueprint(
         request: BluePrintRemoveInput,
         responseObserver:
-        StreamObserver<BluePrintManagementOutput>
+            StreamObserver<BluePrintManagementOutput>
     ) {
 
         runBlocking {
@@ -282,38 +282,38 @@ open class BluePrintManagementGRPCHandler(
     private fun onError(header: CommonHeader, message: String, error: Exception): BluePrintManagementOutput {
         val code = GrpcErrorCodes.code(ErrorCatalogCodes.GENERIC_FAILURE)
         return BluePrintManagementOutput.newBuilder()
-                .setCommonHeader(header)
-                .setStatus(
-                        Status.newBuilder()
-                                .setTimestamp(currentTimestamp())
-                                .setMessage(BluePrintConstants.STATUS_FAILURE)
-                                .setEventType(EventType.EVENT_COMPONENT_FAILURE)
-                                .setErrorMessage("Error : $message \n Details: ${error.errorMessageOrDefault()}")
-                                .setCode(code)
-                                .build()
-                )
-                .build()
+            .setCommonHeader(header)
+            .setStatus(
+                Status.newBuilder()
+                    .setTimestamp(currentTimestamp())
+                    .setMessage(BluePrintConstants.STATUS_FAILURE)
+                    .setEventType(EventType.EVENT_COMPONENT_FAILURE)
+                    .setErrorMessage("Error : $message \n Details: ${error.errorMessageOrDefault()}")
+                    .setCode(code)
+                    .build()
+            )
+            .build()
     }
 
     private fun onErrorCatalog(header: CommonHeader, message: String, error: BluePrintProcessorException):
-            BluePrintManagementOutput {
-        val err = if (error.protocol == "") {
-            error.grpc(ErrorCatalogCodes.GENERIC_FAILURE)
-        } else {
-            error.convertToGrpc()
-        }
-        val errorPayload = errorCatalogService.errorPayload(err.addErrorPayloadMessage(message))
-        return BluePrintManagementOutput.newBuilder()
+        BluePrintManagementOutput {
+            val err = if (error.protocol == "") {
+                error.grpc(ErrorCatalogCodes.GENERIC_FAILURE)
+            } else {
+                error.convertToGrpc()
+            }
+            val errorPayload = errorCatalogService.errorPayload(err.addErrorPayloadMessage(message))
+            return BluePrintManagementOutput.newBuilder()
                 .setCommonHeader(header)
                 .setStatus(
-                        Status.newBuilder()
-                                .setTimestamp(currentTimestamp())
-                                .setMessage(BluePrintConstants.STATUS_FAILURE)
-                                .setEventType(EventType.EVENT_COMPONENT_FAILURE)
-                                .setErrorMessage("Error : ${errorPayload.message}")
-                                .setCode(errorPayload.code)
-                                .build()
+                    Status.newBuilder()
+                        .setTimestamp(currentTimestamp())
+                        .setMessage(BluePrintConstants.STATUS_FAILURE)
+                        .setEventType(EventType.EVENT_COMPONENT_FAILURE)
+                        .setErrorMessage("Error : ${errorPayload.message}")
+                        .setCode(errorPayload.code)
+                        .build()
                 )
                 .build()
-    }
+        }
 }

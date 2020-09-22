@@ -32,6 +32,7 @@ import org.apache.kafka.streams.StreamsConfig
 
 /** Common Properties **/
 abstract class CommonProperties {
+
     lateinit var type: String
     lateinit var topic: String
     lateinit var bootstrapServers: String
@@ -73,6 +74,7 @@ open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties()
 
 /** SSL Auth */
 open class KafkaSslAuthMessageProducerProperties : KafkaBasicAuthMessageProducerProperties() {
+
     lateinit var truststore: String
     lateinit var truststorePassword: String
     var truststoreType: String = SslConfigs.DEFAULT_SSL_TRUSTSTORE_TYPE
@@ -100,6 +102,7 @@ open class KafkaSslAuthMessageProducerProperties : KafkaBasicAuthMessageProducer
 
 /** (SASL) SCRAM SSL Auth */
 class KafkaScramSslAuthMessageProducerProperties : KafkaSslAuthMessageProducerProperties() {
+
     var saslMechanism: String = "SCRAM-SHA-512"
     lateinit var scramUsername: String
     lateinit var scramPassword: String
@@ -109,8 +112,8 @@ class KafkaScramSslAuthMessageProducerProperties : KafkaSslAuthMessageProducerPr
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_SSL.toString()
         configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
-                "username=\"${scramUsername}\" " +
-                "password=\"${scramPassword}\";"
+            "username=\"${scramUsername}\" " +
+            "password=\"${scramPassword}\";"
         return configProps
     }
 }
@@ -122,6 +125,7 @@ abstract class MessageConsumerProperties : CommonProperties()
 
 /** Basic Auth */
 open class KafkaStreamsBasicAuthConsumerProperties : MessageConsumerProperties() {
+
     lateinit var applicationId: String
     var autoOffsetReset: String = "latest"
     var processingGuarantee: String = StreamsConfig.EXACTLY_ONCE
@@ -137,6 +141,7 @@ open class KafkaStreamsBasicAuthConsumerProperties : MessageConsumerProperties()
 
 /** SSL Auth */
 open class KafkaStreamsSslAuthConsumerProperties : KafkaStreamsBasicAuthConsumerProperties() {
+
     lateinit var truststore: String
     lateinit var truststorePassword: String
     var truststoreType: String = SslConfigs.DEFAULT_SSL_TRUSTSTORE_TYPE
@@ -163,6 +168,7 @@ open class KafkaStreamsSslAuthConsumerProperties : KafkaStreamsBasicAuthConsumer
 
 /** (SASL) SCRAM SSL Auth */
 class KafkaStreamsScramSslAuthConsumerProperties : KafkaStreamsSslAuthConsumerProperties() {
+
     var saslMechanism: String = "SCRAM-SHA-512"
     lateinit var scramUsername: String
     lateinit var scramPassword: String
@@ -172,8 +178,8 @@ class KafkaStreamsScramSslAuthConsumerProperties : KafkaStreamsSslAuthConsumerPr
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_SSL.toString()
         configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
-                "username=\"${scramUsername}\" " +
-                "password=\"${scramPassword}\";"
+            "username=\"${scramUsername}\" " +
+            "password=\"${scramPassword}\";"
         return configProps
     }
 }
@@ -182,6 +188,7 @@ class KafkaStreamsScramSslAuthConsumerProperties : KafkaStreamsSslAuthConsumerPr
 /** Message Consumer Properties **/
 /** Basic Auth */
 open class KafkaBasicAuthMessageConsumerProperties : MessageConsumerProperties() {
+
     lateinit var groupId: String
     lateinit var clientId: String
     var autoCommit: Boolean = true
@@ -213,6 +220,7 @@ open class KafkaBasicAuthMessageConsumerProperties : MessageConsumerProperties()
 
 /** SSL Auth */
 open class KafkaSslAuthMessageConsumerProperties : KafkaBasicAuthMessageConsumerProperties() {
+
     lateinit var truststore: String
     lateinit var truststorePassword: String
     var truststoreType: String = SslConfigs.DEFAULT_SSL_TRUSTSTORE_TYPE
@@ -239,6 +247,7 @@ open class KafkaSslAuthMessageConsumerProperties : KafkaBasicAuthMessageConsumer
 
 /** (SASL) SCRAM SSL Auth */
 class KafkaScramSslAuthMessageConsumerProperties : KafkaSslAuthMessageConsumerProperties() {
+
     var saslMechanism: String = "SCRAM-SHA-512"
     lateinit var scramUsername: String
     lateinit var scramPassword: String
@@ -248,8 +257,8 @@ class KafkaScramSslAuthMessageConsumerProperties : KafkaSslAuthMessageConsumerPr
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_SSL.toString()
         configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
-                "username=\"${scramUsername}\" " +
-                "password=\"${scramPassword}\";"
+            "username=\"${scramUsername}\" " +
+            "password=\"${scramPassword}\";"
         return configProps
     }
 }

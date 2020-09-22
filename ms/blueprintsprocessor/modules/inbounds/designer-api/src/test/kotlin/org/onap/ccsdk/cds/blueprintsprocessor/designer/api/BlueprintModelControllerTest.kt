@@ -72,6 +72,7 @@ class BlueprintModelControllerTest {
     private val log = logger(BlueprintModelControllerTest::class)
 
     companion object {
+
         private var bp: BlueprintModelSearch? = null
     }
 
@@ -115,11 +116,14 @@ class BlueprintModelControllerTest {
     fun test01_saveBluePrint() {
         bp = runBlocking {
             val body = MultipartBodyBuilder().apply {
-                part("file", object : ByteArrayResource(testZipFile!!.readBytes()) {
-                    override fun getFilename(): String {
-                        return "test.zip"
+                part(
+                    "file",
+                    object : ByteArrayResource(testZipFile!!.readBytes()) {
+                        override fun getFilename(): String {
+                            return "test.zip"
+                        }
                     }
-                })
+                )
             }.build()
 
             val saveBP = webTestClient
@@ -184,11 +188,14 @@ class BlueprintModelControllerTest {
     fun test07_publishBlueprintModel() {
         bp = runBlocking {
             val body = MultipartBodyBuilder().apply {
-                part("file", object : ByteArrayResource(testZipFile!!.readBytes()) {
-                    override fun getFilename(): String {
-                        return "test.zip"
+                part(
+                    "file",
+                    object : ByteArrayResource(testZipFile!!.readBytes()) {
+                        override fun getFilename(): String {
+                            return "test.zip"
+                        }
                     }
-                })
+                )
             }.build()
 
             val publishBP = webTestClient
@@ -239,7 +246,8 @@ class BlueprintModelControllerTest {
 
         webTestClient.delete().uri("/api/v1/blueprint-model/name/${bp!!.artifactName}/version/${bp!!.artifactVersion}")
             .header(
-                "Authorization", "Basic " + Base64Utils
+                "Authorization",
+                "Basic " + Base64Utils
                     .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8))
             )
             .exchange()
@@ -259,7 +267,8 @@ class BlueprintModelControllerTest {
 
         webTestClient.method(requestMethod).uri(uri)
             .header(
-                "Authorization", "Basic " + Base64Utils
+                "Authorization",
+                "Basic " + Base64Utils
                     .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8))
             )
             .body(body)

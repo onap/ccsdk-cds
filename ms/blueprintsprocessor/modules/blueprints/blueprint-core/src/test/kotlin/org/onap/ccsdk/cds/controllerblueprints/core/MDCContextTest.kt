@@ -26,7 +26,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class MDCContextTest {
+
     val log = logger(MDCContextTest::class)
+
     @Before
     fun setup() {
         MDC.clear()

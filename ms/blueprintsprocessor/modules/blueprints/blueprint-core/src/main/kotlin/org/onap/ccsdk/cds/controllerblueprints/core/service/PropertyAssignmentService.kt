@@ -298,7 +298,8 @@ open class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRunti
             ?: throw BluePrintException(
                 format(
                     "failed to get artifact definitions for node template ({})'s " +
-                        "artifact name ({}) ", nodeTemplateName, artifactExpression.artifactName
+                        "artifact name ({}) ",
+                    nodeTemplateName, artifactExpression.artifactName
                 )
             )
 

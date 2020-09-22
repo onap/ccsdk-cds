@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service
 open class BluePrintCoreConfiguration(private val bluePrintPropertiesService: BluePrintPropertiesService) {
 
     companion object {
+
         const val PREFIX_BLUEPRINT_PROCESSOR = "blueprintsprocessor"
     }
 
@@ -60,6 +61,7 @@ open class BluePrintPropertyConfiguration {
 
 @Service
 open class BluePrintPropertiesService(private var bluePrintPropertyConfig: BluePrintPropertyConfiguration) {
+
     private val log = logger(BluePrintPropertiesService::class)
 
     fun <T> propertyBeanType(prefix: String, type: Class<T>): T {

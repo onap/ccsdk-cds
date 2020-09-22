@@ -25,11 +25,17 @@ interface BlueprintMessageProducerService {
         sendMessageNB(key, message, headers)
     }
 
-    fun sendMessage(key: String = UUID.randomUUID().toString(), topic: String, message: Any, headers: MutableMap<String, String>? = null): Boolean = runBlocking {
-        sendMessageNB(key, topic, message, headers)
-    }
+    fun sendMessage(key: String = UUID.randomUUID().toString(), topic: String, message: Any, headers: MutableMap<String, String>? = null): Boolean =
+        runBlocking {
+            sendMessageNB(key, topic, message, headers)
+        }
 
     suspend fun sendMessageNB(key: String = UUID.randomUUID().toString(), message: Any, headers: MutableMap<String, String>? = null): Boolean
 
-    suspend fun sendMessageNB(key: String = UUID.randomUUID().toString(), topic: String, message: Any, headers: MutableMap<String, String>? = null): Boolean
+    suspend fun sendMessageNB(
+        key: String = UUID.randomUUID().toString(),
+        topic: String,
+        message: Any,
+        headers: MutableMap<String, String>? = null
+    ): Boolean
 }

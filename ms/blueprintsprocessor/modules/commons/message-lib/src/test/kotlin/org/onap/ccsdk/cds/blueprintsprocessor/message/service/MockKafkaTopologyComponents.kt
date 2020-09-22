@@ -31,6 +31,7 @@ import java.nio.charset.Charset
 import java.util.UUID
 
 class PriorityMessage : Serializable {
+
     lateinit var id: String
     lateinit var requestMessage: String
 }

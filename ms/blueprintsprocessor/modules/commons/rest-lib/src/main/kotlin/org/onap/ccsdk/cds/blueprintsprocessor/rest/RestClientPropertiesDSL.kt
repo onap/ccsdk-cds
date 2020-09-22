@@ -112,6 +112,7 @@ open class RestClientPropertiesAssignmentBuilder : PropertiesAssignmentBuilder()
 }
 
 open class BasicAuthRestClientPropertiesAssignmentBuilder : RestClientPropertiesAssignmentBuilder() {
+
     open fun password(password: String) {
         password(password.asJsonPrimitive())
     }
@@ -130,6 +131,7 @@ open class BasicAuthRestClientPropertiesAssignmentBuilder : RestClientProperties
 }
 
 open class TokenAuthRestClientPropertiesAssignmentBuilder : RestClientPropertiesAssignmentBuilder() {
+
     open fun token(token: String) {
         token(token.asJsonPrimitive())
     }
@@ -140,6 +142,7 @@ open class TokenAuthRestClientPropertiesAssignmentBuilder : RestClientProperties
 }
 
 open class SslAuthRestClientPropertiesAssignmentBuilder : RestClientPropertiesAssignmentBuilder() {
+
     open fun keyStoreInstance(keyStoreInstance: String) {
         keyStoreInstance(keyStoreInstance.asJsonPrimitive())
     }

@@ -40,7 +40,7 @@ public class SdcListenerAuthClientInterceptor implements ClientInterceptor {
 
     @Override
     public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> methodDescriptor,
-                                                               CallOptions callOptions, Channel channel) {
+            CallOptions callOptions, Channel channel) {
         Key<String> authHeader = Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
         return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(
                 channel.newCall(methodDescriptor, callOptions)) {

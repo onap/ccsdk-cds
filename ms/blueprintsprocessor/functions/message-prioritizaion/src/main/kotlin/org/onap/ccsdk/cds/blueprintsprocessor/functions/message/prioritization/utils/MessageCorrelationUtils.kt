@@ -44,39 +44,39 @@ object MessageCorrelationUtils {
 
     /** Assumption is message is of same group and checking for required types **/
     fun correlatedMessagesWithTypes(collectedMessages: List<MessagePrioritization>, types: List<String>?):
-            CorrelationCheckResponse {
+        CorrelationCheckResponse {
 
-        return if (!types.isNullOrEmpty() && collectedMessages.size > 1) {
+            return if (!types.isNullOrEmpty() && collectedMessages.size > 1) {
 
-            val unknownMessageTypes = collectedMessages.filter { !types.contains(it.type) }.map { it.id }
-            if (!unknownMessageTypes.isNullOrEmpty()) {
-                throw BluePrintProcessorException("Messages($unknownMessageTypes) is not in type of($types)")
-            }
+                val unknownMessageTypes = collectedMessages.filter { !types.contains(it.type) }.map { it.id }
+                if (!unknownMessageTypes.isNullOrEmpty()) {
+                    throw BluePrintProcessorException("Messages($unknownMessageTypes) is not in type of($types)")
+                }
 
-            val copyTypes = types.toTypedArray().copyOf().toMutableList()
+                val copyTypes = types.toTypedArray().copyOf().toMutableList()
 
-            val filteredMessage = collectedMessages.filter {
-                !it.correlationId.isNullOrBlank() &&
+                val filteredMessage = collectedMessages.filter {
+                    !it.correlationId.isNullOrBlank() &&
                         types.contains(it.type)
-            }
-            var correlatedKeys: MutableSet<String> = mutableSetOf()
-            if (filteredMessage.isNotEmpty()) {
-                val correlatedMap = filteredMessage.groupBy { it.toTypeNCorrelation() }
-                val foundType = correlatedMap.keys.map { it.type }
-                copyTypes.removeAll(foundType)
-                correlatedKeys = correlatedMap.keys.map {
-                    it.correlationId
-                }.toMutableSet()
-            }
-            /** Check if any Types missing and same correlation id for all types */
-            return if (copyTypes.isEmpty()) {
-                if (correlatedKeys.size == 1) CorrelationCheckResponse(correlated = true)
-                else CorrelationCheckResponse(message = "not matching correlation keys($correlatedKeys)")
+                }
+                var correlatedKeys: MutableSet<String> = mutableSetOf()
+                if (filteredMessage.isNotEmpty()) {
+                    val correlatedMap = filteredMessage.groupBy { it.toTypeNCorrelation() }
+                    val foundType = correlatedMap.keys.map { it.type }
+                    copyTypes.removeAll(foundType)
+                    correlatedKeys = correlatedMap.keys.map {
+                        it.correlationId
+                    }.toMutableSet()
+                }
+                /** Check if any Types missing and same correlation id for all types */
+                return if (copyTypes.isEmpty()) {
+                    if (correlatedKeys.size == 1) CorrelationCheckResponse(correlated = true)
+                    else CorrelationCheckResponse(message = "not matching correlation keys($correlatedKeys)")
+                } else {
+                    CorrelationCheckResponse(message = "couldn't find types($copyTypes)")
+                }
             } else {
-                CorrelationCheckResponse(message = "couldn't find types($copyTypes)")
+                return correlatedMessages(collectedMessages)
             }
-        } else {
-            return correlatedMessages(collectedMessages)
         }
-    }
 }

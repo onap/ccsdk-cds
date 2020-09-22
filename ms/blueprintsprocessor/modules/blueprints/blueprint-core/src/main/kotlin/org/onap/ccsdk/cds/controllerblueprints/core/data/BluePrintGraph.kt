@@ -38,6 +38,7 @@ enum class NodeStatus(val id: String) {
 }
 
 class Graph {
+
     val nodes: MutableMap<String, Node> = hashMapOf()
     val edges: MutableSet<Edge> = mutableSetOf()
 
@@ -93,6 +94,7 @@ class Graph {
     }
 
     data class Node(val id: String, var status: NodeStatus = NodeStatus.NOT_STARTED) {
+
         val edges: MutableList<Edge> = ArrayList()
 
         fun neighbors(): List<Node> = edges.map { edge -> edge.target(this) }
@@ -116,7 +118,7 @@ class Graph {
 
         fun equivalentTo(other: Edge) =
             (source == other.source && target == other.target) ||
-                    (source == other.target && target == other.source)
+                (source == other.target && target == other.source)
 
         override fun toString() =
             "${source.id}>${target.id}/$label($status)"
@@ -125,6 +127,7 @@ class Graph {
     data class TermForm(val nodes: Collection<String>, val edges: List<Term>) {
 
         data class Term(val source: String, val target: String, val label: EdgeLabel) {
+
             override fun toString() = "Term($source, $target, $label)"
         }
     }
@@ -141,6 +144,7 @@ class Graph {
         }
 
         data class Link<out String, out EdgeLabel>(val node: String, val label: EdgeLabel) {
+
             override fun toString() = if (label == null) "$node" else "$node/$label"
         }
     }

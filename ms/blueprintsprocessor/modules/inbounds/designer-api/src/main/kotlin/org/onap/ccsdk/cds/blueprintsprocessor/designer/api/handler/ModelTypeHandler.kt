@@ -45,8 +45,10 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
         return if (modelType != null) {
             modelType
         } else {
-            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
-                    "couldn't get modelType($modelTypeName)")
+            throw httpProcessorException(
+                ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+                "couldn't get modelType($modelTypeName)"
+            )
         }
     }
 
@@ -55,7 +57,7 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
      *
      * @param tags tags
      * @return List<ModelType>
-    </ModelType> */
+     </ModelType> */
     suspend fun searchModelTypes(tags: String): List<ModelType> {
         check(tags.isNotBlank()) { "No Search Information provide" }
         return modelTypeRepository.findByTagsContainingIgnoreCase(tags)

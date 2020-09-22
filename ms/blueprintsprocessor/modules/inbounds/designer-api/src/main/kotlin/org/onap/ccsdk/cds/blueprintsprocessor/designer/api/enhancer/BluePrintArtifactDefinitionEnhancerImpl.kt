@@ -40,6 +40,7 @@ open class BluePrintArtifactDefinitionEnhancerImpl(
     BluePrintArtifactDefinitionEnhancer {
 
     companion object {
+
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
     }
 
@@ -79,7 +80,7 @@ open class BluePrintArtifactDefinitionEnhancerImpl(
 
         if (!alreadyEnhanced) {
             val resourceAssignments: MutableList<ResourceAssignment> = JacksonUtils.getListFromFile(artifactFilePath, ResourceAssignment::class.java)
-                    as? MutableList<ResourceAssignment>
+                as? MutableList<ResourceAssignment>
                 ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($artifactFilePath)")
 
             // Call Resource Assignment Enhancer

@@ -66,16 +66,17 @@ open class BluePrintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
 
                     check(
                         nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW ||
-                                nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_COMPONENT
+                            nodeTypeDerivedFrom == BluePrintConstants.MODEL_TYPE_NODE_COMPONENT
                     ) {
                         "NodeType(${nodeTemplate.type}) derived from is '$nodeTypeDerivedFrom', Expected " +
-                                "'${BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW}' or '${BluePrintConstants.MODEL_TYPE_NODE_COMPONENT}'"
+                            "'${BluePrintConstants.MODEL_TYPE_NODE_WORKFLOW}' or '${BluePrintConstants.MODEL_TYPE_NODE_COMPONENT}'"
                     }
                 } catch (e: Exception) {
                     bluePrintRuntimeService.getBluePrintError()
                         .addError(
                             "Failed to validate Workflow($workflowName)'s step($stepName)'s " +
-                                    "definition", paths.joinToString(BluePrintConstants.PATH_DIVIDER), e.message!!
+                                "definition",
+                            paths.joinToString(BluePrintConstants.PATH_DIVIDER), e.message!!
                         )
                 }
             }

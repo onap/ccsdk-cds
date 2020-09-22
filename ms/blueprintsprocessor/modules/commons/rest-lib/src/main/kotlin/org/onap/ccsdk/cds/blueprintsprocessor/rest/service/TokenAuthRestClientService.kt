@@ -23,7 +23,7 @@ import org.springframework.http.MediaType
 
 class TokenAuthRestClientService(
     private val restClientProperties:
-    TokenAuthRestClientProperties
+        TokenAuthRestClientProperties
 ) :
     BlueprintWebClientService {
 
@@ -36,15 +36,15 @@ class TokenAuthRestClientService(
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>):
-            Array<BasicHeader> {
-        val customHeaders: MutableMap<String, String> = headers.toMutableMap()
-        // inject additionalHeaders
-        customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
-        if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
-            customHeaders[HttpHeaders.AUTHORIZATION] = restClientProperties.token!!
+        Array<BasicHeader> {
+            val customHeaders: MutableMap<String, String> = headers.toMutableMap()
+            // inject additionalHeaders
+            customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
+            if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
+                customHeaders[HttpHeaders.AUTHORIZATION] = restClientProperties.token!!
+            }
+            return super.convertToBasicHeaders(customHeaders)
         }
-        return super.convertToBasicHeaders(customHeaders)
-    }
 
     override fun host(uri: String): String {
         return restClientProperties.url + uri

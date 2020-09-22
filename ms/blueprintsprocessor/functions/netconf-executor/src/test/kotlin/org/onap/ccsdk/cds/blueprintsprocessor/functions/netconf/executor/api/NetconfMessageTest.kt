@@ -22,6 +22,7 @@ import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.utils.RpcStatus
 
 class NetconfMessageTest {
+
     @Test
     fun testSuccessfulDeviceResponse() {
         val dr: DeviceResponse = genSuccessfulEmptyDeviceResponse()

@@ -59,12 +59,12 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
             }
             MessageLibConstants.TYPE_KAFKA_SSL_AUTH -> {
                 bluePrintPropertiesService.propertyBeanType(
-                        prefix, KafkaSslAuthMessageProducerProperties::class.java
+                    prefix, KafkaSslAuthMessageProducerProperties::class.java
                 )
             }
             MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH -> {
                 bluePrintPropertiesService.propertyBeanType(
-                        prefix, KafkaScramSslAuthMessageProducerProperties::class.java
+                    prefix, KafkaScramSslAuthMessageProducerProperties::class.java
                 )
             }
             else -> {
@@ -113,33 +113,33 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
             /** Message Consumer */
             MessageLibConstants.TYPE_KAFKA_BASIC_AUTH -> {
                 bluePrintPropertiesService.propertyBeanType(
-                        prefix, KafkaBasicAuthMessageConsumerProperties::class.java
+                    prefix, KafkaBasicAuthMessageConsumerProperties::class.java
                 )
             }
             MessageLibConstants.TYPE_KAFKA_SSL_AUTH -> {
                 bluePrintPropertiesService.propertyBeanType(
-                        prefix, KafkaSslAuthMessageConsumerProperties::class.java
+                    prefix, KafkaSslAuthMessageConsumerProperties::class.java
                 )
             }
             MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH -> {
                 bluePrintPropertiesService.propertyBeanType(
-                        prefix, KafkaScramSslAuthMessageConsumerProperties::class.java
+                    prefix, KafkaScramSslAuthMessageConsumerProperties::class.java
                 )
             }
             /** Stream Consumer */
             MessageLibConstants.TYPE_KAFKA_STREAMS_BASIC_AUTH -> {
                 bluePrintPropertiesService.propertyBeanType(
-                        prefix, KafkaStreamsBasicAuthConsumerProperties::class.java
+                    prefix, KafkaStreamsBasicAuthConsumerProperties::class.java
                 )
             }
             MessageLibConstants.TYPE_KAFKA_STREAMS_SSL_AUTH -> {
                 bluePrintPropertiesService.propertyBeanType(
-                        prefix, KafkaStreamsSslAuthConsumerProperties::class.java
+                    prefix, KafkaStreamsSslAuthConsumerProperties::class.java
                 )
             }
             MessageLibConstants.TYPE_KAFKA_STREAMS_SCRAM_SSL_AUTH -> {
                 bluePrintPropertiesService.propertyBeanType(
-                        prefix, KafkaStreamsScramSslAuthConsumerProperties::class.java
+                    prefix, KafkaStreamsScramSslAuthConsumerProperties::class.java
                 )
             }
             else -> {
@@ -178,44 +178,44 @@ open class BluePrintMessageLibPropertyService(private var bluePrintPropertiesSer
     }
 
     private fun blueprintMessageConsumerService(messageConsumerProperties: MessageConsumerProperties):
-            BlueprintMessageConsumerService {
+        BlueprintMessageConsumerService {
 
-        when (messageConsumerProperties.type) {
-            /** Message Consumer */
-            MessageLibConstants.TYPE_KAFKA_BASIC_AUTH -> {
-                return KafkaMessageConsumerService(
+            when (messageConsumerProperties.type) {
+                /** Message Consumer */
+                MessageLibConstants.TYPE_KAFKA_BASIC_AUTH -> {
+                    return KafkaMessageConsumerService(
                         messageConsumerProperties as KafkaBasicAuthMessageConsumerProperties
-                )
-            }
-            MessageLibConstants.TYPE_KAFKA_SSL_AUTH -> {
-                return KafkaMessageConsumerService(
+                    )
+                }
+                MessageLibConstants.TYPE_KAFKA_SSL_AUTH -> {
+                    return KafkaMessageConsumerService(
                         messageConsumerProperties as KafkaSslAuthMessageConsumerProperties
-                )
-            }
-            MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH -> {
-                return KafkaMessageConsumerService(
+                    )
+                }
+                MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH -> {
+                    return KafkaMessageConsumerService(
                         messageConsumerProperties as KafkaScramSslAuthMessageConsumerProperties
-                )
-            }
-            /** Stream Consumer */
-            MessageLibConstants.TYPE_KAFKA_STREAMS_BASIC_AUTH -> {
-                return KafkaStreamsConsumerService(
+                    )
+                }
+                /** Stream Consumer */
+                MessageLibConstants.TYPE_KAFKA_STREAMS_BASIC_AUTH -> {
+                    return KafkaStreamsConsumerService(
                         messageConsumerProperties as KafkaStreamsBasicAuthConsumerProperties
-                )
-            }
-            MessageLibConstants.TYPE_KAFKA_STREAMS_SSL_AUTH -> {
-                return KafkaStreamsConsumerService(
+                    )
+                }
+                MessageLibConstants.TYPE_KAFKA_STREAMS_SSL_AUTH -> {
+                    return KafkaStreamsConsumerService(
                         messageConsumerProperties as KafkaStreamsSslAuthConsumerProperties
-                )
-            }
-            MessageLibConstants.TYPE_KAFKA_STREAMS_SCRAM_SSL_AUTH -> {
-                return KafkaStreamsConsumerService(
+                    )
+                }
+                MessageLibConstants.TYPE_KAFKA_STREAMS_SCRAM_SSL_AUTH -> {
+                    return KafkaStreamsConsumerService(
                         messageConsumerProperties as KafkaStreamsScramSslAuthConsumerProperties
-                )
-            }
-            else -> {
-                throw BluePrintProcessorException("couldn't get message client service for ${messageConsumerProperties.type}")
+                    )
+                }
+                else -> {
+                    throw BluePrintProcessorException("couldn't get message client service for ${messageConsumerProperties.type}")
+                }
             }
         }
-    }
 }

@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
 open class DBDataSourceProperties {
+
     var type: String = DBLibConstants.MARIA_DB
     lateinit var url: String
     lateinit var username: String
@@ -25,6 +26,7 @@ open class DBDataSourceProperties {
 }
 
 open class PrimaryDataSourceProperties : DBDataSourceProperties() {
+
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
@@ -32,6 +34,7 @@ open class PrimaryDataSourceProperties : DBDataSourceProperties() {
 }
 
 open class MariaDataSourceProperties : DBDataSourceProperties() {
+
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
@@ -40,6 +43,7 @@ open class MariaDataSourceProperties : DBDataSourceProperties() {
 }
 
 open class MySqlDataSourceProperties : DBDataSourceProperties() {
+
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String

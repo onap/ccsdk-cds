@@ -55,7 +55,7 @@ class ImperativeWorkflowExecutionService(
         val graph = bluePrintContext.workflowByName(workflowName).asGraph()
 
         return ImperativeBluePrintWorkflowService(nodeTemplateExecutionService)
-                .executeWorkflow(graph, bluePrintRuntimeService, executionServiceInput)
+            .executeWorkflow(graph, bluePrintRuntimeService, executionServiceInput)
     }
 }
 
@@ -115,22 +115,22 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
     }
 
     override suspend fun prepareNodeExecutionMessage(node: Graph.Node):
-            NodeExecuteMessage<ExecutionServiceInput, ExecutionServiceOutput> {
-        val nodeOutput = ExecutionServiceOutput().apply {
-            commonHeader = executionServiceInput.commonHeader
-            actionIdentifiers = executionServiceInput.actionIdentifiers
+        NodeExecuteMessage<ExecutionServiceInput, ExecutionServiceOutput> {
+            val nodeOutput = ExecutionServiceOutput().apply {
+                commonHeader = executionServiceInput.commonHeader
+                actionIdentifiers = executionServiceInput.actionIdentifiers
+            }
+            return NodeExecuteMessage(node, executionServiceInput, nodeOutput)
         }
-        return NodeExecuteMessage(node, executionServiceInput, nodeOutput)
-    }
 
     override suspend fun prepareNodeSkipMessage(node: Graph.Node):
-            NodeSkipMessage<ExecutionServiceInput, ExecutionServiceOutput> {
-        val nodeOutput = ExecutionServiceOutput().apply {
-            commonHeader = executionServiceInput.commonHeader
-            actionIdentifiers = executionServiceInput.actionIdentifiers
+        NodeSkipMessage<ExecutionServiceInput, ExecutionServiceOutput> {
+            val nodeOutput = ExecutionServiceOutput().apply {
+                commonHeader = executionServiceInput.commonHeader
+                actionIdentifiers = executionServiceInput.actionIdentifiers
+            }
+            return NodeSkipMessage(node, executionServiceInput, nodeOutput)
         }
-        return NodeSkipMessage(node, executionServiceInput, nodeOutput)
-    }
 
     override suspend fun executeNode(
         node: Graph.Node,
@@ -141,6 +141,7 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
         val step = bluePrintRuntimeService.bluePrintContext().workflowStepByName(this.workflowName, node.id)
         checkNotEmpty(step.target) { "couldn't get step target for workflow(${this.workflowName})'s step(${node.id})" }
         val nodeTemplateName = step.target!!
+
         /** execute node template */
         val executionServiceOutput = nodeTemplateExecutionService
             .executeNodeTemplate(bluePrintRuntimeService, nodeTemplateName, nodeInput)

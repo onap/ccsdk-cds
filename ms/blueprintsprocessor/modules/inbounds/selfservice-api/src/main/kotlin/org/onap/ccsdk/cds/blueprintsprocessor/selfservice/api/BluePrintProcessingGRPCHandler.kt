@@ -21,7 +21,6 @@ import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.toJava
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
@@ -74,10 +73,10 @@ open class BluePrintProcessingGRPCHandler(
 
             fun onError(error: Exception) {
                 responseObserver.onError(
-                        Status.INTERNAL
-                                .withDescription(error.errorMessageOrDefault())
-                                .withCause(error.errorCauseOrDefault())
-                                .asException()
+                    Status.INTERNAL
+                        .withDescription(error.errorMessageOrDefault())
+                        .withCause(error.errorCauseOrDefault())
+                        .asException()
                 )
             }
 
@@ -88,10 +87,10 @@ open class BluePrintProcessingGRPCHandler(
                 val errorPayload = errorCatalogService.errorPayload(error)
                 val grpcCode = Status.fromCodeValue(errorPayload.code)
                 responseObserver.onError(
-                        grpcCode
-                                .withDescription(errorPayload.message)
-                                .withCause(error.errorCauseOrDefault())
-                                .asException()
+                    grpcCode
+                        .withDescription(errorPayload.message)
+                        .withCause(error.errorCauseOrDefault())
+                        .asException()
                 )
             }
 

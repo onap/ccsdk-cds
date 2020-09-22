@@ -57,7 +57,7 @@ class BluePrintTemplateService(private val bluePrintLoadConfiguration: BluePrint
             else -> {
                 throw BluePrintProcessorException(
                     "Unknown Artifact type, expecting ${BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_JINJA}" +
-                            "or ${BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_VELOCITY}"
+                        "or ${BluePrintConstants.MODEL_TYPE_ARTIFACT_TEMPLATE_VELOCITY}"
                 )
             }
         }

@@ -26,6 +26,7 @@ import org.springframework.util.Base64Utils
 
 class TestSecuritySettings {
     companion object {
+
         private const val authUsername = "walter.white"
         private const val authPassword = "Heisenberg"
 
@@ -34,6 +35,7 @@ class TestSecuritySettings {
     }
 
     class ServerContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+
         override fun initialize(context: ConfigurableApplicationContext) {
             TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
                 context,

@@ -35,16 +35,18 @@
  *
  *
  */
+
 package org.onap.ccsdk.cds.sdclistener.exceptions;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+
 public class SdcListenerExceptionTest {
 
     @Test
     public void testConstructor() {
-        final String s1="Exception occured";
-        SdcListenerException sle=new SdcListenerException(s1);
-        assertEquals(sle.getMessage(),"Exception occured");
+        final String s1 = "Exception occured";
+        SdcListenerException sle = new SdcListenerException(s1);
+        assertEquals(sle.getMessage(), "Exception occured");
     }
 }

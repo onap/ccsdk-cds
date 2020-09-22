@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
 
 open class K8sProfileUploadProperties {
+
     var type: String = K8sProfileUploadConstants.PREFIX_K8S_PLUGIN
     lateinit var url: String
     lateinit var username: String

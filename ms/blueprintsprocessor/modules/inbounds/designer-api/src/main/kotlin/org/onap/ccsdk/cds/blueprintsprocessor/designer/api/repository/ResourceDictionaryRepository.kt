@@ -35,7 +35,7 @@ interface ResourceDictionaryRepository : JpaRepository<ResourceDictionary, Strin
      *
      * @param name name
      * @return Optional<ResourceMapping>
-    </ResourceMapping> */
+     </ResourceMapping> */
     fun findByName(name: String): ResourceDictionary?
 
     /**
@@ -43,7 +43,7 @@ interface ResourceDictionaryRepository : JpaRepository<ResourceDictionary, Strin
      *
      * @param names names
      * @return Optional<ResourceMapping>
-    </ResourceMapping> */
+     </ResourceMapping> */
     fun findByNameIn(names: List<String>): List<ResourceDictionary>
 
     /**
@@ -51,7 +51,7 @@ interface ResourceDictionaryRepository : JpaRepository<ResourceDictionary, Strin
      *
      * @param tags tags
      * @return Optional<ModelType>
-    </ModelType> */
+     </ModelType> */
     fun findByTagsContainingIgnoreCase(tags: String): List<ResourceDictionary>
 
     /**

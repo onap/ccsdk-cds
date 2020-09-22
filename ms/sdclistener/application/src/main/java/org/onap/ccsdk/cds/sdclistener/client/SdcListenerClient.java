@@ -81,8 +81,8 @@ public class SdcListenerClient {
         result = this.distributionClient.start();
 
         if (!result.getDistributionActionResult().equals(DistributionActionResultEnum.SUCCESS)) {
-            throw new SdcListenerException(
-                    "Startup of the SDC distribution client failed with reason: " + result.getDistributionMessageResult());
+            throw new SdcListenerException("Startup of the SDC distribution client failed with reason: "
+                    + result.getDistributionMessageResult());
         }
     }
 

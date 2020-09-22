@@ -34,51 +34,61 @@ enum class ErrorCode(val value: Int, val httpCode: Int) {
         }
     },
     INVALID_FILE_EXTENSION(2, 415) {
+
         override fun message(detailMsg: String): String {
             return "Unexpected file extension. Details : {$detailMsg}"
         }
     },
     BLUEPRINT_PATH_MISSING(3, 503) {
+
         override fun message(detailMsg: String): String {
             return "Blueprint path missing or wrong. Details : {$detailMsg}"
         }
     },
     BLUEPRINT_WRITING_FAIL(4, 503) {
+
         override fun message(detailMsg: String): String {
             return "Fail to write blueprint files. Details : {$detailMsg}"
         }
     },
     IO_FILE_INTERRUPT(5, 503) {
+
         override fun message(detailMsg: String): String {
             return "IO file system interruption. Details : {$detailMsg}"
         }
     },
     INVALID_REQUEST_FORMAT(6, 400) {
+
         override fun message(detailMsg: String): String {
             return "Bad request. Details : {$detailMsg}"
         }
     },
     UNAUTHORIZED_REQUEST(7, 401) {
+
         override fun message(detailMsg: String): String {
             return "The request requires user authentication. Details : {$detailMsg}"
         }
     },
     REQUEST_NOT_FOUND(8, 404) {
+
         override fun message(detailMsg: String): String {
             return "Request mapping doesn't exist. Details : {$detailMsg}"
         }
     },
     RESOURCE_NOT_FOUND(9, 404) {
+
         override fun message(detailMsg: String): String {
             return "No response was found for this request in the server. Details : {$detailMsg}"
         }
     },
     CONFLICT_ADDING_RESOURCE(10, 409) {
+
         override fun message(detailMsg: String): String {
             return "Duplicated entry while saving Blueprint. Details : {$detailMsg}"
         }
     },
     DUPLICATE_DATA(11, 409) {
+
         override fun message(detailMsg: String): String {
             return "Duplicated data - was expecting one result, got more than one. Details : {$detailMsg}"
         }

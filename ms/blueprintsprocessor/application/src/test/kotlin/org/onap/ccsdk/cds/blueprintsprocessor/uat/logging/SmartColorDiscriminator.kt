@@ -24,6 +24,7 @@ import ch.qos.logback.core.sift.AbstractDiscriminator
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.MDC_COLOR_KEY
 
 class SmartColorDiscriminator : AbstractDiscriminator<ILoggingEvent>() {
+
     var defaultValue: String = "white"
 
     override fun getKey(): String {

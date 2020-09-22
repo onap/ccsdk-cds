@@ -26,8 +26,8 @@ import javax.annotation.PostConstruct
  * Default audit service when no audit publisher is defined, message aren't sent
  */
 @ConditionalOnProperty(
-        name = ["blueprintsprocessor.messageproducer.self-service-api.audit.kafkaEnable"],
-        havingValue = "false"
+    name = ["blueprintsprocessor.messageproducer.self-service-api.audit.kafkaEnable"],
+    havingValue = "false"
 )
 @Service
 class NoPublishAuditService : PublishAuditService {

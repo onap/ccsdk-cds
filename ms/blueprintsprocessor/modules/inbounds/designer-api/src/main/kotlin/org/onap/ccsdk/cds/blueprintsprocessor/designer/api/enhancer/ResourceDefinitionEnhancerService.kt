@@ -48,6 +48,7 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
     private val log = logger(ResourceDefinitionEnhancerService::class)
 
     companion object {
+
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
     }
 
@@ -112,15 +113,15 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
 
     // Read the Resource Definitions from the Database and write to type file.
     private fun generateResourceDictionary(blueprintBasePath: String, resourceAssignments: List<ResourceAssignment>):
-            List<ResourceDefinition> {
-        val resourceKeys = resourceAssignments.mapNotNull { it.dictionaryName }.distinct().sorted()
-        log.info("distinct resource keys ($resourceKeys)")
+        List<ResourceDefinition> {
+            val resourceKeys = resourceAssignments.mapNotNull { it.dictionaryName }.distinct().sorted()
+            log.info("distinct resource keys ($resourceKeys)")
 
-        // TODO("Optimise DB single Query to multiple Query")
-        return resourceKeys.map { resourceKey ->
-            getResourceDefinition(resourceKey)
+            // TODO("Optimise DB single Query to multiple Query")
+            return resourceKeys.map { resourceKey ->
+                getResourceDefinition(resourceKey)
+            }
         }
-    }
 
     private fun enrichResourceDefinitionSources(
         bluePrintContext: BluePrintContext,

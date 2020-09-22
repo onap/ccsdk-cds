@@ -24,6 +24,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource
 import javax.sql.DataSource
 
 class MySqlDatabaseConfiguration(private val mySqlDataSourceProperties: MySqlDataSourceProperties) : BluePrintDBLibGenericService {
+
     override fun namedParameterJdbcTemplate(): NamedParameterJdbcTemplate {
         return mySqlNamedParameterJdbcTemplate(mySqlDataSource())
     }

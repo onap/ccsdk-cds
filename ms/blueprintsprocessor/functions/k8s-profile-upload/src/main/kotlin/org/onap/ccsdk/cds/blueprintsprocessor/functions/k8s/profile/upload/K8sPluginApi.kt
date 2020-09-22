@@ -19,13 +19,13 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
 
-import org.springframework.http.HttpMethod
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import java.nio.file.Path
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpMethod
+import java.nio.file.Path
 
 class K8sPluginApi(
     val username: String,
@@ -34,6 +34,7 @@ class K8sPluginApi(
     val definition: String?,
     val definitionVersion: String?
 ) {
+
     private val service: K8sUploadFileRestClientService // BasicAuthRestClientService
     private val log = LoggerFactory.getLogger(K8sPluginApi::class.java)!!
 

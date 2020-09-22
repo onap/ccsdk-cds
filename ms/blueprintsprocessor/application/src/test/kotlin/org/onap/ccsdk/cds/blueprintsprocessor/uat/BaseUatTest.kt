@@ -55,6 +55,7 @@ abstract class BaseUatTest {
     }
 
     companion object {
+
         const val UAT_BLUEPRINTS_BASE_DIR = "../../../components/model-catalog/blueprint-model/uat-blueprints"
     }
 }

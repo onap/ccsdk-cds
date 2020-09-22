@@ -88,15 +88,15 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
 
     private fun blueprintGrpcServerService(grpcServerProperties: GrpcServerProperties):
         BluePrintGrpcServerService {
-        when (grpcServerProperties) {
-            is TLSAuthGrpcServerProperties -> {
-                return TLSAuthGrpcServerService(grpcServerProperties)
-            }
-            else -> {
-                throw BluePrintProcessorException("couldn't get grpc client service for properties $grpcServerProperties")
+            when (grpcServerProperties) {
+                is TLSAuthGrpcServerProperties -> {
+                    return TLSAuthGrpcServerService(grpcServerProperties)
+                }
+                else -> {
+                    throw BluePrintProcessorException("couldn't get grpc client service for properties $grpcServerProperties")
+                }
             }
         }
-    }
 
     /** GRPC Client Lib Property Service */
 
@@ -152,21 +152,21 @@ open class BluePrintGrpcLibPropertyService(private var bluePrintPropertiesServic
 
     fun blueprintGrpcClientService(grpcClientProperties: GrpcClientProperties):
         BluePrintGrpcClientService {
-        return when (grpcClientProperties) {
-            is TokenAuthGrpcClientProperties -> {
-                TokenAuthGrpcClientService(grpcClientProperties)
-            }
-            is TLSAuthGrpcClientProperties -> {
-                TLSAuthGrpcClientService(grpcClientProperties)
-            }
-            is BasicAuthGrpcClientProperties -> {
-                BasicAuthGrpcClientService(grpcClientProperties)
-            }
-            else -> {
-                throw BluePrintProcessorException("couldn't get grpc service for type(${grpcClientProperties.type})")
+            return when (grpcClientProperties) {
+                is TokenAuthGrpcClientProperties -> {
+                    TokenAuthGrpcClientService(grpcClientProperties)
+                }
+                is TLSAuthGrpcClientProperties -> {
+                    TLSAuthGrpcClientService(grpcClientProperties)
+                }
+                is BasicAuthGrpcClientProperties -> {
+                    BasicAuthGrpcClientService(grpcClientProperties)
+                }
+                else -> {
+                    throw BluePrintProcessorException("couldn't get grpc service for type(${grpcClientProperties.type})")
+                }
             }
         }
-    }
 
     private fun tokenAuthGrpcClientProperties(prefix: String): TokenAuthGrpcClientProperties {
         return bluePrintPropertiesService.propertyBeanType(prefix, TokenAuthGrpcClientProperties::class.java)

@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 import java.io.Serializable
 
 object MessageActionConstants {
+
     const val PRIORITIZE = "prioritize"
 }
 
@@ -33,6 +34,7 @@ enum class MessageState(val id: String) {
 }
 
 open class PrioritizationConfiguration : Serializable {
+
     lateinit var expiryConfiguration: ExpiryConfiguration
     lateinit var shutDownConfiguration: ShutDownConfiguration
     lateinit var cleanConfiguration: CleanConfiguration
@@ -41,12 +43,14 @@ open class PrioritizationConfiguration : Serializable {
 }
 
 open class KafkaConfiguration : Serializable {
+
     lateinit var inputTopicSelector: String // Consumer Configuration Selector
     lateinit var expiredTopic: String // Publish Configuration Selector
     lateinit var outputTopic: String // Publish Configuration Selector
 }
 
 open class NatsConfiguration : Serializable {
+
     lateinit var connectionSelector: String // Consumer Configuration Selector
     lateinit var inputSubject: String // Publish Configuration Selector
     lateinit var expiredSubject: String // Publish Configuration Selector
@@ -54,20 +58,24 @@ open class NatsConfiguration : Serializable {
 }
 
 open class ExpiryConfiguration : Serializable {
+
     var frequencyMilli: Long = 30000L
     var maxPollRecord: Int = 1000
 }
 
 open class ShutDownConfiguration : Serializable {
+
     var waitMill: Long = 30000L
 }
 
 open class CleanConfiguration : Serializable {
+
     var frequencyMilli: Long = 30000L
     var expiredRecordsHoldDays: Int = 5
 }
 
 open class UpdateStateRequest : Serializable {
+
     lateinit var id: String
     var group: String? = null
     var state: String? = null

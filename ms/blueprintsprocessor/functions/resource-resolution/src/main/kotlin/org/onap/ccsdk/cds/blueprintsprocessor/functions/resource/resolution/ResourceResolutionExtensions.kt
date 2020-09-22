@@ -48,9 +48,9 @@ suspend fun AbstractComponentFunction.contentFromResolvedArtifactNB(artifactPref
  */
 
 fun AbstractComponentFunction.storedContentFromResolvedArtifact(resolutionKey: String, artifactName: String):
-        String = runBlocking {
-    storedContentFromResolvedArtifactNB(resolutionKey, artifactName)
-}
+    String = runBlocking {
+        storedContentFromResolvedArtifactNB(resolutionKey, artifactName)
+    }
 
 fun AbstractComponentFunction.contentFromResolvedArtifact(artifactPrefix: String): String = runBlocking {
     contentFromResolvedArtifactNB(artifactPrefix)

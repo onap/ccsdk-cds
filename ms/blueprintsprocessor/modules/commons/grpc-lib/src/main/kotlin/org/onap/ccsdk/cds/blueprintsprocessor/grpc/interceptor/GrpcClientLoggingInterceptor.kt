@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.GrpcLoggerService
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 
 class GrpcClientLoggingInterceptor : ClientInterceptor {
+
     val log = logger(GrpcClientLoggingInterceptor::class)
 
     val loggingService = GrpcLoggerService()

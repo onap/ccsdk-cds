@@ -33,44 +33,47 @@ import org.springframework.stereotype.Service
 class BluePrintDBLibPropertyService(private var bluePrintPropertiesService: BluePrintPropertiesService) {
 
     fun JdbcTemplate(jsonNode: JsonNode): BluePrintDBLibGenericService =
-            blueprintDBDataSourceService(dBDataSourceProperties(jsonNode))
+        blueprintDBDataSourceService(dBDataSourceProperties(jsonNode))
 
     fun JdbcTemplate(selector: String): BluePrintDBLibGenericService =
-            blueprintDBDataSourceService(dBDataSourceProperties("blueprintsprocessor.db.$selector"))
+        blueprintDBDataSourceService(dBDataSourceProperties("blueprintsprocessor.db.$selector"))
 
     private fun dBDataSourceProperties(jsonNode: JsonNode): DBDataSourceProperties =
-            when (val type = jsonNode.get("type").textValue()) {
-                MYSQL_DB -> JacksonUtils.readValue(jsonNode, MySqlDataSourceProperties::class.java)
-                MARIA_DB -> JacksonUtils.readValue(jsonNode, MariaDataSourceProperties::class.java)
-                else -> {
-                    throw BluePrintProcessorException(
-                            "DB type ($type) is not supported. Valid types: $MARIA_DB, $MYSQL_DB")
-                }
-            }!!
+        when (val type = jsonNode.get("type").textValue()) {
+            MYSQL_DB -> JacksonUtils.readValue(jsonNode, MySqlDataSourceProperties::class.java)
+            MARIA_DB -> JacksonUtils.readValue(jsonNode, MariaDataSourceProperties::class.java)
+            else -> {
+                throw BluePrintProcessorException(
+                    "DB type ($type) is not supported. Valid types: $MARIA_DB, $MYSQL_DB"
+                )
+            }
+        }!!
 
     private fun dBDataSourceProperties(prefix: String): DBDataSourceProperties =
-            bluePrintPropertiesService.propertyBeanType("$prefix.type", String::class.java).let {
-                return when (it) {
-                    MARIA_DB, PROCESSOR_DB -> mariaDBConnectionProperties(prefix)
-                    MYSQL_DB -> mySqlDBConnectionProperties(prefix)
-                    else -> {
-                        throw BluePrintProcessorException(
-                                "DB type ($it) is not supported. Valid types: $MARIA_DB, $MYSQL_DB, $PROCESSOR_DB")
-                    }
+        bluePrintPropertiesService.propertyBeanType("$prefix.type", String::class.java).let {
+            return when (it) {
+                MARIA_DB, PROCESSOR_DB -> mariaDBConnectionProperties(prefix)
+                MYSQL_DB -> mySqlDBConnectionProperties(prefix)
+                else -> {
+                    throw BluePrintProcessorException(
+                        "DB type ($it) is not supported. Valid types: $MARIA_DB, $MYSQL_DB, $PROCESSOR_DB"
+                    )
                 }
             }
+        }
 
     private fun blueprintDBDataSourceService(dBConnetionProperties: DBDataSourceProperties): BluePrintDBLibGenericService =
-            when (dBConnetionProperties) {
-                is MariaDataSourceProperties -> MariaDatabaseConfiguration(dBConnetionProperties)
-                is MySqlDataSourceProperties -> MySqlDatabaseConfiguration(dBConnetionProperties)
-                else -> throw BluePrintProcessorException(
-                        "Failed to create db configuration for ${dBConnetionProperties.url}")
-            }
+        when (dBConnetionProperties) {
+            is MariaDataSourceProperties -> MariaDatabaseConfiguration(dBConnetionProperties)
+            is MySqlDataSourceProperties -> MySqlDatabaseConfiguration(dBConnetionProperties)
+            else -> throw BluePrintProcessorException(
+                "Failed to create db configuration for ${dBConnetionProperties.url}"
+            )
+        }
 
     private fun mySqlDBConnectionProperties(prefix: String): MySqlDataSourceProperties =
-            bluePrintPropertiesService.propertyBeanType(prefix, MySqlDataSourceProperties::class.java)
+        bluePrintPropertiesService.propertyBeanType(prefix, MySqlDataSourceProperties::class.java)
 
     private fun mariaDBConnectionProperties(prefix: String): MariaDataSourceProperties =
-            bluePrintPropertiesService.propertyBeanType(prefix, MariaDataSourceProperties::class.java)
+        bluePrintPropertiesService.propertyBeanType(prefix, MariaDataSourceProperties::class.java)
 }

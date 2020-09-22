@@ -48,7 +48,7 @@ interface BlueprintModelContentRepository : JpaRepository<BlueprintModelContent,
      * @return B?
      */
     fun findTopByBlueprintModelAndContentType(blueprintModel: BlueprintModel, contentType: String):
-            BlueprintModelContent?
+        BlueprintModelContent?
 
     /**
      * This is a findByBlueprintModelAndContentType method
@@ -58,7 +58,7 @@ interface BlueprintModelContentRepository : JpaRepository<BlueprintModelContent,
      * @return List<B>
      */
     fun findByBlueprintModelAndContentType(blueprintModel: BlueprintModel, contentType: String):
-            List<BlueprintModelContent>
+        List<BlueprintModelContent>
 
     /**
      * This is a findByBlueprintModel method

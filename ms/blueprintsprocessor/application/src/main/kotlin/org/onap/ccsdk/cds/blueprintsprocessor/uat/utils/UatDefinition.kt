@@ -47,9 +47,14 @@ data class RequestDefinition(
 )
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-data class ResponseDefinition(val status: Int = 200, val body: JsonNode? = null, val headers: Map<String, String> = mapOf("Content-Type" to "application/json")) {
+data class ResponseDefinition(
+    val status: Int = 200,
+    val body: JsonNode? = null,
+    val headers: Map<String, String> = mapOf("Content-Type" to "application/json")
+) {
 
     companion object {
+
         val DEFAULT_RESPONSES = listOf(ResponseDefinition())
     }
 }
@@ -61,9 +66,11 @@ class ExpectationDefinition(
     responses: List<ResponseDefinition>? = null,
     val times: String = ">= 1"
 ) {
+
     val responses: List<ResponseDefinition> = resolveOneOrMany(response, responses, ResponseDefinition.DEFAULT_RESPONSES)
 
     companion object {
+
         fun <T> resolveOneOrMany(one: T?, many: List<T>?, defaultMany: List<T>): List<T> = when {
             many != null -> many
             one != null -> listOf(one)
@@ -108,7 +115,8 @@ data class UatDefinition(
     }
 
     companion object {
+
         fun load(mapper: ObjectMapper, spec: String): UatDefinition =
-                mapper.convertValue(Yaml().load(spec), UatDefinition::class.java)
+            mapper.convertValue(Yaml().load(spec), UatDefinition::class.java)
     }
 }

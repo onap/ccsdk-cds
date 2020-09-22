@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.Dev
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfReceivedEvent
 
 class NetconfSessionListenerImplTest {
+
     // Note: mockk's verifyAll is akin to verify with verifyNoMoreInteractions in Mockito
     private val netconSession = mockk<NetconfSessionImpl>()
 

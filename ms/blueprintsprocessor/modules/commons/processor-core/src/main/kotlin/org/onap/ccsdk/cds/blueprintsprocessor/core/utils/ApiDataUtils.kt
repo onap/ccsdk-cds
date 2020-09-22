@@ -27,9 +27,7 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Flag
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.controllerDate
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.currentTimestamp
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.toControllerDate
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
 

@@ -215,10 +215,10 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         resolutionKey: String
     ) {
         resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
-                blueprintName,
-                blueprintVersion,
-                artifactName,
-                resolutionKey
+            blueprintName,
+            blueprintVersion,
+            artifactName,
+            resolutionKey
         )
     }
 }

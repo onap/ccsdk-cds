@@ -101,12 +101,13 @@ open class ResourceAssignment {
                 dictionaryName = $dictionaryName
                 dictionarySource = $dictionarySource
             ]
-            """.trimIndent()
+        """.trimIndent()
     }
 }
 
 data class KeyIdentifier(val name: String, val value: JsonNode)
 data class DictionaryMetadataEntry(val name: String, val value: String)
+
 /**
  * Data class for exposing summary of resource resolution
  */
@@ -132,6 +133,7 @@ data class ResolutionSummary(
     @JsonProperty("message")
     val message: String
 )
+
 /**
  * Interface for Source Definitions (ex Input Source,
  * Default Source, Database Source, Rest Sources, etc)
@@ -139,5 +141,6 @@ data class ResolutionSummary(
 interface ResourceSource : Serializable
 
 open class ResourceSourceMapping {
+
     lateinit var resourceSourceMappings: MutableMap<String, String>
 }

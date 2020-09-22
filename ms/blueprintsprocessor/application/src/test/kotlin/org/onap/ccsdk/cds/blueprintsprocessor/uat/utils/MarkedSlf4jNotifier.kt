@@ -38,6 +38,7 @@ class MarkedSlf4jNotifier(private val marker: Marker) : Notifier {
     }
 
     companion object {
+
         private val log = LoggerFactory.getLogger("uat.WireMock")
     }
 }

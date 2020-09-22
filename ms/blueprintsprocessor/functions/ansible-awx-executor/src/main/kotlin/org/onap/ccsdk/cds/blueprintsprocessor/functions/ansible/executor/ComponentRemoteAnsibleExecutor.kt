@@ -69,6 +69,7 @@ open class ComponentRemoteAnsibleExecutor(
     var checkDelay: Long = 15_000
 
     companion object {
+
         private val log = LoggerFactory.getLogger(ComponentRemoteAnsibleExecutor::class.java)
 
         // input fields names accepted by this executor
@@ -222,7 +223,7 @@ open class ComponentRemoteAnsibleExecutor(
             // provide more information via the response, like the ignored_fields, or variables_needed_to_start,
             // or resources_needed_to_start, in order to help user pinpoint the problems with the request.
             val message = "Execution of job template $job_template_name could not be started for requestId $processId." +
-                    " (Response: ${response.body}) "
+                " (Response: ${response.body}) "
             log.error(message)
             setNodeOutputErrors(ATTRIBUTE_EXEC_CMD_STATUS_ERROR, message)
         }

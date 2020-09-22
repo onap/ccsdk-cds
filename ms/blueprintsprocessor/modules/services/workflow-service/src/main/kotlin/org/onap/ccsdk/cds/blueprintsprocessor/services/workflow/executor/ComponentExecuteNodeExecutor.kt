@@ -38,32 +38,32 @@ open class ComponentExecuteNodeExecutor(private val nodeTemplateExecutionService
 
     @Throws(SvcLogicException::class)
     override fun execute(svc: SvcLogicServiceBase, node: SvcLogicNode, svcLogicContext: SvcLogicContext):
-            SvcLogicNode = runBlocking {
+        SvcLogicNode = runBlocking {
 
-        var outValue: String
+            var outValue: String
 
-        val ctx = svcLogicContext as BlueprintSvcLogicContext
+            val ctx = svcLogicContext as BlueprintSvcLogicContext
 
-        val nodeTemplateName = SvcLogicExpressionResolver.evaluate(node.getAttribute("plugin"), node, ctx)
+            val nodeTemplateName = SvcLogicExpressionResolver.evaluate(node.getAttribute("plugin"), node, ctx)
 
-        val executionInput = ctx.getRequest() as ExecutionServiceInput
+            val executionInput = ctx.getRequest() as ExecutionServiceInput
 
-        try { // Get the Request from the Context and Set to the Function Input and Invoke the function
-            val executionOutput = nodeTemplateExecutionService.executeNodeTemplate(
-                ctx.getBluePrintService(),
-                nodeTemplateName, executionInput
-            )
+            try { // Get the Request from the Context and Set to the Function Input and Invoke the function
+                val executionOutput = nodeTemplateExecutionService.executeNodeTemplate(
+                    ctx.getBluePrintService(),
+                    nodeTemplateName, executionInput
+                )
 
-            ctx.setResponse(executionOutput)
+                ctx.setResponse(executionOutput)
 
-            outValue = executionOutput.status.message
-            ctx.status = executionOutput.status.message
-        } catch (e: Exception) {
-            log.error("Could not execute plugin($nodeTemplateName) : ", e)
-            outValue = "failure"
-            ctx.status = "failure"
+                outValue = executionOutput.status.message
+                ctx.status = executionOutput.status.message
+            } catch (e: Exception) {
+                log.error("Could not execute plugin($nodeTemplateName) : ", e)
+                outValue = "failure"
+                ctx.status = "failure"
+            }
+
+            getNextNode(node, outValue)
         }
-
-        getNextNode(node, outValue)
-    }
 }

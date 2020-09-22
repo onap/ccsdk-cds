@@ -42,6 +42,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class NetconfDeviceCommunicatorTest {
+
     private lateinit var netconfSession: NetconfSession
     private lateinit var netconfSessionListener: NetconfSessionListener
     private lateinit var mockInputStream: InputStream
@@ -51,7 +52,9 @@ class NetconfDeviceCommunicatorTest {
     private val endPatternCharArray: List<Int> = stringToCharArray(RpcMessageUtils.END_PATTERN)
 
     companion object {
+
         private val chunkedEnding = "\n##\n"
+
         // using example from section 4.2 of RFC6242 (https://tools.ietf.org/html/rfc6242#section-4.2)
         private val validChunkedEncodedMsg = """
             |
@@ -197,7 +200,8 @@ class NetconfDeviceCommunicatorTest {
              xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
           <close-session/>
         </rpc>
-        """.trimIndent(), eventSlot.captured.messagePayload
+            """.trimIndent(),
+            eventSlot.captured.messagePayload
         )
     }
 

@@ -49,8 +49,10 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         return if (resourceDictionaryDb != null) {
             resourceDictionaryDb
         } else {
-            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
-                    String.format("couldn't get resource dictionary for name (%s)", name))
+            throw httpProcessorException(
+                ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+                String.format("couldn't get resource dictionary for name (%s)", name)
+            )
         }
     }
 
@@ -59,7 +61,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      *
      * @param names names
      * @return List<ResourceDictionary>
-    </ResourceDictionary> */
+     </ResourceDictionary> */
     suspend fun searchResourceDictionaryByNames(names: List<String>): List<ResourceDictionary> {
         Preconditions.checkArgument(CollectionUtils.isNotEmpty(names), "No Search Information provide")
         return resourceDictionaryRepository.findByNameIn(names)
@@ -70,7 +72,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      *
      * @param tags tags
      * @return List<ResourceDictionary>
-    </ResourceDictionary> */
+     </ResourceDictionary> */
     suspend fun searchResourceDictionaryByTags(tags: String): List<ResourceDictionary> {
         Preconditions.checkArgument(StringUtils.isNotBlank(tags), "No search tag information provide")
         return resourceDictionaryRepository.findByTagsContainingIgnoreCase(tags)
@@ -139,8 +141,10 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         resourceDictionary.resourceDictionaryGroup = resourceDefinition.group
         resourceDictionary.entrySchema = resourceDefinition.property.entrySchema?.type
         if (StringUtils.isBlank(resourceDefinition.tags)) {
-            resourceDictionary.tags = (resourceDefinition.name + ", " + resourceDefinition.updatedBy +
-                    ", " + resourceDefinition.updatedBy)
+            resourceDictionary.tags = (
+                resourceDefinition.name + ", " + resourceDefinition.updatedBy +
+                    ", " + resourceDefinition.updatedBy
+                )
         } else {
             resourceDictionary.tags = resourceDefinition.tags!!
         }

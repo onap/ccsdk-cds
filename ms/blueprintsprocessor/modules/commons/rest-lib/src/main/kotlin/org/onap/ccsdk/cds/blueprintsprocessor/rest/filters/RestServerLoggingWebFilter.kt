@@ -25,6 +25,7 @@ import reactor.core.publisher.Mono
 import reactor.util.context.Context
 
 open class RestServerLoggingWebFilter : WebFilter {
+
     override fun filter(serverWebExchange: ServerWebExchange, webFilterChain: WebFilterChain): Mono<Void> {
 
         val loggingService = RestLoggerService()

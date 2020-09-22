@@ -27,10 +27,12 @@ class RpcMessageUtilsTest {
 
     @Test
     fun getConfig() {
-        val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        val checkString = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
                 "<get-config><source><candidate/></source><filter type=\"subtree\">Test-Filter-Content</filter>" +
-                "</get-config></rpc>")
+                "</get-config></rpc>"
+            )
 
         val messageId = "Test-Message-ID"
         val configType = NetconfDatastore.CANDIDATE.datastore
@@ -45,10 +47,12 @@ class RpcMessageUtilsTest {
 
     @Test
     fun editConfig() {
-        val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        val checkString = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
                 "<edit-config><target><candidate/></target><default-operation>Test-Default-Operation</default-operation>" +
-                "<config xmlns:nc=\"urn:ietf:params:xml:ns:netconf:base:1.0\">Test-Filter-Content</config></edit-config></rpc>")
+                "<config xmlns:nc=\"urn:ietf:params:xml:ns:netconf:base:1.0\">Test-Filter-Content</config></edit-config></rpc>"
+            )
 
         val messageId = "Test-Message-ID"
         val configType = NetconfDatastore.CANDIDATE.datastore
@@ -64,9 +68,11 @@ class RpcMessageUtilsTest {
 
     @Test
     fun validate() {
-        val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        val checkString = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
-                "<validate><source><candidate/></source></validate></rpc>")
+                "<validate><source><candidate/></source></validate></rpc>"
+            )
 
         val messageId = "Test-Message-ID"
         val configType = NetconfDatastore.CANDIDATE.datastore
@@ -80,11 +86,13 @@ class RpcMessageUtilsTest {
     @Test
     fun cancelCommit() {
         val checkString =
-            ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            (
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                     "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
                     "<cancel-commit>" +
                     "<persist-id>1234</persist-id>" +
-                    "</cancel-commit></rpc>")
+                    "</cancel-commit></rpc>"
+                )
 
         val messageId = "Test-Message-ID"
 
@@ -98,10 +106,12 @@ class RpcMessageUtilsTest {
     @Test
     fun cancelCommitNoPersistId() {
         val checkString =
-            ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            (
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                     "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
                     "<cancel-commit>" +
-                    "</cancel-commit></rpc>")
+                    "</cancel-commit></rpc>"
+                )
 
         val messageId = "Test-Message-ID"
 
@@ -113,9 +123,11 @@ class RpcMessageUtilsTest {
 
     @Test
     fun commit() {
-        val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        val checkString = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
-                "<commit></commit></rpc>")
+                "<commit></commit></rpc>"
+            )
 
         val messageId = "Test-Message-ID"
 
@@ -132,11 +144,13 @@ class RpcMessageUtilsTest {
     @Test
     fun commitPersistId() {
         val checkString =
-            ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            (
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                     "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
                     "<commit>" +
                     "<persist-id>1234</persist-id>" +
-                    "</commit></rpc>")
+                    "</commit></rpc>"
+                )
 
         val messageId = "Test-Message-ID"
 
@@ -160,13 +174,15 @@ class RpcMessageUtilsTest {
     @Test
     fun commitPersist() {
         val checkString =
-            ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+            (
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                     "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
                     "<commit>" +
                     "<confirmed/>" +
                     "<confirm-timeout>30</confirm-timeout>" +
                     "<persist>1234</persist>" +
-                    "</commit></rpc>")
+                    "</commit></rpc>"
+                )
 
         val messageId = "Test-Message-ID"
 
@@ -189,9 +205,11 @@ class RpcMessageUtilsTest {
 
     @Test
     fun unlock() {
-        val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        val checkString = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
-                "<unlock><target><candidate/></target></unlock></rpc>")
+                "<unlock><target><candidate/></target></unlock></rpc>"
+            )
 
         val messageId = "Test-Message-ID"
         val configType = NetconfDatastore.CANDIDATE.datastore
@@ -204,9 +222,11 @@ class RpcMessageUtilsTest {
 
     @Test
     fun deleteConfig() {
-        val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        val checkString = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
-                "<delete-config><target><candidate/></target></delete-config></rpc>")
+                "<delete-config><target><candidate/></target></delete-config></rpc>"
+            )
 
         val messageId = "Test-Message-ID"
         val netconfTargetConfig = NetconfDatastore.CANDIDATE.datastore
@@ -228,9 +248,11 @@ class RpcMessageUtilsTest {
 
     @Test
     fun discardChanges() {
-        val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        val checkString = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
-                "<discard-changes/></rpc>")
+                "<discard-changes/></rpc>"
+            )
 
         val messageId = "Test-Message-ID"
 
@@ -242,9 +264,11 @@ class RpcMessageUtilsTest {
 
     @Test
     fun lock() {
-        val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+        val checkString = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                 "<rpc message-id=\"Test-Message-ID\" xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">" +
-                "<lock><target><candidate/></target></lock></rpc>")
+                "<lock><target><candidate/></target></lock></rpc>"
+            )
 
         val messageId = "Test-Message-ID"
         val configType = NetconfDatastore.CANDIDATE.datastore
@@ -273,8 +297,10 @@ class RpcMessageUtilsTest {
 
     @Test
     fun createHelloString() {
-        val checkString = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?><hello xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">  " +
-                "<capabilities>    <capability>hi</capability>    <capability>hello</capability>  </capabilities></hello>]]>]]>")
+        val checkString = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?><hello xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">  " +
+                "<capabilities>    <capability>hi</capability>    <capability>hello</capability>  </capabilities></hello>]]>]]>"
+            )
 
         val capability = listOf<String>("hi", "hello")
 
@@ -306,12 +332,16 @@ class RpcMessageUtilsTest {
 
     @Test
     fun formatRPCRequest() {
-        val checkString = ("#199" +
+        val checkString = (
+            "#199" +
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?><hello xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">  <capabilities>    <capability>hi</capability>    <capability>hello</capability>  </capabilities></hello>" +
-                "##")
+                "##"
+            )
 
-        val request = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?><hello xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">  " +
-                "<capabilities>    <capability>hi</capability>    <capability>hello</capability>  </capabilities></hello>]]>]]>")
+        val request = (
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?><hello xmlns=\"urn:ietf:params:xml:ns:netconf:base:1.0\">  " +
+                "<capabilities>    <capability>hi</capability>    <capability>hello</capability>  </capabilities></hello>]]>]]>"
+            )
 
         val messageId = "Test-Message-ID"
 

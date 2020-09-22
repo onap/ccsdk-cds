@@ -54,9 +54,11 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 class RestLoggerService {
+
     private val log = logger(RestLoggerService::class)
 
     companion object {
+
         /** Used before invoking any REST outbound request, Inbound Invocation ID is used as request Id
          * for outbound Request, If invocation Id is missing then default Request Id will be generated.
          */
@@ -110,6 +112,7 @@ suspend fun <T> mdcWebCoroutineScope(
     block: suspend CoroutineScope.() -> T
 ) = coroutineScope {
     val reactorContext = this.coroutineContext[ReactorContext]
+
     /** Populate MDC context only if present in Reactor Context */
     val newContext = if (reactorContext != null &&
         !reactorContext.context.isEmpty &&
@@ -138,8 +141,11 @@ fun <T> monoMdc(
     block: suspend CoroutineScope.() -> T?
 ): Mono<T> = Mono.create { sink ->
 
-    val reactorContext = (context[ReactorContext]?.context?.putAll(sink.currentContext())
-        ?: sink.currentContext()).asCoroutineContext()
+    val reactorContext = (
+        context[ReactorContext]?.context?.putAll(sink.currentContext())
+            ?: sink.currentContext()
+        ).asCoroutineContext()
+
     /** Populate MDC context only if present in Reactor Context */
     val newContext = if (!reactorContext.context.isEmpty &&
         reactorContext.context.hasKey(MDCContext)

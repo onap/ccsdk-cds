@@ -122,21 +122,21 @@ open class IpAssignResolutionCapability : ResourceAssignmentProcessor() {
     /** Generates aggregated request payload for Ip Assign mS. Parses the resourceassignments of
      * sourceCapability "ipassign-ms". It generates below sample payload
      * {
-    "requests": [{
-    "name": "fixed_ipv4_Address_01",
-    "property": {
-    "CloudRegionId": "abcd123",
-    "IpServiceName": "MobilityPlan",
-    }
-    }, {
-    "name": "fixed_ipv4_Address_02",
-    "property": {
-    "CloudRegionId": "abcd123",
-    "IpServiceName": "MobilityPlan",
-    }
-    }
-    ]
-    } */
+     "requests": [{
+     "name": "fixed_ipv4_Address_01",
+     "property": {
+     "CloudRegionId": "abcd123",
+     "IpServiceName": "MobilityPlan",
+     }
+     }, {
+     "name": "fixed_ipv4_Address_02",
+     "property": {
+     "CloudRegionId": "abcd123",
+     "IpServiceName": "MobilityPlan",
+     }
+     }
+     ]
+     } */
     private fun generatePayload(
         input: Map<String, Any>,
         groupResourceAssignments: MutableList<ResourceAssignment>

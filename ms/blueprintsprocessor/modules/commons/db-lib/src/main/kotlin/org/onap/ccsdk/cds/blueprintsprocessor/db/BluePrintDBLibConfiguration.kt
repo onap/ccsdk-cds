@@ -62,6 +62,7 @@ fun BluePrintDependencyService.primaryDBLibGenericService(): BluePrintDBLibGener
 
 class DBLibConstants {
     companion object {
+
         const val PREFIX_DB: String = "blueprintsprocessor.db"
 
         // list of database

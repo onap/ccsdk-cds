@@ -92,14 +92,14 @@ object ServiceTemplateUtils {
         toMerge.topologyTemplate?.nodeTemplates?.let {
             parentServiceTemplate.topologyTemplate?.nodeTemplates =
                 parentServiceTemplate.topologyTemplate?.nodeTemplates
-                    ?: hashMapOf()
+                ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.nodeTemplates?.putAll(parentServiceTemplate.topologyTemplate?.nodeTemplates as MutableMap)
         }
 
         toMerge.topologyTemplate?.relationshipTemplates?.let {
             parentServiceTemplate.topologyTemplate?.relationshipTemplates =
                 parentServiceTemplate.topologyTemplate?.relationshipTemplates
-                    ?: hashMapOf()
+                ?: hashMapOf()
             parentServiceTemplate.topologyTemplate?.relationshipTemplates?.putAll(parentServiceTemplate.topologyTemplate?.relationshipTemplates as MutableMap)
         }
 

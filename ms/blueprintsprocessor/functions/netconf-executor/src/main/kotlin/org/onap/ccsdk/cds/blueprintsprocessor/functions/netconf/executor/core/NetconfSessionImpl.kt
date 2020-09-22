@@ -65,7 +65,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
         try {
             log.info(
                 "$deviceInfo: Connecting to Netconf Device with timeouts C:${deviceInfo.connectTimeout}, " +
-                        "R:${deviceInfo.replyTimeout}, I:${deviceInfo.idleTimeout}"
+                    "R:${deviceInfo.replyTimeout}, I:${deviceInfo.idleTimeout}"
             )
             startConnection()
             log.info("$deviceInfo: Connected to Netconf Device")
@@ -78,7 +78,7 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
     override fun disconnect() {
         var retryNum = 3
         while (rpcService.closeSession(false).status
-                .equals(RpcStatus.FAILURE, true) && retryNum > 0
+            .equals(RpcStatus.FAILURE, true) && retryNum > 0
         ) {
             log.error("disconnect: graceful disconnect failed, retrying $retryNum times...")
             retryNum--
@@ -228,7 +228,8 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
             ImmutableSet.of(
                 ClientSession.ClientSessionEvent.WAIT_AUTH,
                 ClientSession.ClientSessionEvent.CLOSED, ClientSession.ClientSessionEvent.AUTHED
-            ), 0
+            ),
+            0
         )
         if (!event.contains(ClientSession.ClientSessionEvent.AUTHED)) {
             throw NetconfException("$deviceInfo: Failed to authenticate session.")

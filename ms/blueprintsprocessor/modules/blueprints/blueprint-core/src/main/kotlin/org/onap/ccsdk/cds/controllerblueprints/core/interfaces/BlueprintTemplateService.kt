@@ -55,6 +55,7 @@ open class BluePrintJsonNodeFactory : JsonNodeFactory() {
 }
 
 open class BluePrintTextNode(v: String) : TextNode(v) {
+
     override fun toString(): String {
         var len = this._value.length
         len = len + 2 + (len shr 4)

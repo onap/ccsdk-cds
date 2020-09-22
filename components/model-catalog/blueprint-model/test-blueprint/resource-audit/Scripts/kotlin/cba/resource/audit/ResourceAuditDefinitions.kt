@@ -29,55 +29,64 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.AbstractBluePrintDefinitions
 
 class ResourceAuditDefinitions : AbstractBluePrintDefinitions() {
+
     override fun serviceTemplate(): ServiceTemplate {
         return defaultServiceTemplate()
     }
 }
 
 fun ResourceAuditDefinitions.defaultServiceTemplate() =
-        serviceTemplate(name = "resource-audit",
-                version = "1.0.0",
-                author = "Brinda Santh Muthuramalingam",
-                tags = "brinda, tosca") {
+    serviceTemplate(
+        name = "resource-audit",
+        version = "1.0.0",
+        author = "Brinda Santh Muthuramalingam",
+        tags = "brinda, tosca"
+    ) {
 
-            topologyTemplate {
+        topologyTemplate {
 
-                workflow(id = "config-collect", description = "Collect the configuration for Device") {
-                    inputs {
-                        property(id = "device-id", type = BluePrintConstants.DATA_TYPE_STRING, required = true, description = "")
-                        property(id = "sources", type = BluePrintConstants.DATA_TYPE_LIST, required = true, description = "") {
-                            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
-                        }
-                    }
-                    outputs {
-                        property(id = "response-data", required = true, type = BluePrintConstants.DATA_TYPE_STRING, description = "") {
-                            value(getNodeTemplateAttribute(nodeTemplateId = "config-collector",
-                                    attributeId = ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA))
-                        }
-                        property(id = "status", required = true, type = BluePrintConstants.DATA_TYPE_STRING, description = "") {
-                            value(BluePrintConstants.STATUS_SUCCESS)
-                        }
-                    }
-                    step(id = "config-collector", target = "config-collector", description = "Collect the Configuration")
-                }
-
-                val configCollectorComponent = BluePrintTypes.nodeTemplateComponentScriptExecutor(
-                        id = "config-collector", description = "Config collector component") {
-
-                    definedOperation(description = "Config Collector Operation") {
-                        inputs {
-                            type(BluePrintConstants.SCRIPT_KOTLIN)
-                            scriptClassReference("cba.resource.audit.functions.ConfigCollector")
-                        }
-                        outputs {
-                            status(getAttribute(ComponentScriptExecutor.ATTRIBUTE_STATUS))
-                            responseData(getAttribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA))
-                        }
+            workflow(id = "config-collect", description = "Collect the configuration for Device") {
+                inputs {
+                    property(id = "device-id", type = BluePrintConstants.DATA_TYPE_STRING, required = true, description = "")
+                    property(id = "sources", type = BluePrintConstants.DATA_TYPE_LIST, required = true, description = "") {
+                        entrySchema(BluePrintConstants.DATA_TYPE_STRING)
                     }
                 }
-                nodeTemplate(configCollectorComponent)
+                outputs {
+                    property(id = "response-data", required = true, type = BluePrintConstants.DATA_TYPE_STRING, description = "") {
+                        value(
+                            getNodeTemplateAttribute(
+                                nodeTemplateId = "config-collector",
+                                attributeId = ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA
+                            )
+                        )
+                    }
+                    property(id = "status", required = true, type = BluePrintConstants.DATA_TYPE_STRING, description = "") {
+                        value(BluePrintConstants.STATUS_SUCCESS)
+                    }
+                }
+                step(id = "config-collector", target = "config-collector", description = "Collect the Configuration")
             }
 
-            nodeType(BluePrintTypes.nodeTypeComponent())
-            nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
+            val configCollectorComponent = BluePrintTypes.nodeTemplateComponentScriptExecutor(
+                id = "config-collector",
+                description = "Config collector component"
+            ) {
+
+                definedOperation(description = "Config Collector Operation") {
+                    inputs {
+                        type(BluePrintConstants.SCRIPT_KOTLIN)
+                        scriptClassReference("cba.resource.audit.functions.ConfigCollector")
+                    }
+                    outputs {
+                        status(getAttribute(ComponentScriptExecutor.ATTRIBUTE_STATUS))
+                        responseData(getAttribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA))
+                    }
+                }
+            }
+            nodeTemplate(configCollectorComponent)
         }
+
+        nodeType(BluePrintTypes.nodeTypeComponent())
+        nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
+    }

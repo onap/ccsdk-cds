@@ -17,40 +17,42 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.nrmfunction
 
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
-import org.junit.Test
 import org.junit.Ignore
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.Test
 import org.junit.runner.RunWith
-import org.springframework.test.context.junit4.SpringRunner
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.BluePrintRestLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ContextConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.BluePrintRestLibConfiguration
 import org.springframework.test.context.TestPropertySource
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
-import kotlin.test.assertNotNull
-import kotlin.test.assertEquals
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.http.ResponseEntity
-import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, NrmTestController::class])
-@TestPropertySource(properties = [
-    "blueprintsprocessor.restclient.nrm.type=basic-auth",
-    "blueprintsprocessor.restclient.nrm.url=http://127.0.0.1:8080",
-    "blueprintsprocessor.restclient.nrm.username=admin",
-    "blueprintsprocessor.restclient.nrm.password=admin"
-])
+@TestPropertySource(
+    properties = [
+        "blueprintsprocessor.restclient.nrm.type=basic-auth",
+        "blueprintsprocessor.restclient.nrm.url=http://127.0.0.1:8080",
+        "blueprintsprocessor.restclient.nrm.username=admin",
+        "blueprintsprocessor.restclient.nrm.password=admin"
+    ]
+)
 
 @Ignore
 class RestfulNRMServiceClientTest {
@@ -100,7 +102,11 @@ class RestfulNRMServiceClientTest {
         test_moi_data.put("data", test_attributes_data)
         val response = restfulNRMServiceClient.modifyMOIAttributes(restClientService, idStr, test_moi_data)
         assertNotNull(response, "failed to get modifyMOIAttributes response")
-        assertEquals("Modify MOI object attributes successfully", response.get("body").get("data").toString(), "failed to get modifyMOIAttributes response")
+        assertEquals(
+            "Modify MOI object attributes successfully",
+            response.get("body").get("data").toString(),
+            "failed to get modifyMOIAttributes response"
+        )
     }
 
     @Test

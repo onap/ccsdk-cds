@@ -148,13 +148,13 @@ class ResourceConfigSnapshotControllerTest {
             post(resourceType, resourceId, "RUNNING")
 
             webTestClient
-                    .get()
-                    .uri("/api/v1/configs/allByID?resourceId=$resourceId")
-                    .exchange()
-                    .expectStatus().is2xxSuccessful
-                    .expectBody()
-                    .jsonPath("$.length()")
-                    .isEqualTo(1)
+                .get()
+                .uri("/api/v1/configs/allByID?resourceId=$resourceId")
+                .exchange()
+                .expectStatus().is2xxSuccessful
+                .expectBody()
+                .jsonPath("$.length()")
+                .isEqualTo(1)
         }
     }
 
@@ -166,13 +166,13 @@ class ResourceConfigSnapshotControllerTest {
             post(resourceType, resourceId, "CANDIDATE")
 
             webTestClient
-                    .get()
-                    .uri("/api/v1/configs/allByID?resourceId=$resourceId&status=CANDIDATE")
-                    .exchange()
-                    .expectStatus().is2xxSuccessful
-                    .expectBody()
-                    .jsonPath("$.length()")
-                    .isEqualTo(1)
+                .get()
+                .uri("/api/v1/configs/allByID?resourceId=$resourceId&status=CANDIDATE")
+                .exchange()
+                .expectStatus().is2xxSuccessful
+                .expectBody()
+                .jsonPath("$.length()")
+                .isEqualTo(1)
         }
     }
 
@@ -181,11 +181,11 @@ class ResourceConfigSnapshotControllerTest {
         runBlocking {
 
             webTestClient
-                    .get()
-                    .uri("/api/v1/configs/allByID")
-                    .exchange()
-                    .expectStatus().is4xxClientError
-                    .expectBody()
+                .get()
+                .uri("/api/v1/configs/allByID")
+                .exchange()
+                .expectStatus().is4xxClientError
+                .expectBody()
         }
     }
 
@@ -194,11 +194,11 @@ class ResourceConfigSnapshotControllerTest {
         runBlocking {
 
             webTestClient
-                    .get()
-                    .uri("/api/v1/configs/allByID?resourceId=$resourceId&status=NOTGOOD")
-                    .exchange()
-                    .expectStatus().is4xxClientError
-                    .expectBody()
+                .get()
+                .uri("/api/v1/configs/allByID?resourceId=$resourceId&status=NOTGOOD")
+                .exchange()
+                .expectStatus().is4xxClientError
+                .expectBody()
         }
     }
 
@@ -210,13 +210,13 @@ class ResourceConfigSnapshotControllerTest {
             post(resourceType, "1", "RUNNING")
 
             webTestClient
-                    .get()
-                    .uri("/api/v1/configs/allByType?resourceType=$resourceType")
-                    .exchange()
-                    .expectStatus().is2xxSuccessful
-                    .expectBody()
-                    .jsonPath("$.length()")
-                    .isEqualTo(3)
+                .get()
+                .uri("/api/v1/configs/allByType?resourceType=$resourceType")
+                .exchange()
+                .expectStatus().is2xxSuccessful
+                .expectBody()
+                .jsonPath("$.length()")
+                .isEqualTo(3)
         }
     }
 
@@ -225,11 +225,11 @@ class ResourceConfigSnapshotControllerTest {
         runBlocking {
 
             webTestClient
-                    .get()
-                    .uri("/api/v1/configs/allByType")
-                    .exchange()
-                    .expectStatus().is4xxClientError
-                    .expectBody()
+                .get()
+                .uri("/api/v1/configs/allByType")
+                .exchange()
+                .expectStatus().is4xxClientError
+                .expectBody()
         }
     }
 
@@ -238,11 +238,11 @@ class ResourceConfigSnapshotControllerTest {
         runBlocking {
 
             webTestClient
-                    .get()
-                    .uri("/api/v1/configs/allByType?resourceType=$resourceType&status=NOTGOOD")
-                    .exchange()
-                    .expectStatus().is4xxClientError
-                    .expectBody()
+                .get()
+                .uri("/api/v1/configs/allByType?resourceType=$resourceType&status=NOTGOOD")
+                .exchange()
+                .expectStatus().is4xxClientError
+                .expectBody()
         }
     }
 

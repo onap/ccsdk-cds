@@ -37,13 +37,16 @@ open class PythonExecutorProperty {
 
     @Value("\${blueprints.processor.functions.python.executor.executionPath}")
     lateinit var executionPath: String
+
     @Value("#{'\${blueprints.processor.functions.python.executor.modulePaths}'.split(',')}")
     lateinit var modulePaths: List<String>
 }
 
 @Deprecated("CDS won't support JythonService")
 class PythonExecutorConstants {
+
     companion object {
+
         const val INPUT_INSTANCE_DEPENDENCIES = "instance-dependencies"
     }
 }

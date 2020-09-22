@@ -50,26 +50,27 @@ public class ResourceDictionaryUtilsTest {
         resourceDefinition.setSources(sources);
         // To Check Empty Source
         ResourceDictionaryUtils.populateSourceMapping(resourceAssignment, resourceDefinition);
-        Assert.assertEquals("Expected Empty source Input, but.", ResourceDictionaryConstants.SOURCE_INPUT, resourceAssignment.getDictionarySource());
+        Assert.assertEquals("Expected Empty source Input, but.", ResourceDictionaryConstants.SOURCE_INPUT,
+                resourceAssignment.getDictionarySource());
 
         // To Check First Source
         resourceAssignment.setDictionarySource(null);
         sources.put(ResourceDictionaryConstants.SOURCE_DEFAULT, new NodeTemplate());
         ResourceDictionaryUtils.populateSourceMapping(resourceAssignment, resourceDefinition);
-        Assert.assertEquals("Expected First source Default, but.",
-                ResourceDictionaryConstants.SOURCE_DEFAULT,
+        Assert.assertEquals("Expected First source Default, but.", ResourceDictionaryConstants.SOURCE_DEFAULT,
                 resourceAssignment.getDictionarySource());
 
         // To Check Assigned Source
         resourceAssignment.setDictionarySource(ResourceDictionaryConstants.PROCESSOR_DB);
         ResourceDictionaryUtils.populateSourceMapping(resourceAssignment, resourceDefinition);
-        Assert.assertEquals("Expected Assigned source DB, but.", ResourceDictionaryConstants.PROCESSOR_DB, resourceAssignment.getDictionarySource());
+        Assert.assertEquals("Expected Assigned source DB, but.", ResourceDictionaryConstants.PROCESSOR_DB,
+                resourceAssignment.getDictionarySource());
 
     }
 
     @Test
     public void testFindFirstSource() {
-        //To check if Empty Source
+        // To check if Empty Source
         Map<String, NodeTemplate> sources = new HashMap<>();
         String firstSource = ResourceDictionaryUtils.findFirstSource(sources);
         Assert.assertNull("Source populated, which is not expected.", firstSource);
@@ -82,7 +83,8 @@ public class ResourceDictionaryUtilsTest {
         // TO check the multiple Source
         sources.put(ResourceDictionaryConstants.PROCESSOR_DB, new NodeTemplate());
         String multipleFirstSource = ResourceDictionaryUtils.findFirstSource(sources);
-        Assert.assertEquals("Expected source Input, but.", ResourceDictionaryConstants.SOURCE_INPUT, multipleFirstSource);
+        Assert.assertEquals("Expected source Input, but.", ResourceDictionaryConstants.SOURCE_INPUT,
+                multipleFirstSource);
 
     }
 
