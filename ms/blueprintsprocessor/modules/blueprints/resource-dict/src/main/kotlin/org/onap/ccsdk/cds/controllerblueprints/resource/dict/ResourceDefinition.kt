@@ -101,7 +101,7 @@ open class ResourceAssignment {
                 dictionaryName = $dictionaryName
                 dictionarySource = $dictionarySource
             ]
-            """.trimIndent()
+        """.trimIndent()
     }
 }
 

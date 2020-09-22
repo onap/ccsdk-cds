@@ -67,9 +67,11 @@ open class ErrorPayload {
     }
 
     fun isEqualTo(errorPayload: ErrorPayload): Boolean {
-        return (this.code == errorPayload.code && this.status == errorPayload.status && this.message == errorPayload.message &&
-            this.logLevel == errorPayload.logLevel && this.debugMessage == errorPayload.debugMessage &&
-            this.subErrors == errorPayload.subErrors)
+        return (
+            this.code == errorPayload.code && this.status == errorPayload.status && this.message == errorPayload.message &&
+                this.logLevel == errorPayload.logLevel && this.debugMessage == errorPayload.debugMessage &&
+                this.subErrors == errorPayload.subErrors
+            )
     }
 
     private fun controllerDate(): Date {

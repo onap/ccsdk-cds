@@ -23,7 +23,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableConfigurationProperties(SdcListenerConfiguration.class)
-@ComponentScan(basePackages = {"org.onap.ccsdk.cds.blueprintsprocessor.healthapi","org.onap.ccsdk.cds.sdclistener"})
+@ComponentScan(basePackages = {"org.onap.ccsdk.cds.blueprintsprocessor.healthapi", "org.onap.ccsdk.cds.sdclistener"})
 public class SdcListenerApplication {
     public static void main(String[] args) {
 

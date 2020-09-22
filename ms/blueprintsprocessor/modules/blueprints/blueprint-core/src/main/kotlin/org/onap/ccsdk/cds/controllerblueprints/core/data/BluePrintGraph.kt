@@ -116,7 +116,7 @@ class Graph {
 
         fun equivalentTo(other: Edge) =
             (source == other.source && target == other.target) ||
-                    (source == other.target && target == other.source)
+                (source == other.target && target == other.source)
 
         override fun toString() =
             "${source.id}>${target.id}/$label($status)"

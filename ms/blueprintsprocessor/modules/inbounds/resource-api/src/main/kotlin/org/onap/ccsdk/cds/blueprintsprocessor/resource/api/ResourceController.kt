@@ -61,7 +61,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
     @ApiOperation(
         value = "Get all resolved resources using the resolution key. ",
         notes = "Retrieve all stored resolved resources using the blueprint name, blueprint version, " +
-                "artifact name and the resolution-key.",
+            "artifact name and the resolution-key.",
         response = ResourceResolution::class,
         responseContainer = "List",
         produces = MediaType.APPLICATION_JSON_VALUE
@@ -82,37 +82,43 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         @ApiParam(value = "Resource Id associated with the resolution.", required = false)
         @RequestParam(value = "resourceId", required = false, defaultValue = "") resourceId: String
     ):
-            ResponseEntity<List<ResourceResolution>> = runBlocking {
+        ResponseEntity<List<ResourceResolution>> = runBlocking {
 
-        if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
-            throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
-                    "Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
-        } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
-            ResponseEntity.ok()
-                .body(resourceResolutionDBService.readWithResolutionKey(bpName, bpVersion, artifactName, resolutionKey))
-        } else if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
-            ResponseEntity.ok()
-                .body(
-                    resourceResolutionDBService.readWithResourceIdAndResourceType(
-                        bpName,
-                        bpVersion,
-                        resourceId,
-                        resourceType
-                    )
+            if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
+                throw httpProcessorException(
+                    ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
+                    "Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type."
                 )
-        } else {
-            throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
-                    "Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type.")
+            } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
+                ResponseEntity.ok()
+                    .body(resourceResolutionDBService.readWithResolutionKey(bpName, bpVersion, artifactName, resolutionKey))
+            } else if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
+                ResponseEntity.ok()
+                    .body(
+                        resourceResolutionDBService.readWithResourceIdAndResourceType(
+                            bpName,
+                            bpVersion,
+                            resourceId,
+                            resourceType
+                        )
+                    )
+            } else {
+                throw httpProcessorException(
+                    ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
+                    "Missing param. Either retrieve resolved value using artifact name and resolution-key OR using resource-id and resource-type."
+                )
+            }
         }
-    }
 
     @RequestMapping(
-            path = [""],
-            method = [RequestMethod.DELETE], produces = [MediaType.APPLICATION_JSON_VALUE]
+        path = [""],
+        method = [RequestMethod.DELETE], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(value = "Delete resources using resolution key",
-            notes = "Delete all the resources associated to a resolution-key using blueprint metadata, artifact name and the resolution-key.",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(
+        value = "Delete resources using resolution key",
+        notes = "Delete all the resources associated to a resolution-key using blueprint metadata, artifact name and the resolution-key.",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
     @PreAuthorize("hasRole('USER')")
     fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
         @ApiParam(value = "Name of the CBA.", required = true)
@@ -125,7 +131,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         @RequestParam(value = "resolutionKey", required = true) resolutionKey: String
     ) = runBlocking {
         ResponseEntity.ok()
-                .body(resourceResolutionDBService.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(bpName, bpVersion, artifactName, resolutionKey))
+            .body(resourceResolutionDBService.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(bpName, bpVersion, artifactName, resolutionKey))
     }
 
     @RequestMapping(
@@ -152,9 +158,9 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         @ApiParam(value = "Name of the resource to retrieve.", required = true)
         @RequestParam(value = "name", required = true) name: String
     ):
-            ResponseEntity<ResourceResolution> = runBlocking {
+        ResponseEntity<ResourceResolution> = runBlocking {
 
-        ResponseEntity.ok()
-            .body(resourceResolutionDBService.readValue(bpName, bpVersion, artifactName, resolutionKey, name))
-    }
+            ResponseEntity.ok()
+                .body(resourceResolutionDBService.readValue(bpName, bpVersion, artifactName, resolutionKey, name))
+        }
 }

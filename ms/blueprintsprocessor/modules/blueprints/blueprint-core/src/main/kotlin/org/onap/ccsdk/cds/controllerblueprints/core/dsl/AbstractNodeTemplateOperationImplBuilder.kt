@@ -16,13 +16,12 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
-abstract class AbstractNodeTemplateOperationImplBuilder<Prop : PropertiesAssignmentBuilder,
-        In : PropertiesAssignmentBuilder, Out : PropertiesAssignmentBuilder>(
-            id: String,
-            type: String,
-            private val interfaceName: String,
-            description: String
-        ) : AbstractNodeTemplatePropertyImplBuilder<Prop>(id, type, description) {
+abstract class AbstractNodeTemplateOperationImplBuilder<Prop : PropertiesAssignmentBuilder, In : PropertiesAssignmentBuilder, Out : PropertiesAssignmentBuilder>(
+    id: String,
+    type: String,
+    private val interfaceName: String,
+    description: String
+) : AbstractNodeTemplatePropertyImplBuilder<Prop>(id, type, description) {
 
     open fun definedOperation(description: String, block: OperationAssignmentBuilder<In, Out>.() -> Unit) {
         typedOperation<In, Out>(interfaceName, description, block)

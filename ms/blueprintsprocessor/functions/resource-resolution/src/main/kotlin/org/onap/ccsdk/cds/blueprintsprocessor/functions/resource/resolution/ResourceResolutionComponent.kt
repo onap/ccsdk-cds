@@ -68,7 +68,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         val resourceType =
             getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE)?.returnNullIfMissing()?.textValue() ?: ""
         val resolutionSummary =
-                getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY)?.asBoolean() ?: false
+            getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY)?.asBoolean() ?: false
 
         val properties: MutableMap<String, Any> = mutableMapOf()
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult
@@ -99,7 +99,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
             } else if (resourceType.isEmpty() && resourceId.isEmpty() && resolutionKey.isEmpty()) {
                 throw BluePrintProcessorException(
                     "Can't proceed with the resolution: can't persist resolution without a correlation key. " +
-                            "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false."
+                        "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false."
                 )
             }
         }

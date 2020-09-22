@@ -130,40 +130,40 @@ fun grpcProcessorException(type: String, domain: String, message: String): BlueP
 }
 
 fun httpProcessorException(type: String, domain: String, message: String, cause: Throwable):
-        BluePrintProcessorException {
-    val bluePrintProcessorException = processorException(message, cause).http(type)
-    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
-}
+    BluePrintProcessorException {
+        val bluePrintProcessorException = processorException(message, cause).http(type)
+        return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
+    }
 
 fun grpcProcessorException(type: String, domain: String, message: String, cause: Throwable):
-        BluePrintProcessorException {
-    val bluePrintProcessorException = processorException(message, cause).grpc(type)
-    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
-}
+    BluePrintProcessorException {
+        val bluePrintProcessorException = processorException(message, cause).grpc(type)
+        return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
+    }
 
 fun httpProcessorException(type: String, domain: String, message: String, cause: Throwable, vararg args: Any?):
-        BluePrintProcessorException {
-    val bluePrintProcessorException = processorException(cause, message, args).http(type)
-    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
-}
+    BluePrintProcessorException {
+        val bluePrintProcessorException = processorException(cause, message, args).http(type)
+        return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
+    }
 
 fun grpcProcessorException(type: String, domain: String, message: String, cause: Throwable, vararg args: Any?):
-        BluePrintProcessorException {
-    val bluePrintProcessorException = processorException(cause, message, args).grpc(type)
-    return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
-}
+    BluePrintProcessorException {
+        val bluePrintProcessorException = processorException(cause, message, args).grpc(type)
+        return bluePrintProcessorException.addDomainAndErrorMessage(domain, message, ExceptionUtils.getRootCauseMessage(cause))
+    }
 
 fun BluePrintProcessorException.updateErrorMessage(domain: String, message: String, cause: String):
-        BluePrintProcessorException {
-    return this.addDomainAndErrorMessage(domain, message, cause).domain(domain)
+    BluePrintProcessorException {
+        return this.addDomainAndErrorMessage(domain, message, cause).domain(domain)
             .addErrorPayloadMessage(message)
             .payloadMessage(message)
-}
+    }
 
 fun BluePrintProcessorException.updateErrorMessage(domain: String, message: String): BluePrintProcessorException {
     return this.addDomainAndErrorMessage(domain, message).domain(domain)
-            .addErrorPayloadMessage(message)
-            .payloadMessage(message)
+        .addErrorPayloadMessage(message)
+        .payloadMessage(message)
 }
 
 private fun BluePrintProcessorException.addDomainAndErrorMessage(

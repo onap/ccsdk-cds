@@ -67,23 +67,23 @@ class BlueprintJythonServiceImpl(
     override fun jythonComponentInstance(bluePrintContext: BluePrintContext, scriptClassReference: String):
         BlueprintFunctionNode<*, *> {
 
-        val pythonFileName = bluePrintContext.rootPath
-            .plus(File.separator)
-            .plus(scriptClassReference)
+            val pythonFileName = bluePrintContext.rootPath
+                .plus(File.separator)
+                .plus(scriptClassReference)
 
-        val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
-        log.info("Getting Jython Script Class($pythonClassName)")
+            val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
+            log.info("Getting Jython Script Class($pythonClassName)")
 
-        val content: String = JacksonUtils.getContent(pythonFileName)
+            val content: String = JacksonUtils.getContent(pythonFileName)
 
-        val jythonInstances: MutableMap<String, Any> = hashMapOf()
-        jythonInstances["log"] = LoggerFactory.getLogger(pythonClassName)
+            val jythonInstances: MutableMap<String, Any> = hashMapOf()
+            jythonInstances["log"] = LoggerFactory.getLogger(pythonClassName)
 
-        return jythonInstance<BlueprintFunctionNode<*, *>>(
-            bluePrintContext, pythonClassName,
-            content, jythonInstances
-        )
-    }
+            return jythonInstance<BlueprintFunctionNode<*, *>>(
+                bluePrintContext, pythonClassName,
+                content, jythonInstances
+            )
+        }
 
     suspend fun jythonComponentInstance(abstractComponentFunction: AbstractComponentFunction): AbstractComponentFunction {
 

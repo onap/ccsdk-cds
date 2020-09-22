@@ -68,8 +68,10 @@ open class DatabaseResourceAssignmentProcessor(
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: BluePrintProcessorException) {
             val errorMsg = "Failed to process Database resource resolution in template key ($resourceAssignment) assignments."
-            throw e.updateErrorMessage(ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
-                    "Wrong resource definition or DB resolution failed.")
+            throw e.updateErrorMessage(
+                ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
+                "Wrong resource definition or DB resolution failed."
+            )
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)
@@ -99,13 +101,13 @@ open class DatabaseResourceAssignmentProcessor(
         }
 
         sourceProperties.inputKeyMapping
-                ?.mapValues { raRuntimeService.getDictionaryStore(it.value) }
-                ?.map { KeyIdentifier(it.key, it.value) }
-                ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
+            ?.mapValues { raRuntimeService.getDictionaryStore(it.value) }
+            ?.map { KeyIdentifier(it.key, it.value) }
+            ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
 
         logger.info(
             "DatabaseResource ($dSource) dictionary information: " +
-                    "Query:($sql), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
+                "Query:($sql), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
         )
         val jdbcTemplate = blueprintDBLibService(sourceProperties, dSource)
 

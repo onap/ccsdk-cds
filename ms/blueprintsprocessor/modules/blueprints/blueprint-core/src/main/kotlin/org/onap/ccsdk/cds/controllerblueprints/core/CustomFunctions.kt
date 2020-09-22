@@ -61,8 +61,10 @@ fun String.splitCommaAsList(): List<String> {
 }
 
 fun String.isJson(): Boolean {
-    return ((this.trim().startsWith("{") && this.trim().endsWith("}")) ||
-        (this.trim().startsWith("[") && this.trim().endsWith("]")))
+    return (
+        (this.trim().startsWith("{") && this.trim().endsWith("}")) ||
+            (this.trim().startsWith("[") && this.trim().endsWith("]"))
+        )
 }
 
 fun Any.asJsonString(intend: Boolean? = false): String {

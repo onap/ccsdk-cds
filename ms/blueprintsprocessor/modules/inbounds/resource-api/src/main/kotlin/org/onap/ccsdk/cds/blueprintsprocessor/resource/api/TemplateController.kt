@@ -71,8 +71,8 @@ open class TemplateController(private val templateResolutionService: TemplateRes
     @ApiOperation(
         value = "Retrieve a resolved template.",
         notes = "Retrieve a config template for a given CBA's action, identified by its blueprint name, blueprint version, " +
-                "artifact name and resolution key. An extra 'format' parameter can be passed to tell what content-type" +
-                " to expect in return"
+            "artifact name and resolution key. An extra 'format' parameter can be passed to tell what content-type" +
+            " to expect in return"
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -98,50 +98,54 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         @ApiParam(value = "Occurrence of the template resolution (1-n).", required = false)
         @RequestParam(value = "occurrence", required = false, defaultValue = "1") occurrence: Int = 1
     ):
-            ResponseEntity<String> = runBlocking {
+        ResponseEntity<String> = runBlocking {
 
-        var result = ""
+            var result = ""
 
-        if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
-            throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
-                    "Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type.")
-        } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
-            result = templateResolutionService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-                bpName,
-                bpVersion,
-                artifactName,
-                resolutionKey,
-                occurrence
-            )
-        } else if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
-            result =
-                templateResolutionService.findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
+            if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
+                throw httpProcessorException(
+                    ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
+                    "Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type."
+                )
+            } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
+                result = templateResolutionService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
                     bpName,
                     bpVersion,
                     artifactName,
-                    resourceId,
-                    resourceType,
+                    resolutionKey,
                     occurrence
                 )
-        } else {
-            throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
-                    "Missing param. Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type.")
-        }
+            } else if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
+                result =
+                    templateResolutionService.findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
+                        bpName,
+                        bpVersion,
+                        artifactName,
+                        resourceId,
+                        resourceType,
+                        occurrence
+                    )
+            } else {
+                throw httpProcessorException(
+                    ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
+                    "Missing param. Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type."
+                )
+            }
 
-        var expectedContentType = format
-        if (expectedContentType.indexOf('/') < 0) {
-            expectedContentType = "application/$expectedContentType"
-        }
-        val expectedMediaType: MediaType = MediaType.valueOf(expectedContentType)
+            var expectedContentType = format
+            if (expectedContentType.indexOf('/') < 0) {
+                expectedContentType = "application/$expectedContentType"
+            }
+            val expectedMediaType: MediaType = MediaType.valueOf(expectedContentType)
 
-        ResponseEntity.ok().contentType(expectedMediaType).body(result)
-    }
+            ResponseEntity.ok().contentType(expectedMediaType).body(result)
+        }
 
     @PostMapping("/{bpName}/{bpVersion}/{artifactName}/{resolutionKey}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(
         value = "Store a resolved template w/ resolution-key",
         notes = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
-                "artifact name and resolution key.",
+            "artifact name and resolution key.",
         response = TemplateResolution::class,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -173,7 +177,7 @@ open class TemplateController(private val templateResolutionService: TemplateRes
     @ApiOperation(
         value = "Store a resolved template w/ resourceId and resourceType",
         notes = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
-                "artifact name, resourceId and resourceType.",
+            "artifact name, resourceId and resourceType.",
         response = TemplateResolution::class,
         produces = MediaType.APPLICATION_JSON_VALUE
     )

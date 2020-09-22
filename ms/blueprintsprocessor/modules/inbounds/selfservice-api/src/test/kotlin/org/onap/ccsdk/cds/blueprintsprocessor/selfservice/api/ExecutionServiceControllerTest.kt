@@ -43,8 +43,10 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @WebFluxTest
 @ContextConfiguration(
-    classes = [ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, SelfServiceApiTestConfiguration::class, ErrorCatalogTestConfiguration::class]
+    classes = [
+        ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
+        BluePrintCatalogService::class, SelfServiceApiTestConfiguration::class, ErrorCatalogTestConfiguration::class
+    ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ExecutionServiceControllerTest {

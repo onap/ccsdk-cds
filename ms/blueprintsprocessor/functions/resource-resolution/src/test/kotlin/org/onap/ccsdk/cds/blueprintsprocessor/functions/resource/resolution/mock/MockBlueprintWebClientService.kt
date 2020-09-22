@@ -41,7 +41,8 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
         // Create expected requests and responses
         setRequest("GET", "/aai/v14/network/generic-vnfs/generic-vnf/123456")
         setRequest(
-            "GET", "/config/GENERIC-RESOURCE-API:services/service/10/service-data/vnfs/vnf/123456/" +
+            "GET",
+            "/config/GENERIC-RESOURCE-API:services/service/10/service-data/vnfs/vnf/123456/" +
                 "vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name"
         )
         setRequestWithPayload(

@@ -319,10 +319,10 @@ fun ServiceTemplateBuilder.artifactTypeK8sProfileFolder() {
 
 fun BluePrintTypes.artifactTypeK8sProfileFolder(): ArtifactType {
     return artifactType(
-            id = BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE,
-            version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-            derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
-            description = "K8s Profile Folder Artifact"
+        id = BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE,
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+        description = "K8s Profile Folder Artifact"
     ) {
     }
 }

@@ -47,46 +47,46 @@ open class KafkaMessagePrioritizationConsumer(
 
     open fun kafkaStreamConsumerFunction(prioritizationConfiguration: PrioritizationConfiguration):
         KafkaStreamConsumerFunction {
-        return object : KafkaStreamConsumerFunction {
+            return object : KafkaStreamConsumerFunction {
 
-            val kafkaConsumerConfiguration = prioritizationConfiguration.kafkaConfiguration
-                ?: throw BluePrintProcessorException("failed to get kafka consumer configuration")
+                val kafkaConsumerConfiguration = prioritizationConfiguration.kafkaConfiguration
+                    ?: throw BluePrintProcessorException("failed to get kafka consumer configuration")
 
-            override suspend fun createTopology(
-                messageConsumerProperties: MessageConsumerProperties,
-                additionalConfig: Map<String, Any>?
-            ): Topology {
+                override suspend fun createTopology(
+                    messageConsumerProperties: MessageConsumerProperties,
+                    additionalConfig: Map<String, Any>?
+                ): Topology {
 
-                val topology = Topology()
-                val kafkaStreamsBasicAuthConsumerProperties = messageConsumerProperties
-                    as KafkaStreamsBasicAuthConsumerProperties
+                    val topology = Topology()
+                    val kafkaStreamsBasicAuthConsumerProperties = messageConsumerProperties
+                        as KafkaStreamsBasicAuthConsumerProperties
 
-                val topics = kafkaStreamsBasicAuthConsumerProperties.topic.splitCommaAsList()
-                log.info("Consuming prioritization topics($topics)")
+                    val topics = kafkaStreamsBasicAuthConsumerProperties.topic.splitCommaAsList()
+                    log.info("Consuming prioritization topics($topics)")
 
-                topology.addSource(MessagePrioritizationConstants.SOURCE_INPUT, *topics.toTypedArray())
+                    topology.addSource(MessagePrioritizationConstants.SOURCE_INPUT, *topics.toTypedArray())
 
-                topology.addProcessor(
-                    MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
-                    bluePrintProcessorSupplier<ByteArray, ByteArray>(
+                    topology.addProcessor(
+                        MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
+                        bluePrintProcessorSupplier<ByteArray, ByteArray>(
+                            MessagePrioritizationConstants.PROCESSOR_PRIORITIZE
+                        ),
+                        MessagePrioritizationConstants.SOURCE_INPUT
+                    )
+
+                    /** To receive completed and error messages */
+                    topology.addSink(
+                        MessagePrioritizationConstants.SINK_OUTPUT,
+                        kafkaConsumerConfiguration.outputTopic,
+                        Serdes.String().serializer(), MessagePrioritizationSerde().serializer(),
                         MessagePrioritizationConstants.PROCESSOR_PRIORITIZE
-                    ),
-                    MessagePrioritizationConstants.SOURCE_INPUT
-                )
+                    )
 
-                /** To receive completed and error messages */
-                topology.addSink(
-                    MessagePrioritizationConstants.SINK_OUTPUT,
-                    kafkaConsumerConfiguration.outputTopic,
-                    Serdes.String().serializer(), MessagePrioritizationSerde().serializer(),
-                    MessagePrioritizationConstants.PROCESSOR_PRIORITIZE
-                )
-
-                // Output will be sent to the group-output topic from Processor API
-                return topology
+                    // Output will be sent to the group-output topic from Processor API
+                    return topology
+                }
             }
         }
-    }
 
     suspend fun startConsuming(prioritizationConfiguration: PrioritizationConfiguration) {
 

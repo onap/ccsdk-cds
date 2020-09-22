@@ -61,10 +61,8 @@ public class SdcListenerDto {
     }
 
     public void setManagedChannelForGrpc() {
-        managedChannel = ManagedChannelBuilder.forAddress(grpcAddress, grpcPort)
-                .usePlaintext()
-                .intercept(sdcListenerAuthClientInterceptor)
-                .build();
+        managedChannel = ManagedChannelBuilder.forAddress(grpcAddress, grpcPort).usePlaintext()
+                .intercept(sdcListenerAuthClientInterceptor).build();
     }
 
     public ManagedChannel getManagedChannelForGrpc() {

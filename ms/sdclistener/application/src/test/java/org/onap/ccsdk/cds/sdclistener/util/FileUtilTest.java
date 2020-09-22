@@ -35,6 +35,7 @@
  *
  *
  */
+
 package org.onap.ccsdk.cds.sdclistener.util;
 
 import org.junit.Test;
@@ -58,25 +59,25 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = {FileUtilTest.class})
 public class FileUtilTest {
 
-   FileUtil fs;
+    FileUtil fs;
 
     @Test
     public void testDeleteFile() throws IOException {
         File tempFile = File.createTempFile("tempFile", ".txt");
-//        System.out.println(tempFile.getRoot());
-        fs.deleteFile(tempFile,tempFile.getAbsolutePath());
+        // System.out.println(tempFile.getRoot());
+        fs.deleteFile(tempFile, tempFile.getAbsolutePath());
         assertFalse(tempFile.exists());
 
     }
 
     @Test
-    public void testGetFilesFromDisk() throws IOException{
+    public void testGetFilesFromDisk() throws IOException {
 
-        Path resourceDirectory = Paths.get("src","test","resources");
-        int totalfile=resourceDirectory.getNameCount();
-        List fileList=fs.getFilesFromDisk(resourceDirectory);
+        Path resourceDirectory = Paths.get("src", "test", "resources");
+        int totalfile = resourceDirectory.getNameCount();
+        List fileList = fs.getFilesFromDisk(resourceDirectory);
         assertNotNull(fileList);
-        assertEquals(fileList.size(),totalfile);
+        assertEquals(fileList.size(), totalfile);
     }
 
 

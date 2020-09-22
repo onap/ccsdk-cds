@@ -23,8 +23,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.List;
 
 /**
- * In order to initiate a SDC distribution client we need to supply some pre-configuration values that
- * distribution client needs.
+ * In order to initiate a SDC distribution client we need to supply some pre-configuration values that distribution
+ * client needs.
  */
 @ConfigurationProperties("listenerservice")
 public class SdcListenerConfiguration implements IConfiguration {

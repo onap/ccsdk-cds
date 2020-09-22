@@ -45,12 +45,14 @@ import org.springframework.http.HttpStatus
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, NrmTestController::class])
-@TestPropertySource(properties = [
-    "blueprintsprocessor.restclient.nrm.type=basic-auth",
-    "blueprintsprocessor.restclient.nrm.url=http://127.0.0.1:8080",
-    "blueprintsprocessor.restclient.nrm.username=admin",
-    "blueprintsprocessor.restclient.nrm.password=admin"
-])
+@TestPropertySource(
+    properties = [
+        "blueprintsprocessor.restclient.nrm.type=basic-auth",
+        "blueprintsprocessor.restclient.nrm.url=http://127.0.0.1:8080",
+        "blueprintsprocessor.restclient.nrm.username=admin",
+        "blueprintsprocessor.restclient.nrm.password=admin"
+    ]
+)
 
 @Ignore
 class RestfulNRMServiceClientTest {

@@ -41,7 +41,7 @@ open class ErrorCatalogDBService(
      * This is a getAllDomains method to retrieve all the Domain in Error Catalog Database by pages
      *
      * @return Page<Domain> list of the domains by page
-    </Domain> */
+     </Domain> */
     open fun getAllDomains(pageRequest: Pageable): Page<Domain> {
         return domainRepository.findAll(pageRequest)
     }
@@ -50,7 +50,7 @@ open class ErrorCatalogDBService(
      * This is a getAllDomains method to retrieve all the Domain in Error Catalog Database
      *
      * @return List<Domain> list of the domains
-    </Domain> */
+     </Domain> */
     open fun getAllDomains(): List<Domain> {
         return domainRepository.findAll()
     }
@@ -59,7 +59,7 @@ open class ErrorCatalogDBService(
      * This is a getAllDomainsByApplication method to retrieve all the Domain that belong to an application in Error Catalog Database
      *
      * @return List<Domain> list of the domains
-    </Domain> */
+     </Domain> */
     open fun getAllDomainsByApplication(applicationId: String): List<Domain> {
         return domainRepository.findAllByApplicationId(applicationId)
     }
@@ -68,7 +68,7 @@ open class ErrorCatalogDBService(
      * This is a getAllErrorMessagesByApplication method to retrieve all the Messages that belong to an application in Error Catalog Database
      *
      * @return MutableMap<String, ErrorCode> list of the abstractErrorModel
-    </Domain> */
+     </Domain> */
     open fun getAllErrorMessagesByApplication(applicationId: String): MutableMap<String, ErrorMessageModel> {
         val domains = domainRepository.findAllByApplicationId(applicationId)
         val errorMessages = mutableMapOf<String, ErrorMessageModel>()

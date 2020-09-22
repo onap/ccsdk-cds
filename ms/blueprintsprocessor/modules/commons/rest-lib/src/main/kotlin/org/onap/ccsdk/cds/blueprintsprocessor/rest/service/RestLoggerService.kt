@@ -138,8 +138,10 @@ fun <T> monoMdc(
     block: suspend CoroutineScope.() -> T?
 ): Mono<T> = Mono.create { sink ->
 
-    val reactorContext = (context[ReactorContext]?.context?.putAll(sink.currentContext())
-        ?: sink.currentContext()).asCoroutineContext()
+    val reactorContext = (
+        context[ReactorContext]?.context?.putAll(sink.currentContext())
+            ?: sink.currentContext()
+        ).asCoroutineContext()
     /** Populate MDC context only if present in Reactor Context */
     val newContext = if (!reactorContext.context.isEmpty &&
         reactorContext.context.hasKey(MDCContext)

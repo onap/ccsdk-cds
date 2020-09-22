@@ -93,7 +93,7 @@ class ResourceAssignmentUtils {
                 resourceAssignment.dictionaryName = resourceAssignment.name
                 logger.warn(
                     "Missing dictionary key, setting with template key (${resourceAssignment.name}) " +
-                            "as dictionary key (${resourceAssignment.dictionaryName})"
+                        "as dictionary key (${resourceAssignment.dictionaryName})"
                 )
             }
 
@@ -103,8 +103,8 @@ class ResourceAssignmentUtils {
                     val valueToPrint = getValueToLog(metadata, value)
                     logger.info(
                         "Setting Resource Value ($valueToPrint) for Resource Name " +
-                                "(${resourceAssignment.name}), definition(${resourceAssignment.dictionaryName}) " +
-                                "of type (${resourceProp.type})"
+                            "(${resourceAssignment.name}), definition(${resourceAssignment.dictionaryName}) " +
+                            "of type (${resourceProp.type})"
                     )
                     setResourceValue(resourceAssignment, raRuntimeService, value)
                     resourceAssignment.updatedDate = Date()
@@ -114,8 +114,9 @@ class ResourceAssignmentUtils {
             } catch (e: Exception) {
                 throw BluePrintProcessorException(
                     "Failed in setting value for template key " +
-                            "(${resourceAssignment.name}) and dictionary key (${resourceAssignment.dictionaryName}) of " +
-                            "type (${resourceProp.type}) with error message (${e.message})", e
+                        "(${resourceAssignment.name}) and dictionary key (${resourceAssignment.dictionaryName}) of " +
+                        "type (${resourceProp.type}) with error message (${e.message})",
+                    e
                 )
             }
         }
@@ -132,29 +133,32 @@ class ResourceAssignmentUtils {
 
             val metadata = resourceAssignment.property?.metadata
             metadata?.get(ResourceResolutionConstants.METADATA_TRANSFORM_TEMPLATE)
-                    ?.let { if (it.contains("$")) it else null }
-                    ?.let { template ->
-                        val resolutionStore = raRuntimeService.getResolutionStore()
-                                .mapValues { e -> e.value.asText() } as MutableMap<String, Any>
-                        val newValue: JsonNode
-                        try {
-                            newValue = BluePrintVelocityTemplateService
-                                    .generateContent(template, null, true, resolutionStore)
-                                    .also { if (hasLogProtect(metadata))
-                                        logger.info("Transformed value: $resourceAssignment.name")
-                                    else
-                                        logger.info("Transformed value: $value -> $it") }
-                                    .let { v -> v.asJsonType() }
-                        } catch (e: Exception) {
-                            throw BluePrintProcessorException(
-                                    "transform-template failed: $template", e)
-                        }
-                        with(resourceAssignment) {
-                            raRuntimeService.putResolutionStore(this.name, newValue)
-                            raRuntimeService.putDictionaryStore(this.dictionaryName!!, newValue)
-                            this.property!!.value = newValue
-                        }
+                ?.let { if (it.contains("$")) it else null }
+                ?.let { template ->
+                    val resolutionStore = raRuntimeService.getResolutionStore()
+                        .mapValues { e -> e.value.asText() } as MutableMap<String, Any>
+                    val newValue: JsonNode
+                    try {
+                        newValue = BluePrintVelocityTemplateService
+                            .generateContent(template, null, true, resolutionStore)
+                            .also {
+                                if (hasLogProtect(metadata))
+                                    logger.info("Transformed value: $resourceAssignment.name")
+                                else
+                                    logger.info("Transformed value: $value -> $it")
+                            }
+                            .let { v -> v.asJsonType() }
+                    } catch (e: Exception) {
+                        throw BluePrintProcessorException(
+                            "transform-template failed: $template", e
+                        )
                     }
+                    with(resourceAssignment) {
+                        raRuntimeService.putResolutionStore(this.name, newValue)
+                        raRuntimeService.putDictionaryStore(this.dictionaryName!!, newValue)
+                        this.property!!.value = newValue
+                    }
+                }
         }
 
         fun setFailedResourceDataValue(resourceAssignment: ResourceAssignment, message: String?) {
@@ -199,7 +203,7 @@ class ResourceAssignmentUtils {
                     }
                 }
                 result = mapper.writerWithDefaultPrettyPrinter()
-                        .writeValueAsString(mapper.treeToValue(root, Object::class.java))
+                    .writeValueAsString(mapper.treeToValue(root, Object::class.java))
 
                 if (!containsLogProtected) {
                     logger.info("Generated Resource Param Data ($result)")
@@ -238,35 +242,35 @@ class ResourceAssignmentUtils {
                 val definition = resourceDefinitions[it.name]
                 val description = definition?.property?.description ?: ""
                 val value = it.property?.value
-                        ?.let { v -> if (v.isNullOrMissing()) emptyTextNode else v }
-                        ?: emptyTextNode
+                    ?.let { v -> if (v.isNullOrMissing()) emptyTextNode else v }
+                    ?: emptyTextNode
 
                 var payload: JsonNode = definition?.sources?.get(it.dictionarySource)
-                        ?.properties?.get("resolved-payload")
-                        ?.let { p -> if (p.isNullOrMissing()) emptyTextNode else p }
-                        ?: emptyTextNode
+                    ?.properties?.get("resolved-payload")
+                    ?.let { p -> if (p.isNullOrMissing()) emptyTextNode else p }
+                    ?: emptyTextNode
 
                 val metadata = definition?.property?.metadata
-                        ?.map { e -> DictionaryMetadataEntry(e.key, e.value) }
-                        ?.toMutableList() ?: mutableListOf()
+                    ?.map { e -> DictionaryMetadataEntry(e.key, e.value) }
+                    ?.toMutableList() ?: mutableListOf()
 
                 val keyIdentifiers: MutableList<KeyIdentifier> = it.keyIdentifiers.map { k ->
                     if (k.value.isNullOrMissing()) KeyIdentifier(k.name, emptyTextNode) else k
                 }.toMutableList()
 
                 ResolutionSummary(
-                        it.name,
-                        value,
-                        it.property?.required ?: false,
-                        it.property?.type ?: "",
-                        keyIdentifiers,
-                        description,
-                        metadata,
-                        it.dictionaryName ?: "",
-                        it.dictionarySource ?: "",
-                        payload,
-                        it.status ?: "",
-                        it.message ?: ""
+                    it.name,
+                    value,
+                    it.property?.required ?: false,
+                    it.property?.type ?: "",
+                    keyIdentifiers,
+                    description,
+                    metadata,
+                    it.dictionaryName ?: "",
+                    it.dictionarySource ?: "",
+                    payload,
+                    it.status ?: "",
+                    it.message ?: ""
                 )
             }
             // Wrapper needed for integration with SDNC
@@ -409,7 +413,7 @@ class ResourceAssignmentUtils {
             if ((resourceAssignment.property?.entrySchema?.type).isNullOrEmpty()) {
                 throw BluePrintProcessorException(
                     "Couldn't get data type for dictionary type " +
-                            "(${resourceAssignment.property!!.type}) and dictionary name ($dName)"
+                        "(${resourceAssignment.property!!.type}) and dictionary name ($dName)"
                 )
             }
             val entrySchemaType = resourceAssignment.property!!.entrySchema!!.type
@@ -487,7 +491,7 @@ class ResourceAssignmentUtils {
                         val outputKeyMap = outputKeyMapping.entries.first()
                         if (resourceAssignment.keyIdentifiers.none { it.name == outputKeyMap.key }) {
                             resourceAssignment.keyIdentifiers.add(
-                                    KeyIdentifier(outputKeyMap.key, JacksonUtils.objectMapper.createArrayNode())
+                                KeyIdentifier(outputKeyMap.key, JacksonUtils.objectMapper.createArrayNode())
                             )
                         }
                         return parseSingleElementNodeWithOneOutputKeyMapping(
@@ -576,13 +580,14 @@ class ResourceAssignmentUtils {
             logKeyValueResolvedResource(metadata, outputKeyMappingKey, responseKeyValue, type)
             JacksonUtils.populateJsonNodeValues(outputKeyMappingKey, responseKeyValue, type, arrayChildNode)
             resourceAssignment.keyIdentifiers.find { it.name == outputKeyMappingKey && it.value.isArray }
-                    .let {
-                        if (it != null)
-                            (it.value as ArrayNode).add(responseKeyValue)
-                        else
-                            resourceAssignment.keyIdentifiers.add(
-                                    KeyIdentifier(outputKeyMappingKey, responseKeyValue))
-                    }
+                .let {
+                    if (it != null)
+                        (it.value as ArrayNode).add(responseKeyValue)
+                    else
+                        resourceAssignment.keyIdentifiers.add(
+                            KeyIdentifier(outputKeyMappingKey, responseKeyValue)
+                        )
+                }
             return arrayChildNode
         }
 
@@ -694,7 +699,7 @@ class ResourceAssignmentUtils {
 
             logger.info(
                 "For List Type Resource: key ($key), value ($valueToPrint), " +
-                        "type  ({$type})"
+                    "type  ({$type})"
             )
         }
 
@@ -703,6 +708,6 @@ class ResourceAssignmentUtils {
         }
 
         fun getValueToLog(metadata: MutableMap<String, String>?, value: Any): Any =
-                if (hasLogProtect(metadata)) LOG_REDACTED else value
+            if (hasLogProtect(metadata)) LOG_REDACTED else value
     }
 }

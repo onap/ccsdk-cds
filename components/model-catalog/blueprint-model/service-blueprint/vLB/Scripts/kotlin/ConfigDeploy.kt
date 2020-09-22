@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifactNB
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
@@ -30,8 +29,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.web.client.RestTemplate
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.apache.http.client.ClientProtocolException
-import java.io.IOException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 
 open class ConfigDeploy : AbstractScriptComponentFunction() {
@@ -53,13 +50,12 @@ open class ConfigDeploy : AbstractScriptComponentFunction() {
         val payloadObject = JacksonUtils.jsonNode(payload) as ObjectNode
         val vdns_ip: String = payloadObject.get("vdns-instance")[0].get("ip-addr").asText()
 
-
         val blueprintContext = bluePrintRuntimeService.bluePrintContext()
         val requirement = blueprintContext.nodeTemplateRequirement(nodeTemplateName, "restconf-connection")
         val capabilityProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties(requirement.node!!, requirement.capability!!)
         val netconfDeviceInfo = JacksonUtils.getInstanceFromMap(capabilityProperties, NetconfDeviceInfo::class.java)
         log.info("Waiting for 2 minutes until vLB intializes ...")
-        //Thread.sleep(120000)
+        // Thread.sleep(120000)
         val uri = "http://${netconfDeviceInfo.ipAddress}:8183/restconf/config/vlb-business-vnf-onap-plugin:vlb-business-vnf-onap-plugin/vdns-instances/vdns-instance/$vdns_ip"
         val restTemplate = RestTemplate()
         val mapOfHeaders = hashMapOf<String, String>()
@@ -71,16 +67,15 @@ open class ConfigDeploy : AbstractScriptComponentFunction() {
         basicAuthRestClientProperties.username = "admin"
         basicAuthRestClientProperties.password = "admin"
         basicAuthRestClientProperties.url = uri
-        basicAuthRestClientProperties.additionalHeaders =mapOfHeaders
-        val basicAuthRestClientService: BasicAuthRestClientService= BasicAuthRestClientService(basicAuthRestClientProperties)
+        basicAuthRestClientProperties.additionalHeaders = mapOfHeaders
+        val basicAuthRestClientService: BasicAuthRestClientService = BasicAuthRestClientService(basicAuthRestClientProperties)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = basicAuthRestClientService.exchangeResource(HttpMethod.PUT.name, "", payload)
             print(result)
             basicAuthRestClientProperties.url = "http://${netconfDeviceInfo.ipAddress}:8183/restconf/config/vlb-business-vnf-onap-plugin:vlb-business-vnf-onap-plugin/vdns-instances"
             val resultOfGet: BlueprintWebClientService.WebClientResponse<String> = basicAuthRestClientService.exchangeResource(HttpMethod.GET.name, "", "")
             print(resultOfGet)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             log.info("Caught exception trying to connect to vLB!!")
             throw BluePrintProcessorException("${e.message}")
         }
@@ -113,7 +108,7 @@ class NetconfDeviceInfo {
     override fun toString(): String {
         return "$ipAddress:$port"
     }
-    //TODO: should this be a data class instead? Is anything using the JSON serdes?
+    // TODO: should this be a data class instead? Is anything using the JSON serdes?
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

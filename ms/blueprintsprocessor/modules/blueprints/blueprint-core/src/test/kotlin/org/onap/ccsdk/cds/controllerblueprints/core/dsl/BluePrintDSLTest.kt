@@ -277,8 +277,8 @@ fun BluePrintTypes.nodeTemplateComponentTestExecutor(
     block: TestNodeTemplateOperationImplBuilder.() -> Unit
 ):
     NodeTemplate {
-    return TestNodeTemplateOperationImplBuilder(id, description).apply(block).build()
-}
+        return TestNodeTemplateOperationImplBuilder(id, description).apply(block).build()
+    }
 
 class TestNodeTemplateOperationImplBuilder(id: String, description: String) :
     AbstractNodeTemplateOperationImplBuilder<TestProperty, TestInput, TestOutput>(

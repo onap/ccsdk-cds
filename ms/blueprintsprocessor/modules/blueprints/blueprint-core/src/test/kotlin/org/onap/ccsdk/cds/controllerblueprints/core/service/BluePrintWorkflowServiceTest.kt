@@ -210,9 +210,9 @@ class TestBluePrintWorkFlowService :
     }
 
     override suspend fun prepareNodeExecutionMessage(node: Graph.Node):
-            NodeExecuteMessage<String, String> {
-        return NodeExecuteMessage(node, "$node Input", "")
-    }
+        NodeExecuteMessage<String, String> {
+            return NodeExecuteMessage(node, "$node Input", "")
+        }
 
     override suspend fun executeNode(
         node: Graph.Node,

@@ -50,17 +50,21 @@ import kotlin.test.assertNotNull
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(
-    classes = [BluePrintDmaapLibConfiguration::class, TestController::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+    classes = [
+        BluePrintDmaapLibConfiguration::class, TestController::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
-    properties = ["server.port=9111",
+    properties = [
+        "server.port=9111",
         "blueprintsprocessor.dmaapclient.aai.topic=cds_aai",
         "blueprintsprocessor.dmaapclient.aai.type=HTTPNOAUTH",
         "blueprintsprocessor.dmaapclient.aai.host=127.0.0.1:9111",
         "blueprintsprocessor.dmaapclient.multi.topic=cds_multi1,cds_multi2",
         "blueprintsprocessor.dmaapclient.multi.type=HTTPNOAUTH",
-        "blueprintsprocessor.dmaapclient.multi.host=127.0.0.1:9111"]
+        "blueprintsprocessor.dmaapclient.multi.host=127.0.0.1:9111"
+    ]
 )
 class TestDmaapEventPublisher {
 
@@ -77,8 +81,8 @@ class TestDmaapEventPublisher {
 
         strList.add(
             "{\n" +
-                    "    \"a\" : \"hello\"\n" +
-                    "}"
+                "    \"a\" : \"hello\"\n" +
+                "}"
         )
         dmaapClient.sendMessage(strList)
         val msgs = dmaapClient.close(2)
@@ -95,8 +99,8 @@ class TestDmaapEventPublisher {
     fun testEventPropertiesWithSingleMsg() {
         val dmaapClient = dmaapService.blueprintDmaapClientService("aai")
         val str: String = "{\n" +
-                "    \"a\" : \"hello\"\n" +
-                "}"
+            "    \"a\" : \"hello\"\n" +
+            "}"
         dmaapClient.sendMessage(str)
         val msgs = dmaapClient.close(2)
         assertEquals(msgs!!.size, 1)
@@ -114,8 +118,8 @@ class TestDmaapEventPublisher {
 
         strList.add(
             "{\n" +
-                    "    \"a\" : \"hello\"\n" +
-                    "}"
+                "    \"a\" : \"hello\"\n" +
+                "}"
         )
         dmaapClient.sendMessage(strList)
         val msgs = dmaapClient.close(2)
@@ -132,10 +136,10 @@ class TestDmaapEventPublisher {
     @Test
     fun testMultiTopicPropertiesWithJsonInput() {
         val jsonString = "{\n" +
-                "    \"topic\" : \"cds_json1,cds_json2\",\n" +
-                "    \"type\" : \"HTTPNOAUTH\",\n" +
-                "    \"host\" : \"127.0.0.1:9111\"\n" +
-                "}"
+            "    \"topic\" : \"cds_json1,cds_json2\",\n" +
+            "    \"type\" : \"HTTPNOAUTH\",\n" +
+            "    \"host\" : \"127.0.0.1:9111\"\n" +
+            "}"
         val mapper = ObjectMapper()
         val node = mapper.readTree(jsonString)
         val strList = mutableListOf<String>()
@@ -143,8 +147,8 @@ class TestDmaapEventPublisher {
 
         strList.add(
             "{\n" +
-                    "    \"a\" : \"hello\"\n" +
-                    "}"
+                "    \"a\" : \"hello\"\n" +
+                "}"
         )
         dmaapClient.sendMessage(strList)
         val msgs = dmaapClient.close(2)
@@ -165,13 +169,13 @@ class TestDmaapEventPublisher {
 
         strList.add(
             "{\n" +
-                    "    \"a\" : \"hello\"\n" +
-                    "}"
+                "    \"a\" : \"hello\"\n" +
+                "}"
         )
         strList.add(
             "{\n" +
-                    "    \"a\" : \"second\"\n" +
-                    "}"
+                "    \"a\" : \"second\"\n" +
+                "}"
         )
         dmaapClient.sendMessage(strList)
         val msgs = dmaapClient.close(2)
@@ -190,8 +194,9 @@ class TestDmaapEventPublisher {
         )
         assertNotNull(properties, "failed to create property bean")
         assertNotNull(
-            properties.host, "failed to get url property" +
-                    " in property bean"
+            properties.host,
+            "failed to get url property" +
+                " in property bean"
         )
     }
 
@@ -221,11 +226,11 @@ open class TestController {
      */
     @PostMapping(path = ["/{topic}"])
     fun postTopic(@PathVariable(value = "topic") topic: String):
-            ResponseEntity<Any> {
-        var a = "{\n" +
+        ResponseEntity<Any> {
+            var a = "{\n" +
                 "    \"message\" : \"The message is published into $topic " +
                 "topic\"\n" +
                 "}"
-        return ResponseEntity(a, HttpStatus.OK)
-    }
+            return ResponseEntity(a, HttpStatus.OK)
+        }
 }

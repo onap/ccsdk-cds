@@ -73,7 +73,8 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
                     }
                 }
                 artifact(
-                    id = "command-template", type = "artifact-template-velocity",
+                    id = "command-template",
+                    type = "artifact-template-velocity",
                     file = "Templates/check-command-template.vtl"
                 )
             }

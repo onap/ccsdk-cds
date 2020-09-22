@@ -44,7 +44,7 @@ class ExecutionServiceHandler(
     private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
     private val blueprintsProcessorCatalogService: BluePrintCatalogService,
     private val bluePrintWorkflowExecutionService:
-    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>,
+        BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>,
     private val publishAuditService: PublishAuditService
 ) {
 
@@ -71,13 +71,13 @@ class ExecutionServiceHandler(
             else -> {
                 publishAuditService.publishExecutionInput(executionServiceInput)
                 val executionServiceOutput = response(
-                        executionServiceInput,
-                        "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
-                        true
+                    executionServiceInput,
+                    "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
+                    true
                 )
                 publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput)
                 responseObserver.onNext(
-                        executionServiceOutput.toProto()
+                    executionServiceOutput.toProto()
                 )
             }
         }

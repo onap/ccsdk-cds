@@ -31,8 +31,10 @@ import javax.sql.DataSource
 @Configuration
 @Import(BluePrintDBLibConfiguration::class)
 @EnableJpaRepositories(
-    basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution",
-        "org.onap.ccsdk.cds.blueprintsprocessor.db.primary"],
+    basePackages = [
+        "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution",
+        "org.onap.ccsdk.cds.blueprintsprocessor.db.primary"
+    ],
     entityManagerFactoryRef = "primaryEntityManager",
     transactionManagerRef = "primaryTransactionManager"
 )

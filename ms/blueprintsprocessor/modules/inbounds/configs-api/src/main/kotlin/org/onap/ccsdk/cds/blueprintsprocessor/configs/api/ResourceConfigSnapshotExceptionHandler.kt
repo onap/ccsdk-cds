@@ -28,4 +28,4 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
  */
 @RestControllerAdvice("org.onap.ccsdk.cds.blueprintsprocessor.configs.api")
 open class ResourceConfigSnapshotExceptionHandler(private val errorCatalogService: ErrorCatalogService) :
-        ErrorCatalogExceptionHandler(errorCatalogService)
+    ErrorCatalogExceptionHandler(errorCatalogService)

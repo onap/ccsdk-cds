@@ -197,7 +197,8 @@ class NetconfDeviceCommunicatorTest {
              xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
           <close-session/>
         </rpc>
-        """.trimIndent(), eventSlot.captured.messagePayload
+            """.trimIndent(),
+            eventSlot.captured.messagePayload
         )
     }
 

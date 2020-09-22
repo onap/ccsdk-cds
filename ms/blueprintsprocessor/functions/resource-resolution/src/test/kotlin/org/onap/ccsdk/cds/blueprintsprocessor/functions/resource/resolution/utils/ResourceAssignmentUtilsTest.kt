@@ -180,9 +180,11 @@ class ResourceAssignmentUtilsTest {
         }
 
         val result = ResourceAssignmentUtils.generateResolutionSummaryData(
-                listOf(resourceAssignment), mapOf("pnf-id" to resourceDefinition))
+            listOf(resourceAssignment), mapOf("pnf-id" to resourceDefinition)
+        )
 
-        assertEquals("""
+        assertEquals(
+            """
             {
                 "resolution-summary":[
                     {
@@ -203,7 +205,9 @@ class ResourceAssignmentUtilsTest {
                     }
                 ]
             }
-        """.replace("\n|\\s".toRegex(), ""), result)
+        """.replace("\n|\\s".toRegex(), ""),
+            result
+        )
     }
 
     private fun createResourceAssignmentForTest(resourceValue: String?, resourceName: String = "pnf-id"): ResourceAssignment {
@@ -243,8 +247,8 @@ class ResourceAssignmentUtilsTest {
             "Unexpected outcome returned for primitive type of key-value String"
         )
         assertEquals(
-                expectedValueToTestPrimitiveType,
-                resourceAssignment.keyIdentifiers[0].value
+            expectedValueToTestPrimitiveType,
+            resourceAssignment.keyIdentifiers[0].value
         )
     }
 
@@ -262,8 +266,8 @@ class ResourceAssignmentUtilsTest {
 
         val expectedKeyIdentifierValue = JacksonUtils.getJsonNode(outcome.map { it["ip"] })
         assertEquals(
-                expectedKeyIdentifierValue,
-                resourceAssignment.keyIdentifiers[0].value
+            expectedKeyIdentifierValue,
+            resourceAssignment.keyIdentifiers[0].value
         )
 
         // FIXME("Map is not collection type, It is known complex type")
@@ -313,8 +317,9 @@ class ResourceAssignmentUtilsTest {
             "Unexpected outcome returned for complex type"
         )
         assertEquals(
-                expectedValueToTestComplexTypeWithOneOutputKeyMapping["host"],
-                resourceAssignment.keyIdentifiers[0].value)
+            expectedValueToTestComplexTypeWithOneOutputKeyMapping["host"],
+            resourceAssignment.keyIdentifiers[0].value
+        )
     }
 
     @Test
@@ -330,13 +335,13 @@ class ResourceAssignmentUtilsTest {
         )
         assertEquals(2, resourceAssignment.keyIdentifiers.size)
         assertEquals(
-                expectedValueToTestComplexTypeWithAllOutputKeyMapping["name"],
-                resourceAssignment.keyIdentifiers[0].value
+            expectedValueToTestComplexTypeWithAllOutputKeyMapping["name"],
+            resourceAssignment.keyIdentifiers[0].value
         )
 
         assertEquals(
-                expectedValueToTestComplexTypeWithAllOutputKeyMapping["ipAddress"],
-                resourceAssignment.keyIdentifiers[1].value
+            expectedValueToTestComplexTypeWithAllOutputKeyMapping["ipAddress"],
+            resourceAssignment.keyIdentifiers[1].value
         )
     }
 
@@ -351,13 +356,15 @@ class ResourceAssignmentUtilsTest {
 
         // Enable transform template
         resourceAssignment.property!!.metadata =
-                mutableMapOf(METADATA_TRANSFORM_TEMPLATE to "\${vnf_name}_private2")
+            mutableMapOf(METADATA_TRANSFORM_TEMPLATE to "\${vnf_name}_private2")
 
         ResourceAssignmentUtils
-                .setResourceDataValue(resourceAssignment, resourceAssignmentRuntimeService, value)
+            .setResourceDataValue(resourceAssignment, resourceAssignmentRuntimeService, value)
 
-        assertEquals("abc-vnf_private2",
-                resourceAssignment.property!!.value!!.asText())
+        assertEquals(
+            "abc-vnf_private2",
+            resourceAssignment.property!!.value!!.asText()
+        )
     }
 
     private fun initInputMapAndExpectedValuesForPrimitiveType() {
@@ -412,7 +419,8 @@ class ResourceAssignmentUtilsTest {
 
         expectedValueToTestCollectionOfComplexTypeWithOneOutputKeyMapping = arrayListOf(
             ExpectedResponseIpAddress(IpAddress("1111", "1.2.3.1")),
-            ExpectedResponseIpAddress(IpAddress("2222", "1.2.3.2")), ExpectedResponseIpAddress(
+            ExpectedResponseIpAddress(IpAddress("2222", "1.2.3.2")),
+            ExpectedResponseIpAddress(
                 IpAddress("3333", "1.2.3.3")
             )
         ).asJsonType()

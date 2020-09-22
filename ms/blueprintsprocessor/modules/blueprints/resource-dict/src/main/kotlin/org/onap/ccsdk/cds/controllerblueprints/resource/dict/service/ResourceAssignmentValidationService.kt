@@ -122,7 +122,7 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
                 for (resourceAssignment in vs) {
                     s.append(
                         "(" + resourceAssignment.dictionaryName + ":" + resourceAssignment.name +
-                                "),"
+                            "),"
                     )
                 }
                 s.append("]")
@@ -131,7 +131,7 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
                 for (resourceAssignment in vs) {
                     s.append(
                         "(" + resourceAssignment.dictionaryName + ":" + resourceAssignment.name +
-                                "),"
+                            "),"
                     )
                 }
                 s.append("]")

@@ -122,42 +122,47 @@ class BluePrintArchiveUtils {
                 TarArchiveOutputStream(GzipCompressorOutputStream(output))
             stream
                 .use { aos ->
-                    Files.walkFileTree(baseDir, object : SimpleFileVisitor<Path>() {
-                        @Throws(IOException::class)
-                        override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                            if (pathFilter.test(file)) {
-                                var archiveEntry: ArchiveEntry = aos.createArchiveEntry(file.toFile(),
-                                        baseDir.relativize(file).toString())
+                    Files.walkFileTree(
+                        baseDir,
+                        object : SimpleFileVisitor<Path>() {
+                            @Throws(IOException::class)
+                            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                                if (pathFilter.test(file)) {
+                                    var archiveEntry: ArchiveEntry = aos.createArchiveEntry(
+                                        file.toFile(),
+                                        baseDir.relativize(file).toString()
+                                    )
+                                    if (archiveType == ArchiveType.Zip) {
+                                        val entry = archiveEntry as ZipArchiveEntry
+                                        fixedModificationTime?.let {
+                                            entry.time = it
+                                        }
+                                        entry.time = 0
+                                    }
+                                    aos.putArchiveEntry(archiveEntry)
+                                    Files.copy(file, aos)
+                                    aos.closeArchiveEntry()
+                                }
+                                return FileVisitResult.CONTINUE
+                            }
+
+                            @Throws(IOException::class)
+                            override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                                var archiveEntry: ArchiveEntry?
                                 if (archiveType == ArchiveType.Zip) {
-                                    val entry = archiveEntry as ZipArchiveEntry
+                                    val entry = ZipArchiveEntry(baseDir.relativize(dir).toString() + "/")
                                     fixedModificationTime?.let {
                                         entry.time = it
                                     }
-                                    entry.time = 0
-                                }
+                                    archiveEntry = entry
+                                } else
+                                    archiveEntry = TarArchiveEntry(baseDir.relativize(dir).toString() + "/")
                                 aos.putArchiveEntry(archiveEntry)
-                                Files.copy(file, aos)
                                 aos.closeArchiveEntry()
+                                return FileVisitResult.CONTINUE
                             }
-                            return FileVisitResult.CONTINUE
                         }
-
-                        @Throws(IOException::class)
-                        override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-                            var archiveEntry: ArchiveEntry?
-                            if (archiveType == ArchiveType.Zip) {
-                                val entry = ZipArchiveEntry(baseDir.relativize(dir).toString() + "/")
-                                fixedModificationTime?.let {
-                                    entry.time = it
-                                }
-                                archiveEntry = entry
-                            } else
-                                archiveEntry = TarArchiveEntry(baseDir.relativize(dir).toString() + "/")
-                            aos.putArchiveEntry(archiveEntry)
-                            aos.closeArchiveEntry()
-                            return FileVisitResult.CONTINUE
-                        }
-                    })
+                    )
                 }
             return output
         }

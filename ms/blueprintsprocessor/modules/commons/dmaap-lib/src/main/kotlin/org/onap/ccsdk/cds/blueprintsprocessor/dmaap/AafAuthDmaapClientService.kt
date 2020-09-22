@@ -29,7 +29,7 @@ import com.att.nsa.mr.client.impl.MRSimplerBatchPublisher
  */
 class AafAuthDmaapClientService(
     private val clientProps:
-    AafAuthDmaapClientProperties
+        AafAuthDmaapClientProperties
 ) :
     BluePrintDmaapClientService {
 

@@ -80,8 +80,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping).toMutableMap()
 
                 inputKeyMapping?.mapValues { raRuntimeService.getDictionaryStore(it.value) }
-                        ?.map { KeyIdentifier(it.key, it.value) }
-                        ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
+                    ?.map { KeyIdentifier(it.key, it.value) }
+                    ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
 
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
@@ -92,7 +92,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
 
                 logger.info(
                     "RestResource ($dSource) dictionary information: " +
-                            "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
+                        "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
                 )
                 val requestHeaders = sourceProperties.headers
                 logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
@@ -120,8 +120,10 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         } catch (e: BluePrintProcessorException) {
             val errorMsg = "Failed to process REST resource resolution in template key ($resourceAssignment) assignments."
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, errorMsg)
-            throw e.updateErrorMessage(ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
-                    "Wrong resource definition or resolution failed.")
+            throw e.updateErrorMessage(
+                ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
+                "Wrong resource definition or resolution failed."
+            )
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)

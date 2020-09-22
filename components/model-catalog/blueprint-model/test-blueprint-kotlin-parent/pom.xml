@@ -89,43 +89,6 @@
         </resources>
         <plugins>
             <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>validate-kotlin</id>
-                        <phase>validate</phase>
-                        <configuration>
-                            <target name="ktlint">
-                                <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true" classname="com.pinterest.ktlint.Main" classpathref="maven.plugin.classpath">
-                                    <arg value="Scripts/kotlin/**/*.kt"/>
-                                </java>
-                            </target>
-                            <skip>${format.skipValidate}</skip>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <!-- Built-in formatter So that you wouldn't have to fix all style violations by hand.-->
-                        <id>format-kotlin</id>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <target name="ktlint">
-                                <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true" classname="com.pinterest.ktlint.Main" classpathref="maven.plugin.classpath">
-                                    <arg value="-F"/>
-                                    <arg value="Scripts/kotlin/**/*.kt"/>
-                                </java>
-                            </target>
-                            <skip>${format.skipExecute}</skip>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <executions>

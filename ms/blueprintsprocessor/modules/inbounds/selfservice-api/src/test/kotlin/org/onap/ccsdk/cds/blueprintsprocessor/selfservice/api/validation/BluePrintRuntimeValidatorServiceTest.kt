@@ -28,8 +28,10 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [BluePrintRuntimeValidatorService::class,
-        BluePrintValidationConfiguration::class, MockResourceSource::class]
+    classes = [
+        BluePrintRuntimeValidatorService::class,
+        BluePrintValidationConfiguration::class, MockResourceSource::class
+    ]
 )
 class BluePrintRuntimeValidatorServiceTest {
 

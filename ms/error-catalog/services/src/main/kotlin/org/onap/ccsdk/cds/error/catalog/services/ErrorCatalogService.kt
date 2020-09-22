@@ -78,11 +78,11 @@ open class ErrorCatalogService(private var errorCatalogLoadService: ErrorCatalog
         }
 
         return ErrorCatalog(
-                errorCatalogException.name,
-                errorCatalogException.domain,
-                errorCode,
-                action,
-                errorCause
+            errorCatalogException.name,
+            errorCatalogException.domain,
+            errorCode,
+            action,
+            errorCause
         )
     }
 

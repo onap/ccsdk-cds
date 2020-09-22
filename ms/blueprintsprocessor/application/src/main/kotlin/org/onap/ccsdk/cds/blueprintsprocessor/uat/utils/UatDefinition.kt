@@ -109,6 +109,6 @@ data class UatDefinition(
 
     companion object {
         fun load(mapper: ObjectMapper, spec: String): UatDefinition =
-                mapper.convertValue(Yaml().load(spec), UatDefinition::class.java)
+            mapper.convertValue(Yaml().load(spec), UatDefinition::class.java)
     }
 }

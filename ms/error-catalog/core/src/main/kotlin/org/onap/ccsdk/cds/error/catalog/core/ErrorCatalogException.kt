@@ -60,8 +60,8 @@ open class ErrorCatalogException : RuntimeException {
 
     constructor(code: Int, cause: Throwable, message: String, vararg args: Any?) :
         super(String.format(message, *args), cause) {
-        this.code = code
-    }
+            this.code = code
+        }
 
     open fun <T : ErrorCatalogException> updateCode(code: Int): T {
         this.code = code

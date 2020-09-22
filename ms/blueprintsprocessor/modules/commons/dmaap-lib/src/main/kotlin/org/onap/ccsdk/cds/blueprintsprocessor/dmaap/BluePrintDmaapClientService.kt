@@ -96,7 +96,8 @@ interface BluePrintDmaapClientService {
             } catch (e: IOException) {
                 log.warn(
                     "Unable to cleanly close the connection from the " +
-                            "client $client", e
+                        "client $client",
+                    e
                 )
             }
         }

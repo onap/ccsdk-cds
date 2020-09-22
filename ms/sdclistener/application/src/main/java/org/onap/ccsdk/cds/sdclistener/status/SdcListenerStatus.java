@@ -51,27 +51,26 @@ public class SdcListenerStatus {
 
 
     public enum NotificationType {
-        DOWNLOAD,
-        SDC_LISTENER_COMPONENT;
+        DOWNLOAD, SDC_LISTENER_COMPONENT;
     }
 
     /**
      * Send the component status back to SDC.
      *
      * @param distributionID SDC Distribution ID
-     * @param status         Distribution status
-     * @param errorReason    Reason of failure if present
-     * @param url            Artifact URL
-     * @param type           - NotificationType(Download or Component)
+     * @param status Distribution status
+     * @param errorReason Reason of failure if present
+     * @param url Artifact URL
+     * @param type - NotificationType(Download or Component)
      */
     public void sendResponseBackToSdc(String distributionID, DistributionStatusEnum status, String errorReason,
-                                      String url, NotificationType type) {
+            String url, NotificationType type) {
         final IDistributionClient distributionClient = sdcListenerDto.getDistributionClient();
 
         switch (type) {
             case SDC_LISTENER_COMPONENT:
-                IComponentDoneStatusMessage componentStatusMessage = buildStatusMessage(distributionID, status, url,
-                        COMPONENT_NAME);
+                IComponentDoneStatusMessage componentStatusMessage =
+                        buildStatusMessage(distributionID, status, url, COMPONENT_NAME);
 
                 if (errorReason == null) {
                     checkResponseStatusFromSdc(distributionClient.sendComponentDoneStatus(componentStatusMessage));
@@ -82,8 +81,8 @@ public class SdcListenerStatus {
                 break;
 
             case DOWNLOAD:
-                IDistributionStatusMessage downloadStatusMessage = buildStatusMessage(distributionID, status, url,
-                        null);
+                IDistributionStatusMessage downloadStatusMessage =
+                        buildStatusMessage(distributionID, status, url, null);
 
                 if (errorReason == null) {
                     checkResponseStatusFromSdc(distributionClient.sendDownloadStatus(downloadStatusMessage));
@@ -97,7 +96,7 @@ public class SdcListenerStatus {
     }
 
     private ComponentStatusMessage buildStatusMessage(String distributionId, DistributionStatusEnum status, String url,
-                                                      String componentName) {
+            String componentName) {
         return new BuilderUtil<>(new ComponentStatusMessage()).build(builder -> {
             builder.setDistributionID(distributionId);
             builder.setStatus(status);

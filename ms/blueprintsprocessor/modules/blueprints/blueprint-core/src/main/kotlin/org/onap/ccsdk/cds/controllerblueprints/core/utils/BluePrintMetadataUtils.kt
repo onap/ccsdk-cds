@@ -104,47 +104,47 @@ class BluePrintMetadataUtils {
         /** Get the default blueprint runtime for [id] and [blueprintBasePath] */
         suspend fun getBluePrintRuntime(id: String, blueprintBasePath: String):
             BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-            val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
-            return getBluePrintRuntime(id, bluePrintContext)
-        }
+                val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
+                return getBluePrintRuntime(id, bluePrintContext)
+            }
 
         /** Get the default blocking blueprint runtime api for [id] and [blueprintBasePath] used in testing */
         fun bluePrintRuntime(id: String, blueprintBasePath: String):
             BluePrintRuntimeService<MutableMap<String, JsonNode>> = runBlocking {
-            val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
-            getBluePrintRuntime(id, bluePrintContext)
-        }
+                val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
+                getBluePrintRuntime(id, bluePrintContext)
+            }
 
         /** Get the default blueprint runtime from [bluePrintContext] */
         fun getBluePrintRuntime(id: String, bluePrintContext: BluePrintContext):
             BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-            checkNotEmpty(bluePrintContext.rootPath) { "blueprint context root path is missing." }
-            checkNotEmpty(bluePrintContext.entryDefinition) { "blueprint context entry definition is missing." }
-            val blueprintBasePath = bluePrintContext.rootPath
-            val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
-            bluePrintRuntimeService.put(
-                BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH,
-                blueprintBasePath.asJsonPrimitive()
-            )
-            bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID, id.asJsonPrimitive())
-            return bluePrintRuntimeService
-        }
+                checkNotEmpty(bluePrintContext.rootPath) { "blueprint context root path is missing." }
+                checkNotEmpty(bluePrintContext.entryDefinition) { "blueprint context entry definition is missing." }
+                val blueprintBasePath = bluePrintContext.rootPath
+                val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
+                bluePrintRuntimeService.put(
+                    BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH,
+                    blueprintBasePath.asJsonPrimitive()
+                )
+                bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID, id.asJsonPrimitive())
+                return bluePrintRuntimeService
+            }
 
         /** Get the blueprint runtime for enhancement start for [id] and [blueprintBasePath] */
         suspend fun getBaseEnhancementBluePrintRuntime(id: String, blueprintBasePath: String):
             BluePrintRuntimeService<MutableMap<String, JsonNode>> {
 
-            val bluePrintContext: BluePrintContext = getBaseEnhancementBluePrintContext(blueprintBasePath)
+                val bluePrintContext: BluePrintContext = getBaseEnhancementBluePrintContext(blueprintBasePath)
 
-            val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
-            bluePrintRuntimeService.put(
-                BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH,
-                blueprintBasePath.asJsonPrimitive()
-            )
-            bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID, id.asJsonPrimitive())
+                val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
+                bluePrintRuntimeService.put(
+                    BluePrintConstants.PROPERTY_BLUEPRINT_BASE_PATH,
+                    blueprintBasePath.asJsonPrimitive()
+                )
+                bluePrintRuntimeService.put(BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID, id.asJsonPrimitive())
 
-            return bluePrintRuntimeService
-        }
+                return bluePrintRuntimeService
+            }
 
         /** Get the default blueprint runtime for enhancement start for [id],  [blueprintBasePath] and [executionContext] */
         suspend fun getBluePrintRuntime(
@@ -153,15 +153,15 @@ class BluePrintMetadataUtils {
             executionContext: MutableMap<String, JsonNode>
         ):
             BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-            val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
-            val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
-            executionContext.forEach {
-                bluePrintRuntimeService.put(it.key, it.value)
-            }
+                val bluePrintContext: BluePrintContext = getBluePrintContext(blueprintBasePath)
+                val bluePrintRuntimeService = DefaultBluePrintRuntimeService(id, bluePrintContext)
+                executionContext.forEach {
+                    bluePrintRuntimeService.put(it.key, it.value)
+                }
 
-            bluePrintRuntimeService.setExecutionContext(executionContext)
-            return bluePrintRuntimeService
-        }
+                bluePrintRuntimeService.setExecutionContext(executionContext)
+                return bluePrintRuntimeService
+            }
 
         /** Get the default blueprint context for [blueprintBasePath]*/
         suspend fun getBluePrintContext(blueprintBasePath: String): BluePrintContext {

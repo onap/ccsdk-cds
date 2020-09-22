@@ -74,7 +74,7 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
     @ApiOperation(
         value = "Retrieve a resource configuration snapshot.",
         notes = "Retrieve a config snapshot, identified by its Resource Id and Type. " +
-                "An extra 'format' parameter can be passed to tell what content-type is expected."
+            "An extra 'format' parameter can be passed to tell what content-type is expected."
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -95,38 +95,44 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
         @RequestParam(value = "format", required = false, defaultValue = MediaType.TEXT_PLAIN_VALUE) format: String
     ):
 
-            ResponseEntity<String> = runBlocking {
+        ResponseEntity<String> = runBlocking {
 
-        var configSnapshot = ""
+            var configSnapshot = ""
 
-        if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
-            try {
-                configSnapshot = resourceConfigSnapshotService.findByResourceIdAndResourceTypeAndStatus(
-                    resourceId,
-                    resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase())
+            if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
+                try {
+                    configSnapshot = resourceConfigSnapshotService.findByResourceIdAndResourceTypeAndStatus(
+                        resourceId,
+                        resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase())
+                    )
+                } catch (ex: NoSuchElementException) {
+                    throw httpProcessorException(
+                        ErrorCatalogCodes.RESOURCE_NOT_FOUND, ConfigsApiDomains.CONFIGS_API,
+                        "Could not find configuration snapshot entry for type $resourceType and Id $resourceId",
+                        ex.errorCauseOrDefault()
+                    )
+                } catch (ex: Exception) {
+                    throw httpProcessorException(
+                        ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                        "Could not find configuration snapshot entry for type $resourceType and Id $resourceId",
+                        ex.errorCauseOrDefault()
+                    )
+                }
+            } else {
+                throw httpProcessorException(
+                    ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                    "Missing param. You must specify resource-id and resource-type."
                 )
-            } catch (ex: NoSuchElementException) {
-                throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, ConfigsApiDomains.CONFIGS_API,
-                        "Could not find configuration snapshot entry for type $resourceType and Id $resourceId",
-                        ex.errorCauseOrDefault())
-            } catch (ex: Exception) {
-                throw httpProcessorException(ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
-                        "Could not find configuration snapshot entry for type $resourceType and Id $resourceId",
-                        ex.errorCauseOrDefault())
             }
-        } else {
-            throw httpProcessorException(ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
-                    "Missing param. You must specify resource-id and resource-type.")
-        }
 
-        var expectedContentType = format
-        if (expectedContentType.indexOf('/') < 0) {
-            expectedContentType = "application/$expectedContentType"
-        }
-        val expectedMediaType: MediaType = MediaType.valueOf(expectedContentType)
+            var expectedContentType = format
+            if (expectedContentType.indexOf('/') < 0) {
+                expectedContentType = "application/$expectedContentType"
+            }
+            val expectedMediaType: MediaType = MediaType.valueOf(expectedContentType)
 
-        ResponseEntity.ok().contentType(expectedMediaType).body(configSnapshot)
-    }
+            ResponseEntity.ok().contentType(expectedMediaType).body(configSnapshot)
+        }
 
     @PostMapping(
         "/{resourceType}/{resourceId}/{status}",
@@ -135,7 +141,7 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
     @ApiOperation(
         value = "Store a resource configuration snapshot identified by resourceId, resourceType, status.",
         notes = "Store a resource configuration snapshot, identified by its resourceId and resourceType, " +
-                "and optionally its status, either RUNNING or CANDIDATE.",
+            "and optionally its status, either RUNNING or CANDIDATE.",
         response = ResourceConfigSnapshot::class, produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseBody
@@ -161,13 +167,13 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
     }
 
     @RequestMapping(
-            path = ["/allByID"],
-            method = [RequestMethod.GET],
-            produces = [MediaType.APPLICATION_JSON_VALUE]
+        path = ["/allByID"],
+        method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
-            value = "Retrieve all resource configuration snapshots identified by a given resource_id",
-            notes = "Retrieve all config snapshots, identified by its Resource Id, ordered by most recently created/modified date. "
+        value = "Retrieve all resource configuration snapshots identified by a given resource_id",
+        notes = "Retrieve all config snapshots, identified by its Resource Id, ordered by most recently created/modified date. "
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -184,16 +190,21 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
                 configSnapshots = resourceConfigSnapshotService.findAllByResourceId(resourceId)
             } else {
                 configSnapshots = resourceConfigSnapshotService.findAllByResourceIdForStatus(
-                        resourceId, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase()))
+                    resourceId, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase())
+                )
             }
         } catch (ex: NoSuchElementException) {
-            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, ConfigsApiDomains.CONFIGS_API,
-                    "Could not find configuration snapshot entry for ID $resourceId",
-                    ex.errorCauseOrDefault())
+            throw httpProcessorException(
+                ErrorCatalogCodes.RESOURCE_NOT_FOUND, ConfigsApiDomains.CONFIGS_API,
+                "Could not find configuration snapshot entry for ID $resourceId",
+                ex.errorCauseOrDefault()
+            )
         } catch (ex: Exception) {
-            throw httpProcessorException(ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
-                    "Unexpected error while finding configuration snapshot entries for ID $resourceId",
-                    ex.errorCauseOrDefault())
+            throw httpProcessorException(
+                ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                "Unexpected error while finding configuration snapshot entries for ID $resourceId",
+                ex.errorCauseOrDefault()
+            )
         }
 
         val expectedMediaType: MediaType = MediaType.valueOf(JSON_MIME_TYPE)
@@ -201,13 +212,13 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
     }
 
     @RequestMapping(
-            path = ["allByType"],
-            method = [RequestMethod.GET],
-            produces = [MediaType.APPLICATION_JSON_VALUE]
+        path = ["allByType"],
+        method = [RequestMethod.GET],
+        produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
-            value = "Retrieve all resource configuration snapshots for a given resource type.",
-            notes = "Retrieve all config snapshots matching a specified Resource Type, ordered by most recently created/modified date. "
+        value = "Retrieve all resource configuration snapshots for a given resource type.",
+        notes = "Retrieve all config snapshots matching a specified Resource Type, ordered by most recently created/modified date. "
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -224,16 +235,21 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
                 configSnapshots = resourceConfigSnapshotService.findAllByResourceType(resourceType)
             } else {
                 configSnapshots = resourceConfigSnapshotService.findAllByResourceTypeForStatus(
-                        resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase()))
+                    resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase())
+                )
             }
         } catch (ex: NoSuchElementException) {
-            throw httpProcessorException(ErrorCatalogCodes.RESOURCE_NOT_FOUND, ConfigsApiDomains.CONFIGS_API,
-                    "Could not find configuration snapshot entry for ID $resourceType",
-                    ex.errorCauseOrDefault())
+            throw httpProcessorException(
+                ErrorCatalogCodes.RESOURCE_NOT_FOUND, ConfigsApiDomains.CONFIGS_API,
+                "Could not find configuration snapshot entry for ID $resourceType",
+                ex.errorCauseOrDefault()
+            )
         } catch (ex: Exception) {
-            throw httpProcessorException(ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
-                    "Unexpected error while finding configuration snapshot entries for type $resourceType",
-                    ex.errorCauseOrDefault())
+            throw httpProcessorException(
+                ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                "Unexpected error while finding configuration snapshot entries for type $resourceType",
+                ex.errorCauseOrDefault()
+            )
         }
 
         val expectedMediaType: MediaType = MediaType.valueOf(JSON_MIME_TYPE)

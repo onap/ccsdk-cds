@@ -42,8 +42,12 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [MockServiceAction::class, SelfServiceApiTestConfiguration::class,
-    ErrorCatalogTestConfiguration::class])
+@ContextConfiguration(
+    classes = [
+        MockServiceAction::class, SelfServiceApiTestConfiguration::class,
+        ErrorCatalogTestConfiguration::class
+    ]
+)
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ExecutionServiceHandlerTest {
 
@@ -95,10 +99,10 @@ class ExecutionServiceHandlerTest {
 
         val publishAuditService = mockk<KafkaPublishAuditService>(relaxed = true)
         val executionServiceHandler = ExecutionServiceHandler(
-                mockk(),
-                mockk(),
-                mockk(),
-                publishAuditService
+            mockk(),
+            mockk(),
+            mockk(),
+            publishAuditService
         )
 
         coEvery { publishAuditService.publishExecutionInput(ExecutionServiceInput()) } just Runs

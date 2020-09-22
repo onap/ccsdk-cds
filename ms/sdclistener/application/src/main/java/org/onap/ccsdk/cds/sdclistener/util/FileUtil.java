@@ -62,9 +62,7 @@ public final class FileUtil {
 
         try (Stream<Path> fileTree = walk(path)) {
             // Get the list of files from the path
-            return fileTree.filter(Files :: isRegularFile)
-                    .map(Path :: toFile)
-                    .collect(Collectors.toList());
+            return fileTree.filter(Files::isRegularFile).map(Path::toFile).collect(Collectors.toList());
         } catch (IOException e) {
             LOGGER.error("Failed to find the file due to", e);
         }

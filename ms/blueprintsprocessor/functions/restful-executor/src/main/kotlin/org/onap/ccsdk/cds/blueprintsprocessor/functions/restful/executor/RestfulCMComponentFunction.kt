@@ -41,7 +41,7 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
     }
 
     open fun bluePrintRestLibPropertyService(): BluePrintRestLibPropertyService =
-            functionDependencyInstanceAsType(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+        functionDependencyInstanceAsType(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
 
     fun restClientService(clientInfo: JsonNode): BlueprintWebClientService {
         return bluePrintRestLibPropertyService().blueprintWebClientService(clientInfo)
@@ -105,7 +105,7 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
                 }
             }
             "config-delete" -> {
-                    for (managed_object_instance in managed_object_instances) {
+                for (managed_object_instance in managed_object_instances) {
                     // invoke deleteMOI for each managed-object-instance
                     log.info("invoke deleteMOI for each managed-object-instance")
                     var NRM_Restful_client = RestfulNRMServiceClient()

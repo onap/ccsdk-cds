@@ -44,7 +44,8 @@ fun AbstractComponentFunction.netconfDeviceInfo(requirementName: String): Device
 
     val capabilityProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties(
         requirement
-            .node!!, requirement.capability!!
+            .node!!,
+        requirement.capability!!
     )
 
     return netconfDeviceInfo(capabilityProperties)

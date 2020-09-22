@@ -109,8 +109,8 @@ class KafkaScramSslAuthMessageProducerProperties : KafkaSslAuthMessageProducerPr
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_SSL.toString()
         configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
-                "username=\"${scramUsername}\" " +
-                "password=\"${scramPassword}\";"
+            "username=\"${scramUsername}\" " +
+            "password=\"${scramPassword}\";"
         return configProps
     }
 }
@@ -172,8 +172,8 @@ class KafkaStreamsScramSslAuthConsumerProperties : KafkaStreamsSslAuthConsumerPr
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_SSL.toString()
         configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
-                "username=\"${scramUsername}\" " +
-                "password=\"${scramPassword}\";"
+            "username=\"${scramUsername}\" " +
+            "password=\"${scramPassword}\";"
         return configProps
     }
 }
@@ -248,8 +248,8 @@ class KafkaScramSslAuthMessageConsumerProperties : KafkaSslAuthMessageConsumerPr
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_SSL.toString()
         configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
-                "username=\"${scramUsername}\" " +
-                "password=\"${scramPassword}\";"
+            "username=\"${scramUsername}\" " +
+            "password=\"${scramPassword}\";"
         return configProps
     }
 }

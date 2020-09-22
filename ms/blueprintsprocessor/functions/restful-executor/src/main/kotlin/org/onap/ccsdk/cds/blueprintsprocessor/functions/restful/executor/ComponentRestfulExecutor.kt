@@ -53,8 +53,10 @@ open class ComponentRestfulExecutor(private var componentFunctionScriptingServic
          * Populate the Script Instance based on the Type
          */
         scriptComponent = componentFunctionScriptingService
-                .scriptInstance<RestfulCMComponentFunction>(this, scriptType,
-                        scriptClassReference, scriptDependencies)
+            .scriptInstance<RestfulCMComponentFunction>(
+                this, scriptType,
+                scriptClassReference, scriptDependencies
+            )
 
         checkNotNull(scriptComponent) { "failed to get restfulCM script component" }
 
@@ -64,6 +66,6 @@ open class ComponentRestfulExecutor(private var componentFunctionScriptingServic
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBluePrintError()
-                .addError("Failed in ComponentRestfulExecutor : ${runtimeException.message}")
+            .addError("Failed in ComponentRestfulExecutor : ${runtimeException.message}")
     }
 }

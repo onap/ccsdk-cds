@@ -238,8 +238,10 @@ open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val
 
     override suspend fun tryLock(timeout: Long): Boolean {
         return distributedLock.tryLock(timeout, TimeUnit.MILLISECONDS)
-                .also { if (it) log.trace("Cluster lock acquired: $name")
-                    else log.trace("Failed to acquire Cluster lock $name within timeout $timeout") }
+            .also {
+                if (it) log.trace("Cluster lock acquired: $name")
+                else log.trace("Failed to acquire Cluster lock $name within timeout $timeout")
+            }
     }
 
     override suspend fun unLock() {

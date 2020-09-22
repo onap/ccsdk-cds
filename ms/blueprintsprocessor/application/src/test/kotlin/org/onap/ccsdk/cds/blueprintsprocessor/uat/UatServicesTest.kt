@@ -223,11 +223,14 @@ class UatServicesTest : BaseUatTest() {
 
             for (response in expectation.responses) {
                 val responseDefinitionBuilder: ResponseDefinitionBuilder = aResponse()
-                        .withStatus(response.status)
+                    .withStatus(response.status)
                 if (response.body != null) {
                     responseDefinitionBuilder.withBody(mapper.writeValueAsBytes(response.body))
-                        .withHeaders(HttpHeaders(
-                            response.headers.entries.map { e -> HttpHeader(e.key, e.value) }))
+                        .withHeaders(
+                            HttpHeaders(
+                                response.headers.entries.map { e -> HttpHeader(e.key, e.value) }
+                            )
+                        )
                 }
 
                 // TODO: MockServer verification for multiple responses should be done using Wiremock scenarios

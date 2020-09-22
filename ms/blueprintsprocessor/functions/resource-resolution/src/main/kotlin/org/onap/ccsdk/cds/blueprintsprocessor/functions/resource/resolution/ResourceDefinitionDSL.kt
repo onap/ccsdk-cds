@@ -25,9 +25,9 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 
 /** Resource Definition DSL **/
 fun BluePrintTypes.resourceDefinitions(block: ResourceDefinitionsBuilder.() -> Unit):
-        MutableMap<String, ResourceDefinition> {
-    return ResourceDefinitionsBuilder().apply(block).build()
-}
+    MutableMap<String, ResourceDefinition> {
+        return ResourceDefinitionsBuilder().apply(block).build()
+    }
 
 fun BluePrintTypes.resourceDefinition(
     name: String,
@@ -39,9 +39,9 @@ fun BluePrintTypes.resourceDefinition(
 
 /** Resource Mapping DSL **/
 fun BluePrintTypes.resourceAssignments(block: ResourceAssignmentsBuilder.() -> Unit):
-        MutableMap<String, ResourceAssignment> {
-    return ResourceAssignmentsBuilder().apply(block).build()
-}
+    MutableMap<String, ResourceAssignment> {
+        return ResourceAssignmentsBuilder().apply(block).build()
+    }
 
 fun BluePrintTypes.resourceAssignment(
     name: String,

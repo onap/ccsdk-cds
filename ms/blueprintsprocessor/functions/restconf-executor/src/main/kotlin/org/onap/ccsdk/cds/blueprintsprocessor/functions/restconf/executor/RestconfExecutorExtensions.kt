@@ -81,7 +81,7 @@ suspend fun AbstractScriptComponentFunction.restconfApplyDeviceConfig(
     log.debug("headers: $additionalHeaders")
     log.info("configuring device: $deviceId, Configlet: $configletToApply")
     val applyConfigUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
-            "$deviceId/$configletResourcePath"
+        "$deviceId/$configletResourcePath"
     return webClientService.exchangeResource("PATCH", applyConfigUrl, configletToApply as String, additionalHeaders)
 }
 
@@ -90,13 +90,13 @@ suspend fun AbstractScriptComponentFunction.restconfDeviceConfig(
     deviceId: String,
     configletResourcePath: String
 ):
-        BlueprintWebClientService.WebClientResponse<String> {
+    BlueprintWebClientService.WebClientResponse<String> {
 
-    val configPathUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
+        val configPathUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
             "$deviceId/$configletResourcePath"
-    log.debug("sending GET request,  url: $configPathUrl")
-    return webClientService.exchangeResource("GET", configPathUrl, "")
-}
+        log.debug("sending GET request,  url: $configPathUrl")
+        return webClientService.exchangeResource("GET", configPathUrl, "")
+    }
 
 /**
  * Generic UnMount function

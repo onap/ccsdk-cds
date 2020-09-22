@@ -43,8 +43,8 @@ open class ExecutionServiceInput {
     @get:ApiModelProperty(
         required = true,
         value = "Contain the information to be passed as input to the action." +
-                "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
-                " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
+            "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
+            " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
     )
     lateinit var payload: ObjectNode
     @get:ApiModelProperty(hidden = true)
@@ -64,8 +64,8 @@ open class ExecutionServiceOutput {
     @get:ApiModelProperty(
         required = true,
         value = "Contain the information to be passed as input to the action." +
-                "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
-                " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
+            "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
+            " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
     )
     lateinit var payload: ObjectNode
     @get:ApiModelProperty(hidden = true)

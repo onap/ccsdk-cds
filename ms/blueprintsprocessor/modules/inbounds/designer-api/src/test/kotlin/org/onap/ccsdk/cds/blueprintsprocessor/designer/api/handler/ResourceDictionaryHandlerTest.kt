@@ -39,10 +39,10 @@ class ResourceDictionaryHandlerTest {
     @Test
     fun testSaveResourceDictionary() {
         val resourceDefinition: ResourceDefinition = JacksonUtils
-                .readValueFromFile(
-                        "./../../../../../components/model-catalog/resource-dictionary/starter-dictionary/sample-db-source.json",
-                        ResourceDefinition::class.java
-                )!!
+            .readValueFromFile(
+                "./../../../../../components/model-catalog/resource-dictionary/starter-dictionary/sample-db-source.json",
+                ResourceDefinition::class.java
+            )!!
 
         val expectedResourceDictionary = ResourceDictionary()
         expectedResourceDictionary.name = resourceDefinition.name
@@ -57,7 +57,7 @@ class ResourceDictionaryHandlerTest {
         val mockReturnValue = ResourceDictionary()
         mockReturnValue.definition = ResourceDefinition()
         Mockito.`when`(mockRepository.save(any(ResourceDictionary::class.java)))
-                .thenReturn(mockReturnValue)
+            .thenReturn(mockReturnValue)
 
         runBlocking {
             resourceDictionaryHandler.saveResourceDefinition(resourceDefinition)

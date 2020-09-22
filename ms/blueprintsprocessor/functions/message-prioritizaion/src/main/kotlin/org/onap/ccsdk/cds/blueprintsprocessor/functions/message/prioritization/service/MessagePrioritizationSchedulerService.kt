@@ -36,11 +36,11 @@ open class MessagePrioritizationSchedulerService(
     var keepGoing = true
 
     /** This is sample scheduler implementation used during starting application with configuration.
-    @EventListener(ApplicationReadyEvent::class)
-    open fun init() = runBlocking {
-    log.info("Starting PrioritizationListeners...")
-    startScheduling(MessagePrioritizationSample.samplePrioritizationConfiguration())
-    }
+     @EventListener(ApplicationReadyEvent::class)
+     open fun init() = runBlocking {
+     log.info("Starting PrioritizationListeners...")
+     startScheduling(MessagePrioritizationSample.samplePrioritizationConfiguration())
+     }
      */
 
     open suspend fun startScheduling() {

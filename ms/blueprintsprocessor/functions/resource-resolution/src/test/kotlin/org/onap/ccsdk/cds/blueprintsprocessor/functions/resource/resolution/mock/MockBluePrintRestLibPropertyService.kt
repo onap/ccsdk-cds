@@ -24,13 +24,13 @@ class MockBluePrintRestLibPropertyService(bluePrintProperties: BluePrintProperti
 
     fun mockBlueprintWebClientService(selector: String):
         MockBlueprintWebClientService {
-        val prefix = "blueprintsprocessor.restclient.$selector"
-        val restClientProperties = restClientProperties(prefix)
-        return mockBlueprintWebClientService(restClientProperties)
-    }
+            val prefix = "blueprintsprocessor.restclient.$selector"
+            val restClientProperties = restClientProperties(prefix)
+            return mockBlueprintWebClientService(restClientProperties)
+        }
 
     private fun mockBlueprintWebClientService(restClientProperties: RestClientProperties):
         MockBlueprintWebClientService {
-        return MockBlueprintWebClientService(restClientProperties)
-    }
+            return MockBlueprintWebClientService(restClientProperties)
+        }
 }

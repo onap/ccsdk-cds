@@ -55,7 +55,7 @@ class ImperativeWorkflowExecutionService(
         val graph = bluePrintContext.workflowByName(workflowName).asGraph()
 
         return ImperativeBluePrintWorkflowService(nodeTemplateExecutionService)
-                .executeWorkflow(graph, bluePrintRuntimeService, executionServiceInput)
+            .executeWorkflow(graph, bluePrintRuntimeService, executionServiceInput)
     }
 }
 
@@ -115,22 +115,22 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
     }
 
     override suspend fun prepareNodeExecutionMessage(node: Graph.Node):
-            NodeExecuteMessage<ExecutionServiceInput, ExecutionServiceOutput> {
-        val nodeOutput = ExecutionServiceOutput().apply {
-            commonHeader = executionServiceInput.commonHeader
-            actionIdentifiers = executionServiceInput.actionIdentifiers
+        NodeExecuteMessage<ExecutionServiceInput, ExecutionServiceOutput> {
+            val nodeOutput = ExecutionServiceOutput().apply {
+                commonHeader = executionServiceInput.commonHeader
+                actionIdentifiers = executionServiceInput.actionIdentifiers
+            }
+            return NodeExecuteMessage(node, executionServiceInput, nodeOutput)
         }
-        return NodeExecuteMessage(node, executionServiceInput, nodeOutput)
-    }
 
     override suspend fun prepareNodeSkipMessage(node: Graph.Node):
-            NodeSkipMessage<ExecutionServiceInput, ExecutionServiceOutput> {
-        val nodeOutput = ExecutionServiceOutput().apply {
-            commonHeader = executionServiceInput.commonHeader
-            actionIdentifiers = executionServiceInput.actionIdentifiers
+        NodeSkipMessage<ExecutionServiceInput, ExecutionServiceOutput> {
+            val nodeOutput = ExecutionServiceOutput().apply {
+                commonHeader = executionServiceInput.commonHeader
+                actionIdentifiers = executionServiceInput.actionIdentifiers
+            }
+            return NodeSkipMessage(node, executionServiceInput, nodeOutput)
         }
-        return NodeSkipMessage(node, executionServiceInput, nodeOutput)
-    }
 
     override suspend fun executeNode(
         node: Graph.Node,

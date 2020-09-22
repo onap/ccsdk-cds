@@ -106,12 +106,12 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
     open suspend fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: MutableMap<String, JsonNode>):
         String {
-        if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
-            return valueToResolve
+            if (valueToResolve.isEmpty() || !valueToResolve.contains("$")) {
+                return valueToResolve
+            }
+            // TODO("Optimize to JSON Node directly without velocity").asJsonNode().toString()
+            return BluePrintVelocityTemplateService.generateContent(valueToResolve, keyMapping.asJsonNode().toString())
         }
-        // TODO("Optimize to JSON Node directly without velocity").asJsonNode().toString()
-        return BluePrintVelocityTemplateService.generateContent(valueToResolve, keyMapping.asJsonNode().toString())
-    }
 
     final override suspend fun applyNB(resourceAssignment: ResourceAssignment): Boolean {
         try {

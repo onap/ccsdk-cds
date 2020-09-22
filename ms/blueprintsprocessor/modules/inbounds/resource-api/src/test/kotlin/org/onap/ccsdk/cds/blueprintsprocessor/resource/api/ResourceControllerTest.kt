@@ -40,13 +40,17 @@ import org.springframework.test.web.reactive.server.WebTestClient
 @RunWith(SpringRunner::class)
 @WebFluxTest
 @ContextConfiguration(
-    classes = [TestDatabaseConfiguration::class, ErrorCatalogTestConfiguration::class,
-        ResourceController::class, ResourceResolutionDBService::class]
+    classes = [
+        TestDatabaseConfiguration::class, ErrorCatalogTestConfiguration::class,
+        ResourceController::class, ResourceResolutionDBService::class
+    ]
 )
 @ComponentScan(
-    basePackages = ["org.onap.ccsdk.cds.controllerblueprints.core.service",
+    basePackages = [
+        "org.onap.ccsdk.cds.controllerblueprints.core.service",
         "org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
-        "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution"]
+        "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution"
+    ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ResourceControllerTest {
@@ -150,9 +154,9 @@ class ResourceControllerTest {
                 .consumeWith {
                     val r = JacksonUtils.objectMapper.readValue(it.responseBody, ErrorPayload::class.java)
                     Assert.assertEquals(
-                            "Cause: Missing param. Either retrieve resolved value using artifact name and " +
-                                    "resolution-key OR using resource-id and resource-type. \n" +
-                                    " Action : Please verify your request.",
+                        "Cause: Missing param. Either retrieve resolved value using artifact name and " +
+                            "resolution-key OR using resource-id and resource-type. \n" +
+                            " Action : Please verify your request.",
                         r.message
                     )
                 }
@@ -172,7 +176,7 @@ class ResourceControllerTest {
                     val r = JacksonUtils.objectMapper.readValue(it.responseBody, ErrorPayload::class.java)
                     Assert.assertEquals(
                         "Cause: Either retrieve resolved value using artifact name and resolution-key OR using " +
-                                "resource-id and resource-type. \n Action : Please verify your request.",
+                            "resource-id and resource-type. \n Action : Please verify your request.",
                         r.message
                     )
                 }

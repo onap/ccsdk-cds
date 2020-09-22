@@ -619,8 +619,10 @@ A TOSCA Service Template (YAML) document contains element definitions of buildin
  */
 
 @JsonPropertyOrder(
-    value = ["toscaDefinitionsVersion", "description", "metadata", "imports", "dsl_definitions",
-        "topologyTemplate"]
+    value = [
+        "toscaDefinitionsVersion", "description", "metadata", "imports", "dsl_definitions",
+        "topologyTemplate"
+    ]
 )
 class ServiceTemplate : Cloneable {
 

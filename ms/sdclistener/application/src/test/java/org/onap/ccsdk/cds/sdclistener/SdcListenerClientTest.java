@@ -39,11 +39,11 @@ public class SdcListenerClientTest {
 
     @Test
     public void testInitCdsClientSuccesfully(@Injectable IDistributionClient distributionClient,
-                                             @Injectable SdcListenerConfiguration configuration,
-                                             @Injectable SdcListenerNotificationCallback notification,
-                                             @Injectable SdcListenerDto sdcListenerDto) throws SdcListenerException {
+            @Injectable SdcListenerConfiguration configuration,
+            @Injectable SdcListenerNotificationCallback notification, @Injectable SdcListenerDto sdcListenerDto)
+            throws SdcListenerException {
 
-        //Arrange
+        // Arrange
         new MockUp<DistributionClientFactory>() {
             @Mock
             public IDistributionClient createDistributionClient() {
@@ -51,24 +51,30 @@ public class SdcListenerClientTest {
             }
         };
 
-        new Expectations() {{
-            distributionClient.init(configuration, notification);
-            result = getResult();
-        }};
+        new Expectations() {
+            {
+                distributionClient.init(configuration, notification);
+                result = getResult();
+            }
+        };
 
-        new Expectations() {{
-            distributionClient.start();
-            result = getResult();
-        }};
+        new Expectations() {
+            {
+                distributionClient.start();
+                result = getResult();
+            }
+        };
 
         // Act
         sdcListenerClient.initSdcClient();
 
         // Verify
-        new VerificationsInOrder() {{
-            distributionClient.init(configuration, notification);
-            distributionClient.start();
-        }};
+        new VerificationsInOrder() {
+            {
+                distributionClient.init(configuration, notification);
+                distributionClient.start();
+            }
+        };
     }
 
     public IDistributionClientResult getResult() {

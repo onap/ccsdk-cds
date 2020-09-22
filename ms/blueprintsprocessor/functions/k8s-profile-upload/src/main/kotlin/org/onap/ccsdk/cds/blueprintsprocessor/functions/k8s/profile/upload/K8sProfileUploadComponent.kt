@@ -152,8 +152,10 @@ open class K8sProfileUploadComponent(
                 val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
                 val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, profileSource)
                 if (artifact.type != BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE)
-                    throw BluePrintProcessorException("Unexpected profile artifact type for profile source " +
-                            "$profileSource. Expecting: $artifact.type")
+                    throw BluePrintProcessorException(
+                        "Unexpected profile artifact type for profile source " +
+                            "$profileSource. Expecting: $artifact.type"
+                    )
                 var profile = K8sProfile()
                 profile.profileName = profileName
                 profile.rbName = definitionName
@@ -197,7 +199,7 @@ open class K8sProfileUploadComponent(
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val bluePrintBasePath: String = bluePrintContext.rootPath
         val profileSourceFileFolderPath: String = bluePrintBasePath.plus(File.separator)
-                .plus(ks8ProfileLocation)
+            .plus(ks8ProfileLocation)
         val profileFilePathTarGz: String = profileSourceFileFolderPath.plus(".tar.gz")
         val profileFilePathTgz: String = profileSourceFileFolderPath.plus(".tgz")
 
@@ -215,26 +217,37 @@ open class K8sProfileUploadComponent(
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = 1
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY] = false
             val resolutionResult: Pair<String, JsonNode> = resourceResolutionService.resolveResources(
-                    bluePrintRuntimeService,
-                    nodeTemplateName,
-                    ks8ProfileSource,
-                    properties)
+                bluePrintRuntimeService,
+                nodeTemplateName,
+                ks8ProfileSource,
+                properties
+            )
             val tempMainPath: File = createTempDir("k8s-profile-", "")
             val tempProfilePath: File = createTempDir("content-", "", tempMainPath)
 
             try {
-                val manifestFiles: ArrayList<File>? = readManifestFiles(Paths.get(profileSourceFileFolderPath).toFile(),
-                        tempProfilePath)
+                val manifestFiles: ArrayList<File>? = readManifestFiles(
+                    Paths.get(profileSourceFileFolderPath).toFile(),
+                    tempProfilePath
+                )
                 if (manifestFiles != null) {
-                    templateLocation(Paths.get(profileSourceFileFolderPath).toFile(), resolutionResult.second,
-                            tempProfilePath, manifestFiles)
+                    templateLocation(
+                        Paths.get(profileSourceFileFolderPath).toFile(), resolutionResult.second,
+                        tempProfilePath, manifestFiles
+                    )
                 } else
                     throw BluePrintProcessorException("Manifest file is missing")
                 // Preparation of the final profile content
-                val finalProfileFilePath = Paths.get(tempMainPath.toString().plus(File.separator).plus(
-                        "$k8sRbProfileName.tar.gz"))
-                if (!BluePrintArchiveUtils.compress(tempProfilePath, finalProfileFilePath.toFile(),
-                                ArchiveType.TarGz)) {
+                val finalProfileFilePath = Paths.get(
+                    tempMainPath.toString().plus(File.separator).plus(
+                        "$k8sRbProfileName.tar.gz"
+                    )
+                )
+                if (!BluePrintArchiveUtils.compress(
+                        tempProfilePath, finalProfileFilePath.toFile(),
+                        ArchiveType.TarGz
+                    )
+                ) {
                     throw BluePrintProcessorException("Profile compression has failed")
                 }
                 FileUtils.deleteDirectory(tempProfilePath)
@@ -303,8 +316,10 @@ open class K8sProfileUploadComponent(
             if (location.extension.toLowerCase() == "vtl") {
                 templateFile(location, params, destinationFolder, manifestFiles)
             } else {
-                val finalFilePath = Paths.get(destinationFolder.path.plus(File.separator)
-                        .plus(location.name)).toFile()
+                val finalFilePath = Paths.get(
+                    destinationFolder.path.plus(File.separator)
+                        .plus(location.name)
+                ).toFile()
                 if (isFileInTheManifestFiles(finalFilePath, manifestFiles)) {
                     if (!destinationFolder.exists())
                         Files.createDirectories(destinationFolder.toPath())
@@ -328,13 +343,17 @@ open class K8sProfileUploadComponent(
         destinationFolder: File,
         manifestFiles: ArrayList<File>
     ) {
-        val finalFile = File(destinationFolder.path.plus(File.separator)
-                .plus(templatedFile.nameWithoutExtension))
+        val finalFile = File(
+            destinationFolder.path.plus(File.separator)
+                .plus(templatedFile.nameWithoutExtension)
+        )
         if (!isFileInTheManifestFiles(finalFile, manifestFiles))
             return
         val fileContent = templatedFile.bufferedReader().readText()
-        val finalFileContent = BluePrintVelocityTemplateService.generateContent(fileContent,
-                params, true)
+        val finalFileContent = BluePrintVelocityTemplateService.generateContent(
+            fileContent,
+            params, true
+        )
         if (!destinationFolder.exists())
             Files.createDirectories(destinationFolder.toPath())
         finalFile.bufferedWriter().use { out -> out.write(finalFileContent) }

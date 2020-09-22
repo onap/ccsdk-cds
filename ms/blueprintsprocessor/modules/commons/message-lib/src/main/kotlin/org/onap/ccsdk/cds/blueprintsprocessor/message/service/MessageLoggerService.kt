@@ -61,7 +61,8 @@ class MessageLoggerService {
         val headers = consumerRecord.headers().toMap()
         val localhost = InetAddress.getLocalHost()
         MDC.put(
-            "InvokeTimestamp", ZonedDateTime
+            "InvokeTimestamp",
+            ZonedDateTime
                 .ofInstant(Instant.ofEpochMilli(consumerRecord.timestamp()), ZoneOffset.UTC)
                 .format(DateTimeFormatter.ISO_INSTANT)
         )

@@ -35,8 +35,10 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [BluePrintMessageLibConfiguration::class, SelfServiceApiTestConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, ErrorCatalogTestConfiguration::class]
+    classes = [
+        BluePrintMessageLibConfiguration::class, SelfServiceApiTestConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, ErrorCatalogTestConfiguration::class
+    ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintProcessingKafkaConsumerTest {

@@ -42,35 +42,38 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [BluePrintRestLibConfiguration::class, BluePrintPropertyConfiguration::class,
-        BluePrintPropertiesService::class]
+    classes = [
+        BluePrintRestLibConfiguration::class, BluePrintPropertyConfiguration::class,
+        BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
     properties =
-    ["blueprintsprocessor.restclient.sample.type=basic-auth",
-        "blueprintsprocessor.restclient.sample.url=http://localhost:8080",
-        "blueprintsprocessor.restclient.sample.userId=sampleuser",
-        "blueprintsprocessor.restclient.sslbasic.type=ssl-basic-auth",
-        "blueprintsprocessor.restclient.sslbasic.url=https://localhost:8443",
-        "blueprintsprocessor.restclient.sslbasic.username=admin",
-        "blueprintsprocessor.restclient.sslbasic.password=cds",
-        "blueprintsprocessor.restclient.sslbasic.keyStoreInstance=PKCS12",
-        "blueprintsprocessor.restclient.sslbasic.sslTrust=src/test/resources/keystore.p12",
-        "blueprintsprocessor.restclient.sslbasic.sslTrustPassword=changeit",
-        "blueprintsprocessor.restclient.ssltoken.type=ssl-token-auth",
-        "blueprintsprocessor.restclient.ssltoken.url=https://localhost:8443",
-        "blueprintsprocessor.restclient.ssltoken.token=72178473kjshdkjgvbsdkjv903274908",
-        "blueprintsprocessor.restclient.ssltoken.keyStoreInstance=PKCS12",
-        "blueprintsprocessor.restclient.ssltoken.sslTrust=src/test/resources/keystore.p12",
-        "blueprintsprocessor.restclient.ssltoken.sslTrustPassword=changeit",
-        "blueprintsprocessor.restclient.ssl.type=ssl-no-auth",
-        "blueprintsprocessor.restclient.ssl.url=https://localhost:8443",
-        "blueprintsprocessor.restclient.ssl.keyStoreInstance=PKCS12",
-        "blueprintsprocessor.restclient.ssl.sslTrust=src/test/resources/keystore.p12",
-        "blueprintsprocessor.restclient.ssl.sslTrustPassword=changeit",
-        "blueprintsprocessor.restclient.ssl.sslKey=src/test/resources/keystore.p12",
-        "blueprintsprocessor.restclient.ssl.sslKeyPassword=changeit"
-    ]
+        [
+            "blueprintsprocessor.restclient.sample.type=basic-auth",
+            "blueprintsprocessor.restclient.sample.url=http://localhost:8080",
+            "blueprintsprocessor.restclient.sample.userId=sampleuser",
+            "blueprintsprocessor.restclient.sslbasic.type=ssl-basic-auth",
+            "blueprintsprocessor.restclient.sslbasic.url=https://localhost:8443",
+            "blueprintsprocessor.restclient.sslbasic.username=admin",
+            "blueprintsprocessor.restclient.sslbasic.password=cds",
+            "blueprintsprocessor.restclient.sslbasic.keyStoreInstance=PKCS12",
+            "blueprintsprocessor.restclient.sslbasic.sslTrust=src/test/resources/keystore.p12",
+            "blueprintsprocessor.restclient.sslbasic.sslTrustPassword=changeit",
+            "blueprintsprocessor.restclient.ssltoken.type=ssl-token-auth",
+            "blueprintsprocessor.restclient.ssltoken.url=https://localhost:8443",
+            "blueprintsprocessor.restclient.ssltoken.token=72178473kjshdkjgvbsdkjv903274908",
+            "blueprintsprocessor.restclient.ssltoken.keyStoreInstance=PKCS12",
+            "blueprintsprocessor.restclient.ssltoken.sslTrust=src/test/resources/keystore.p12",
+            "blueprintsprocessor.restclient.ssltoken.sslTrustPassword=changeit",
+            "blueprintsprocessor.restclient.ssl.type=ssl-no-auth",
+            "blueprintsprocessor.restclient.ssl.url=https://localhost:8443",
+            "blueprintsprocessor.restclient.ssl.keyStoreInstance=PKCS12",
+            "blueprintsprocessor.restclient.ssl.sslTrust=src/test/resources/keystore.p12",
+            "blueprintsprocessor.restclient.ssl.sslTrustPassword=changeit",
+            "blueprintsprocessor.restclient.ssl.sslKey=src/test/resources/keystore.p12",
+            "blueprintsprocessor.restclient.ssl.sslKeyPassword=changeit"
+        ]
 )
 class BluePrintRestLibPropertyServiceTest {
 
@@ -84,8 +87,9 @@ class BluePrintRestLibPropertyServiceTest {
         )
         assertNotNull(properties, "failed to create property bean")
         assertNotNull(
-            properties.url, "failed to get url property in" +
-                    " property bean"
+            properties.url,
+            "failed to get url property in" +
+                " property bean"
         )
     }
 
@@ -435,7 +439,8 @@ class BluePrintRestLibPropertyServiceTest {
             """,
               "additionalHeaders" : {
                  "authorization": "Basic aGF2ZTphbmljZWRheQo="
-              }""".trimIndent()
+              }
+            """.trimIndent()
         )
 
         private fun sslTokenAuthEndpointWithHeadersField(headers: String = ""): String =
@@ -462,7 +467,8 @@ class BluePrintRestLibPropertyServiceTest {
             "username" : "admin",
             "password" : "cds"
           }$headers
-        }""".trimIndent()
+        }
+            """.trimIndent()
 
         private fun sslNoAuthEndpointWithHeadersField(headers: String = ""): String = """{
           "type" : "ssl-no-auth",
@@ -472,7 +478,8 @@ class BluePrintRestLibPropertyServiceTest {
           "sslTrustPassword" : "changeit",
           "sslKey" : "src/test/resources/keystore.p12",
           "sslKeyPassword" : "changeit"$headers
-        }""".trimIndent()
+        }
+        """.trimIndent()
 
         // Don't forget to supply "," as the first char to make valid JSON
         private fun basicAuthEndpointWithHeadersField(headers: String = ""): String =
@@ -481,37 +488,44 @@ class BluePrintRestLibPropertyServiceTest {
               "url": "http://127.0.0.1:8000",
               "username": "user",
               "password": "pass"$headers
-            }""".trimIndent()
+            }
+            """.trimIndent()
 
         private val emptyAdditionalHeaders = """,
           "additionalHeaders" : {
-          }""".trimIndent()
+          }
+        """.trimIndent()
 
         private val oneAdditionalParameter = """,
           "additionalHeaders" : {
             "key1": "value1"
-          }""".trimIndent()
+          }
+        """.trimIndent()
 
         private val threeAdditionalHeaders = """,
           "additionalHeaders" : {
             "key1": "value1",
             "key2": "value2",
             "key3": "value3"
-          }""".trimIndent()
+          }
+        """.trimIndent()
 
         private val contentTypeAdditionalHeader = """,
           "additionalHeaders" : {
             "${HttpHeaders.CONTENT_TYPE}": "${MediaType.APPLICATION_XML}"
-          }""".trimIndent()
+          }
+        """.trimIndent()
 
         private val additionalHeadersWithAuth = """,
           "additionalHeaders" : {
              "Authorization": "Basic aGF2ZTphbmljZWRheQo="
-          }""".trimIndent()
+          }
+        """.trimIndent()
 
         private val additionalHeadersWithAuthLowercased = """,
           "additionalHeaders" : {
              "authorization": "Basic aGF2ZTphbmljZWRheQo="
-          }""".trimIndent()
+          }
+        """.trimIndent()
     }
 }

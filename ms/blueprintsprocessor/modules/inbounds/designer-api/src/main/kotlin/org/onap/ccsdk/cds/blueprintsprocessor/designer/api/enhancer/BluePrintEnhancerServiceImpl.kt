@@ -83,15 +83,21 @@ open class BluePrintEnhancerServiceImpl(
             }
         } catch (e: BluePrintProcessorException) {
             val errorMsg = "Error while enriching the CBA package."
-            throw e.updateErrorMessage(DesignerApiDomains.DESIGNER_API, errorMsg,
-                    "Wrong blueprint definitions or resource definitions.")
+            throw e.updateErrorMessage(
+                DesignerApiDomains.DESIGNER_API, errorMsg,
+                "Wrong blueprint definitions or resource definitions."
+            )
         } catch (e: IOException) {
-            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
-                    "IO Error: CBA file failed enrichment - ${e.message}", e.errorCauseOrDefault())
+            throw httpProcessorException(
+                ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                "IO Error: CBA file failed enrichment - ${e.message}", e.errorCauseOrDefault()
+            )
         } catch (e: Exception) {
-            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
-                    "Error in Enriching CBA: ${e.message}", e.errorCauseOrDefault())
+            throw httpProcessorException(
+                ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                "Error in Enriching CBA: ${e.message}", e.errorCauseOrDefault()
+            )
         }
-            return blueprintRuntimeService.bluePrintContext()
-        }
+        return blueprintRuntimeService.bluePrintContext()
+    }
 }

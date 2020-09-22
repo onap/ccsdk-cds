@@ -58,9 +58,11 @@ class BlueprintsAcceptanceTest(
         @Parameterized.Parameters(name = "{index} {0}")
         @JvmStatic
         fun scanUatEmpoweredBlueprints(): List<Array<Any>> {
-            return (File(UAT_BLUEPRINTS_BASE_DIR)
-                .listFiles { file -> file.isDirectory && File(file, UAT_SPECIFICATION_FILE).isFile }
-                ?: throw RuntimeException("Failed to scan $UAT_BLUEPRINTS_BASE_DIR"))
+            return (
+                File(UAT_BLUEPRINTS_BASE_DIR)
+                    .listFiles { file -> file.isDirectory && File(file, UAT_SPECIFICATION_FILE).isFile }
+                    ?: throw RuntimeException("Failed to scan $UAT_BLUEPRINTS_BASE_DIR")
+                )
                 .map { file ->
                     arrayOf(
                         file.nameWithoutExtension,

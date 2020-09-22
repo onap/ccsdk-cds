@@ -73,7 +73,7 @@ public class BluePrintProcessorHandlerTest {
         final BluePrintManagementServiceImplBase serviceImplBase = new BluePrintManagementServiceImplBase() {
             @Override
             public void uploadBlueprint(BluePrintUploadInput request,
-                                        StreamObserver<BluePrintManagementOutput> responseObserver) {
+                    StreamObserver<BluePrintManagementOutput> responseObserver) {
                 responseObserver.onNext(getBluePrintManagementOutput());
                 responseObserver.onCompleted();
             }
@@ -83,8 +83,8 @@ public class BluePrintProcessorHandlerTest {
         String serverName = InProcessServerBuilder.generateName();
 
         // Create a server, add service, start, and register.
-        grpcCleanup.register(
-                InProcessServerBuilder.forName(serverName).addService(serviceImplBase).directExecutor().build().start());
+        grpcCleanup.register(InProcessServerBuilder.forName(serverName).addService(serviceImplBase).directExecutor()
+                .build().start());
 
         // Create a client channel.
         channel = grpcCleanup.register(InProcessChannelBuilder.forName(serverName).directExecutor().build());
@@ -109,20 +109,16 @@ public class BluePrintProcessorHandlerTest {
         FileChunk fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(bytes)).build();
 
         return BluePrintUploadInput.newBuilder()
-                .setCommonHeader(CommonHeader.newBuilder()
-                        .setRequestId(UUID.randomUUID().toString())
-                        .setSubRequestId(UUID.randomUUID().toString())
-                        .setOriginatorId("SDC-LISTENER")
-                        .build())
-                .setActionIdentifiers(ActionIdentifiers.newBuilder()
-                        .setActionName(UploadAction.PUBLISH.toString()).build())
+                .setCommonHeader(CommonHeader.newBuilder().setRequestId(UUID.randomUUID().toString())
+                        .setSubRequestId(UUID.randomUUID().toString()).setOriginatorId("SDC-LISTENER").build())
+                .setActionIdentifiers(
+                        ActionIdentifiers.newBuilder().setActionName(UploadAction.PUBLISH.toString()).build())
                 .setFileChunk(fileChunk).build();
     }
 
     private BluePrintManagementOutput getBluePrintManagementOutput() {
         return BluePrintManagementOutput.newBuilder()
-                .setStatus(Status.newBuilder().setMessage(SUCCESS_MSG).setCode(200).build())
-                .build();
+                .setStatus(Status.newBuilder().setMessage(SUCCESS_MSG).setCode(200).build()).build();
     }
 
 }

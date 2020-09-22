@@ -46,17 +46,20 @@ import kotlin.test.assertEquals
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [BluePrintSshLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+    classes = [
+        BluePrintSshLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
     properties =
-    ["blueprintsprocessor.sshclient.sample.type=basic-auth",
-        "blueprintsprocessor.sshclient.sample.host=localhost",
-        "blueprintsprocessor.sshclient.sample.port=52815",
-        "blueprintsprocessor.sshclient.sample.username=root",
-        "blueprintsprocessor.sshclient.sample.password=dummyps"
-    ]
+        [
+            "blueprintsprocessor.sshclient.sample.type=basic-auth",
+            "blueprintsprocessor.sshclient.sample.host=localhost",
+            "blueprintsprocessor.sshclient.sample.port=52815",
+            "blueprintsprocessor.sshclient.sample.username=root",
+            "blueprintsprocessor.sshclient.sample.password=dummyps"
+        ]
 )
 class BlueprintSshClientServiceTest {
 

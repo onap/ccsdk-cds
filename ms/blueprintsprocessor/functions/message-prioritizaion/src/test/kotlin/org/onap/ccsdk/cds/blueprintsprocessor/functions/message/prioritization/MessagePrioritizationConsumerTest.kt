@@ -61,43 +61,45 @@ import kotlin.test.assertNotNull
 @DataJpaTest
 @DirtiesContext
 @ContextConfiguration(
-    classes = [BluePrintMessageLibConfiguration::class, BluePrintNatsLibConfiguration::class,
+    classes = [
+        BluePrintMessageLibConfiguration::class, BluePrintNatsLibConfiguration::class,
         BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
-        MessagePrioritizationConfiguration::class, TestDatabaseConfiguration::class]
+        MessagePrioritizationConfiguration::class, TestDatabaseConfiguration::class
+    ]
 )
 @TestPropertySource(
     properties =
-    [
-        "spring.jpa.show-sql=false",
-        "spring.jpa.properties.hibernate.show_sql=false",
-        "spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl",
+        [
+            "spring.jpa.show-sql=false",
+            "spring.jpa.properties.hibernate.show_sql=false",
+            "spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl",
 
-        "blueprintsprocessor.messageconsumer.prioritize-input.type=kafka-streams-scram-ssl-auth",
-        "blueprintsprocessor.messageconsumer.prioritize-input.bootstrapServers=127.0.0.1:9092",
-        "blueprintsprocessor.messageconsumer.prioritize-input.applicationId=test-prioritize-application",
-        "blueprintsprocessor.messageconsumer.prioritize-input.topic=prioritize-input-topic",
-        "blueprintsprocessor.messageconsumer.prioritize-input.truststore=/path/to/truststore.jks",
-        "blueprintsprocessor.messageconsumer.prioritize-input.truststorePassword=truststorePassword",
-        "blueprintsprocessor.messageconsumer.prioritize-input.keystore=/path/to/keystore.jks",
-        "blueprintsprocessor.messageconsumer.prioritize-input.keystorePassword=keystorePassword",
-        "blueprintsprocessor.messageconsumer.prioritize-input.scramUsername=test-user",
-        "blueprintsprocessor.messageconsumer.prioritize-input.scramPassword=testUserPassword",
+            "blueprintsprocessor.messageconsumer.prioritize-input.type=kafka-streams-scram-ssl-auth",
+            "blueprintsprocessor.messageconsumer.prioritize-input.bootstrapServers=127.0.0.1:9092",
+            "blueprintsprocessor.messageconsumer.prioritize-input.applicationId=test-prioritize-application",
+            "blueprintsprocessor.messageconsumer.prioritize-input.topic=prioritize-input-topic",
+            "blueprintsprocessor.messageconsumer.prioritize-input.truststore=/path/to/truststore.jks",
+            "blueprintsprocessor.messageconsumer.prioritize-input.truststorePassword=truststorePassword",
+            "blueprintsprocessor.messageconsumer.prioritize-input.keystore=/path/to/keystore.jks",
+            "blueprintsprocessor.messageconsumer.prioritize-input.keystorePassword=keystorePassword",
+            "blueprintsprocessor.messageconsumer.prioritize-input.scramUsername=test-user",
+            "blueprintsprocessor.messageconsumer.prioritize-input.scramPassword=testUserPassword",
 
-        // To send initial test message
-        "blueprintsprocessor.messageproducer.prioritize-input.type=kafka-scram-ssl-auth",
-        "blueprintsprocessor.messageproducer.prioritize-input.bootstrapServers=127.0.0.1:9092",
-        "blueprintsprocessor.messageproducer.prioritize-input.topic=prioritize-input-topic",
-        "blueprintsprocessor.messageproducer.prioritize-input.truststore=/path/to/truststore.jks",
-        "blueprintsprocessor.messageproducer.prioritize-input.truststorePassword=truststorePassword",
-        "blueprintsprocessor.messageproducer.prioritize-input.keystore=/path/to/keystore.jks",
-        "blueprintsprocessor.messageproducer.prioritize-input.keystorePassword=keystorePassword",
-        "blueprintsprocessor.messageproducer.prioritize-input.scramUsername=test-user",
-        "blueprintsprocessor.messageproducer.prioritize-input.scramPassword=testUserPassword",
+            // To send initial test message
+            "blueprintsprocessor.messageproducer.prioritize-input.type=kafka-scram-ssl-auth",
+            "blueprintsprocessor.messageproducer.prioritize-input.bootstrapServers=127.0.0.1:9092",
+            "blueprintsprocessor.messageproducer.prioritize-input.topic=prioritize-input-topic",
+            "blueprintsprocessor.messageproducer.prioritize-input.truststore=/path/to/truststore.jks",
+            "blueprintsprocessor.messageproducer.prioritize-input.truststorePassword=truststorePassword",
+            "blueprintsprocessor.messageproducer.prioritize-input.keystore=/path/to/keystore.jks",
+            "blueprintsprocessor.messageproducer.prioritize-input.keystorePassword=keystorePassword",
+            "blueprintsprocessor.messageproducer.prioritize-input.scramUsername=test-user",
+            "blueprintsprocessor.messageproducer.prioritize-input.scramPassword=testUserPassword",
 
-        "blueprintsprocessor.nats.cds-controller.type=token-auth",
-        "blueprintsprocessor.nats.cds-controller.host=nats://localhost:4222",
-        "blueprintsprocessor.nats.cds-controller.token=tokenAuth"
-    ]
+            "blueprintsprocessor.nats.cds-controller.type=token-auth",
+            "blueprintsprocessor.nats.cds-controller.host=nats://localhost:4222",
+            "blueprintsprocessor.nats.cds-controller.token=tokenAuth"
+        ]
 )
 open class MessagePrioritizationConsumerTest {
 

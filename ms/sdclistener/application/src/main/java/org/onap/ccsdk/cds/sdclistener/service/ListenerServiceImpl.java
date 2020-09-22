@@ -81,7 +81,8 @@ public class ListenerServiceImpl implements ListenerService {
     @Value("${listenerservice.config.grpcPort}")
     private int grpcPort;
 
-    private static final String CBA_ZIP_PATH = "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
+    private static final String CBA_ZIP_PATH =
+            "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
     private static final int SUCCESS_CODE = 200;
     private static final Logger LOGGER = LoggerFactory.getLogger(ListenerServiceImpl.class);
 
@@ -105,17 +106,17 @@ public class ListenerServiceImpl implements ListenerService {
             }
 
             if (validPathCount == 0) {
-                LOGGER
-                        .info("CBA archive doesn't exist in the CSAR Package or it doesn't exist as per the given path {}",
-                                CBA_ZIP_PATH);
-                listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_OK, null,
-                        artifactUrl, SDC_LISTENER_COMPONENT);
+                LOGGER.info(
+                        "CBA archive doesn't exist in the CSAR Package or it doesn't exist as per the given path {}",
+                        CBA_ZIP_PATH);
+                listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_OK, null, artifactUrl,
+                        SDC_LISTENER_COMPONENT);
             }
 
         } catch (Exception e) {
             final String errorMessage = format("Failed to extract blueprint %s", e.getMessage());
-            listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage,
-                    artifactUrl, SDC_LISTENER_COMPONENT);
+            listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage, artifactUrl,
+                    SDC_LISTENER_COMPONENT);
             LOGGER.error(errorMessage);
         }
     }
@@ -133,8 +134,8 @@ public class ListenerServiceImpl implements ListenerService {
             LOGGER.error("Could not able to create file {}", targetZipFile, e);
         }
 
-        try (InputStream inputStream = zipFile.getInputStream(entry); OutputStream out = new FileOutputStream(
-                targetZipFile)) {
+        try (InputStream inputStream = zipFile.getInputStream(entry);
+                OutputStream out = new FileOutputStream(targetZipFile)) {
             IOUtils.copy(inputStream, out);
             LOGGER.info("Successfully store the CBA archive {} at this location", targetZipFile);
         } catch (Exception e) {
@@ -200,8 +201,8 @@ public class ListenerServiceImpl implements ListenerService {
                 if (responseStatus.getCode() != SUCCESS_CODE) {
                     final String errorMessage = format("Failed to store the CBA archive into CDS DB due to %s",
                             responseStatus.getErrorMessage());
-                    listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage, artifactUrl,
-                            SDC_LISTENER_COMPONENT);
+                    listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage,
+                            artifactUrl, SDC_LISTENER_COMPONENT);
                     LOGGER.error(errorMessage);
                 } else {
                     LOGGER.info(responseStatus.getMessage());
@@ -223,15 +224,11 @@ public class ListenerServiceImpl implements ListenerService {
         FileChunk fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(bytes)).build();
         FileUtil.deleteFile(file, path);
         return BluePrintUploadInput.newBuilder()
-                .setCommonHeader(CommonHeader.newBuilder()
-                        .setRequestId(UUID.randomUUID().toString())
-                        .setSubRequestId(UUID.randomUUID().toString())
-                        .setOriginatorId("SDC-LISTENER")
-                        .build())
-                .setActionIdentifiers(ActionIdentifiers.newBuilder()
-                        .setActionName(UploadAction.PUBLISH.toString()).build())
-                .setFileChunk(fileChunk)
-                .build();
+                .setCommonHeader(CommonHeader.newBuilder().setRequestId(UUID.randomUUID().toString())
+                        .setSubRequestId(UUID.randomUUID().toString()).setOriginatorId("SDC-LISTENER").build())
+                .setActionIdentifiers(
+                        ActionIdentifiers.newBuilder().setActionName(UploadAction.PUBLISH.toString()).build())
+                .setFileChunk(fileChunk).build();
     }
 
     private String getDistributionId() {

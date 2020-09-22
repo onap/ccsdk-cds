@@ -49,12 +49,15 @@ class ExtendedTemporaryFolder {
      * Delete all files under the root temporary folder recursively. The folders are preserved.
      */
     fun deleteAllFiles() {
-        Files.walkFileTree(tempFolder.toPath(), object : SimpleFileVisitor<Path>() {
-            @Throws(IOException::class)
-            override fun visitFile(file: Path?, attrs: BasicFileAttributes?): FileVisitResult {
-                file?.toFile()?.delete()
-                return FileVisitResult.CONTINUE
+        Files.walkFileTree(
+            tempFolder.toPath(),
+            object : SimpleFileVisitor<Path>() {
+                @Throws(IOException::class)
+                override fun visitFile(file: Path?, attrs: BasicFileAttributes?): FileVisitResult {
+                    file?.toFile()?.delete()
+                    return FileVisitResult.CONTINUE
+                }
             }
-        })
+        )
     }
 }

@@ -141,13 +141,13 @@ class NetconfMessageUtils {
             if (!persist.isEmpty() && !persistId.isEmpty()) {
                 throw NetconfException(
                     "Can't proceed <commit> with both persist($persist) and " +
-                            "persistId($persistId) specified. Only one should be specified."
+                        "persistId($persistId) specified. Only one should be specified."
                 )
             }
             if (confirmed && !persistId.isEmpty()) {
                 throw NetconfException(
                     "Can't proceed <commit> with both confirmed flag and " +
-                            "persistId($persistId) specified. Only one should be specified."
+                        "persistId($persistId) specified. Only one should be specified."
                 )
             }
 
@@ -366,8 +366,10 @@ class NetconfMessageUtils {
             if (!message.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH)) {
                 // chunk encode message
                 message =
-                    (RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + message.toByteArray(UTF_8).size + RpcMessageUtils.NEW_LINE + message + RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH +
-                            RpcMessageUtils.NEW_LINE)
+                    (
+                        RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + message.toByteArray(UTF_8).size + RpcMessageUtils.NEW_LINE + message + RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH + RpcMessageUtils.HASH +
+                            RpcMessageUtils.NEW_LINE
+                        )
             }
             return message
         }
@@ -384,8 +386,8 @@ class NetconfMessageUtils {
                 if (request.startsWith(RpcMessageUtils.NEW_LINE + RpcMessageUtils.HASH)) {
                     request =
                         request.split("<".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] + RpcMessageUtils.XML_HEADER + request.substring(
-                            request.split("<".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].length
-                        )
+                        request.split("<".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].length
+                    )
                 } else {
                     request = RpcMessageUtils.XML_HEADER + "\n" + request
                 }
