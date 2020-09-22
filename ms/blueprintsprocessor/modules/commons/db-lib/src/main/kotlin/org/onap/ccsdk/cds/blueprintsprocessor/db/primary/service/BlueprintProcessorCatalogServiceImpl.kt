@@ -103,7 +103,7 @@ class BlueprintProcessorCatalogServiceImpl(
                 deleteNBDir(deployFile.absolutePath)
                 throw BluePrintProcessorException(
                     "failed to get  get cba file name($name), version($version) from db" +
-                            " : ${e.message}"
+                        " : ${e.message}"
                 )
             } finally {
                 deleteNBDir(cbaFile.parentFile.absolutePath)
@@ -149,7 +149,8 @@ class BlueprintProcessorCatalogServiceImpl(
         blueprintModel.artifactVersion = artifactVersion
         blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!
         blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]!!
-        val description = if (null != metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION]) metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION] else ""
+        val description =
+            if (null != metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION]) metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION] else ""
         blueprintModel.artifactDescription = description
 
         val blueprintModelContent = BlueprintModelContent()
@@ -166,8 +167,10 @@ class BlueprintProcessorCatalogServiceImpl(
             blueprintModelRepository.saveAndFlush(blueprintModel)
         } catch (ex: DataIntegrityViolationException) {
             throw BluePrintException(
-                ErrorCode.CONFLICT_ADDING_RESOURCE.value, "The blueprint entry " +
-                        "is already exist in database: ${ex.message}", ex
+                ErrorCode.CONFLICT_ADDING_RESOURCE.value,
+                "The blueprint entry " +
+                    "is already exist in database: ${ex.message}",
+                ex
             )
         }
     }

@@ -39,40 +39,50 @@ abstract class ErrorCatalogExceptionHandler(private val errorCatalogService: Err
 
     @ExceptionHandler
     fun errorCatalogException(e: ServerWebInputException): ResponseEntity<ErrorPayload> {
-        val error = ErrorCatalogException(HttpErrorCodes.code(ErrorCatalogCodes.REQUEST_NOT_FOUND),
-                e.errorMessageOrDefault(), e.errorCauseOrDefault())
+        val error = ErrorCatalogException(
+            HttpErrorCodes.code(ErrorCatalogCodes.REQUEST_NOT_FOUND),
+            e.errorMessageOrDefault(), e.errorCauseOrDefault()
+        )
         val errorPayload = ErrorPayload(error.code, error.name, error.errorMessageOrDefault())
         return errorPayload.toResponseEntity()
     }
 
     @ExceptionHandler
     fun errorCatalogException(e: IncorrectResultSizeDataAccessException): ResponseEntity<ErrorPayload> {
-        val error = ErrorCatalogException(HttpErrorCodes.code(ErrorCatalogCodes.DUPLICATE_DATA),
-                e.errorMessageOrDefault(), e.errorCauseOrDefault())
+        val error = ErrorCatalogException(
+            HttpErrorCodes.code(ErrorCatalogCodes.DUPLICATE_DATA),
+            e.errorMessageOrDefault(), e.errorCauseOrDefault()
+        )
         val errorPayload = ErrorPayload(error.code, error.name, error.errorMessageOrDefault())
         return errorPayload.toResponseEntity()
     }
 
     @ExceptionHandler
     fun errorCatalogException(e: EmptyResultDataAccessException): ResponseEntity<ErrorPayload> {
-        val error = ErrorCatalogException(HttpErrorCodes.code(ErrorCatalogCodes.RESOURCE_NOT_FOUND),
-                e.errorMessageOrDefault(), e.errorCauseOrDefault())
+        val error = ErrorCatalogException(
+            HttpErrorCodes.code(ErrorCatalogCodes.RESOURCE_NOT_FOUND),
+            e.errorMessageOrDefault(), e.errorCauseOrDefault()
+        )
         val errorPayload = ErrorPayload(error.code, error.name, error.errorMessageOrDefault())
         return errorPayload.toResponseEntity()
     }
 
     @ExceptionHandler
     fun errorCatalogException(e: JpaObjectRetrievalFailureException): ResponseEntity<ErrorPayload> {
-        val error = ErrorCatalogException(HttpErrorCodes.code(ErrorCatalogCodes.RESOURCE_NOT_FOUND),
-                e.errorMessageOrDefault(), e.errorCauseOrDefault())
+        val error = ErrorCatalogException(
+            HttpErrorCodes.code(ErrorCatalogCodes.RESOURCE_NOT_FOUND),
+            e.errorMessageOrDefault(), e.errorCauseOrDefault()
+        )
         val errorPayload = ErrorPayload(error.code, error.name, error.errorMessageOrDefault())
         return errorPayload.toResponseEntity()
     }
 
     @ExceptionHandler
     fun errorCatalogException(e: Exception): ResponseEntity<ErrorPayload> {
-        val error = ErrorCatalogException(HttpErrorCodes.code(ErrorCatalogCodes.GENERIC_FAILURE),
-                e.errorMessageOrDefault(), e.errorCauseOrDefault())
+        val error = ErrorCatalogException(
+            HttpErrorCodes.code(ErrorCatalogCodes.GENERIC_FAILURE),
+            e.errorMessageOrDefault(), e.errorCauseOrDefault()
+        )
         val errorPayload = ErrorPayload(error.code, error.name, error.errorMessageOrDefault())
         return errorPayload.toResponseEntity()
     }

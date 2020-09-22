@@ -83,6 +83,7 @@ class BlueprintModelSearch : Serializable {
     var tags: String? = null
 
     companion object {
+
         const val serialversionuid = 1L
     }
 }

@@ -35,6 +35,7 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
     AbstractComponentFunction() {
 
     companion object {
+
         const val SCRIPT_TYPE = "script-type"
         const val SCRIPT_CLASS_REFERENCE = "script-class-reference"
         const val INSTANCE_DEPENDENCIES = "instance-dependencies"
@@ -66,8 +67,10 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
         // Handles both script processing and error handling
         scriptComponent.executeScript(executionServiceInput)
 
-        componentFunctionScriptingService.cleanupInstance(bluePrintRuntimeService.bluePrintContext(),
-                scriptType)
+        componentFunctionScriptingService.cleanupInstance(
+            bluePrintRuntimeService.bluePrintContext(),
+            scriptType
+        )
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

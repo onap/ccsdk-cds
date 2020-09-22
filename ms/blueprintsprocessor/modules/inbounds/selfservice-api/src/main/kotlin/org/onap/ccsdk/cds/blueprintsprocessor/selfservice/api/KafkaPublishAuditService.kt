@@ -52,19 +52,21 @@ import javax.annotation.PostConstruct
  * @property log Audit Service logger
  */
 @ConditionalOnProperty(
-        name = ["blueprintsprocessor.messageproducer.self-service-api.audit.kafkaEnable"],
-        havingValue = "true"
+    name = ["blueprintsprocessor.messageproducer.self-service-api.audit.kafkaEnable"],
+    havingValue = "true"
 )
 @Service
 class KafkaPublishAuditService(
     private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService,
     private val blueprintsProcessorCatalogService: BluePrintCatalogService
 ) : PublishAuditService {
+
     private var inputInstance: BlueprintMessageProducerService? = null
     private var outputInstance: BlueprintMessageProducerService? = null
     private val log = LoggerFactory.getLogger(KafkaPublishAuditService::class.toString())
 
     companion object {
+
         const val INPUT_SELECTOR = "self-service-api.audit.request"
         const val OUTPUT_SELECTOR = "self-service-api.audit.response"
     }
@@ -88,8 +90,8 @@ class KafkaPublishAuditService(
             this.inputInstance!!.sendMessage(key, secureExecutionServiceInput)
         } catch (e: Exception) {
             var errMsg =
-                    if (e.message != null) "ERROR : ${e.message}"
-                    else "ERROR : Failed to send execution request to Kafka."
+                if (e.message != null) "ERROR : ${e.message}"
+                else "ERROR : Failed to send execution request to Kafka."
             log.error(errMsg)
         }
     }
@@ -109,8 +111,8 @@ class KafkaPublishAuditService(
             this.outputInstance!!.sendMessage(key, executionServiceOutput)
         } catch (e: Exception) {
             var errMsg =
-                    if (e.message != null) "ERROR : $e"
-                    else "ERROR : Failed to send execution request to Kafka."
+                if (e.message != null) "ERROR : $e"
+                else "ERROR : Failed to send execution request to Kafka."
             log.error(errMsg)
         }
     }
@@ -161,7 +163,8 @@ class KafkaPublishAuditService(
 
         try {
             if (clonedExecutionServiceInput.payload
-                            .path("$workflowName-request").has("$workflowName-properties")) {
+                .path("$workflowName-request").has("$workflowName-properties")
+            ) {
 
                 /** Retrieving sensitive input parameters */
                 val requestId = clonedExecutionServiceInput.commonHeader.requestId
@@ -181,23 +184,24 @@ class KafkaPublishAuditService(
 
                     /** We need to check in his Node Template Dependencies is case of a Node Template DG */
                     if (nodeTemplate.type == BluePrintConstants.NODE_TEMPLATE_TYPE_DG) {
-                        val dependencyNodeTemplate = nodeTemplate.properties?.get(BluePrintConstants.PROPERTY_DG_DEPENDENCY_NODE_TEMPLATE) as ArrayNode
+                        val dependencyNodeTemplate =
+                            nodeTemplate.properties?.get(BluePrintConstants.PROPERTY_DG_DEPENDENCY_NODE_TEMPLATE) as ArrayNode
                         dependencyNodeTemplate.forEach { dependencyNodeTemplateName ->
                             clonedExecutionServiceInput = hideSensitiveDataFromResourceResolution(
-                                    blueprintRuntimeService,
-                                    blueprintContext,
-                                    clonedExecutionServiceInput,
-                                    workflowName,
-                                    dependencyNodeTemplateName.asText()
-                            )
-                        }
-                    } else {
-                        clonedExecutionServiceInput = hideSensitiveDataFromResourceResolution(
                                 blueprintRuntimeService,
                                 blueprintContext,
                                 clonedExecutionServiceInput,
                                 workflowName,
-                                nodeTemplateName
+                                dependencyNodeTemplateName.asText()
+                            )
+                        }
+                    } else {
+                        clonedExecutionServiceInput = hideSensitiveDataFromResourceResolution(
+                            blueprintRuntimeService,
+                            blueprintContext,
+                            clonedExecutionServiceInput,
+                            workflowName,
+                            nodeTemplateName
                         )
                     }
                 }
@@ -206,8 +210,9 @@ class KafkaPublishAuditService(
             val errMsg = "ERROR : Couldn't hide sensitive data in the execution request."
             log.error(errMsg, e)
             clonedExecutionServiceInput.payload.replace(
-                    "$workflowName-request",
-                    "$errMsg $e".asJsonPrimitive())
+                "$workflowName-request",
+                "$errMsg $e".asJsonPrimitive()
+            )
         }
         return clonedExecutionServiceInput
     }
@@ -236,8 +241,8 @@ class KafkaPublishAuditService(
             val operationName = blueprintContext.nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName)
 
             val propertyAssignments: MutableMap<String, JsonNode> =
-                    blueprintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
-                            ?: hashMapOf()
+                blueprintContext.nodeTemplateInterfaceOperationInputs(nodeTemplateName, interfaceName, operationName)
+                    ?: hashMapOf()
 
             /** Getting values define in artifact-prefix-names */
             val input = executionServiceInput.payload.get("$workflowName-request")
@@ -245,25 +250,26 @@ class KafkaPublishAuditService(
             val artifactPrefixNamesNode = propertyAssignments[ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES]
             val propertyAssignmentService = PropertyAssignmentService(blueprintRuntimeService)
             val artifactPrefixNamesNodeValue = propertyAssignmentService.resolveAssignmentExpression(
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
-                    nodeTemplateName,
-                    ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES,
-                    artifactPrefixNamesNode!!)
+                BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+                nodeTemplateName,
+                ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES,
+                artifactPrefixNamesNode!!
+            )
 
             val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNodeValue!!, String::class.java)
 
             /** Storing mapping entries with metadata log-protect set to true */
             val sensitiveParameters: List<String> = artifactPrefixNames
-                    .map { "$it-mapping" }
-                    .map { blueprintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, it) }
-                    .flatMap { JacksonUtils.getListFromJson(it, ResourceAssignment::class.java) }
-                    .filter { PropertyDefinitionUtils.hasLogProtect(it.property) }
-                    .map { it.name }
+                .map { "$it-mapping" }
+                .map { blueprintRuntimeService.resolveNodeTemplateArtifact(nodeTemplateName, it) }
+                .flatMap { JacksonUtils.getListFromJson(it, ResourceAssignment::class.java) }
+                .filter { PropertyDefinitionUtils.hasLogProtect(it.property) }
+                .map { it.name }
 
             /** Hiding sensitive input parameters from the request */
             var workflowProperties: ObjectNode = executionServiceInput.payload
-                    .path("$workflowName-request")
-                    .path("$workflowName-properties") as ObjectNode
+                .path("$workflowName-request")
+                .path("$workflowName-properties") as ObjectNode
 
             sensitiveParameters.forEach { sensitiveParameter ->
                 if (workflowProperties.has(sensitiveParameter)) {

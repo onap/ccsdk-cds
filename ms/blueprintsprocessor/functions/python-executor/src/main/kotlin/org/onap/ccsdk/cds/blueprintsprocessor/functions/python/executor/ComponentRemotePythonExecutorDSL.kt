@@ -112,9 +112,9 @@ fun BluePrintTypes.nodeTemplateComponentRemotePythonExecutor(
     description: String,
     block: ComponentRemotePythonExecutorNodeTemplateBuilder.() -> Unit
 ):
-        NodeTemplate {
-    return ComponentRemotePythonExecutorNodeTemplateBuilder(id, description).apply(block).build()
-}
+    NodeTemplate {
+        return ComponentRemotePythonExecutorNodeTemplateBuilder(id, description).apply(block).build()
+    }
 
 class DtSystemPackageDataTypeBuilder : PropertiesAssignmentBuilder() {
 
@@ -135,7 +135,7 @@ class DtSystemPackageDataTypeBuilder : PropertiesAssignmentBuilder() {
 
 class ComponentRemotePythonExecutorNodeTemplateBuilder(id: String, description: String) :
     AbstractNodeTemplateOperationImplBuilder<PropertiesAssignmentBuilder, ComponentRemotePythonExecutorNodeTemplateBuilder.InputsBuilder,
-            ComponentRemotePythonExecutorNodeTemplateBuilder.OutputsBuilder>(
+        ComponentRemotePythonExecutorNodeTemplateBuilder.OutputsBuilder>(
         id, "component-remote-python-executor",
         "ComponentRemotePythonExecutor", description
     ) {

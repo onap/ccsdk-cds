@@ -37,8 +37,10 @@ import kotlin.test.AfterTest
 @RunWith(SpringRunner::class)
 @WebFluxTest
 @ContextConfiguration(
-    classes = [TestDatabaseConfiguration::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, ErrorCatalogTestConfiguration::class]
+    classes = [
+        TestDatabaseConfiguration::class, BluePrintCoreConfiguration::class,
+        BluePrintCatalogService::class, ErrorCatalogTestConfiguration::class
+    ]
 )
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])

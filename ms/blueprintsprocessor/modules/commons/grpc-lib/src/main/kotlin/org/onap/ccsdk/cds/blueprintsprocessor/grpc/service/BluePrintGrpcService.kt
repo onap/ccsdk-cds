@@ -21,9 +21,11 @@ import io.grpc.ManagedChannel
 import io.grpc.netty.NettyServerBuilder
 
 interface BluePrintGrpcServerService {
+
     fun serverBuilder(): NettyServerBuilder
 }
 
 interface BluePrintGrpcClientService {
+
     suspend fun channel(): ManagedChannel
 }

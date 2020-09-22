@@ -53,8 +53,10 @@ open class DefaultResourceResolutionProcessor : ResourceAssignmentProcessor() {
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: BluePrintProcessorException) {
             val errorMsg = "Failed to process default resource resolution in template key ($resourceAssignment) assignments."
-            throw e.updateErrorMessage(ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
-                    "Wrong default value was set.")
+            throw e.updateErrorMessage(
+                ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
+                "Wrong default value was set."
+            )
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)

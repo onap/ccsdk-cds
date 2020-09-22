@@ -65,31 +65,33 @@ import kotlin.test.assertNotNull
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(
-    classes = [BluePrintRestLibConfiguration::class, SampleController::class,
+    classes = [
+        BluePrintRestLibConfiguration::class, SampleController::class,
         SecurityConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
     properties =
-    [
-        "server.port=8443",
-        "server.ssl.enabled=true",
-        "server.ssl.key-store=classpath:keystore.p12",
-        "server.ssl.key-store-password=changeit",
-        "server.ssl.keyStoreType=PKCS12",
-        "server.ssl.keyAlias=tomcat",
-        "blueprintsprocessor.restclient.sample.type=basic-auth",
-        "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:9081",
-        "blueprintsprocessor.restclient.sample.username=admin",
-        "blueprintsprocessor.restclient.sample.password=jans",
-        "blueprintsprocessor.restclient.test.type=ssl-basic-auth",
-        "blueprintsprocessor.restclient.test.url=https://localhost:8443",
-        "blueprintsprocessor.restclient.test.username=admin",
-        "blueprintsprocessor.restclient.test.password=jans",
-        "blueprintsprocessor.restclient.test.keyStoreInstance=PKCS12",
-        "blueprintsprocessor.restclient.test.sslTrust=src/test/resources/keystore.p12",
-        "blueprintsprocessor.restclient.test.sslTrustPassword=changeit"
-    ]
+        [
+            "server.port=8443",
+            "server.ssl.enabled=true",
+            "server.ssl.key-store=classpath:keystore.p12",
+            "server.ssl.key-store-password=changeit",
+            "server.ssl.keyStoreType=PKCS12",
+            "server.ssl.keyAlias=tomcat",
+            "blueprintsprocessor.restclient.sample.type=basic-auth",
+            "blueprintsprocessor.restclient.sample.url=http://127.0.0.1:9081",
+            "blueprintsprocessor.restclient.sample.username=admin",
+            "blueprintsprocessor.restclient.sample.password=jans",
+            "blueprintsprocessor.restclient.test.type=ssl-basic-auth",
+            "blueprintsprocessor.restclient.test.url=https://localhost:8443",
+            "blueprintsprocessor.restclient.test.username=admin",
+            "blueprintsprocessor.restclient.test.password=jans",
+            "blueprintsprocessor.restclient.test.keyStoreInstance=PKCS12",
+            "blueprintsprocessor.restclient.test.sslTrust=src/test/resources/keystore.p12",
+            "blueprintsprocessor.restclient.test.sslTrustPassword=changeit"
+        ]
 )
 class RestClientServiceTest {
 
@@ -119,26 +121,26 @@ class RestClientServiceTest {
     @Test
     fun testGetQueryParam() {
         val restClientService = bluePrintRestLibPropertyService
-                .blueprintWebClientService("sample")
+            .blueprintWebClientService("sample")
         val response = restClientService.exchangeResource(
-                HttpMethod.GET.name, "/sample/query?id=3", ""
+            HttpMethod.GET.name, "/sample/query?id=3", ""
         )
         assertEquals(
-                "query with id:3", response.body,
-                "failed to get query param response"
+            "query with id:3", response.body,
+            "failed to get query param response"
         )
     }
 
     @Test
     fun testGetPathParamWithWhitespace() {
         val restClientService = bluePrintRestLibPropertyService
-                .blueprintWebClientService("sample")
+            .blueprintWebClientService("sample")
         val response = restClientService.exchangeResource(
-                HttpMethod.GET.name, "/sample/path/id 3/get", ""
+            HttpMethod.GET.name, "/sample/path/id 3/get", ""
         )
         assertEquals(
-                "path param id:id 3", response.body,
-                "failed to get query param response"
+            "path param id:id 3", response.body,
+            "failed to get query param response"
         )
     }
 
@@ -171,11 +173,11 @@ class RestClientServiceTest {
     @Test
     fun testSimpleBasicAuth() {
         val json: String = "{\n" +
-                "  \"type\" : \"basic-auth\",\n" +
-                "  \"url\" : \"http://localhost:9081\",\n" +
-                "  \"username\" : \"admin\",\n" +
-                "  \"password\" : \"jans\"\n" +
-                "}"
+            "  \"type\" : \"basic-auth\",\n" +
+            "  \"url\" : \"http://localhost:9081\",\n" +
+            "  \"username\" : \"admin\",\n" +
+            "  \"password\" : \"jans\"\n" +
+            "}"
         val mapper = ObjectMapper()
         val actualObj: JsonNode = mapper.readTree(json)
         val restClientService = bluePrintRestLibPropertyService
@@ -203,13 +205,13 @@ class RestClientServiceTest {
         headers["X-TransactionId"] = "9999"
         headers["X-FromAppId"] = "AAI"
         val post1 = "{\n" +
-                "  \"customer\": {\n" +
-                "    \"global-customer-id\": \"ONSDEMOBJHKCustomer\",\n" +
-                "    \"subscriber-name\": \"ONSDEMOBJHKCustomer\",\n" +
-                "    \"subscriber-type\": \"CUST\",\n" +
-                "    \"resource-version\": \"1552985011163\"\n" +
-                "  }\n" +
-                "}"
+            "  \"customer\": {\n" +
+            "    \"global-customer-id\": \"ONSDEMOBJHKCustomer\",\n" +
+            "    \"subscriber-name\": \"ONSDEMOBJHKCustomer\",\n" +
+            "    \"subscriber-type\": \"CUST\",\n" +
+            "    \"resource-version\": \"1552985011163\"\n" +
+            "  }\n" +
+            "}"
         lateinit var res1: Customer
         lateinit var res2: Customer
         lateinit var res3: String
@@ -307,11 +309,11 @@ open class SampleController {
 
     @GetMapping("/query")
     fun getQuery(@RequestParam("id") id: String): String =
-            "query with id:$id"
+        "query with id:$id"
 
     @GetMapping("/path/{id}/get")
     fun getPathParam(@PathVariable("id") id: String): String =
-            "path param id:$id"
+        "path param id:$id"
 
     @PatchMapping("/name")
     fun patchName(): String = "Patch request successful"
@@ -330,11 +332,11 @@ open class SampleController {
             return ""
         }
         return "{\n" +
-                "  \"id\": \"ONSDEMOBJHKCustomer\",\n" +
-                "  \"name\": \"ONSDEMOBJHKCustomer\",\n" +
-                "  \"type\": \"CUST\",\n" +
-                "  \"resource\": \"1552985011163\"\n" +
-                "}"
+            "  \"id\": \"ONSDEMOBJHKCustomer\",\n" +
+            "  \"name\": \"ONSDEMOBJHKCustomer\",\n" +
+            "  \"type\": \"CUST\",\n" +
+            "  \"resource\": \"1552985011163\"\n" +
+            "}"
     }
 
     @PostMapping("/aai/v14/business/customers")

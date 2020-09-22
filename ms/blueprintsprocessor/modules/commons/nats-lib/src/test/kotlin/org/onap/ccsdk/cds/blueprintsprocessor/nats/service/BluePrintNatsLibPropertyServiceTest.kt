@@ -30,15 +30,18 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [BluePrintNatsLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+    classes = [
+        BluePrintNatsLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
     properties =
-    ["blueprintsprocessor.nats.cds-controller.type=token-auth",
-        "blueprintsprocessor.nats.cds-controller.host=nats://localhost:4222",
-        "blueprintsprocessor.nats.cds-controller.token=tokenAuth"
-    ]
+        [
+            "blueprintsprocessor.nats.cds-controller.type=token-auth",
+            "blueprintsprocessor.nats.cds-controller.host=nats://localhost:4222",
+            "blueprintsprocessor.nats.cds-controller.token=tokenAuth"
+        ]
 )
 class BluePrintNatsLibPropertyServiceTest {
 

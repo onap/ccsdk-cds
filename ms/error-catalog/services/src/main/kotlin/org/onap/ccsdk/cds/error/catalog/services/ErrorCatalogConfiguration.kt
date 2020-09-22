@@ -28,6 +28,7 @@ open class ErrorCatalogConfiguration
 @Component
 @ConfigurationProperties(prefix = "error.catalog")
 open class ErrorCatalogProperties {
+
     lateinit var type: String
     lateinit var applicationId: String
     var errorDefinitionDir: String? = null

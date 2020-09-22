@@ -43,6 +43,7 @@ class DSLBluePrint {
 }
 
 class DSLWorkflow {
+
     @get:JsonIgnore
     var id: String? = null
     lateinit var description: String
@@ -53,6 +54,7 @@ class DSLWorkflow {
 }
 
 class DSLComponent {
+
     @get:JsonIgnore
     lateinit var id: String
     lateinit var type: String
@@ -67,6 +69,7 @@ class DSLComponent {
 }
 
 class DSLRegistryComponent {
+
     lateinit var id: String
     lateinit var type: String
     lateinit var version: String

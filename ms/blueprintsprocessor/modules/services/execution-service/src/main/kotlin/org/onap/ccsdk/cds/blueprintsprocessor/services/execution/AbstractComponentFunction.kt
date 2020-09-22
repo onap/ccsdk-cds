@@ -105,9 +105,10 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         /** Resolve and validate lock properties */
         implementation.lock?.apply {
             val resolvedValues = bluePrintRuntimeService.resolvePropertyAssignments(
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
-                    interfaceName,
-                    mutableMapOf("key" to this.key, "acquireTimeout" to this.acquireTimeout))
+                BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+                interfaceName,
+                mutableMapOf("key" to this.key, "acquireTimeout" to this.acquireTimeout)
+            )
             this.key = resolvedValues["key"] ?: "".asJsonType()
             this.acquireTimeout = resolvedValues["acquireTimeout"] ?: "".asJsonType()
 
@@ -157,9 +158,9 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
             prepareRequestNB(executionServiceInput)
             implementation.lock?.let {
                 bluePrintClusterService.clusterLock("${it.key.textValue()}@$CDS_LOCK_GROUP")
-                        .executeWithLock(it.acquireTimeout.intValue().times(1000).toLong()) {
-                            applyNBWithTimeout(executionServiceInput)
-                        }
+                    .executeWithLock(it.acquireTimeout.intValue().times(1000).toLong()) {
+                        applyNBWithTimeout(executionServiceInput)
+                    }
             } ?: applyNBWithTimeout(executionServiceInput)
         } catch (runtimeException: RuntimeException) {
             log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
@@ -169,11 +170,13 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     private suspend fun applyNBWithTimeout(executionServiceInput: ExecutionServiceInput) =
-            withTimeout((implementation.timeout * 1000).toLong()) {
-                log.debug("DEBUG::: AbstractComponentFunction.withTimeout " +
-                        "section ${implementation.timeout} seconds")
-                processNB(executionServiceInput)
-            }
+        withTimeout((implementation.timeout * 1000).toLong()) {
+            log.debug(
+                "DEBUG::: AbstractComponentFunction.withTimeout " +
+                    "section ${implementation.timeout} seconds"
+            )
+            processNB(executionServiceInput)
+        }
 
     fun getOperationInput(key: String): JsonNode {
         return operationInputs[key]

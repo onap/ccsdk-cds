@@ -37,8 +37,10 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [MockRestResourceResolutionProcessor::class, MockBluePrintRestLibPropertyService::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, RestClientProperties::class]
+    classes = [
+        MockRestResourceResolutionProcessor::class, MockBluePrintRestLibPropertyService::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, RestClientProperties::class
+    ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class RestResourceResolutionProcessorTest {

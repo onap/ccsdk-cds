@@ -63,8 +63,10 @@ class ModelTypeServiceTest {
             modelType.definition = JacksonUtils.jsonNode(content)
             modelType.modelName = modelName
             modelType.version = "1.0.0"
-            modelType.tags = ("test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
+            modelType.tags = (
+                "test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
+                    BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+                )
             modelType.updatedBy = "xxxxxx@xxx.com"
             modelType = modelTypeHandler!!.saveModel(modelType)
             log.info("Saved Mode {}", modelType.toString())

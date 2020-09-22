@@ -23,61 +23,84 @@ import com.fasterxml.jackson.annotation.JsonProperty
 open class ResourceSourceProperties
 
 open class InputResourceSource : ResourceSourceProperties() {
+
     lateinit var key: String
+
     @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }
 
 open class DefaultResourceSource : ResourceSourceProperties() {
+
     lateinit var key: String
+
     @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }
 
 open class DatabaseResourceSource : ResourceSourceProperties() {
+
     lateinit var type: String
+
     @get:JsonProperty("endpoint-selector")
     var endpointSelector: String? = null
     lateinit var query: String
+
     @get:JsonProperty("input-key-mapping")
     var inputKeyMapping: MutableMap<String, String>? = null
+
     @get:JsonProperty("output-key-mapping")
     var outputKeyMapping: MutableMap<String, String>? = null
+
     @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }
 
 open class RestResourceSource : ResourceSourceProperties() {
+
     lateinit var verb: String
+
     @get:JsonProperty("payload")
     var payload: String? = null
+
     @get:JsonProperty("resolved-payload")
     var resolvedPayload: String? = null
     lateinit var type: String
+
     @get:JsonProperty("endpoint-selector")
     var endpointSelector: String? = null
+
     @get:JsonProperty("url-path")
     lateinit var urlPath: String
     lateinit var path: String
+
     @get:JsonProperty("expression-type")
     lateinit var expressionType: String
+
     @get:JsonProperty("input-key-mapping")
     var inputKeyMapping: MutableMap<String, String>? = null
+
     @get:JsonProperty("output-key-mapping")
     var outputKeyMapping: MutableMap<String, String>? = null
+
     @get:JsonProperty("headers")
     var headers: Map<String, String> = emptyMap()
+
     @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }
 
 open class CapabilityResourceSource : ResourceSourceProperties() {
+
     @get:JsonProperty("script-type")
     lateinit var scriptType: String
+
     @get:JsonProperty("script-class-reference")
     lateinit var scriptClassReference: String
+
     @get:JsonProperty("instance-dependencies")
     var instanceDependencies: List<String>? = null
+
     @get:JsonProperty("key-dependencies")
     lateinit var keyDependencies: MutableList<String>
 }

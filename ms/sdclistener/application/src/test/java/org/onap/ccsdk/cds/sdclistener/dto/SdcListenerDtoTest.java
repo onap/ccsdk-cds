@@ -35,6 +35,7 @@
  *
  *
  */
+
 package org.onap.ccsdk.cds.sdclistener.dto;
 
 import org.junit.Test;
@@ -49,7 +50,7 @@ import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
-@EnableConfigurationProperties({SdcListenerDto.class,SdcListenerAuthClientInterceptor.class})
+@EnableConfigurationProperties({SdcListenerDto.class, SdcListenerAuthClientInterceptor.class})
 @SpringBootTest(classes = {SdcListenerDtoTest.class})
 public class SdcListenerDtoTest {
 

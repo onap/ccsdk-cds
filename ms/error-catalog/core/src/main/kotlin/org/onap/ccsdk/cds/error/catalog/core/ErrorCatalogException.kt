@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.error.catalog.core
 
 interface ErrorCatalogExceptionFluent<T> {
+
     fun code(code: Int): T
     fun domain(domain: String): T
     fun action(action: String): T
@@ -31,6 +32,7 @@ interface ErrorCatalogExceptionFluent<T> {
 }
 
 open class ErrorCatalogException : RuntimeException {
+
     var code: Int = -1
     var domain: String = ""
     var name: String = ErrorCatalogCodes.GENERIC_FAILURE
@@ -60,8 +62,8 @@ open class ErrorCatalogException : RuntimeException {
 
     constructor(code: Int, cause: Throwable, message: String, vararg args: Any?) :
         super(String.format(message, *args), cause) {
-        this.code = code
-    }
+            this.code = code
+        }
 
     open fun <T : ErrorCatalogException> updateCode(code: Int): T {
         this.code = code

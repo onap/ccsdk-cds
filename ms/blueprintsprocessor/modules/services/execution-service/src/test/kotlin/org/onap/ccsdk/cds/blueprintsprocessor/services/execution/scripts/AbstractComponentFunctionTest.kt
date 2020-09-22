@@ -54,7 +54,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import java.lang.RuntimeException
 import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -64,8 +63,10 @@ import kotlin.test.assertNotNull
  */
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [ComponentFunctionScriptingService::class,
-        BluePrintScriptsServiceImpl::class, DeprecatedBlueprintJythonService::class]
+    classes = [
+        ComponentFunctionScriptingService::class,
+        BluePrintScriptsServiceImpl::class, DeprecatedBlueprintJythonService::class
+    ]
 )
 class AbstractComponentFunctionTest {
 
@@ -166,8 +167,8 @@ class AbstractComponentFunctionTest {
         every {
             bluePrintRuntimeService.resolvePropertyAssignments(any(), any(), any())
         } returns mutableMapOf(
-                "key" to "abc-123-def-456".asJsonType(),
-                "acquireTimeout" to implementation.lock!!.acquireTimeout
+            "key" to "abc-123-def-456".asJsonType(),
+            "acquireTimeout" to implementation.lock!!.acquireTimeout
         )
 
         val component: AbstractComponentFunction = SampleComponent()
@@ -193,8 +194,10 @@ class AbstractComponentFunctionTest {
 
         every {
             bluePrintRuntimeService.resolvePropertyAssignments(any(), any(), any())
-        } returns mutableMapOf("key" to "".asJsonType(),
-                "acquireTimeout" to Integer(360).asJsonType())
+        } returns mutableMapOf(
+            "key" to "".asJsonType(),
+            "acquireTimeout" to Integer(360).asJsonType()
+        )
 
         val component: AbstractComponentFunction = SampleComponent()
         component.bluePrintRuntimeService = bluePrintRuntimeService
@@ -239,8 +242,10 @@ class AbstractComponentFunctionTest {
 
         every {
             bluePrintRuntimeService.resolvePropertyAssignments(any(), any(), any())
-        } returns mutableMapOf("key" to lockName.asJsonType(),
-                "acquireTimeout" to Integer(180).asJsonType())
+        } returns mutableMapOf(
+            "key" to lockName.asJsonType(),
+            "acquireTimeout" to Integer(180).asJsonType()
+        )
 
         val clusterLock: ClusterLock = mockk()
 
@@ -272,49 +277,49 @@ class AbstractComponentFunctionTest {
     private fun getMockedInput(bluePrintRuntime: DefaultBluePrintRuntimeService):
         ExecutionServiceInput {
 
-        val mapper = ObjectMapper()
-        val rootNode = mapper.createObjectNode()
-        rootNode.put("ip-address", "0.0.0.0")
-        rootNode.put("type", "rest")
+            val mapper = ObjectMapper()
+            val rootNode = mapper.createObjectNode()
+            rootNode.put("ip-address", "0.0.0.0")
+            rootNode.put("type", "rest")
 
-        val operationInputs = hashMapOf<String, JsonNode>()
-        operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] =
-            "activate-restconf".asJsonPrimitive()
-        operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] =
-            "interfaceName".asJsonPrimitive()
-        operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] =
-            "operationName".asJsonPrimitive()
-        operationInputs["dynamic-properties"] = rootNode
+            val operationInputs = hashMapOf<String, JsonNode>()
+            operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] =
+                "activate-restconf".asJsonPrimitive()
+            operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] =
+                "interfaceName".asJsonPrimitive()
+            operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] =
+                "operationName".asJsonPrimitive()
+            operationInputs["dynamic-properties"] = rootNode
 
-        val stepInputData = StepData().apply {
-            name = "activate-restconf"
-            properties = operationInputs
-        }
-        val executionServiceInput = ExecutionServiceInput().apply {
-            commonHeader = CommonHeader().apply {
-                requestId = "1234"
+            val stepInputData = StepData().apply {
+                name = "activate-restconf"
+                properties = operationInputs
             }
-            actionIdentifiers = ActionIdentifiers().apply {
-                actionName = "activate"
+            val executionServiceInput = ExecutionServiceInput().apply {
+                commonHeader = CommonHeader().apply {
+                    requestId = "1234"
+                }
+                actionIdentifiers = ActionIdentifiers().apply {
+                    actionName = "activate"
+                }
+                payload = JacksonUtils.jsonNode("{}") as ObjectNode
             }
-            payload = JacksonUtils.jsonNode("{}") as ObjectNode
+            executionServiceInput.stepData = stepInputData
+
+            every {
+                bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs(
+                    "activate-restconf", "interfaceName", "operationName"
+                )
+            } returns operationInputs
+
+            val operationOutputs = hashMapOf<String, JsonNode>()
+            every {
+                bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs(
+                    "activate-restconf", "interfaceName", "operationName"
+                )
+            } returns operationOutputs
+            every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
+
+            return executionServiceInput
         }
-        executionServiceInput.stepData = stepInputData
-
-        every {
-            bluePrintRuntime.resolveNodeTemplateInterfaceOperationInputs(
-                "activate-restconf", "interfaceName", "operationName"
-            )
-        } returns operationInputs
-
-        val operationOutputs = hashMapOf<String, JsonNode>()
-        every {
-            bluePrintRuntime.resolveNodeTemplateInterfaceOperationOutputs(
-                "activate-restconf", "interfaceName", "operationName"
-            )
-        } returns operationOutputs
-        every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
-
-        return executionServiceInput
-    }
 }

@@ -57,6 +57,7 @@ open class ComponentRemotePythonExecutor(
     private val log = LoggerFactory.getLogger(ComponentRemotePythonExecutor::class.java)!!
 
     companion object {
+
         const val SELECTOR_CMD_EXEC = "blueprintsprocessor.remote-script-command"
         const val INPUT_ENDPOINT_SELECTOR = "endpoint-selector"
         const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"
@@ -151,7 +152,8 @@ open class ComponentRemotePythonExecutor(
                     subRequestId = executionServiceInput.commonHeader.subRequestId,
                     remoteIdentifier = RemoteIdentifier(
                         blueprintName = blueprintName,
-                        blueprintVersion = blueprintVersion),
+                        blueprintVersion = blueprintVersion
+                    ),
                     packages = packages,
                     timeOut = envPrepTimeout.toLong()
 
@@ -175,8 +177,10 @@ open class ComponentRemotePythonExecutor(
             // in cases where the exception is caught in BP side due to timeout, we do not have `err_msg` returned by cmd-exec (inside `payload`),
             // hence `artifact` field will be empty
         } catch (grpcEx: io.grpc.StatusRuntimeException) {
-            val componentLevelWarningMsg = if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
-            val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId).$componentLevelWarningMsg grpcError: (${grpcEx.cause?.message})"
+            val componentLevelWarningMsg =
+                if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
+            val grpcErrMsg =
+                "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId).$componentLevelWarningMsg grpcError: (${grpcEx.cause?.message})"
             // no execution log in case of timeout (as cmd-exec side hasn't finished to transfer output)
             // set prepare-env-log to the error msg, and cmd-exec-log to empty
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, grpcErrMsg.asJsonPrimitive())
@@ -184,7 +188,8 @@ open class ComponentRemotePythonExecutor(
             addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, grpcErrMsg)
             log.error(grpcErrMsg, grpcEx)
         } catch (e: Exception) {
-            val catchallErrMsg = "Command executor failed during env. preparation.. catch-all case. timeout($envPrepTimeout) requestId ($processId). exception msg: ${e.message}"
+            val catchallErrMsg =
+                "Command executor failed during env. preparation.. catch-all case. timeout($envPrepTimeout) requestId ($processId). exception msg: ${e.message}"
             // no environment prepare log from executor in case of timeout (as cmd-exec side hasn't finished to transfer output), set it to error msg. Execution logs is empty.
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, catchallErrMsg.asJsonPrimitive())
             setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), "{}".asJsonPrimitive(), isLogResponseEnabled)
@@ -204,7 +209,8 @@ open class ComponentRemotePythonExecutor(
                     remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
                     command = scriptCommand,
                     properties = properties,
-                    timeOut = executionTimeout.toLong())
+                    timeOut = executionTimeout.toLong()
+                )
 
                 val remoteExecutionOutputDeferred = GlobalScope.async {
                     remoteScriptExecutionService.executeCommand(remoteExecutionInput)
@@ -228,18 +234,22 @@ open class ComponentRemotePythonExecutor(
                     setNodeOutputProperties(remoteExecutionOutput.status, STEP_EXEC_CMD, logs, returnedPayload, isLogResponseEnabled)
                 } // In timeout exception cases, we don't have payload, hence `payload` is empty value.
             } catch (timeoutEx: TimeoutCancellationException) {
-                val componentLevelWarningMsg = if (timeout < executionTimeout) "Note: component-level timeout ($timeout) is shorter than execution timeout ($executionTimeout). " else ""
-                val timeoutErrMsg = "Command executor execution timeout. DetailedMessage: (${timeoutEx.message}) requestId ($processId). $componentLevelWarningMsg"
+                val componentLevelWarningMsg =
+                    if (timeout < executionTimeout) "Note: component-level timeout ($timeout) is shorter than execution timeout ($executionTimeout). " else ""
+                val timeoutErrMsg =
+                    "Command executor execution timeout. DetailedMessage: (${timeoutEx.message}) requestId ($processId). $componentLevelWarningMsg"
                 setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonPrimitive(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, timeoutErrMsg)
                 log.error(timeoutErrMsg, timeoutEx)
             } catch (grpcEx: io.grpc.StatusRuntimeException) {
-                val timeoutErrMsg = "Command executor timed out executing after $executionTimeout seconds requestId ($processId) grpcErr: ${grpcEx.status}"
+                val timeoutErrMsg =
+                    "Command executor timed out executing after $executionTimeout seconds requestId ($processId) grpcErr: ${grpcEx.status}"
                 setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonPrimitive(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, timeoutErrMsg)
                 log.error(timeoutErrMsg, grpcEx)
             } catch (e: Exception) {
-                val catchAllErrMsg = "Command executor failed during process catch-all case requestId ($processId) timeout($envPrepTimeout) exception msg: ${e.message}"
+                val catchAllErrMsg =
+                    "Command executor failed during process catch-all case requestId ($processId) timeout($envPrepTimeout) exception msg: ${e.message}"
                 setNodeOutputErrors(STEP_PREPARE_ENV, listOf(catchAllErrMsg).asJsonPrimitive(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, catchAllErrMsg)
                 log.error(catchAllErrMsg, e)

@@ -402,6 +402,7 @@ class AttributeDefinitionBuilder(
 }
 
 class PropertiesDefinitionBuilder {
+
     private val properties: MutableMap<String, PropertyDefinition> = hashMapOf()
 
     fun property(id: String, property: PropertyDefinition) {
@@ -487,6 +488,7 @@ class PropertyDefinitionBuilder(
 }
 
 class ConstraintsClauseBuilder {
+
     val constraints: MutableList<ConstraintClause> = mutableListOf()
 
     fun constrain(block: ConstraintClauseBuilder.() -> Unit) {
@@ -500,6 +502,7 @@ class ConstraintsClauseBuilder {
 }
 
 class ConstraintClauseBuilder {
+
     private val constraintClause = ConstraintClause()
 
     fun equal(equal: Any) = equal(equal.asJsonType())
@@ -564,6 +567,7 @@ class ConstraintClauseBuilder {
 }
 
 class EntrySchemaBuilder(private val type: String) {
+
     private var entrySchema: EntrySchema = EntrySchema()
 
     fun constrain(block: ConstraintClauseBuilder.() -> Unit) {

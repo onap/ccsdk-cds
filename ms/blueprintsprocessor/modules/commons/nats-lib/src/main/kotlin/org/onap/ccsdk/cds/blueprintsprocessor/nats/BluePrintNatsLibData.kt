@@ -20,20 +20,25 @@ import org.onap.ccsdk.cds.blueprintsprocessor.nats.utils.NatsClusterUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ClusterUtils
 
 open class NatsConnectionProperties {
+
     lateinit var type: String
     var clusterId: String = NatsClusterUtils.clusterId()
     var clientId: String = ClusterUtils.clusterNodeId()
     lateinit var host: String
+
     /** Rest endpoint selector to access Monitoring API */
     var monitoringSelector: String? = null
 }
 
 open class TokenAuthNatsConnectionProperties : NatsConnectionProperties() {
+
     lateinit var token: String
 }
 
 open class TLSAuthNatsConnectionProperties : NatsConnectionProperties() {
+
     var trustCertCollection: String? = null
+
     /** Below Used only for Mutual TLS */
     var clientCertChain: String? = null
     var clientPrivateKey: String? = null

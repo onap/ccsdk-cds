@@ -83,9 +83,11 @@ open class ExecutionServiceController {
     ): ResponseEntity<ExecutionServiceOutput> = mdcWebCoroutineScope {
 
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {
-            throw httpProcessorException(ErrorCatalogCodes.GENERIC_FAILURE,
-                    SelfServiceApiDomains.BLUEPRINT_PROCESSOR,
-                    "Can't process async request through the REST endpoint. Use gRPC for async processing.")
+            throw httpProcessorException(
+                ErrorCatalogCodes.GENERIC_FAILURE,
+                SelfServiceApiDomains.BLUEPRINT_PROCESSOR,
+                "Can't process async request through the REST endpoint. Use gRPC for async processing."
+            )
         }
         ph.register()
         val processResult = executionServiceHandler.doProcess(executionServiceInput)

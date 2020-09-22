@@ -32,7 +32,8 @@ public class BulkResourceSequencingUtilsTest {
 
     @Test
     public void testProcess() {
-        List<ResourceAssignment> assignments = JacksonUtils.Companion.getListFromClassPathFile("validation/success.json", ResourceAssignment.class);
+        List<ResourceAssignment> assignments =
+                JacksonUtils.Companion.getListFromClassPathFile("validation/success.json", ResourceAssignment.class);
         Assert.assertNotNull("failed to get ResourceAssignment from validation/success.json ", assignments);
         BulkResourceSequencingUtils.process(assignments);
     }

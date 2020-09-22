@@ -35,6 +35,6 @@ open class DeprecatedBlueprintJythonService : BlueprintJythonService {
 
     override fun jythonComponentInstance(bluePrintContext: BluePrintContext, scriptClassReference: String):
         BlueprintFunctionNode<*, *> {
-        throw BluePrintProcessorException("Include python-executor module for Jython support")
-    }
+            throw BluePrintProcessorException("Include python-executor module for Jython support")
+        }
 }

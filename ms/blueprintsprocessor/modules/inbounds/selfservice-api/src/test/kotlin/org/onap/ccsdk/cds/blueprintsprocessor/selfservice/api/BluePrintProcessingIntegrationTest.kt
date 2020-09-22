@@ -33,7 +33,7 @@ import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOu
 import org.springframework.test.context.ContextConfiguration
 
 @ContextConfiguration(
-        classes = [SelfServiceApiTestConfiguration::class, ErrorCatalogTestConfiguration::class]
+    classes = [SelfServiceApiTestConfiguration::class, ErrorCatalogTestConfiguration::class]
 )
 class BluePrintProcessingIntegrationTest {
 

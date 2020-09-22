@@ -22,4 +22,4 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice("org.onap.ccsdk.cds")
 open class BlueprintProcessorExceptionHandler(private val errorCatalogService: ErrorCatalogService) :
-        ErrorCatalogExceptionHandler(errorCatalogService)
+    ErrorCatalogExceptionHandler(errorCatalogService)

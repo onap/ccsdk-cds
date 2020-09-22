@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 object ResourceDictionaryUtils {
+
     private val log = LoggerFactory.getLogger(ResourceDictionaryUtils::class.java)
 
     @JvmStatic

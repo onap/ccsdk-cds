@@ -45,6 +45,7 @@ open class K8sProfileUploadConfiguration(private var bluePrintPropertiesService:
 
 class K8sProfileUploadConstants {
     companion object {
+
         const val PREFIX_K8S_PLUGIN: String = "blueprintprocessor.k8s.plugin"
     }
 }

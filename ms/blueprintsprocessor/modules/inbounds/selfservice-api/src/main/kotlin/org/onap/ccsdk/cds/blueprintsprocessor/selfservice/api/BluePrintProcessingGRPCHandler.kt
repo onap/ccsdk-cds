@@ -74,10 +74,10 @@ open class BluePrintProcessingGRPCHandler(
 
             fun onError(error: Exception) {
                 responseObserver.onError(
-                        Status.INTERNAL
-                                .withDescription(error.errorMessageOrDefault())
-                                .withCause(error.errorCauseOrDefault())
-                                .asException()
+                    Status.INTERNAL
+                        .withDescription(error.errorMessageOrDefault())
+                        .withCause(error.errorCauseOrDefault())
+                        .asException()
                 )
             }
 
@@ -88,10 +88,10 @@ open class BluePrintProcessingGRPCHandler(
                 val errorPayload = errorCatalogService.errorPayload(error)
                 val grpcCode = Status.fromCodeValue(errorPayload.code)
                 responseObserver.onError(
-                        grpcCode
-                                .withDescription(errorPayload.message)
-                                .withCause(error.errorCauseOrDefault())
-                                .asException()
+                    grpcCode
+                        .withDescription(errorPayload.message)
+                        .withCause(error.errorCauseOrDefault())
+                        .asException()
                 )
             }
 

@@ -38,6 +38,7 @@ open class EntityType {
     var description: String? = null
     var version: String = "1.0.0"
     var metadata: MutableMap<String, String>? = null
+
     @get:JsonProperty("derived_from")
     lateinit var derivedFrom: String
     var attributes: MutableMap<String, AttributeDefinition>? = null
@@ -54,6 +55,7 @@ class Credential {
     @get:JsonIgnore
     var id: String? = null
     var protocol: String? = null
+
     @get:JsonProperty("token_type")
     lateinit var tokenType: String
     lateinit var token: String
@@ -68,21 +70,29 @@ A constraint clause defines an operation along with one or more compatible value
 class ConstraintClause {
 
     var equal: JsonNode? = null
+
     @get:JsonProperty("greater_than")
     var greaterThan: JsonNode? = null
+
     @get:JsonProperty("greater_or_equal")
     var greaterOrEqual: JsonNode? = null
+
     @get:JsonProperty("less_than")
     var lessThan: JsonNode? = null
+
     @get:JsonProperty("less_or_equal")
     var lessOrEqual: JsonNode? = null
+
     @get:JsonProperty("in_range")
     var inRange: MutableList<JsonNode>? = null
+
     @get:JsonProperty("valid_values")
     var validValues: MutableList<JsonNode>? = null
     var length: JsonNode? = null
+
     @get:JsonProperty("min_length")
     var minLength: JsonNode? = null
+
     @get:JsonProperty("max_length")
     var maxLength: JsonNode? = null
     var pattern: String? = null
@@ -95,6 +105,7 @@ A node filter definition defines criteria for selection of a TOSCA Node Template
  */
 
 class NodeFilterDefinition {
+
     var properties: MutableMap<String, PropertyDefinition>? = null
     var capabilities: MutableList<String>? = null
 }
@@ -126,6 +137,7 @@ class ArtifactDefinition {
     lateinit var file: String
     var repository: String? = null
     var description: String? = null
+
     @get:JsonProperty("deploy_Path")
     var deployPath: String? = null
     var properties: MutableMap<String, JsonNode>? = null
@@ -143,8 +155,10 @@ class ImportDefinition {
     var id: String? = null
     lateinit var file: String
     var repository: String? = null
+
     @get:JsonProperty("namespace_uri")
     var namespaceUri: String? = null
+
     @get:JsonProperty("namespace_prefix")
     var namespacePrefix: String? = null
 }
@@ -162,17 +176,22 @@ class PropertyDefinition {
     var description: String? = null
     var required: Boolean? = null
     lateinit var type: String
+
     @get:JsonProperty("input-param")
     var inputparam: Boolean? = null
+
     @get:JsonProperty("default")
     var defaultValue: JsonNode? = null
     var status: String? = null
     var constraints: MutableList<ConstraintClause>? = null
+
     @get:JsonProperty("entry_schema")
     var entrySchema: EntrySchema? = null
+
     @get:JsonProperty("external-schema")
     var externalSchema: String? = null
     var metadata: MutableMap<String, String>? = null
+
     // Mainly used in Workflow Outputs
     @get:ApiModelProperty(notes = "Property Value, It may be Expression or Json type values")
     var value: JsonNode? = null
@@ -189,17 +208,21 @@ from the instance model and used as values to other entities within TOSCA Servic
  */
 
 class AttributeDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
     var required: Boolean? = null
     lateinit var type: String
+
     @JsonProperty("default")
     var defaultValue: JsonNode? = null
     var status: String? = null
     var constraints: MutableList<ConstraintClause>? = null
+
     @JsonProperty("entry_schema")
     var entrySchema: EntrySchema? = null
+
     // Mainly used in DSL definitions
     @get:ApiModelProperty(notes = "Attribute Value, It may be Expression or Json type values")
     var value: JsonNode? = null
@@ -220,16 +243,20 @@ class OperationDefinition {
 }
 
 class Implementation {
+
     var primary: String? = null
     var dependencies: MutableList<String>? = null
+
     @get:JsonProperty("operation_host")
     var operationHost: String = BluePrintConstants.PROPERTY_SELF
+
     // Timeout value in seconds
     var timeout: Int = 180
     var lock: LockAssignment? = null
 }
 
 class LockAssignment {
+
     lateinit var key: JsonNode
     var acquireTimeout: JsonNode = Integer(180).asJsonType()
 }
@@ -269,8 +296,10 @@ class TriggerDefinition {
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
+
     @get:JsonProperty("event_type")
     lateinit var eventType: String
+
     @get:JsonProperty("target_filter")
     var targetFilter: EventFilterDefinition? = null
     var condition: ConditionClause? = null
@@ -290,8 +319,10 @@ class TriggerDefinition {
 class Activity {
 
     var delegate: String? = null
+
     @get:JsonProperty("set_state")
     var setState: String? = null
+
     @get:JsonProperty("call_operation")
     var callOperation: String? = null
     var inlines: ArrayList<String>? = null
@@ -306,6 +337,7 @@ class PreConditionDefinition {
     @get:JsonIgnore
     var id: String? = null
     lateinit var target: String
+
     @get:JsonProperty("target_relationship")
     lateinit var targetRelationship: String
     lateinit var condition: ArrayList<ConditionClause>
@@ -321,13 +353,17 @@ class Step {
     var id: String? = null
     var description: String? = null
     var target: String? = null
+
     @JsonProperty("target_relationship")
     var targetRelationship: String? = null
+
     @JsonProperty("operation_host")
     var operationHost: String? = null
     var activities: ArrayList<Activity>? = null
+
     @get:JsonProperty("on_success")
     var onSuccess: ArrayList<String>? = null
+
     @get:JsonProperty("on_failure")
     var onFailure: ArrayList<String>? = null
 }
@@ -338,11 +374,13 @@ A capability definition defines a named, typed set of data that can be associate
  */
 
 class CapabilityDefinition {
+
     @get:JsonIgnore
     var id: String? = null
     lateinit var type: String
     var description: String? = null
     var properties: MutableMap<String, PropertyDefinition>? = null
+
     @get:JsonProperty("valid_source_types")
     var validSourceTypes: MutableList<String>? = null
     var occurrences: MutableList<Any>? = null
@@ -371,6 +409,7 @@ class ArtifactType : EntityType() {
 
     @get:JsonProperty("mime_type")
     var mimeType: String? = null
+
     @get:JsonProperty("file_ext")
     var fileExt: MutableList<String>? = null
 }
@@ -381,6 +420,7 @@ A Data Type definition defines the schema for new named datatypes in TOSCA.
  */
 
 class DataType : EntityType() {
+
     var constraints: MutableList<ConstraintClause>? = null
 }
 
@@ -391,6 +431,7 @@ A Node Type is a reusable entity that defines the type of one or more Node Templ
  */
 
 class NodeType : EntityType() {
+
     var capabilities: MutableMap<String, CapabilityDefinition>? = null
     var requirements: MutableMap<String, RequirementDefinition>? = null
     var interfaces: MutableMap<String, InterfaceDefinition>? = null
@@ -406,6 +447,7 @@ along with a named Feature notation.
  */
 
 class RequirementType : EntityType() {
+
     var requirements: MutableMap<String, RequirementDefinition>? = null
     var capabilities: MutableMap<String, CapabilityDefinition>? = null
     var interfaces: MutableMap<String, InterfaceDefinition>? = null
@@ -418,7 +460,9 @@ A Relationship Type is a reusable entity that defines the type of one or more re
 */
 
 class RelationshipType : EntityType() {
+
     var interfaces: MutableMap<String, InterfaceDefinition>? = null
+
     @get:JsonProperty("valid_target_types")
     var validTargetTypes: MutableList<String>? = null
 }
@@ -432,6 +476,7 @@ Groups can effectively be viewed as logical nodes that are not part of the physi
  */
 
 class GroupType : EntityType() {
+
     var members: MutableList<String>? = null
     var requirements: ArrayList<RequirementDefinition>? = null
     var capabilities: MutableMap<String, CapabilityDefinition>? = null
@@ -502,18 +547,22 @@ class TopologyTemplate {
     var id: String? = null
     var description: String? = null
     var inputs: MutableMap<String, PropertyDefinition>? = null
+
     @get:JsonProperty("node_templates")
     var nodeTemplates: MutableMap<String, NodeTemplate>? = null
+
     @get:JsonProperty("relationship_templates")
     var relationshipTemplates: MutableMap<String, RelationshipTemplate>? = null
     var policies: MutableMap<String, PolicyDefinition>? = null
     var outputs: MutableMap<String, PropertyDefinition>? = null
+
     @get:JsonProperty("substitution_mappings")
     var substitutionMappings: Any? = null
     var workflows: MutableMap<String, Workflow>? = null
 }
 
 class SubstitutionMapping {
+
     @get:JsonProperty("node_type")
     lateinit var nodeType: String
     lateinit var capabilities: ArrayList<String>
@@ -521,11 +570,13 @@ class SubstitutionMapping {
 }
 
 class EntrySchema {
+
     lateinit var type: String
     var constraints: MutableList<ConstraintClause>? = null
 }
 
 class InterfaceAssignment {
+
     @get:JsonIgnore
     var id: String? = null
     var operations: MutableMap<String, OperationAssignment>? = null
@@ -538,12 +589,14 @@ A Node Template specifies the occurrence of a manageable software component as p
  */
 
 open class NodeTemplate {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
     lateinit var type: String
     var metadata: MutableMap<String, String>? = null
     var directives: MutableList<String>? = null
+
     // @get:JsonSerialize(using = PropertyDefinitionValueSerializer::class)
     var properties: MutableMap<String, JsonNode>? = null
     var attributes: MutableMap<String, JsonNode>? = null
@@ -551,12 +604,14 @@ open class NodeTemplate {
     var requirements: MutableMap<String, RequirementAssignment>? = null
     var interfaces: MutableMap<String, InterfaceAssignment>? = null
     var artifacts: MutableMap<String, ArtifactDefinition>? = null
+
     @get:JsonProperty("node_filter")
     var nodeFilter: NodeFilterDefinition? = null
     var copy: String? = null
 }
 
 class OperationAssignment {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -571,6 +626,7 @@ A Relationship Template specifies the occurrence of a manageable relationship be
  */
 
 class RelationshipTemplate {
+
     @get:JsonIgnore
     var id: String? = null
     lateinit var type: String
@@ -588,15 +644,18 @@ A Requirement assignment allows template authors to provide either concrete name
  */
 
 class RequirementAssignment {
+
     @get:JsonIgnore
     var id: String? = null
     var capability: String? = null
     var node: String? = null
+
     // Relationship Type or Relationship Template
     var relationship: String? = null
 }
 
 class Workflow {
+
     @get:JsonIgnore
     var id: String? = null
     var description: String? = null
@@ -607,8 +666,10 @@ class Workflow {
 }
 
 class ConditionClause {
+
     var and: ArrayList<MutableMap<String, Any>>? = null
     var or: ArrayList<MutableMap<String, Any>>? = null
+
     @get:JsonProperty("assert")
     var assertConditions: ArrayList<MutableMap<String, Any>>? = null
 }
@@ -619,31 +680,41 @@ A TOSCA Service Template (YAML) document contains element definitions of buildin
  */
 
 @JsonPropertyOrder(
-    value = ["toscaDefinitionsVersion", "description", "metadata", "imports", "dsl_definitions",
-        "topologyTemplate"]
+    value = [
+        "toscaDefinitionsVersion", "description", "metadata", "imports", "dsl_definitions",
+        "topologyTemplate"
+    ]
 )
 class ServiceTemplate : Cloneable {
 
     @get:JsonIgnore
     var id: String? = null
+
     @get:JsonProperty("tosca_definitions_version")
     var toscaDefinitionsVersion: String = "controller_blueprint_1_0_0"
     var metadata: MutableMap<String, String>? = null
     var description: String? = null
+
     @get:JsonProperty("dsl_definitions")
     var dslDefinitions: MutableMap<String, JsonNode>? = null
     var repositories: MutableMap<String, RepositoryDefinition>? = null
     var imports: MutableList<ImportDefinition>? = null
+
     @get:JsonProperty("artifact_types")
     var artifactTypes: MutableMap<String, ArtifactType>? = null
+
     @get:JsonProperty("data_types")
     var dataTypes: MutableMap<String, DataType>? = null
+
     @get:JsonProperty("relationship_types")
     var relationshipTypes: MutableMap<String, RelationshipType>? = null
+
     @get:JsonProperty("node_types")
     var nodeTypes: MutableMap<String, NodeType>? = null
+
     @get:JsonProperty("policy_types")
     var policyTypes: MutableMap<String, PolicyType>? = null
+
     @get:JsonProperty("topology_template")
     var topologyTemplate: TopologyTemplate? = null
 
@@ -653,6 +724,7 @@ class ServiceTemplate : Cloneable {
 }
 
 class ToscaMetaData {
+
     lateinit var toscaMetaFileVersion: String
     lateinit var csarVersion: String
     lateinit var createdBy: String

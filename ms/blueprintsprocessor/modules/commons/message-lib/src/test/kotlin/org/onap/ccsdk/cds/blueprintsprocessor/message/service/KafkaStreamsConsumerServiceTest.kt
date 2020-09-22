@@ -41,31 +41,33 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @DirtiesContext
 @ContextConfiguration(
-    classes = [BluePrintMessageLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+    classes = [
+        BluePrintMessageLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
     properties =
-    [
-        "blueprintsprocessor.messageproducer.sample.type=kafka-scram-ssl-auth",
-        "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
-        "blueprintsprocessor.messageproducer.sample.topic=default-stream-topic",
-        "blueprintsprocessor.messageproducer.sample.clientId=default-client-id",
-        "blueprintsprocessor.messageproducer.sample.truststore=/path/to/truststore.jks",
-        "blueprintsprocessor.messageproducer.sample.truststorePassword=secretpassword",
-        "blueprintsprocessor.messageproducer.sample.scramUsername=sample-user",
-        "blueprintsprocessor.messageproducer.sample.scramPassword=secretpassword",
+        [
+            "blueprintsprocessor.messageproducer.sample.type=kafka-scram-ssl-auth",
+            "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
+            "blueprintsprocessor.messageproducer.sample.topic=default-stream-topic",
+            "blueprintsprocessor.messageproducer.sample.clientId=default-client-id",
+            "blueprintsprocessor.messageproducer.sample.truststore=/path/to/truststore.jks",
+            "blueprintsprocessor.messageproducer.sample.truststorePassword=secretpassword",
+            "blueprintsprocessor.messageproducer.sample.scramUsername=sample-user",
+            "blueprintsprocessor.messageproducer.sample.scramPassword=secretpassword",
 
-        "blueprintsprocessor.messageconsumer.stream-consumer.type=kafka-streams-scram-ssl-auth",
-        "blueprintsprocessor.messageconsumer.stream-consumer.bootstrapServers=127.0.0.1:9092",
-        "blueprintsprocessor.messageconsumer.stream-consumer.applicationId=test-streams-application",
-        "blueprintsprocessor.messageconsumer.stream-consumer.topic=default-stream-topic",
-        "blueprintsprocessor.messageproducer.stream-consumer.truststore=/path/to/truststore.jks",
-        "blueprintsprocessor.messageproducer.stream-consumer.truststorePassword=secretpassword",
-        "blueprintsprocessor.messageproducer.stream-consumer.scramUsername=sample-user",
-        "blueprintsprocessor.messageproducer.stream-consumer.scramPassword=secretpassword"
+            "blueprintsprocessor.messageconsumer.stream-consumer.type=kafka-streams-scram-ssl-auth",
+            "blueprintsprocessor.messageconsumer.stream-consumer.bootstrapServers=127.0.0.1:9092",
+            "blueprintsprocessor.messageconsumer.stream-consumer.applicationId=test-streams-application",
+            "blueprintsprocessor.messageconsumer.stream-consumer.topic=default-stream-topic",
+            "blueprintsprocessor.messageproducer.stream-consumer.truststore=/path/to/truststore.jks",
+            "blueprintsprocessor.messageproducer.stream-consumer.truststorePassword=secretpassword",
+            "blueprintsprocessor.messageproducer.stream-consumer.scramUsername=sample-user",
+            "blueprintsprocessor.messageproducer.stream-consumer.scramPassword=secretpassword"
 
-    ]
+        ]
 )
 class KafkaStreamsConsumerServiceTest {
 
@@ -92,7 +94,7 @@ class KafkaStreamsConsumerServiceTest {
                 ): Topology {
                     val topology = Topology()
                     val kafkaStreamsBasicAuthConsumerProperties = messageConsumerProperties
-                            as KafkaStreamsBasicAuthConsumerProperties
+                        as KafkaStreamsBasicAuthConsumerProperties
 
                     val topics = kafkaStreamsBasicAuthConsumerProperties.topic.split(",")
                     topology.addSource("Source", *topics.toTypedArray())

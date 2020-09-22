@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ComponentScan(
-        basePackages = ["org.onap.ccsdk.cds.error.catalog"]
+    basePackages = ["org.onap.ccsdk.cds.error.catalog"]
 )
 @EnableAutoConfiguration
 open class ErrorCatalogTestConfiguration

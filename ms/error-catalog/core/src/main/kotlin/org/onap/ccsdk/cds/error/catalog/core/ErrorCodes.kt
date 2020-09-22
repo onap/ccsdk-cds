@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.error.catalog.core
 
 object ErrorCatalogCodes {
+
     const val GENERIC_FAILURE = "GENERIC_FAILURE"
     const val GENERIC_PROCESS_FAILURE = "GENERIC_PROCESS_FAILURE"
     const val INVALID_FILE_EXTENSION = "INVALID_FILE_EXTENSION"
@@ -32,6 +33,7 @@ object ErrorCatalogCodes {
 }
 
 object HttpErrorCodes {
+
     private val store: MutableMap<String, Int> = mutableMapOf()
 
     init {
@@ -59,6 +61,7 @@ object HttpErrorCodes {
 }
 
 object GrpcErrorCodes {
+
     private val store: MutableMap<String, Int> = mutableMapOf()
 
     init {

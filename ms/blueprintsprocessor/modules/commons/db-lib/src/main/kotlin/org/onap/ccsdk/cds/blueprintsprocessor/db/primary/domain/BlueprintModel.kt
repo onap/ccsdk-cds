@@ -124,6 +124,7 @@ class BlueprintModel : Serializable {
     var blueprintModelContent: BlueprintModelContent? = null
 
     companion object {
+
         private const val serialVersionUID = 1L
     }
 }

@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.error.catalog.services
 
 import kotlinx.coroutines.runBlocking
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalog
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogException
 import org.onap.ccsdk.cds.error.catalog.core.ErrorMessageLibConstants
@@ -25,7 +26,6 @@ import org.onap.ccsdk.cds.error.catalog.core.ErrorPayload
 import org.onap.ccsdk.cds.error.catalog.core.GrpcErrorCodes
 import org.onap.ccsdk.cds.error.catalog.core.HttpErrorCodes
 import org.onap.ccsdk.cds.error.catalog.core.utils.ErrorCatalogUtils
-import org.apache.commons.lang3.exception.ExceptionUtils
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
@@ -78,11 +78,11 @@ open class ErrorCatalogService(private var errorCatalogLoadService: ErrorCatalog
         }
 
         return ErrorCatalog(
-                errorCatalogException.name,
-                errorCatalogException.domain,
-                errorCode,
-                action,
-                errorCause
+            errorCatalogException.name,
+            errorCatalogException.domain,
+            errorCode,
+            action,
+            errorCause
         )
     }
 

@@ -74,6 +74,7 @@ interface KafkaConsumerRecordsFunction : ConsumerFunction {
 }
 
 interface KafkaStreamConsumerFunction : ConsumerFunction {
+
     suspend fun createTopology(
         messageConsumerProperties: MessageConsumerProperties,
         additionalConfig: Map<String, Any>?

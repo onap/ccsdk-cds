@@ -25,12 +25,15 @@ open class GrpcServerProperties {
 }
 
 open class TokenAuthGrpcServerProperties : GrpcServerProperties() {
+
     lateinit var token: String
 }
 
 open class TLSAuthGrpcServerProperties : GrpcServerProperties() {
+
     lateinit var certChain: String
     lateinit var privateKey: String
+
     /** Below Used only for Mutual TLS */
     var trustCertCollection: String? = null
 }
@@ -44,17 +47,21 @@ open class GrpcClientProperties {
 }
 
 open class TokenAuthGrpcClientProperties : GrpcClientProperties() {
+
     lateinit var token: String
 }
 
 open class TLSAuthGrpcClientProperties : GrpcClientProperties() {
+
     var trustCertCollection: String? = null
+
     /** Below Used only for Mutual TLS */
     var clientCertChain: String? = null
     var clientPrivateKey: String? = null
 }
 
 open class BasicAuthGrpcClientProperties : GrpcClientProperties() {
+
     lateinit var username: String
     lateinit var password: String
 }

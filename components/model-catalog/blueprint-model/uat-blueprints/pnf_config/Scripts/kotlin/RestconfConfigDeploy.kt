@@ -16,7 +16,6 @@
 * ============LICENSE_END=========================================================
  */
 
-
 package cba.pnf.config
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
@@ -32,6 +31,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 
 class RestconfConfigDeploy : AbstractScriptComponentFunction() {
+
     private val CONFIGLET_TEMPLATE_NAME = "config-assign"
     private val CONFIGLET_RESOURCE_PATH = "yang-ext:mount/mynetconf:netconflist"
     private val RESTCONF_SERVER_IDENTIFIER = "sdnc"
@@ -53,25 +53,25 @@ class RestconfConfigDeploy : AbstractScriptComponentFunction() {
                 log.debug("Mounting Device : $deviceID")
                 restconfMountDevice(webclientService, deviceID, mountPayload, mutableMapOf("Content-Type" to "application/json"))
 
-                //Log the current configuration for the subtree
+                // Log the current configuration for the subtree
                 val currentConfig: Any = restconfDeviceConfig(webclientService, deviceID, CONFIGLET_RESOURCE_PATH)
                 log.info("Current configuration subtree : $currentConfig")
-                //Apply configlet
-                restconfApplyDeviceConfig(webclientService, deviceID, CONFIGLET_RESOURCE_PATH,
-                        storedContentFromResolvedArtifactNB(resolutionKey, CONFIGLET_TEMPLATE_NAME),
-                        mutableMapOf("Content-Type" to "application/yang.patch+json"))
-
+                // Apply configlet
+                restconfApplyDeviceConfig(
+                    webclientService, deviceID, CONFIGLET_RESOURCE_PATH,
+                    storedContentFromResolvedArtifactNB(resolutionKey, CONFIGLET_TEMPLATE_NAME),
+                    mutableMapOf("Content-Type" to "application/yang.patch+json")
+                )
             } catch (err: Exception) {
                 log.error("an error occurred while configuring device {}", err)
             } finally {
-                //Un mount device
+                // Un mount device
                 restconfUnMountDevice(webclientService, deviceID, "")
             }
         } catch (bpe: BluePrintProcessorException) {
             log.error("Error looking up server identifier ", bpe)
         }
     }
-
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         log.info("Recover function called!")

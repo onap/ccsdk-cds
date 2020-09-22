@@ -80,16 +80,16 @@ open class BluePrintNatsLibPropertyService(private var bluePrintPropertiesServic
 
     fun bluePrintNatsService(natsConnectionProperties: NatsConnectionProperties):
         BluePrintNatsService {
-        return when (natsConnectionProperties) {
-            is TokenAuthNatsConnectionProperties -> {
-                TokenAuthNatsService(natsConnectionProperties)
-            }
-            is TLSAuthNatsConnectionProperties -> {
-                TLSAuthNatsService(natsConnectionProperties)
-            }
-            else -> {
-                throw BluePrintProcessorException("couldn't get NATS service for properties $natsConnectionProperties")
+            return when (natsConnectionProperties) {
+                is TokenAuthNatsConnectionProperties -> {
+                    TokenAuthNatsService(natsConnectionProperties)
+                }
+                is TLSAuthNatsConnectionProperties -> {
+                    TLSAuthNatsService(natsConnectionProperties)
+                }
+                else -> {
+                    throw BluePrintProcessorException("couldn't get NATS service for properties $natsConnectionProperties")
+                }
             }
         }
-    }
 }

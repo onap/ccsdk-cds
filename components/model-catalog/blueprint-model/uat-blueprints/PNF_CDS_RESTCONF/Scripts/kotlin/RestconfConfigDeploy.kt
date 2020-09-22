@@ -16,9 +16,7 @@
 * ============LICENSE_END=========================================================
  */
 
-
 package cba.pnf.config.aai
-
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.contentFromResolvedArtifactNB
@@ -35,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService.WebClientResponse
 
 class RestconfConfigDeploy : AbstractScriptComponentFunction() {
+
     private val CONFIGLET_TEMPLATE_NAME = "config-assign"
     private val CONFIGLET_RESOURCE_PATH = "yang-ext:mount/mynetconf:netconflist"
     private val RESTCONF_SERVER_IDENTIFIER = "sdnc"
@@ -57,13 +56,15 @@ class RestconfConfigDeploy : AbstractScriptComponentFunction() {
                 log.debug("Mounting Device : $deviceID")
                 restconfMountDevice(webclientService, deviceID, mountPayload, mutableMapOf("Content-Type" to "application/json"))
 
-                //Log the current configuration for the subtree
+                // Log the current configuration for the subtree
                 val currentConfig: Any = restconfDeviceConfig(webclientService, deviceID, CONFIGLET_RESOURCE_PATH)
                 log.info("Current configuration subtree : $currentConfig")
-                //Apply configlet
-                val result = restconfApplyDeviceConfig(webclientService, deviceID, CONFIGLET_RESOURCE_PATH,
-                        storedContentFromResolvedArtifactNB(resolutionKey, CONFIGLET_TEMPLATE_NAME),
-                        mutableMapOf("Content-Type" to "application/yang.patch+json")) as WebClientResponse<*>
+                // Apply configlet
+                val result = restconfApplyDeviceConfig(
+                    webclientService, deviceID, CONFIGLET_RESOURCE_PATH,
+                    storedContentFromResolvedArtifactNB(resolutionKey, CONFIGLET_TEMPLATE_NAME),
+                    mutableMapOf("Content-Type" to "application/yang.patch+json")
+                ) as WebClientResponse<*>
 
                 val jsonResult = mapper.readTree((result.body).toString())
 
@@ -72,18 +73,16 @@ class RestconfConfigDeploy : AbstractScriptComponentFunction() {
                 } else {
                     log.info("Device has been configured succesfully")
                 }
-
             } catch (err: Exception) {
                 log.error("an error occurred while configuring device {}", err)
             } finally {
-                //Un mount device
+                // Un mount device
                 restconfUnMountDevice(webclientService, deviceID, "")
             }
         } catch (bpe: BluePrintProcessorException) {
             log.error("Error looking up server identifier ", bpe)
         }
     }
-
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         log.info("Recover function called!")

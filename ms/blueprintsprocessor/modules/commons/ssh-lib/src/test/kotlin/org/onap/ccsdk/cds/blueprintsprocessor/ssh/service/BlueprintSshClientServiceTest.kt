@@ -27,6 +27,7 @@ import org.apache.sshd.server.auth.pubkey.AcceptAllPublickeyAuthenticator
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.apache.sshd.server.session.ServerSession
 import org.apache.sshd.server.shell.ProcessShellCommandFactory
+import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BluePrintSshLibConfiguration
@@ -36,27 +37,29 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import java.nio.file.Paths
-import org.junit.runner.RunWith
-import kotlin.test.BeforeTest
 import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertTrue
-import kotlin.test.assertNotNull
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [BluePrintSshLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+    classes = [
+        BluePrintSshLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
     properties =
-    ["blueprintsprocessor.sshclient.sample.type=basic-auth",
-        "blueprintsprocessor.sshclient.sample.host=localhost",
-        "blueprintsprocessor.sshclient.sample.port=52815",
-        "blueprintsprocessor.sshclient.sample.username=root",
-        "blueprintsprocessor.sshclient.sample.password=dummyps"
-    ]
+        [
+            "blueprintsprocessor.sshclient.sample.type=basic-auth",
+            "blueprintsprocessor.sshclient.sample.host=localhost",
+            "blueprintsprocessor.sshclient.sample.port=52815",
+            "blueprintsprocessor.sshclient.sample.username=root",
+            "blueprintsprocessor.sshclient.sample.password=dummyps"
+        ]
 )
 class BlueprintSshClientServiceTest {
 

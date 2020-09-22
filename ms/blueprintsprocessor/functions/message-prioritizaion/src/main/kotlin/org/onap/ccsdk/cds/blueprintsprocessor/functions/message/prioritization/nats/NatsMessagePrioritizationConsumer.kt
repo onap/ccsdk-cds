@@ -35,6 +35,7 @@ open class NatsMessagePrioritizationConsumer(
     private val bluePrintNatsLibPropertyService: BluePrintNatsLibPropertyService,
     private val natsMessagePrioritizationService: MessagePrioritizationService
 ) {
+
     private val log = logger(NatsMessagePrioritizationConsumer::class)
 
     lateinit var bluePrintNatsService: BluePrintNatsService

@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core
 
 object TestConstants {
+
     const val PATH_TEST_BLUEPRINTS = "./../../../../../components/model-catalog/blueprint-model/test-blueprint"
     const val PATH_TEST_BLUEPRINTS_BASECONFIG = "$PATH_TEST_BLUEPRINTS/baseconfiguration"
 

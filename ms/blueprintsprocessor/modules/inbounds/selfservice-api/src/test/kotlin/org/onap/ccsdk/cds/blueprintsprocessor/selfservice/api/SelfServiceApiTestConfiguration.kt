@@ -22,8 +22,10 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ComponentScan(
-    basePackages = ["org.onap.ccsdk.cds.controllerblueprints",
-        "org.onap.ccsdk.cds.blueprintsprocessor"]
+    basePackages = [
+        "org.onap.ccsdk.cds.controllerblueprints",
+        "org.onap.ccsdk.cds.blueprintsprocessor"
+    ]
 )
 @EnableAutoConfiguration
 open class SelfServiceApiTestConfiguration

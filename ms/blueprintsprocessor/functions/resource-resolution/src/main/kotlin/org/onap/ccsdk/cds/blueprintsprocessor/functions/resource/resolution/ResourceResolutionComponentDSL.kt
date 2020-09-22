@@ -83,7 +83,7 @@ fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
 
                 property(
                     ResourceResolutionComponent.INPUT_RESOLUTION_SUMMARY, BluePrintConstants.DATA_TYPE_BOOLEAN,
-                        false, "Enables ResolutionSummary output"
+                    false, "Enables ResolutionSummary output"
                 )
 
                 property(

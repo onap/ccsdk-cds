@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.error.catalog.core
 
 object ErrorMessageLibConstants {
+
     const val ERROR_CATALOG_DOMAIN = "org.onap.ccsdk.cds.error.catalog"
     const val ERROR_CATALOG_TYPE = "error.catalog.type"
     const val ERROR_CATALOG_TYPE_PROPERTIES = "properties"

@@ -165,14 +165,14 @@ interface BlueprintWebClientService {
         httpUriRequest: HttpUriRequest,
         responseType: Class<T>
     ):
-            WebClientResponse<T> {
-        val httpResponse = httpClient().execute(httpUriRequest)
-        val statusCode = httpResponse.statusLine.statusCode
-        httpResponse.entity.content.use {
-            val body = getResponse(it, responseType)
-            return WebClientResponse(statusCode, body)
+        WebClientResponse<T> {
+            val httpResponse = httpClient().execute(httpUriRequest)
+            val statusCode = httpResponse.statusLine.statusCode
+            httpResponse.entity.content.use {
+                val body = getResponse(it, responseType)
+                return WebClientResponse(statusCode, body)
+            }
         }
-    }
 
     suspend fun getNB(path: String): WebClientResponse<String> {
         return getNB(path, null, String::class.java)
@@ -183,9 +183,9 @@ interface BlueprintWebClientService {
     }
 
     suspend fun <T> getNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-            WebClientResponse<T> = withContext(Dispatchers.IO) {
-        get(path, additionalHeaders!!, responseType)
-    }
+        WebClientResponse<T> = withContext(Dispatchers.IO) {
+            get(path, additionalHeaders!!, responseType)
+        }
 
     suspend fun postNB(path: String, request: Any): WebClientResponse<String> {
         return postNB(path, request, null, String::class.java)
@@ -230,19 +230,19 @@ interface BlueprintWebClientService {
     }
 
     suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?):
-            WebClientResponse<String> {
-        return deleteNB(path, additionalHeaders, String::class.java)
-    }
+        WebClientResponse<String> {
+            return deleteNB(path, additionalHeaders, String::class.java)
+        }
 
     suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-            WebClientResponse<T> = withContext(Dispatchers.IO) {
-        delete(path, additionalHeaders!!, responseType)
-    }
+        WebClientResponse<T> = withContext(Dispatchers.IO) {
+            delete(path, additionalHeaders!!, responseType)
+        }
 
     suspend fun <T> patchNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-            WebClientResponse<T> = withContext(Dispatchers.IO) {
-        patch(path, request, additionalHeaders!!, responseType)
-    }
+        WebClientResponse<T> = withContext(Dispatchers.IO) {
+            patch(path, request, additionalHeaders!!, responseType)
+        }
 
     suspend fun exchangeNB(methodType: String, path: String, request: Any): WebClientResponse<String> {
         return exchangeNB(
@@ -252,9 +252,9 @@ interface BlueprintWebClientService {
     }
 
     suspend fun exchangeNB(methodType: String, path: String, request: Any, additionalHeaders: Map<String, String>?):
-            WebClientResponse<String> {
-        return exchangeNB(methodType, path, request, additionalHeaders, String::class.java)
-    }
+        WebClientResponse<String> {
+            return exchangeNB(methodType, path, request, additionalHeaders, String::class.java)
+        }
 
     suspend fun <T> exchangeNB(
         methodType: String,
@@ -294,16 +294,16 @@ interface BlueprintWebClientService {
     }
 
     private fun basicHeaders(headers: Map<String, String>?):
-            Array<BasicHeader> {
-        val basicHeaders = mutableListOf<BasicHeader>()
-        defaultHeaders().forEach { (name, value) ->
-            basicHeaders.add(BasicHeader(name, value))
+        Array<BasicHeader> {
+            val basicHeaders = mutableListOf<BasicHeader>()
+            defaultHeaders().forEach { (name, value) ->
+                basicHeaders.add(BasicHeader(name, value))
+            }
+            headers?.forEach { name, value ->
+                basicHeaders.add(BasicHeader(name, value))
+            }
+            return basicHeaders.toTypedArray()
         }
-        headers?.forEach { name, value ->
-            basicHeaders.add(BasicHeader(name, value))
-        }
-        return basicHeaders.toTypedArray()
-    }
 
     // Non Blocking Rest Implementation
     suspend fun httpClientNB(): CloseableHttpClient {
@@ -323,8 +323,8 @@ interface BlueprintWebClientService {
         restClientProperties.additionalHeaders?.let {
             if (it.keys.map { k -> k.toLowerCase().trim() }.contains(HttpHeaders.AUTHORIZATION.toLowerCase())) {
                 val errMsg = "Error in definition of endpoint ${restClientProperties.url}." +
-                        " User-supplied \"additionalHeaders\" cannot contain AUTHORIZATION header with" +
-                        " auth-type \"${RestLibConstants.TYPE_BASIC_AUTH}\""
+                    " User-supplied \"additionalHeaders\" cannot contain AUTHORIZATION header with" +
+                    " auth-type \"${RestLibConstants.TYPE_BASIC_AUTH}\""
                 WebClientUtils.log.error(errMsg)
                 throw BluePrintProcessorException(errMsg)
             } else {

@@ -31,13 +31,13 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.PipedInputStream
 import java.io.PipedOutputStream
+import java.util.ArrayList
 import java.util.Collections
 import java.util.EnumSet
 import java.util.Scanner
-import java.util.ArrayList
 
 open class BasicAuthSshClientService(private val basicAuthSshClientProperties: BasicAuthSshClientProperties) :
-        BlueprintSshClientService {
+    BlueprintSshClientService {
 
     private val log = LoggerFactory.getLogger(BasicAuthSshClientService::class.java)!!
     private val newLine = "\n".toByteArray()
@@ -54,8 +54,9 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         log.debug("SSH Client Service started successfully")
 
         clientSession = sshClient.connect(
-                basicAuthSshClientProperties.username, basicAuthSshClientProperties.host,
-                basicAuthSshClientProperties.port).verify(basicAuthSshClientProperties.connectionTimeOut).session
+            basicAuthSshClientProperties.username, basicAuthSshClientProperties.host,
+            basicAuthSshClientProperties.port
+        ).verify(basicAuthSshClientProperties.connectionTimeOut).session
 
         clientSession.addPasswordIdentity(basicAuthSshClientProperties.password)
         clientSession.auth().verify(basicAuthSshClientProperties.connectionTimeOut)
@@ -79,7 +80,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
         }
     }
 
-    override suspend fun executeCommandsNB(commands: List <String>, timeOut: Long): List<CommandResult> {
+    override suspend fun executeCommandsNB(commands: List<String>, timeOut: Long): List<CommandResult> {
         val response = ArrayList<CommandResult>()
         try {
             var stopLoop = false
@@ -126,7 +127,8 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
 
     private fun waitForPrompt(timeOut: Long): String {
         val waitMask = channel!!.waitFor(
-                Collections.unmodifiableSet(EnumSet.of(ClientChannelEvent.CLOSED)), timeOut)
+            Collections.unmodifiableSet(EnumSet.of(ClientChannelEvent.CLOSED)), timeOut
+        )
         if (channel!!.out.toString().indexOfAny(arrayListOf("$", ">", "#")) <= 0 && waitMask.contains(ClientChannelEvent.TIMEOUT)) {
             throw BluePrintProcessorException("Timeout: Failed to retrieve commands result in $timeOut ms")
         }
@@ -157,8 +159,11 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
             Scanner(output).use { scanner ->
                 while (scanner.hasNextLine()) {
                     val temp = scanner.nextLine()
-                    if (temp.isNotBlank() && (temp.trim { it <= ' ' }.startsWith("%") ||
-                                    temp.trim { it <= ' ' }.startsWith("syntax error"))) {
+                    if (temp.isNotBlank() && (
+                        temp.trim { it <= ' ' }.startsWith("%") ||
+                            temp.trim { it <= ' ' }.startsWith("syntax error")
+                        )
+                    ) {
                         return true
                     }
                 }

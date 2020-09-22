@@ -33,6 +33,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 
 interface BluePrintEnhancer<T> {
+
     fun enhance(bluePrintRuntimeService: BluePrintRuntimeService<*>, name: String, type: T)
 }
 

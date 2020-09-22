@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core
 
 class BluePrintError {
+
     var errors: MutableList<String> = arrayListOf()
 
     fun addError(type: String, name: String, error: String) {

@@ -45,6 +45,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class HazelcastClusterServiceTest {
+
     private val log = logger(HazelcastClusterServiceTest::class)
     private val clusterSize = 3
 
@@ -229,6 +230,7 @@ class HazelcastClusterServiceTest {
 }
 
 open class SampleSchedulerTask : Runnable, Serializable {
+
     private val log = logger(SampleSchedulerTask::class)
     override fun run() {
         log.info("I am scheduler action")

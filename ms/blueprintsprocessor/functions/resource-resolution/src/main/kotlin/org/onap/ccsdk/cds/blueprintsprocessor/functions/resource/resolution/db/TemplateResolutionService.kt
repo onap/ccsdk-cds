@@ -147,7 +147,7 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 )?.let {
                     log.info(
                         "Overwriting template resolution for blueprintName=($blueprintVersion), blueprintVersion=($blueprintName), " +
-                                "artifactName=($artifactPrefix) and resolutionKey=($resolutionKey)"
+                            "artifactName=($artifactPrefix) and resolutionKey=($resolutionKey)"
                     )
                     templateResolutionRepository.deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
                         resolutionKey,
@@ -163,7 +163,7 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 )?.let {
                     log.info(
                         "Overwriting template resolution for blueprintName=($blueprintVersion), blueprintVersion=($blueprintName), " +
-                                "artifactName=($artifactPrefix), resourceId=($resourceId) and resourceType=($resourceType)"
+                            "artifactName=($artifactPrefix), resourceId=($resourceId) and resourceType=($resourceType)"
                     )
                     templateResolutionRepository.deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
                         resourceId,
@@ -178,13 +178,14 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
             try {
                 log.info(
                     "Writing out template_resolution result: bpName: $blueprintName bpVer $blueprintVersion resKey:$resolutionKey" +
-                            " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence"
+                        " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence"
                 )
                 templateResolutionRepository.saveAndFlush(resourceResolutionResult)
             } catch (ex: DataIntegrityViolationException) {
                 log.error(
                     "Error writing out template_resolution result: bpName: $blueprintName bpVer $blueprintVersion resKey:$resolutionKey" +
-                            " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence error: {}", ex.message
+                        " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence error: {}",
+                    ex.message
                 )
                 throw BluePrintException("Failed to store resource api result.", ex)
             }

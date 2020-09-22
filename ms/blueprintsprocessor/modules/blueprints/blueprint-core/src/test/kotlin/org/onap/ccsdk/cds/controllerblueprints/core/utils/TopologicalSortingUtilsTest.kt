@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory
 class TopologicalSortingUtilsTest {
 
     private val log = LoggerFactory.getLogger(TopologicalSortingUtilsTest::class.java)
+
     @Test
     fun testSorting() {
         val graph: TopologicalSortingUtils<String> = TopologicalSortingUtils()

@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.configs.api
 
 object ConfigsApiDomains {
+
     // ConfigsApi Domains Constants
     const val CONFIGS_API = "org.onap.ccsdk.cds.blueprintsprocessor.configs.api"
 }

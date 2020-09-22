@@ -240,8 +240,9 @@ class BluePrintRuntimeServiceTest {
         val bluePrintRuntimeService = getBluePrintRuntimeService()
 
         bluePrintRuntimeService.setNodeTemplateAttributeValue(
-                "resource-assignment", "assignment-map",
-                JacksonUtils.jsonNode("""
+            "resource-assignment", "assignment-map",
+            JacksonUtils.jsonNode(
+                """
                     {
                       "a-prefix":{
                         "an-object":{
@@ -249,13 +250,15 @@ class BluePrintRuntimeServiceTest {
                         }
                       }
                     }
-                """.trimIndent())
+                """.trimIndent()
+            )
         )
 
         val propertyDefinitions = mutableMapOf<String, PropertyDefinition>(
-                "resolution" to PropertyDefinition().apply {
-                    this.type = "json"
-                    this.value = JacksonUtils.jsonNode("""
+            "resolution" to PropertyDefinition().apply {
+                this.type = "json"
+                this.value = JacksonUtils.jsonNode(
+                    """
                         {
                           "get_attribute":[
                             "resource-assignment",
@@ -266,8 +269,9 @@ class BluePrintRuntimeServiceTest {
                             "a-key"
                             ]
                         }
-                    """.trimIndent())
-                }
+                    """.trimIndent()
+                )
+            }
         )
 
         val result = bluePrintRuntimeService.resolvePropertyDefinitions("workflow", "WORKFLOW", propertyDefinitions)

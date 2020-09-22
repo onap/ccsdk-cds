@@ -116,6 +116,7 @@ object BluePrintConstants {
     const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO = "tosca.relationships.ConnectsTo"
     const val MODEL_TYPE_RELATIONSHIPS_ATTACH_TO = "tosca.relationships.AttachesTo"
     const val MODEL_TYPE_RELATIONSHIPS_ROUTES_TO = "tosca.relationships.RoutesTo"
+
     // CDS Defined Relationship Types
     const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB = "tosca.relationships.ConnectsTo.Db"
     const val MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT = "tosca.relationships.ConnectsTo.RestClient"
@@ -154,6 +155,7 @@ object BluePrintConstants {
     const val MODEL_TYPE_CAPABILITY_TYPE_ATTACHMENT = "tosca.capabilities.Attachment"
     const val MODEL_TYPE_CAPABILITY_TYPE_OPERATION_SYSTEM = "tosca.capabilities.OperatingSystem"
     const val MODEL_TYPE_CAPABILITY_TYPE_BINDABLE = "tosca.capabilities.network.Bindable"
+
     // Custom capabilities
     const val MODEL_TYPE_CAPABILITY_TYPE_CONTENT = "tosca.capabilities.Content"
     const val MODEL_TYPE_CAPABILITY_TYPE_MAPPING = "tosca.capabilities.Mapping"

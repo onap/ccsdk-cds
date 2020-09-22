@@ -39,7 +39,7 @@ class MockBluePrintProcessingServer : BluePrintProcessingServiceGrpc.BluePrintPr
             override fun onNext(executionServiceInput: ExecutionServiceInput) {
                 log.info(
                     "Received requestId(${executionServiceInput.commonHeader.requestId})  " +
-                            "subRequestId(${executionServiceInput.commonHeader.subRequestId})"
+                        "subRequestId(${executionServiceInput.commonHeader.subRequestId})"
                 )
                 runBlocking {
                     launch(MDCContext()) {

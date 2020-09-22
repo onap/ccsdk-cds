@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory
 class ResourceAssignmentValidationServiceTest {
 
     private val log = LoggerFactory.getLogger(ResourceAssignmentValidationServiceTest::class.java)
+
     @Before
     fun setUp() {
         // Setup dummy Source Instance Mapping

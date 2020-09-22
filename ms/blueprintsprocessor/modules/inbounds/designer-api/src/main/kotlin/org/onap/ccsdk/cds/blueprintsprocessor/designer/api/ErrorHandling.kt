@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
 object DesignerApiDomains {
+
     // Designer Api Domains Constants
     const val DESIGNER_API = "org.onap.ccsdk.cds.blueprintsprocessor.designer.api"
     const val DESIGNER_API_ENHANCER = "org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer"

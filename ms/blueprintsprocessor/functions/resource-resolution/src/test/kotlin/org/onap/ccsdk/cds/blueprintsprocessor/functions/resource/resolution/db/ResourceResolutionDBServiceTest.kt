@@ -239,8 +239,8 @@ open class ResourceResolutionDBServiceTest {
         } returns ResourceResolution()
         runBlocking {
             resourceResolutionDBService.write(
-                            props, bluePrintRuntimeService, artifactPrefix, resourceAssignment
-                    )
+                props, bluePrintRuntimeService, artifactPrefix, resourceAssignment
+            )
 
             val res = slot.captured
 
@@ -255,7 +255,8 @@ open class ResourceResolutionDBServiceTest {
         } returns Unit
         runBlocking {
             val res = resourceResolutionDBService.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
-                    blueprintName, blueprintVersion, artifactPrefix, resolutionKey)
+                blueprintName, blueprintVersion, artifactPrefix, resolutionKey
+            )
             assertEquals(Unit, res)
         }
     }

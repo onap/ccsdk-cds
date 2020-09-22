@@ -450,19 +450,19 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
 
     override fun resolveNodeTemplateCapabilityProperties(nodeTemplateName: String, capabilityName: String):
         MutableMap<String, JsonNode> {
-        log.info("resolveNodeTemplateCapabilityProperties for node template($nodeTemplateName) capability($capabilityName)")
-        val nodeTemplate: NodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
+            log.info("resolveNodeTemplateCapabilityProperties for node template($nodeTemplateName) capability($capabilityName)")
+            val nodeTemplate: NodeTemplate = bluePrintContext.nodeTemplateByName(nodeTemplateName)
 
-        val propertyAssignments = nodeTemplate.capabilities?.get(capabilityName)?.properties ?: hashMapOf()
+            val propertyAssignments = nodeTemplate.capabilities?.get(capabilityName)?.properties ?: hashMapOf()
 
-        val propertyDefinitions = bluePrintContext.nodeTemplateNodeType(nodeTemplateName)
-            .capabilities?.get(capabilityName)?.properties ?: hashMapOf()
+            val propertyDefinitions = bluePrintContext.nodeTemplateNodeType(nodeTemplateName)
+                .capabilities?.get(capabilityName)?.properties ?: hashMapOf()
 
-        /**
-         * Resolve the Capability Property Assignment Values.
-         */
-        return resolveNodeTemplatePropertyAssignments(nodeTemplateName, propertyDefinitions, propertyAssignments)
-    }
+            /**
+             * Resolve the Capability Property Assignment Values.
+             */
+            return resolveNodeTemplatePropertyAssignments(nodeTemplateName, propertyDefinitions, propertyAssignments)
+        }
 
     override fun resolveNodeTemplateInterfaceOperationInputs(
         nodeTemplateName: String,
@@ -515,6 +515,7 @@ open class DefaultBluePrintRuntimeService(private var id: String, private var bl
         val nodeTypeInterfaceOperationOutputs: MutableMap<String, PropertyDefinition> =
             bluePrintContext.nodeTypeInterfaceOperationOutputs(nodeTypeName, interfaceName, operationName)
                 ?: hashMapOf()
+
         /**
          * Resolve the Property Output Assignment Values.
          */

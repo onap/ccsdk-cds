@@ -19,6 +19,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh
 
 open class SshClientProperties {
+
     lateinit var type: String
     lateinit var host: String
     var port: Int = 22
@@ -27,6 +28,7 @@ open class SshClientProperties {
 }
 
 open class BasicAuthSshClientProperties : SshClientProperties() {
+
     lateinit var password: String
     lateinit var username: String
 }

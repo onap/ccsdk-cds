@@ -43,6 +43,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class ImperativeWorkflowExecutionServiceTest {
+
     val log = logger(ImperativeWorkflowExecutionServiceTest::class)
 
     @Before

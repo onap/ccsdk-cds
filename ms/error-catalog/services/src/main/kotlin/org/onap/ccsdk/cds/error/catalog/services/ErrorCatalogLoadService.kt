@@ -100,7 +100,7 @@ open class ErrorCatalogLoadDBService(
     havingValue = ErrorMessageLibConstants.ERROR_CATALOG_TYPE_PROPERTIES
 )
 open class ErrorCatalogLoadPropertyService(private var errorCatalogProperties: ErrorCatalogProperties) :
-        ErrorCatalogLoadService {
+    ErrorCatalogLoadService {
 
     private val propertyFileName = ErrorMessageLibConstants.ERROR_CATALOG_PROPERTIES_FILENAME
     private lateinit var propertyFile: File
@@ -134,11 +134,15 @@ open class ErrorCatalogLoadPropertyService(private var errorCatalogProperties: E
             inputStream = propertyFile.inputStream()
             props.load(inputStream)
         } catch (e: FileNotFoundException) {
-            log.error("Application ID: ${errorCatalogProperties.applicationId} > Property File '$propertyFileName' " +
-                    "not found in the application directory.")
+            log.error(
+                "Application ID: ${errorCatalogProperties.applicationId} > Property File '$propertyFileName' " +
+                    "not found in the application directory."
+            )
         } catch (e: IOException) {
-            log.error("Application ID: ${errorCatalogProperties.applicationId} > Fail to load property file " +
-                    "'$propertyFileName' for message errors.")
+            log.error(
+                "Application ID: ${errorCatalogProperties.applicationId} > Fail to load property file " +
+                    "'$propertyFileName' for message errors."
+            )
         } finally {
             inputStream?.close()
         }

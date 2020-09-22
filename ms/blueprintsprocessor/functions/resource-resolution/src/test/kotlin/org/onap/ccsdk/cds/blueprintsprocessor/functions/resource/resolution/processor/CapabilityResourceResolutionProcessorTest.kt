@@ -139,6 +139,7 @@ class CapabilityResourceResolutionProcessorTest {
 open class MockCapabilityService
 
 open class MockCapabilityScriptRA : ResourceAssignmentProcessor() {
+
     val log = logger(MockCapabilityScriptRA::class)
 
     override fun getName(): String {

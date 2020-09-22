@@ -85,7 +85,8 @@ class JacksonUtils {
                 withContext(Dispatchers.Default) {
                     IOUtils.toString(
                         JacksonUtils::class.java.classLoader
-                            .getResourceAsStream(fileName), Charset.defaultCharset()
+                            .getResourceAsStream(fileName),
+                        Charset.defaultCharset()
                     )
                 }
             }

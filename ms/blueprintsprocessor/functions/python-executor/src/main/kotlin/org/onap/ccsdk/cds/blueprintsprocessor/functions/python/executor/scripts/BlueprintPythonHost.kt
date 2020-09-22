@@ -23,6 +23,7 @@ import org.python.util.PythonInterpreter
 
 @Deprecated("CDS won't support JythonService")
 open class BlueprintPythonHost(private val bluePrintPython: BluePrintPython) {
+
     private val blueprintPythonInterpreterProxy: BlueprintPythonInterpreterProxy
 
     init {
@@ -46,8 +47,10 @@ open class BlueprintPythonHost(private val bluePrintPython: BluePrintPython) {
             return blueprintPythonInterpreterProxy.getPythonInstance(properties)
         } catch (e: BluePrintProcessorException) {
             val errorMsg = "Failed to get python instance."
-            throw e.updateErrorMessage(ExecutionServiceDomains.PYTHON_EXECUTOR, errorMsg,
-                    "Error in environment properties")
+            throw e.updateErrorMessage(
+                ExecutionServiceDomains.PYTHON_EXECUTOR, errorMsg,
+                "Error in environment properties"
+            )
         } catch (e: Exception) {
             throw BluePrintProcessorException("Failed to execute Jython component $e", e)
         }

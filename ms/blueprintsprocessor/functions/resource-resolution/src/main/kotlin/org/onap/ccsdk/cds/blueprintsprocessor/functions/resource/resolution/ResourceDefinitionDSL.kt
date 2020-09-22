@@ -25,9 +25,9 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 
 /** Resource Definition DSL **/
 fun BluePrintTypes.resourceDefinitions(block: ResourceDefinitionsBuilder.() -> Unit):
-        MutableMap<String, ResourceDefinition> {
-    return ResourceDefinitionsBuilder().apply(block).build()
-}
+    MutableMap<String, ResourceDefinition> {
+        return ResourceDefinitionsBuilder().apply(block).build()
+    }
 
 fun BluePrintTypes.resourceDefinition(
     name: String,
@@ -39,9 +39,9 @@ fun BluePrintTypes.resourceDefinition(
 
 /** Resource Mapping DSL **/
 fun BluePrintTypes.resourceAssignments(block: ResourceAssignmentsBuilder.() -> Unit):
-        MutableMap<String, ResourceAssignment> {
-    return ResourceAssignmentsBuilder().apply(block).build()
-}
+    MutableMap<String, ResourceAssignment> {
+        return ResourceAssignmentsBuilder().apply(block).build()
+    }
 
 fun BluePrintTypes.resourceAssignment(
     name: String,
@@ -53,6 +53,7 @@ fun BluePrintTypes.resourceAssignment(
 }
 
 class ResourceDefinitionsBuilder() {
+
     private val resourceDefinitions: MutableMap<String, ResourceDefinition> = hashMapOf()
 
     fun resourceDefinition(
@@ -74,6 +75,7 @@ class ResourceDefinitionsBuilder() {
 }
 
 class ResourceDefinitionBuilder(private val name: String, private val description: String) {
+
     private val resourceDefinition = ResourceDefinition()
 
     fun updatedBy(updatedBy: String) {
@@ -115,6 +117,7 @@ class ResourceDefinitionBuilder(private val name: String, private val descriptio
 }
 
 class ResourceDefinitionSourcesBuilder {
+
     var sources: MutableMap<String, NodeTemplate> = hashMapOf()
 
     fun source(source: NodeTemplate) {
@@ -147,6 +150,7 @@ class ResourceDefinitionSourcesBuilder {
 }
 
 class ResourceAssignmentsBuilder() {
+
     private val resourceAssignments: MutableMap<String, ResourceAssignment> = hashMapOf()
 
     fun resourceAssignment(

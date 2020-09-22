@@ -55,6 +55,7 @@ class BluePrintScriptsServiceImplTest {
             val bluePrintScriptsService = BluePrintScriptsServiceImpl()
 
             val basePath = normalizedPathName("src/test/resources/compile")
+
             /** Load the Definitions */
             val bluePrintDefinitions = bluePrintScriptsService
                 .scriptInstance<BluePrintDefinitions>(

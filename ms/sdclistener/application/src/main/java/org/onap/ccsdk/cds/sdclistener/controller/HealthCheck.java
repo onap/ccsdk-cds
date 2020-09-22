@@ -28,8 +28,7 @@ import reactor.core.publisher.Mono;
 public class HealthCheck {
 
     @RequestMapping(path = "/healthcheck", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Mono<String> ping() {
+    public @ResponseBody Mono<String> ping() {
         return Mono.just("{\"status\":\"UP\"}");
     }
 

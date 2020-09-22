@@ -338,6 +338,7 @@ class DSLRegistryComponentBuilder(
 }
 
 class DSLWorkflowBuilder(private val actionName: String, private val description: String) {
+
     private val dslWorkflow = DSLWorkflow()
     private var steps: MutableMap<String, Step>? = null
     private var inputs: MutableMap<String, PropertyDefinition>? = null

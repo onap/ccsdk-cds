@@ -33,9 +33,11 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class NetconfRpcServiceImplTest {
+
     private lateinit var mockNetconfSession: NetconfSessionImpl
 
     companion object {
+
         private const val someString = "someString"
         private const val replyStr = "this is a reply"
         private val failedDeviceResponse = DeviceResponse(
@@ -46,6 +48,7 @@ class NetconfRpcServiceImplTest {
             status = RpcStatus.SUCCESS,
             requestMessage = "request message", responseMessage = replyStr
         ) // responseMessage will be null in this POJO
+
         // but will be set later from mockSession
         private const val msgId = "100"
         private const val timeout = 5

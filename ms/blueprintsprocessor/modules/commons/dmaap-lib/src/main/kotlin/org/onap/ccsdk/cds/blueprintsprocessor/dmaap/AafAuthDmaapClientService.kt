@@ -28,8 +28,7 @@ import com.att.nsa.mr.client.impl.MRSimplerBatchPublisher
  * Representation of DMAAP client service for AAF auth type.
  */
 class AafAuthDmaapClientService(
-    private val clientProps:
-    AafAuthDmaapClientProperties
+    private val clientProps: AafAuthDmaapClientProperties
 ) :
     BluePrintDmaapClientService {
 

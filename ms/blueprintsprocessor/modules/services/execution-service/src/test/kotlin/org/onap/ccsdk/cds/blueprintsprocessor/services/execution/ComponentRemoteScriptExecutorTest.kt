@@ -110,8 +110,8 @@ class ComponentRemoteScriptExecutorTest {
             val mockExecutionServiceInput = mockExecutionServiceInput(bluePrintRuntime)
 
             val mockStreamingRemoteExecutionService = mockk<StreamingRemoteExecutionService<
-                org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput,
-                ExecutionServiceOutput>>()
+                    org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput,
+                    ExecutionServiceOutput>>()
 
             coEvery {
                 mockStreamingRemoteExecutionService.sendNonInteractive(

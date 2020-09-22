@@ -20,12 +20,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.enhancer
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiDomains
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.updateErrorMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.updateErrorMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils
@@ -83,15 +83,21 @@ open class BluePrintEnhancerServiceImpl(
             }
         } catch (e: BluePrintProcessorException) {
             val errorMsg = "Error while enriching the CBA package."
-            throw e.updateErrorMessage(DesignerApiDomains.DESIGNER_API, errorMsg,
-                    "Wrong blueprint definitions or resource definitions.")
+            throw e.updateErrorMessage(
+                DesignerApiDomains.DESIGNER_API, errorMsg,
+                "Wrong blueprint definitions or resource definitions."
+            )
         } catch (e: IOException) {
-            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
-                    "IO Error: CBA file failed enrichment - ${e.message}", e.errorCauseOrDefault())
+            throw httpProcessorException(
+                ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                "IO Error: CBA file failed enrichment - ${e.message}", e.errorCauseOrDefault()
+            )
         } catch (e: Exception) {
-            throw httpProcessorException(ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
-                    "Error in Enriching CBA: ${e.message}", e.errorCauseOrDefault())
+            throw httpProcessorException(
+                ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
+                "Error in Enriching CBA: ${e.message}", e.errorCauseOrDefault()
+            )
         }
-            return blueprintRuntimeService.bluePrintContext()
-        }
+        return blueprintRuntimeService.bluePrintContext()
+    }
 }

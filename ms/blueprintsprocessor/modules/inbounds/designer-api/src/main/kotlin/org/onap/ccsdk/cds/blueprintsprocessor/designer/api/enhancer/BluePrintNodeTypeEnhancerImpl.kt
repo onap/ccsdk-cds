@@ -101,7 +101,7 @@ open class BluePrintNodeTypeEnhancerImpl(
                 val relationShipTypeName = requirementDefinition.relationship
                     ?: throw BluePrintException(
                         "couldn't get relationship name for the NodeType($nodeTypeName) " +
-                                "Requirement($requirementName)"
+                            "Requirement($requirementName)"
                     )
                 enrichRelationShipType(relationShipTypeName)
             }

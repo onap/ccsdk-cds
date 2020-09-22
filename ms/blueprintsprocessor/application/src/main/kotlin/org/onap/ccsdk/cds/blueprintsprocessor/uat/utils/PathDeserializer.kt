@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 
 internal class PathDeserializer : StdDeserializer<String>(String::class.java) {
+
     override fun deserialize(jp: JsonParser, ctxt: DeserializationContext?): String {
         val path = jp.codec.readValue(jp, Any::class.java)
         return flatJoin(path)

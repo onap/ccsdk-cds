@@ -197,8 +197,8 @@ open class ResourceResolutionServiceImpl(
             false
         ) as Boolean
         val assignmentMap = resourceAssignments
-                .associateBy({ it.name }, { it.property?.value })
-                .asJsonNode()
+            .associateBy({ it.name }, { it.property?.value })
+            .asJsonNode()
         val resolvedParamJsonContent =
             ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
         val artifactTemplateDefinition =
@@ -213,7 +213,7 @@ open class ResourceResolutionServiceImpl(
                         ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE to
                             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE]
                                 .asJsonPrimitive()
-                        )
+                    )
                 )
             }
             resolutionSummary -> {
@@ -443,10 +443,12 @@ open class ResourceResolutionServiceImpl(
 
     // Comparision between what we have in the database vs what we have to assign.
     private fun compareOne(resourceResolution: ResourceResolution, resourceAssignment: ResourceAssignment): Boolean {
-        return (resourceResolution.name == resourceAssignment.name &&
-            resourceResolution.dictionaryName == resourceAssignment.dictionaryName &&
-            resourceResolution.dictionarySource == resourceAssignment.dictionarySource &&
-            resourceResolution.dictionaryVersion == resourceAssignment.version)
+        return (
+            resourceResolution.name == resourceAssignment.name &&
+                resourceResolution.dictionaryName == resourceAssignment.dictionaryName &&
+                resourceResolution.dictionarySource == resourceAssignment.dictionarySource &&
+                resourceResolution.dictionaryVersion == resourceAssignment.version
+            )
     }
 
     private fun exposeOccurrencePropertyInResourceAssignments(

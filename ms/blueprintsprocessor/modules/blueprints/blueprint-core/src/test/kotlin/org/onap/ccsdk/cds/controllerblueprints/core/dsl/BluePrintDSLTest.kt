@@ -277,8 +277,8 @@ fun BluePrintTypes.nodeTemplateComponentTestExecutor(
     block: TestNodeTemplateOperationImplBuilder.() -> Unit
 ):
     NodeTemplate {
-    return TestNodeTemplateOperationImplBuilder(id, description).apply(block).build()
-}
+        return TestNodeTemplateOperationImplBuilder(id, description).apply(block).build()
+    }
 
 class TestNodeTemplateOperationImplBuilder(id: String, description: String) :
     AbstractNodeTemplateOperationImplBuilder<TestProperty, TestInput, TestOutput>(
@@ -288,6 +288,7 @@ class TestNodeTemplateOperationImplBuilder(id: String, description: String) :
     )
 
 class TestProperty : PropertiesAssignmentBuilder() {
+
     fun prop1(prop1: String) {
         property("prop1", prop1.asJsonPrimitive())
     }
@@ -298,12 +299,14 @@ class TestProperty : PropertiesAssignmentBuilder() {
 }
 
 class TestInput : PropertiesAssignmentBuilder() {
+
     fun request(request: String) {
         property("request", request.asJsonPrimitive())
     }
 }
 
 class TestOutput : PropertiesAssignmentBuilder() {
+
     fun response(response: String) {
         response(response.asJsonPrimitive())
     }

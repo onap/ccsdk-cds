@@ -29,6 +29,7 @@ import java.util.Base64
 
 class MockBlueprintWebClientService(private var restClientProperties: RestClientProperties) :
     BlueprintWebClientService {
+
     private var mockServer: ClientAndServer
     private var port: String = if (restClientProperties.url.split(":")[2].isEmpty()) "8080"
     else restClientProperties.url.split(":")[2]
@@ -41,7 +42,8 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
         // Create expected requests and responses
         setRequest("GET", "/aai/v14/network/generic-vnfs/generic-vnf/123456")
         setRequest(
-            "GET", "/config/GENERIC-RESOURCE-API:services/service/10/service-data/vnfs/vnf/123456/" +
+            "GET",
+            "/config/GENERIC-RESOURCE-API:services/service/10/service-data/vnfs/vnf/123456/" +
                 "vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name"
         )
         setRequestWithPayload(

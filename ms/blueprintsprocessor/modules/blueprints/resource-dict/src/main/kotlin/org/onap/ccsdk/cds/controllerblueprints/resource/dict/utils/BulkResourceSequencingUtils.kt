@@ -60,8 +60,10 @@ object BulkResourceSequencingUtils {
             } else if (CollectionUtils.isNotEmpty(resourceAssignment.dependencies)) {
                 for (dependency in resourceAssignment.dependencies!!) {
                     val ra = resourceAssignmentMap[dependency]
-                        ?: throw BluePrintProcessorException("Couldn't get Resource Assignment dependency " +
-                            "Key($dependency)")
+                        ?: throw BluePrintProcessorException(
+                            "Couldn't get Resource Assignment dependency " +
+                                "Key($dependency)"
+                        )
                     topologySorting.add(ra, resourceAssignment)
                 }
             } else {

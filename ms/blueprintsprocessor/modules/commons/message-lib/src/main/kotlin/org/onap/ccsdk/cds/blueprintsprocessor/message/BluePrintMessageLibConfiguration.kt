@@ -57,6 +57,7 @@ fun BluePrintDependencyService.messageConsumerService(jsonNode: JsonNode): Bluep
 
 class MessageLibConstants {
     companion object {
+
         const val SERVICE_BLUEPRINT_MESSAGE_LIB_PROPERTY = "blueprint-message-lib-property-service"
         const val PROPERTY_MESSAGE_CONSUMER_PREFIX = "blueprintsprocessor.messageconsumer."
         const val PROPERTY_MESSAGE_PRODUCER_PREFIX = "blueprintsprocessor.messageproducer."
