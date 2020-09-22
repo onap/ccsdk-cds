@@ -49,7 +49,7 @@ open class SampleRestconfComponent(private var componentFunctionScriptingService
                 this,
                 "internal",
                 "org.onap.ccsdk.cds.blueprintsprocessor.services" +
-                        ".execution.scripts.SampleTest",
+                    ".execution.scripts.SampleTest",
                 mutableListOf()
             )
         scriptComponent.executeScript(executionServiceInput)

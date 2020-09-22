@@ -56,6 +56,7 @@ class ErrorMessageModel : Serializable {
     val domains: MutableSet<Domain> = mutableSetOf()
 
     companion object {
+
         private const val serialVersionUID = 1L
     }
 

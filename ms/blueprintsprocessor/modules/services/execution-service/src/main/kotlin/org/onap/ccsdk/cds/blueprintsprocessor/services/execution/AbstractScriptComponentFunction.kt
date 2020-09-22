@@ -25,9 +25,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
 
 abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
+
     private val log = LoggerFactory.getLogger(AbstractScriptComponentFunction::class.java)!!
 
     companion object {
+
         const val DYNAMIC_PROPERTIES = "dynamic-properties"
     }
 

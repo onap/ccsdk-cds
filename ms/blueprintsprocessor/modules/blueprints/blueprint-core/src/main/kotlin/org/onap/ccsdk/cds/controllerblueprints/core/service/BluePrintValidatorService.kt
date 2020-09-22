@@ -331,7 +331,8 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
                 ?: throw BluePrintException(
                     format(
                         "Failed to get NodeTemplate({}) capability definition ({}) " +
-                                "from NodeType({}) ", nodeTemplateName, capabilityName, nodeTemplate.type
+                            "from NodeType({}) ",
+                        nodeTemplateName, capabilityName, nodeTemplate.type
                     )
                 )
 
@@ -363,7 +364,8 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
                 ?: throw BluePrintException(
                     format(
                         "Failed to get NodeTemplate({}) requirement definition ({}) from" +
-                                " NodeType({}) ", nodeTemplateName, requirementName, nodeTemplate.type
+                            " NodeType({}) ",
+                        nodeTemplateName, requirementName, nodeTemplate.type
                     )
                 )
             // Validate Requirement Assignment
@@ -422,7 +424,8 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
                 ?: throw BluePrintException(
                     format(
                         "Failed to get NodeTemplate({}) interface definition ({}) from" +
-                                " NodeType({}) ", nodeTemplateName, interfaceAssignmentName, nodeTemplate.type
+                            " NodeType({}) ",
+                        nodeTemplateName, interfaceAssignmentName, nodeTemplate.type
                     )
                 )
 
@@ -485,7 +488,8 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
                         ?: throw BluePrintException(
                             format(
                                 "Failed to get NodeTemplate({}) operation definition ({}) " +
-                                        "property definition({})", nodeTemplateName, operationAssignmentName, propertyName
+                                    "property definition({})",
+                                nodeTemplateName, operationAssignmentName, propertyName
                             )
                         )
                     // Check the property values with property definition
@@ -497,7 +501,8 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
                         ?: throw BluePrintException(
                             format(
                                 "Failed to get NodeTemplate({}) operation definition ({}) " +
-                                        "output property definition({})", nodeTemplateName, operationAssignmentName,
+                                    "output property definition({})",
+                                nodeTemplateName, operationAssignmentName,
                                 propertyName
                             )
                         )

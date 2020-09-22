@@ -39,9 +39,9 @@ open class ConfigDeploy : AbstractScriptComponentFunction() {
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         val resolution_key = getDynamicProperties("resolution-key").asText()
-        log.info("resolution_key: $resolution_key"\n)
+        log.info("resolution_key: $resolution_key"\ n)
         val payload = storedContentFromResolvedArtifactNB(resolution_key, "baseconfig")
-        log.info("configuration: \n$payload"\n)
+        log.info("configuration: \n$payload"\ n)
         log.info("Waiting 1 minute and 30 seconds or vLB to initialize ...")
         Thread.sleep(90000)
         val netconf_device = netconfDevice("netconf-connection")
@@ -58,8 +58,6 @@ open class ConfigDeploy : AbstractScriptComponentFunction() {
         //var payloadObject = JacksonUtils.jsonNode(payload) as ObjectNode
         //var vdns_ip: String = payloadObject.get("vdns-instance")[0].get("ip-addr").asText()
         netconf_session.disconnect()
-
-
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

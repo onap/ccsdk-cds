@@ -45,7 +45,8 @@ class JacksonReactorUtils {
             // log.trace("Reading Classpath File($fileName)")
             IOUtils.toString(
                 JacksonUtils::class.java.classLoader
-                    .getResourceAsStream(fileName), Charset.defaultCharset()
+                    .getResourceAsStream(fileName),
+                Charset.defaultCharset()
             )
         }
 

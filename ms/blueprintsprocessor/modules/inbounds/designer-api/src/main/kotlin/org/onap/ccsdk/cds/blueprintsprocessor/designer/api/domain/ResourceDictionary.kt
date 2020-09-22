@@ -88,18 +88,19 @@ class ResourceDictionary : Serializable {
 
     override fun toString(): String {
         return "[" + ", name = " + name +
-                ", dataType = " + dataType +
-                ", entrySchema = " + entrySchema +
-                ", resourceDictionaryGroup = " + resourceDictionaryGroup +
-                ", definition =" + definition +
-                ", description = " + description +
-                ", updatedBy = " + updatedBy +
-                ", tags = " + tags +
-                ", creationDate = " + creationDate +
-                "]"
+            ", dataType = " + dataType +
+            ", entrySchema = " + entrySchema +
+            ", resourceDictionaryGroup = " + resourceDictionaryGroup +
+            ", definition =" + definition +
+            ", description = " + description +
+            ", updatedBy = " + updatedBy +
+            ", tags = " + tags +
+            ", creationDate = " + creationDate +
+            "]"
     }
 
     companion object {
+
         private const val serialVersionUID = 1L
     }
 }

@@ -19,21 +19,21 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
 
+import org.apache.commons.io.IOUtils
+import org.apache.http.client.ClientProtocolException
+import org.apache.http.client.entity.EntityBuilder
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
-import org.apache.commons.io.IOUtils
-import org.apache.http.client.entity.EntityBuilder
-import org.apache.http.message.BasicHeader
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.client.methods.HttpUriRequest
-import org.apache.http.client.ClientProtocolException
-import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Path
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import java.io.IOException
 import java.nio.charset.Charset
+import java.nio.file.Files
+import java.nio.file.Path
 import java.util.Base64
 
 class K8sUploadFileRestClientService(

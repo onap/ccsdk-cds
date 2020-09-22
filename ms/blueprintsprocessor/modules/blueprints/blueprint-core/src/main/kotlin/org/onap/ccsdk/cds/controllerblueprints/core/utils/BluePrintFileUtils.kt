@@ -116,8 +116,9 @@ class BluePrintFileUtils {
 
             check(definitionDir.exists()) {
                 throw BluePrintException(
-                    ErrorCode.BLUEPRINT_PATH_MISSING.value, "couldn't get definition file under " +
-                            "path(${definitionDir.absolutePath})"
+                    ErrorCode.BLUEPRINT_PATH_MISSING.value,
+                    "couldn't get definition file under " +
+                        "path(${definitionDir.absolutePath})"
                 )
             }
 
@@ -208,8 +209,9 @@ class BluePrintFileUtils {
             Files.write(definitionFile.toPath(), content.toByteArray(), StandardOpenOption.CREATE_NEW)
             check(definitionFile.exists()) {
                 throw BluePrintException(
-                    ErrorCode.BLUEPRINT_WRITING_FAIL.value, "couldn't write definition file under " +
-                            "path(${definitionFile.absolutePath})"
+                    ErrorCode.BLUEPRINT_WRITING_FAIL.value,
+                    "couldn't write definition file under " +
+                        "path(${definitionFile.absolutePath})"
                 )
             }
         }
@@ -220,21 +222,22 @@ class BluePrintFileUtils {
             Files.write(typeFile.toPath(), content.toByteArray(), StandardOpenOption.CREATE_NEW)
             check(typeFile.exists()) {
                 throw BluePrintException(
-                    ErrorCode.BLUEPRINT_WRITING_FAIL.value, "couldn't write $type.json file under " +
-                            "path(${typeFile.absolutePath})"
+                    ErrorCode.BLUEPRINT_WRITING_FAIL.value,
+                    "couldn't write $type.json file under " +
+                        "path(${typeFile.absolutePath})"
                 )
             }
         }
 
         private fun getMetaDataContent(): String {
             return "TOSCA-Meta-File-Version: 1.0.0" +
-                    "\nCSAR-Version: <VERSION>" +
-                    "\nCreated-By: <AUTHOR NAME>" +
-                    "\nEntry-Definitions: Definitions/<BLUEPRINT_NAME>.json" +
-                    "\nTemplate-Name: <BLUEPRINT_NAME>" +
-                    "\nTemplate-Version: <BLUEPRINT_VERSION>" +
-                    "\nTemplate-Type: <BLUEPRINT_TYPE>" +
-                    "\nTemplate-Tags: <TAGS>"
+                "\nCSAR-Version: <VERSION>" +
+                "\nCreated-By: <AUTHOR NAME>" +
+                "\nEntry-Definitions: Definitions/<BLUEPRINT_NAME>.json" +
+                "\nTemplate-Name: <BLUEPRINT_NAME>" +
+                "\nTemplate-Version: <BLUEPRINT_VERSION>" +
+                "\nTemplate-Type: <BLUEPRINT_TYPE>" +
+                "\nTemplate-Tags: <TAGS>"
         }
 
         fun getBluePrintFile(fileName: String, targetPath: Path): File {
@@ -242,8 +245,9 @@ class BluePrintFileUtils {
             val file = File(filePath)
             check(file.exists()) {
                 throw BluePrintException(
-                    ErrorCode.BLUEPRINT_PATH_MISSING.value, "couldn't get definition file under " +
-                            "path(${file.absolutePath})"
+                    ErrorCode.BLUEPRINT_PATH_MISSING.value,
+                    "couldn't get definition file under " +
+                        "path(${file.absolutePath})"
                 )
             }
             return file
@@ -252,8 +256,9 @@ class BluePrintFileUtils {
         fun getCbaStorageDirectory(path: String): Path {
             check(StringUtils.isNotBlank(path)) {
                 throw BluePrintException(
-                    ErrorCode.BLUEPRINT_PATH_MISSING.value, "couldn't get " +
-                            "Blueprint folder under path($path)"
+                    ErrorCode.BLUEPRINT_PATH_MISSING.value,
+                    "couldn't get " +
+                        "Blueprint folder under path($path)"
                 )
             }
 
@@ -305,12 +310,12 @@ class BluePrintFileUtils {
 
             val urls = arrayListOf<URL>()
             directory.walkTopDown()
-                    .filter { it.name.endsWith(COMPILED_JAR_SUFFIX) }
-                    .forEach {
-                        log.debug("Adding (${it.absolutePath}) to classLoader (${directory.absolutePath})")
+                .filter { it.name.endsWith(COMPILED_JAR_SUFFIX) }
+                .forEach {
+                    log.debug("Adding (${it.absolutePath}) to classLoader (${directory.absolutePath})")
 
-                        urls.add(it.toURI().toURL())
-                    }
+                    urls.add(it.toURI().toURL())
+                }
             return URLClassLoader(urls.toTypedArray(), this.javaClass.classLoader)
         }
 

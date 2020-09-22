@@ -38,7 +38,7 @@ public class BluePrintProcesssorHandler implements AutoCloseable {
     /**
      * Sending CBA archive to CDS backend to store into its Database.
      *
-     * @param request        BluePrintManagementInput object holds CBA archive, its version and blueprints.
+     * @param request BluePrintManagementInput object holds CBA archive, its version and blueprints.
      * @param managedChannel - ManagedChannel object helps to access the server or application end point.
      *
      * @return A response object

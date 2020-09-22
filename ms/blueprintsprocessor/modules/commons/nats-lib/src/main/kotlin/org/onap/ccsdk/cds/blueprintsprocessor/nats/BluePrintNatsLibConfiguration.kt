@@ -38,6 +38,7 @@ fun BluePrintDependencyService.controllerNatsService(): BluePrintNatsService {
 
 class NatsLibConstants {
     companion object {
+
         const val SERVICE_BLUEPRINT_NATS_LIB_PROPERTY = "blueprint-nats-lib-property-service"
         const val DEFULT_NATS_SELECTOR = "cds-controller"
         const val PROPERTY_NATS_PREFIX = "blueprintsprocessor.nats."

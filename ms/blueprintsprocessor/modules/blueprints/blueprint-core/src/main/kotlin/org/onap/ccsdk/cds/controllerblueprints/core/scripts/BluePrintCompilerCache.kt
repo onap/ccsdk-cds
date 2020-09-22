@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import java.net.URLClassLoader
 
 object BluePrintCompileCache {
+
     val log = logger(BluePrintCompileCache::class)
 
     private val classLoaderCache: LoadingCache<String, URLClassLoader> = CacheBuilder.newBuilder()

@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
 object ResourceApiDomains {
+
     // Resource Api Domains Constants
     const val RESOURCE_API = "org.onap.ccsdk.cds.blueprintsprocessor.resource.api"
 }

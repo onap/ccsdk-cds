@@ -141,7 +141,7 @@ open class BluePrintNodeTypeValidatorImpl(private val bluePrintTypeValidatorServ
         relationShipNodeType.capabilities?.get(capabilityName)
             ?: throw BluePrintException(
                 "failed to get requirement NodeType($requirementNodeTypeName)'s " +
-                        "capability($nodeTypeName) for NodeType ($capabilityName)'s requirement($requirementDefinitionName) "
+                    "capability($nodeTypeName) for NodeType ($capabilityName)'s requirement($requirementDefinitionName) "
             )
     }
 

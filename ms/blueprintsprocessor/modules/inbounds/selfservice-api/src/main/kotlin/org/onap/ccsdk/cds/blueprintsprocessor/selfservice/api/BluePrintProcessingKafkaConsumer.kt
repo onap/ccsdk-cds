@@ -53,6 +53,7 @@ open class BluePrintProcessingKafkaConsumer(
     private lateinit var blueprintMessageConsumerService: BlueprintMessageConsumerService
 
     companion object {
+
         const val CONSUMER_SELECTOR = "self-service-api"
         const val PRODUCER_SELECTOR = "self-service-api"
     }
@@ -62,7 +63,7 @@ open class BluePrintProcessingKafkaConsumer(
         try {
             log.info(
                 "Setting up message consumer($CONSUMER_SELECTOR)" +
-                        "message producer($PRODUCER_SELECTOR)..."
+                    "message producer($PRODUCER_SELECTOR)..."
             )
 
             /** Get the Message Consumer Service **/
@@ -71,8 +72,10 @@ open class BluePrintProcessingKafkaConsumer(
                     .blueprintMessageConsumerService(CONSUMER_SELECTOR)
             } catch (e: BluePrintProcessorException) {
                 val errorMsg = "Failed creating Kafka consumer message service."
-                throw e.updateErrorMessage(SelfServiceApiDomains.SELF_SERVICE_API, errorMsg,
-                        "Wrong Kafka selector provided or internal error in Kafka service.")
+                throw e.updateErrorMessage(
+                    SelfServiceApiDomains.SELF_SERVICE_API, errorMsg,
+                    "Wrong Kafka selector provided or internal error in Kafka service."
+                )
             } catch (e: Exception) {
                 throw BluePrintProcessorException("failed to create consumer service ${e.message}")
             }
@@ -80,11 +83,13 @@ open class BluePrintProcessingKafkaConsumer(
             /** Get the Message Producer Service **/
             val blueprintMessageProducerService = try {
                 bluePrintMessageLibPropertyService
-                        .blueprintMessageProducerService(PRODUCER_SELECTOR)
+                    .blueprintMessageProducerService(PRODUCER_SELECTOR)
             } catch (e: BluePrintProcessorException) {
                 val errorMsg = "Failed creating Kafka producer message service."
-                throw e.updateErrorMessage(SelfServiceApiDomains.SELF_SERVICE_API, errorMsg,
-                        "Wrong Kafka selector provided or internal error in Kafka service.")
+                throw e.updateErrorMessage(
+                    SelfServiceApiDomains.SELF_SERVICE_API, errorMsg,
+                    "Wrong Kafka selector provided or internal error in Kafka service."
+                )
             } catch (e: Exception) {
                 throw BluePrintProcessorException("failed to create producer service ${e.message}")
             }
@@ -114,7 +119,8 @@ open class BluePrintProcessingKafkaConsumer(
         } catch (e: Exception) {
             log.error(
                 "failed to start message consumer($CONSUMER_SELECTOR) " +
-                        "message producer($PRODUCER_SELECTOR) ", e
+                    "message producer($PRODUCER_SELECTOR) ",
+                e
             )
         }
     }
@@ -124,7 +130,7 @@ open class BluePrintProcessingKafkaConsumer(
         try {
             log.info(
                 "Shutting down message consumer($CONSUMER_SELECTOR)" +
-                        "message producer($PRODUCER_SELECTOR)..."
+                    "message producer($PRODUCER_SELECTOR)..."
             )
             blueprintMessageConsumerService.shutDown()
             ph.arriveAndAwaitAdvance()

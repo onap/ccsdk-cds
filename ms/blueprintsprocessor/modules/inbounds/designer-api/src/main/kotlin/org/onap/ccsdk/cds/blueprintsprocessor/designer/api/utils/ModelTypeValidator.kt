@@ -30,6 +30,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 class ModelTypeValidator {
     companion object {
+
         /**
          * This is a validateModelTypeDefinition
          *

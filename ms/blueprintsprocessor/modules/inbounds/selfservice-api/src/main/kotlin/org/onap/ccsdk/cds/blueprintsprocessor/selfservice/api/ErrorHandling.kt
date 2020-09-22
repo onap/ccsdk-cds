@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
 object SelfServiceApiDomains {
+
     // SelfServiceApi Domains Constants
     const val BLUEPRINT_PROCESSOR = "org.onap.ccsdk.cds.blueprintsprocessor"
     const val SELF_SERVICE_API = "org.onap.ccsdk.cds.blueprintsprocessor.resource.api"

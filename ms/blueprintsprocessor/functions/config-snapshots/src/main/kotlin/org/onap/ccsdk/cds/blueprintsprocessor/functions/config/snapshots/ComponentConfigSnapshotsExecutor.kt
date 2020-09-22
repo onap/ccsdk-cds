@@ -56,6 +56,7 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
     AbstractComponentFunction() {
 
     companion object {
+
         private val log = LoggerFactory.getLogger(ComponentConfigSnapshotsExecutor::class.java)
 
         // input fields names accepted by this executor
@@ -128,7 +129,7 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
             setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, cfgSnapshotValue)
         } catch (er: NoSuchElementException) {
             val message = "No Resource config snapshot identified by resourceId={$resourceId}, " +
-                    "resourceType={$resourceType} does not exists"
+                "resourceType={$resourceType} does not exists"
             setNodeOutputErrors(OUTPUT_STATUS_ERROR, message)
         }
     }
@@ -217,7 +218,7 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
         val output = StringBuilder()
         output.append(
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                    "<diff>"
+                "<diff>"
         )
         val diffIterator = differences.getDifferences().iterator()
         while (diffIterator.hasNext()) {

@@ -27,14 +27,14 @@ public interface ListenerService {
      * Get the controller blueprint archive from CSAR package.
      *
      * @param csarArchivePath The path where CSAR archive is stored.
-     * @param cbaArchivePath  The destination path where CBA will be stored.
+     * @param cbaArchivePath The destination path where CBA will be stored.
      */
     void extractBluePrint(String csarArchivePath, String cbaArchivePath);
 
     /**
      * Store the Zip file into CDS database.
      *
-     * @param path           path where zip file exists.
+     * @param path path where zip file exists.
      * @param managedChannel To access the blueprint processor application end point
      */
     void saveBluePrintToCdsDatabase(Path path, ManagedChannel managedChannel);
@@ -42,7 +42,7 @@ public interface ListenerService {
     /**
      * Extract and store the csar package to local disk.
      *
-     * @param result          - IDistributionClientDownloadResult contains payload.
+     * @param result - IDistributionClientDownloadResult contains payload.
      * @param csarArchivePath The destination path where CSAR will be stored.
      */
     void extractCsarAndStore(IDistributionClientDownloadResult result, Path csarArchivePath);

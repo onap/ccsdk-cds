@@ -83,7 +83,7 @@ open class BluePrintWorkflowExecutionServiceImpl(
                 else -> {
                     throw BluePrintProcessorException(
                         "couldn't execute workflow($workflowName) step mapped " +
-                                "to node template($nodeTemplateName) derived from($derivedFrom)"
+                            "to node template($nodeTemplateName) derived from($derivedFrom)"
                     )
                 }
             }
@@ -103,8 +103,8 @@ open class BluePrintWorkflowExecutionServiceImpl(
         // Set the Response Payload
         executionServiceOutput.payload = JacksonUtils.objectMapper.createObjectNode()
         executionServiceOutput.payload.set<JsonNode>(
-                "$workflowName-response",
-                workflowOutputs?.asObjectNode() ?: JacksonUtils.objectMapper.createObjectNode()
+            "$workflowName-response",
+            workflowOutputs?.asObjectNode() ?: JacksonUtils.objectMapper.createObjectNode()
         )
         return executionServiceOutput
     }

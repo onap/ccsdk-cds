@@ -19,24 +19,6 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 import com.google.common.base.Predicates
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.slf4j.LoggerFactory
-import java.io.BufferedInputStream
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.Closeable
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.IOException
-import java.io.OutputStream
-import java.nio.file.FileVisitResult
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.attribute.BasicFileAttributes
-import java.util.function.Predicate
 import org.apache.commons.compress.archivers.ArchiveEntry
 import org.apache.commons.compress.archivers.ArchiveInputStream
 import org.apache.commons.compress.archivers.ArchiveOutputStream
@@ -48,7 +30,25 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream
 import org.apache.commons.compress.archivers.zip.ZipFile
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.slf4j.LoggerFactory
+import java.io.BufferedInputStream
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.Closeable
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.OutputStream
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.SimpleFileVisitor
+import java.nio.file.attribute.BasicFileAttributes
 import java.util.Enumeration
+import java.util.function.Predicate
 import java.util.zip.Deflater
 
 enum class ArchiveType {
@@ -59,6 +59,7 @@ enum class ArchiveType {
 class BluePrintArchiveUtils {
 
     companion object {
+
         private val log = LoggerFactory.getLogger(BluePrintArchiveUtils::class.java)
 
         /**
@@ -115,49 +116,54 @@ class BluePrintArchiveUtils {
             compressionLevel: Int = Deflater.DEFAULT_COMPRESSION,
             fixedModificationTime: Long? = null
         ): T
-                where T : OutputStream {
+            where T : OutputStream {
             val stream: ArchiveOutputStream = if (archiveType == ArchiveType.Zip)
                 ZipArchiveOutputStream(output).apply { setLevel(compressionLevel) }
             else
                 TarArchiveOutputStream(GzipCompressorOutputStream(output))
             stream
                 .use { aos ->
-                    Files.walkFileTree(baseDir, object : SimpleFileVisitor<Path>() {
-                        @Throws(IOException::class)
-                        override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                            if (pathFilter.test(file)) {
-                                var archiveEntry: ArchiveEntry = aos.createArchiveEntry(file.toFile(),
-                                        baseDir.relativize(file).toString())
+                    Files.walkFileTree(
+                        baseDir,
+                        object : SimpleFileVisitor<Path>() {
+                            @Throws(IOException::class)
+                            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                                if (pathFilter.test(file)) {
+                                    var archiveEntry: ArchiveEntry = aos.createArchiveEntry(
+                                        file.toFile(),
+                                        baseDir.relativize(file).toString()
+                                    )
+                                    if (archiveType == ArchiveType.Zip) {
+                                        val entry = archiveEntry as ZipArchiveEntry
+                                        fixedModificationTime?.let {
+                                            entry.time = it
+                                        }
+                                        entry.time = 0
+                                    }
+                                    aos.putArchiveEntry(archiveEntry)
+                                    Files.copy(file, aos)
+                                    aos.closeArchiveEntry()
+                                }
+                                return FileVisitResult.CONTINUE
+                            }
+
+                            @Throws(IOException::class)
+                            override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+                                var archiveEntry: ArchiveEntry?
                                 if (archiveType == ArchiveType.Zip) {
-                                    val entry = archiveEntry as ZipArchiveEntry
+                                    val entry = ZipArchiveEntry(baseDir.relativize(dir).toString() + "/")
                                     fixedModificationTime?.let {
                                         entry.time = it
                                     }
-                                    entry.time = 0
-                                }
+                                    archiveEntry = entry
+                                } else
+                                    archiveEntry = TarArchiveEntry(baseDir.relativize(dir).toString() + "/")
                                 aos.putArchiveEntry(archiveEntry)
-                                Files.copy(file, aos)
                                 aos.closeArchiveEntry()
+                                return FileVisitResult.CONTINUE
                             }
-                            return FileVisitResult.CONTINUE
                         }
-
-                        @Throws(IOException::class)
-                        override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-                            var archiveEntry: ArchiveEntry?
-                            if (archiveType == ArchiveType.Zip) {
-                                val entry = ZipArchiveEntry(baseDir.relativize(dir).toString() + "/")
-                                fixedModificationTime?.let {
-                                    entry.time = it
-                                }
-                                archiveEntry = entry
-                            } else
-                                archiveEntry = TarArchiveEntry(baseDir.relativize(dir).toString() + "/")
-                            aos.putArchiveEntry(archiveEntry)
-                            aos.closeArchiveEntry()
-                            return FileVisitResult.CONTINUE
-                        }
-                    })
+                    )
                 }
             return output
         }
@@ -210,6 +216,7 @@ class BluePrintArchiveUtils {
     }
 
     class ArchiveEnumerator : Enumeration<ArchiveEntry>, Closeable {
+
         private val zipArchive: ZipFile?
         private val zipEnumeration: Enumeration<ZipArchiveEntry>?
         private val archiveStream: ArchiveInputStream?

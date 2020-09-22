@@ -105,9 +105,13 @@ open class ResourceAssignmentEnhancerServiceImpl(private val resourceDefinitionR
     }
 
     private fun checkResourceDefinitionNeeded(resourceAssignment: ResourceAssignment): Boolean {
-        return !((resourceAssignment.dictionarySource.equals(ResourceDictionaryConstants.SOURCE_INPUT) ||
-                resourceAssignment.dictionarySource.equals(ResourceDictionaryConstants.SOURCE_DEFAULT)) &&
-                BluePrintTypes.validPrimitiveOrCollectionPrimitive(resourceAssignment.property!!))
+        return !(
+            (
+                resourceAssignment.dictionarySource.equals(ResourceDictionaryConstants.SOURCE_INPUT) ||
+                    resourceAssignment.dictionarySource.equals(ResourceDictionaryConstants.SOURCE_DEFAULT)
+                ) &&
+                BluePrintTypes.validPrimitiveOrCollectionPrimitive(resourceAssignment.property!!)
+            )
     }
 
     private fun getResourceDefinition(name: String): ResourceDefinition {

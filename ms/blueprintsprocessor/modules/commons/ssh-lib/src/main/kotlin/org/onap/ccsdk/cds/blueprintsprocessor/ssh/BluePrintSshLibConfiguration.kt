@@ -43,6 +43,7 @@ fun BluePrintDependencyService.sshClientService(jsonNode: JsonNode): BlueprintSs
 
 class SshLibConstants {
     companion object {
+
         const val SERVICE_BLUEPRINT_SSH_LIB_PROPERTY = "blueprint-ssh-lib-property-service"
         const val PROPERTY_SSH_CLIENT_PREFIX = "blueprintsprocessor.sshclient."
         const val TYPE_BASIC_AUTH = "basic-auth"

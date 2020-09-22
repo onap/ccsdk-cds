@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service
 class BluePrintTypeValidatorServiceImpl : BluePrintTypeValidatorService {
 
     companion object {
+
         const val PREFIX_DEFAULT = "default"
     }
 

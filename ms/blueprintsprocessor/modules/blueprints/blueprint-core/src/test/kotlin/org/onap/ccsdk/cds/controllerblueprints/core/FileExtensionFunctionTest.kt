@@ -20,6 +20,7 @@ import org.junit.Test
 import kotlin.test.assertTrue
 
 class FileExtensionFunctionTest {
+
     val blueprintBasePath = TestConstants.PATH_TEST_BLUEPRINTS_BASECONFIG
 
     @Test

@@ -43,6 +43,7 @@ open class ComponentRemoteScriptExecutor(
 ) : AbstractComponentFunction() {
 
     companion object {
+
         const val INPUT_SELECTOR = "selector"
         const val INPUT_BLUEPRINT_NAME = "blueprint-name"
         const val INPUT_BLUEPRINT_VERSION = "blueprint-version"

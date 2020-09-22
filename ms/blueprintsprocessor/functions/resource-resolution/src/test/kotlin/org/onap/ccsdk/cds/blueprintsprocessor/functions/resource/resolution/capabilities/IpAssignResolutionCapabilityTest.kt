@@ -51,6 +51,7 @@ import kotlin.test.assertTrue
  */
 
 class IpAssignResolutionCapabilityTest {
+
     val log = logger(IpAssignResolutionCapabilityTest::class)
 
     @Before
@@ -61,7 +62,8 @@ class IpAssignResolutionCapabilityTest {
         val blueprintWebClientService = mockk<BlueprintWebClientService>()
         // Create mock Response
         val mockResponse = BlueprintWebClientService.WebClientResponse(
-            200, """{
+            200,
+            """{
             "fixed_ipv4_Address_01" : "10.10.10.11",
             "fixed_ipv4_Address_02" : "10.10.10.12",
             "fixed_ipv4_Address_03" : "10.10.10.13"
@@ -133,8 +135,10 @@ class IpAssignResolutionCapabilityTest {
             )
 
             val resoulutionSummary =
-                    ResourceAssignmentUtils.generateResolutionSummaryData(resourceAssignments.values.toList(),
-                        capabilityResourceResolutionProcessor.resourceDictionaries)
+                ResourceAssignmentUtils.generateResolutionSummaryData(
+                    resourceAssignments.values.toList(),
+                    capabilityResourceResolutionProcessor.resourceDictionaries
+                )
             log.info(resoulutionSummary.asJsonType().toPrettyString())
             assertNotNull(resoulutionSummary.asJsonType().get("resolution-summary"))
 
@@ -148,7 +152,7 @@ class IpAssignResolutionCapabilityTest {
         }
     }
 
-        /** Test dictionaries */
+    /** Test dictionaries */
 
     /** Test dictionaries */
     private fun resourceDefinitions(): MutableMap<String, ResourceDefinition> {

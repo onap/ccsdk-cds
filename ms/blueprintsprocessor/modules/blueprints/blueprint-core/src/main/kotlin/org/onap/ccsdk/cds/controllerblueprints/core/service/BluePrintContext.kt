@@ -57,6 +57,7 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
      * Blueprint CBA extracted file location
      */
     var rootPath = "."
+
     /**
      * Root Definition file path
      */
@@ -262,8 +263,8 @@ class BluePrintContext(val serviceTemplate: ServiceTemplate) {
 
     fun nodeTemplateOperationImplementation(nodeTemplateName: String, interfaceName: String, operationName: String):
         Implementation? {
-        return nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName).implementation
-    }
+            return nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName).implementation
+        }
 
     fun nodeTemplateInterfaceOperationInputs(
         nodeTemplateName: String,

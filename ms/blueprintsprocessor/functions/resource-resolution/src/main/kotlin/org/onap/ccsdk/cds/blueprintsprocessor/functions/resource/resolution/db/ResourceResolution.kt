@@ -112,6 +112,7 @@ class ResourceResolution : Serializable {
     var createdDate = Date()
 
     companion object {
+
         private const val serialVersionUID = 1L
     }
 }

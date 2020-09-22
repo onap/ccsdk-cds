@@ -81,7 +81,6 @@ limitations under the License.
             <plugins>
                 <!--TODO: This plugin is broken. Find replacement-->
                 <!-- Plugin to Format/Validate POM Files -->
-                <!--
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>tidy-maven-plugin</artifactId>
@@ -109,13 +108,12 @@ limitations under the License.
                         </execution>
                     </executions>
                 </plugin>
-                -->
 
                 <!-- Plugin to Format/Validate Kotlin Files -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.7</version>
+                    <version>${maven-antrun-plugin.version}</version>
                     <executions>
                         <execution>
                             <id>validate-kotlin</id>
@@ -124,6 +122,7 @@ limitations under the License.
                                 <target name="ktlint">
                                     <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true" classname="com.pinterest.ktlint.Main" classpathref="maven.plugin.classpath">
                                         <arg value="src/**/*.kt"/>
+                                        <arg value="Scripts/**/*.kt"/>
                                     </java>
                                 </target>
                                 <skip>${format.skipValidate}</skip>
@@ -133,7 +132,6 @@ limitations under the License.
                             </goals>
                         </execution>
                         <execution>
-                            <!-- Built-in formatter So that you wouldn't have to fix all style violations by hand.-->
                             <id>format-kotlin</id>
                             <phase>process-sources</phase>
                             <configuration>
@@ -141,6 +139,7 @@ limitations under the License.
                                     <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true" classname="com.pinterest.ktlint.Main" classpathref="maven.plugin.classpath">
                                         <arg value="-F"/>
                                         <arg value="src/**/*.kt"/>
+                                        <arg value="Scripts/**/*.kt"/>
                                     </java>
                                 </target>
                                 <skip>${format.skipExecute}</skip>
@@ -154,10 +153,78 @@ limitations under the License.
                         <dependency>
                             <groupId>com.pinterest</groupId>
                             <artifactId>ktlint</artifactId>
-                            <version>0.35.0</version>
+                            <version>0.39.0</version>
                         </dependency>
                     </dependencies>
                 </plugin>
+
+                <!-- Plugin to identify root path of the project -->
+                <plugin>
+                    <groupId>org.commonjava.maven.plugins</groupId>
+                    <artifactId>directory-maven-plugin</artifactId>
+                    <version>0.3</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <id>directories</id>
+                            <goals>
+                                <goal>highest-basedir</goal>
+                            </goals>
+                            <configuration>
+                                <property>baseDirPath</property>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- Plugin to Format/Validate Java Classes -->
+                <plugin>
+                    <groupId>net.revelc.code.formatter</groupId>
+                    <artifactId>formatter-maven-plugin</artifactId>
+                    <version>2.12.0</version>
+                    <executions>
+                        <execution>
+                            <id>format-java</id>
+                            <goals>
+                                <goal>format</goal>
+                            </goals>
+                            <phase>process-sources</phase>
+                            <configuration>
+                                <lineEnding>LF</lineEnding>
+                                <skip>${format.skipExecute}</skip>
+                                <sourceDirectory>${project.basedir}</sourceDirectory>
+                                <configFile>${baseDirPath}/ONAP-Java-Code-Style.xml</configFile>
+                                <includes>
+                                    <include>src/**/*.java</include>
+                                </includes>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>validate-java</id>
+                            <goals>
+                                <goal>validate</goal>
+                            </goals>
+                            <phase>validate</phase>
+                            <configuration>
+                                <lineEnding>LF</lineEnding>
+                                <skip>${format.skipValidate}</skip>
+                                <sourceDirectory>${project.basedir}</sourceDirectory>
+                                <configFile>${baseDirPath}/ONAP-Java-Code-Style.xml</configFile>
+                                <includes>
+                                    <include>src/**/*.java</include>
+                                </includes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.fasterxml.jackson.core</groupId>
+                            <artifactId>jackson-annotations</artifactId>
+                            <version>${jackson-bom.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -218,8 +285,20 @@ limitations under the License.
                 <version>${jacoco.version}</version>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tidy-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.commonjava.maven.plugins</groupId>
+                <artifactId>directory-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>net.revelc.code.formatter</groupId>
+                <artifactId>formatter-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

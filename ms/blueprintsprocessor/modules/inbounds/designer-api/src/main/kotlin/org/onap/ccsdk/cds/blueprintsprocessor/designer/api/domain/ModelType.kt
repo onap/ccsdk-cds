@@ -89,17 +89,18 @@ class ModelType : Serializable {
 
     override fun toString(): String {
         return "[" + "modelName = " + modelName +
-                ", derivedFrom = " + derivedFrom +
-                ", definitionType = " + definitionType +
-                ", description = " + description +
-                ", creationDate = " + creationDate +
-                ", version = " + version +
-                ", updatedBy = " + updatedBy +
-                ", tags = " + tags +
-                "]"
+            ", derivedFrom = " + derivedFrom +
+            ", definitionType = " + definitionType +
+            ", description = " + description +
+            ", creationDate = " + creationDate +
+            ", version = " + version +
+            ", updatedBy = " + updatedBy +
+            ", tags = " + tags +
+            "]"
     }
 
     companion object {
+
         private const val serialVersionUID = 1L
     }
 }

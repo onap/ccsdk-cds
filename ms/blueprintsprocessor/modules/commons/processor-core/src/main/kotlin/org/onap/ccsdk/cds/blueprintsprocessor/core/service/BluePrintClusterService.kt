@@ -71,6 +71,7 @@ data class ClusterMember(
 )
 
 interface ClusterLock {
+
     fun name(): String
     suspend fun lock()
     suspend fun fenceLock(): String

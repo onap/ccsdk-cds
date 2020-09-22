@@ -46,9 +46,11 @@ object BluePrintExpressionService {
     fun checkContainsExpression(propertyAssignmentNode: JsonNode): Boolean {
         val json = propertyAssignmentNode.toString()
         // FIXME("Check if any Optimisation needed")
-        return (json.contains(BluePrintConstants.EXPRESSION_GET_INPUT) ||
+        return (
+            json.contains(BluePrintConstants.EXPRESSION_GET_INPUT) ||
                 json.contains(BluePrintConstants.EXPRESSION_GET_ATTRIBUTE) ||
-                json.contains(BluePrintConstants.EXPRESSION_GET_PROPERTY))
+                json.contains(BluePrintConstants.EXPRESSION_GET_PROPERTY)
+            )
     }
 
     @JvmStatic
@@ -110,8 +112,9 @@ object BluePrintExpressionService {
             throw BluePrintException(
                 String.format(
                     "missing property expression, " +
-                            "it should be [ <modelable_entity_name>, <optional_req_or_cap_name>, <property_name>, " +
-                            "<nested_property_name_or_index_1>, ..., <nested_property_name_or_index_n> ] , but present {}", jsonNode
+                        "it should be [ <modelable_entity_name>, <optional_req_or_cap_name>, <property_name>, " +
+                        "<nested_property_name_or_index_1>, ..., <nested_property_name_or_index_n> ] , but present {}",
+                    jsonNode
                 )
             )
         }
@@ -149,8 +152,9 @@ object BluePrintExpressionService {
             throw BluePrintException(
                 String.format(
                     "missing attribute expression, " +
-                            "it should be [ <modelable_entity_name>, <optional_req_or_cap_name>, <attribute_name>," +
-                            " <nested_attribute_name_or_index_1>, ..., <nested_attribute_name_or_index_n> ] , but present {}", jsonNode
+                        "it should be [ <modelable_entity_name>, <optional_req_or_cap_name>, <attribute_name>," +
+                        " <nested_attribute_name_or_index_1>, ..., <nested_attribute_name_or_index_n> ] , but present {}",
+                    jsonNode
                 )
             )
         }
@@ -189,7 +193,7 @@ object BluePrintExpressionService {
             throw BluePrintException(
                 String.format(
                     "missing operation output expression, " +
-                            "it should be (<modelable_entity_name>, <interface_name>, <operation_name>, <output_variable_name>) , but present {}",
+                        "it should be (<modelable_entity_name>, <interface_name>, <operation_name>, <output_variable_name>) , but present {}",
                     jsonNode
                 )
             )
@@ -216,7 +220,8 @@ object BluePrintExpressionService {
             throw BluePrintException(
                 String.format(
                     "missing artifact expression, " +
-                            "it should be [ <modelable_entity_name>, <artifact_name>, <location>, <remove> ] , but present {}", jsonNode
+                        "it should be [ <modelable_entity_name>, <artifact_name>, <location>, <remove> ] , but present {}",
+                    jsonNode
                 )
             )
         }

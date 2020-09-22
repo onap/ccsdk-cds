@@ -64,7 +64,8 @@ class NamingResolutionCapabilityTest {
         val blueprintWebClientService = mockk<BlueprintWebClientService>()
         // Create mock Response
         val mockResponse = BlueprintWebClientService.WebClientResponse<String>(
-            200, """{
+            200,
+            """{
             "vf-module-name" : "dlsst001dbcx-adsf-Base-01",
             "vnfc-name" : "dlsst001dbcx"
             }
@@ -136,8 +137,10 @@ class NamingResolutionCapabilityTest {
             )
 
             val resoulutionSummary =
-                ResourceAssignmentUtils.generateResolutionSummaryData(resourceAssignments.values.toList(),
-                    capabilityResourceResolutionProcessor.resourceDictionaries)
+                ResourceAssignmentUtils.generateResolutionSummaryData(
+                    resourceAssignments.values.toList(),
+                    capabilityResourceResolutionProcessor.resourceDictionaries
+                )
             log.info(resoulutionSummary.asJsonType().toPrettyString())
             assertNotNull(resoulutionSummary.asJsonType().get("resolution-summary"))
 

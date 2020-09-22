@@ -29,8 +29,10 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(classes = [BluePrintPython::class, PythonExecutorProperty::class, String::class])
 @TestPropertySource(
     properties =
-    ["blueprints.processor.functions.python.executor.modulePaths=./../../../../../components/scripts/python/ccsdk_blueprints",
-        "blueprints.processor.functions.python.executor.executionPath=./../../../../../components/scripts/python/ccsdk_blueprints"]
+        [
+            "blueprints.processor.functions.python.executor.modulePaths=./../../../../../components/scripts/python/ccsdk_blueprints",
+            "blueprints.processor.functions.python.executor.executionPath=./../../../../../components/scripts/python/ccsdk_blueprints"
+        ]
 )
 class BlueprintPythonHostTest {
 

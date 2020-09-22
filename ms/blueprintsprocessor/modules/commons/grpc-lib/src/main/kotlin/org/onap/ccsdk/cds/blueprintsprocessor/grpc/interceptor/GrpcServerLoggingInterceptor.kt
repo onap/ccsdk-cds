@@ -32,6 +32,7 @@ import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceIn
 import org.slf4j.MDC
 
 class GrpcServerLoggingInterceptor : ServerInterceptor {
+
     val log = logger(GrpcServerLoggingInterceptor::class)
     val loggingService = GrpcLoggerService()
 
@@ -42,59 +43,59 @@ class GrpcServerLoggingInterceptor : ServerInterceptor {
     ):
         ServerCall.Listener<ReqT> {
 
-        val forwardingServerCall = object : ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(call) {
-            override fun sendHeaders(responseHeaders: Metadata) {
-                loggingService.grpResponding(requestHeaders, responseHeaders)
-                super.sendHeaders(responseHeaders)
-            }
-        }
-
-        return object :
-            ForwardingServerCallListener.SimpleForwardingServerCallListener<ReqT>(
-                next.startCall(forwardingServerCall, requestHeaders)
-            ) {
-
-            override fun onMessage(message: ReqT) {
-                /** Get the requestId, SubRequestId and Originator Id and set in MDS context
-                 *  If you are using other GRPC services, Implement own Logging Interceptors to get tracing.
-                 * */
-                when (message) {
-                    is ExecutionServiceInput -> {
-                        val commonHeader = message.commonHeader
-                            ?: throw BluePrintProcessorException("missing common header in request")
-                        loggingService.grpcRequesting(call, commonHeader, next)
-                    }
-                    is BluePrintUploadInput -> {
-                        val commonHeader = message.commonHeader
-                            ?: throw BluePrintProcessorException("missing common header in request")
-                        loggingService.grpcRequesting(call, commonHeader, next)
-                    }
-                    is BluePrintDownloadInput -> {
-                        val commonHeader = message.commonHeader
-                            ?: throw BluePrintProcessorException("missing common header in request")
-                        loggingService.grpcRequesting(call, commonHeader, next)
-                    }
-                    is BluePrintRemoveInput -> {
-                        val commonHeader = message.commonHeader
-                            ?: throw BluePrintProcessorException("missing common header in request")
-                        loggingService.grpcRequesting(call, commonHeader, next)
-                    }
-                    else -> {
-                        loggingService.grpcRequesting(call, requestHeaders, next)
-                    }
+            val forwardingServerCall = object : ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(call) {
+                override fun sendHeaders(responseHeaders: Metadata) {
+                    loggingService.grpResponding(requestHeaders, responseHeaders)
+                    super.sendHeaders(responseHeaders)
                 }
-                super.onMessage(message)
             }
 
-            override fun onComplete() {
-                MDC.clear()
-                super.onComplete()
-            }
+            return object :
+                ForwardingServerCallListener.SimpleForwardingServerCallListener<ReqT>(
+                    next.startCall(forwardingServerCall, requestHeaders)
+                ) {
 
-            override fun onCancel() {
-                MDC.clear()
-                super.onCancel()
+                override fun onMessage(message: ReqT) {
+                    /** Get the requestId, SubRequestId and Originator Id and set in MDS context
+                     *  If you are using other GRPC services, Implement own Logging Interceptors to get tracing.
+                     * */
+                    when (message) {
+                        is ExecutionServiceInput -> {
+                            val commonHeader = message.commonHeader
+                                ?: throw BluePrintProcessorException("missing common header in request")
+                            loggingService.grpcRequesting(call, commonHeader, next)
+                        }
+                        is BluePrintUploadInput -> {
+                            val commonHeader = message.commonHeader
+                                ?: throw BluePrintProcessorException("missing common header in request")
+                            loggingService.grpcRequesting(call, commonHeader, next)
+                        }
+                        is BluePrintDownloadInput -> {
+                            val commonHeader = message.commonHeader
+                                ?: throw BluePrintProcessorException("missing common header in request")
+                            loggingService.grpcRequesting(call, commonHeader, next)
+                        }
+                        is BluePrintRemoveInput -> {
+                            val commonHeader = message.commonHeader
+                                ?: throw BluePrintProcessorException("missing common header in request")
+                            loggingService.grpcRequesting(call, commonHeader, next)
+                        }
+                        else -> {
+                            loggingService.grpcRequesting(call, requestHeaders, next)
+                        }
+                    }
+                    super.onMessage(message)
+                }
+
+                override fun onComplete() {
+                    MDC.clear()
+                    super.onComplete()
+                }
+
+                override fun onCancel() {
+                    MDC.clear()
+                    super.onCancel()
+                }
             }
         }
-    }
 }

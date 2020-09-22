@@ -79,7 +79,7 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
     /**
      * Download the TOSCA CSAR artifact and process it.
      *
-     * @param info               - Artifact information
+     * @param info - Artifact information
      * @param distributionClient - SDC distribution client
      */
     private void downloadCsarArtifacts(IArtifactInfo info, IDistributionClient distributionClient) {
@@ -97,9 +97,8 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
             if (!Objects.equals(result.getDistributionActionResult(), SUCCESS)) {
                 final String errorMessage = String.format("Failed to download the artifact from : %s due to %s ", url,
                         result.getDistributionActionResult());
-                listenerStatus
-                        .sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_ERROR, errorMessage,
-                                url, NotificationType.DOWNLOAD);
+                listenerStatus.sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_ERROR,
+                        errorMessage, url, NotificationType.DOWNLOAD);
                 LOGGER.error(errorMessage);
             } else {
                 listenerStatus.sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_OK, null, url,
@@ -122,7 +121,7 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
         if (!csarFiles.isEmpty()) {
             final String archivePath = cbaArchivePath.toString();
 
-            //Extract CBA archive from CSAR package and store it into local disk
+            // Extract CBA archive from CSAR package and store it into local disk
             csarFiles.forEach(file -> listenerService.extractBluePrint(file.getAbsolutePath(), archivePath));
             csarFiles.forEach(file -> FileUtil.deleteFile(file, csarArchivePath.toString()));
         } else {

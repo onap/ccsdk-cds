@@ -53,12 +53,14 @@ class MockComponentFunction : AbstractComponentFunction() {
 }
 
 open class MockResourceSource {
+
     @Bean(
         name = [
             "rr-processor-source-input",
             "rr-processor-source-default",
             "rr-processor-source-db",
-            "rr-processor-source-rest"]
+            "rr-processor-source-rest"
+        ]
     )
     open fun sourceInstance(): ResourceAssignmentProcessor {
         return mockk<ResourceAssignmentProcessor>()

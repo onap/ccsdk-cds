@@ -87,7 +87,8 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
             val uat = UatDefinition.load(mapper, uatSpec)
             val cbaBytes = tempFile.readBytes()
             val updatedUat = uatExecutor.execute(uat, cbaBytes)
-            return@runBlocking updatedUat.dump(mapper,
+            return@runBlocking updatedUat.dump(
+                mapper,
                 FIELDS_TO_EXCLUDE
             )
         } catch (t: Throwable) {
@@ -119,6 +120,7 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
     }
 
     companion object {
+
         // Fields that can be safely ignored from BPP response, and can be omitted on the UAT specification.
         private val FIELDS_TO_EXCLUDE = listOf("timestamp")
     }

@@ -92,8 +92,10 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption,
         @RequestParam(defaultValue = "ASC") sortType: String
     ): Page<BlueprintModelSearch> {
-        val pageRequest = PageRequest.of(offset, limit,
-                Sort.Direction.fromString(sortType), sort.columnName)
+        val pageRequest = PageRequest.of(
+            offset, limit,
+            Sort.Direction.fromString(sortType), sort.columnName
+        )
         return this.bluePrintModelHandler.allBlueprintModel(pageRequest)
     }
 
@@ -115,8 +117,10 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption,
         @RequestParam(defaultValue = "ASC") sortType: String
     ): Page<BlueprintModelSearch> {
-        val pageRequest = PageRequest.of(offset, limit,
-                Sort.Direction.fromString(sortType), sort.columnName)
+        val pageRequest = PageRequest.of(
+            offset, limit,
+            Sort.Direction.fromString(sortType), sort.columnName
+        )
         return this.bluePrintModelHandler.searchBluePrintModelsByKeyWordPaged(keyWord, pageRequest)
     }
 
@@ -172,8 +176,11 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         }
 
     @PostMapping(
-        "/enrich", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
-            .MULTIPART_FORM_DATA_VALUE]
+        "/enrich", produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [
+            MediaType
+                .MULTIPART_FORM_DATA_VALUE
+        ]
     )
     @ResponseBody
     @Throws(BluePrintException::class)
@@ -183,8 +190,11 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     }
 
     @PostMapping(
-        "/enrichandpublish", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType
-        .MULTIPART_FORM_DATA_VALUE]
+        "/enrichandpublish", produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [
+            MediaType
+                .MULTIPART_FORM_DATA_VALUE
+        ]
     )
     @ResponseBody
     @Throws(BluePrintException::class)
@@ -226,7 +236,8 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     }
 
     @PostMapping(
-        path = arrayOf("/workflow-spec"), produces = arrayOf(
+        path = arrayOf("/workflow-spec"),
+        produces = arrayOf(
             MediaType
                 .APPLICATION_JSON_VALUE
         ),
@@ -237,10 +248,10 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @PreAuthorize("hasRole('USER')")
     suspend fun workflowSpec(@RequestBody workFlowSpecReq: WorkFlowSpecRequest):
         ResponseEntity<String> = mdcWebCoroutineScope {
-        var json = bluePrintModelHandler.prepareWorkFlowSpec(workFlowSpecReq)
-            .asJsonString()
-        ResponseEntity(json, HttpStatus.OK)
-    }
+            var json = bluePrintModelHandler.prepareWorkFlowSpec(workFlowSpecReq)
+                .asJsonString()
+            ResponseEntity(json, HttpStatus.OK)
+        }
 
     @GetMapping(
         path = arrayOf(

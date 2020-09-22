@@ -65,19 +65,19 @@ open class MessagePrioritizationStateServiceImpl(
 
     override suspend fun getMessageForStatesNotExpiredIn(group: String, states: List<String>, count: Int):
         List<MessagePrioritization>? {
-        return prioritizationMessageRepository.findByGroupAndStateInAndNotExpiredDate(
-            group,
-            states, Date(), PageRequest.of(0, count)
-        )
-    }
+            return prioritizationMessageRepository.findByGroupAndStateInAndNotExpiredDate(
+                group,
+                states, Date(), PageRequest.of(0, count)
+            )
+        }
 
     override suspend fun getMessageForStatesExpired(group: String, states: List<String>, count: Int):
         List<MessagePrioritization>? {
-        return prioritizationMessageRepository.findByGroupAndStateInAndExpiredDate(
-            group,
-            states, Date(), PageRequest.of(0, count)
-        )
-    }
+            return prioritizationMessageRepository.findByGroupAndStateInAndExpiredDate(
+                group,
+                states, Date(), PageRequest.of(0, count)
+            )
+        }
 
     override suspend fun getExpiredMessages(expiryDate: Date, count: Int): List<MessagePrioritization>? {
         return prioritizationMessageRepository.findByExpiredDate(
@@ -87,11 +87,11 @@ open class MessagePrioritizationStateServiceImpl(
 
     override suspend fun getExpiredMessages(group: String, expiryDate: Date, count: Int):
         List<MessagePrioritization>? {
-        return prioritizationMessageRepository.findByGroupAndExpiredDate(
-            group,
-            expiryDate, PageRequest.of(0, count)
-        )
-    }
+            return prioritizationMessageRepository.findByGroupAndExpiredDate(
+                group,
+                expiryDate, PageRequest.of(0, count)
+            )
+        }
 
     override suspend fun getCorrelatedMessages(
         group: String,

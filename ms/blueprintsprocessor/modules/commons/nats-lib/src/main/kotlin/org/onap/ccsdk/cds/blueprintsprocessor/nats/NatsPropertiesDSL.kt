@@ -111,6 +111,7 @@ open class NatsConnectionPropertiesAssignmentBuilder : PropertiesAssignmentBuild
 }
 
 class NatsTokenAuthPropertiesAssignmentBuilder : NatsConnectionPropertiesAssignmentBuilder() {
+
     fun token(selector: String) = token(selector.asJsonPrimitive())
 
     fun token(selector: JsonNode) = property(TokenAuthNatsConnectionProperties::token, selector)

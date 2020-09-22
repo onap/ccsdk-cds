@@ -49,7 +49,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
-import java.lang.RuntimeException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
@@ -148,7 +147,8 @@ class BluePrintWorkflowExecutionServiceImplTest {
     fun `Should handle errors from resolve workflow output`() {
         val imperativeWorkflowExecutionService: ImperativeWorkflowExecutionService = mockk()
         val bluePrintWorkflowExecutionServiceImpl = BluePrintWorkflowExecutionServiceImpl(
-                mockk(), mockk(), imperativeWorkflowExecutionService)
+            mockk(), mockk(), imperativeWorkflowExecutionService
+        )
         val bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>> = mockk()
         val bluePrintContext: BluePrintContext = mockk()
         val executionServiceInput = ExecutionServiceInput().apply {
@@ -176,7 +176,8 @@ class BluePrintWorkflowExecutionServiceImplTest {
 
         runBlocking {
             val output = bluePrintWorkflowExecutionServiceImpl.executeBluePrintWorkflow(
-                    bluePrintRuntimeService, executionServiceInput, mutableMapOf())
+                bluePrintRuntimeService, executionServiceInput, mutableMapOf()
+            )
             assertEquals("failed to resolve property...", blueprintError.errors[0])
             assertEquals("""{"config-assign-response":{}}""".asJsonType(), output.payload)
         }

@@ -19,12 +19,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.nrmfun
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.springframework.http.HttpMethod
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import java.util.UUID
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.springframework.http.HttpMethod
 import org.springframework.web.util.UriComponentsBuilder
+import java.util.UUID
 
 class RestfulNRMServiceClient() {
 

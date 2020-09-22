@@ -36,10 +36,12 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [TestDatabaseConfiguration::class,
+    classes = [
+        TestDatabaseConfiguration::class,
         PrimaryDBLibGenericService::class, BluePrintDBLibPropertyService::class,
         DatabaseResourceAssignmentProcessor::class, MockDBLibGenericService::class,
-        MockBlueprintProcessorCatalogServiceImpl::class]
+        MockBlueprintProcessorCatalogServiceImpl::class
+    ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class DatabaseResourceResolutionProcessorTest {

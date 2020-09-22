@@ -49,10 +49,12 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [CliExecutorConfiguration::class,
+    classes = [
+        CliExecutorConfiguration::class,
         ExecutionServiceConfiguration::class,
         BluePrintSshLibConfiguration::class, BluePrintScriptsServiceImpl::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDependencyService::class]
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDependencyService::class
+    ]
 )
 @DirtiesContext
 @TestPropertySource(properties = [], locations = ["classpath:application-test.properties"])

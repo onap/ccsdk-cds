@@ -22,12 +22,16 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class K8sProfile {
+
     @get:JsonProperty("rb-name")
     var rbName: String? = null
+
     @get:JsonProperty("rb-version")
     var rbVersion: String? = null
+
     @get:JsonProperty("profile-name")
     var profileName: String? = null
+
     @get:JsonProperty("namespace")
     var namespace: String? = "default"
 

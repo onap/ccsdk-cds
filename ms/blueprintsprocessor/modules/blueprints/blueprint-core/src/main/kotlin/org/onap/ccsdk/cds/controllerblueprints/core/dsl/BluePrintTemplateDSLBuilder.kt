@@ -35,6 +35,7 @@ import kotlin.reflect.full.createInstance
 import kotlin.reflect.jvm.reflect
 
 open class TopologyTemplateBuilder {
+
     private var topologyTemplate = TopologyTemplate()
     var nodeTemplates: MutableMap<String, NodeTemplate>? = null
     var relationshipTemplates: MutableMap<String, RelationshipTemplate>? = null
@@ -222,6 +223,7 @@ open class RelationshipTemplateBuilder(
     private val type: String,
     private val description: String? = ""
 ) {
+
     var relationshipTemplate: RelationshipTemplate = RelationshipTemplate()
     var properties: MutableMap<String, JsonNode>? = null
 
@@ -293,6 +295,7 @@ class ArtifactDefinitionBuilder(private val id: String, private val type: String
 }
 
 open class CapabilityAssignmentBuilder(private val id: String) {
+
     var capabilityAssignment: CapabilityAssignment = CapabilityAssignment()
     var attributes: MutableMap<String, JsonNode>? = null
     var properties: MutableMap<String, JsonNode>? = null
@@ -418,6 +421,7 @@ class OperationAssignmentBuilder<In : PropertiesAssignmentBuilder, Out : Propert
 }
 
 class ImplementationBuilder(private val timeout: Int, private val operationHost: String) {
+
     private val implementation = Implementation()
 
     fun primary(primary: String) {
@@ -440,6 +444,7 @@ class ImplementationBuilder(private val timeout: Int, private val operationHost:
 }
 
 open class PropertiesAssignmentBuilder {
+
     var properties: MutableMap<String, JsonNode> = hashMapOf()
 
     fun property(id: String, value: Any) {
@@ -460,6 +465,7 @@ open class PropertiesAssignmentBuilder {
 }
 
 open class AttributesAssignmentBuilder {
+
     var attributes: MutableMap<String, JsonNode> = hashMapOf()
 
     fun attribute(id: String, value: String) {

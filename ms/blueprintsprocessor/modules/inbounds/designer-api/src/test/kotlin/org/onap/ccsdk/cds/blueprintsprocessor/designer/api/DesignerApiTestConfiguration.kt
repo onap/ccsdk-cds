@@ -22,9 +22,11 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @ComponentScan(
-    basePackages = ["org.onap.ccsdk.cds.controllerblueprints",
+    basePackages = [
+        "org.onap.ccsdk.cds.controllerblueprints",
         "org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
-        "org.onap.ccsdk.cds.blueprintsprocessor.db.primary"]
+        "org.onap.ccsdk.cds.blueprintsprocessor.db.primary"
+    ]
 )
 @EnableAutoConfiguration
 open class DesignerApiTestConfiguration

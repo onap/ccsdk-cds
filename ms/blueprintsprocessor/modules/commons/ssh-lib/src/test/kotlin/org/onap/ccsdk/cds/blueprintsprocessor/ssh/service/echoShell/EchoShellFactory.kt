@@ -18,14 +18,14 @@ package org.onap.ccsdk.cds.blueprintsprocessor.ssh.service.echoShell
 
 import org.apache.sshd.common.Factory
 import org.apache.sshd.server.Environment
-import org.apache.sshd.server.command.Command
 import org.apache.sshd.server.ExitCallback
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.IOException
+import org.apache.sshd.server.command.Command
 import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.InterruptedIOException
+import java.io.OutputStream
 
 class EchoShellFactory : Factory<Command> {
 
@@ -34,6 +34,7 @@ class EchoShellFactory : Factory<Command> {
     }
 
     companion object {
+
         val INSTANCE = EchoShellFactory()
     }
 }

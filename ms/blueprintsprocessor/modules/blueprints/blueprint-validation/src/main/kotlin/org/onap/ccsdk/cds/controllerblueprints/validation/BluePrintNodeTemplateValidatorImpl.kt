@@ -102,7 +102,7 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
             val capabilityDefinition = nodeType.capabilities?.get(capabilityName)
                 ?: throw BluePrintException(
                     "Failed to get NodeTemplate($nodeTemplateName) capability definition ($capabilityName) " +
-                            "from NodeType(${nodeTemplate.type})"
+                        "from NodeType(${nodeTemplate.type})"
                 )
 
             validateCapabilityAssignment(nodeTemplateName, capabilityName, capabilityDefinition, capabilityAssignment)
@@ -135,7 +135,7 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
             val requirementDefinition = nodeType.requirements?.get(requirementName)
                 ?: throw BluePrintException(
                     "Failed to get NodeTemplate($nodeTemplateName) requirement definition ($requirementName) from" +
-                            " NodeType(${nodeTemplate.type})"
+                        " NodeType(${nodeTemplate.type})"
                 )
             // Validate Requirement Assignment
             validateRequirementAssignment(nodeTemplateName, requirementName, requirementDefinition, requirementAssignment)
@@ -166,13 +166,13 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
         val relationShipNodeTemplate = bluePrintContext.serviceTemplate.topologyTemplate?.nodeTemplates?.get(requirementNodeTemplateName)
             ?: throw BluePrintException(
                 "Failed to get requirement NodeTemplate($requirementNodeTemplateName)'s " +
-                        "for NodeTemplate($nodeTemplateName) requirement($requirementAssignmentName)"
+                    "for NodeTemplate($nodeTemplateName) requirement($requirementAssignmentName)"
             )
 
         relationShipNodeTemplate.capabilities?.get(capabilityName)
             ?: throw BluePrintException(
                 "Failed to get requirement NodeTemplate($requirementNodeTemplateName)'s " +
-                        "capability($capabilityName) for NodeTemplate ($nodeTemplateName)'s requirement($requirementAssignmentName)"
+                    "capability($capabilityName) for NodeTemplate ($nodeTemplateName)'s requirement($requirementAssignmentName)"
             )
     }
 
@@ -186,7 +186,7 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
             val interfaceDefinition = nodeType.interfaces?.get(interfaceAssignmentName)
                 ?: throw BluePrintException(
                     "Failed to get NodeTemplate($nodeTemplateName) interface definition ($interfaceAssignmentName) from" +
-                            " NodeType(${nodeTemplate.type})"
+                        " NodeType(${nodeTemplate.type})"
                 )
 
             validateInterfaceAssignment(
@@ -232,7 +232,7 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
 
                 log.debug(
                     "Validation NodeTemplate($nodeTemplateName) Interface($interfaceAssignmentName) Operation " +
-                            "($operationAssignmentName)"
+                        "($operationAssignmentName)"
                 )
 
                 val inputs = operationAssignments.inputs
@@ -242,7 +242,7 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
                     val propertyDefinition = operationDefinition.inputs?.get(propertyName)
                         ?: throw BluePrintException(
                             "Failed to get NodeTemplate($nodeTemplateName) operation " +
-                                    "definition ($operationAssignmentName) property definition($propertyName)"
+                                "definition ($operationAssignmentName) property definition($propertyName)"
                         )
                     // Check the property values with property definition
                     propertyAssignmentValidationUtils
@@ -253,7 +253,7 @@ open class BluePrintNodeTemplateValidatorImpl(private val bluePrintTypeValidator
                     val propertyDefinition = operationDefinition.outputs?.get(propertyName)
                         ?: throw BluePrintException(
                             "Failed to get NodeTemplate($nodeTemplateName) operation definition ($operationAssignmentName) " +
-                                    "output property definition($propertyName)"
+                                "output property definition($propertyName)"
                         )
                     // Check the property values with property definition
                     propertyAssignmentValidationUtils

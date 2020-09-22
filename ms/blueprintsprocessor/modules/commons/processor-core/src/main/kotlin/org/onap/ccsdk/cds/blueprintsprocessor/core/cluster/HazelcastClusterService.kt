@@ -80,6 +80,7 @@ open class HazelcastClusterService : BluePrintClusterService {
                     )
 
                     val configFile = configuration.configFile
+
                     /** Check file exists */
                     val clusterConfigFile = normalizedFile(configuration.configFile)
                     check(clusterConfigFile.absolutePath.endsWith("yaml", true)) {
@@ -211,6 +212,7 @@ open class HazelcastClusterService : BluePrintClusterService {
 
 open class BlueprintsClusterMembershipListener() :
     MembershipListener {
+
     private val log = logger(BlueprintsClusterMembershipListener::class)
 
     override fun memberRemoved(membershipEvent: MembershipEvent) {
@@ -223,6 +225,7 @@ open class BlueprintsClusterMembershipListener() :
 }
 
 open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val name: String) : ClusterLock {
+
     private val log = logger(ClusterLockImpl::class)
 
     private val distributedLock: FencedLock = hazelcast.cpSubsystem.getLock(name)
@@ -238,8 +241,10 @@ open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val
 
     override suspend fun tryLock(timeout: Long): Boolean {
         return distributedLock.tryLock(timeout, TimeUnit.MILLISECONDS)
-                .also { if (it) log.trace("Cluster lock acquired: $name")
-                    else log.trace("Failed to acquire Cluster lock $name within timeout $timeout") }
+            .also {
+                if (it) log.trace("Cluster lock acquired: $name")
+                else log.trace("Failed to acquire Cluster lock $name within timeout $timeout")
+            }
     }
 
     override suspend fun unLock() {

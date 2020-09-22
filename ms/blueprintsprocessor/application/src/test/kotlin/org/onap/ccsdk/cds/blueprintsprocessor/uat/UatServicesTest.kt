@@ -74,6 +74,7 @@ fun String.prefixIfNot(prefix: String) =
 class UatServicesTest : BaseUatTest() {
 
     companion object {
+
         private const val BLUEPRINT_NAME = "pnf_config"
         private val BLUEPRINT_BASE_DIR = Paths.get(UAT_BLUEPRINTS_BASE_DIR, BLUEPRINT_NAME)
         private val UAT_PATH = BLUEPRINT_BASE_DIR.resolve(UAT_SPECIFICATION_FILE)
@@ -223,11 +224,14 @@ class UatServicesTest : BaseUatTest() {
 
             for (response in expectation.responses) {
                 val responseDefinitionBuilder: ResponseDefinitionBuilder = aResponse()
-                        .withStatus(response.status)
+                    .withStatus(response.status)
                 if (response.body != null) {
                     responseDefinitionBuilder.withBody(mapper.writeValueAsBytes(response.body))
-                        .withHeaders(HttpHeaders(
-                            response.headers.entries.map { e -> HttpHeader(e.key, e.value) }))
+                        .withHeaders(
+                            HttpHeaders(
+                                response.headers.entries.map { e -> HttpHeader(e.key, e.value) }
+                            )
+                        )
                 }
 
                 // TODO: MockServer verification for multiple responses should be done using Wiremock scenarios

@@ -49,6 +49,7 @@ class ApplicationRegistrationService {
     }
 
     companion object {
+
         private val log = LoggerFactory.getLogger(ApplicationRegistrationService::class.java)
     }
 }

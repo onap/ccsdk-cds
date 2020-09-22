@@ -35,10 +35,11 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-        classes = [ErrorCatalogTestConfiguration::class]
+    classes = [ErrorCatalogTestConfiguration::class]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ErrorCatalogServiceTest {
+
     @Autowired
     lateinit var errorCatalogService: ErrorCatalogService
 
@@ -52,46 +53,74 @@ class ErrorCatalogServiceTest {
     @BeforeTest
     fun setup() {
         errorType = ErrorCatalogCodes.GENERIC_FAILURE
-        errorCatalogHttp = ErrorCatalog(errorType, domain, 500,
-                "Contact CDS administrator team.", "Internal error in Blueprint Processor run time.")
-        errorCatalogGrpc = ErrorCatalog(errorType, domain, 2,
-                "Contact CDS administrator team.", "Internal error in Blueprint Processor run time.")
+        errorCatalogHttp = ErrorCatalog(
+            errorType, domain, 500,
+            "Contact CDS administrator team.", "Internal error in Blueprint Processor run time."
+        )
+        errorCatalogGrpc = ErrorCatalog(
+            errorType, domain, 2,
+            "Contact CDS administrator team.", "Internal error in Blueprint Processor run time."
+        )
 
-        errorPayloadHttp = ErrorPayload(500, ErrorCatalogCodes.GENERIC_FAILURE,
-                "Cause: Internal error in Blueprint Processor run time. \n Action : Contact CDS administrator team.",
-                errorMessage = ErrorMessage("org.onap.ccsdk.cds.blueprintsprocessor",
-                        "Internal error in Blueprint Processor run time.", ""))
-        errorPayloadGrpc = ErrorPayload(2, ErrorCatalogCodes.GENERIC_FAILURE,
-                "Cause: Internal error in Blueprint Processor run time. \n Action : Contact CDS administrator team.",
-                errorMessage = ErrorMessage("org.onap.ccsdk.cds.blueprintsprocessor",
-                        "Internal error in Blueprint Processor run time.", ""))
+        errorPayloadHttp = ErrorPayload(
+            500, ErrorCatalogCodes.GENERIC_FAILURE,
+            "Cause: Internal error in Blueprint Processor run time. \n Action : Contact CDS administrator team.",
+            errorMessage = ErrorMessage(
+                "org.onap.ccsdk.cds.blueprintsprocessor",
+                "Internal error in Blueprint Processor run time.", ""
+            )
+        )
+        errorPayloadGrpc = ErrorPayload(
+            2, ErrorCatalogCodes.GENERIC_FAILURE,
+            "Cause: Internal error in Blueprint Processor run time. \n Action : Contact CDS administrator team.",
+            errorMessage = ErrorMessage(
+                "org.onap.ccsdk.cds.blueprintsprocessor",
+                "Internal error in Blueprint Processor run time.", ""
+            )
+        )
     }
 
     @Test
     fun errorPayloadHttp() {
-        val errorPayload = errorCatalogService.errorPayload(httpProcessorException(errorType, domain,
-                "Internal error in Blueprint Processor run time."))
+        val errorPayload = errorCatalogService.errorPayload(
+            httpProcessorException(
+                errorType, domain,
+                "Internal error in Blueprint Processor run time."
+            )
+        )
         assertTrue { errorPayload.isEqualTo(errorPayloadHttp) }
     }
 
     @Test
     fun errorPayloadGrpc() {
-        val errorPayload = errorCatalogService.errorPayload(grpcProcessorException(errorType, domain,
-                "Internal error in Blueprint Processor run time."))
+        val errorPayload = errorCatalogService.errorPayload(
+            grpcProcessorException(
+                errorType, domain,
+                "Internal error in Blueprint Processor run time."
+            )
+        )
         assertTrue { errorPayload.isEqualTo(errorPayloadGrpc) }
     }
 
     @Test
     fun getErrorCatalogHttp() {
-        val errorCatalog = errorCatalogService.getErrorCatalog(httpProcessorException(errorType, domain,
-                "Internal error in Blueprint Processor run time."))
+        val errorCatalog = errorCatalogService.getErrorCatalog(
+            httpProcessorException(
+                errorType, domain,
+                "Internal error in Blueprint Processor run time."
+            )
+        )
         assertTrue { errorCatalog == errorCatalogHttp }
     }
 
     @Test
     fun getErrorCatalogGrpc() {
-        val errorCatalog = errorCatalogService.getErrorCatalog(grpcProcessorException(errorType, domain,
-                "Internal error in Blueprint Processor run time."))
+        val errorCatalog = errorCatalogService.getErrorCatalog(
+            grpcProcessorException(
+                errorType, domain,
+                "Internal error in Blueprint Processor run time."
+            )
+        )
         assertTrue { errorCatalog == errorCatalogGrpc }
     }
 }

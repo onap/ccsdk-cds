@@ -40,36 +40,39 @@ import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [BluePrintGrpcLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+    classes = [
+        BluePrintGrpcLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
     properties =
-    ["blueprintsprocessor.grpcclient.sample.type=basic-auth",
-        "blueprintsprocessor.grpcclient.sample.host=127.0.0.1",
-        "blueprintsprocessor.grpcclient.sample.port=50505",
-        "blueprintsprocessor.grpcclient.sample.username=sampleuser",
-        "blueprintsprocessor.grpcclient.sample.password=sampleuser",
+        [
+            "blueprintsprocessor.grpcclient.sample.type=basic-auth",
+            "blueprintsprocessor.grpcclient.sample.host=127.0.0.1",
+            "blueprintsprocessor.grpcclient.sample.port=50505",
+            "blueprintsprocessor.grpcclient.sample.username=sampleuser",
+            "blueprintsprocessor.grpcclient.sample.password=sampleuser",
 
-        "blueprintsprocessor.grpcclient.token.type=token-auth",
-        "blueprintsprocessor.grpcclient.token.host=127.0.0.1",
-        "blueprintsprocessor.grpcclient.token.port=50505",
-        "blueprintsprocessor.grpcclient.token.username=sampleuser",
-        "blueprintsprocessor.grpcclient.token.password=sampleuser",
+            "blueprintsprocessor.grpcclient.token.type=token-auth",
+            "blueprintsprocessor.grpcclient.token.host=127.0.0.1",
+            "blueprintsprocessor.grpcclient.token.port=50505",
+            "blueprintsprocessor.grpcclient.token.username=sampleuser",
+            "blueprintsprocessor.grpcclient.token.password=sampleuser",
 
-        "blueprintsprocessor.grpcserver.tls-sample.type=tls-auth",
-        "blueprintsprocessor.grpcserver.tls-sample.port=50505",
-        "blueprintsprocessor.grpcserver.tls-sample.certChain=server1.pem",
-        "blueprintsprocessor.grpcserver.tls-sample.privateKey=server1.key",
-        "blueprintsprocessor.grpcserver.tls-sample.trustCertCollection=ca.pem",
+            "blueprintsprocessor.grpcserver.tls-sample.type=tls-auth",
+            "blueprintsprocessor.grpcserver.tls-sample.port=50505",
+            "blueprintsprocessor.grpcserver.tls-sample.certChain=server1.pem",
+            "blueprintsprocessor.grpcserver.tls-sample.privateKey=server1.key",
+            "blueprintsprocessor.grpcserver.tls-sample.trustCertCollection=ca.pem",
 
-        "blueprintsprocessor.grpcclient.tls-sample.type=tls-auth",
-        "blueprintsprocessor.grpcclient.tls-sample.host=127.0.0.1",
-        "blueprintsprocessor.grpcclient.tls-sample.port=50505",
-        "blueprintsprocessor.grpcclient.tls-sample.trustCertCollection=ca.pem",
-        "blueprintsprocessor.grpcclient.tls-sample.clientCertChain=client.pem",
-        "blueprintsprocessor.grpcclient.tls-sample.clientPrivateKey=client.key"
-    ]
+            "blueprintsprocessor.grpcclient.tls-sample.type=tls-auth",
+            "blueprintsprocessor.grpcclient.tls-sample.host=127.0.0.1",
+            "blueprintsprocessor.grpcclient.tls-sample.port=50505",
+            "blueprintsprocessor.grpcclient.tls-sample.trustCertCollection=ca.pem",
+            "blueprintsprocessor.grpcclient.tls-sample.clientCertChain=client.pem",
+            "blueprintsprocessor.grpcclient.tls-sample.clientPrivateKey=client.key"
+        ]
 )
 class BluePrintGrpcLibPropertyServiceTest {
 

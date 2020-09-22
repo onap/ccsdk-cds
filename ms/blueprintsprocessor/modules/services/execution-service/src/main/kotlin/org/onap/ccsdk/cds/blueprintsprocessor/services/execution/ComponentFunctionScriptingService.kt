@@ -44,7 +44,7 @@ class ComponentFunctionScriptingService(
 
         log.info(
             "creating component function of script type($scriptType), reference name($scriptClassReference) and " +
-                    "instanceDependencies($instanceDependencies)"
+                "instanceDependencies($instanceDependencies)"
         )
 
         val scriptComponent: T = scriptInstance(

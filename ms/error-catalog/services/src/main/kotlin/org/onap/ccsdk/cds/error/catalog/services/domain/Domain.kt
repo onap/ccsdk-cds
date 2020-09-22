@@ -17,18 +17,18 @@
 package org.onap.ccsdk.cds.error.catalog.services.domain
 
 import java.io.Serializable
+import java.util.UUID
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
 import javax.persistence.Lob
 import javax.persistence.ManyToMany
 import javax.persistence.Table
 import javax.persistence.UniqueConstraint
-import java.util.UUID
-import javax.persistence.JoinTable
-import javax.persistence.JoinColumn
 
 /**
  *  Provide ErrorCode Entity
@@ -40,6 +40,7 @@ import javax.persistence.JoinColumn
 @Entity
 @Table(name = "ERROR_DOMAINS", uniqueConstraints = [UniqueConstraint(columnNames = ["name", "application_id"])])
 class Domain : Serializable {
+
     @Id
     var id: String = UUID.randomUUID().toString()
 
@@ -71,6 +72,7 @@ class Domain : Serializable {
     }
 
     companion object {
+
         private const val serialVersionUID = 1L
     }
 }

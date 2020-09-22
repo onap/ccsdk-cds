@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component
  */
 @Component
 open class BluePrintCustomIndicator(private val bluePrintProcessorHealthCheck: BluePrintProcessorHealthCheck) :
-        AbstractHealthIndicator() {
+    AbstractHealthIndicator() {
 
     private var logger = LoggerFactory.getLogger(BluePrintCustomIndicator::class.java)
 

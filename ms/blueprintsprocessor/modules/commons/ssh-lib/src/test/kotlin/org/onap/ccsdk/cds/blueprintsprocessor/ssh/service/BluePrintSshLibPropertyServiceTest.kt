@@ -31,17 +31,20 @@ import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
-    classes = [BluePrintSshLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class]
+    classes = [
+        BluePrintSshLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+    ]
 )
 @TestPropertySource(
     properties =
-    ["blueprintsprocessor.sshclient.sample.type=basic-auth",
-        "blueprintsprocessor.sshclient.sample.host=127.0.0.1",
-        "blueprintsprocessor.sshclient.sample.port=22",
-        "blueprintsprocessor.sshclient.sample.password=1234",
-        "blueprintsprocessor.sshclient.sample.username=dummy"
-    ]
+        [
+            "blueprintsprocessor.sshclient.sample.type=basic-auth",
+            "blueprintsprocessor.sshclient.sample.host=127.0.0.1",
+            "blueprintsprocessor.sshclient.sample.port=22",
+            "blueprintsprocessor.sshclient.sample.password=1234",
+            "blueprintsprocessor.sshclient.sample.username=dummy"
+        ]
 )
 class BluePrintSshLibPropertyServiceTest {
 

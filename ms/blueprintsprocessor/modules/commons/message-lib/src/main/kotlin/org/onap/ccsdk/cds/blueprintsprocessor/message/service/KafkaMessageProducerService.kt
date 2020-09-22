@@ -44,6 +44,7 @@ class KafkaMessageProducerService(
     private val messageLoggerService = MessageLoggerService()
 
     companion object {
+
         const val MAX_ERR_MSG_LEN = 128
     }
 
@@ -113,8 +114,8 @@ class KafkaMessageProducerService(
         /** Truncation of error messages */
         var truncErrMsg = executionServiceOutput.status.errorMessage
         if (truncErrMsg != null && truncErrMsg.length > MAX_ERR_MSG_LEN) {
-            truncErrMsg = "${truncErrMsg.substring(0,MAX_ERR_MSG_LEN)}" +
-                    " [...]. Check Blueprint Processor logs for more information."
+            truncErrMsg = "${truncErrMsg.substring(0, MAX_ERR_MSG_LEN)}" +
+                " [...]. Check Blueprint Processor logs for more information."
         }
         /** Truncation for Command Executor responses */
         var truncPayload = executionServiceOutput.payload.deepCopy()

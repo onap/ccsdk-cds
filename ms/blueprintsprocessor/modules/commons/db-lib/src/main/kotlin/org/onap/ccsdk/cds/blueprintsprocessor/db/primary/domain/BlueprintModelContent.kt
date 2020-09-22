@@ -78,9 +78,9 @@ class BlueprintModelContent : Serializable {
 
     override fun toString(): String {
         return "[" + "id = " + id +
-                ", name = " + name +
-                ", contentType = " + contentType +
-                "]"
+            ", name = " + name +
+            ", contentType = " + contentType +
+            "]"
     }
 
     override fun equals(o: Any?): Boolean {
@@ -92,8 +92,10 @@ class BlueprintModelContent : Serializable {
             return false
         }
         val blueprintModelContent = o as BlueprintModelContent?
-        return (id == blueprintModelContent!!.id && name == blueprintModelContent.name &&
-                contentType == blueprintModelContent.contentType)
+        return (
+            id == blueprintModelContent!!.id && name == blueprintModelContent.name &&
+                contentType == blueprintModelContent.contentType
+            )
     }
 
     override fun hashCode(): Int {

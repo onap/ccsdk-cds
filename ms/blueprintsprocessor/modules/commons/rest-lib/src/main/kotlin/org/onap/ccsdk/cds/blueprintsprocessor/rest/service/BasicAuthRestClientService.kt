@@ -26,7 +26,7 @@ import java.util.Base64
 
 class BasicAuthRestClientService(
     private val restClientProperties:
-    BasicAuthRestClientProperties
+        BasicAuthRestClientProperties
 ) :
     BlueprintWebClientService {
 
@@ -49,21 +49,21 @@ class BasicAuthRestClientService(
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>):
-            Array<BasicHeader> {
-        val customHeaders: MutableMap<String, String> = headers.toMutableMap()
-        // inject additionalHeaders
-        customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
+        Array<BasicHeader> {
+            val customHeaders: MutableMap<String, String> = headers.toMutableMap()
+            // inject additionalHeaders
+            customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
 
-        if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
-            val encodedCredentials = setBasicAuth(
-                restClientProperties.username,
-                restClientProperties.password
-            )
-            customHeaders[HttpHeaders.AUTHORIZATION] =
-                "Basic $encodedCredentials"
+            if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
+                val encodedCredentials = setBasicAuth(
+                    restClientProperties.username,
+                    restClientProperties.password
+                )
+                customHeaders[HttpHeaders.AUTHORIZATION] =
+                    "Basic $encodedCredentials"
+            }
+            return super.convertToBasicHeaders(customHeaders)
         }
-        return super.convertToBasicHeaders(customHeaders)
-    }
 
     private fun setBasicAuth(username: String, password: String): String {
         val credentialsString = "$username:$password"

@@ -46,6 +46,7 @@ class ComponentRemoteAnsibleExecutorTest {
     private val webClientService = mockk<BlueprintWebClientService>()
 
     companion object {
+
         private const val jtId = 9
         private const val jobId = 223
 

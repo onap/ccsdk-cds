@@ -125,25 +125,25 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
      * sourceCapability "naming-ms". "naming-type" should be provides as property metadata for
      * each resourceassigment of sourceCapability "naming-ms". It generates below sample payload
      * {
-    "elements": [{
-    "vf-module-name": "${vf-module-name}",
-    "naming-type": "VF-MODULE",
-    "naming-code": "dbc",
-    "vf-module-label": "adsf",
-    "policy-instance-name": "SDNC_Policy.Config_Json.xml",
-    "vnf-name": "vnf-123",
-    "vf-module-type": "base"
-    }, {
-    "vnfc-name": "${vnfc-name}",
-    "naming-type": "VNFC",
-    "naming-code": "dbc",
-    "vf-module-label": "adsf",
-    "policy-instance-name": "SDNC_Policy.Config_Json.xml",
-    "vnf-name": "vnf-123",
-    "vf-module-type": "base"
-    }
-    ]
-    } */
+     "elements": [{
+     "vf-module-name": "${vf-module-name}",
+     "naming-type": "VF-MODULE",
+     "naming-code": "dbc",
+     "vf-module-label": "adsf",
+     "policy-instance-name": "SDNC_Policy.Config_Json.xml",
+     "vnf-name": "vnf-123",
+     "vf-module-type": "base"
+     }, {
+     "vnfc-name": "${vnfc-name}",
+     "naming-type": "VNFC",
+     "naming-code": "dbc",
+     "vf-module-label": "adsf",
+     "policy-instance-name": "SDNC_Policy.Config_Json.xml",
+     "vnf-name": "vnf-123",
+     "vf-module-type": "base"
+     }
+     ]
+     } */
     private fun generatePayload(
         input: Map<String, Any>,
         groupResourceAssignments: MutableList<ResourceAssignment>
@@ -158,7 +158,8 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
             val moduleValue = "\${".plus(moduleName.plus("}"))
 
             val request: MutableMap<String, String> = input.mapValues {
-                    it.value.toString().removeSurrounding("\"") } as MutableMap<String, String>
+                it.value.toString().removeSurrounding("\"")
+            } as MutableMap<String, String>
             if (namingType != null) {
                 request["naming-type"] = namingType
             }

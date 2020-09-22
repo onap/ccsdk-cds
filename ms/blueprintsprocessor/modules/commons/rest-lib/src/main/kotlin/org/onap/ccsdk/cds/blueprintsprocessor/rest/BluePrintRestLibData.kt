@@ -19,12 +19,14 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.rest
 
 open class RestClientProperties {
+
     lateinit var type: String
     lateinit var url: String
     var additionalHeaders: Map<String, String>? = null
 }
 
 open class SSLRestClientProperties : RestClientProperties() {
+
     lateinit var keyStoreInstance: String // JKS, PKCS12
     lateinit var sslTrust: String
     lateinit var sslTrustPassword: String
@@ -46,15 +48,18 @@ open class SSLTokenAuthRestClientProperties : SSLRestClientProperties() {
 }
 
 open class BasicAuthRestClientProperties : RestClientProperties() {
+
     lateinit var password: String
     lateinit var username: String
 }
 
 open class TokenAuthRestClientProperties : RestClientProperties() {
+
     var token: String? = null
 }
 
 open class PolicyManagerRestClientProperties : RestClientProperties() {
+
     lateinit var env: String
     lateinit var clientAuth: String
     lateinit var authorisation: String

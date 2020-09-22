@@ -21,6 +21,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 
 class PortSpeedRAProcessor : ResourceAssignmentProcessor() {
+
     val log = logger(PortSpeedRAProcessor::class)
     override fun getName(): String {
         return "PortSpeedRAProcessor"
@@ -31,6 +32,6 @@ class PortSpeedRAProcessor : ResourceAssignmentProcessor() {
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }

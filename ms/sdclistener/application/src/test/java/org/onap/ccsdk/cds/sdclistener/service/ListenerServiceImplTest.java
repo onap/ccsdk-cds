@@ -50,15 +50,15 @@ import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.Notificati
 import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 
 @RunWith(SpringRunner.class)
-@EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class,
-                                BluePrintProcesssorHandler.class, SdcListenerDto.class, ListenerServiceImpl.class, SdcListenerStatus.class,
-                                SdcListenerConfiguration.class})
+@EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class, BluePrintProcesssorHandler.class,
+        SdcListenerDto.class, ListenerServiceImpl.class, SdcListenerStatus.class, SdcListenerConfiguration.class})
 @SpringBootTest(classes = {ListenerServiceImplTest.class})
 public class ListenerServiceImplTest {
 
     private static final String CSAR_SAMPLE = "src/test/resources/service-ServicePnfTest-csar.csar";
     private static final String WRONG_CSAR_SAMPLE = "src/test/resources/wrong_csar_pattern.csar";
-    private static final String CBA_ZIP_PATH = "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
+    private static final String CBA_ZIP_PATH =
+            "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
     private static final String ZIP_FILE = ".zip";
     private static final String CSAR_FILE = ".csar";
     private static final String DISTRIBUTION_ID = "1";
@@ -104,15 +104,15 @@ public class ListenerServiceImplTest {
         // Arrange
         Mockito.when(listenerDto.getDistributionId()).thenReturn(DISTRIBUTION_ID);
         Mockito.when(listenerDto.getArtifactUrl()).thenReturn(URL);
-        Mockito.doCallRealMethod().when(status)
-                .sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL, SDC_LISTENER_COMPONENT);
+        Mockito.doCallRealMethod().when(status).sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL,
+                SDC_LISTENER_COMPONENT);
 
         // Act
         listenerService.extractBluePrint(WRONG_CSAR_SAMPLE, tempDirectoryPath.toString());
 
         // Verify
-        Mockito.verify(status)
-                .sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL, SDC_LISTENER_COMPONENT);
+        Mockito.verify(status).sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL,
+                SDC_LISTENER_COMPONENT);
     }
 
     @Test
@@ -129,12 +129,7 @@ public class ListenerServiceImplTest {
     }
 
     private String checkFileExists(Path path) throws IOException {
-        return Files.walk(path)
-                .filter(Files :: isRegularFile)
-                .map(Path :: toFile)
-                .findAny()
-                .get()
-                .getName();
+        return Files.walk(path).filter(Files::isRegularFile).map(Path::toFile).findAny().get().getName();
     }
 
     public byte[] convertFileToByteArray(File file) {
@@ -146,11 +141,10 @@ public class ListenerServiceImplTest {
         return null;
     }
 
-    public class DistributionClientDownloadResultStubImpl extends DistributionClientResultStubImpl implements
-            IDistributionClientDownloadResult {
+    public class DistributionClientDownloadResultStubImpl extends DistributionClientResultStubImpl
+            implements IDistributionClientDownloadResult {
 
-        public DistributionClientDownloadResultStubImpl() {
-        }
+        public DistributionClientDownloadResultStubImpl() {}
 
         public byte[] getArtifactPayload() {
             File file = Paths.get(CSAR_SAMPLE).toFile();

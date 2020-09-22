@@ -27,11 +27,13 @@ enum class ModifyAction(val action: String) {
 }
 
 object RpcStatus {
+
     const val SUCCESS = "success"
     const val FAILURE = "failure"
 }
 
 object RpcMessageUtils {
+
     const val OPEN = "<"
     const val CLOSE = ">"
     const val EQUAL = "="

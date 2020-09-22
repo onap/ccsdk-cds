@@ -45,6 +45,7 @@ import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit
 
 interface RemoteScriptExecutionService {
+
     suspend fun init(selector: Any)
     suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput
     suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput): RemoteScriptExecutionOutput

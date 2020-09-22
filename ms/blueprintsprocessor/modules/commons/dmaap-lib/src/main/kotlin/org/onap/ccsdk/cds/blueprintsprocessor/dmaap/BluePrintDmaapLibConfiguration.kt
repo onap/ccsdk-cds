@@ -39,8 +39,9 @@ open class BluePrintDmaapLibConfiguration
 class DmaapLibConstants {
 
     companion object {
+
         const val SERVICE_BLUEPRINT_DMAAP_LIB_PROPERTY = "blueprint" +
-                "-dmaap-lib-property-service"
+            "-dmaap-lib-property-service"
         const val TYPE_HTTP_NO_AUTH = "HTTPNOAUTH"
         const val TYPE_HTTP_AAF_AUTH = "HTTPAAF"
     }

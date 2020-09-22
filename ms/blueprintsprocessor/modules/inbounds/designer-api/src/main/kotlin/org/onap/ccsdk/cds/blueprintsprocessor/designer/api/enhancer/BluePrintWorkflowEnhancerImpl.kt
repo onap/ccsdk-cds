@@ -48,6 +48,7 @@ open class BluePrintWorkflowEnhancerImpl(
     private val log = logger(BluePrintWorkflowEnhancerImpl::class)
 
     companion object {
+
         const val ARTIFACT_TYPE_MAPPING_SOURCE: String = "artifact-mapping-resource"
         const val PROPERTY_DEPENDENCY_NODE_TEMPLATES = "dependency-node-templates"
     }
@@ -109,7 +110,7 @@ open class BluePrintWorkflowEnhancerImpl(
             else -> {
                 throw BluePrintProcessorException(
                     "couldn't execute workflow($name) step mapped " +
-                            "to node template($firstNodeTemplateName) derived from($derivedFrom)"
+                        "to node template($firstNodeTemplateName) derived from($derivedFrom)"
                 )
             }
         }
@@ -139,11 +140,11 @@ open class BluePrintWorkflowEnhancerImpl(
 
             val resourceAssignmentArtifacts = bluePrintContext.nodeTemplateByName(componentNodeTemplateName)
                 .artifacts?.filter {
-                it.value.type == ARTIFACT_TYPE_MAPPING_SOURCE
-            }?.map {
-                log.info("resource assignment artifacts(${it.key}) for NodeType($componentNodeTemplateName)")
-                it.value.file
-            }
+                    it.value.type == ARTIFACT_TYPE_MAPPING_SOURCE
+                }?.map {
+                    log.info("resource assignment artifacts(${it.key}) for NodeType($componentNodeTemplateName)")
+                    it.value.file
+                }
             resourceAssignmentArtifacts
         }?.flatten()
 
@@ -173,7 +174,7 @@ open class BluePrintWorkflowEnhancerImpl(
         val resourceAssignmentProperties: MutableMap<String, PropertyDefinition> = hashMapOf()
 
         val resourceAssignments: MutableList<ResourceAssignment> = JacksonUtils.getListFromFile(filePath, ResourceAssignment::class.java)
-                as? MutableList<ResourceAssignment>
+            as? MutableList<ResourceAssignment>
             ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
 
         val alreadyEnhancedKey = "enhanced-$fileName"

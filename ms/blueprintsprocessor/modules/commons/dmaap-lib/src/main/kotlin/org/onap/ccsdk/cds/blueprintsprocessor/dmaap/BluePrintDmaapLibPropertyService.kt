@@ -70,21 +70,21 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintPropertiesServi
      * node.
      */
     fun blueprintDmaapClientService(jsonNode: JsonNode):
-            BluePrintDmaapClientService {
-        val dmaapProps = dmaapClientProperties(jsonNode)
-        return blueprintDmaapClientService(dmaapProps)
-    }
+        BluePrintDmaapClientService {
+            val dmaapProps = dmaapClientProperties(jsonNode)
+            return blueprintDmaapClientService(dmaapProps)
+        }
 
     /**
      * Returns the DMAAP client by providing the input properties as a
      * selector string.
      */
     fun blueprintDmaapClientService(selector: String):
-            BluePrintDmaapClientService {
-        val prefix = "blueprintsprocessor.dmaapclient.$selector"
-        val dmaapProps = dmaapClientProperties(prefix)
-        return blueprintDmaapClientService(dmaapProps)
-    }
+        BluePrintDmaapClientService {
+            val prefix = "blueprintsprocessor.dmaapclient.$selector"
+            val dmaapProps = dmaapClientProperties(prefix)
+            return blueprintDmaapClientService(dmaapProps)
+        }
 
     /**
      * Returns the DMAAP client properties from the type of connection it
@@ -114,7 +114,7 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintPropertiesServi
             else -> {
                 throw BluePrintProcessorException(
                     "DMAAP adaptor($type) is " +
-                            "not supported"
+                        "not supported"
                 )
             }
         }
@@ -149,7 +149,7 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintPropertiesServi
             else -> {
                 throw BluePrintProcessorException(
                     "DMAAP adaptor($type) is " +
-                            "not supported"
+                        "not supported"
                 )
             }
         }
@@ -160,24 +160,24 @@ open class BluePrintDmaapLibPropertyService(private var bluePrintPropertiesServi
      * Returns DMAAP client service according to the type of client properties.
      */
     private fun blueprintDmaapClientService(clientProps: DmaapClientProperties):
-            BluePrintDmaapClientService {
-        when (clientProps) {
-            is HttpNoAuthDmaapClientProperties -> {
-                return HttpNoAuthDmaapClientService(clientProps)
-            }
+        BluePrintDmaapClientService {
+            when (clientProps) {
+                is HttpNoAuthDmaapClientProperties -> {
+                    return HttpNoAuthDmaapClientService(clientProps)
+                }
 
-            is AafAuthDmaapClientProperties -> {
-                return AafAuthDmaapClientService(clientProps)
-            }
+                is AafAuthDmaapClientProperties -> {
+                    return AafAuthDmaapClientService(clientProps)
+                }
 
-            else -> {
-                throw BluePrintProcessorException(
-                    "Unable to get the DMAAP " +
+                else -> {
+                    throw BluePrintProcessorException(
+                        "Unable to get the DMAAP " +
                             "client"
-                )
+                    )
+                }
             }
         }
-    }
 
     /**
      * Parses the event.properties file which contains the default values for

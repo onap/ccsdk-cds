@@ -165,7 +165,7 @@ abstract class AbstractMessagePrioritizationService(
         if (!messages.isNullOrEmpty()) {
             try {
                 /** Implement Aggregation logic in overridden class, If necessary,
-                Populate New Message and Update status with Prioritized, Forward the message to next processor */
+                 Populate New Message and Update status with Prioritized, Forward the message to next processor */
                 handleAggregation(messages)
             } catch (e: Exception) {
                 val error = "failed in aggregate message(${messages.ids()}) : ${e.message}"
@@ -180,7 +180,8 @@ abstract class AbstractMessagePrioritizationService(
                         } catch (sendException: Exception) {
                             log.error(
                                 "failed to update/publish error message(${messagePrioritization.id}) : " +
-                                    "${sendException.message}", e
+                                    "${sendException.message}",
+                                e
                             )
                         }
                     }

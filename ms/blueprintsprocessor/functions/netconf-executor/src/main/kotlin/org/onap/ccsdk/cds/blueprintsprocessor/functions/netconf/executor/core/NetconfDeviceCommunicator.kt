@@ -120,6 +120,7 @@ class NetconfDeviceCommunicator(
     internal enum class NetconfMessageState {
 
         NO_MATCHING_PATTERN {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
                     ']' -> FIRST_BRACKET
@@ -129,6 +130,7 @@ class NetconfDeviceCommunicator(
             }
         },
         FIRST_BRACKET {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
                     ']' -> SECOND_BRACKET
@@ -137,6 +139,7 @@ class NetconfDeviceCommunicator(
             }
         },
         SECOND_BRACKET {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
                     '>' -> FIRST_BIGGER
@@ -145,6 +148,7 @@ class NetconfDeviceCommunicator(
             }
         },
         FIRST_BIGGER {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
                     ']' -> THIRD_BRACKET
@@ -153,6 +157,7 @@ class NetconfDeviceCommunicator(
             }
         },
         THIRD_BRACKET {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
                     ']' -> ENDING_BIGGER
@@ -161,6 +166,7 @@ class NetconfDeviceCommunicator(
             }
         },
         ENDING_BIGGER {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
                     '>' -> END_PATTERN
@@ -169,6 +175,7 @@ class NetconfDeviceCommunicator(
             }
         },
         FIRST_LF {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
                     '#' -> FIRST_HASH
@@ -179,6 +186,7 @@ class NetconfDeviceCommunicator(
             }
         },
         FIRST_HASH {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
                     '#' -> SECOND_HASH
@@ -187,6 +195,7 @@ class NetconfDeviceCommunicator(
             }
         },
         SECOND_HASH {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return when (c) {
                     '\n' -> END_CHUNKED_PATTERN
@@ -195,11 +204,13 @@ class NetconfDeviceCommunicator(
             }
         },
         END_CHUNKED_PATTERN {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return NO_MATCHING_PATTERN
             }
         },
         END_PATTERN {
+
             override fun evaluateChar(c: Char): NetconfMessageState {
                 return NO_MATCHING_PATTERN
             }

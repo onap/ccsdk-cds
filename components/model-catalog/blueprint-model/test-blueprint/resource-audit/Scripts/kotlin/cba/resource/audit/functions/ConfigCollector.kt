@@ -44,13 +44,15 @@ class ConfigCollector : AbstractScriptComponentFunction() {
 
         // Set the Attributes
         setAttribute(ComponentScriptExecutor.ATTRIBUTE_STATUS, BluePrintConstants.STATUS_SUCCESS.asJsonPrimitive())
-        setAttribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA, """{
+        setAttribute(
+            ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA,
+            """{
                       "port-speed" : "10MBS"
-        }""".trimIndent().jsonAsJsonType())
-
+        }
+            """.trimIndent().jsonAsJsonType()
+        )
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-
     }
 }

@@ -44,7 +44,8 @@ class ComponentRemotePythonExecutorDSLTest {
                         "prop1" : "1234",
                         "prop2" : true,
                         "prop3" : 23
-                    }""".trimIndent()
+                    }
+                        """.trimIndent()
                     )
                     argumentProperties("""["one", "two"]""")
                     packages {
