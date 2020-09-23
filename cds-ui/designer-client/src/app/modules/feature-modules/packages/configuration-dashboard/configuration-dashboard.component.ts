@@ -46,6 +46,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     metadataClasses = 'nav-item nav-link active';
     private cbaPackage: CBAPackage = new CBAPackage();
+    dataTarget: any = '';
 
     constructor(
         private route: ActivatedRoute,
@@ -159,8 +160,14 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
             }
             this.packageCreationStore.changeDslDefinition(dslDefinition);
             this.packageCreationStore.setCustomKeys(mapOfCustomKeys);
-            if (definition.topology_template && definition.topology_template.content) {
-                this.designerStore.saveSourceContent(definition.topology_template.content);
+            if (definition.topology_template) {
+                const content = {};
+                const workflow = 'workflows';
+                content[workflow] = definition.topology_template.workflows;
+                const nodeTemplates = 'node_templates';
+                content[nodeTemplates] = definition.topology_template.node_templates;
+                this.designerStore.saveSourceContent(JSON.stringify(content));
+                this.packageCreationStore.addTopologyTemplate(definition.topology_template);
             }
 
         }
@@ -274,7 +281,6 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     }
 
     goToDesignerMode(id) {
-
         this.router.navigate(['/packages/designer', id, {actionName: this.customActionName}]);
     }
 
@@ -344,4 +350,12 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         return this.isSaveEnabled;
     }
 
+    checkSkipTypesOfAction() {
+       
+        if (this.cbaPackage.templateTopology.node_templates && this.cbaPackage.templateTopology.workflows) {
+            this.goToDesignerMode(this.id);
+        } else {
+            this.dataTarget = '#exampleModalLong';
+        }
+    }
 }
