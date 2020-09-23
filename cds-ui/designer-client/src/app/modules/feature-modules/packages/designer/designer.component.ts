@@ -38,7 +38,7 @@ import {FunctionsStore} from './functions.store';
 import {Subject} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DesignerService} from './designer.service';
 import {FilesContent, FolderNodeElement} from '../package-creation/mapping-models/metadata/MetaDataTab.model';
 import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
@@ -49,6 +49,8 @@ import {PackageCreationUtils} from '../package-creation/package-creation.utils';
 import * as JSZip from 'jszip';
 import {PackageCreationExtractionService} from '../package-creation/package-creation-extraction.service';
 import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
+import {TopologyTemplate} from './model/designer.topologyTemplate.model';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
     selector: 'app-designer',
@@ -77,6 +79,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     folder: FolderNodeElement = new FolderNodeElement();
     zipFile: JSZip = new JSZip();
     private cbaPackage: CBAPackage;
+    private actions: string[] = [];
 
     constructor(
         private designerStore: DesignerStore,
@@ -86,9 +89,11 @@ export class DesignerComponent implements OnInit, OnDestroy {
         private graphUtil: GraphUtil,
         private graphGenerator: GraphGenerator,
         private route: ActivatedRoute,
+        private router: Router,
         private designerService: DesignerService,
         private packageCreationService: PackageCreationService,
-        private packageCreationExtractionService: PackageCreationExtractionService) {
+        private packageCreationExtractionService: PackageCreationExtractionService,
+        private toastService: ToastrService) {
         this.controllerSideBar = true;
         this.attributesSideBar = false;
         this.showAction = false;
@@ -152,7 +157,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
             this.cbaPackage = cba;
             console.log(cba.templateTopology.content);
             this.designerStore.saveSourceContent(cba.templateTopology.content);
+
         });
+
         /**
          * the code to retrieve from server is commented
          */
@@ -186,9 +193,10 @@ export class DesignerComponent implements OnInit, OnDestroy {
                 if (state.sourceContent) {
                     console.log('inside desinger.component---> ', state);
                     // generate graph from store objects if exist
-                    const topologtTemplate = JSON.parse(state.sourceContent);
+                    const topologtTemplate: TopologyTemplate = JSON.parse(state.sourceContent);
                     console.log(topologtTemplate);
                     delete state.sourceContent;
+                    this.graphGenerator.clear(this.boardGraph);
                     this.graphGenerator.populate(topologtTemplate, this.boardGraph);
 
                     console.log('all cells', this.boardGraph.getCells());
@@ -205,6 +213,11 @@ export class DesignerComponent implements OnInit, OnDestroy {
                         clusterPadding: {top: 100, left: 30, right: 10, bottom: 100},
                         rankDir: 'TB'
                     });
+                    for (const workflowsKey in topologtTemplate.workflows) {
+                        if (workflowsKey && !this.actions.includes(workflowsKey)) {
+                            this.actions.push(workflowsKey);
+                        }
+                    }
                 }
             });
 
@@ -430,9 +443,12 @@ export class DesignerComponent implements OnInit, OnDestroy {
             .then(blob => {
                 this.packageCreationService.savePackage(blob).subscribe(
                     bluePrintDetailModels => {
+                        this.toastService.info('success updating the package');
+                        const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
+                        this.router.navigate(['/packages/designer/' + id]);
                         console.log('success');
                     }, error => {
-                        // this.toastService.error('error happened when editing ' + error.message);
+                        this.toastService.error('error happened when editing ' + error.message);
                         console.log('Error -' + error.message);
                     });
             });
