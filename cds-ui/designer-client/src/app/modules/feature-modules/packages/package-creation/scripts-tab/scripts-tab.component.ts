@@ -24,6 +24,7 @@ export class ScriptsTabComponent implements OnInit {
 
 
     ngOnInit() {
+
         this.packageCreationStore.state$.subscribe(cbaPackage => {
             if (cbaPackage.scripts && cbaPackage.scripts.files && cbaPackage.scripts.files.size > 0) {
                 this.scriptsFiles = cbaPackage.scripts.files;

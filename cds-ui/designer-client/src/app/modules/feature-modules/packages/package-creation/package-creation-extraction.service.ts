@@ -13,18 +13,23 @@ import {DesignerStore} from '../designer/designer.store';
 })
 export class PackageCreationExtractionService {
 
-    zipFile: JSZip = new JSZip();
-    entryDefinitionKeys: string[] = ['template_tags', 'user-groups',
+    private zipFile: JSZip = new JSZip();
+    private entryDefinitionKeys: string[] = ['template_tags', 'user-groups',
         'author-email', 'template_version', 'template_name', 'template_author', 'template_description'];
+
+    private toscaMetaDataKeys: string[] = ['TOSCA-Meta-File-Version', 'CSAR-Version',
+        'Created-By', 'Entry-Definitions', 'Template-Name', 'Template-Version', 'Template-Type', 'Template-Tags'];
     @ViewChild(MetadataTabComponent, {static: false})
-    metadataTabComponent: MetadataTabComponent;
+    private metadataTabComponent: MetadataTabComponent;
 
     constructor(private packageCreationStore: PackageCreationStore,
                 private packageCreationUtils: PackageCreationUtils,
                 private designerStore: DesignerStore) {
+
     }
 
     public extractBlobToStore(blob) {
+
         let packageName = null;
         this.zipFile.loadAsync(blob).then((zip) => {
             Object.keys(zip.files).filter(fileName => fileName.includes('TOSCA-Metadata/'))
@@ -32,6 +37,7 @@ export class PackageCreationExtractionService {
                     zip.files[filename].async('string').then((fileData) => {
                         if (fileData) {
                             if (filename.includes('TOSCA-Metadata/')) {
+
                                 const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
                                 packageName = metaDataTabInfo.name;
                                 this.setMetaData(metaDataTabInfo);
@@ -65,11 +71,11 @@ export class PackageCreationExtractionService {
         });
     }
 
-    setScripts(filename: string, fileData: any) {
+    private setScripts(filename: string, fileData: any) {
         this.packageCreationStore.addScripts(filename, fileData);
     }
 
-    setImports(filename: string, fileData: any, packageName: string) {
+    private setImports(filename: string, fileData: any, packageName: string) {
         console.log(filename);
         if (filename.includes(packageName)) {
             let definition = new VlbDefinition();
@@ -86,37 +92,48 @@ export class PackageCreationExtractionService {
             this.packageCreationStore.changeDslDefinition(dslDefinition);
             this.packageCreationStore.setCustomKeys(mapOfCustomKeys);
             this.setPackageDescription(definition.metadata.template_description);
-            if (definition.topology_template && definition.topology_template.content) {
-                this.designerStore.saveSourceContent(definition.topology_template.content);
-            }
+            console.log(definition);
+            console.log(definition.topology_template);
+            const content = {};
+            const workflow = 'workflows';
+            content[workflow] = definition.topology_template.workflows;
+            const nodeTemplates = 'node_templates';
+            content[nodeTemplates] = definition.topology_template.node_templates;
+            this.designerStore.saveSourceContent(JSON.stringify(content));
 
         }
         this.packageCreationStore.addDefinition(filename, fileData);
 
     }
 
-    setTemplates(filename: string, fileData: any) {
+    private setTemplates(filename: string, fileData: any) {
         this.packageCreationStore.addTemplate(filename, fileData);
     }
 
-    setMapping(fileName: string, fileData: string) {
+    private setMapping(fileName: string, fileData: string) {
         this.packageCreationStore.addMapping(fileName, fileData);
     }
 
-    setMetaData(metaDataObject: MetaDataTabModel) {
+    private setMetaData(metaDataObject: MetaDataTabModel) {
         this.packageCreationStore.changeMetaData(metaDataObject);
     }
 
-    getMetaDataTabInfo(fileData: string) {
+    private getMetaDataTabInfo(fileData: string) {
         const metaDataTabModel = new MetaDataTabModel();
+
         const arrayOfLines = fileData.split('\n');
-        metaDataTabModel.entryFileName = arrayOfLines[3].split(':')[1];
-        metaDataTabModel.name = arrayOfLines[4].split(':')[1];
-        metaDataTabModel.version = arrayOfLines[5].split(':')[1];
-        metaDataTabModel.mode = arrayOfLines[6].split(':')[1];
-        console.log(arrayOfLines[7]);
-        if (arrayOfLines[7].split(':')) {
-            metaDataTabModel.templateTags = new Set<string>(arrayOfLines[7].split(':')[1].split(','));
+        const map = new Map<string, string>();
+        for (const currentLine of arrayOfLines) {
+            const currentKey = currentLine.split(':')[0];
+            const currentValue = currentLine.split(':')[1];
+            map.set(currentKey, currentValue);
+        }
+        metaDataTabModel.entryFileName = map.get(this.toscaMetaDataKeys[3]);
+        metaDataTabModel.name = map.get(this.toscaMetaDataKeys[4]);
+        metaDataTabModel.version = map.get(this.toscaMetaDataKeys[5]).trim();
+        metaDataTabModel.mode = map.get(this.toscaMetaDataKeys[6]);
+        if (map.get(this.toscaMetaDataKeys[7])) {
+            metaDataTabModel.templateTags = new Set<string>(map.get(this.toscaMetaDataKeys[7]).split(','));
         }
         return metaDataTabModel;
     }

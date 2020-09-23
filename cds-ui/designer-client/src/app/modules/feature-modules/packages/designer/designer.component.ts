@@ -47,6 +47,7 @@ import {PackageCreationStore} from '../package-creation/package-creation.store';
 import {PackageCreationService} from '../package-creation/package-creation.service';
 import {PackageCreationUtils} from '../package-creation/package-creation.utils';
 import * as JSZip from 'jszip';
+import {PackageCreationExtractionService} from '../package-creation/package-creation-extraction.service';
 import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
 
 @Component({
@@ -75,6 +76,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     filesData: any = [];
     folder: FolderNodeElement = new FolderNodeElement();
     zipFile: JSZip = new JSZip();
+    private cbaPackage: CBAPackage;
 
     constructor(
         private designerStore: DesignerStore,
@@ -85,7 +87,8 @@ export class DesignerComponent implements OnInit, OnDestroy {
         private graphGenerator: GraphGenerator,
         private route: ActivatedRoute,
         private designerService: DesignerService,
-        private packageCreationService: PackageCreationService) {
+        private packageCreationService: PackageCreationService,
+        private packageCreationExtractionService: PackageCreationExtractionService) {
         this.controllerSideBar = true;
         this.attributesSideBar = false;
         this.showAction = false;
@@ -137,8 +140,19 @@ export class DesignerComponent implements OnInit, OnDestroy {
             (bluePrintDetailModels) => {
                 if (bluePrintDetailModels) {
                     this.viewedPackage = bluePrintDetailModels[0];
+                    this.packageCreationService.downloadPackage(this.viewedPackage.artifactName + '/'
+                        + this.viewedPackage.artifactVersion)
+                        .subscribe(response => {
+                            const blob = new Blob([response], {type: 'application/octet-stream'});
+                            this.packageCreationExtractionService.extractBlobToStore(blob);
+                        });
                 }
             });
+        this.packageCreationStore.state$.subscribe(cba => {
+            this.cbaPackage = cba;
+            console.log(cba.templateTopology.content);
+            this.designerStore.saveSourceContent(cba.templateTopology.content);
+        });
         /**
          * the code to retrieve from server is commented
          */
@@ -386,17 +400,16 @@ export class DesignerComponent implements OnInit, OnDestroy {
     }
 
     saveBluePrint() {
-        let cbaPackage: CBAPackage = JSON.parse(sessionStorage.getItem('cba'));
-        console.log(cbaPackage);
+
         FilesContent.clear();
         let packageCreationModes: PackageCreationModes;
-        cbaPackage = PackageCreationModes.mapModeType(cbaPackage);
-        cbaPackage.metaData = PackageCreationModes.setEntryPoint(cbaPackage.metaData);
-        packageCreationModes = PackageCreationBuilder.getCreationMode(cbaPackage);
+        this.cbaPackage = PackageCreationModes.mapModeType(this.cbaPackage);
+        this.cbaPackage.metaData = PackageCreationModes.setEntryPoint(this.cbaPackage.metaData);
+        packageCreationModes = PackageCreationBuilder.getCreationMode(this.cbaPackage);
         this.designerStore.state$.subscribe(state => {
-            cbaPackage.templateTopology.content = this.packageCreationUtils.transformToJson(state.template);
+            this.cbaPackage.templateTopology.content = this.packageCreationUtils.transformToJson(state.template);
         });
-        packageCreationModes.execute(cbaPackage, this.packageCreationUtils);
+        packageCreationModes.execute(this.cbaPackage, this.packageCreationUtils);
         this.filesData.push(this.folder.TREE_DATA);
         this.saveBluePrintToDataBase();
 

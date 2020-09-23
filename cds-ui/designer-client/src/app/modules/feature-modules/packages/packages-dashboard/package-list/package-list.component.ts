@@ -39,10 +39,6 @@ export class PackageListComponent implements OnInit {
 
     ngOnInit() {
         this.packagesStore.getAll();
-
-
-
-
     }
 
     view(id) {

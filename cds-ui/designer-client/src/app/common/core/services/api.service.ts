@@ -48,4 +48,8 @@ export class ApiService {
 
         return this.httpClient.post(url, body, options);
     }
+
+    getCustomized(url: string, params?: any): Observable<any> {
+        return this.httpClient.get(url, params);
+    }
 }

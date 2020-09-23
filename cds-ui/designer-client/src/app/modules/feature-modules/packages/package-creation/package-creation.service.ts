@@ -42,7 +42,7 @@ export class PackageCreationService {
     }
 
     private enrichBlueprint(body: any | null, options?: any): Observable<any> {
-        return this.api.post(BlueprintURLs.enrich, body, { responseType: 'blob' });
+        return this.api.post(BlueprintURLs.enrich, body, {responseType: 'blob'});
     }
 
     private deployBluePrint(body: any | null, options?: any): Observable<any> {
@@ -83,7 +83,9 @@ export class PackageCreationService {
         return this.api.post(ResourceDictionaryURLs.searchResourceDictionaryByNames, variables);
     }
 
-
+    downloadPackage(id) {
+        return this.api.getCustomized(BlueprintURLs.download + id, {responseType: 'blob'});
+    }
 
 
 }
