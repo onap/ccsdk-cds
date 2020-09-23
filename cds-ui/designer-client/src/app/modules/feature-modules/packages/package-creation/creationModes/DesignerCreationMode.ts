@@ -74,15 +74,22 @@ export class DesignerCreationMode extends PackageCreationModes {
         metadata.template_tags = fullTags;
         vlbDefinition.metadata = metadata;
         const files: Import[] = [];
+        let insideVlbDefinition: VlbDefinition = null;
         if (cbaPackage.definitions.imports && cbaPackage.definitions.imports.size > 0) {
             cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
                 if (!key.includes(cbaPackage.metaData.name)) {
                     files.push({file: key});
+                } else {
+                    // it means this is entry definition
+                    insideVlbDefinition = JSON.parse(valueOfFile);
                 }
             });
         }
         console.log(vlbDefinition);
         vlbDefinition.imports = files;
+        if (insideVlbDefinition && insideVlbDefinition.topology_template) {
+            vlbDefinition.topology_template = insideVlbDefinition.topology_template;
+        }
         console.log(cbaPackage.definitions.dslDefinition.content);
         if (cbaPackage.definitions.dslDefinition.content) {
             vlbDefinition.dsl_definitions = JSON.parse(cbaPackage.definitions.dslDefinition.content);
