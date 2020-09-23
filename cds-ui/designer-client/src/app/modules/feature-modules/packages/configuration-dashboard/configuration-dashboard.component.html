@@ -167,8 +167,8 @@
                             </button> -->
                             <!-- Button trigger modal - 1st Action -->
 
-                            <button type="button" class="btn btn-sm btn-primary mb-2" data-toggle="modal"
-                                    data-target="#exampleModalLong">
+                            <button (click)="checkSkipTypesOfAction()" type="button" class="btn btn-sm btn-primary mb-2" data-toggle="modal"
+                                    [attr.data-target]="dataTarget">
                                 <i class="icon-topologyView-active"></i> Designer Mode
                             </button>
                             <!-- Designer Modal -->

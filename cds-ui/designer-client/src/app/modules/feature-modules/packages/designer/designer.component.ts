@@ -49,6 +49,7 @@ import {PackageCreationUtils} from '../package-creation/package-creation.utils';
 import * as JSZip from 'jszip';
 import {PackageCreationExtractionService} from '../package-creation/package-creation-extraction.service';
 import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
+import {TopologyTemplate} from './model/designer.topologyTemplate.model';
 
 @Component({
     selector: 'app-designer',
@@ -77,6 +78,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     folder: FolderNodeElement = new FolderNodeElement();
     zipFile: JSZip = new JSZip();
     private cbaPackage: CBAPackage;
+    private actions: string[] = [];
 
     constructor(
         private designerStore: DesignerStore,
@@ -152,7 +154,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
             this.cbaPackage = cba;
             console.log(cba.templateTopology.content);
             this.designerStore.saveSourceContent(cba.templateTopology.content);
+
         });
+
         /**
          * the code to retrieve from server is commented
          */
@@ -186,9 +190,10 @@ export class DesignerComponent implements OnInit, OnDestroy {
                 if (state.sourceContent) {
                     console.log('inside desinger.component---> ', state);
                     // generate graph from store objects if exist
-                    const topologtTemplate = JSON.parse(state.sourceContent);
+                    const topologtTemplate: TopologyTemplate = JSON.parse(state.sourceContent);
                     console.log(topologtTemplate);
                     delete state.sourceContent;
+                    this.graphGenerator.clear(this.boardGraph);
                     this.graphGenerator.populate(topologtTemplate, this.boardGraph);
 
                     console.log('all cells', this.boardGraph.getCells());
@@ -205,6 +210,11 @@ export class DesignerComponent implements OnInit, OnDestroy {
                         clusterPadding: {top: 100, left: 30, right: 10, bottom: 100},
                         rankDir: 'TB'
                     });
+                    for (let workflowsKey in topologtTemplate.workflows) {
+                        if (workflowsKey && !this.actions.includes(workflowsKey)) {
+                            this.actions.push(workflowsKey);
+                        }
+                    }
                 }
             });
 
