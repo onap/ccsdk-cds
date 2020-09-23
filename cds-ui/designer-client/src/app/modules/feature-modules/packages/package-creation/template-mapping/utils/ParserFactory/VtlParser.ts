@@ -1,6 +1,7 @@
 import { Parser } from './Parser';
 
 export class VtlParser implements Parser {
+    variables: Set<string> = new Set();
     getVariables(fileContent: string): string[] {
         const variables: string[] = [];
         const stringsSlittedByBraces = fileContent.split('${');
@@ -29,7 +30,8 @@ export class VtlParser implements Parser {
                 }
             }
         }
-        return variables;
+        this.variables = new Set(variables);
+        return [...variables];
     }
 
 }
