@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -95,6 +97,7 @@ class ExecutionServiceHandlerTest {
                 blueprintVersion = "1.0.0"
                 actionName = "mock-service-action"
             }
+            payload = ObjectMapper().readTree("{}") as ObjectNode
         }
 
         val publishAuditService = mockk<KafkaPublishAuditService>(relaxed = true)
