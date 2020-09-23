@@ -92,6 +92,7 @@ class ExecutionServiceHandler(
         lateinit var executionServiceOutput: ExecutionServiceOutput
 
         log.info("processing request id $requestId")
+        log.info("payload ${executionServiceInput.payload}")
 
         publishAuditService.publishExecutionInput(executionServiceInput)
 
