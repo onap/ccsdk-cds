@@ -18,10 +18,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
 */
-import { TopologyTemplate } from './model/designer.topologyTemplate.model';
-import { Injectable } from '@angular/core';
-import { GraphUtil } from './graph.util';
-import { NodeTemplate } from './model/desinger.nodeTemplate.model';
+import {TopologyTemplate} from './model/designer.topologyTemplate.model';
+import {Injectable} from '@angular/core';
+import {GraphUtil} from './graph.util';
 
 @Injectable({
     providedIn: 'root'
@@ -29,6 +28,10 @@ import { NodeTemplate } from './model/desinger.nodeTemplate.model';
 export class GraphGenerator {
 
     constructor(private graphUtil: GraphUtil) {
+    }
+
+    clear(boardGraph: joint.dia.Graph) {
+        boardGraph.clear();
     }
 
     /**
@@ -79,7 +82,7 @@ export class GraphGenerator {
 
             // create action element
             const actionElement =
-                    this.graphUtil.createCustomActionWithName(workFlowName, boardGraph);
+                this.graphUtil.createCustomActionWithName(workFlowName, boardGraph);
 
             // create board function elements
             const workflow = topologyTempalte.workflows[workFlowName].steps;
@@ -91,7 +94,7 @@ export class GraphGenerator {
 
                 this.graphUtil.dropFunctionOverActionRelativeToParent(
                     actionElement,
-                    stepName , functionType, boardGraph);
+                    stepName, functionType, boardGraph);
 
                 // TODO handle dg-generic case (multi-step in the same action)
                 if (functionType === 'dg-generic') {
