@@ -4,7 +4,7 @@
 .. Copyright (C) 2020 Deutsche Telekom AG.
 
 Modeling Concepts
-==================
+=================
 
 CDS is a framework to automate the **resolution of resources** for
 **instantiation** and any **config** provisioning operation, such as
@@ -29,11 +29,11 @@ can be found
    :caption: Table of Contents
    :maxdepth: 1
 
-   CBA <cba>
+   cba
    Tosca.Meta <tosca-meta>
    dynamic-payload
    enrichment
-   Flexible Plug-in <flexible-plug-in>
+   external-system
    expression
    data-dictionary
    data-type

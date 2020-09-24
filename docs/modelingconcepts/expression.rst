@@ -7,7 +7,7 @@
 .. _expression:
 
 Expression
--------------------------------------
+----------
 
 TOSCA provides for a set of functions to reference elements within the template or to retrieve runtime values.
 
@@ -19,54 +19,56 @@ TOSCA provides for a set of functions to reference elements within the template 
 
       **get_input**
 
-      The **get_input** function is used to retrieve the values of properties declared 
+      The **get_input** function is used to retrieve the values of properties declared
       within the inputs section of a TOSCA Service Template.
 
       Within CDS, this is mainly Workflow inputs.
 
-      `TOSCA specification 
+      `TOSCA specification
       <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454178>`_
 
       **Example:**
 
       `<https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/blueprint-model/test-blueprint/golden/Definitions/golden-blueprint.json#L210>`_
 
-      .. code-block:: JSON
-         
+      .. code-block:: json
+
          "resolution-key": {
-         "get_input": "resolution-key"
+            "get_input": "resolution-key"
          }
-         
+
    .. tab:: get_property
 
       **get_property**
 
-      The **get_property** function is used to retrieve property values between modelable 
+      The **get_property** function is used to retrieve property values between modelable
       entities defined in the same service template.
 
-      `TOSCA specification 
+      `TOSCA specification
       <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454178>`_
 
       **Example:**
 
-      TBD
+      .. code-block:: json
+
+         "get_property": ["SELF", "property-name"]
 
    .. tab:: get_attribute
 
       **get_attribute**
 
-      The **get_attribute** function is used to retrieve the values of named attributes declared 
+      The **get_attribute** function is used to retrieve the values of named attributes declared
       by the referenced node or relationship template name.
 
-      `TOSCA specification 
+      `TOSCA specification
       <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454178>`_
 
       **Example:**
 
       `<https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/blueprint-model/test-blueprint/golden/Definitions/golden-blueprint.json#L64-L67>`_
 
-      .. code-block:: JSON
-         
+      .. code-block:: json
+
          "get_attribute": [
             "resource-assignment",
             "assignment-params"
@@ -76,26 +78,30 @@ TOSCA provides for a set of functions to reference elements within the template 
 
       **get_operation_output**
 
-      The **get_operation_output** function is used to retrieve property values between modelable 
-      entities defined in the same service template.
+      The **get_operation_output** function is used to retrieve the values of variables
+      exposed / exported from an interface operation.
 
-      `TOSCA specification 
+      `TOSCA specification
       <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454180>`_
 
       **Example:**
 
-      TBD
+      .. code-block:: json
+
+         "get_operation_output": ["SELF", "interface-name", "operation-name", "output-property-name"]
 
    .. tab:: get_artifact
 
       **get_artifact**
 
-      The **get_artifact** function is used to retrieve property values between modelable 
+      The **get_artifact** function is used to retrieve artifact location between modelable
       entities defined in the same service template.
 
-      `TOSCA specification 
+      `TOSCA specification
       <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454182>`_
 
       **Example:**
 
-      TBD
+      .. code-block:: json
+
+         "get_artifact" : ["SELF", "artifact-template", "location", true]
