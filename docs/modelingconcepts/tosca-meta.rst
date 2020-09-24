@@ -41,23 +41,20 @@ Tosca meta file captures the model entities that compose the cba package name, v
      - Required
      - String
      - | The attribute that holds the blueprint version
-       |
-       | X.Y.Z
-       |
+       | **X.Y.Z**
        | X=Major version
        | Y=Minor Version
        | Z=Revision Version
-       | 
-       | X=Ex. 1.0.0         
+       | X=Ex. 1.0.0
    * - Template-Type
      - Required
      - String
      - | The attribute that holds the blueprint package types.
        | Valid Options:
        * "DEFAULT" – .JSON file consistent of tosca based cba package that describes the package intent.
-       * "KOTLIN_DSL" – .KT file consistent of tosca based cba package that describes the package intent 
-         composed using Domain Specific Language (DSL). 
-       * "GENERIC_SCRIPT" – Script file consistent of NONE tosca based cba package that describes the package intent 
+       * "KOTLIN_DSL" – .KT file consistent of tosca based cba package that describes the package intent
+         composed using Domain Specific Language (DSL).
+       * "GENERIC_SCRIPT" – Script file consistent of NONE tosca based cba package that describes the package intent
          using DSL Language.
        | If not specified in the tosca.meta file the default is "DEFAULT"
    * - Template-Tags
@@ -69,12 +66,12 @@ Tosca meta file captures the model entities that compose the cba package name, v
 
 **Default Template Type**
 
-https://gerrit.onap.org/r/gitweb?p=ccsdk/cds.git;a=blob;f=components/model-catalog/blueprint-model/test-blueprint/capability_cli/TOSCA-Metadata/TOSCA.meta;hb=refs/heads/master 
+https://git.onap.org/ccsdk/cds/tree/components/model-catalog/blueprint-model/test-blueprint/capability_cli/TOSCA-Metadata/TOSCA.meta
 
 **KOTLIN_DSL Template Type**
 
-https://gerrit.onap.org/r/gitweb?p=ccsdk/cds.git;a=blob;f=components/model-catalog/blueprint-model/test-blueprint/resource-audit/TOSCA-Metadata/TOSCA.meta;hb=refs/heads/master
+https://git.onap.org/ccsdk/cds/tree/components/model-catalog/blueprint-model/test-blueprint/resource-audit/TOSCA-Metadata/TOSCA.meta
 
 **GENERIC_SCRIPT Template Type**
 
-https://gerrit.onap.org/r/gitweb?p=ccsdk/cds.git;a=tree;f=ms/py-executor/test/resources/sample-cba/1.0.0;hb=refs/heads/master
+https://git.onap.org/ccsdk/cds/tree/components/model-catalog/blueprint-model/test-blueprint/capability_python/TOSCA-Metadata/TOSCA.meta
