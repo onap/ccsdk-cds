@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "317c6d9d_23d16070",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/ExecutionServiceHandler.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-24T10:47:24Z",
+      "side": 1,
+      "message": "I think the reason this is not already there, is because the payload is commonly used to pass sensitive data, such as passwords, which should not appear in logs. \n\nIt is possible to mark properties as sensitive using metadata.LOG_PROTECT \u003d true in the mapping file. This needs to support that.",
+      "revId": "1424b0926e0e3bf8b51679988dbe9ab42f3d543b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
