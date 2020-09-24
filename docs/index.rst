@@ -17,6 +17,7 @@ programmers, can reconfigure the software system as needed to meet customer
 requirements. To accomplish this goal, the system is built around models that
 provide for real-time changes in how the system operates.  Users merely need
 to change a model to change how a service operates.
+
 Self service is a completely new way of delivering services.  It removes the
 dependence on code releases and the delays they cause and puts the control of
 services into the hands of the service providers.  They can change a model and
@@ -66,7 +67,7 @@ https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definitio
 
 Tosca Model Reference:
 
-|image0|
+|toscaModel|
 
 Modeling Concept Links:
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,21 +76,10 @@ Modeling Concept Links:
    :maxdepth: 1
 
    modelingconcepts/overview
-   microservices/controllerBlueprintStudioProcessorMS
-   microservices/bluePrintsProcessorMS
+   microservices/controllerBlueprintMS
+   microservices/blueprintsProcessorMS
    microservices/expression
-   microservices/dynamicapi
    microservices/flexibleplugin
-
-
-Design tools
-------------
-.. toctree::
-   :maxdepth: 1
-   :glob:
-
-   CBA/index
-   datadictionary/index
 
 Scripts
 -------
@@ -99,62 +89,54 @@ Library
 
 * NetconfClient
 
-In order to facilitate NETCONF interaction within scripts, a python NetconfClient binded to our Kotlin implementation is made available. This NetconfClient can be used when using the component-netconf-executor.
+    In order to facilitate NETCONF interaction within scripts, a python NetconfClient binded to our Kotlin implementation is made available. This NetconfClient can be used when using the component-netconf-executor.
 
-The client can be find here: https://github.com/onap/ccsdk-cds/blob/master/components/scripts/python/ccsdk_netconf/netconfclient.py
+    The client can be find here: https://github.com/onap/ccsdk-cds/blob/master/components/scripts/python/ccsdk_netconf/netconfclient.py
 
 * ResolutionHelper
 
-When executing a component executor script, designer might want to perform
-resource resolution along with template meshing directly from the script
-itself.
+    When executing a component executor script, designer might want to perform
+    resource resolution along with template meshing directly from the script
+    itself.
 
-The helper can be found in below link: 
-https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_netconf/common.py
+    The helper can be found in below link:
+    https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_netconf/common.py
 
-.. |image0| image:: media/tosca_model.jpg
-   :width: 7.88889in
-   :height: 4.43750in
+.. |toscaModel| image:: media/tosca_model.jpg
+   :width: 500pt
 
-.. |cdsArchitectureImage| image:: media/CDS_architecture_latest.png
-   :scale: 30 %
-
-Developer Guide
-----------
-
-.. toctree::
-   :maxdepth: 2
-
-   developerguide/developer-guide
+.. |cdsArchitectureImage| image:: media/CDS_architecture.jpg
+   :width: 500pt
 
 User Guide
 ----------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 4
 
-   installation
-   designtime
+   userguide/developer-guide
+   userguide/installation
+   userguide/designtime
 
 Use Cases
-----------
+---------
 
 .. toctree::
    :maxdepth: 2
 
    usecases/use-cases
 
-CDS Desginer UI
+CDS Designer UI
 ---------------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   CDS_Designer_Guide
+   ui/designer
 
 
 Controller Design Studio Presentation
 -------------------------------------
 
 Details about CDS Architecture and Design detail, Please click the link.
-:download:`CDS_Architecture_Design.pptx`
+:download:`CDS_Architecture_Design <media/CDS_Architecture_Design.pptx>`
