@@ -25,7 +25,7 @@ In the checked out directory, type
 
 .. code-block:: bash
 
-   mvn clean install -DskipTests=true -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dadditionalparam=-Xdoclint:none
+   mvn clean install -Pq -Dadditionalparam=-Xdoclint:none
 
 Spin up a Docker container with the database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -276,7 +276,7 @@ Import the project into the IDE
                -Dserver.port=55555
 
 
-      **Browse Working Directory to your application path**  ``.../cds/ms/blueprintsprocessor/application`` 
+      **Browse Working Directory to your application path**  ``.../cds/ms/blueprintsprocessor/application``
       **if path is not already specified correctly.**
 
       **Add/replace the following in Blueprint's application-dev.properties file:**
@@ -403,47 +403,43 @@ Imported packages or annotiations are not found, Run Config not available?
 Compilation error?
 ********************
 
-* Change Java Version to 11 or 8
+* Change Java Version to 11
 
 
 .. image alignment inside tabs doesn't work
 
 .. |imageRunConfigJava| image:: media/run_config_java.png
-   :scale: 75 %
+   :width: 100pt
    :align: middle
 
 .. |imageRunConfigKt| image:: media/run_config_kt.png
-   :scale: 75 %
+   :width: 100pt
    :align: middle
 
 .. |imageCreateRunConfigJava| image:: media/create_run_config_java.png
-   :scale: 75 %
+   :width: 100pt
    :align: middle
 
 .. |imageCreateRunConfigKt| image:: media/create_run_config_kt.png
-   :scale: 75 %
+   :width: 100pt
    :align: middle
 
 .. |imageImportProject| image:: media/import_project.png
-   :scale: 75 %
+   :width: 100pt
    :align: middle
 
 .. |imageReimportMaven| image:: media/reimport_maven.png
-   :scale: 75 %
+   :width: 100pt
    :align: middle
 
 .. |imageRunDebug| image:: media/run_debug.png
-   :scale: 75 %
+   :width: 100pt
    :align: middle
-
-.. |imageRunDebug| image:: media/run_debug.png
-   :align: middle
-   :scale: 75 %
 
 .. |imageBuildLogs| image:: media/build_logs.png
+   :width: 100pt
    :align: middle
-   :scale: 75 %
 
 .. |imageLogsVSC| image:: media/vsc_logs.png
+   :width: 100pt
    :align: middle
-   :scale: 75 %
