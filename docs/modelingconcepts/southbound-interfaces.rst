@@ -4,11 +4,11 @@
 .. Copyright (C) 2020 Deutsche Telekom AG.
 
 Southbound Interfaces
--------------------------
+---------------------
 
-CDS comes with native python 3.6 support and Ansible AWX (Ansible Tower): 
-idea is Network Ops are familiar with Python and/or Ansible, and our goal is not to dictate the SBI to use for 
-their operations. Ansible and Python provide already many, and well adopted, 
+CDS comes with native python 3.6 support and Ansible AWX (Ansible Tower):
+idea is Network Ops are familiar with Python and/or Ansible, and our goal is not to dictate the SBI to use for
+their operations. Ansible and Python provide already many, and well adopted,
 SBI libraries, hence they could be utilized as needed.
 
 CDS also provide native support for the following libraries:
@@ -19,5 +19,5 @@ CDS also provide native support for the following libraries:
 * SSH
 * gRPC (hence gNMI / gNOI should be supported)
 
-CDS also has extensible REST support, meaning any RESTful interface used for network interaction can be used, 
+CDS also has extensible REST support, meaning any RESTful interface used for network interaction can be used,
 such as external VNFM or EMS.

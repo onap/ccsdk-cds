@@ -27,13 +27,10 @@ CDS UI:
 |image2|
 
 .. |image0| image:: media/Enrichment-REST.png
-   :width: 7.88889in
-   :height: 4.43750in
-   
+   :width: 500pt
+
 .. |image1| image:: media/Enrichment-UI1.png
-   :width: 7.88889in
-   :height: 4.43750in   
- 
+   :width: 500pt
+
 .. |image2| image:: media/Enrichment-UI2.png
-   :width: 7.88889in
-   :height: 4.43750in 
+   :width: 500pt
