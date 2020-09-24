@@ -20,5 +20,4 @@ Here is how the a generic request and response look like.
 |image0|
 
 .. |image0| image:: media/dyanmicapi.jpg
-   :height: 4.43750in
-   :width: 7.88889in
+   :width: 100pt
