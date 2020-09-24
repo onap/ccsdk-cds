@@ -4,7 +4,7 @@
 .. Copyright (C) 2020 Deutsche Telekom AG.
 
 Scripts
--------------
+-------
 
 Library
 +++++++++++++++++
@@ -12,7 +12,7 @@ Library
 NetconfClient
 +++++++++++++++++
 
-In order to facilitate NETCONF interaction within scripts, a python NetconfClient binded to our Kotlin implementation is made available. 
+In order to facilitate NETCONF interaction within scripts, a python NetconfClient binded to our Kotlin implementation is made available.
 This NetconfClient can be used when using the component-netconf-executor.
 
 The client can be find here: https://github.com/onap/ccsdk-cds/blob/master/components/scripts/python/ccsdk_netconf/netconfclient.py
@@ -20,8 +20,8 @@ The client can be find here: https://github.com/onap/ccsdk-cds/blob/master/compo
 ResolutionHelper
 +++++++++++++++++
 
-When executing a component executor script, designer might want to perform 
+When executing a component executor script, designer might want to perform
 resource resolution along with template meshing directly from the script itself.
 
-The helper can be find here: 
+The helper can be find here:
 https://github.com/onap/ccsdk-cds/blob/master/components/scripts/python/ccsdk_netconf/common.py
