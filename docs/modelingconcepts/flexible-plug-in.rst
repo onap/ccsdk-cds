@@ -29,15 +29,15 @@ Here are some examples on how to populate the system information within the pack
    * - token-auth
    * - .. code-block:: JSON
 
-            {
-             . . .
-             "dsl_definitions": {
-             "ipam-1": {
-                "type": "token-auth",
-                "url": "http://netbox-nginx.netprog:8080",
-                "token": "Token 0123456789abcdef0123456789abcdef01234567"
-             }
-            }
+        {
+          . . .
+          "dsl_definitions": {
+          "ipam-1": {
+            "type": "token-auth",
+            "url": "http://netbox-nginx.netprog:8080",
+            "token": "Token 0123456789abcdef0123456789abcdef01234567"
+          }
+        }
 
 .. list-table::
    :widths: 100
@@ -46,18 +46,18 @@ Here are some examples on how to populate the system information within the pack
    * - basic-auth
    * - .. code-block:: JSON
 
-            {
-             . . .
-             "dsl_definitions": {
-                "ipam-1": {
-                   "type": "basic-auth",
-                   "url": "http://localhost:8080",
-                   "username": "bob",
-                   "password": "marley"
-                }
-             }
-             . . .
+        {
+          . . .
+          "dsl_definitions": {
+            "ipam-1": {
+               "type": "basic-auth",
+               "url": "http://localhost:8080",
+               "username": "bob",
+               "password": "marley"
             }
+          }
+          . . .
+        }
 
 .. list-table::
    :widths: 100
@@ -66,22 +66,22 @@ Here are some examples on how to populate the system information within the pack
    * - ssl-basic-auth
    * - .. code-block:: JSON
 
-            {
-             . . .
-             "dsl_definitions": {
-                "ipam-1": {
-                   "type" : "ssl-basic-auth",
-                   "url" : "http://localhost:32778",
-                   "keyStoreInstance": "JKS or PKCS12",
-                   "sslTrust": "trusture",
-                   "sslTrustPassword": "trustore password",
-                   "sslKey": "keystore",
-                   "sslKeyPassword: "keystore password"
-                }
-             }
-             . . .
+        {
+          . . .
+          "dsl_definitions": {
+            "ipam-1": {
+               "type" : "ssl-basic-auth",
+               "url" : "http://localhost:32778",
+               "keyStoreInstance": "JKS or PKCS12",
+               "sslTrust": "trusture",
+               "sslTrustPassword": "trustore password",
+               "sslKey": "keystore",
+               "sslKeyPassword: "keystore password"
             }
-         
+          }
+          . . .
+        }
+
 .. list-table::
    :widths: 100
    :header-rows: 1
@@ -89,18 +89,18 @@ Here are some examples on how to populate the system information within the pack
    * - grpc-executor
    * - .. code-block:: JSON
 
-            {
-             . . .
-             "dsl_definitions": {
-             "remote-executor": {
-                "type": "token-auth",
-                "host": "cds-command-executor.netprog",
-                "port": "50051",
-                "token": "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
-             },
-             }
-             . . .
+        {
+          . . .
+          "dsl_definitions": {
+            "remote-executor": {
+              "type": "token-auth",
+              "host": "cds-command-executor.netprog",
+              "port": "50051",
+              "token": "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
             }
+          }
+          . . .
+        }
 
 .. list-table::
    :header-rows: 1
@@ -108,15 +108,15 @@ Here are some examples on how to populate the system information within the pack
    * - maria-db
    * - .. code-block:: JSON
 
-            {
-             . . .
-             "dsl_definitions": {
-                "netprog-db": {
-                   "type": "maria-db",
-                   "url": "jdbc:mysql://10.195.196.123:32050/netprog",
-                   "username": "netprog",
-                   "password": "netprog"
-                }
-             }
-             . . .
+        {
+          . . .
+          "dsl_definitions": {
+            "netprog-db": {
+               "type": "maria-db",
+               "url": "jdbc:mysql://10.195.196.123:32050/netprog",
+               "username": "netprog",
+               "password": "netprog"
             }
+          }
+          . . .
+        }

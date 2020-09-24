@@ -28,6 +28,11 @@ Supports both **primitive** and **complex** data types:
      - * json
        * list
        * array
+       *
+       *
+       *
+       *
+
 For complex data type, an **entry schema** is required, defining the
 type of value contained within the complex type, if list or array.
 
@@ -37,61 +42,47 @@ Users can **create** as many **data type** as needed.
 
    **Creating Custom Data Types:**
 
-   To create a custom data-type you can use a POST call to CDS endpoint: 
+   To create a custom data-type you can use a POST call to CDS endpoint:
    "<cds-ip>:<cds-port>/api/v1/model-type"
 
    .. code-block:: python
       :caption: **Payload:**
 
       {
-
        "model-name": "<model-name>",
        "derivedFrom": "tosca.datatypes.Root",
-
        "definitionType": "data_type",
-
        "definition": {
-
           "description": "<description>",
-
           "version": "<version-number: eg 1.0.0>",
-
           "properties": {<add properties of your custom data type in JSON format>},
-
           "derived_from": "tosca.datatypes.Root"
-
        },
-
        "description": "<description",
-
        "version": "<version>",
-
        "tags": "<model-name>,datatypes.Root.data_type",
-
        "creationDate": "<creation timestamp>",
-
        "updatedBy": "<name>"
-
       }
 
-Data type are useful to manipulate data during resource resolution. 
+Data type are useful to manipulate data during resource resolution.
 They can be used to format the JSON output as needed.
 
-List of existing data type: 
+List of existing data type:
 `<https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definition-type/starter-type/data_type>`_
 
-`TOSCA specification 
+`TOSCA specification
 <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454187>`_
 
 **Below is a list of existing data types**
 
 .. tabs::
-   
+
    .. tab:: resource-assignment
 
       **datatype-resource-assignment**
 
-      Used to define entries within artifact-mapping-resource 
+      Used to define entries within artifact-mapping-resource
       (see tab Artifact Type -> artifact-mapping-resource)
 
       That datatype represent a **resource** to be resolved. We also refer
@@ -124,44 +115,44 @@ List of existing data type:
       .. code-block:: JSON
          :caption: **datatype-resource-assignment**
 
-         {
+        {
           "version": "1.0.0",
           "description": "This is Resource Assignment Data Type",
           "properties": {
-             "property": {
-                   "required": true,
-                   "type": "datatype-property"
-             },
-             "input-param": {
-                   "required": true,
-                   "type": "boolean"
-             },
-             "dictionary-name": {
-                   "required": false,
-                   "type": "string"
-             },
-             "dictionary-source": {
-                   "required": false,
-                   "type": "string"
-             },
-             "dependencies": {
-                   "required": true,
-                   "type": "list",
-                   "entry_schema": {
-                      "type": "string"
-                   }
-             },
-             "updated-date": {
-                   "required": false,
-                   "type": "string"
-             },
-             "updated-by": {
-                   "required": false,
-                   "type": "string"
-             }
+            "property": {
+              "required": true,
+              "type": "datatype-property"
+            },
+            "input-param": {
+              "required": true,
+              "type": "boolean"
+            },
+            "dictionary-name": {
+              "required": false,
+              "type": "string"
+            },
+            "dictionary-source": {
+              "required": false,
+              "type": "string"
+            },
+            "dependencies": {
+              "required": true,
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
+            },
+            "updated-date": {
+              "required": false,
+              "type": "string"
+            },
+            "updated-by": {
+              "required": false,
+              "type": "string"
+            }
           },
           "derived_from": "tosca.datatypes.Root"
-         }
+        }
 
    .. tab:: property
 
@@ -192,9 +183,9 @@ List of existing data type:
          :caption: **datatype-property**
 
          {
-          "version": "1.0.0",
-          "description": "This is Resource Assignment Data Type",
-          "properties": {
+           "version": "1.0.0",
+           "description": "This is Resource Assignment Data Type",
+           "properties": {
              "property": {
                    "required": true,
                    "type": "datatype-property"
@@ -226,6 +217,6 @@ List of existing data type:
                    "required": false,
                    "type": "string"
              }
-          },
-          "derived_from": "tosca.datatypes.Root"
+           },
+           "derived_from": "tosca.datatypes.Root"
          }

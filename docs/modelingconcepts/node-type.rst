@@ -8,10 +8,10 @@
 Node type
 -----------
 
-`TOSCA definition 
+`TOSCA definition
 <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454215>`_
 
-In CDS, we have mainly two distinct types: components and source. We have some other type as well, 
+In CDS, we have mainly two distinct types: components and source. We have some other type as well,
 listed in the other section.
 
 .. tabs::
@@ -22,41 +22,41 @@ listed in the other section.
 
       Used to represent a **functionality** along with its **contract**, such as **inputs**, **ouputs**, and **attributes**
 
-      `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/tosca.nodes.Component.json>`_ 
+      `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/tosca.nodes.Component.json>`_
       is the root component TOSCA node type from which other node type will derive:
-      
+
       .. code-block:: json
          :caption: **tosca.nodes.Component**
 
          {
-          "description": "This is default Component Node",
-          "version": "1.0.0",
-          "derived_from": "tosca.nodes.Root"
+           "description": "This is default Component Node",
+           "version": "1.0.0",
+           "derived_from": "tosca.nodes.Root"
          }
 
       **Bellow is a list of supported components**
 
       .. tabs::
-         
+
          .. tab:: resource-resolution
 
             **component-resource-resolution:**
 
             Used to perform resolution of **resources**.
 
-            Requires as many as artifact-mapping-resource (see :ref:`artifact_type` -> Mapping) AND 
+            Requires as many as artifact-mapping-resource (see :ref:`artifact_type` -> Mapping) AND
             artifact-template-velocity (see :ref:`artifact_type` -> Jinja) as needed.
 
             **Output result:**
 
             Will put the resolution result as an **attribute** in the workflow context called **assignment-params**.
 
-            Using the :ref:`undefined <get_attribute expression>`, this attribute can be retrieve to be 
+            Using the :ref:`undefined <get_attribute expression>`, this attribute can be retrieve to be
             provided as workflow output (see :ref:`workflow`).
 
             **Specify which template to resolve:**
 
-            Currently, resolution is bounded to a template. To specify which template to use, you 
+            Currently, resolution is bounded to a template. To specify which template to use, you
             need to fill in the `artifact-prefix-names` field.
 
             See :ref:`template` to understand what the artifact prefix name is.
@@ -67,36 +67,36 @@ listed in the other section.
 
             Also, when storing the data, it must be in the context of either a `resource-id` and `resource-type`, or based on a given `resolution-key`
 
-            
-            The concept of resource-id / resource-type, or resolution-key, is to uniquely identify a specific resolution that 
+
+            The concept of resource-id / resource-type, or resolution-key, is to uniquely identify a specific resolution that
             has been performed for a given action. Hence the resolution-key has to be unique for a given blueprint name, blueprint version, action name.
 
             Through the combination of the fields mentioned previously, one could retrieved what has been resolved. This is useful to manage the life-cycle of the resolved resource, the life-cycle of the template, along with sharing with external systems the outcome of a given resolution.
 
             The resource-id / resource-type combo is more geared to uniquely identify a resource in AAI, or external system. For example, for a given AAI resource, say a PNF, you can trigger a given CDS action, and then you will be able to manage all the resolved resources bound to this PNF. Even we could have a history of what has been assigned, unassigned for this given AAI resource.
 
-            .. warning:: Important not to confuse and AAI resource (e.g. a topology element, 
-                         or service related element) with the resources resolved by CDS, which can be seen 
+            .. warning:: Important not to confuse and AAI resource (e.g. a topology element,
+                         or service related element) with the resources resolved by CDS, which can be seen
                          as parameters required to derived a network configuration.
 
             **Run the resolution multiple time:**
 
-            If you need to run the same resolution component multiple times, use the field `occurence`. 
-            This will add the notion of occurrence to the resolution, and if storing the results, resources 
+            If you need to run the same resolution component multiple times, use the field `occurence`.
+            This will add the notion of occurrence to the resolution, and if storing the results, resources
             and templates, they will be accessible for each occurrence.
 
-            Occurrence is a number between 1 and N; when retrieving information 
+            Occurrence is a number between 1 and N; when retrieving information
             for a given occurrence, the first iteration starts at 1.
 
             This feature is useful when you need to apply the same configuration accross network elements.
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-resource-resolution.json>`_ 
+            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-resource-resolution.json>`_
             is the definition:
 
             .. code-block:: json
-               :caption: **component-resource-resolution**
+              :caption: **component-resource-resolution**
 
-               {
+              {
                 "description": "This is Resource Assignment Component API",
                 "version": "1.0.0",
                 "attributes": {
@@ -180,20 +180,20 @@ listed in the other section.
                   }
                 },
                 "derived_from": "tosca.nodes.Component"
-               }
+              }
 
          .. tab:: script-executor
 
             **component-script-executor:**
 
-            Used to **execute** a script to perform **NETCONF, RESTCONF, SSH commands** 
+            Used to **execute** a script to perform **NETCONF, RESTCONF, SSH commands**
             from within the runtime container of CDS.
 
             Two type of scripts are supported:
 
-            * Kotlin: offer a way more integrated scripting framework, along 
+            * Kotlin: offer a way more integrated scripting framework, along
               with a way faster processing capability. See more about Kotlin script: https://github.com/Kotlin/KEEP/blob/master/proposals/scripting-support.md
-            * Python: uses Jython which is bound to Python 2.7, end of life Januray 2020. 
+            * Python: uses Jython which is bound to Python 2.7, end of life Januray 2020.
               See more about Jython: https://www.jython.org/
 
             The `script-class-reference` field need to reference
@@ -207,9 +207,9 @@ listed in the other section.
             .. _test_test_test:
 
             .. code-block:: json
-               :caption: **component-script-executor**
+              :caption: **component-script-executor**
 
-               {
+              {
                 "description": "This is Netconf Transaction Configuration Component API",
                 "version": "1.0.0",
                 "interfaces": {
@@ -236,7 +236,7 @@ listed in the other section.
                             "description": "Kotlin Script class name with full package or jython script name.",
                             "required": true,
                             "type": "string"
-                            },           
+                            },
                             "dynamic-properties": {
                             "description": "Dynamic Json Content or DSL Json reference.",
                             "required": false,
@@ -260,7 +260,7 @@ listed in the other section.
                    }
                 },
                 "derived_from": "tosca.nodes.Component"
-               }
+              }
 
          .. tab:: remote-script-executor
 
@@ -274,18 +274,18 @@ listed in the other section.
 
             execute-command-logs: will contain the execution logs of the script, that were printed into stdout
 
-            Using the get_attribute expression (see :ref:`expression` -> get_attribute), 
+            Using the get_attribute expression (see :ref:`expression` -> get_attribute),
             this attribute can be retrieve to be provided as workflow output (see :ref:`workflow`).
 
             **Params:**
 
-            The `command` field need to reference the path from the Scripts folder of the 
+            The `command` field need to reference the path from the Scripts folder of the
             scripts to execute, e.g. Scripts/python/Bob.py
 
-            The `packages` field allow to provide a list of **PIP package** to install in the target environment, 
+            The `packages` field allow to provide a list of **PIP package** to install in the target environment,
             or a requirements.txt file. Also, it supports **Ansible role**.
 
-            If **requirements.txt** is specified, then it should be **provided** as 
+            If **requirements.txt** is specified, then it should be **provided** as
             part of the **Environment** folder of the CBA.
 
             .. code-block:: json
@@ -306,11 +306,11 @@ listed in the other section.
                   }
                ]
 
-            The `argument-properties` allows to specified input argument to the script to execute. They should be 
-            expressed in a DSL, and they will be ordered as specified.   
+            The `argument-properties` allows to specified input argument to the script to execute. They should be
+            expressed in a DSL, and they will be ordered as specified.
 
             .. code-block:: json
-               :caption: **Example** 
+               :caption: **Example**
 
                "ansible-argument-properties": {
                   "arg0": "-i",
@@ -325,83 +325,82 @@ listed in the other section.
                      ]
                   }
                }
-               }
 
-            The `dynamic-properties` can be anything that needs to be passed to the 
-            script that couldn't be passed as an argument, such as JSON object, etc... If used, they will be passed 
+            The `dynamic-properties` can be anything that needs to be passed to the
+            script that couldn't be passed as an argument, such as JSON object, etc... If used, they will be passed
             in as the last argument of the Python script.
 
             `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-remote-python-executor.json>`_
             is the definition
 
             .. code-block:: json
-               :caption: **component-remote-script-executor** 
+               :caption: **component-remote-script-executor**
 
                {
-                "description": "This is Remote Python Execution Component.",
-                "version": "1.0.0",
-                "attributes": {
+                 "description": "This is Remote Python Execution Component.",
+                 "version": "1.0.0",
+                 "attributes": {
                    "prepare-environment-logs": {
-                      "required": false,
-                      "type": "string"
+                     "required": false,
+                     "type": "string"
                    },
                    "execute-command-logs": {
-                      "required": false,
-                      "type": "list",
-                      "entry_schema": {
-                      "type": "string"
-                      }
+                     "required": false,
+                     "type": "list",
+                     "entry_schema": {
+                       "type": "string"
+                     }
                    },
                    "response-data": {
-                      "required": false,
-                      "type": "json"
+                     "required": false,
+                     "type": "json"
                    }
-                },
-                "capabilities": {
+                 },
+                 "capabilities": {
                    "component-node": {
-                      "type": "tosca.capabilities.Node"
+                     "type": "tosca.capabilities.Node"
                    }
-                },
-                "interfaces": {
+                 },
+                 "interfaces": {
                    "ComponentRemotePythonExecutor": {
-                      "operations": {
-                      "process": {
+                     "operations": {
+                       "process": {
                          "inputs": {
-                            "endpoint-selector": {
-                            "description": "Remote Container or Server selector name.",
-                            "required": false,
-                            "type": "string",
-                            "default": "remote-python"
-                            },
-                            "dynamic-properties": {
-                            "description": "Dynamic Json Content or DSL Json reference.",
-                            "required": false,
-                            "type": "json"
-                            },
-                            "argument-properties": {
-                            "description": "Argument Json Content or DSL Json reference.",
-                            "required": false,
-                            "type": "json"
-                            },
-                            "command": {
-                            "description": "Command to execute.",
-                            "required": true,
-                            "type": "string"
-                            },
-                            "packages": {
-                            "description": "Packages to install based on type.",
-                            "required": false,
-                            "type" : "list",
-                            "entry_schema" : {
+                           "endpoint-selector": {
+                             "description": "Remote Container or Server selector name.",
+                             "required": false,
+                             "type": "string",
+                             "default": "remote-python"
+                           },
+                           "dynamic-properties": {
+                             "description": "Dynamic Json Content or DSL Json reference.",
+                             "required": false,
+                             "type": "json"
+                           },
+                           "argument-properties": {
+                             "description": "Argument Json Content or DSL Json reference.",
+                             "required": false,
+                             "type": "json"
+                           },
+                           "command": {
+                             "description": "Command to execute.",
+                             "required": true,
+                             "type": "string"
+                           },
+                           "packages": {
+                             "description": "Packages to install based on type.",
+                             "required": false,
+                             "type" : "list",
+                             "entry_schema" : {
                                "type" : "dt-system-packages"
-                            }
-                            }
+                             }
+                           }
                          }
-                      }
-                      }
+                       }
+                     }
                    }
-                },
-                "derived_from": "tosca.nodes.Component"
+                 },
+                 "derived_from": "tosca.nodes.Component"
                }
 
          .. tab:: remote-ansible-executor
@@ -428,71 +427,71 @@ listed in the other section.
             .. code-block:: json
                :caption: **component-remote-script-executor**
 
-               {
-                "description": "This is Remote Ansible Playbook (AWX) Execution Component.",
-                "version": "1.0.0",
-                "attributes": {
-                   "ansible-command-status": {
+                {
+                  "description": "This is Remote Ansible Playbook (AWX) Execution Component.",
+                  "version": "1.0.0",
+                  "attributes": {
+                    "ansible-command-status": {
                       "required": true,
                       "type": "string"
-                   },
-                   "ansible-command-logs": {
+                    },
+                    "ansible-command-logs": {
                       "required": true,
                       "type": "string"
-                   }
-                },
-                "capabilities": {
-                   "component-node": {
+                    }
+                  },
+                  "capabilities": {
+                    "component-node": {
                       "type": "tosca.capabilities.Node"
-                   }
-                },
-                "interfaces": {
-                   "ComponentRemoteAnsibleExecutor": {
+                    }
+                  },
+                  "interfaces": {
+                    "ComponentRemoteAnsibleExecutor": {
                       "operations": {
-                      "process": {
-                         "inputs": {
+                        "process": {
+                          "inputs": {
                             "job-template-name": {
-                            "description": "Primary key or name of the job template to launch new job.",
-                            "required": true,
-                            "type": "string"
+                              "description": "Primary key or name of the job template to launch new job.",
+                              "required": true,
+                              "type": "string"
                             },
                             "limit": {
-                            "description": "Specify host limit for job template to run.",
-                            "required": false,
-                            "type": "string"
+                              "description": "Specify host limit for job template to run.",
+                              "required": false,
+                              "type": "string"
                             },
                             "inventory": {
-                            "description": "Specify inventory for job template to run.",
-                            "required": false,
-                            "type": "string"
+                              "description": "Specify inventory for job template to run.",
+                              "required": false,
+                              "type": "string"
                             },
-                            "extra-vars" : {
-                            "required" : false,
-                            "type" : "json",
-                            "description": "json formatted text that contains extra variables to pass on."
+                            "extra-vars": {
+                              "required": false,
+                              "type": "json",
+                              "description": "json formatted text that contains extra variables to pass on."
                             },
                             "tags": {
-                            "description": "Specify tagged actions in the playbook to run.",
-                            "required": false,
-                            "type": "string"
+                              "description": "Specify tagged actions in the playbook to run.",
+                              "required": false,
+                              "type": "string"
                             },
                             "skip-tags": {
-                            "description": "Specify tagged actions in the playbook to omit.",
-                            "required": false,
-                            "type": "string"
+                              "description": "Specify tagged actions in the playbook to omit.",
+                              "required": false,
+                              "type": "string"
                             },
                             "endpoint-selector": {
-                            "description": "Remote AWX Server selector name.",
-                            "required": true,
-                            "type": "string"
+                              "description": "Remote AWX Server selector name.",
+                              "required": true,
+                              "type": "string"
                             }
-                         }
+                          }
+                        }
                       }
-                      }
-                   }
-                },
-                "derived_from": "tosca.nodes.Component"
-               }
+                    }
+                  },
+                  "derived_from": "tosca.nodes.Component"
+                }
 
    .. tab:: Source
 
@@ -502,7 +501,7 @@ listed in the other section.
 
       Defines the **contract** to resolve a resource.
 
-      `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/tosca.nodes.ResourceSource.json>`_ 
+      `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/tosca.nodes.ResourceSource.json>`_
       is the root component TOSCA node type from which other node type will derive:
 
       .. code-block::
@@ -516,24 +515,24 @@ listed in the other section.
 
       **Bellow is a list of supported sources**
 
-      .. tabs:: 
+      .. tabs::
          .. tab:: input
 
             **Input:**
 
             Expects the **value to be provided as input** to the request.
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-input.json>`_ 
+            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-input.json>`_
             is the Definition
 
-            .. code-block:: 
+            .. code-block::
                :caption: **source-input**
 
                {
-                "description": "This is Input Resource Source Node Type",
-                "version": "1.0.0",
-                "properties": {},
-                "derived_from": "tosca.nodes.ResourceSource"
+                 "description": "This is Input Resource Source Node Type",
+                 "version": "1.0.0",
+                 "properties": {},
+                 "derived_from": "tosca.nodes.ResourceSource"
                }
 
          .. tab:: default
@@ -542,17 +541,17 @@ listed in the other section.
 
             Expects the **value to be defaulted** in the model itself.
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-default.json>`_ 
+            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-default.json>`_
             is the Definition
 
             .. code-block:: json
                :caption: **source-default**
 
                {
-                "description": "This is Default Resource Source Node Type",
-                "version": "1.0.0",
-                "properties": {},
-                "derived_from": "tosca.nodes.ResourceSource"
+                 "description": "This is Default Resource Source Node Type",
+                 "version": "1.0.0",
+                 "properties": {},
+                 "derived_from": "tosca.nodes.ResourceSource"
                }
 
          .. tab:: rest
@@ -561,7 +560,7 @@ listed in the other section.
 
             Expects the **URI along with the VERB and the payload**, if needed.
 
-            CDS is currently deployed along the side of SDNC, hence the **default** rest 
+            CDS is currently deployed along the side of SDNC, hence the **default** rest
             **connection** provided by the framework is to **SDNC MDSAL**.
 
             .. list-table::
@@ -592,105 +591,107 @@ listed in the other section.
                * - expression-type
                  - Path expression type - default value is JSON_PATH
                  - Optional
-            
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-rest.json>`_ 
+
+            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-rest.json>`_
             is the definition:
 
             .. code-block:: json
                :caption: **source-rest**
 
-               {
-               "description": "This is Rest Resource Source Node Type",
-               "version": "1.0.0",
-               "properties": {
-                  "type": {
-                     "required": false,
-                     "type": "string",
-                     "default": "JSON",
-                     "constraints": [
-                     {
-                        "valid_values": [
-                           "JSON"
-                        ]
-                     }
-                     ]
+                {
+                  "description": "This is Rest Resource Source Node Type",
+                  "version": "1.0.0",
+                  "properties": {
+                    "type": {
+                      "required": false,
+                      "type": "string",
+                      "default": "JSON",
+                      "constraints": [
+                        {
+                          "valid_values": [
+                            "JSON"
+                          ]
+                        }
+                      ]
+                    },
+                    "verb": {
+                      "required": false,
+                      "type": "string",
+                      "default": "GET",
+                      "constraints": [
+                        {
+                          "valid_values": [
+                            "GET",
+                            "POST",
+                            "DELETE",
+                            "PUT"
+                          ]
+                        }
+                      ]
+                    },
+                    "payload": {
+                      "required": false,
+                      "type": "string",
+                      "default": ""
+                    },
+                    "endpoint-selector": {
+                      "required": false,
+                      "type": "string"
+                    },
+                    "url-path": {
+                      "required": true,
+                      "type": "string"
+                    },
+                    "path": {
+                      "required": true,
+                      "type": "string"
+                    },
+                    "expression-type": {
+                      "required": false,
+                      "type": "string",
+                      "default": "JSON_PATH",
+                      "constraints": [
+                        {
+                          "valid_values": [
+                            "JSON_PATH",
+                            "JSON_POINTER"
+                          ]
+                        }
+                      ]
+                    },
+                    "input-key-mapping": {
+                      "required": false,
+                      "type": "map",
+                      "entry_schema": {
+                        "type": "string"
+                      }
+                    },
+                    "output-key-mapping": {
+                      "required": false,
+                      "type": "map",
+                      "entry_schema": {
+                        "type": "string"
+                      }
+                    },
+                    "key-dependencies": {
+                      "required": true,
+                      "type": "list",
+                      "entry_schema": {
+                        "type": "string"
+                      }
+                    }
                   },
-                  "verb": {
-                     "required": false,
-                     "type": "string",
-                     "default": "GET",
-                     "constraints": [
-                     {
-                        "valid_values": [
-                           "GET", "POST", "DELETE", "PUT"
-                        ]
-                     }
-                     ]
-                  },
-                  "payload": {
-                     "required": false,
-                     "type": "string",
-                     "default": ""
-                  },
-                  "endpoint-selector": {
-                     "required": false,
-                     "type": "string"
-                  },
-                  "url-path": {
-                     "required": true,
-                     "type": "string"
-                  },
-                  "path": {
-                     "required": true,
-                     "type": "string"
-                  },
-                  "expression-type": {
-                     "required": false,
-                     "type": "string",
-                     "default": "JSON_PATH",
-                     "constraints": [
-                     {
-                        "valid_values": [
-                           "JSON_PATH",
-                           "JSON_POINTER"
-                        ]
-                     }
-                     ]
-                  },
-                  "input-key-mapping": {
-                     "required": false,
-                     "type": "map",
-                     "entry_schema": {
-                     "type": "string"
-                     }
-                  },
-                  "output-key-mapping": {
-                     "required": false,
-                     "type": "map",
-                     "entry_schema": {
-                     "type": "string"
-                     }
-                  },
-                  "key-dependencies": {
-                     "required": true,
-                     "type": "list",
-                     "entry_schema": {
-                     "type": "string"
-                     }
-                  }
-               },
-               "derived_from": "tosca.nodes.ResourceSource"
-               }
-
+                  "derived_from": "tosca.nodes.ResourceSource"
+                }
          .. tab:: sql
 
             **SQL**
 
-            Expects the **SQL query** to be modeled; that SQL query can be parameterized, 
-            and the parameters be other resources resolved through other means. 
+            Expects the **SQL query** to be modeled; that SQL query can be parameterized,
+            and the parameters be other resources resolved through other means.
             If that's the case, this data dictionary definition will have to define ``key-dependencies`` along with ``input-key-mapping``.
 
-            CDS is currently deployed along the side of SDNC, hence the **primary** database 
+            CDS is currently deployed along the side of SDNC, hence the **primary** database
             **connection** provided by the framework is to **SDNC database**.
 
             .. list-table::
@@ -709,60 +710,60 @@ listed in the other section.
                  - Statement to execute
                  - Mandatory
 
-            
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-processor-db.json>`_ 
+
+            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-processor-db.json>`_
             is the definition:
 
             .. code-block:: json
                :caption: **source-db**
 
-               {
-                "description": "This is Database Resource Source Node Type",
-                "version": "1.0.0",
-                "properties": {
-                   "type": {
+                {
+                  "description": "This is Database Resource Source Node Type",
+                  "version": "1.0.0",
+                  "properties": {
+                    "type": {
                       "required": true,
                       "type": "string",
                       "constraints": [
-                      {
-                         "valid_values": [
+                        {
+                          "valid_values": [
                             "SQL"
-                         ]
-                      }
+                          ]
+                        }
                       ]
-                   },
-                   "endpoint-selector": {
+                    },
+                    "endpoint-selector": {
                       "required": false,
                       "type": "string"
-                   },
-                   "query": {
+                    },
+                    "query": {
                       "required": true,
                       "type": "string"
-                   },
-                   "input-key-mapping": {
+                    },
+                    "input-key-mapping": {
                       "required": false,
                       "type": "map",
                       "entry_schema": {
-                      "type": "string"
+                        "type": "string"
                       }
-                   },
-                   "output-key-mapping": {
+                    },
+                    "output-key-mapping": {
                       "required": false,
                       "type": "map",
                       "entry_schema": {
-                      "type": "string"
+                        "type": "string"
                       }
-                   },
-                   "key-dependencies": {
+                    },
+                    "key-dependencies": {
                       "required": true,
                       "type": "list",
                       "entry_schema": {
-                      "type": "string"
+                        "type": "string"
                       }
-                   }
-                },
-                "derived_from": "tosca.nodes.ResourceSource"
-               }
+                    }
+                  },
+                  "derived_from": "tosca.nodes.ResourceSource"
+                }
 
          .. tab:: capability
 
@@ -777,53 +778,53 @@ listed in the other section.
                      * - Property
                        - Description
                        - Scope
-                     * - script-type	
+                     * - script-type
                        - The type of the script - default value is Koltin
                        - Optional
                      * - script-class-reference
                        - The name of the class to use to create an instance of the script
                        - Mandatory
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-capability.json>`_ 
-            is the definition:     
+            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-capability.json>`_
+            is the definition:
 
             .. code-block:: json
-               :caption: **source-capability** 
+               :caption: **source-capability**
 
-               {
-                "description": "This is Component Resource Source Node Type",
-                "version": "1.0.0",
-                "properties": {
-                   "script-type": {
+                {
+                  "description": "This is Component Resource Source Node Type",
+                  "version": "1.0.0",
+                  "properties": {
+                    "script-type": {
                       "required": true,
                       "type": "string",
                       "default": "kotlin",
                       "constraints": [
-                      {
-                         "valid_values": [
+                        {
+                          "valid_values": [
                             "internal",
                             "kotlin",
                             "jython"
-                         ]
-                      }
+                          ]
+                        }
                       ]
-                   },
-                   "script-class-reference": {
+                    },
+                    "script-class-reference": {
                       "description": "Capability reference name for internal and kotlin, for jython script file path",
                       "required": true,
                       "type": "string"
-                   },
-                   "key-dependencies": {
+                    },
+                    "key-dependencies": {
                       "description": "Resource Resolution dependency dictionary names.",
                       "required": true,
                       "type": "list",
                       "entry_schema": {
-                      "type": "string"
+                        "type": "string"
                       }
-                   }
-                },
-                "derived_from": "tosca.nodes.ResourceSource"
-               }        
+                    }
+                  },
+                  "derived_from": "tosca.nodes.ResourceSource"
+                }
 
    .. tab:: Other
 
@@ -844,57 +845,65 @@ listed in the other section.
                * - Property
                  - Description
                  - Scope
-               * - dependency-node-templates	
+               * - dependency-node-templates
                  - The node template the workflow depends on
                  - Required
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/dg-generic.json>`_ 
-            is the definition:   
+            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/dg-generic.json>`_
+            is the definition:
 
             .. code-block:: json
                :caption: **dg-generic**
 
-               {
-               "description": "This is Generic Directed Graph Type",
-               "version": "1.0.0",
-               "properties": {
-                  "content": {
-                     "required": true,
-                     "type": "string"
+                {
+                  "description": "This is Generic Directed Graph Type",
+                  "version": "1.0.0",
+                  "properties": {
+                    "content": {
+                      "required": true,
+                      "type": "string"
+                    },
+                    "dependency-node-templates": {
+                      "required": true,
+                      "description": "Dependent Step Components NodeTemplate name.",
+                      "type": "list",
+                      "entry_schema": {
+                        "type": "string"
+                      }
+                    }
                   },
-                  "dependency-node-templates": {
-                     "required": true,
-                     "description": "Dependent Step Components NodeTemplate name.",
-                     "type": "list",
-                     "entry_schema": {
-                     "type": "string"
-                     }
-                  }
-               },
-               "derived_from": "tosca.nodes.DG"
-               }
+                  "derived_from": "tosca.nodes.DG"
+                }
 
-            A node_template of this type always provide one artifact, of type artifact-directed-graph, 
+            A node_template of this type always provide one artifact, of type artifact-directed-graph,
             which will be located under the Plans/ folder within the CBA.
 
             .. code-block:: json
                :caption: **node_template example**
 
-               "config-deploy-process" : {
-               "type" : "dg-generic",
-               "properties" : {
-                  "content" : {
-                     "get_artifact" : [ "SELF", "dg-config-deploy-process" ]
-                  },
-                  "dependency-node-templates" : [ "nf-account-collection", "execute" ]
-               },
-               "artifacts" : {
-                  "dg-config-deploy-process" : {
-                     "type" : "artifact-directed-graph",
-                     "file" : "Plans/CONFIG_ConfigDeploy.xml"
+                {
+                  "config-deploy-process": {
+                    "type": "dg-generic",
+                    "properties": {
+                      "content": {
+                        "get_artifact": [
+                          "SELF",
+                          "dg-config-deploy-process"
+                        ]
+                      },
+                      "dependency-node-templates": [
+                        "nf-account-collection",
+                        "execute"
+                      ]
+                    },
+                    "artifacts": {
+                      "dg-config-deploy-process": {
+                        "type": "artifact-directed-graph",
+                        "file": "Plans/CONFIG_ConfigDeploy.xml"
+                      }
+                    }
                   }
-               }
-               }
+                }
 
             In the DG bellow, the execute node refers to the node_template.
 
@@ -945,7 +954,7 @@ listed in the other section.
                  "version": "1.0.0",
                  "derived_from": "tosca.nodes.Root"
                }
-            
+
             **vnf-netconf-device**
 
             Represents the VNF information to **establish** a **NETCONF communication**.
@@ -997,36 +1006,3 @@ listed in the other section.
                  },
                  "derived_from": "tosca.nodes.Vnf"
                }
-
-
-                     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
