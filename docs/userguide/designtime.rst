@@ -2,8 +2,8 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2019 IBM.
 
-Design Time User Guide
-======================
+Design Time Tools Guide
+=======================
 
 Below are the requirements to enable automation for a service within ONAP.
 
@@ -44,7 +44,7 @@ Services:
 
 .. toctree::
    :maxdepth: 1
-   
-   CBA/index
-   datadictionary/index
+
+   ../CBA/index
+   ../resourcedefinition/index
    resourceassignment

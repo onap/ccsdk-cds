@@ -12,9 +12,9 @@ Expects the value to be provided as input to the request.
 
 .. code-block:: json
    :linenos:
-   
+
    {
-     "source-input" : 
+     "source-input" :
      {
        "description": "This is Input Resource Source Node Type",
        "version": "1.0.0",
@@ -29,12 +29,12 @@ Default:
 ========
 Expects the value to be defaulted in the model itself.
 
-   
+
 .. code-block:: json
    :linenos:
-   
+
    {
-     "source-default" : 
+     "source-default" :
      {
        "description": "This is Default Resource Source Node Type",
        "version": "1.0.0",
@@ -54,18 +54,17 @@ CDS is currently deployed along the side of SDNC, hence the primary database con
 |image0|
 
 .. |image0| image:: media/sqltable.JPG
-   :width: 7.88889in 
-   :height: 4.43750in
+   :width: 400pt
 
 .. toctree::
-   :maxdepth: 1  
+   :maxdepth: 1
 
    sourceprimarydbcode
 
 Connection to a specific database can be expressed through the endpoint-selector property, which refers to a macro defining the information about the database the connect to. Understand TOSCA Macro in the context of CDS.
 
 .. toctree::
-   :maxdepth: 1 
+   :maxdepth: 1
 
    dbsystemcode
 
@@ -79,13 +78,12 @@ CDS is currently deployed along the side of SDNC, hence the default rest connect
 
 |image1|
 
-.. |image1| image:: media/resttable.JPG
-   :width: 7.88889in 
-   :height: 4.43750in
+.. |image1| image:: media/optional.JPG
+   :width: 400pt
 
 .. toctree::
    :maxdepth: 1
-   
+
    restsourcecode
 
 Connection to a specific REST system can be expressed through the endpoint-selector property, which refers to a macro defining the information about the REST system the connect to. Understand TOSCA Macro in the context of CDS.
@@ -95,12 +93,12 @@ Few ways are available to authenticate to the REST system:
 	* token-auth
 	* basic-auth
 	* ssl-basic-auth
-	
+
 For source code of Authentication click below link:
 
 .. toctree::
-   :maxdepth: 1
-   
+   :maxdepth: 4
+
    restauth
 
 Capability:
@@ -111,15 +109,14 @@ Expects a script to be provided.
 |image2|
 
 .. |image2| image:: media/capabilitytable.JPG
-   :width: 7.88889in 
-   :height: 4.43750in
-   
-   
+   :width: 400pt
+
+
 .. toctree::
-   :maxdepth: 1   
+   :maxdepth: 1
 
    sourcecapabilitycode
-	
+
 Complex Type:
 =============
 
@@ -134,15 +131,15 @@ Some ingredients are required to perform the query, in this case, $prefixId. Hen
 As part of this request, the expected response will be as below.
 
 .. toctree::
-   :maxdepth: 1   
+   :maxdepth: 1
 
    complexResponse
 
 What is of interest is the address and id fields. For the process to return these two values, we need to create a custom data-type, as bellow
 
 .. toctree::
-   :maxdepth: 1 
-   
+   :maxdepth: 1
+
    dt-netbox-ip
 
 The type of the data dictionary will be dt-netbox-ip.
@@ -150,6 +147,6 @@ The type of the data dictionary will be dt-netbox-ip.
 To tell the resolution framework what is of interest in the response, the output-key-mapping section is used. The process will map the output-key-mapping to the defined data-type.
 
 .. toctree::
-   :maxdepth: 1 
-   
+   :maxdepth: 1
+
    create_netbox_ip_address
