@@ -2,10 +2,10 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2019 IBM.
 
-Resource Definition 
+Resource Definition
 -------------------
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
 Introduction:
 =============
@@ -20,7 +20,6 @@ Creation of Resource definition is a standalone activity, separated from the blu
 As part of modelling a Resource definition entry, the following generic information should be provided:
 
 |image0|
-
 
 
 Below are properties that all the resource source have will have
@@ -38,9 +37,9 @@ vf-module-model-customization-uuid and vf-module-label are two data dictionaries
 Here is how input-key-mapping, output-key-mapping and key-dependencies can be used:
 
 .. toctree::
-   :maxdepth: 1
-   
-   resourcedefinitioncodesnip 
+   :maxdepth: 2
+
+   sourcecapabilitycode
 
 
 Resource source:
@@ -53,8 +52,8 @@ A resource source is modeled, following TOSCA_ node type definition and derives 
 Also please click below for resource source available details
 
 .. toctree::
-   :maxdepth: 1
-   
+   :maxdepth: 4
+
    resourcesource
 
 .. _TOSCA: http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#DEFN_ENTITY_NODE_TYPE
@@ -62,9 +61,7 @@ Also please click below for resource source available details
 
 
 .. |image0| image:: media/mandatory.JPG
-   :width: 7.88889in 
-   :height: 4.43750in
-   
+   :width: 400pt
+
 .. |image1| image:: media/optional.JPG
-   :width: 7.88889in 
-   :height: 4.43750in
+   :width: 400pt
