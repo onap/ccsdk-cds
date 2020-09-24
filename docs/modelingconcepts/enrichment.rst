@@ -22,22 +22,22 @@ definition of types used:
 * gather all the node-type used and put them into a :file:`node_types.json` file
 * gather all the data-type used and put them into a :file:`data_types.json` file
 * gather all the artifact-type used and put them into a :file:`artifact_types.json` file
-* gather all the data dictionary definitions used from within the mapping files and put them 
+* gather all the data dictionary definitions used from within the mapping files and put them
   into a :file:`resources_definition_types.json` file
 
 .. warning::
-   Before uploading a CBA, it must be enriched. If your package is already enrich, 
+   Before uploading a CBA, it must be enriched. If your package is already enrich,
    you do not need to perform enrichment again.
 
-The enrichment can be run using REST API, and required the **.zip** file as input. 
+The enrichment can be run using REST API, and required the **.zip** file as input.
 It will return an :file:`enriched-cba.zip` file.
 
 .. code-block:: bash
 
    curl -X POST \
-   'http://{{ip}}:{{cds-designtime}}/api/v1/blueprint-model/enrich' \
-   -H 'content-type: multipart/form-data' \
-   -F file=@cba.zip
+      'http://{{ip}}:{{cds-designtime}}/api/v1/blueprint-model/enrich' \
+      -H 'content-type: multipart/form-data' \
+      -F file=@cba.zip
 
 The enrichment process will also, for all resources to be resolved as input and default:
 

@@ -5,16 +5,16 @@
 Controller Blueprints Studio Processor
 ======================================
 
-The Controller Blueprint Archive is the overall service design, fully model-driven, intent based package needed for SELF SERVICE provisioning and configuration management automation.
+The **C**\ ontroller **B**\ lueprint **A**\ rchive is the overall service design, fully model-driven, intent based
+**package** needed for SELF SERVICE provisioning and configuration management automation.
 
-The CBA is .zip file which is saved in Controller Blueprint Database.
+The CBA is .zip file, which is saved in Controller Blueprint Database.
 
 Controller Blueprint Microservices:
 -----------------------------------
 
 .. toctree::
    :maxdepth: 1
-   
+
    dynamicapi
    enrichment
-   

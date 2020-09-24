@@ -6,14 +6,14 @@ Dbsystemcode
 ============
 .. code-block:: json
    :linenos:
-   
+
    {
-      "dsl_definitions": {
-         "dynamic-db-source": {
-            "type": "maria-db",
-            "url": "jdbc:mysql://localhost:3306/sdnctl",
-            "username": "<username>",
-            "password": "<password>"
-           }
-      }
+     "dsl_definitions": {
+       "dynamic-db-source": {
+         "type": "maria-db",
+         "url": "jdbc:mysql://localhost:3306/sdnctl",
+         "username": "<username>",
+         "password": "<password>"
+       }
+     }
    }

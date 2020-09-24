@@ -21,45 +21,45 @@ Here is how the a **generic request** and **response** look like.
      - response
    * - .. code-block:: json
 
-          {
-           "commonHeader": {
-              "originatorId": "",
-              "requestId": "",
-              "subRequestId": ""
-           },
-           "actionIdentifiers": {
-              "blueprintName": "",
-              "blueprintVersion": "",
-              "actionName": "",
-              "mode": ""
-           },
-           "payload": {
-              "$actionName-request": {
-                 "$actionName-properties": {
-                 }
+        {
+          "commonHeader": {
+            "originatorId": "",
+            "requestId": "",
+            "subRequestId": ""
+          },
+          "actionIdentifiers": {
+            "blueprintName": "",
+            "blueprintVersion": "",
+            "actionName": "",
+            "mode": ""
+          },
+          "payload": {
+            "$actionName-request": {
+              "$actionName-properties": {
               }
-           }
+            }
           }
+        }
 
      - .. code-block:: json
-         
-          {
-           "commonHeader": {
-              "originatorId": "",
-              "requestId": "",
-              "subRequestId": ""
-           },
-           "actionIdentifiers": {
-              "blueprintName": "",
-              "blueprintVersion": "",
-              "actionName": "",
-              "mode": ""
-           },
-           "payload": {
-              "$actionName-response": {
-              }
-           }
+
+        {
+          "commonHeader": {
+            "originatorId": "",
+            "requestId": "",
+            "subRequestId": ""
+          },
+          "actionIdentifiers": {
+            "blueprintName": "",
+            "blueprintVersion": "",
+            "actionName": "",
+            "mode": ""
+          },
+          "payload": {
+            "$actionName-response": {
+            }
           }
+        }
 
 The ``actionName``, under the ``actionIdentifiers`` refers to the name of a
 Workflow (see :ref:`workflow`)
@@ -74,5 +74,5 @@ Then the **content within this element** is fully based on the
 
 During the :ref:`enrichment` CDS will aggregate all the resources
 defined to be resolved as input (see :ref:`node_type` -> Source -> Input), within mapping definition files
-(see :ref:`artifact_type` -> Mapping), as data-type, that will then be use as type 
+(see :ref:`artifact_type` -> Mapping), as data-type, that will then be use as type
 of an  input called ``$actionName-properties``.
