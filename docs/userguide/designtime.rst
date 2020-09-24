@@ -44,7 +44,7 @@ Services:
 
 .. toctree::
    :maxdepth: 1
-   
-   CBA/index
-   datadictionary/index
+
+   ../CBA/index
+   ../resourcedefinition/index
    resourceassignment

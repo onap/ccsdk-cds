@@ -17,6 +17,7 @@ programmers, can reconfigure the software system as needed to meet customer
 requirements. To accomplish this goal, the system is built around models that
 provide for real-time changes in how the system operates.  Users merely need
 to change a model to change how a service operates.
+
 Self service is a completely new way of delivering services.  It removes the
 dependence on code releases and the delays they cause and puts the control of
 services into the hands of the service providers.  They can change a model and
@@ -66,7 +67,7 @@ https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definitio
 
 Tosca Model Reference:
 
-|image0|
+|toscaModel|
 
 Modeling Concept Links:
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -89,7 +90,7 @@ Design tools
    :glob:
 
    CBA/index
-   datadictionary/index
+   resourcedefinition/index
 
 Scripts
 -------
@@ -109,18 +110,17 @@ When executing a component executor script, designer might want to perform
 resource resolution along with template meshing directly from the script
 itself.
 
-The helper can be found in below link: 
+The helper can be found in below link:
 https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_netconf/common.py
 
-.. |image0| image:: media/tosca_model.jpg
-   :width: 7.88889in
-   :height: 4.43750in
+.. |toscaModel| image:: media/tosca_model.jpg
+   :width: 500pt
 
-.. |cdsArchitectureImage| image:: media/CDS_architecture_latest.png
-   :scale: 30 %
+.. |cdsArchitectureImage| image:: media/CDS_architecture.jpg
+   :width: 500pt
 
 Developer Guide
-----------
+---------------
 
 .. toctree::
    :maxdepth: 2
@@ -133,28 +133,29 @@ User Guide
 .. toctree::
    :maxdepth: 1
 
-   installation
-   designtime
+   userguide/installation
+   userguide/designtime
+   userguide/cdsdesignerui
 
 Use Cases
-----------
+---------
 
 .. toctree::
    :maxdepth: 2
 
    usecases/use-cases
 
-CDS Desginer UI
+CDS Designer UI
 ---------------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   CDS_Designer_Guide
+   userguide/cdsdesignerui
 
 
 Controller Design Studio Presentation
 -------------------------------------
 
 Details about CDS Architecture and Design detail, Please click the link.
-:download:`CDS_Architecture_Design.pptx`
+:download:`media/CDS_Architecture_Design.pptx`

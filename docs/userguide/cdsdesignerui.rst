@@ -1,7 +1,9 @@
+.. This work is licensed under a Creative Commons Attribution 4.0 International License.
+.. http://creativecommons.org/licenses/by/4.0
+.. Copyright (C) 2019 IBM.
 
-
-CDS Designer Guide
-==================
+CDS Designer UI Guide
+=====================
 
 **Table of Contents**
 
@@ -11,7 +13,7 @@ CDS Designer Guide
 -  `What is CDS Designer
    UI? <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-WhatIsCDS>`__
 
--  `What’s
+-  `What's
    new? <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-WhatIsNew>`__
 
 -  `Overview of CDS
@@ -43,15 +45,16 @@ CDS Designer Guide
          -  `External System Authentication
             Properties <#CDSDesignerGuide-ExternalSystem>`__
 
+
 Getting Started
-===============
+---------------
 
 This is your CDS Designer UI guide. No matter how experienced you are or
 what you want to achieve, it should cover everything you need to know —
 from navigating the interface to making the most of different features.
 
 What is CDS Designer UI?
-========================
+------------------------
 
 +----------------------------------------------+--------------+
 | CDS Designer UI is a framework to automate   |              |
@@ -63,25 +66,25 @@ What is CDS Designer UI?
 | CDS has both **design-time** and             |              |
 | **run-time** activities; during design time, |              |
 | **Designer** can **define** what **actions** |              |
-| are required for a given service, along with |              |                                                                                                                
-| anything comprising the action. The design   |              |                                                                                                                  
-| produces a `CBA                              |              |                                                                                                                   
-| Package <https://wik                         |              |                                                                                                                   
-| i.onap.org/display/DW/Modeling+Concepts#Mode |              |                                                                                                                   
-| lingConcepts-ControllerBlueprintArchive>`__. |              |                                                                                                                   
-| Its **content** is driven from a **catalog** |              |                                                                                                                   
-| of **reusable data dictionary** and          |              |                                                                                                                   
-| **component**, delivering a reusable and     |              |                                                                                                                   
-| simplified **self-service** experience.      |              |                                                                                                                   
-|                                              |              |                                                                                                                   
-| CDS modeling is mainly based on **the TOSCA  |              |                                                                                                                   
-| standard**, using JSON as a representation.  |              |                                                                                                                   
+| are required for a given service, along with |              |
+| anything comprising the action. The design   |              |
+| produces a `CBA                              |              |
+| Package <https://wik                         |              |
+| i.onap.org/display/DW/Modeling+Concepts#Mode |              |
+| lingConcepts-ControllerBlueprintArchive>`__. |              |
+| Its **content** is driven from a **catalog** |              |
+| of **reusable data dictionary** and          |              |
+| **component**, delivering a reusable and     |              |
+| simplified **self-service** experience.      |              |
+|                                              |              |
+| CDS modeling is mainly based on **the TOSCA  |              |
+| standard**, using JSON as a representation.  |              |
 +----------------------------------------------+--------------+
 
 .. _section-3:
 
 What's new?
-===========
+-----------
 
 +----------------------+----------------------+----------------------+
 | |image2|             | |image3|             | |image4|             |
@@ -103,7 +106,7 @@ What's new?
 +----------------------+----------------------+----------------------+
 
 Overview of CDS Interface
-=========================
+-------------------------
 
 Full CDS UI screens are available in
 `InVision <https://invis.io/PAUI9GLJH3Q>`__
@@ -122,7 +125,7 @@ Full CDS UI screens are available in
    and filtering
 
 CBA Packages
-============
+------------
 
 -  .. rubric:: Package List
       :name: package-list
@@ -171,7 +174,7 @@ It gives you quick access to all and most recent created/edit packages
     screen
 
 Create a New CBA Package
-========================
+------------------------
 
 -  .. rubric:: User Flow
       :name: user-flow
@@ -353,7 +356,7 @@ to provide **dsl_definitions**
 |image29|
 
 
-.. |image1| image:: https://wiki.onap.org/download/attachments/84650426/CDS%20Logo.png?version=1&modificationDate=1591034588000&api=v2     
+.. |image1| image:: https://wiki.onap.org/download/attachments/84650426/CDS%20Logo.png?version=1&modificationDate=1591034588000&api=v2
    :width: 200pt
 .. |image2| image:: https://wiki.onap.org/download/thumbnails/84650426/Feature%201.png?version=1&modificationDate=1591032224000&api=v2
    :width: 50pt
@@ -409,5 +412,5 @@ to provide **dsl_definitions**
    :width: 500pt
 .. |image28| image:: https://wiki.onap.org/download/attachments/84650426/Definitions%203.jpg?version=1&modificationDate=1591639556000&api=v2
    :width: 500pt
-.. |image29| image:: https://wiki.onap.org/download/attachments/84650426/External%20system.jpg?version=1&modificationDate=1591639581000&api=v2     
+.. |image29| image:: https://wiki.onap.org/download/attachments/84650426/External%20system.jpg?version=1&modificationDate=1591639581000&api=v2
    :width: 500pt
