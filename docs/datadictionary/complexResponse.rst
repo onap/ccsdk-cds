@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2019 IBM.
 
-complex Response code
+Complex Response code
 =====================
 
 .. code-block:: json
