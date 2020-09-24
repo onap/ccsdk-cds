@@ -3,7 +3,7 @@
 .. Copyright (C) 2019 IBM.
 
 Dynamic API
------------
+===========
 
 The nature of the API request and response is meant to be model driven and dynamic. They both share the same definition.
 
@@ -20,5 +20,4 @@ Here is how the a generic request and response look like.
 |image0|
 
 .. |image0| image:: media/dyanmicapi.jpg
-   :height: 4.43750in
-   :width: 7.88889in
+   :width: 500pt
