@@ -22,6 +22,8 @@ import org.apache.sshd.client.SshClient
 import org.apache.sshd.client.channel.ClientChannel
 import org.apache.sshd.client.session.ClientSession
 import org.apache.sshd.common.FactoryManager
+import org.apache.sshd.server.keyprovider.AbstractGeneratorHostKeyProvider
+import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfRpcService
