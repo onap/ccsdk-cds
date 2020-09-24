@@ -6,7 +6,7 @@
 .. _data_dictionary:
 
 Data Dictionary
------------------
+---------------
 
 A data dictionary **models the how** a specific **resource** can be **resolved**.
 
@@ -32,7 +32,7 @@ As part of modelling a data dictionary entry, the following generic information 
      - The creator
      - Mandatory
    * - tags
-     - Information related	
+     - Information related
      - Mandatory
    * - sources
      - List of resource source instance (see :ref:`resource source`)
@@ -42,11 +42,11 @@ As part of modelling a data dictionary entry, the following generic information 
      - Mandatory
    * - name
      - Data dictionary name
-     - Mandatory  
-   
+     - Mandatory
+
 **Bellow are properties that all the resource source can have**
 
-The modeling does allow for **data translation** between external capability 
+The modeling does allow for **data translation** between external capability
 and CDS for both input and output key mapping.
 
 .. list-table::
@@ -57,22 +57,22 @@ and CDS for both input and output key mapping.
      - Description
      - Scope
    * - input-key-mapping
-     - map of resources required to perform the request/query. The left hand-side is what is used within 
+     - map of resources required to perform the request/query. The left hand-side is what is used within
        the query/request, the right hand side refer to a data dictionary instance.
      - Optional
    * - output-key-mapping
-     - name of the resource to be resolved mapped to the value resolved by the request/query.  
+     - name of the resource to be resolved mapped to the value resolved by the request/query.
      - Optional
    * - key-dependencies
      - | list of data dictionary instances to be resolved prior the resolution of this specific resource.
-       | during run time execution the key dependencies are recursively sorted and resolved 
-         in batch processing using the `acyclic graph algorithm 
+       | during run time execution the key dependencies are recursively sorted and resolved
+         in batch processing using the `acyclic graph algorithm
          <https://en.wikipedia.org/wiki/Directed_acyclic_graph>`_
      - Optional
-   
+
 **Example:**
 
-``vf-module-model-customization-uuid`` and ``vf-module-label`` are two data dictionaries. 
+``vf-module-model-customization-uuid`` and ``vf-module-label`` are two data dictionaries.
 A SQL table, VF_MODULE_MODEL, exist to correlate them.
 
 Here is how input-key-mapping, output-key-mapping and key-dependencies can be used:
@@ -84,30 +84,29 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
    * - vf-module-label data dictionary
    * - .. code-block:: JSON
 
-         
-         {
+
+        {
           "name" : "vf-module-label",
           "tags" : "vf-module-label",
           "updated-by" : "adetalhouet",
           "property" : {
-             "description" : "vf-module-label",
-             "type" : "string"
+            "description" : "vf-module-label",
+            "type" : "string"
           },
           "sources" : {
-             "primary-db" : {
-                "type" : "source-primary-db",
-                "properties" : {
+            "primary-db" : {
+              "type" : "source-primary-db",
+              "properties" : {
                 "type" : "SQL",
-                "query" : "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label 
-                           from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
+                "query" : "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
                 "input-key-mapping" : {
-                   "customizationid" : "vf-module-model-customization-uuid"
+                  "customizationid" : "vf-module-model-customization-uuid"
                 },
                 "output-key-mapping" : {
-                   "vf-module-label" : "vf_module_label"
+                  "vf-module-label" : "vf_module_label"
                 },
                 "key-dependencies" : [ "vf-module-model-customization-uuid" ]
-                }
-             }
+              }
+            }
           }
-         }
+        }

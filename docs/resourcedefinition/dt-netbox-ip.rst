@@ -5,9 +5,9 @@
 dt-netbox-ip code
 =================
 
-.. code-block:: none
+.. code-block:: json
    :linenos:
-   
+
    {
      "version": "1.0.0",
      "description": "This is Netbox IP Data Type",

@@ -3,11 +3,11 @@
 .. Copyright (C) 2019 IBM.
 
 create_netbox_ip_address code
-============================= 
+=============================
 
 .. code-block:: json
 
-   {
+  {
     "tags" : "oam-local-ipv4-address",
     "name" : "create_netbox_ip",
     "property" : {
@@ -35,4 +35,4 @@ create_netbox_ip_address code
         }
       }
     }
-   }
+  }
