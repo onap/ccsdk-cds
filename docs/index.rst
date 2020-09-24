@@ -17,6 +17,7 @@ programmers, can reconfigure the software system as needed to meet customer
 requirements. To accomplish this goal, the system is built around models that
 provide for real-time changes in how the system operates.  Users merely need
 to change a model to change how a service operates.
+
 Self service is a completely new way of delivering services.  It removes the
 dependence on code releases and the delays they cause and puts the control of
 services into the hands of the service providers.  They can change a model and
@@ -109,7 +110,7 @@ When executing a component executor script, designer might want to perform
 resource resolution along with template meshing directly from the script
 itself.
 
-The helper can be found in below link: 
+The helper can be found in below link:
 https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_netconf/common.py
 
 .. |image0| image:: media/tosca_model.jpg
