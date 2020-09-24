@@ -3,7 +3,7 @@
 .. Copyright (C) 2020 Deutsche Telekom AG.
 
 Use Cases
-=================
+=========
 
 .. toctree::
    :caption: Table of Contents

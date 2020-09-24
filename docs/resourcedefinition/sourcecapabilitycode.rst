@@ -7,7 +7,7 @@ Source Capability Code
 
 .. code-block:: json
    :linenos:
-   
+
    {
       "description": "This is Component Resource Source Node Type",
       "version": "1.0.0",
