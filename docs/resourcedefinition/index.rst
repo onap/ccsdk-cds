@@ -3,12 +3,12 @@
 .. Copyright (C) 2019 IBM.
 
 Resource Definition
--------------------
+===================
 .. toctree::
    :maxdepth: 2
 
 Introduction:
-=============
+-------------
 A Resource definition models the how a specific resource can be resolved.
 
 A resource is a variable/parameter in the context of the service. It can be anything, but it should not be confused with SDC or Openstack resources.
@@ -21,7 +21,6 @@ As part of modelling a Resource definition entry, the following generic informat
 
 |image0|
 
-
 Below are properties that all the resource source have will have
 
 The modeling does allow for data translation between external capability and CDS for both input and output key mapping.
@@ -30,7 +29,7 @@ The modeling does allow for data translation between external capability and CDS
 
 
 Example:
-========
+--------
 
 vf-module-model-customization-uuid and vf-module-label are two data dictionaries. A SQL table, VF_MODULE_MODEL, exist to correlate them.
 
@@ -39,7 +38,7 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "description": "This is Component Resource Source Node Type",
       "version": "1.0.0",
       "properties": {
@@ -79,11 +78,11 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
         }
       },
       "derived_from": "tosca.nodes.ResourceSource"
-   }
+    }
 
 
 Resource source:
-================
+----------------
 
 Defines the contract to resolve a resource.
 

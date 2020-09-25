@@ -15,7 +15,7 @@ Represents the **type of a artifact**, used to **identify** the
 
 This node was created, derived from ``tosca.artifacts.Root`` to be the root TOSCA node for all artifact.
 
-.. code-block:: JSON
+.. code-block:: json
    :caption: **tosca.artifacts.Implementation**
 
    {
@@ -49,7 +49,7 @@ This node was created, derived from ``tosca.artifacts.Root`` to be the root TOSC
       `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/artifact_type/artifact-template-velocity.json>`_
       is the TOSCA artifact type:
 
-      .. code-block:: JSON
+      .. code-block:: json
          :caption: **artifact-template-velocity**
 
          {
@@ -78,7 +78,7 @@ This node was created, derived from ``tosca.artifacts.Root`` to be the root TOSC
       `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/artifact_type/artifact-template-jinja.json>`_
       is the TOSCA artifact type:
 
-      .. code-block:: JSON
+      .. code-block:: json
          :caption: **artifact-template-jinja**
 
          {
@@ -110,7 +110,7 @@ This node was created, derived from ``tosca.artifacts.Root`` to be the root TOSC
       `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/artifact_type/artifact-mapping-resource.json>`_
       is the TOSCA artifact type:
 
-      .. code-block:: JSON
+      .. code-block:: json
          :caption: **artifact-mapping-resource**
 
          {
