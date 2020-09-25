@@ -56,7 +56,7 @@ CDS is currently deployed along the side of SDNC, hence the primary database con
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "description": "This is Database Resource Source Node Type",
       "version": "1.0.0",
       "properties": {
@@ -102,7 +102,7 @@ CDS is currently deployed along the side of SDNC, hence the primary database con
         }
       },
       "derived_from": "tosca.nodes.ResourceSource"
-   }
+    }
 
 Connection to a specific database can be expressed through the endpoint-selector property, which refers to a macro defining the information about the database the connect to. Understand TOSCA Macro in the context of CDS.
 
@@ -135,7 +135,7 @@ CDS is currently deployed along the side of SDNC, hence the default rest connect
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "description": "This is Rest Resource Source Node Type",
       "version": "1.0.0",
       "properties": {
@@ -216,7 +216,7 @@ CDS is currently deployed along the side of SDNC, hence the default rest connect
         }
       },
       "derived_from": "tosca.nodes.ResourceSource"
-   }
+    }
 
 Connection to a specific REST system can be expressed through the endpoint-selector property, which refers to a macro defining the information about the REST system the connect to. Understand TOSCA Macro in the context of CDS.
 
@@ -291,7 +291,7 @@ Expects a script to be provided.
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "description": "This is Component Resource Source Node Type",
       "version": "1.0.0",
       "properties": {
@@ -331,7 +331,7 @@ Expects a script to be provided.
         }
       },
       "derived_from": "tosca.nodes.ResourceSource"
-   }
+    }
 
 Complex Type:
 =============
@@ -349,7 +349,7 @@ As part of this request, the expected response will be as below.
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "id": 4,
       "address": "192.168.10.2/32",
       "vrf": null,
@@ -361,7 +361,7 @@ As part of this request, the expected response will be as below.
       "nat_inside": null,
       "created": "2018-08-30",
       "last_updated": "2018-08-30T14:59:05.277820Z"
-   }
+    }
 
 What is of interest is the address and id fields. For the process to return these two values, we need to create a custom data-type, as bellow
 

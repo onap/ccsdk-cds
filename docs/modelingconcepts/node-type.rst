@@ -209,58 +209,58 @@ listed in the other section.
             .. code-block:: json
               :caption: **component-script-executor**
 
-              {
-                "description": "This is Netconf Transaction Configuration Component API",
-                "version": "1.0.0",
-                "interfaces": {
-                   "ComponentScriptExecutor": {
+                {
+                  "description": "This is Netconf Transaction Configuration Component API",
+                  "version": "1.0.0",
+                  "interfaces": {
+                    "ComponentScriptExecutor": {
                       "operations": {
-                      "process": {
-                         "inputs": {
+                        "process": {
+                          "inputs": {
                             "script-type": {
-                            "description": "Script type, kotlin type is supported",
-                            "required": true,
-                            "type": "string",
-                            "default": "internal",
-                            "constraints": [
-                               {
+                              "description": "Script type, kotlin type is supported",
+                              "required": true,
+                              "type": "string",
+                              "default": "internal",
+                              "constraints": [
+                                {
                                   "valid_values": [
-                                  "kotlin",
-                                  "jython",
-                                  "internal"
+                                    "kotlin",
+                                    "jython",
+                                    "internal"
                                   ]
-                               }
-                            ]
+                                }
+                              ]
                             },
                             "script-class-reference": {
-                            "description": "Kotlin Script class name with full package or jython script name.",
-                            "required": true,
-                            "type": "string"
+                              "description": "Kotlin Script class name with full package or jython script name.",
+                              "required": true,
+                              "type": "string"
                             },
                             "dynamic-properties": {
-                            "description": "Dynamic Json Content or DSL Json reference.",
-                            "required": false,
-                            "type": "json"
+                              "description": "Dynamic Json Content or DSL Json reference.",
+                              "required": false,
+                              "type": "json"
                             }
-                         },
-                         "outputs": {
+                          },
+                          "outputs": {
                             "response-data": {
-                            "description": "Execution Response Data in JSON format.",
-                            "required": false,
-                            "type": "string"
+                              "description": "Execution Response Data in JSON format.",
+                              "required": false,
+                              "type": "string"
                             },
                             "status": {
-                            "description": "Status of the Component Execution ( success or failure )",
-                            "required": true,
-                            "type": "string"
+                              "description": "Status of the Component Execution ( success or failure )",
+                              "required": true,
+                              "type": "string"
                             }
-                         }
+                          }
+                        }
                       }
-                      }
-                   }
-                },
-                "derived_from": "tosca.nodes.Component"
-              }
+                    }
+                  },
+                  "derived_from": "tosca.nodes.Component"
+                }
 
          .. tab:: remote-script-executor
 
@@ -292,18 +292,18 @@ listed in the other section.
                :caption: **Example**
 
                "packages": [
-                  {
-                     "type": "pip",
-                     "package": [
+                 {
+                   "type": "pip",
+                   "package": [
                      "requirements.txt"
-                     ]
-                  },
-                  {
-                     "type": "ansible_galaxy",
-                     "package": [
+                   ]
+                 },
+                 {
+                   "type": "ansible_galaxy",
+                   "package": [
                      "juniper.junos"
-                     ]
-                  }
+                   ]
+                 }
                ]
 
             The `argument-properties` allows to specified input argument to the script to execute. They should be
@@ -313,17 +313,17 @@ listed in the other section.
                :caption: **Example**
 
                "ansible-argument-properties": {
-                  "arg0": "-i",
-                  "arg1": "Scripts/ansible/inventory.yaml",
-                  "arg2": "--extra-vars",
-                  "arg3": {
-                     "get_attribute": [
+                 "arg0": "-i",
+                 "arg1": "Scripts/ansible/inventory.yaml",
+                 "arg2": "--extra-vars",
+                 "arg3": {
+                   "get_attribute": [
                      "resolve-ansible-vars",
                      "",
                      "assignment-params",
                      "ansible-vars"
-                     ]
-                  }
+                   ]
+                 }
                }
 
             The `dynamic-properties` can be anything that needs to be passed to the
@@ -516,6 +516,7 @@ listed in the other section.
       **Bellow is a list of supported sources**
 
       .. tabs::
+
          .. tab:: input
 
             **Input:**
@@ -916,24 +917,24 @@ listed in the other section.
                xsi:schemaLocation='http://www.onap.org/sdnc/svclogic ./svclogic.xsd' module='CONFIG' version='1.0.0'>
                   <method rpc='ConfigDeploy' mode='sync'>
                      <block atomic="true">
-                           <execute plugin="nf-account-collection" method="process">
-                              <outcome value='failure'>
-                                 <return status="failure">
-                                 </return>
-                              </outcome>
-                              <outcome value='success'>
-                                 <execute plugin="execute" method="process">
-                                       <outcome value='failure'>
-                                          <return status="failure">
-                                          </return>
-                                       </outcome>
-                                       <outcome value='success'>
-                                          <return status='success'>
-                                          </return>
-                                       </outcome>
-                                 </execute>
-                              </outcome>
-                           </execute>
+                        <execute plugin="nf-account-collection" method="process">
+                           <outcome value='failure'>
+                              <return status="failure">
+                              </return>
+                           </outcome>
+                           <outcome value='success'>
+                              <execute plugin="execute" method="process">
+                                 <outcome value='failure'>
+                                    <return status="failure">
+                                    </return>
+                                 </outcome>
+                                 <outcome value='success'>
+                                    <return status='success'>
+                                    </return>
+                                 </outcome>
+                              </execute>
+                           </outcome>
+                        </execute>
                      </block>
                   </method>
                </service-logic>

@@ -46,7 +46,7 @@ The enrichment process will also, for all resources to be resolved as input and 
 
 Example for workflow named *resource-assignment*:
 
-.. code-block:: JSON
+.. code-block:: json
    :caption: **dynamic input**
 
    {

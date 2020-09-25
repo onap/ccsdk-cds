@@ -39,7 +39,7 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "description": "This is Component Resource Source Node Type",
       "version": "1.0.0",
       "properties": {
@@ -79,7 +79,7 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
         }
       },
       "derived_from": "tosca.nodes.ResourceSource"
-   }
+    }
 
 
 Resource source:

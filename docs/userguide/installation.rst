@@ -84,7 +84,6 @@ Install Node.js and angularCLI. Refer https://angular.io/guide/quickstart
 npm install in the directory cds/cds-ui/client
 npm run build - to build UI module
 
-
 Loopback Server:
 ~~~~~~~~~~~~~~~~
 
