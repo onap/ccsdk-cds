@@ -5,45 +5,9 @@
 CDS Designer UI
 ===============
 
-**Table of Contents**
-
--  `Getting
-   Started <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-GettingStarted>`__
-
--  `What is CDS Designer
-   UI? <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-WhatIsCDS>`__
-
--  `What's
-   new? <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-WhatIsNew>`__
-
--  `Overview of CDS
-   Interface <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-OverviewOfCDS>`__
-
--  `CBA
-   Packages <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-CBAPackages>`__
-
-   -  `Package
-      list <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-PackageList>`__
-
-   -  `Create a CBA
-      Package <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-CreateNewCBAPackage>`__
-
-      -  `User
-         Flow <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-UserFlow>`__
-
-      -  `Create a New
-         Package <file:////pages/viewpage.action%3fpageId=84650427#CDSDesignerGuide-CreateNewPackage>`__
-
-         -  `MetaData <#CDSDesignerGuide-MetaData>`__
-
-         -  `Template & Mapping <#CDSDesignerGuide-TemplateMapping>`__
-
-         -  `Scripts <#CDSDesignerGuide-Scripts>`__
-
-         -  `Definitions <#CDSDesignerGuide-Definitions>`__
-
-         -  `External System Authentication
-            Properties <#CDSDesignerGuide-ExternalSystem>`__
+.. toctree::
+   :caption: Table of Contents
+   :maxdepth: 4
 
 
 Getting Started
@@ -52,6 +16,7 @@ Getting Started
 This is your CDS Designer UI guide. No matter how experienced you are or
 what you want to achieve, it should cover everything you need to know —
 from navigating the interface to making the most of different features.
+
 
 What is CDS Designer UI?
 ------------------------
@@ -81,7 +46,6 @@ What is CDS Designer UI?
 | standard**, using JSON as a representation.  |              |
 +----------------------------------------------+--------------+
 
-.. _section-3:
 
 What's new?
 -----------
@@ -105,6 +69,7 @@ What's new?
 |                      | management)          |                      |
 +----------------------+----------------------+----------------------+
 
+
 Overview of CDS Interface
 -------------------------
 
@@ -124,11 +89,12 @@ Full CDS UI screens are available in
 4. **Module list:** View all active items in module and tools for search
    and filtering
 
+
 CBA Packages
 ------------
 
--  .. rubric:: Package List
-      :name: package-list
+Package List
+~~~~~~~~~~~~
 
 It gives you quick access to all and most recent created/edit packages
 
@@ -173,16 +139,18 @@ It gives you quick access to all and most recent created/edit packages
     and Generic scripting) and by clicking on it, it will load to mode
     screen
 
+
 Create a New CBA Package
 ------------------------
 
--  .. rubric:: User Flow
-      :name: user-flow
+User Flow
+~~~~~~~~~
 
 |image10|
 
--  .. rubric:: Create a New Package
-      :name: create-a-new-package
+
+Create a New Package
+~~~~~~~~~~~~~~~~~~~~
 
 You can create a new CBA Package by creating a new custom package or by
 import package file that is already created before.
@@ -200,8 +168,9 @@ navigate to **Package** **Configuration**
 
 |image11|
 
--  .. rubric:: `MetaData <https://wiki.onap.org/display/DW/Modeling+Concepts#Concepts-958933373>`__
-      :name: metadata
+
+`MetaData <https://wiki.onap.org/display/DW/Modeling+Concepts#Concepts-958933373>`__
+~~~~~~~~~
 
 In **MetaData Tab,** select Package Mode, enter package Name, Version,
 Description and other configurations
@@ -227,9 +196,9 @@ To close the package configuration and go back to the Package list,
 navigate to the top left in breadcrumb and click the **CBA Packages**
 link or click on **Packages** link in the Main menu.
 
--  .. rubric:: `Template &
-      Mapping <https://wiki.onap.org/display/DW/Modeling+Concepts#Concepts--1256902502>`__
-      :name: template-mapping
+
+`Template & Mapping <https://wiki.onap.org/display/DW/Modeling+Concepts#Concepts--1256902502>`__
+~~~~~~~~~~~~~~~~~~~
 
 You can create as many templates using
 `artifact-mapping-resource <https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-artifact-mapping-resource>`__
@@ -295,20 +264,20 @@ on **the Clear button** **(2).**
 
 |image22|
 
--  .. rubric:: `Scripts <https://wiki.onap.org/display/DW/Modeling+Concepts#Concepts--703799064>`__
-      :name: scripts
+
+`Scripts <https://wiki.onap.org/display/DW/Modeling+Concepts#Concepts--703799064>`__
+~~~~~~~~
 
 Allowed file type: Kotlin(kt), Python(py)
 
 To add script file/s, you have two options:
 
-1. **Enter file URL:** Script file can be stored in server and you can
-   add this script file by copy and paste file URL in URL input then
-   **press ENTER** key from the keyboard
+**Enter file URL:** Script file can be stored in server and you can add this script file by copy and paste file URL in URL input then
+**press ENTER** key from the keyboard
 
 |image23|
 
-2. **Import File**
+**Import File**
 
 |image24|
 
@@ -320,21 +289,21 @@ By adding script file/s, you can:
 
 |image25|
 
--  .. rubric:: `Definitions <https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-dataType>`__
-      :name: definitions
+
+`Definitions <https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-dataType>`__
+~~~~~~~~~~~~
 
 Allowed file type: JSON
 
 To define a data type that represents the **schema** of a specific type
 of **data**, you have two options:
 
-1. ** Enter file URL:**  Definition file can be stored in server and user can
-   add this script file by copy and paste file URL in URL input then
-   **press ENTER** key from the keyboard
+**Enter file URL:**  Definition file can be stored in server and user can add this script file by copy and paste file URL in URL input then
+**press ENTER** key from the keyboard
 
 |image26|
 
-2. **Import File**
+**Import File**
 
 |image27|
 
@@ -346,9 +315,9 @@ By adding definition file/s, you can:
 
 |image28|
 
--  .. rubric:: `External System Authentication
-      Properties <https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-FlexiblePlugIn>`__
-      :name: external-system-authentication-properties
+
+`External System Authentication Properties <https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-FlexiblePlugIn>`__
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to populate the system information within the package, you have
 to provide **dsl_definitions**

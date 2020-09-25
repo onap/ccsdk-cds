@@ -2,23 +2,23 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2019 IBM.
 
-Resource Assignment 
--------------------
+Resource Assignment
+===================
 .. toctree::
    :maxdepth: 1
-   
-   
+
+
 Component executor:
-===================
+-------------------
 Workflow:
-=========
+~~~~~~~~~
 
 A workflow defines an overall action to be taken for the service; it can be composed of a set of sub-actions to execute. Currently, workflows are backed by Directed Graph engine.
 
 A CBA can have as many workflow as needed.
 
 Template:
-=========
+~~~~~~~~~
 
 A template is an artifact.
 
@@ -34,7 +34,7 @@ ${artifact-prefix}-mapping
 A template can represent anything, such as device config, payload to interact with 3rd party systems, resource-accumulator template, etc...
 
 Mapping:
-========
+~~~~~~~~
 Defines the contract of each resource to be resolved. Each placeholder in the template must have a corresponding mapping definition.
 
 A mapping is comprised of:
@@ -46,13 +46,14 @@ A mapping is comprised of:
 - dictionary-source
 
 Dependencies:
-=============
+~~~~~~~~~~~~~
 
 This allows to make sure given resources get resolved prior the resolution of the resources defining the dependency.
 The dictionary fields reference to a specific data dictionary.
 
+
 Resource accumulator:
-=====================
+---------------------
 
 In order to resolve HEAT environment variables, resource accumulator templates are being in used for Dublin.
 

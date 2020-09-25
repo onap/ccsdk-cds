@@ -35,7 +35,7 @@ In the checked out directory, type
 
 .. code-block:: none
 
-   mvn clean install -DskipTests=true -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dadditionalparam=-Xdoclint:none
+   mvn clean install -Pq -Dadditionalparam=-Xdoclint:none
 
 Create the needed Docker images:
 
@@ -52,6 +52,7 @@ Build it using the Maven profile called Docker:
 .. code-block:: none
 
    mvn clean install -Pdocker
+
 
 Start Docker containers using docker-composer:
 ----------------------------------------------

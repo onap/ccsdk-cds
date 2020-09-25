@@ -45,20 +45,20 @@ Users can **create** as many **data type** as needed.
       :caption: **Payload:**
 
       {
-       "model-name": "<model-name>",
-       "derivedFrom": "tosca.datatypes.Root",
-       "definitionType": "data_type",
-       "definition": {
+        "model-name": "<model-name>",
+        "derivedFrom": "tosca.datatypes.Root",
+        "definitionType": "data_type",
+        "definition": {
           "description": "<description>",
           "version": "<version-number: eg 1.0.0>",
           "properties": {<add properties of your custom data type in JSON format>},
           "derived_from": "tosca.datatypes.Root"
-       },
-       "description": "<description",
-       "version": "<version>",
-       "tags": "<model-name>,datatypes.Root.data_type",
-       "creationDate": "<creation timestamp>",
-       "updatedBy": "<name>"
+        },
+        "description": "<description",
+        "version": "<version>",
+        "tags": "<model-name>,datatypes.Root.data_type",
+        "creationDate": "<creation timestamp>",
+        "updatedBy": "<name>"
       }
 
 Data type are useful to manipulate data during resource resolution.
@@ -108,7 +108,7 @@ List of existing data type:
 
       `<https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/data_type/datatype-resource-assignment.json>`_
 
-      .. code-block:: JSON
+      .. code-block:: json
          :caption: **datatype-resource-assignment**
 
         {
@@ -175,7 +175,7 @@ List of existing data type:
 
       `<https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/data_type/datatype-property.json>`_
 
-      .. code-block:: JSON
+      .. code-block:: json
          :caption: **datatype-property**
 
          {
@@ -183,35 +183,35 @@ List of existing data type:
            "description": "This is Resource Assignment Data Type",
            "properties": {
              "property": {
-                   "required": true,
-                   "type": "datatype-property"
+               "required": true,
+               "type": "datatype-property"
              },
              "input-param": {
-                   "required": true,
-                   "type": "boolean"
+               "required": true,
+               "type": "boolean"
              },
              "dictionary-name": {
-                   "required": false,
-                   "type": "string"
+               "required": false,
+               "type": "string"
              },
              "dictionary-source": {
-                   "required": false,
-                   "type": "string"
+               "required": false,
+               "type": "string"
              },
              "dependencies": {
-                   "required": true,
-                   "type": "list",
-                   "entry_schema": {
-                      "type": "string"
-                   }
+               "required": true,
+               "type": "list",
+               "entry_schema": {
+                 "type": "string"
+               }
              },
              "updated-date": {
-                   "required": false,
-                   "type": "string"
+               "required": false,
+               "type": "string"
              },
              "updated-by": {
-                   "required": false,
-                   "type": "string"
+               "required": false,
+               "type": "string"
              }
            },
            "derived_from": "tosca.datatypes.Root"

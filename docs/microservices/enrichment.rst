@@ -14,15 +14,12 @@ The following shows 2 ways to run CBA enrichment
 
 REST API request:
 -----------------
-
 |image0|
 
 
 CDS UI:
 -------
-
 |image1|
-
 
 |image2|
 
