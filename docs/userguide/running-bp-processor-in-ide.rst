@@ -12,7 +12,6 @@ Objective
 Have the blueprint processor running locally is to use the IDE to run the code, while having the database running in a container.
 This way, code changes can be conveniently tested and debugged.
 
-
 Check out the code
 ~~~~~~~~~~~~~~~~~~~
 
@@ -42,31 +41,9 @@ file present on the distribution module. This database will require a local dire
 
 Navigate to the docker-compose file in the distribution module:
 
-.. tabs::
+.. code-block:: bash
 
-   .. group-tab:: Latest
-
-      .. code-block:: bash
-
-         cd ms/blueprintsprocessor/application/src/main/dc
-
-   .. group-tab:: Frankfurt
-
-      .. code-block:: bash
-
-         cd ms/blueprintsprocessor/application/src/main/dc
-
-   .. group-tab:: El Alto
-
-      .. code-block:: bash
-
-         ms/blueprintsprocessor/distribution/src/main/dc
-
-   .. group-tab:: Dublin
-
-      .. code-block:: bash
-
-         ms/blueprintsprocessor/distribution/src/main/dc
+   ms/blueprintsprocessor/distribution/src/main/dc
 
 And run docker-composer:
 
@@ -89,7 +66,6 @@ it can be started again by the command:
 .. code-block:: bash
 
    docker start <id of mariadb container>
-
 
 Set permissions on the local file system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,7 +96,6 @@ Import the project into the IDE
       Sometimes it may be necessary to reimport Maven project:
 
       |imageReimportMaven|
-
 
       **Override some application properties:**
 
@@ -317,11 +292,11 @@ Import the project into the IDE
             .. code-block:: json
 
                {
-                     "type": "kotlin",
-                     "request": "launch",
-                     "name": "Blueprint Processor",
-                     "projectRoot": "${workspaceFolder}/ms/blueprintsprocessor/application",
-                     "mainClass": "-Dspring.profiles.active=dev org.onap.ccsdk.cds.blueprintsprocessor.BlueprintProcessorApplicationKt"
+                 "type": "kotlin",
+                 "request": "launch",
+                 "name": "Blueprint Processor",
+                 "projectRoot": "${workspaceFolder}/ms/blueprintsprocessor/application",
+                 "mainClass": "-Dspring.profiles.active=dev org.onap.ccsdk.cds.blueprintsprocessor.BlueprintProcessorApplicationKt"
                }
 
             .. warning:: The `projectRoot` path assumes that you created your Workspace in the main CDS repository folder. If not - please change the path accordingly
@@ -376,7 +351,7 @@ Import the project into the IDE
 
 
 Testing the application
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 There are two main features of the Blueprints Processor that can be of interest of a developer:
 blueprint publish and blueprint process.
@@ -390,8 +365,9 @@ them is present on https://www.getpostman.com/collections/b99863b0cde7565a32fc.
 
 A detailed description of the usage of different APIs of CDS will follow.
 
+
 Possible Fixes
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 Imported packages or annotiations are not found, Run Config not available?
 *****************************************************************************
@@ -401,7 +377,7 @@ Imported packages or annotiations are not found, Run Config not available?
 3. Maven reimport in IDE
 
 Compilation error?
-********************
+*******************
 
 * Change Java Version to 11
 

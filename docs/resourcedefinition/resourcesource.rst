@@ -3,12 +3,12 @@
 .. Copyright (C) 2019 IBM.
 
 Resource Source
----------------
+===============
 .. toctree::
    :maxdepth: 4
 
 Input:
-======
+------
 Expects the value to be provided as input to the request.
 
 .. code-block:: json
@@ -25,7 +25,7 @@ Expects the value to be provided as input to the request.
    }
 
 Default:
-========
+--------
 Expects the value to be defaulted in the model itself.
 
 .. code-block:: json
@@ -42,7 +42,7 @@ Expects the value to be defaulted in the model itself.
    }
 
 Sql:
-====
+----
 
 Expects the SQL query to be modeled; that SQL query can be parameterized, and the parameters be other resources resolved through other means. If that's the case, this data dictionary definition will have to define key-dependencies along with input-key-mapping.
 
@@ -56,7 +56,7 @@ CDS is currently deployed along the side of SDNC, hence the primary database con
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "description": "This is Database Resource Source Node Type",
       "version": "1.0.0",
       "properties": {
@@ -102,7 +102,7 @@ CDS is currently deployed along the side of SDNC, hence the primary database con
         }
       },
       "derived_from": "tosca.nodes.ResourceSource"
-   }
+    }
 
 Connection to a specific database can be expressed through the endpoint-selector property, which refers to a macro defining the information about the database the connect to. Understand TOSCA Macro in the context of CDS.
 
@@ -121,7 +121,7 @@ Connection to a specific database can be expressed through the endpoint-selector
    }
 
 Rest:
-=====
+-----
 
 Expects the URI along with the VERB and the payload, if needed.
 
@@ -135,7 +135,7 @@ CDS is currently deployed along the side of SDNC, hence the default rest connect
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "description": "This is Rest Resource Source Node Type",
       "version": "1.0.0",
       "properties": {
@@ -216,7 +216,7 @@ CDS is currently deployed along the side of SDNC, hence the default rest connect
         }
       },
       "derived_from": "tosca.nodes.ResourceSource"
-   }
+    }
 
 Connection to a specific REST system can be expressed through the endpoint-selector property, which refers to a macro defining the information about the REST system the connect to. Understand TOSCA Macro in the context of CDS.
 
@@ -279,7 +279,7 @@ ssl-basic-auth:
    }
 
 Capability:
-===========
+-----------
 
 Expects a script to be provided.
 
@@ -291,7 +291,7 @@ Expects a script to be provided.
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "description": "This is Component Resource Source Node Type",
       "version": "1.0.0",
       "properties": {
@@ -331,10 +331,10 @@ Expects a script to be provided.
         }
       },
       "derived_from": "tosca.nodes.ResourceSource"
-   }
+    }
 
 Complex Type:
-=============
+-------------
 
 Value will be resolved through REST., and output will be a complex type.
 
@@ -349,7 +349,7 @@ As part of this request, the expected response will be as below.
 .. code-block:: json
    :linenos:
 
-   {
+    {
       "id": 4,
       "address": "192.168.10.2/32",
       "vrf": null,
@@ -361,7 +361,7 @@ As part of this request, the expected response will be as below.
       "nat_inside": null,
       "created": "2018-08-30",
       "last_updated": "2018-08-30T14:59:05.277820Z"
-   }
+    }
 
 What is of interest is the address and id fields. For the process to return these two values, we need to create a custom data-type, as bellow
 
