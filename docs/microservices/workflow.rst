@@ -4,7 +4,6 @@
 
 Workflow
 ========
-
 A workflow defines an overall action to be taken on the service, hence is an entry-point for the run-time execution of the CBA package.
 
 A workflow also defines inputs and outputs that will defined the payload contract of the request and response (see Dynamic API)
@@ -13,10 +12,11 @@ A workflow can be composed of one or multiple sub-actions to execute.
 
 A CBA package can have as many workflows as needed.
 
+
 Single action
 -------------
-
 The workflow is directly backed by a node_template of type tosca.nodes.Component
+
 
 Multiple sub-actions
 --------------------
@@ -27,11 +27,9 @@ A DG used as workflow for CDS is composed of multiple execute nodes; each indivi
 Below the properties of a workflow:
 
 
-
 Workflow Example
 ----------------
-
-::
+.. code-block:: json
 
    {
      "workflow": {
@@ -41,7 +39,7 @@ Workflow Example
              "required": true,
              "type": "string"
            },
-           "resource-assignment-properties": {                    <- dynamic inputs
+           "resource-assignment-properties": {                 <- dynamic inputs
              "required": true,
              "type": "dt-resource-assignment-properties"
            }
