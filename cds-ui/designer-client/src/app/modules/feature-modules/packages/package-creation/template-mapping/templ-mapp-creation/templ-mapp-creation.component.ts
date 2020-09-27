@@ -54,6 +54,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     edit = false;
     fileToDelete: any = {};
     parserFactory = new ParserFactory();
+    selectedProps = new Set<string>();
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -88,7 +89,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 this.resourceDictionaryRes = [];
             }
             this.templateFileContent = templateInfo.fileContent;
-            this.templateExt = this.templateInfo.ext || this.templateExt ;
+            this.templateExt = this.templateInfo.ext || this.templateExt;
             this.currentTemplate = Object.assign({}, templateInfo);
 
             if (templateInfo.type === 'template' || templateInfo.type.includes('template')) {
@@ -100,6 +101,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             }
 
         });
+
 
         this.sharedService.isEdit().subscribe(res => {
             console.log('------------------------....');
@@ -129,6 +131,68 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             destroy: true,
             retrieve: true,
         };
+    }
+
+    selectProp(value) {
+        console.log(value);
+        if (this.selectedProps.has(value)) {
+            this.selectedProps.delete(value);
+        } else {
+            this.selectedProps.add(value);
+        }
+    }
+
+    removeProps() {
+        console.log(this.selectedProps);
+        this.selectedProps.forEach(prop => {
+            this.resourceDictionaryRes.forEach((res, index) => {
+                if (res.name === prop) {
+                    console.log('delete...');
+                    this.resourceDictionaryRes.splice(index, 1);
+                    this.selectedProps.delete(prop);
+                }
+            });
+        });
+    }
+    selectAllProps() {
+        if (this.resourceDictionaryRes.length === this.selectedProps.size) {
+            this.selectedProps = new Set<string>();
+        } else {
+            this.resourceDictionaryRes.forEach(prop => {
+                console.log(prop);
+                this.selectedProps.add(prop.name);
+            });
+        }
+
+    }
+    reMap() {
+        let currentResDictionary = [];
+        if (this.selectedProps && this.selectedProps.size > 0) {
+            console.log('base');
+            this.packageCreationService.getTemplateAndMapping([...this.selectedProps]).subscribe(res => {
+                let message = 'Re-Auto mapping';
+                this.mappingRes = [];
+                currentResDictionary = res;
+                console.log(currentResDictionary);
+                if (currentResDictionary && currentResDictionary.length <= 0) {
+                    message = 'No values for those attributes';
+                }
+
+                // Replcae new values with the old ones
+                currentResDictionary.forEach(curr => {
+                    for (let i = 0; i < this.resourceDictionaryRes.length; i++) {
+                        if (this.resourceDictionaryRes[i].name === curr.name) {
+                            this.resourceDictionaryRes[i] = curr;
+                        }
+                    }
+                });
+                this.rerender();
+                this.toastr.success(message, 'Success');
+            }, err => {
+                this.toastr.error('Error');
+            });
+        }
+
     }
 
     getFileExtension() {

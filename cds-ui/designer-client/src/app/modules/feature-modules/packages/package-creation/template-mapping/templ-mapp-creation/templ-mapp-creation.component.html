@@ -9,8 +9,8 @@
             class="btn btn-outline-danger" title="Delete Template">Delete</button>
         <button (click)="cancel()" [hidden]="fileName?.length <=0 || edit"
             class="btn btn-outline-secondary">Clear</button>
-        <button tourAnchor="tm-templateFinish" (click)="saveToStore()" [disabled]="fileName?.length <=0" title="Submit template and close"
-            class="btn btn-primary">Finish</button>
+        <button tourAnchor="tm-templateFinish" (click)="saveToStore()" [disabled]="fileName?.length <=0"
+            title="Submit template and close" class="btn btn-primary">Finish</button>
     </div>
 </div>
 <div class="card creat-card">
@@ -31,8 +31,8 @@
         <div class="card">
             <div class="card-header" id="headingOne">
                 <h5 class="mb-0 d-flex justify-content-between">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" id="templateTab" aria-expanded="true"
-                        aria-controls="collapseOne">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" id="templateTab"
+                        aria-expanded="true" aria-controls="collapseOne">
                         1. Template <span class="accordian-title">{{currentTemplate?.fileName?.split('/')[1]}}</span>
                     </button>
 
@@ -59,7 +59,8 @@
                                     Jinja
                                 </span>
                             </label>
-                            <label tourAnchor="tm-templateContent" name="trst" (click)="allowedExt=['.kt'];templateExt='kt'">
+                            <label tourAnchor="tm-templateContent" name="trst"
+                                (click)="allowedExt=['.kt'];templateExt='kt'">
                                 <input class="form-check-input" [(ngModel)]="templateExt" type="radio"
                                     name="exampleRadios" id="exampleRadios1" value=kt>
 
@@ -70,8 +71,7 @@
                         </div>
                     </div>
                     <div class="create-template-import">Use the editor to add parameters or you can also
-                        <a href="#" data-toggle="modal" 
-                            data-target="#templateModal"><b>Import
+                        <a href="#" data-toggle="modal" data-target="#templateModal"><b>Import
                                 File</b></a>. <br /> <span class="templateNote"><i class="icon-info"
                                 aria-hidden="true"></i> When you import new file, the new attributes will replace
                             current attributes.</span></div>
@@ -86,8 +86,9 @@
         <div class="card">
             <div class="card-header" id="headingTwo">
                 <h5 class="mb-0">
-                    <button tourAnchor="tm-mappingContent" class="btn btn-link collapsed" id="mappingTab" data-toggle="collapse"
-                        data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <button tourAnchor="tm-mappingContent" class="btn btn-link collapsed" id="mappingTab"
+                        data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                        aria-controls="collapseTwo">
                         2. Manage Mapping <span
                             class="accordian-title">{{currentMapping?.fileName?.split('/')[1]}}</span>
                     </button>
@@ -127,6 +128,7 @@
                     <table datatable [dtOptions]="initDtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Required</th>
                                 <th>Parameter Name</th>
                                 <th>Dictionary Name</th>
@@ -139,6 +141,8 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let dict of resourceDictionaryRes">
+                                <td><input type="checkbox" [checked]="selectedProps.has(dict.name)"
+                                        (click)="selectProp(dict.name)"></td>
                                 <td>
                                     <img *ngIf="dict.definition?.property?.required"
                                         src="/assets/img/icon-required-yes.svg">
