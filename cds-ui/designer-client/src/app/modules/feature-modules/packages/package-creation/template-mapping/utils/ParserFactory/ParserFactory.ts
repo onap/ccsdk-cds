@@ -6,6 +6,7 @@ import { FileExtension } from '../TemplateType';
 import { JinjaXMLParser } from './JinjaXML';
 import { VtlYMLParser } from './VtlYMLParser';
 import { JinjaYMLParser } from './JinjaYML';
+import { ASCIIParser } from './ASCII-Parser';
 
 export class ParserFactory {
 
@@ -19,6 +20,8 @@ export class ParserFactory {
                 parser = new XmlParser();
             } else if (this.isJSON(fileContent)) {
                 parser = new VtlParser();
+            } else if (this.isASCII(fileContent)) {
+                parser = new ASCIIParser();
             } else {
                 parser = new VtlYMLParser();
             }
@@ -29,6 +32,8 @@ export class ParserFactory {
                 parser = new JinjaXMLParser();
             } else if (this.isJSON(fileContent)) {
                 // TODO: implement JSON parser
+            } else if (this.isASCII(fileContent)) {
+                parser = new ASCIIParser();
             } else {
                 parser = new JinjaYMLParser();
             }
@@ -50,5 +55,17 @@ export class ParserFactory {
             return false;
         }
         return true;
+    }
+
+    private isASCII(fileContent: string): boolean {
+        if (
+            fileContent.includes('end') &&
+            fileContent.includes('set') &&
+            fileContent.includes('$(')
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

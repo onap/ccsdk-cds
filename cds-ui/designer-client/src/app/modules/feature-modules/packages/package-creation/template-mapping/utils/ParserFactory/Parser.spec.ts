@@ -77,4 +77,42 @@ fdescribe('ImportsTabComponent', () => {
         expect(res[1]).toEqual('vnf_name');
 
     });
+
+    it('Test ASCII Parser', () => {
+        const fileContent = `
+        config system interface
+        edit "internal"
+        set vdom "root"
+        set ip $(subnet1_fgt_ip) 255.255.255.0 #1
+        set allowaccess ping https ssh http fgfm capwap
+        set type hard-switch
+        set stp enable
+        set role lan
+        next
+        end
+        config system dhcp server
+        edit 1
+        set dns-service default
+        set default-gateway $(subnet1_fgt_ip) #2
+        set netmask 255.255.255.0
+        set interface "internal"
+        config ip-range
+        edit 1
+        set start-ip $(subnet1_fgt_ip)4,150 #3
+        set end-ip $(subnet1_fgt_ip)4,200 #4
+        next
+        end
+        next
+        end
+        Options
+        `;
+
+        const parser = parserFactory.getParser(fileContent, FileExtension.Jinja);
+        const res = parser.getVariables(fileContent);
+        console.log(res);
+        expect(res.length).toEqual(1);
+        expect(res[0]).toEqual('subnet1_fgt_ip');
+
+
+    });
 });
