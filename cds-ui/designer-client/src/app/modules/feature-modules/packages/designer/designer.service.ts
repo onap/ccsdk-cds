@@ -21,11 +21,11 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {ApiService} from '../../../../common/core/services/api.typed.service';
-import {ResourceDictionaryURLs, BlueprintURLs} from '../../../../common/constants/app-constants';
-import {ModelType} from './model/ModelType.model';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ApiService } from '../../../../common/core/services/api.typed.service';
+import { ResourceDictionaryURLs, BlueprintURLs } from '../../../../common/constants/app-constants';
+import { ModelType } from './model/ModelType.model';
 import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
 
 
@@ -34,8 +34,10 @@ import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
 })
 export class DesignerService {
 
-    constructor(private api: ApiService<ModelType>,
-                private api2: ApiService<BluePrintDetailModel>) {
+    constructor(
+        private api: ApiService<ModelType>,
+        private api2: ApiService<BluePrintDetailModel>
+    ) {
     }
 
     getFunctions(modelDefinitionType: string): Observable<ModelType[]> {
@@ -48,6 +50,11 @@ export class DesignerService {
 
     getPagedPackages(id: string) {
         return this.getBluePrintModel(id);
+    }
+
+    publishBlueprint(body: any | null, options?: any): Observable<any> {
+
+        return this.api.post(BlueprintURLs.publish, body, { responseType: 'text' });
     }
 
 }

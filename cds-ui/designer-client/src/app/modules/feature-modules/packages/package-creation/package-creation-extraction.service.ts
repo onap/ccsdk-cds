@@ -1,12 +1,12 @@
-import {Injectable, ViewChild} from '@angular/core';
-import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
-import {VlbDefinition} from './mapping-models/definitions/VlbDefinition';
-import {DslDefinition} from './mapping-models/CBAPacakge.model';
-import {PackageCreationStore} from './package-creation.store';
+import { Injectable, ViewChild } from '@angular/core';
+import { MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
+import { VlbDefinition } from './mapping-models/definitions/VlbDefinition';
+import { DslDefinition } from './mapping-models/CBAPacakge.model';
+import { PackageCreationStore } from './package-creation.store';
 import * as JSZip from 'jszip';
-import {PackageCreationUtils} from './package-creation.utils';
-import {MetadataTabComponent} from './metadata-tab/metadata-tab.component';
-import {DesignerStore} from '../designer/designer.store';
+import { PackageCreationUtils } from './package-creation.utils';
+import { MetadataTabComponent } from './metadata-tab/metadata-tab.component';
+import { DesignerStore } from '../designer/designer.store';
 
 @Injectable({
     providedIn: 'root'
@@ -19,12 +19,14 @@ export class PackageCreationExtractionService {
 
     private toscaMetaDataKeys: string[] = ['TOSCA-Meta-File-Version', 'CSAR-Version',
         'Created-By', 'Entry-Definitions', 'Template-Name', 'Template-Version', 'Template-Type', 'Template-Tags'];
-    @ViewChild(MetadataTabComponent, {static: false})
+    @ViewChild(MetadataTabComponent, { static: false })
     private metadataTabComponent: MetadataTabComponent;
 
-    constructor(private packageCreationStore: PackageCreationStore,
-                private packageCreationUtils: PackageCreationUtils,
-                private designerStore: DesignerStore) {
+    constructor(
+        private packageCreationStore: PackageCreationStore,
+        private packageCreationUtils: PackageCreationUtils,
+        private designerStore: DesignerStore
+    ) {
 
     }
 
@@ -96,9 +98,9 @@ export class PackageCreationExtractionService {
             console.log(definition.topology_template);
             const content = {};
             const workflow = 'workflows';
-            content[workflow] = definition.topology_template.workflows;
+            content[workflow] = definition.topology_template ? definition.topology_template.workflows : {};
             const nodeTemplates = 'node_templates';
-            content[nodeTemplates] = definition.topology_template.node_templates;
+            content[nodeTemplates] = definition.topology_template ? definition.topology_template.node_templates : {};
             this.designerStore.saveSourceContent(JSON.stringify(content));
 
         }

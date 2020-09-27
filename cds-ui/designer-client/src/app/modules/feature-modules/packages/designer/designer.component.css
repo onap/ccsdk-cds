@@ -203,7 +203,9 @@ header{
   font-size: 11px;
   line-height: 20px;
 }
-
+.save-blueprint li:hover{
+  cursor: pointer;
+}
 
 
 
