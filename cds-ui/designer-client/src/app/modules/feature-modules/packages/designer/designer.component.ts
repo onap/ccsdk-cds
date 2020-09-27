@@ -115,6 +115,18 @@ export class DesignerComponent implements OnInit, OnDestroy {
         this.attributesSideBar = !this.attributesSideBar;
     }
 
+    publishBluePrint(blob) {
+        const formData = new FormData();
+        formData.append('file', blob);
+        this.designerService.publishBlueprint(formData).subscribe(res => {
+            console.log('Package Deployed...');
+        }, error => {
+            console.log(error);
+        }, () => {
+            //  this.deployBluePrint = false;
+        });
+    }
+
     // private _toggleSidebar3() {
     //   this.functionAttributeSidebar = !this.functionAttributeSidebar;
     // }

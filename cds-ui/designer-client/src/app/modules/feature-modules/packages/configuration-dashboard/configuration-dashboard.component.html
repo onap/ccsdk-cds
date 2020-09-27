@@ -81,7 +81,7 @@
                         <span>Save</span>
                     </button>
                     <button data-target="#discardChangesModal" data-toggle="modal" class="action-button"
-                            [disabled]="!isSaveEnabled">
+                        [disabled]="!isSaveEnabled">
                         <i class="icon-discard-sm" aria-hidden="true"></i>
                         <span>Discard Changes</span>
                     </button>
@@ -98,7 +98,7 @@
                     </a>
 
                     <a class="action-button"
-                       (click)="downloadPackage(viewedPackage.artifactName,viewedPackage.artifactVersion)">
+                        (click)="downloadPackage(viewedPackage.artifactName,viewedPackage.artifactVersion)">
                         <i class="icon-download" aria-hidden="true"></i>
                         <span>Download</span>
                     </a>
@@ -127,7 +127,8 @@
                             <div class="row package-auth-info">
                                 <div class="col-3">
                                     <p><b>Author Name</b></p>
-                                    <span> {{viewedPackage.updatedBy ? viewedPackage.updatedBy.split('<')[0] : ""}}</span>
+                                    <span>
+                                        {{viewedPackage.updatedBy ? viewedPackage.updatedBy.split('<')[0] : ""}}</span>
                                 </div>
                                 <!--<div class="col-4">
                                     <p><b>Author Email</b></p>
@@ -138,19 +139,19 @@
                                     <ul class="package-contributers">
                                         <li>
                                             <button type="button" class="border-fade" data-toggle="tooltip"
-                                                    data-placement="bottom" title="User name">
+                                                data-placement="bottom" title="User name">
                                                 <img src="/assets/img/img-user1.jpeg">
                                             </button>
                                         </li>
                                         <li>
                                             <button type="button" data-toggle="tooltip" data-placement="bottom"
-                                                    title="User name">
+                                                title="User name">
                                                 <img src="/assets/img/img-user2.jpg">
                                             </button>
                                         </li>
                                         <li>
                                             <button type="button" data-toggle="tooltip" data-placement="bottom"
-                                                    title="User name">
+                                                title="User name">
                                                 <img src="/assets/img/img-user3.jpg">
                                             </button>
                                         </li>
@@ -167,25 +168,25 @@
                             </button> -->
                             <!-- Button trigger modal - 1st Action -->
 
-                            <button (click)="checkSkipTypesOfAction()" type="button" class="btn btn-sm btn-primary mb-2" data-toggle="modal"
-                                    [attr.data-target]="dataTarget">
+                            <button (click)="checkSkipTypesOfAction()" type="button" class="btn btn-sm btn-primary mb-2"
+                                data-toggle="modal" [attr.data-target]="dataTarget">
                                 <i class="icon-topologyView-active"></i> Designer Mode
                             </button>
                             <!-- Designer Modal -->
                             <div class="modal fade createActionModal" id="exampleModalLong" tabindex="-1" role="dialog"
-                                 aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                                aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLongTitle"></h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                                    title="Close">
+                                                title="Close">
                                                 <i class="icon-action-close"></i>
                                             </button>
                                         </div>
                                         <div class="modal-body">
                                             <div id="carouselExampleIndicators" class="carousel slide"
-                                                 data-ride="carousel" data-interval="false">
+                                                data-ride="carousel" data-interval="false">
                                                 <div class="carousel-inner">
                                                     <!--OPTIONS SLIDE-->
                                                     <div class="carousel-item active">
@@ -195,15 +196,15 @@
                                                             <!--Custom Action-->
                                                             <div class="col-3 d-flex">
                                                                 <a class="d-flex"
-                                                                   data-target="#carouselExampleIndicators"
-                                                                   data-slide-to="1">
+                                                                    data-target="#carouselExampleIndicators"
+                                                                    data-slide-to="1">
                                                                     <div class="card actionType custom">
                                                                         <div class="card-body">
                                                                             <h3>Custom</h3>
                                                                             <p>Start with your own settings</p>
                                                                             <button
-                                                                                    data-target="#carouselExampleIndicators"
-                                                                                    data-slide-to="1" class="btn">
+                                                                                data-target="#carouselExampleIndicators"
+                                                                                data-slide-to="1" class="btn">
                                                                                 Create
                                                                             </button>
                                                                         </div>
@@ -213,16 +214,16 @@
                                                             <!--Default Action-->
                                                             <div class="col-3 d-flex">
                                                                 <a class="d-flex"
-                                                                   data-target="#carouselExampleIndicators"
-                                                                   data-slide-to="2">
+                                                                    data-target="#carouselExampleIndicators"
+                                                                    data-slide-to="2">
                                                                     <div class="card actionType default">
                                                                         <div class="card-body">
                                                                             <h3>Default</h3>
                                                                             <p>Explore preset actions from CDS
                                                                                 Action Catalog</p>
                                                                             <button
-                                                                                    data-target="#carouselExampleIndicators"
-                                                                                    data-slide-to="2" class="btn">
+                                                                                data-target="#carouselExampleIndicators"
+                                                                                data-slide-to="2" class="btn">
                                                                                 Select
                                                                             </button>
                                                                         </div>
@@ -232,8 +233,8 @@
                                                             <!--Recent Action-->
                                                             <div class="col-3 d-flex">
                                                                 <a class="d-flex"
-                                                                   data-target="#carouselExampleIndicators"
-                                                                   data-slide-to="3">
+                                                                    data-target="#carouselExampleIndicators"
+                                                                    data-slide-to="3">
                                                                     <div class="card actionType recent">
                                                                         <div class="card-body">
                                                                             <h3>Recent</h3>
@@ -241,8 +242,8 @@
                                                                                 recent
                                                                                 packages</p>
                                                                             <button
-                                                                                    data-target="#carouselExampleIndicators"
-                                                                                    data-slide-to="3" class="btn">
+                                                                                data-target="#carouselExampleIndicators"
+                                                                                data-slide-to="3" class="btn">
                                                                                 Select
                                                                             </button>
                                                                         </div>
@@ -252,15 +253,15 @@
                                                             <!--Import Action-->
                                                             <div class="col-3 d-flex">
                                                                 <a class="d-flex"
-                                                                   data-target="#carouselExampleIndicators"
-                                                                   data-slide-to="4">
+                                                                    data-target="#carouselExampleIndicators"
+                                                                    data-slide-to="4">
                                                                     <div class="card actionType import">
                                                                         <div class="card-body">
                                                                             <h3>Import</h3>
                                                                             <p>Import your own action files</p>
                                                                             <button
-                                                                                    data-target="#carouselExampleIndicators"
-                                                                                    data-slide-to="4" class="btn">
+                                                                                data-target="#carouselExampleIndicators"
+                                                                                data-slide-to="4" class="btn">
                                                                                 Browse
                                                                             </button>
                                                                         </div>
@@ -270,8 +271,8 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="col text-center">
-                                                                <button class="btn skip-btn"
-                                                                        (click)="goToDesignerMode(viewedPackage.id)">
+                                                                <button class="btn skip-btn" data-dismiss="modal"
+                                                                    (click)="goToDesignerMode(viewedPackage.id)">
                                                                     Skip
                                                                     to Designer Canvas
                                                                 </button>
@@ -281,16 +282,16 @@
                                                     <!--Custom Action Form-->
                                                     <div class="carousel-item">
                                                         <button data-target="#carouselExampleIndicators"
-                                                                data-slide-to="0" title="Back" class="btn back"><i
+                                                            data-slide-to="0" title="Back" class="btn back"><i
                                                                 class="icon-action-back"></i></button>
                                                         <h1>Create Custom Action</h1>
                                                         <div class="form-group text-center">
                                                             <input type="text" [(ngModel)]="customActionName"
-                                                                   class="form-control customAction"
-                                                                   placeholder="Type Action Name" autofocus>
-                                                            <button type="button"
-                                                                    (click)="goToDesignerMode(viewedPackage.id)"
-                                                                    class="btn submit">Start
+                                                                class="form-control customAction"
+                                                                placeholder="Type Action Name" autofocus>
+                                                            <button type="button"  data-dismiss="modal"
+                                                                (click)="goToDesignerMode(viewedPackage.id)"
+                                                                class="btn submit">Start
                                                             </button>
                                                         </div>
 
@@ -298,7 +299,7 @@
                                                     <!--Default Actions Form-->
                                                     <div class="carousel-item">
                                                         <button data-target="#carouselExampleIndicators"
-                                                                data-slide-to="0" title="Back" class="btn back"><i
+                                                            data-slide-to="0" title="Back" class="btn back"><i
                                                                 class="icon-action-back"></i></button>
                                                         <h1>Choose Action(s) from CDS Default Package </h1>
                                                         <div class="actionFormWrapper">
@@ -320,7 +321,7 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <input type="text" class="form-control searchInput"
-                                                                           placeholder="Search">
+                                                                        placeholder="Search">
                                                                 </div>
                                                             </div>
                                                             <div class="row actionsListScroll">
@@ -328,11 +329,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation1"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation1" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation1">config-assign</label>
+                                                                                for="customControlValidation1">config-assign</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -340,11 +340,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation2"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation2" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation2">config-assign-test</label>
+                                                                                for="customControlValidation2">config-assign-test</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -352,11 +351,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation3"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation3" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation3">config-deploy</label>
+                                                                                for="customControlValidation3">config-deploy</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -364,11 +362,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation4"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation4" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation4">config-modify</label>
+                                                                                for="customControlValidation4">config-modify</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -376,11 +373,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -388,11 +384,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -400,11 +395,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -412,11 +406,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -424,11 +417,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -436,11 +428,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -448,11 +439,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -460,9 +450,9 @@
                                                             <div class="row">
                                                                 <div class="col text-center">
                                                                     <p class="selectedActions">0 selected</p>
-                                                                    <button type="button"
-                                                                            (click)="goToDesignerMode(viewedPackage.id)"
-                                                                            class="btn submit">Start
+                                                                    <button type="button" data-dismiss="modal"
+                                                                        (click)="goToDesignerMode(viewedPackage.id)"
+                                                                        class="btn submit">Start
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -471,7 +461,7 @@
                                                     <!--Recent Actions Form-->
                                                     <div class="carousel-item">
                                                         <button data-target="#carouselExampleIndicators"
-                                                                data-slide-to="0" title="Back" class="btn back"><i
+                                                            data-slide-to="0" title="Back" class="btn back"><i
                                                                 class="icon-action-back"></i></button>
                                                         <h1>Choose Action(s) from Recent Packages</h1>
                                                         <div class="actionFormWrapper">
@@ -501,7 +491,7 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <input type="text" class="form-control searchInput"
-                                                                           placeholder="Search">
+                                                                        placeholder="Search">
                                                                 </div>
                                                             </div>
                                                             <div class="row actionsListScroll">
@@ -509,11 +499,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation1"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation1" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation1">config-assign</label>
+                                                                                for="customControlValidation1">config-assign</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -521,11 +510,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation2"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation2" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation2">config-assign-test</label>
+                                                                                for="customControlValidation2">config-assign-test</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -533,11 +521,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation3"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation3" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation3">config-deploy</label>
+                                                                                for="customControlValidation3">config-deploy</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -545,11 +532,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation4"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation4" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation4">config-modify</label>
+                                                                                for="customControlValidation4">config-modify</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -557,11 +543,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -569,11 +554,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -581,11 +565,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -593,11 +576,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -605,11 +587,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -617,11 +598,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -629,11 +609,10 @@
                                                                     <div class="actionName">
                                                                         <div class="custom-control custom-checkbox">
                                                                             <input type="checkbox"
-                                                                                   class="custom-control-input"
-                                                                                   id="customControlValidation5"
-                                                                                   required>
+                                                                                class="custom-control-input"
+                                                                                id="customControlValidation5" required>
                                                                             <label class="custom-control-label"
-                                                                                   for="customControlValidation5">config-assign1</label>
+                                                                                for="customControlValidation5">config-assign1</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -641,8 +620,7 @@
                                                             <div class="row">
                                                                 <div class="col text-center">
                                                                     <p class="selectedActions">0 selected</p>
-                                                                    <button type="button"
-                                                                            class="btn submit">Start
+                                                                    <button type="button" class="btn submit">Start
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -651,30 +629,30 @@
                                                     <!--Import Actions Form-->
                                                     <div class="carousel-item">
                                                         <button data-target="#carouselExampleIndicators"
-                                                                data-slide-to="0" title="Back" class="btn back"><i
+                                                            data-slide-to="0" title="Back" class="btn back"><i
                                                                 class="icon-action-back"></i></button>
                                                         <h1>Import Action(s)</h1>
                                                         <div class="actionFormWrapper">
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <ngx-file-drop accept=".json"
-                                                                                   dropZoneLabel="Drop files here"
-                                                                                   (onFileDrop)="dropped($event)"
-                                                                                   (onFileOver)="fileOver($event)"
-                                                                                   (onFileLeave)="fileLeave($event)">
+                                                                        dropZoneLabel="Drop files here"
+                                                                        (onFileDrop)="dropped($event)"
+                                                                        (onFileOver)="fileOver($event)"
+                                                                        (onFileLeave)="fileLeave($event)">
                                                                         <ng-template ngx-file-drop-content-tmp
-                                                                                     let-openFileSelector="openFileSelector">
+                                                                            let-openFileSelector="openFileSelector">
                                                                             <div class="folder-upload">
                                                                                 <img
-                                                                                        src="assets/img/folder-upload.svg"/>
+                                                                                    src="assets/img/folder-upload.svg" />
                                                                             </div>
                                                                             <div class="folder-upload-text">
                                                                                 Drag & Drop file
                                                                             </div>
                                                                             <div class="folder-upload-text">or
                                                                                 <button type="button"
-                                                                                        class="btn btn-sm btn-primary"
-                                                                                        (click)="openFileSelector()">
+                                                                                    class="btn btn-sm btn-primary"
+                                                                                    (click)="openFileSelector()">
                                                                                     Browse
                                                                                     Files
                                                                                 </button>
@@ -688,17 +666,17 @@
                                                                     <div class="upload-table">
                                                                         <table class="table">
                                                                             <thead>
-                                                                            <tr
+                                                                                <tr
                                                                                     *ngFor="let item of uploadedFiles; let i=index">
-                                                                                <th width="40"><img
-                                                                                        src="assets/img/icon-file-code.svg"/>
-                                                                                </th>
-                                                                                <th>{{ item.name }}</th>
-                                                                                <th width="40" class="text-right">
-                                                                                    <img
-                                                                                            src="assets/img/icon-remove-file.svg"/>
-                                                                                </th>
-                                                                            </tr>
+                                                                                    <th width="40"><img
+                                                                                            src="assets/img/icon-file-code.svg" />
+                                                                                    </th>
+                                                                                    <th>{{ item.name }}</th>
+                                                                                    <th width="40" class="text-right">
+                                                                                        <img
+                                                                                            src="assets/img/icon-remove-file.svg" />
+                                                                                    </th>
+                                                                                </tr>
                                                                             </thead>
                                                                         </table>
                                                                     </div>
@@ -706,8 +684,7 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col text-center">
-                                                                    <button type="button"
-                                                                            class="btn submit mt-4">Import
+                                                                    <button type="button" class="btn submit mt-4">Import
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -720,7 +697,7 @@
                                 </div>
                             </div>
                             <button type="button" class="btn btn-sm mb-2 btn-enrich" data-toggle="modal"
-                                    data-target="#enrichModal">
+                                data-target="#enrichModal">
                                 <i class="icon-enrich" aria-hidden="true"></i> Manual Enrich
                             </button>
 
@@ -738,17 +715,17 @@
                     <div class="col">
                         <div class="nav nav-tabs " id="nav-tab" role="tablist">
                             <a [classList]="metadataClasses" id="nav-metadata-tab" data-toggle="tab"
-                               href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="true"
-                               autofocus #nameit (focusout)="saveMetaData()">METADATA</a>
+                                href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="true"
+                                autofocus #nameit (focusout)="saveMetaData()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-template-tab" data-toggle="tab" href="#nav-template"
-                               role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
+                                role="tab" aria-controls="nav-template" aria-selected="false">TEMPLATE & MAPPING</a>
                             <a class="nav-item nav-link" id="nav-scripts-tab" data-toggle="tab" href="#nav-scripts"
-                               role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
+                                role="tab" aria-controls="nav-scripts" aria-selected="false">SCRIPTS</a>
                             <a class="nav-item nav-link" id="nav-imports-tab" data-toggle="tab" href="#nav-imports"
-                               role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a>
+                                role="tab" aria-controls="nav-imports" aria-selected="false">DEFINITIONS</a>
                             <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab"
-                               href="#nav-authentication" role="tab" aria-controls="nav-authentication"
-                               aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
+                                href="#nav-authentication" role="tab" aria-controls="nav-authentication"
+                                aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
                         </div>
                     </div>
 
@@ -757,24 +734,24 @@
                     <div class="col">
                         <div class="tab-content" id="nav-tabContent" (change)="clickEvent()">
                             <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
-                                 aria-labelledby="nav-metadata-tab">
+                                aria-labelledby="nav-metadata-tab">
                                 <app-metadata-tab></app-metadata-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-template" role="tabpanel"
-                                 aria-labelledby="nav-template-tab">
+                                aria-labelledby="nav-template-tab">
                                 <app-template-mapping></app-template-mapping>
                             </div>
                             <div class="tab-pane fade" id="nav-scripts" role="tabpanel"
-                                 aria-labelledby="nav-scripts-tab">
+                                aria-labelledby="nav-scripts-tab">
                                 <app-scripts-tab></app-scripts-tab>
                             </div>
                             <div class="tab-pane fade" id="nav-imports" role="tabpanel"
-                                 aria-labelledby="nav-imports-tab">
+                                aria-labelledby="nav-imports-tab">
                                 <app-imports-tab></app-imports-tab>
 
                             </div>
                             <div class="tab-pane fade" id="nav-authentication" role="tabpanel"
-                                 aria-labelledby="nav-authentication-tab">
+                                aria-labelledby="nav-authentication-tab">
                                 <div class="card creat-card">
                                     <div class="editor-container">
                                         <app-dsl-definitions-tab></app-dsl-definitions-tab>
@@ -791,13 +768,13 @@
 
 <!-- Enrich Modal -->
 <div class="modal fade enrichModal" id="enrichModal" tabindex="-1" role="dialog" aria-labelledby="enrichModalLabel"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="enrichModalLabel">Manual Enrich</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <img src="assets/img/icon-close.svg"/>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body">
@@ -807,16 +784,14 @@
                     <li>2. Press <b>Enrich</b> button</li>
                 </ul>
                 <ace-editor [(text)]="vlbDefinition.topology_template.content" [mode]="'javascript'"
-                            [autoUpdateContent]="true"
-                            [durationBeforeCallback]="1000" (textChanged)="textChanged($event)" [theme]="'eclipse'"
-                            #editor
-                            style="height:300px;">
+                    [autoUpdateContent]="true" [durationBeforeCallback]="1000" (textChanged)="textChanged($event)"
+                    [theme]="'eclipse'" #editor style="height:300px;">
                 </ace-editor>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" data-dismiss="modal" class="btn btn-primary btn-enrich"
-                        (click)="enrichBluePrint()">Enrich
+                    (click)="enrichBluePrint()">Enrich
                 </button>
             </div>
         </div>
@@ -824,7 +799,7 @@
 </div>
 <!-- Delete Modal -->
 <div class="modal fade" id="removePackageModal" tabindex="-1" role="dialog" aria-labelledby="removePackageModalLabel"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -838,8 +813,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" (click)="deletePackage()" data-dismiss="modal"
-                        class="btn btn-primary">Delete
+                <button type="button" (click)="deletePackage()" data-dismiss="modal" class="btn btn-primary">Delete
                 </button>
             </div>
         </div>
@@ -847,7 +821,7 @@
 </div>
 
 <div class="modal fade" id="discardChangesModal" tabindex="-1" role="dialog" aria-labelledby="discardChangesModalLabel"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -861,8 +835,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" (click)="discardChanges()" data-dismiss="modal"
-                        class="btn btn-primary">Discard Changes
+                <button type="button" (click)="discardChanges()" data-dismiss="modal" class="btn btn-primary">Discard
+                    Changes
                 </button>
             </div>
         </div>

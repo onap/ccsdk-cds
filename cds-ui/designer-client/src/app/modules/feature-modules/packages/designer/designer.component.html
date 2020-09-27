@@ -12,7 +12,7 @@
                     <li class="breadcrumb-item">
                         <a routerLink="/packages/package/{{viewedPackage.id}}">{{viewedPackage.artifactName}}</a>
                         <button type="button" class="btn package-info-btn" data-toggle="modal"
-                                data-target="#exampleModalLong">
+                            data-target="#exampleModalLong">
                             <i class="icon-info" aria-hidden="true"></i>
                         </button>
                     </li>
@@ -22,13 +22,13 @@
                     </li>
                 </ol>
                 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
-                     aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLongTitle">Package Details</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <img src="assets/img/icon-close.svg"/>
+                                    <img src="assets/img/icon-close.svg" />
                                 </button>
                             </div>
                             <div class="modal-body package-info">
@@ -70,15 +70,15 @@
                 <li>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
-                           data-tooltip="Preview">
+                            data-tooltip="Preview">
                             <i class="fa fa-eye"></i>
                         </a>
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
-                           data-tooltip="Download">
+                            data-tooltip="Download">
                             <i class="fa fa-download"></i>
                         </a>
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
-                           data-tooltip="Share">
+                            data-tooltip="Share">
                             <i class="fa fa-share-square"></i>
                         </a>
                     </div>
@@ -92,7 +92,7 @@
                                 <a (click)="saveBluePrint()">Save</a>
                             </li>
                             <li>
-                                <a href="">Save &amp; Deploy</a>
+                                <a (click)="publishBluePrint()">Save &amp; Deploy</a>
                             </li>
                         </ul>
                     </div>
@@ -106,7 +106,7 @@
 
 <nav class="editNavbar row source-button {{cl}} navbar navbar-expand-lg">
     <button (click)="_toggleSidebar1()" class="toggoleBtn active btn tooltip-bottom" title="" aria-pressed="true"
-            data-tooltip="Collapse Side bar">
+        data-tooltip="Collapse Side bar">
         <i class="fa arr-size">&#xf100;</i>
     </button>
     <div class="collapse navbar-collapse ">
@@ -117,9 +117,9 @@
                     <div class="col-12">
                         <div class="nav nav-tabs " id="nav-tab" role="tablist">
                             <a class="nav-item nav-link active col-6" id=" " data-toggle="tab" href="" role="tab"
-                               aria-controls=" " aria-selected="false" autofocus #nameit>Workflow</a>
+                                aria-controls=" " aria-selected="false" autofocus #nameit>Workflow</a>
                             <a class="nav-item nav-link col-6" id=" " data-toggle="tab" href="" role="tab"
-                               aria-controls=" " aria-selected="false">Template</a>
+                                aria-controls=" " aria-selected="false">Template</a>
                         </div>
                     </div>
                 </nav>
@@ -159,7 +159,7 @@
                 <div class="btn-group viewBtns" role="group">
                     <button type="button" class="btn btn-secondary topologySource active">Designer</button>
                     <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
-                            class="btn btn-secondary topologyView">Scripting
+                        class="btn btn-secondary topologyView">Scripting
                     </button>
                 </div>
             </li>
@@ -171,16 +171,16 @@
 <ng-sidebar-container class="sidebar-container">
     <!-- Controller SideBar -->
     <ng-sidebar [(opened)]="controllerSideBar" [sidebarClass]="'demo-sidebar controllerSidebar container-fluid'"
-                [mode]="'push'" #sidebarLeft>
+        [mode]="'push'" #sidebarLeft>
 
         <nav class="row">
             <!--Nav Tabs-->
             <div class="col">
                 <div class="nav nav-tabs " id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active col-6" id="nav-action-tab" data-toggle="tab" href="#nav-action"
-                       role="tab" aria-controls="nav-action" aria-selected="false" autofocus #nameit>Actions</a>
+                        role="tab" aria-controls="nav-action" aria-selected="false" autofocus #nameit>Actions</a>
                     <a class="nav-item nav-link col-6" id="nav-function-tab" data-toggle="tab" href="#nav-function"
-                       role="tab" aria-controls="nav-function" aria-selected="false">Functions</a>
+                        role="tab" aria-controls="nav-function" aria-selected="false">Functions</a>
                 </div>
             </div>
         </nav>
@@ -188,7 +188,7 @@
             <div class="col">
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-action" role="tabpanel"
-                         aria-labelledby="nav-action-tab">
+                        aria-labelledby="nav-action-tab">
                         <!--Action Search Box-->
                         <input type="text" class="form-control input-search-controller" placeholder="Search Actions">
 
@@ -288,7 +288,7 @@
     </div>
     <!-- Action Attribute SideBar -->
     <ng-sidebar [(opened)]="attributesSideBar" [sidebarClass]="'demo-sidebar attributesSideBar '" [mode]="'push'"
-                [position]="'right'" #sidebarRight>
+        [position]="'right'" #sidebarRight>
         <div class="container-fluid0">
             <div class="row m-0">
                 <div class="col-2 pr-0">
@@ -310,8 +310,7 @@
                                 <div class="card-header row" id="headingOne">
                                     <h2 class="col-10 mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                data-target="#collapseOne" aria-expanded="true"
-                                                aria-controls="collapseOne">
+                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                             Steps
                                         </button>
                                     </h2>
@@ -321,7 +320,7 @@
                                 </div>
 
                                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                     data-parent="#accordionExample">
+                                    data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-9">
@@ -341,7 +340,7 @@
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Description</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1"
-                                                      rows="3"></textarea>
+                                                rows="3"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Target</label>
@@ -355,8 +354,7 @@
                                 <div class="card-header row" id="headingTwo">
                                     <h2 class="col-10 mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                data-target="#collapseTwo" aria-expanded="true"
-                                                aria-controls="collapseTwo">
+                                            data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                                             Inputs
                                         </button>
                                     </h2>
@@ -365,7 +363,7 @@
                                     </div>
                                 </div>
                                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
-                                     data-parent="#accordionExample">
+                                    data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-9">
@@ -385,7 +383,7 @@
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Description</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1"
-                                                      rows="3"></textarea>
+                                                rows="3"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Target</label>
@@ -399,8 +397,8 @@
                                 <div class="card-header row" id="headingThree">
                                     <h2 class="col-10 mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                data-target="#collapseThree" aria-expanded="true"
-                                                aria-controls="collapseThree">
+                                            data-target="#collapseThree" aria-expanded="true"
+                                            aria-controls="collapseThree">
                                             Outputs
                                         </button>
                                     </h2>
@@ -409,7 +407,7 @@
                                     </div>
                                 </div>
                                 <div id="collapseThree" class="collapse show" aria-labelledby="headingThree"
-                                     data-parent="#accordionExample">
+                                    data-parent="#accordionExample">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-9">
@@ -429,7 +427,7 @@
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Description</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1"
-                                                      rows="3"></textarea>
+                                                rows="3"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Target</label>
@@ -448,7 +446,7 @@
 
     <!-- Function Attribute SideBar -->
     <ng-sidebar [(opened)]="functionAttributeSidebar" [sidebarClass]="'demo-sidebar functionAttributeSidebar '"
-                [mode]="'push'" [position]="'right'" #sidebarRight>
+        [mode]="'push'" [position]="'right'" #sidebarRight>
         <div class="container-fluid0">
             <div class="row m-0">
                 <div class="col-2 pr-0">
@@ -506,7 +504,7 @@
                             <div class="card-header row" id="headingOne">
                                 <h2 class="col-10 mb-0">
                                     <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                         Interface
                                     </button>
                                 </h2>
@@ -516,7 +514,7 @@
                             </div>
 
                             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                 data-parent="#accordionExample">
+                                data-parent="#accordionExample">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-9">
@@ -538,11 +536,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label>
-                                            <input class="with-gap radio-btn" name="group1" type="radio"/>
+                                            <input class="with-gap radio-btn" name="group1" type="radio" />
                                             <span class="radio-btn">True</span>
                                         </label>
                                         <label class="radio-btn">
-                                            <input class="with-gap radio-btn" name="group1" type="radio"/>
+                                            <input class="with-gap radio-btn" name="group1" type="radio" />
                                             <span class="radio-btn">False</span>
                                         </label>
                                     </div>
@@ -567,7 +565,7 @@
                             <div class="card-header row" id="headingOne">
                                 <h2 class="col-10 mb-0">
                                     <button class="btn btn-link" type="button" data-toggle="collapse"
-                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                         Artifact
                                     </button>
                                 </h2>
@@ -577,7 +575,7 @@
                             </div>
 
                             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                 data-parent="#accordionExample">
+                                data-parent="#accordionExample">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-9">
