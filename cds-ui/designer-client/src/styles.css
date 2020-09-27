@@ -995,7 +995,7 @@ height: 40px;
   padding: 6px;
 }
 .helpMenu .dropdown-content a{
-  padding: 0 12px;
+  padding: 5px 12px !important;
   text-align: left;
   text-indent: 0;
   font-size: 14px;
@@ -1054,7 +1054,7 @@ height: 40px;
   -webkit-box-shadow: 0 4px 10px 0 #eef0f5;
   box-shadow: 0 4px 10px 0 #eef0f5;
   position: relative;
-  z-index: 8;
+  z-index: 300;
   /* position: fixed;
   width: calc(100% - 50px); */
 }
