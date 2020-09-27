@@ -974,6 +974,11 @@ height: 40px;
   text-indent: unset;
   text-align: center;
 }
+.helpMenu li:hover,
+.helpMenu li:hover i,
+.helpMenu li:hover p{
+  cursor: pointer;
+}
 .helpMenu li:not(:last-child){
   margin-bottom: 9px;
 }
