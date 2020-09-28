@@ -19,11 +19,11 @@ export class ImportPackageComponent implements OnInit {
     constructor(private packageCreationExtractionService: PackageCreationExtractionService,
                 private packageCreationStore: PackageCreationStore,
                 private router: Router) {
-        this.packageCreationStore.clear();
+
     }
 
     ngOnInit() {
-        this.packageCreationStore.clear();
+
     }
 
     removeInitFile(index) {
@@ -72,7 +72,7 @@ export class ImportPackageComponent implements OnInit {
     public fileLeave(event) {
         console.log(event);
     }
-
+// TODO mix two function in ond bigger one
     saveFileToStore() {
         console.log(this.uploadedFiles.length);
         const file = this.getFile(this.uploadedFiles[this.uploadedFiles.length - 1]);

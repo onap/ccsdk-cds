@@ -1,25 +1,26 @@
-import { Injectable, ViewChild } from '@angular/core';
-import { MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
-import { VlbDefinition } from './mapping-models/definitions/VlbDefinition';
-import { DslDefinition } from './mapping-models/CBAPacakge.model';
-import { PackageCreationStore } from './package-creation.store';
+import {Injectable, ViewChild} from '@angular/core';
+import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import {VlbDefinition} from './mapping-models/definitions/VlbDefinition';
+import {DslDefinition} from './mapping-models/CBAPacakge.model';
+import {PackageCreationStore} from './package-creation.store';
 import * as JSZip from 'jszip';
-import { PackageCreationUtils } from './package-creation.utils';
-import { MetadataTabComponent } from './metadata-tab/metadata-tab.component';
-import { DesignerStore } from '../designer/designer.store';
+import {PackageCreationUtils} from './package-creation.utils';
+import {MetadataTabComponent} from './metadata-tab/metadata-tab.component';
+import {DesignerStore} from '../designer/designer.store';
+import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PackageCreationExtractionService {
 
-    private zipFile: JSZip = new JSZip();
+    private zipFile: JSZip;
     private entryDefinitionKeys: string[] = ['template_tags', 'user-groups',
         'author-email', 'template_version', 'template_name', 'template_author', 'template_description'];
 
     private toscaMetaDataKeys: string[] = ['TOSCA-Meta-File-Version', 'CSAR-Version',
         'Created-By', 'Entry-Definitions', 'Template-Name', 'Template-Version', 'Template-Type', 'Template-Tags'];
-    @ViewChild(MetadataTabComponent, { static: false })
+    @ViewChild(MetadataTabComponent, {static: false})
     private metadataTabComponent: MetadataTabComponent;
 
     constructor(
@@ -31,7 +32,7 @@ export class PackageCreationExtractionService {
     }
 
     public extractBlobToStore(blob) {
-
+        this.zipFile = new JSZip();
         let packageName = null;
         this.zipFile.loadAsync(blob).then((zip) => {
             Object.keys(zip.files).filter(fileName => fileName.includes('TOSCA-Metadata/'))
@@ -73,11 +74,11 @@ export class PackageCreationExtractionService {
         });
     }
 
-    private setScripts(filename: string, fileData: any) {
+    public setScripts(filename: string, fileData: any) {
         this.packageCreationStore.addScripts(filename, fileData);
     }
 
-    private setImports(filename: string, fileData: any, packageName: string) {
+    public setImports(filename: string, fileData: any, packageName: string) {
         console.log(filename);
         if (filename.includes(packageName)) {
             let definition = new VlbDefinition();
@@ -108,11 +109,11 @@ export class PackageCreationExtractionService {
 
     }
 
-    private setTemplates(filename: string, fileData: any) {
+    public setTemplates(filename: string, fileData: any) {
         this.packageCreationStore.addTemplate(filename, fileData);
     }
 
-    private setMapping(fileName: string, fileData: string) {
+    public setMapping(fileName: string, fileData: string) {
         this.packageCreationStore.addMapping(fileName, fileData);
     }
 
@@ -120,7 +121,13 @@ export class PackageCreationExtractionService {
         this.packageCreationStore.changeMetaData(metaDataObject);
     }
 
-    private getMetaDataTabInfo(fileData: string) {
+    public setMetaDataWithObject(metaDataObject: MetaDataTabModel, bluePrintDetailModel: BluePrintDetailModel) {
+        metaDataObject.description = bluePrintDetailModel.artifactDescription;
+        this.packageCreationStore.changeMetaData(metaDataObject);
+
+    }
+
+    public getMetaDataTabInfo(fileData: string) {
         const metaDataTabModel = new MetaDataTabModel();
 
         const arrayOfLines = fileData.split('\n');

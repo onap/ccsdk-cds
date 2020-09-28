@@ -7,7 +7,7 @@ import {MetadataTabComponent} from '../package-creation/metadata-tab/metadata-ta
 import * as JSZip from 'jszip';
 import {ConfigurationDashboardService} from './configuration-dashboard.service';
 import {TemplateTopology, VlbDefinition} from '../package-creation/mapping-models/definitions/VlbDefinition';
-import {CBAPackage, DslDefinition} from '../package-creation/mapping-models/CBAPacakge.model';
+import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
 import {PackageCreationUtils} from '../package-creation/package-creation.utils';
 import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
 import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
@@ -89,7 +89,6 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
 
     }
 
-
     private refreshCurrentPackage(id?) {
         this.id = this.route.snapshot.paramMap.get('id');
         console.log(this.id);
@@ -109,78 +108,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
             this.viewedPackage.artifactName + '/' + this.viewedPackage.artifactVersion).subscribe(response => {
             const blob = new Blob([response], {type: 'application/octet-stream'});
             this.currentBlob = blob;
-            this.extractBlobToStore(blob, this.viewedPackage);
+            this.packageCreationExtractionService.extractBlobToStore(blob);
         });
-    }
-
-    private extractBlobToStore(blob: Blob, bluePrintDetailModel: BluePrintDetailModel) {
-        this.zipFile.loadAsync(blob).then((zip) => {
-            Object.keys(zip.files).forEach((filename) => {
-                zip.files[filename].async('string').then((fileData) => {
-                    console.log(filename);
-                    if (fileData) {
-                        if (filename.includes('Scripts/')) {
-                            this.setScripts(filename, fileData);
-                        } else if (filename.includes('Templates/')) {
-                            if (filename.includes('-mapping.')) {
-                                this.setMapping(filename, fileData);
-                            } else if (filename.includes('-template.')) {
-                                this.setTemplates(filename, fileData);
-                            }
-
-                        } else if (filename.includes('Definitions/')) {
-                            this.setImports(filename, fileData, bluePrintDetailModel);
-                        } else if (filename.includes('TOSCA-Metadata/')) {
-                            const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
-                            this.setMetaData(metaDataTabInfo, bluePrintDetailModel);
-                        }
-                    }
-                });
-            });
-        });
-    }
-
-    setScripts(filename: string, fileData: any) {
-        this.packageCreationStore.addScripts(filename, fileData);
-    }
-
-    setImports(filename: string, fileData: any, bluePrintDetailModels: BluePrintDetailModel) {
-        console.log(filename);
-        if (filename.includes(bluePrintDetailModels.artifactName)) {
-            let definition = new VlbDefinition();
-            definition = fileData as VlbDefinition;
-            definition = JSON.parse(fileData);
-            const dslDefinition = new DslDefinition();
-            dslDefinition.content = this.packageCreationUtils.transformToJson(definition.dsl_definitions);
-            const mapOfCustomKeys = new Map<string, string>();
-            for (const metadataKey in definition.metadata) {
-                if (!this.entryDefinitionKeys.includes(metadataKey + '')) {
-                    mapOfCustomKeys.set(metadataKey + '', definition.metadata[metadataKey + '']);
-                }
-            }
-            this.packageCreationStore.changeDslDefinition(dslDefinition);
-            this.packageCreationStore.setCustomKeys(mapOfCustomKeys);
-            if (definition.topology_template) {
-                const content = {};
-                const workflow = 'workflows';
-                content[workflow] = definition.topology_template.workflows;
-                const nodeTemplates = 'node_templates';
-                content[nodeTemplates] = definition.topology_template.node_templates;
-                this.designerStore.saveSourceContent(JSON.stringify(content));
-                this.packageCreationStore.addTopologyTemplate(definition.topology_template);
-            }
-
-        }
-        this.packageCreationStore.addDefinition(filename, fileData);
-
-    }
-
-    setTemplates(filename: string, fileData: any) {
-        this.packageCreationStore.addTemplate(filename, fileData);
-    }
-
-    setMapping(fileName: string, fileData: string) {
-        this.packageCreationStore.addMapping(fileName, fileData);
     }
 
     editBluePrint() {
@@ -201,26 +130,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         this.filesData.push(this.folder.TREE_DATA);
     }
 
-    setMetaData(metaDataObject: MetaDataTabModel, bluePrintDetailModel: BluePrintDetailModel) {
-        metaDataObject.description = bluePrintDetailModel.artifactDescription;
-        this.packageCreationStore.changeMetaData(metaDataObject);
-
-    }
-
     saveMetaData() {
         this.metadataTabComponent.saveMetaDataToStore();
-
-    }
-
-    getMetaDataTabInfo(fileData: string) {
-        const metaDataTabModel = new MetaDataTabModel();
-        const arrayOfLines = fileData.split('\n');
-        metaDataTabModel.entryFileName = arrayOfLines[3].split(':')[1];
-        metaDataTabModel.name = arrayOfLines[4].split(':')[1];
-        metaDataTabModel.version = arrayOfLines[5].split(':')[1];
-        metaDataTabModel.mode = arrayOfLines[6].split(':')[1];
-        metaDataTabModel.templateTags = new Set<string>(arrayOfLines[7].split(':')[1].split(','));
-        return metaDataTabModel;
     }
 
     saveBluePrintToDataBase() {
@@ -316,7 +227,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     const blobInfo = new Blob([response], {type: 'application/octet-stream'});
                     this.currentBlob = blobInfo;
                     this.packageCreationStore.clear();
-                    this.extractBlobToStore(this.currentBlob, this.viewedPackage);
+                    this.packageCreationExtractionService.extractBlobToStore(this.currentBlob);
                     this.isSaveEnabled = true;
                     this.toastService.info('enriched successfully ');
                 });
