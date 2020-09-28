@@ -19,7 +19,7 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FilesContent, FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
 
 import * as JSZip from 'jszip';
@@ -42,7 +42,7 @@ import {DesignerStore} from '../designer/designer.store';
     templateUrl: './package-creation.component.html',
     styleUrls: ['./package-creation.component.css']
 })
-export class PackageCreationComponent extends ComponentCanDeactivate implements OnInit {
+export class PackageCreationComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
 
 
     // adding initial referencing to designer mode
@@ -84,6 +84,8 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
         this.elementRef.nativeElement.focus();
         const regexp = RegExp(this.versionPattern);
         this.packageCreationStore.state$.subscribe(cbaPackage => {
+            console.log(cbaPackage);
+            console.log('abbaaaas' + cbaPackage.metaData.name);
             this.cbaPackage = cbaPackage;
             if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.description
                 && cbaPackage.metaData.name && cbaPackage.metaData.version &&
@@ -163,5 +165,9 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
 
     canDeactivate(): boolean {
         return this.isSaveEnabled;
+    }
+
+    ngOnDestroy(): void {
+
     }
 }
