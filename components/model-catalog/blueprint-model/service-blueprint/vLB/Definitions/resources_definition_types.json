@@ -1,2820 +1,2566 @@
 {
-	"aic-cloud-region": {
-		"tags": "aic-cloud-region",
-		"name": "aic-cloud-region",
-		"property": {
-			"description": "aic-cloud-region",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input",
-				"properties": {}
-			}
-		}
-	},
-	"vlb_0_int_pktgen_private_port_0_mac": {
-		"tags": "vlb_0_int_pktgen_private_port_0_mac",
-		"name": "vlb_0_int_pktgen_private_port_0_mac",
-		"property": {
-			"description": "vlb_0_int_pktgen_private_port_0_mac",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_0_int_pktgen_private_port_0_mac",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vlb_0_int_pktgen_private_port_0_mac": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"vpg_0_int_pktgen_private_port_0_mac": {
-		"tags": "vpg_0_int_pktgen_private_port_0_mac",
-		"name": "vpg_0_int_pktgen_private_port_0_mac",
-		"property": {
-			"description": "vpg_0_int_pktgen_private_port_0_mac",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_0_int_pktgen_private_port_0_mac",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vpg_0_int_pktgen_private_port_0_mac": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"cloud_env": {
-		"tags": "cloud_env",
-		"name": "cloud_env",
-		"property": {
-			"description": "cloud_env",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/cloud_env",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"cloud_env": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"create-md-sal-vnf-param": {
-		"tags": "create-md-sal-vnf-param",
-		"name": "create-md-sal-vnf-param",
-		"property": {
-			"description": "create-md-sal-vnf-param",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"type": "JSON",
-					"headers": {
-						"Accept": "application/json",
-						"Content-Type": "application/json"
-					},
-					"verb": "PUT",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vdns_vf_module_id",
-					"path": "",
-					"payload": "{\n\"GENERIC-RESOURCE-API:param\": [\n{\n\"GENERIC-RESOURCE-API:name\": \"vdns_vf_module_id\",\n\"GENERIC-RESOURCE-API:value\": \"$vf-module-id\"\n}\n]\n}",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id",
-						"vf-module-id": "vf-module-id"
-					},
-					"output-key-mapping": {},
-					"key-dependencies": [
-						"vf-module-id",
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"aai-data": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "PATCH",
-					"type": "JSON",
-					"url-path": "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id/nm-profile-name",
-					"payload": "{\"nm-profile-name\":\"$vf-module-id\"}",
-					"path": "",
-					"input-key-mapping": {
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {},
-					"key-dependencies": [
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"dcae_collector_ip": {
-		"tags": "dcae_collector_ip",
-		"name": "dcae_collector_ip",
-		"property": {
-			"description": "dcae_collector_ip",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/dcae_collector_ip",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"dcae_collector_ip": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"dcae_collector_port": {
-		"tags": "dcae_collector_port",
-		"name": "dcae_collector_port",
-		"property": {
-			"description": "dcae_collector_port",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/dcae_collector_port",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"dcae_collector_port": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"demo_artifacts_version": {
-		"tags": "demo_artifacts_version",
-		"name": "demo_artifacts_version",
-		"property": {
-			"description": "demo_artifacts_version",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/demo_artifacts_version",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"demo_artifacts_version": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"flavor_name": {
-		"tags": "flavor_name",
-		"name": "flavor_name",
-		"property": {
-			"description": "flavor_name",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/flavor_name",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"flavor_name": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"gre_ipaddr": {
-		"tags": "gre_ipaddr",
-		"name": "gre_ipaddr",
-		"property": {
-			"description": "gre_ipaddr",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/gre_ipaddr",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"gre_ipaddr": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "private1-prefix-id"
-					},
-					"output-key-mapping": {
-						"gre_ipaddr": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"private1-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"image_name": {
-		"tags": "image_name",
-		"name": "image_name",
-		"property": {
-			"description": "image_name",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/image_name",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"image_name": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"install_script_version": {
-		"tags": "install_script_version",
-		"name": "install_script_version",
-		"property": {
-			"description": "install_script_version",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/install_script_version",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"install_script_version": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"int_pktgen_private_net_id": {
-		"tags": "int_pktgen_private_net_id",
-		"name": "int_pktgen_private_net_id",
-		"property": {
-			"description": "int_pktgen_private_net_id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/int_pktgen_private_net_id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"int_pktgen_private_net_id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"int_pktgen_private_subnet_id": {
-		"tags": "int_pktgen_private_subnet_id",
-		"name": "int_pktgen_private_subnet_id",
-		"property": {
-			"description": "int_pktgen_private_subnet_id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/int_pktgen_private_subnet_id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"int_pktgen_private_subnet_id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"int_private_net_id": {
-		"tags": "int_private_net_id",
-		"name": "int_private_net_id",
-		"property": {
-			"description": "int_private_net_id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/int_private_net_id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"int_private_net_id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"int_private_subnet_id": {
-		"tags": "int_private_subnet_id",
-		"name": "int_private_subnet_id",
-		"property": {
-			"description": "int_private_subnet_id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/int_private_subnet_id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"int_private_subnet_id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"key_name": {
-		"tags": "key_name",
-		"name": "key_name",
-		"property": {
-			"description": "key_name",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/key_name",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"key_name": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"keypair": {
-		"tags": "keypair",
-		"name": "keypair",
-		"property": {
-			"description": "keypair",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/keypair",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"keypair": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"management-prefix-id": {
-		"tags": "management-prefix-id",
-		"name": "management-prefix-id",
-		"property": {
-			"description": "management-prefix-id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/management-prefix-id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"management-prefix-id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"management\"",
-					"input-key-mapping": {},
-					"output-key-mapping": {
-						"management-prefix-id": "prefix_id"
-					}
-				}
-			}
-		}
-	},
-	"nb_api_version": {
-		"tags": "nb_api_version",
-		"name": "nb_api_version",
-		"property": {
-			"description": "nb_api_version",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/nb_api_version",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"nb_api_version": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"nexus_artifact_repo": {
-		"tags": "nexus_artifact_repo",
-		"name": "nexus_artifact_repo",
-		"property": {
-			"description": "nexus_artifact_repo",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/nexus_artifact_repo",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"nexus_artifact_repo": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"nfc-naming-code": {
-		"tags": "nfc-naming-code",
-		"name": "nfc-naming-code",
-		"property": {
-			"description": "nfc-naming-code",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select nfc_naming_code as nfc_naming_code from sdnctl.VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-					"input-key-mapping": {
-						"vfccustomizationuuid": "vfccustomizationuuid"
-					},
-					"output-key-mapping": {
-						"nfc-naming-code": "nfc_naming_code"
-					},
-					"key-dependencies": [
-						"vfccustomizationuuid"
-					]
-				}
-			}
-		}
-	},
-	"onap_private_net_cidr": {
-		"tags": "onap_private_net_cidr",
-		"name": "onap_private_net_cidr",
-		"property": {
-			"description": "onap_private_net_cidr",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"management\"",
-					"input-key-mapping": {},
-					"output-key-mapping": {
-						"onap_private_net_cidr": "prefix"
-					}
-				}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_net_cidr",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"onap_private_net_cidr": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"onap_private_net_id": {
-		"tags": "onap_private_net_id",
-		"name": "onap_private_net_id",
-		"property": {
-			"description": "onap_private_net_id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_net_id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"onap_private_net_id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"onap_private_subnet_id": {
-		"tags": "onap_private_subnet_id",
-		"name": "onap_private_subnet_id",
-		"property": {
-			"description": "onap_private_subnet_id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_subnet_id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"onap_private_subnet_id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"pg_int": {
-		"tags": "pg_int",
-		"name": "pg_int",
-		"property": {
-			"description": "pg_int",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/pg_int",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"pg_int": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "private2-prefix-id"
-					},
-					"output-key-mapping": {
-						"pg_int": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"private2-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"pktgen_private_net_cidr": {
-		"tags": "pktgen_private_net_cidr",
-		"name": "pktgen_private_net_cidr",
-		"property": {
-			"description": "pktgen_private_net_cidr",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private2\"",
-					"output-key-mapping": {
-						"pktgen_private_net_cidr": "prefix"
-					},
-					"input-key-mapping": {}
-				}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/pktgen_private_net_cidr",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"pktgen_private_net_cidr": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"private1-prefix-id": {
-		"tags": "private1-prefix-id",
-		"name": "private1-prefix-id",
-		"property": {
-			"description": "private1-prefix-id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/private1-prefix-id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"private1-prefix-id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private1\"",
-					"input-key-mapping": {},
-					"output-key-mapping": {
-						"private1-prefix-id": "prefix_id"
-					}
-				}
-			}
-		}
-	},
-	"private2-prefix-id": {
-		"tags": "private2-prefix-id",
-		"name": "private2-prefix-id",
-		"property": {
-			"description": "private2-prefix-id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/private2-prefix-id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"private2-prefix-id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private2\"",
-					"input-key-mapping": {},
-					"output-key-mapping": {
-						"private2-prefix-id": "prefix_id"
-					}
-				}
-			}
-		}
-	},
-	"pub_key": {
-		"tags": "pub_key",
-		"name": "pub_key",
-		"property": {
-			"description": "pub_key",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/pub_key",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"pub_key": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"public_net_id": {
-		"tags": "public_net_id",
-		"name": "public_net_id",
-		"property": {
-			"description": "public_net_id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/public_net_id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"public_net_id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"sec_group": {
-		"tags": "sec_group",
-		"name": "sec_group",
-		"property": {
-			"description": "sec_group",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/sec_group",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"sec_group": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"service-instance-id": {
-		"tags": "service-instance-id, tosca.datatypes.Root, data_type",
-		"name": "service-instance-id",
-		"property": {
-			"description": "To be provided",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input",
-				"properties": {}
-			},
-			"any-db": {
-				"type": "source-db",
-				"properties": {
-					"query": "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
-					"input-key-mapping": {},
-					"output-key-mapping": {
-						"service-instance-id": "artifact_name"
-					}
-				}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"query": "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
-					"input-key-mapping": {},
-					"output-key-mapping": {
-						"service-instance-id": "artifact_name"
-					}
-				}
-			},
-			"capability": {
-				"type": "source-capability",
-				"properties": {
-					"script-type": "jython",
-					"script-class-reference": "SampleRAProcessor",
-					"instance-key-dependencies": []
-				}
-			}
-		}
-	},
-	"vdns_int_private_ip_0": {
-		"tags": "vdns_int_private_ip_0",
-		"name": "vdns_int_private_ip_0",
-		"property": {
-			"description": "vdns_int_private_ip_0",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vf-modules/vf-module/$vdns_vf_module_id/vf-module-data/vf-module-topology/vf-module-parameters/param/vdns_int_private_ip_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id",
-						"vdns_vf_module_id": "vdns_vf_module_id"
-					},
-					"output-key-mapping": {
-						"vdns_int_private_ip_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id",
-						"vdns_vf_module_id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "private1-prefix-id"
-					},
-					"output-key-mapping": {
-						"vdns_int_private_ip_0": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"private1-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"vdns_name_0": {
-		"tags": "vdns_name_0",
-		"name": "vdns_name_0",
-		"property": {
-			"description": "vdns_name_0",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vdns_name_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vdns_name_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "naming-resolution",
-					"verb": "POST",
-					"type": "JSON",
-					"headers": {
-						"Accept": "application/json",
-						"Content-Type": "application/json"
-					},
-					"url-path": "/v1/genNetworkElementName",
-					"payload": "{\r\n\t\"elements\": [{\r\n\t\t\"resource-name\": \"vdns_name_0\",\r\n\t\t\"resource-value\": \"${vdns_name_0}\",\r\n\t\t\"external-key\": \"${vf-module-id}_vdns_name_0\",\r\n\t\t\"policy-instance-name\": \"${vf-naming-policy}\",\r\n\t\t\"naming-type\": \"VNFC\",\r\n\t\t\"VNF_NAME\": \"${vnf_name}\",\r\n\t\t\"NFC_NAMING_CODE\": \"${nfc-naming-code}\"\r\n\t}]\r\n}",
-					"path": "/elements/0/resource-value",
-					"input-key-mapping": {
-						"vf-naming-policy": "vf-naming-policy",
-						"nfc-naming-code": "nfc-naming-code",
-						"vnf_name": "vnf_name",
-						"vf-module-id": "vf-module-id"
-
-					},
-					"output-key-mapping": {
-						"vdns_name_0": "resource-value"
-					},
-					"key-dependencies": [
-						"vf-naming-policy",
-						"nfc-naming-code",
-						"vnf_name",
-						"vf-module-id"
-
-					]
-				}
-			}
-		}
-	},
-	"vdns_onap_private_ip_0": {
-		"tags": "vdns_onap_private_ip_0",
-		"name": "vdns_onap_private_ip_0",
-		"property": {
-			"description": "vdns_onap_private_ip_0",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vf-modules/vf-module/$vdns_vf_module_id/vf-module-data/vf-module-topology/vf-module-parameters/param/vdns_onap_private_ip_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id",
-						"vdns_vf_module_id": "vdns_vf_module_id"
-					},
-					"output-key-mapping": {
-						"vdns_onap_private_ip_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id",
-						"vdns_vf_module_id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "management-prefix-id"
-					},
-					"output-key-mapping": {
-						"vdns_onap_private_ip_0": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"management-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"vdns_vf_module_id": {
-		"tags": "vdns_vf_module_id",
-		"name": "vdns_vf_module_id",
-		"property": {
-			"description": "vdns_vf_module_id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vdns_vf_module_id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vdns_vf_module_id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id",
-					"path": "",
-					"input-key-mapping": {
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vdns_vf_module_id": "nm-profile-name"
-					},
-					"key-dependencies": [
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"vf-module-id": {
-		"tags": "vf-module-id",
-		"name": "vf-module-id",
-		"property": {
-			"description": "vf-module-id",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input",
-				"properties": {}
-			}
-		}
-	},
-	"vf-module-label": {
-		"tags": "vf-module-label",
-		"name": "vf-module-label",
-		"property": {
-			"description": "vf-module-label",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
-					"input-key-mapping": {
-						"customizationid": "vf-module-model-customization-uuid"
-					},
-					"output-key-mapping": {
-						"vf-module-label": "vf_module_label"
-					},
-					"key-dependencies": [
-						"vf-module-model-customization-uuid"
-					]
-				}
-			}
-		}
-	},
-	"vf-module-model-customization-uuid": {
-		"tags": "vf-module-model-customization-uuid",
-		"name": "vf-module-model-customization-uuid",
-		"property": {
-			"description": "vf-module-model-customization-uuid",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			}
-		}
-	},
-	"vnf_assign_aai": {
-
-		"tags": "vnf_assign_aai",
-		"name": "vnf_assign_aai",
-		"property": {
-			"description": "vnf_assign_aai",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"aai-data": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "PATCH",
-					"type": "JSON",
-					"headers": {
-					
-						"Content-Type": "application/merge-patch+json"
-										
-					},
-					"url-path": "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id",
-					"payload": "{\r\n\"vnf-name\":\"${vnf_name}\", \r\n \"selflink\": \"restconf\/config\/GENERIC-RESOURCE-API:services\/service\/${service-instance-id}\/service-data\/vnfs\/vnf\/${vnf-id}\/vnf-data\/vnf-topology\/\"\r\n}",
-					"path": "",
-					"input-key-mapping": {
-						"service-instance-id":"service-instance-id",
-						"vnf-id": "vnf-id",
-						"vnf_name": "vnf_name"
-					},
-					"output-key-mapping": {},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id",
-						"vnf_name"
-					]
-				}
-			}
-		}
-	},
-
-	"vf-module-assign": {
-
-		"tags": "vf-module-assign",
-		"name": "vf-module-assign",
-		"property": {
-			"description": "vf-module-assign",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-
-			"aai-data": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "PATCH",
-					"type": "JSON",
-					"headers": {
-					
-						"Content-Type": "application/merge-patch+json"
-						
-					},
-					"url-path": "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id/vf-modules/vf-module/$vf-module-id",
-					"payload": "{\r\n\"vf-module-name\":\"${vf-module-name}\", \r\n\"selflink\": \"restconf\/config\/GENERIC-RESOURCE-API:services\/service\/${service-instance-id}\/service-data\/vnfs\/vnf\/${vnf-id}\/vnf-data\/vf-modules\/vf-module\/${vf-module-id}\/vf-module-data\/vf-module-topology\/\"\r\n  \r\n}",
-					"path": "",
-					"input-key-mapping": {
-					    "service-instance-id":"service-instance-id",
-						"vnf-id": "vnf-id",
-						"vf-module-id": "vf-module-id",
-						"vf-module-name": "vf-module-name"
-					},
-					"output-key-mapping": {},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id",
-						"vf-module-id",
-						"vf-module-name"
-					]
-				}
-			}
-		}
-	},
-
-	"vf-module-name": {
-		"tags": "vf-module-name",
-		"name": "vf-module-name",
-		"property": {
-			"description": "vf_module_name",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vf-modules/vf-module/$vf_module_id/vf-module-data/vf-module-topology/vf-module-parameters/param/vf-module-name",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vf-module-name": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id",
-						"vf_module_id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "naming-resolution",
-					"verb": "POST",
-					"type": "JSON",
-					"headers": {
-						"Accept": "application/json",
-						"Content-Type": "application/json"
-					},
-					"url-path": "/v1/genNetworkElementName",
-					"payload": "{\r\n  \"elements\": [\r\n    {\r\n      \"resource-name\": \"vf-module-name\",\r\n      \"resource-value\": \"${vf-module-name}\",\r\n      \"external-key\": \"${vf-module-id}\",\r\n      \"policy-instance-name\": \"${vf-naming-policy}\",\r\n      \"naming-type\": \"VF-MODULE\",\r\n      \"VNF_NAME\": \"${vnf_name}\",\r\n      \"VF_MODULE_LABEL\":\"${vf-module-label}\",\r\n      \"VF_MODULE_TYPE\":\"${vf-module-type}\"\r\n    }\r\n  ]\r\n}",
-					"path": "/elements/0/resource-value",
-					"input-key-mapping": {
-						"vf-naming-policy": "vf-naming-policy",
-						"vnf_name": "vnf_name",
-						"vf-module-label": "vf-module-label",
-						"vf-module-type": "vf-module-type",
-						"vf-module-id": "vf-module-id"
-
-					},
-					"output-key-mapping": {
-						"vf-module-name": "resource-value"
-					},
-					"key-dependencies": [
-						"vf-naming-policy",
-						"vnf_name",
-						"vf-module-label",
-						"vf-module-type",
-						"vf-module-id"
-					]
-				}
-			}
-		}
-	},
-	"vf-module-type": {
-		"tags": "vf-module-type",
-		"name": "vf-module-type",
-		"property": {
-			"description": "vf-module-type",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select vf_module_type as vf_module_type from sdnctl.VF_MODULE_MODEL where customization_uuid=:customizationid",
-					"output-key-mapping": {
-						"vf-module-type": "vf_module_type"
-					},
-					"input-key-mapping": {
-						"customizationid": "vf-module-model-customization-uuid"
-					},
-					"key-dependencies": [
-						"vf-module-model-customization-uuid"
-					]
-				}
-			}
-		}
-	},
-	"vf-naming-policy": {
-		"tags": "vf-naming-policy",
-		"name": "vf-naming-policy",
-		"property": {
-			"description": "vf-naming-policy",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vf-naming-policy",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vf-naming-policy": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select sdnctl.VF_MODEL.naming_policy as vf_naming_policy from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnf_model_customization_uuid",
-					"input-key-mapping": {
-						"vnf_model_customization_uuid": "vnf-model-customization-uuid"
-					},
-					"output-key-mapping": {
-						"vf-naming-policy": "vf_naming_policy"
-					},
-					"key-dependencies": [
-						"vnf-model-customization-uuid"
-					]
-				}
-			}
-		}
-	},
-	"vfccustomizationuuid": {
-		"tags": "vfccustomizationuuid",
-		"name": "vfccustomizationuuid",
-		"property": {
-			"description": "vfccustomizationuuid",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select sdnctl.VF_MODULE_TO_VFC_MAPPING.vfc_customization_uuid as vnf_customid from sdnctl.VF_MODULE_TO_VFC_MAPPING where vm_count = 1 and sdnctl.VF_MODULE_TO_VFC_MAPPING.vf_module_customization_uuid=:vfmodulecustomizationuuid",
-					"input-key-mapping": {
-						"vfmodulecustomizationuuid": "vf-module-model-customization-uuid"
-					},
-					"output-key-mapping": {
-						"vfccustomizationuuid": "vnf_customid"
-					},
-					"key-dependencies": [
-						"vf-module-model-customization-uuid"
-					]
-				}
-			}
-		}
-	},
-	"vip": {
-		"tags": "vip",
-		"name": "vip",
-		"property": {
-			"description": "vip",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vip",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vip": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "private2-prefix-id"
-					},
-					"output-key-mapping": {
-						"vip": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"private2-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"vlb_int_pktgen_private_ip_0": {
-		"tags": "vlb_int_pktgen_private_ip_0",
-		"name": "vlb_int_pktgen_private_ip_0",
-		"property": {
-			"description": "vlb_int_pktgen_private_ip_0",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_int_pktgen_private_ip_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vlb_int_pktgen_private_ip_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "private2-prefix-id"
-					},
-					"output-key-mapping": {
-						"vlb_int_pktgen_private_ip_0": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"private2-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"vlb_int_private_ip_0": {
-		"tags": "vlb_int_private_ip_0",
-		"name": "vlb_int_private_ip_0",
-		"property": {
-			"description": "vlb_int_private_ip_0",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_int_private_ip_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vlb_int_private_ip_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "private1-prefix-id"
-					},
-					"output-key-mapping": {
-						"vlb_int_private_ip_0": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"private1-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"vlb_name_0": {
-		"tags": "vlb_name_0",
-		"name": "vlb_name_0",
-		"property": {
-			"description": "vlb_name_0",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_name_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vlb_name_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "naming-resolution",
-					"verb": "POST",
-					"type": "JSON",
-					"headers": {
-						"Accept": "application/json",
-						"Content-Type": "application/json"
-					},
-					"url-path": "/v1/genNetworkElementName",
-					"payload": "{\r\n\t\"elements\": [{\r\n\t\t\"resource-name\": \"vlb_name_0\",\r\n\t\t\"resource-value\": \"${vlb_name_0}\",\r\n\t\t\"external-key\": \"${vf-module-id}_vlb_name_0\",\r\n\t\t\"policy-instance-name\": \"${vf-naming-policy}\",\r\n\t\t\"naming-type\": \"VNFC\",\r\n\t\t\"VNF_NAME\": \"${vnf_name}\",\r\n\t\t\"NFC_NAMING_CODE\": \"${nfc-naming-code}\"\r\n\t}]\r\n}",
-					"path": "/elements/0/resource-value",
-					"input-key-mapping": {
-						"vf-naming-policy": "vf-naming-policy",
-						"nfc-naming-code": "nfc-naming-code",
-						"vnf_name": "vnf_name",
-						"vf-module-id": "vf-module-id"
-					},
-					"output-key-mapping": {
-						"vlb_name_0": "resource-value"
-					},
-					"key-dependencies": [
-						"vf-naming-policy",
-						"nfc-naming-code",
-						"vnf_name",
-						"vf-module-id"
-					]
-				}
-			}
-		}
-	},
-	"vlb_onap_private_ip_0": {
-		"tags": "vlb_onap_private_ip_0",
-		"name": "vlb_onap_private_ip_0",
-		"property": {
-			"description": "vlb_onap_private_ip_0",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_onap_private_ip_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vlb_onap_private_ip_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "management-prefix-id"
-					},
-					"output-key-mapping": {
-						"vlb_onap_private_ip_0": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"management-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"vlb_private_net_cidr": {
-		"tags": "vlb_private_net_cidr",
-		"name": "vlb_private_net_cidr",
-		"property": {
-			"description": "vlb_private_net_cidr",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_private_net_cidr",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vlb_private_net_cidr": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private1\"",
-					"input-key-mapping": {},
-					"output-key-mapping": {
-						"vlb_private_net_cidr": "prefix"
-					}
-				}
-			}
-		}
-	},
-	"vm-type": {
-		"tags": "vm-type",
-		"name": "vm-type",
-		"property": {
-			"description": "vm-type",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select VFC_MODEL.vm_type as vm_type from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-					"output-key-mapping": {
-						"vm-type": "vm_type"
-					},
-					"input-key-mapping": {
-						"vfccustomizationuuid": "vfccustomizationuuid"
-					},
-					"key-dependencies": [
-						"vfccustomizationuuid"
-					]
-				}
-			}
-		}
-	},
-	"vnf-id": {
-		"tags": "vnf-id",
-		"name": "vnf-id",
-		"property": {
-			"description": "vnf-id",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf-id",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vnf-id": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"vnf-model-customization-uuid": {
-		"tags": "vnf-model-customization-uuid",
-		"name": "vnf-model-customization-uuid",
-		"property": {
-			"description": "vnf-model-customization-uuid",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input",
-				"properties": {}
-			}
-		}
-	},
-	"vnf_name": {
-		"tags": "vnf_name",
-		"name": "vnf_name",
-		"property": {
-			"description": "vnf_name",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
-					"path": "/param/0/value",
-					"headers": {
-						"Accept": "application/json",
-						"Content-Type": "application/json"
-					},
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vnf_name": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "naming-resolution",
-					"verb": "POST",
-					"type": "JSON",
-					"headers": {
-						"Accept": "application/json",
-						"Content-Type": "application/json"
-					},
-					"url-path": "/v1/genNetworkElementName",
-					"payload": "{\r\n  \"elements\": [\r\n    {\r\n      \"resource-name\": \"vnf_name\",\r\n      \"resource-value\": \"${vnf_name}\",\r\n      \"external-key\": \"${vnf-id}\",\r\n      \"policy-instance-name\": \"${vf-naming-policy}\",\r\n      \"naming-type\": \"VNF\",\r\n      \"AIC_CLOUD_REGION\": \"${aic-cloud-region}\"\r\n    }\r\n  ]\r\n}",
-					"path": "/elements/0/resource-value",
-					"input-key-mapping": {
-						"vnf-id": "vnf-id",
-						"aic-cloud-region": "aic-cloud-region",
-						"vf-naming-policy": "vf-naming-policy"
-					},
-					"output-key-mapping": {
-						"vnf_name": "resource-value"
-					},
-					"key-dependencies": [
-						"vnf-id",
-						"aic-cloud-region",
-						"vf-naming-policy"
-					]
-				}
-			}
-		}
-	},
-	"repo_url_blob": {
-		"tags": "repo_url_blob",
-		"name": "repo_url_blob",
-		"property": {
-			"description": "repo_url_blob",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/repo_url_blob",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"repo_url_blob": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"repo_url_artifacts": {
-		"tags": "repo_url_artifacts",
-		"name": "repo_url_artifacts",
-		"property": {
-			"description": "repo_url_artifacts",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/repo_url_artifacts",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"repo_url_artifacts": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			}
-		}
-	},
-	"vnfc-model-invariant-uuid": {
-		"tags": "vnfc-model-invariant-uuid",
-		"name": "vnfc-model-invariant-uuid",
-		"property": {
-			"description": "vnfc-model-invariant-uuid",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-					"output-key-mapping": {
-						"vnfc-model-invariant-uuid": "vfc_invariant_uuid"
-					},
-					"input-key-mapping": {
-						"vfccustomizationuuid": "vfccustomizationuuid"
-					},
-					"key-dependencies": [
-						"vfccustomizationuuid"
-					]
-				}
-			}
-		}
-	},
-	"vnfc-model-version": {
-		"tags": "vnfc-model-version",
-		"name": "vnfc-model-version",
-		"property": {
-			"description": "vnfc-model-version",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"processor-db": {
-				"type": "source-db",
-				"properties": {
-					"type": "SQL",
-					"query": "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
-					"output-key-mapping": {
-						"vnfc-model-version": "vnfc_model_version"
-					},
-					"input-key-mapping": {
-						"vfccustomizationuuid": "vfccustomizationuuid"
-					},
-					"key-dependencies": [
-						"vfccustomizationuuid"
-					]
-				}
-			}
-		}
-	},
-	"vpg_int_private1_ip_0": {
-		"tags": "vpg_int_private1_ip_0",
-		"name": "vpg_int_private1_ip_0",
-		"property": {
-			"description": "vpg_int_private1_ip_0",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_int_private1_ip_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vpg_int_private1_ip_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "management-prefix-id"
-					},
-					"output-key-mapping": {
-						"vpg_int_private1_ip_0": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"management-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"vpg_int_pktgen_private_ip_0": {
-		"tags": "vpg_int_pktgen_private_ip_0",
-		"name": "vpg_int_pktgen_private_ip_0",
-		"property": {
-			"description": "vpg_int_pktgen_private_ip_0",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_int_pktgen_private_ip_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vpg_int_pktgen_private_ip_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "private2-prefix-id"
-					},
-					"output-key-mapping": {
-						"vpg_int_pktgen_private_ip_0": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"private2-prefix-id"
-					]
-				}
-			}
-		}
-	},
-	"vpg_name_0": {
-		"tags": "vpg_name_0",
-		"name": "vpg_name_0",
-		"property": {
-			"description": "vlb_name_0",
-			"type": "string"
-		},
-		"updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_name_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vpg_name_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "naming-resolution",
-					"verb": "POST",
-					"type": "JSON",
-					"headers": {
-						"Accept": "application/json",
-						"Content-Type": "application/json"
-					},
-					"url-path": "/v1/genNetworkElementName",
-					"payload": "{\r\n\t\"elements\": [{\r\n\t\t\"resource-name\": \"vpg_name_0\",\r\n\t\t\"resource-value\": \"${vpg_name_0}\",\r\n\t\t\"external-key\": \"${vf-module-id}_vpg_name_0\",\r\n\t\t\"policy-instance-name\": \"${vf-naming-policy}\",\r\n\t\t\"naming-type\": \"VNFC\",\r\n\t\t\"VNF_NAME\": \"${vnf_name}\",\r\n\t\t\"NFC_NAMING_CODE\": \"${nfc-naming-code}\"\r\n\t}]\r\n}",
-					"path": "/elements/0/resource-value",
-					"input-key-mapping": {
-						"vf-naming-policy": "vf-naming-policy",
-						"nfc-naming-code": "nfc-naming-code",
-						"vnf_name": "vnf_name",
-						"vf-module-id": "vf-module-id"
-
-					},
-					"output-key-mapping": {
-						"vpg_name_0": "resource-value"
-					},
-					"key-dependencies": [
-						"vf-naming-policy",
-						"nfc-naming-code",
-						"vnf_name",
-						"vf-module-id"
-
-					]
-				}
-			}
-		}
-	},
-	"vpg_onap_private_ip_0": {
-		"tags": "vpg_onap_private_ip_0",
-		"name": "vpg_onap_private_ip_0",
-		"property": {
-			"description": "vpg_onap_private_ip_0",
-			"type": "string"
-		},
-		"updated-by": "Singal, Kapil <ks220y@att.com>",
-		"sources": {
-			"input": {
-				"type": "source-input"
-			},
-			"default": {
-				"type": "source-default",
-				"properties": {}
-			},
-			"sdnc": {
-				"type": "source-rest",
-				"properties": {
-					"verb": "GET",
-					"type": "JSON",
-					"url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_onap_private_ip_0",
-					"path": "/param/0/value",
-					"input-key-mapping": {
-						"service-instance-id": "service-instance-id",
-						"vnf-id": "vnf-id"
-					},
-					"output-key-mapping": {
-						"vpg_onap_private_ip_0": "value"
-					},
-					"key-dependencies": [
-						"service-instance-id",
-						"vnf-id"
-					]
-				}
-			},
-			"rest": {
-				"type": "source-rest",
-				"properties": {
-					"endpoint-selector": "ipam-1",
-					"type": "JSON",
-					"verb": "POST",
-					"url-path": "/api/ipam/prefixes/$prefix-id/available-ips/",
-					"path": "",
-					"input-key-mapping": {
-						"prefix-id": "management-prefix-id"
-					},
-					"output-key-mapping": {
-						"vpg_onap_private_ip_0": "address",
-						"id": "id"
-					},
-					"key-dependencies": [
-						"management-prefix-id"
-					]
-				}
-			}
-		}
-	}
+  "aic-cloud-region" : {
+    "tags" : "aic-cloud-region",
+    "name" : "aic-cloud-region",
+    "property" : {
+      "description" : "aic-cloud-region",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "cloud_env" : {
+    "tags" : "cloud_env",
+    "name" : "cloud_env",
+    "property" : {
+      "description" : "cloud_env",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/cloud_env",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "cloud_env" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "create-md-sal-vnf-param" : {
+    "tags" : "create-md-sal-vnf-param",
+    "name" : "create-md-sal-vnf-param",
+    "property" : {
+      "description" : "create-md-sal-vnf-param",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "headers" : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+          },
+          "verb" : "PUT",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vdns_vf_module_id",
+          "path" : "",
+          "payload" : "{\n\"GENERIC-RESOURCE-API:param\": [\n{\n\"GENERIC-RESOURCE-API:name\": \"vdns_vf_module_id\",\n\"GENERIC-RESOURCE-API:value\": \"$vf-module-id\"\n}\n]\n}",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id",
+            "vf-module-id" : "vf-module-id"
+          },
+          "output-key-mapping" : { },
+          "key-dependencies" : [ "vf-module-id", "service-instance-id", "vnf-id" ]
+        }
+      },
+      "aai-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "PATCH",
+          "type" : "JSON",
+          "url-path" : "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id/nm-profile-name",
+          "payload" : "{\"nm-profile-name\":\"$vf-module-id\"}",
+          "path" : "",
+          "input-key-mapping" : {
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : { },
+          "key-dependencies" : [ "vnf-id" ]
+        }
+      }
+    }
+  },
+  "dcae_collector_ip" : {
+    "tags" : "dcae_collector_ip",
+    "name" : "dcae_collector_ip",
+    "property" : {
+      "description" : "dcae_collector_ip",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/dcae_collector_ip",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "dcae_collector_ip" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "dcae_collector_port" : {
+    "tags" : "dcae_collector_port",
+    "name" : "dcae_collector_port",
+    "property" : {
+      "description" : "dcae_collector_port",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/dcae_collector_port",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "dcae_collector_port" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "demo_artifacts_version" : {
+    "tags" : "demo_artifacts_version",
+    "name" : "demo_artifacts_version",
+    "property" : {
+      "description" : "demo_artifacts_version",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/demo_artifacts_version",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "demo_artifacts_version" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "flavor_name" : {
+    "tags" : "flavor_name",
+    "name" : "flavor_name",
+    "property" : {
+      "description" : "flavor_name",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/flavor_name",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "flavor_name" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "gre_ipaddr" : {
+    "tags" : "gre_ipaddr",
+    "name" : "gre_ipaddr",
+    "property" : {
+      "description" : "gre_ipaddr",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/gre_ipaddr",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "gre_ipaddr" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "private1-prefix-id"
+          },
+          "output-key-mapping" : {
+            "gre_ipaddr" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "private1-prefix-id" ]
+        }
+      }
+    }
+  },
+  "image_name" : {
+    "tags" : "image_name",
+    "name" : "image_name",
+    "property" : {
+      "description" : "image_name",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/image_name",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "image_name" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "install_script_version" : {
+    "tags" : "install_script_version",
+    "name" : "install_script_version",
+    "property" : {
+      "description" : "install_script_version",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/install_script_version",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "install_script_version" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "int_pktgen_private_net_id" : {
+    "tags" : "int_pktgen_private_net_id",
+    "name" : "int_pktgen_private_net_id",
+    "property" : {
+      "description" : "int_pktgen_private_net_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/int_pktgen_private_net_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "int_pktgen_private_net_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "int_pktgen_private_subnet_id" : {
+    "tags" : "int_pktgen_private_subnet_id",
+    "name" : "int_pktgen_private_subnet_id",
+    "property" : {
+      "description" : "int_pktgen_private_subnet_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/int_pktgen_private_subnet_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "int_pktgen_private_subnet_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "int_private_net_id" : {
+    "tags" : "int_private_net_id",
+    "name" : "int_private_net_id",
+    "property" : {
+      "description" : "int_private_net_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/int_private_net_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "int_private_net_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "int_private_subnet_id" : {
+    "tags" : "int_private_subnet_id",
+    "name" : "int_private_subnet_id",
+    "property" : {
+      "description" : "int_private_subnet_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/int_private_subnet_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "int_private_subnet_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "key_name" : {
+    "tags" : "key_name",
+    "name" : "key_name",
+    "property" : {
+      "description" : "key_name",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/key_name",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "key_name" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "management-prefix-id" : {
+    "tags" : "management-prefix-id",
+    "name" : "management-prefix-id",
+    "property" : {
+      "description" : "management-prefix-id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/management-prefix-id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "management-prefix-id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"management\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "management-prefix-id" : "prefix_id"
+          }
+        }
+      }
+    }
+  },
+  "nb_api_version" : {
+    "tags" : "nb_api_version",
+    "name" : "nb_api_version",
+    "property" : {
+      "description" : "nb_api_version",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/nb_api_version",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "nb_api_version" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "nexus_artifact_repo" : {
+    "tags" : "nexus_artifact_repo",
+    "name" : "nexus_artifact_repo",
+    "property" : {
+      "description" : "nexus_artifact_repo",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/nexus_artifact_repo",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "nexus_artifact_repo" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "nfc-naming-code" : {
+    "tags" : "nfc-naming-code",
+    "name" : "nfc-naming-code",
+    "property" : {
+      "description" : "nfc-naming-code",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select nfc_naming_code as nfc_naming_code from sdnctl.VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+          "input-key-mapping" : {
+            "vfccustomizationuuid" : "vfccustomizationuuid"
+          },
+          "output-key-mapping" : {
+            "nfc-naming-code" : "nfc_naming_code"
+          },
+          "key-dependencies" : [ "vfccustomizationuuid" ]
+        }
+      }
+    }
+  },
+  "onap_private_net_cidr" : {
+    "tags" : "onap_private_net_cidr",
+    "name" : "onap_private_net_cidr",
+    "property" : {
+      "description" : "onap_private_net_cidr",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"management\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "onap_private_net_cidr" : "prefix"
+          }
+        }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_net_cidr",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "onap_private_net_cidr" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "onap_private_net_id" : {
+    "tags" : "onap_private_net_id",
+    "name" : "onap_private_net_id",
+    "property" : {
+      "description" : "onap_private_net_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_net_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "onap_private_net_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "onap_private_subnet_id" : {
+    "tags" : "onap_private_subnet_id",
+    "name" : "onap_private_subnet_id",
+    "property" : {
+      "description" : "onap_private_subnet_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/onap_private_subnet_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "onap_private_subnet_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "pg_int" : {
+    "tags" : "pg_int",
+    "name" : "pg_int",
+    "property" : {
+      "description" : "pg_int",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/pg_int",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "pg_int" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "private2-prefix-id"
+          },
+          "output-key-mapping" : {
+            "pg_int" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "private2-prefix-id" ]
+        }
+      }
+    }
+  },
+  "pktgen_private_net_cidr" : {
+    "tags" : "pktgen_private_net_cidr",
+    "name" : "pktgen_private_net_cidr",
+    "property" : {
+      "description" : "pktgen_private_net_cidr",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private2\"",
+          "output-key-mapping" : {
+            "pktgen_private_net_cidr" : "prefix"
+          },
+          "input-key-mapping" : { }
+        }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/pktgen_private_net_cidr",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "pktgen_private_net_cidr" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "pktgen_private_net_id" : {
+    "tags" : "pktgen_private_net_id",
+    "name" : "pktgen_private_net_id",
+    "property" : {
+      "description" : "pktgen_private_net_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/pktgen_private_net_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "pktgen_private_net_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "private1-prefix-id" : {
+    "tags" : "private1-prefix-id",
+    "name" : "private1-prefix-id",
+    "property" : {
+      "description" : "private1-prefix-id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/private1-prefix-id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "private1-prefix-id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private1\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "private1-prefix-id" : "prefix_id"
+          }
+        }
+      }
+    }
+  },
+  "private2-prefix-id" : {
+    "tags" : "private2-prefix-id",
+    "name" : "private2-prefix-id",
+    "property" : {
+      "description" : "private2-prefix-id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/private2-prefix-id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "private2-prefix-id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix_id as prefix_id from sdnctl.IPAM_IP_POOL where description = \"private2\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "private2-prefix-id" : "prefix_id"
+          }
+        }
+      }
+    }
+  },
+  "pub_key" : {
+    "tags" : "pub_key",
+    "name" : "pub_key",
+    "property" : {
+      "description" : "pub_key",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/pub_key",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "pub_key" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "public_net_id" : {
+    "tags" : "public_net_id",
+    "name" : "public_net_id",
+    "property" : {
+      "description" : "public_net_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/public_net_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "public_net_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "sec_group" : {
+    "tags" : "sec_group",
+    "name" : "sec_group",
+    "property" : {
+      "description" : "sec_group",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/sec_group",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "sec_group" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "service-instance-id" : {
+    "tags" : "service-instance-id, tosca.datatypes.Root, data_type",
+    "name" : "service-instance-id",
+    "property" : {
+      "description" : "To be provided",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      },
+      "any-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "query" : "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "service-instance-id" : "artifact_name"
+          }
+        }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "query" : "SELECT artifact_name FROM BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "service-instance-id" : "artifact_name"
+          }
+        }
+      },
+      "capability" : {
+        "type" : "source-capability",
+        "properties" : {
+          "script-type" : "jython",
+          "script-class-reference" : "SampleRAProcessor",
+          "instance-dependencies" : [ ]
+        }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id",
+          "path" : "/service/0/service-instance-id",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance.service-instance-id"
+          },
+          "output-key-mapping" : {
+            "service-instance-id" : "service-instance-id"
+          },
+          "key-dependencies" : [ "service-instance.service-instance-id" ]
+        }
+      }
+    }
+  },
+  "vdns_int_private_ip_0" : {
+    "tags" : "vdns_int_private_ip_0",
+    "name" : "vdns_int_private_ip_0",
+    "property" : {
+      "description" : "vdns_int_private_ip_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vf-modules/vf-module/$vdns_vf_module_id/vf-module-data/vf-module-topology/vf-module-parameters/param/vdns_int_private_ip_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id",
+            "vdns_vf_module_id" : "vdns_vf_module_id"
+          },
+          "output-key-mapping" : {
+            "vdns_int_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id", "vdns_vf_module_id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "private1-prefix-id"
+          },
+          "output-key-mapping" : {
+            "vdns_int_private_ip_0" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "private1-prefix-id" ]
+        }
+      }
+    }
+  },
+  "vdns_name_0" : {
+    "tags" : "vdns_name_0",
+    "name" : "vdns_name_0",
+    "property" : {
+      "description" : "vdns_name_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vdns_name_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vdns_name_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "naming-resolution",
+          "verb" : "POST",
+          "type" : "JSON",
+          "headers" : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+          },
+          "url-path" : "/v1/genNetworkElementName",
+          "payload" : "{\r\n\t\"elements\": [{\r\n\t\t\"resource-name\": \"vdns_name_0\",\r\n\t\t\"resource-value\": \"${vdns_name_0}\",\r\n\t\t\"external-key\": \"${vf-module-id}_vdns_name_0\",\r\n\t\t\"policy-instance-name\": \"${vf-naming-policy}\",\r\n\t\t\"naming-type\": \"VNFC\",\r\n\t\t\"VNF_NAME\": \"${vnf_name}\",\r\n\t\t\"NFC_NAMING_CODE\": \"${nfc-naming-code}\"\r\n\t}]\r\n}",
+          "path" : "/elements/0/resource-value",
+          "input-key-mapping" : {
+            "vf-naming-policy" : "vf-naming-policy",
+            "nfc-naming-code" : "nfc-naming-code",
+            "vnf_name" : "vnf_name",
+            "vf-module-id" : "vf-module-id"
+          },
+          "output-key-mapping" : {
+            "vdns_name_0" : "resource-value"
+          },
+          "key-dependencies" : [ "vf-naming-policy", "nfc-naming-code", "vnf_name", "vf-module-id" ]
+        }
+      }
+    }
+  },
+  "vdns_onap_private_ip_0" : {
+    "tags" : "vdns_onap_private_ip_0",
+    "name" : "vdns_onap_private_ip_0",
+    "property" : {
+      "description" : "vdns_onap_private_ip_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vf-modules/vf-module/$vdns_vf_module_id/vf-module-data/vf-module-topology/vf-module-parameters/param/vdns_onap_private_ip_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id",
+            "vdns_vf_module_id" : "vdns_vf_module_id"
+          },
+          "output-key-mapping" : {
+            "vdns_onap_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id", "vdns_vf_module_id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "management-prefix-id"
+          },
+          "output-key-mapping" : {
+            "vdns_onap_private_ip_0" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "management-prefix-id" ]
+        }
+      }
+    }
+  },
+  "vdns_vf_module_id" : {
+    "tags" : "vdns_vf_module_id",
+    "name" : "vdns_vf_module_id",
+    "property" : {
+      "description" : "vdns_vf_module_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vdns_vf_module_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vdns_vf_module_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id",
+          "path" : "",
+          "input-key-mapping" : {
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vdns_vf_module_id" : "nm-profile-name"
+          },
+          "key-dependencies" : [ "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vf-module-assign" : {
+    "tags" : "vf-module-assign",
+    "name" : "vf-module-assign",
+    "property" : {
+      "description" : "vf-module-assign",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "aai-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "PATCH",
+          "type" : "JSON",
+          "headers" : {
+            "Content-Type" : "application/merge-patch+json"
+          },
+          "url-path" : "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id/vf-modules/vf-module/$vf-module-id",
+          "payload" : "{\r\n\"vf-module-name\":\"${vf-module-name}\", \r\n\"selflink\": \"restconf/config/GENERIC-RESOURCE-API:services/service/${service-instance-id}/service-data/vnfs/vnf/${vnf-id}/vnf-data/vf-modules/vf-module/${vf-module-id}/vf-module-data/vf-module-topology/\"\r\n  \r\n}",
+          "path" : "",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id",
+            "vf-module-id" : "vf-module-id",
+            "vf-module-name" : "vf-module-name"
+          },
+          "output-key-mapping" : { },
+          "key-dependencies" : [ "service-instance-id", "vnf-id", "vf-module-id", "vf-module-name" ]
+        }
+      }
+    }
+  },
+  "vf-module-id" : {
+    "tags" : "vf-module-id",
+    "name" : "vf-module-id",
+    "property" : {
+      "description" : "vf-module-id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vf-module-label" : {
+    "tags" : "vf-module-label",
+    "name" : "vf-module-label",
+    "property" : {
+      "description" : "vf-module-label",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
+          "input-key-mapping" : {
+            "customizationid" : "vf-module-model-customization-uuid"
+          },
+          "output-key-mapping" : {
+            "vf-module-label" : "vf_module_label"
+          },
+          "key-dependencies" : [ "vf-module-model-customization-uuid" ]
+        }
+      }
+    }
+  },
+  "vf-module-model-customization-uuid" : {
+    "tags" : "vf-module-model-customization-uuid",
+    "name" : "vf-module-model-customization-uuid",
+    "property" : {
+      "description" : "vf-module-model-customization-uuid",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      }
+    }
+  },
+  "vf-module-name" : {
+    "tags" : "vf-module-name",
+    "name" : "vf-module-name",
+    "property" : {
+      "description" : "vf-module-name",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vf-modules/vf-module/$vf_module_id/vf-module-data/vf-module-topology/vf-module-parameters/param/vf-module-name",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vf-module-name" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id", "vf_module_id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "naming-resolution",
+          "verb" : "POST",
+          "type" : "JSON",
+          "headers" : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+          },
+          "url-path" : "/v1/genNetworkElementName",
+          "payload" : "{\r\n  \"elements\": [\r\n    {\r\n      \"resource-name\": \"vf-module-name\",\r\n      \"resource-value\": \"${vf-module-name}\",\r\n      \"external-key\": \"${vf-module-id}\",\r\n      \"policy-instance-name\": \"${vf-naming-policy}\",\r\n      \"naming-type\": \"VF-MODULE\",\r\n      \"VNF_NAME\": \"${vnf_name}\",\r\n      \"VF_MODULE_LABEL\":\"${vf-module-label}\",\r\n      \"VF_MODULE_TYPE\":\"${vf-module-type}\"\r\n    }\r\n  ]\r\n}",
+          "path" : "/elements/0/resource-value",
+          "input-key-mapping" : {
+            "vf-naming-policy" : "vf-naming-policy",
+            "vnf_name" : "vnf_name",
+            "vf-module-label" : "vf-module-label",
+            "vf-module-type" : "vf-module-type",
+            "vf-module-id" : "vf-module-id"
+          },
+          "output-key-mapping" : {
+            "vf-module-name" : "resource-value"
+          },
+          "key-dependencies" : [ "vf-naming-policy", "vnf_name", "vf-module-label", "vf-module-type", "vf-module-id" ]
+        }
+      }
+    }
+  },
+  "vf-module-type" : {
+    "tags" : "vf-module-type",
+    "name" : "vf-module-type",
+    "property" : {
+      "description" : "vf-module-type",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select vf_module_type as vf_module_type from sdnctl.VF_MODULE_MODEL where customization_uuid=:customizationid",
+          "output-key-mapping" : {
+            "vf-module-type" : "vf_module_type"
+          },
+          "input-key-mapping" : {
+            "customizationid" : "vf-module-model-customization-uuid"
+          },
+          "key-dependencies" : [ "vf-module-model-customization-uuid" ]
+        }
+      }
+    }
+  },
+  "vf-naming-policy" : {
+    "tags" : "vf-naming-policy",
+    "name" : "vf-naming-policy",
+    "property" : {
+      "description" : "vf-naming-policy",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vf-naming-policy",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vf-naming-policy" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.VF_MODEL.naming_policy as vf_naming_policy from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnf_model_customization_uuid",
+          "input-key-mapping" : {
+            "vnf_model_customization_uuid" : "vnf-model-customization-uuid"
+          },
+          "output-key-mapping" : {
+            "vf-naming-policy" : "vf_naming_policy"
+          },
+          "key-dependencies" : [ "vnf-model-customization-uuid" ]
+        }
+      }
+    }
+  },
+  "vfccustomizationuuid" : {
+    "tags" : "vfccustomizationuuid",
+    "name" : "vfccustomizationuuid",
+    "property" : {
+      "description" : "vfccustomizationuuid",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.VF_MODULE_TO_VFC_MAPPING.vfc_customization_uuid as vnf_customid from sdnctl.VF_MODULE_TO_VFC_MAPPING where vm_count = 1 and sdnctl.VF_MODULE_TO_VFC_MAPPING.vf_module_customization_uuid=:vfmodulecustomizationuuid",
+          "input-key-mapping" : {
+            "vfmodulecustomizationuuid" : "vf-module-model-customization-uuid"
+          },
+          "output-key-mapping" : {
+            "vfccustomizationuuid" : "vnf_customid"
+          },
+          "key-dependencies" : [ "vf-module-model-customization-uuid" ]
+        }
+      }
+    }
+  },
+  "vip" : {
+    "tags" : "vip",
+    "name" : "vip",
+    "property" : {
+      "description" : "vip",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vip",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vip" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "private2-prefix-id"
+          },
+          "output-key-mapping" : {
+            "vip" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "private2-prefix-id" ]
+        }
+      }
+    }
+  },
+  "vlb_0_int_pktgen_private_port_0_mac" : {
+    "tags" : "vlb_0_int_pktgen_private_port_0_mac",
+    "name" : "vlb_0_int_pktgen_private_port_0_mac",
+    "property" : {
+      "description" : "vlb_0_int_pktgen_private_port_0_mac",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_0_int_pktgen_private_port_0_mac",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vlb_0_int_pktgen_private_port_0_mac" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vlb_int_pktgen_private_ip_0" : {
+    "tags" : "vlb_int_pktgen_private_ip_0",
+    "name" : "vlb_int_pktgen_private_ip_0",
+    "property" : {
+      "description" : "vlb_int_pktgen_private_ip_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_int_pktgen_private_ip_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vlb_int_pktgen_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "private2-prefix-id"
+          },
+          "output-key-mapping" : {
+            "vlb_int_pktgen_private_ip_0" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "private2-prefix-id" ]
+        }
+      }
+    }
+  },
+  "vlb_int_private_ip_0" : {
+    "tags" : "vlb_int_private_ip_0",
+    "name" : "vlb_int_private_ip_0",
+    "property" : {
+      "description" : "vlb_int_private_ip_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_int_private_ip_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vlb_int_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "private1-prefix-id"
+          },
+          "output-key-mapping" : {
+            "vlb_int_private_ip_0" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "private1-prefix-id" ]
+        }
+      }
+    }
+  },
+  "vlb_name_0" : {
+    "tags" : "vlb_name_0",
+    "name" : "vlb_name_0",
+    "property" : {
+      "description" : "vlb_name_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_name_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vlb_name_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "naming-resolution",
+          "verb" : "POST",
+          "type" : "JSON",
+          "headers" : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+          },
+          "url-path" : "/v1/genNetworkElementName",
+          "payload" : "{\r\n\t\"elements\": [{\r\n\t\t\"resource-name\": \"vlb_name_0\",\r\n\t\t\"resource-value\": \"${vlb_name_0}\",\r\n\t\t\"external-key\": \"${vf-module-id}_vlb_name_0\",\r\n\t\t\"policy-instance-name\": \"${vf-naming-policy}\",\r\n\t\t\"naming-type\": \"VNFC\",\r\n\t\t\"VNF_NAME\": \"${vnf_name}\",\r\n\t\t\"NFC_NAMING_CODE\": \"${nfc-naming-code}\"\r\n\t}]\r\n}",
+          "path" : "/elements/0/resource-value",
+          "input-key-mapping" : {
+            "vf-naming-policy" : "vf-naming-policy",
+            "nfc-naming-code" : "nfc-naming-code",
+            "vnf_name" : "vnf_name",
+            "vf-module-id" : "vf-module-id"
+          },
+          "output-key-mapping" : {
+            "vlb_name_0" : "resource-value"
+          },
+          "key-dependencies" : [ "vf-naming-policy", "nfc-naming-code", "vnf_name", "vf-module-id" ]
+        }
+      }
+    }
+  },
+  "vlb_onap_private_ip_0" : {
+    "tags" : "vlb_onap_private_ip_0",
+    "name" : "vlb_onap_private_ip_0",
+    "property" : {
+      "description" : "vlb_onap_private_ip_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_onap_private_ip_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vlb_onap_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "management-prefix-id"
+          },
+          "output-key-mapping" : {
+            "vlb_onap_private_ip_0" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "management-prefix-id" ]
+        }
+      }
+    }
+  },
+  "vlb_private_net_cidr" : {
+    "tags" : "vlb_private_net_cidr",
+    "name" : "vlb_private_net_cidr",
+    "property" : {
+      "description" : "vlb_private_net_cidr",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_private_net_cidr",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vlb_private_net_cidr" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select sdnctl.IPAM_IP_POOL.prefix as prefix from sdnctl.IPAM_IP_POOL where description = \"private1\"",
+          "input-key-mapping" : { },
+          "output-key-mapping" : {
+            "vlb_private_net_cidr" : "prefix"
+          }
+        }
+      }
+    }
+  },
+  "vlb_private_net_id" : {
+    "tags" : "vlb_private_net_id",
+    "name" : "vlb_private_net_id",
+    "property" : {
+      "description" : "vlb_private_net_id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vlb_private_net_id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vlb_private_net_id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vm-type" : {
+    "tags" : "vm-type",
+    "name" : "vm-type",
+    "property" : {
+      "description" : "vm-type",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select VFC_MODEL.vm_type as vm_type from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+          "output-key-mapping" : {
+            "vm-type" : "vm_type"
+          },
+          "input-key-mapping" : {
+            "vfccustomizationuuid" : "vfccustomizationuuid"
+          },
+          "key-dependencies" : [ "vfccustomizationuuid" ]
+        }
+      }
+    }
+  },
+  "vnf-id" : {
+    "tags" : "vnf-id",
+    "name" : "vnf-id",
+    "property" : {
+      "description" : "vnf-id",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf-id",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vnf-id" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vnf-model-customization-uuid" : {
+    "tags" : "vnf-model-customization-uuid",
+    "name" : "vnf-model-customization-uuid",
+    "property" : {
+      "description" : "vnf-model-customization-uuid",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : { }
+      }
+    }
+  },
+  "vnf_assign_aai" : {
+    "tags" : "vnf_assign_aai",
+    "name" : "vnf_assign_aai",
+    "property" : {
+      "description" : "vnf_assign_aai",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "aai-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "PATCH",
+          "type" : "JSON",
+          "headers" : {
+            "Content-Type" : "application/merge-patch+json"
+          },
+          "url-path" : "/aai/v14/network/generic-vnfs/generic-vnf/$vnf-id",
+          "payload" : "{\r\n\"vnf-name\":\"${vnf_name}\", \r\n \"selflink\": \"restconf/config/GENERIC-RESOURCE-API:services/service/${service-instance-id}/service-data/vnfs/vnf/${vnf-id}/vnf-data/vnf-topology/\"\r\n}",
+          "path" : "",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id",
+            "vnf_name" : "vnf_name"
+          },
+          "output-key-mapping" : { },
+          "key-dependencies" : [ "service-instance-id", "vnf-id", "vnf_name" ]
+        }
+      }
+    }
+  },
+  "vnf_name" : {
+    "tags" : "vnf_name",
+    "name" : "vnf_name",
+    "property" : {
+      "description" : "vnf_name",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
+          "path" : "/param/0/value",
+          "headers" : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+          },
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vnf_name" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "naming-resolution",
+          "verb" : "POST",
+          "type" : "JSON",
+          "headers" : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+          },
+          "url-path" : "/v1/genNetworkElementName",
+          "payload" : "{\r\n  \"elements\": [\r\n    {\r\n      \"resource-name\": \"vnf_name\",\r\n      \"resource-value\": \"${vnf_name}\",\r\n      \"external-key\": \"${vnf-id}\",\r\n      \"policy-instance-name\": \"${vf-naming-policy}\",\r\n      \"naming-type\": \"VNF\",\r\n      \"AIC_CLOUD_REGION\": \"${aic-cloud-region}\"\r\n    }\r\n  ]\r\n}",
+          "path" : "/elements/0/resource-value",
+          "input-key-mapping" : {
+            "vnf-id" : "vnf-id",
+            "aic-cloud-region" : "aic-cloud-region",
+            "vf-naming-policy" : "vf-naming-policy"
+          },
+          "output-key-mapping" : {
+            "vnf_name" : "resource-value"
+          },
+          "key-dependencies" : [ "vnf-id", "aic-cloud-region", "vf-naming-policy" ]
+        }
+      }
+    }
+  },
+  "vnfc-model-invariant-uuid" : {
+    "tags" : "vnfc-model-invariant-uuid",
+    "name" : "vnfc-model-invariant-uuid",
+    "property" : {
+      "description" : "vnfc-model-invariant-uuid",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select VFC_MODEL.invariant_uuid as vfc_invariant_uuid from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+          "output-key-mapping" : {
+            "vnfc-model-invariant-uuid" : "vfc_invariant_uuid"
+          },
+          "input-key-mapping" : {
+            "vfccustomizationuuid" : "vfccustomizationuuid"
+          },
+          "key-dependencies" : [ "vfccustomizationuuid" ]
+        }
+      }
+    }
+  },
+  "vnfc-model-version" : {
+    "tags" : "vnfc-model-version",
+    "name" : "vnfc-model-version",
+    "property" : {
+      "description" : "vnfc-model-version",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "select VFC_MODEL.version as vnfc_model_version from VFC_MODEL where customization_uuid=:vfccustomizationuuid",
+          "output-key-mapping" : {
+            "vnfc-model-version" : "vnfc_model_version"
+          },
+          "input-key-mapping" : {
+            "vfccustomizationuuid" : "vfccustomizationuuid"
+          },
+          "key-dependencies" : [ "vfccustomizationuuid" ]
+        }
+      }
+    }
+  },
+  "vpg_0_int_pktgen_private_port_0_mac" : {
+    "tags" : "vpg_0_int_pktgen_private_port_0_mac",
+    "name" : "vpg_0_int_pktgen_private_port_0_mac",
+    "property" : {
+      "description" : "vpg_0_int_pktgen_private_port_0_mac",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_0_int_pktgen_private_port_0_mac",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vpg_0_int_pktgen_private_port_0_mac" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      }
+    }
+  },
+  "vpg_int_pktgen_private_ip_0" : {
+    "tags" : "vpg_int_pktgen_private_ip_0",
+    "name" : "vpg_int_pktgen_private_ip_0",
+    "property" : {
+      "description" : "vpg_int_pktgen_private_ip_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_int_pktgen_private_ip_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vpg_int_pktgen_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "private2-prefix-id"
+          },
+          "output-key-mapping" : {
+            "vpg_int_pktgen_private_ip_0" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "private2-prefix-id" ]
+        }
+      }
+    }
+  },
+  "vpg_name_0" : {
+    "tags" : "vpg_name_0",
+    "name" : "vpg_name_0",
+    "property" : {
+      "description" : "vlb_name_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_name_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vpg_name_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "naming-resolution",
+          "verb" : "POST",
+          "type" : "JSON",
+          "headers" : {
+            "Accept" : "application/json",
+            "Content-Type" : "application/json"
+          },
+          "url-path" : "/v1/genNetworkElementName",
+          "payload" : "{\r\n\t\"elements\": [{\r\n\t\t\"resource-name\": \"vpg_name_0\",\r\n\t\t\"resource-value\": \"${vpg_name_0}\",\r\n\t\t\"external-key\": \"${vf-module-id}_vpg_name_0\",\r\n\t\t\"policy-instance-name\": \"${vf-naming-policy}\",\r\n\t\t\"naming-type\": \"VNFC\",\r\n\t\t\"VNF_NAME\": \"${vnf_name}\",\r\n\t\t\"NFC_NAMING_CODE\": \"${nfc-naming-code}\"\r\n\t}]\r\n}",
+          "path" : "/elements/0/resource-value",
+          "input-key-mapping" : {
+            "vf-naming-policy" : "vf-naming-policy",
+            "nfc-naming-code" : "nfc-naming-code",
+            "vnf_name" : "vnf_name",
+            "vf-module-id" : "vf-module-id"
+          },
+          "output-key-mapping" : {
+            "vpg_name_0" : "resource-value"
+          },
+          "key-dependencies" : [ "vf-naming-policy", "nfc-naming-code", "vnf_name", "vf-module-id" ]
+        }
+      }
+    }
+  },
+  "vpg_onap_private_ip_0" : {
+    "tags" : "vpg_onap_private_ip_0",
+    "name" : "vpg_onap_private_ip_0",
+    "property" : {
+      "description" : "vpg_onap_private_ip_0",
+      "type" : "string"
+    },
+    "group" : "default",
+    "updated-by" : "Singal, Kapil <ks220y@att.com>",
+    "sources" : {
+      "input" : {
+        "type" : "source-input"
+      },
+      "default" : {
+        "type" : "source-default",
+        "properties" : { }
+      },
+      "sdnc" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vpg_onap_private_ip_0",
+          "path" : "/param/0/value",
+          "input-key-mapping" : {
+            "service-instance-id" : "service-instance-id",
+            "vnf-id" : "vnf-id"
+          },
+          "output-key-mapping" : {
+            "vpg_onap_private_ip_0" : "value"
+          },
+          "key-dependencies" : [ "service-instance-id", "vnf-id" ]
+        }
+      },
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "endpoint-selector" : "ipam-1",
+          "type" : "JSON",
+          "verb" : "POST",
+          "url-path" : "/api/ipam/prefixes/$prefix-id/available-ips/",
+          "path" : "",
+          "input-key-mapping" : {
+            "prefix-id" : "management-prefix-id"
+          },
+          "output-key-mapping" : {
+            "vpg_onap_private_ip_0" : "address",
+            "id" : "id"
+          },
+          "key-dependencies" : [ "management-prefix-id" ]
+        }
+      }
+    }
+  }
 }

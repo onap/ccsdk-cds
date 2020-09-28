@@ -282,16 +282,16 @@
         }
       },
       "execute" : {
-        "type" : "component-script-executor",
+        "type" : "component-netconf-executor",
         "requirements" : {
-          "restconf-connection" : {
+          "netconf-connection" : {
             "capability" : "restconf",
             "node" : "netconf-device",
             "relationship" : "tosca.relationships.ConnectsTo"
           }
         },
         "interfaces" : {
-          "ComponentScriptExecutor" : {
+          "ComponentNetconfExecutor" : {
             "operations" : {
               "process" : {
                 "inputs" : {

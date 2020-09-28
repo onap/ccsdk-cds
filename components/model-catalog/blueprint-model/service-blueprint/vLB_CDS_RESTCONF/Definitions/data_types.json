@@ -61,16 +61,6 @@
       "description" : "Dynamic DataType definition for workflow(config-deploy).",
       "version" : "1.0.0",
       "properties" : {
-        "vdns_int_private_ip_0" : {
-          "description" : "",
-          "required" : false,
-          "type" : "string",
-          "status" : "",
-          "constraints" : [ { } ],
-          "entry_schema" : {
-            "type" : ""
-          }
-        },
         "vnf-id" : {
           "description" : "",
           "required" : false,
@@ -81,27 +71,7 @@
             "type" : ""
           }
         },
-        "vdns_vf_module_id" : {
-          "description" : "",
-          "required" : false,
-          "type" : "string",
-          "status" : "",
-          "constraints" : [ { } ],
-          "entry_schema" : {
-            "type" : ""
-          }
-        },
         "service-instance-id" : {
-          "description" : "",
-          "required" : false,
-          "type" : "string",
-          "status" : "",
-          "constraints" : [ { } ],
-          "entry_schema" : {
-            "type" : ""
-          }
-        },
-        "vdns_onap_private_ip_0" : {
           "description" : "",
           "required" : false,
           "type" : "string",
@@ -138,12 +108,24 @@
             "type" : ""
           }
         },
+        "vf-module-name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "${vf-module-name}",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
         "private1-prefix-id" : {
           "description" : "",
           "required" : false,
           "type" : "string",
           "status" : "",
           "constraints" : [ { } ],
+          "default" : "",
           "entry_schema" : {
             "type" : ""
           }
@@ -505,6 +487,7 @@
           "type" : "string",
           "status" : "",
           "constraints" : [ { } ],
+          "default" : "",
           "entry_schema" : {
             "type" : ""
           }
@@ -526,17 +509,6 @@
           "type" : "string",
           "status" : "",
           "constraints" : [ { } ],
-          "entry_schema" : {
-            "type" : ""
-          }
-        },
-        "vf_module_name" : {
-          "description" : "",
-          "required" : false,
-          "type" : "string",
-          "status" : "",
-          "constraints" : [ { } ],
-          "default" : "${vf_module_name}",
           "entry_schema" : {
             "type" : ""
           }
@@ -629,6 +601,7 @@
           "type" : "string",
           "status" : "",
           "constraints" : [ { } ],
+          "default" : "",
           "entry_schema" : {
             "type" : ""
           }
@@ -712,6 +685,7 @@
           "type" : "string",
           "status" : "",
           "constraints" : [ { } ],
+          "default" : "",
           "entry_schema" : {
             "type" : ""
           }

@@ -271,7 +271,7 @@
         }
       },
       "execute" : {
-        "type" : "component-script-executor",
+        "type" : "component-netconf-executor",
         "requirements" : {
           "netconf-connection" : {
             "capability" : "netconf",
@@ -280,7 +280,7 @@
           }
         },
         "interfaces" : {
-          "ComponentScriptExecutor" : {
+          "ComponentNetconfExecutor" : {
             "operations" : {
               "process" : {
                 "inputs" : {

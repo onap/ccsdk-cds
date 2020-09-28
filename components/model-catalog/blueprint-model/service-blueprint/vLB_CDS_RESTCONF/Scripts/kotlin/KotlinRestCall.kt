@@ -51,7 +51,7 @@ open class ConfigDeploy : AbstractScriptComponentFunction() {
         val vdns_ip: String = payloadObject.get("vdns-instance")[0].get("ip-addr").asText()
 
         val blueprintContext = bluePrintRuntimeService.bluePrintContext()
-        val requirement = blueprintContext.nodeTemplateRequirement(nodeTemplateName, "restconf-connection")
+        val requirement = blueprintContext.nodeTemplateRequirement(nodeTemplateName, "netconf-connection")
         val capabilityProperties = bluePrintRuntimeService.resolveNodeTemplateCapabilityProperties(requirement.node!!, requirement.capability!!)
         val netconfDeviceInfo = JacksonUtils.getInstanceFromMap(capabilityProperties, NetconfDeviceInfo::class.java)
         log.info("Waiting for 2 minutes until vLB intializes ...")

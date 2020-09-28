@@ -35,6 +35,32 @@
 					"default": 30
 				}
 			}
+		},
+		"restconf" : {
+			"type": "tosca.capabilities.Restconf",
+			"properties" : {
+				"login-key": {
+					"required": true,
+					"type": "string"
+				},
+				"login-account": {
+					"required": true,
+					"type": "string"
+				},
+				"target-ip-address": {
+					"required": true,
+					"type": "string"
+				},
+				"port-number": {
+					"required": true,
+					"type": "integer"
+				},
+				"connection-time-out": {
+					"required": false,
+					"type": "integer",
+					"default": 30
+				}
+			}
 		}
 	},
 	"derived_from": "tosca.nodes.Vnf"
