@@ -3,4 +3,6 @@ CSAR-Version: 1.0
 Created-By: Seaudi, Abdelmuhaimen <abdelmuhaimen.seaudi@orange.com>
 Entry-Definitions: Definitions/vLB_CDS.json
 Template-Tags: vLB-CDS
+Template-Name: vLB_CDS_RESTCONF
+Template-Version: 1.0.0
 Content-Type: application/vnd.oasis.bpmn

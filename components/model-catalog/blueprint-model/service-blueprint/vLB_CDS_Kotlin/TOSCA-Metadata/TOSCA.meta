@@ -2,5 +2,7 @@ TOSCA-Meta-File-Version: 1.0.0
 CSAR-Version: 1.0
 Created-By: PLATANIA, MARCO <platania@research.att.com>
 Entry-Definitions: Definitions/vLB_CDS_KOTLIN.json
-Template-Tags: vDNS-CDS-test1
+Template-Tags: test, vDNS-CDS, SCALE-OUT, MARCO
+Template-Name: vLB_CDS_KOTLIN
+Template-Version: 1.0.0
 Content-Type: application/vnd.oasis.bpmn
