@@ -18,6 +18,9 @@ body{
   transition: 0.3s !important;
 }
 /*Bootstrap*/
+.custom-control-input:checked ~ .custom-control-label::before {
+  border-color: transparent !important;
+}
 .btn-outline-danger{
   background: #fff !important;
   border: solid 1px #ECEDF2 !important;
@@ -1926,6 +1929,7 @@ ul.package-contributers{
   color: #1B3E6F;
   content: attr(data-tooltip);
   font-size: 12px;
+  font-weight: bold !important;
   line-height: 1.2;
   border-radius: 3px;
 }
@@ -2082,22 +2086,26 @@ ul.package-contributers{
   color:#1B3E6F;
   background-color: #C3CDDB !important;
   border: solid 1px #C3CDDB;
-  border-radius: 3px !important;
-  border-top-left-radius: 0 !important;
+  border-radius: 1px !important;
+  /* border-top-left-radius: 0 !important; */
   font-size: 12px;
   opacity: 1.0 !important;
 } 
 
-.bs-tooltip-auto[x-placement^=top] .arrow::before, .bs-tooltip-top .arrow::before {
+.bs-tooltip-auto[x-placement^=top] .arrow::before, 
+.bs-tooltip-top .arrow::before {
   border-top-color: #C3CDDB !important;
 }
-.bs-tooltip-auto[x-placement^=right] .arrow::before, .bs-tooltip-right .arrow::before {
+.bs-tooltip-auto[x-placement^=right] .arrow::before, 
+.bs-tooltip-right .arrow::before {
   border-right-color: #C3CDDB !important;
 }
-.bs-tooltip-auto[x-placement^=bottom] .arrow::before, .bs-tooltip-bottom .arrow::before {
+.bs-tooltip-auto[x-placement^=bottom] .arrow::before, 
+.bs-tooltip-bottom .arrow::before {
   border-bottom-color: #C3CDDB !important;
 }
-.bs-tooltip-auto[x-placement^=left] .arrow::before, .bs-tooltip-left .arrow::before {
+.bs-tooltip-auto[x-placement^=left] .arrow::before, 
+.bs-tooltip-left .arrow::before {
   border-left-color: #C3CDDB !important;
 }
 
@@ -3009,6 +3017,36 @@ padding: 0 10px 0 0;
 .mapping-source-load.hover-disable:hover i{
   background: transparent;
 }
+.mapping-editBar{
+  margin-bottom: 1rem;
+}
+.mapping-editBar .custom-checkbox,
+.mapping-editBar .btn{
+  margin: 0 4px !important;
+  padding: 9px !important;
+  width: 36px;
+  height: 36px;
+  background: #F4F9FE;
+  border-radius: 50% !important;
+  text-align: center;
+  line-height: 14px;
+}
+.mapping-editBar .custom-checkbox{
+  margin-left: 0 !important;
+}
+.mapping-editBar .custom-control-label{
+  top: -2px;
+  left: 16px;
+}
+.mapping-editBar .btn i{
+  color: #1B3E6F;
+  font-size: 18px;
+  opacity: .5;
+}
+.mapping-editBar .custom-checkbox:hover,
+.mapping-editBar .btn:hover i{
+  opacity: 1;
+}
 .template-mapping-list{
   background: #F4F9FE;
   border: 1px solid #E9F3FF;
@@ -3172,8 +3210,8 @@ margin-right: 5px;
   font-size: 13px;
 }
 .template-mapping-action .btn-primary{
-  background:#5DBDBA !important ;
-  border-color:#5DBDBA !important ;
+  background:#66BB00 !important ;
+  border-color:#66BB00 !important ;
   color: #fff !important ;
 }
 .template-mapping-action .btn-outline-secondary{

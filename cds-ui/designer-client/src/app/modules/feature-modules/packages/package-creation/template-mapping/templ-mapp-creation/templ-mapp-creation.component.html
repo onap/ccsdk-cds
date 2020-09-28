@@ -123,8 +123,18 @@
 
 
                     </div>
+                    
                 </div>
+                
                 <div id="mapping-table" [hidden]="resourceDictionaryRes?.length == 0" class="mapping-table mx-4 my-2">
+                    <div class="btn-group mapping-editBar" role="group">
+                          <div class="custom-control custom-checkbox" tooltip="Select All" placement="bottom">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                            <label class="custom-control-label" for="customCheck1"></label>
+                          </div>
+                        <button type="button" class="btn" tooltip="Re-mapping" placement="bottom"><i class="icon-autoMap"></i></button>
+                        <button type="button" class="btn" tooltip="Remove" placement="bottom"><i class="icon-delete-sm"></i></button>
+                      </div>
                     <table datatable [dtOptions]="initDtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                         <thead>
                             <tr>
@@ -141,8 +151,14 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let dict of resourceDictionaryRes">
-                                <td><input type="checkbox" [checked]="selectedProps.has(dict.name)"
-                                        (click)="selectProp(dict.name)"></td>
+                                <td>
+                                <div class="custom-control custom-checkbox" tooltip="Select" placement="bottom">
+                            <input type="checkbox" class="custom-control-input" id="customCheck2" [checked]="selectedProps.has(dict.name)"
+                                        (click)="selectProp(dict.name)">
+                            <label class="custom-control-label" for="customCheck2"></label>
+                          </div>
+                                <!-- <input type="checkbox" [checked]="selectedProps.has(dict.name)"
+                                        (click)="selectProp(dict.name)"></td> -->
                                 <td>
                                     <img *ngIf="dict.definition?.property?.required"
                                         src="/assets/img/icon-required-yes.svg">
