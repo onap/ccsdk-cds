@@ -80,6 +80,7 @@ object BluePrintTypes {
         BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_CONTENT,
         BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_MAPPING,
         BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_NETCONF,
+        BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_RESTCONF,
         BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_SSH,
         BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_SFTP
     )

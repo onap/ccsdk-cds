@@ -1,70 +1,6 @@
 {
   "node_types" : {
-    "component-script-executor":{
-  "description": "This is CLI Transaction Configuration Component API",
-  "version": "1.0.0",
-  "attributes": {
-    "response-data": {
-      "required": false,
-      "type": "json"
-    }
-  },
-  "capabilities": {
-    "component-node": {
-      "type": "tosca.capabilities.Node"
-    }
-  },
-  "interfaces": {
-    "ComponentScriptExecutor": {
-      "operations": {
-        "process": {
-          "inputs": {
-            "script-type": {
-              "description": "Script type, kotlin type is supported",
-              "required": true,
-              "type": "string",
-              "default": "internal",
-              "constraints": [
-                {
-                  "valid_values": [
-                    "kotlin",
-                    "jython",
-                    "internal"
-                  ]
-                }
-              ]
-            },
-            "script-class-reference": {
-              "description": "Kotlin Script class name or jython script name.",
-              "required": true,
-              "type": "string"
-            },
-            "dynamic-properties": {
-              "description": "Dynamic Json Content or DSL Json reference.",
-              "required": false,
-              "type": "json"
-            }
-          },
-          "outputs": {
-            "response-data": {
-              "description": "Execution Response Data.",
-              "required": false,
-              "type": "string"
-            },
-            "status": {
-              "description": "Status of the Component Execution ( success or failure )",
-              "required": true,
-              "type": "string"
-            }
-          }
-        }
-      }
-    }
-  },
-  "derived_from": "tosca.nodes.Component"
-},
-
-  "component-netconf-executor" : {
+    "component-netconf-executor" : {
       "description" : "This is Netconf Transaction Configuration Component API",
       "version" : "1.0.0",
       "attributes" : {
@@ -141,8 +77,14 @@
       "version" : "1.0.0",
       "attributes" : {
         "assignment-params" : {
+          "description" : "Holds resolved template, resolution-summary or key-value",
           "required" : true,
           "type" : "string"
+        },
+        "assignment-map" : {
+          "description" : "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+          "required" : true,
+          "type" : "map"
         }
       },
       "capabilities" : {
@@ -176,6 +118,11 @@
                   "required" : false,
                   "type" : "string"
                 },
+                "resolution-summary" : {
+                  "description" : "Enable resolution-summary output",
+                  "required" : false,
+                  "type" : "boolean"
+                },
                 "artifact-prefix-names" : {
                   "description" : "Template , Resource Assignment Artifact Prefix names",
                   "required" : true,
@@ -207,6 +154,10 @@
               },
               "outputs" : {
                 "resource-assignment-params" : {
+                  "required" : true,
+                  "type" : "string"
+                },
+                "resource-assignment-map" : {
                   "required" : true,
                   "type" : "string"
                 },
@@ -344,6 +295,13 @@
           } ],
           "default" : "JSON"
         },
+        "headers" : {
+          "required" : false,
+          "type" : "map",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        },
         "verb" : {
           "required" : true,
           "type" : "string",
@@ -460,22 +418,15 @@
           }
         },
         "restconf" : {
-          "type" : "tosca.capabilities.Netconf",
+          "type" : "tosca.capabilities.Restconf",
           "properties" : {
             "login-key" : {
               "required" : true,
-              "type" : "string",
-              "default" : "sdnc"
+              "type" : "string"
             },
             "login-account" : {
               "required" : true,
-              "type" : "string",
-              "default" : "sdnc-tacacs"
-            },
-            "source" : {
-              "required" : false,
-              "type" : "string",
-              "default" : "npm"
+              "type" : "string"
             },
             "target-ip-address" : {
               "required" : true,
@@ -483,8 +434,7 @@
             },
             "port-number" : {
               "required" : true,
-              "type" : "integer",
-              "default" : 830
+              "type" : "integer"
             },
             "connection-time-out" : {
               "required" : false,

@@ -160,6 +160,7 @@ object BluePrintConstants {
     const val MODEL_TYPE_CAPABILITY_TYPE_CONTENT = "tosca.capabilities.Content"
     const val MODEL_TYPE_CAPABILITY_TYPE_MAPPING = "tosca.capabilities.Mapping"
     const val MODEL_TYPE_CAPABILITY_TYPE_NETCONF = "tosca.capabilities.Netconf"
+    const val MODEL_TYPE_CAPABILITY_TYPE_RESTCONF = "tosca.capabilities.Restconf"
     const val MODEL_TYPE_CAPABILITY_TYPE_SSH = "tosca.capabilities.Ssh"
     const val MODEL_TYPE_CAPABILITY_TYPE_SFTP = "tosca.capabilities.Sftp"
 

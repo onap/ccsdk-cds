@@ -213,11 +213,6 @@
                         "response-data"
                      ]
                   }
-               },
-               "status": {
-                  "description": "Status of the Component Execution ( success or failure )",
-                  "required": true,
-                  "type": "string"
                }
             }
          },
@@ -514,16 +509,16 @@
             }
          },
          "execute": {
-            "type": "component-script-executor",
+            "type": "component-netconf-executor",
             "requirements": {
-               "restconf-connection": {
+               "netconf-connection": {
                   "capability": "restconf",
                   "node": "netconf-device",
                   "relationship": "tosca.relationships.ConnectsTo"
                }
             },
             "interfaces": {
-               "ComponentScriptExecutor": {
+               "ComponentNetconfExecutor": {
                   "operations": {
                      "process": {
                         "inputs": {
@@ -538,16 +533,16 @@
             }
          },
          "executeHealthCheck": {
-            "type": "component-script-executor",
+            "type": "component-netconf-executor",
             "requirements": {
-               "restconf-connection": {
+               "netconf-connection": {
                   "capability": "restconf",
                   "node": "netconf-device",
                   "relationship": "tosca.relationships.ConnectsTo"
                }
             },
             "interfaces": {
-               "ComponentScriptExecutor": {
+               "ComponentNetconfExecutor": {
                   "operations": {
                      "process": {
                         "inputs": {
