@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c30f8be0_17d18ba9",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/vpg_name_0 .json",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2020-09-29T15:19:07Z",
+      "side": 0,
+      "message": "why delete this definition?",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 39,
+        "endChar": 1
+      },
+      "revId": "4726dfef46e024941f25be2c9d4ee66a5b1798ba",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
