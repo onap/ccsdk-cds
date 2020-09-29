@@ -48,10 +48,10 @@ Here are some examples on how to populate the system information within the pack
           . . .
           "dsl_definitions": {
             "ipam-1": {
-               "type": "basic-auth",
-               "url": "http://localhost:8080",
-               "username": "bob",
-               "password": "marley"
+              "type": "basic-auth",
+              "url": "http://localhost:8080",
+              "username": "bob",
+              "password": "marley"
             }
           }
           . . .
@@ -68,13 +68,13 @@ Here are some examples on how to populate the system information within the pack
           . . .
           "dsl_definitions": {
             "ipam-1": {
-               "type" : "ssl-basic-auth",
-               "url" : "http://localhost:32778",
-               "keyStoreInstance": "JKS or PKCS12",
-               "sslTrust": "trusture",
-               "sslTrustPassword": "trustore password",
-               "sslKey": "keystore",
-               "sslKeyPassword: "keystore password"
+              "type" : "ssl-basic-auth",
+              "url" : "http://localhost:32778",
+              "keyStoreInstance": "JKS or PKCS12",
+              "sslTrust": "trusture",
+              "sslTrustPassword": "trustore password",
+              "sslKey": "keystore",
+              "sslKeyPassword: "keystore password"
             }
           }
           . . .
@@ -110,10 +110,10 @@ Here are some examples on how to populate the system information within the pack
           . . .
           "dsl_definitions": {
             "netprog-db": {
-               "type": "maria-db",
-               "url": "jdbc:mysql://10.195.196.123:32050/netprog",
-               "username": "netprog",
-               "password": "netprog"
+              "type": "maria-db",
+              "url": "jdbc:mysql://10.195.196.123:32050/netprog",
+              "username": "netprog",
+              "password": "netprog"
             }
           }
           . . .

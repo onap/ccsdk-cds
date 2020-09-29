@@ -53,6 +53,7 @@ Architecture
 ------------
 |image1|
 
+
 Data Flow
 ---------
 |image2|
@@ -86,6 +87,7 @@ Building and creating server
    * EXPOSE 3000
    * CMD [ "npm", "start" ]
 
+
 Development
 -----------
 
@@ -106,6 +108,7 @@ Steps
    2. git clone https://(LFID)@gerrit.onap.org/r/a/ccsdk/cds
    3. cd cds ; mvn clean install ; cd ..
    4. Open the cds-ui/client code for development
+
 
 Functional Decomposition
 ------------------------
