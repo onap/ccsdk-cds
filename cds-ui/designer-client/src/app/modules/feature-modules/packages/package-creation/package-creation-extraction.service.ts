@@ -103,6 +103,8 @@ export class PackageCreationExtractionService {
             const nodeTemplates = 'node_templates';
             content[nodeTemplates] = definition.topology_template ? definition.topology_template.node_templates : {};
             this.designerStore.saveSourceContent(JSON.stringify(content));
+            this.packageCreationStore.addTopologyTemplate(definition.topology_template);
+
 
         }
         this.packageCreationStore.addDefinition(filename, fileData);
