@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
 import {PackageCreationStore} from '../package-creation/package-creation.store';
-import {FilesContent, FolderNodeElement, MetaDataTabModel} from '../package-creation/mapping-models/metadata/MetaDataTab.model';
+import {FilesContent, FolderNodeElement} from '../package-creation/mapping-models/metadata/MetaDataTab.model';
 import {MetadataTabComponent} from '../package-creation/metadata-tab/metadata-tab.component';
 import * as JSZip from 'jszip';
 import {ConfigurationDashboardService} from './configuration-dashboard.service';
@@ -65,8 +65,6 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
             cbaPackage => {
                 this.cbaPackage = cbaPackage;
             });
-
-
     }
 
     ngOnInit() {
@@ -262,7 +260,9 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     }
 
     checkSkipTypesOfAction() {
+        console.log(this.cbaPackage);
         if (this.cbaPackage.templateTopology.node_templates && this.cbaPackage.templateTopology.workflows) {
+            console.log('eeeeee');
             this.goToDesignerMode(this.id);
         } else {
             this.dataTarget = '#exampleModalLong';
