@@ -53,8 +53,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     currentMapping: any;
     edit = false;
     fileToDelete: any = {};
-    parserFactory = new ParserFactory();
-    selectedProps = new Set<string>();
+    parserFactory: ParserFactory;
+    selectedProps: Set<string>;
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -68,6 +68,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.selectedProps = new Set<string>();
+        this.parserFactory = new ParserFactory();
         this.templateStore.state$.subscribe(templateInfo => {
             // init Template&mapping vars
             console.log('Oninit');

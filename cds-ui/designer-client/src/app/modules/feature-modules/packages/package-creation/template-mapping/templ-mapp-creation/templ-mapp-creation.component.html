@@ -123,18 +123,26 @@
 
 
                     </div>
-                    
+
                 </div>
-                
+
                 <div id="mapping-table" [hidden]="resourceDictionaryRes?.length == 0" class="mapping-table mx-4 my-2">
                     <div class="btn-group mapping-editBar" role="group">
-                          <div class="custom-control custom-checkbox" tooltip="Select All" placement="bottom">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                        <div class="custom-control custom-checkbox" tooltip="Select All" placement="bottom">
+                            <input type="checkbox" (click)="selectAllProps()" class="custom-control-input"
+                                id="customCheck1"
+                                [checked]="resourceDictionaryRes.length>0&&resourceDictionaryRes.length === this.selectedProps.size">
                             <label class="custom-control-label" for="customCheck1"></label>
-                          </div>
-                        <button type="button" class="btn" tooltip="Re-mapping" placement="bottom"><i class="icon-autoMap"></i></button>
-                        <button type="button" class="btn" tooltip="Remove" placement="bottom"><i class="icon-delete-sm"></i></button>
-                      </div>
+                        </div>
+                        <button [disabled]="selectedProps.size <=0" type="button" class="btn" (click)="reMap()"
+                            tooltip="Re-mapping" placement="bottom"><i class="icon-autoMap"></i></button>
+                        <button [disabled]="selectedProps.size <=0" type="button" class="btn" (click)="removeProps()"
+                            tooltip="Remove" placement="bottom"><i class="icon-delete-sm"></i></button>
+                        <div style="line-height: 35px;font-size: 10px;">
+                            <span>{{selectedProps.size}} selected </span>
+                            <span>({{resourceDictionaryRes.length}} attributes in total)</span>
+                        </div>
+                    </div>
                     <table datatable [dtOptions]="initDtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
                         <thead>
                             <tr>
@@ -152,13 +160,15 @@
                         <tbody>
                             <tr *ngFor="let dict of resourceDictionaryRes">
                                 <td>
-                                <div class="custom-control custom-checkbox" tooltip="Select" placement="bottom">
-                            <input type="checkbox" class="custom-control-input" id="customCheck2" [checked]="selectedProps.has(dict.name)"
-                                        (click)="selectProp(dict.name)">
-                            <label class="custom-control-label" for="customCheck2"></label>
-                          </div>
-                                <!-- <input type="checkbox" [checked]="selectedProps.has(dict.name)"
+                                    <div class="custom-control custom-checkbox" tooltip="Select" placement="bottom">
+                                        <input type="checkbox" class="custom-control-input"
+                                            id="customCheck-{{dict.name}}" [checked]="selectedProps.has(dict.name)"
+                                            (click)="selectProp(dict.name)">
+                                        <label class="custom-control-label" for="customCheck-{{dict.name}}"></label>
+                                    </div>
+                                    <!-- <input type="checkbox" [checked]="selectedProps.has(dict.name)"
                                         (click)="selectProp(dict.name)"></td> -->
+                                </td>
                                 <td>
                                     <img *ngIf="dict.definition?.property?.required"
                                         src="/assets/img/icon-required-yes.svg">
@@ -193,9 +203,22 @@
                 </div>
 
                 <div id="mapping-table-res" [hidden]="mappingRes?.length == 0" class="mapping-table mx-4 my-2">
+                    <!-- <div class="btn-group mapping-editBar" role="group">
+                        <div class="custom-control custom-checkbox" tooltip="Select All" placement="bottom">
+                            <input type="checkbox" (click)="selectAllProps()" class="custom-control-input"
+                                id="customCheck2"
+                                [checked]="resourceDictionaryRes.length>0&&resourceDictionaryRes.length === this.selectedProps.size">
+                            <label class="custom-control-label" for="customCheck2"></label>
+                        </div>
+                        <button [disabled]="selectedProps.size <=0" type="button" class="btn" (click)="reMap()"
+                            tooltip="Re-mapping" placement="bottom"><i class="icon-autoMap"></i></button>
+                        <button [disabled]="selectedProps.size <=0" type="button" class="btn" (click)="removeProps()"
+                            tooltip="Remove" placement="bottom"><i class="icon-delete-sm"></i></button>
+                    </div> -->
                     <table datatable [dtOptions]="dtOptions" [dtTrigger]="resTableDtTrigger" class="row-border hover">
                         <thead>
                             <tr>
+                                <!-- <th></th> -->
                                 <th>Required</th>
                                 <th>Parameter Name</th>
                                 <th>Dictionary Name</th>
@@ -208,6 +231,14 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let dict of mappingRes">
+                                <!-- <td>
+                                    <div class="custom-control custom-checkbox" tooltip="Select" placement="bottom">
+                                        <input type="checkbox" class="custom-control-input"
+                                            id="customCheck2-{{dict.name}}" [checked]="selectedProps.has(dict.name)"
+                                            (click)="selectProp(dict.name)">
+                                        <label class="custom-control-label" for="customCheck2-{{dict.name}}"></label>
+                                    </div>
+                                </td> -->
                                 <td>
                                     <img *ngIf="dict.definition?.property?.required"
                                         src="/assets/img/icon-required-yes.svg">
