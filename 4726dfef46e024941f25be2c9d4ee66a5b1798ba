@@ -22,6 +22,30 @@
       "revId": "4726dfef46e024941f25be2c9d4ee66a5b1798ba",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43911a75_50dceae4",
+        "filename": "components/model-catalog/resource-dictionary/starter-dictionary/vpg_name_0 .json",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-09-29T15:47:02Z",
+      "side": 0,
+      "message": "It is a duplicate, and it is causing issues. Today we have both:\nvpg_name_0.json\nvpg_name_0 .json  \u003c-- notice whitespace\n\nThe one with whitespace is missing a capability (rest) which is present in the other one. But because they have the same name, it overwrites the first one so that anything referencing the rest capability will fail.",
+      "parentUuid": "c30f8be0_17d18ba9",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 39,
+        "endChar": 1
+      },
+      "revId": "4726dfef46e024941f25be2c9d4ee66a5b1798ba",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
