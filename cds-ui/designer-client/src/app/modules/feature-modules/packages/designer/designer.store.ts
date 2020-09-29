@@ -144,4 +144,9 @@ export class DesignerStore extends Store<DesignerDashboardState> {
             }
         });
     }
+
+    clear() {
+        this.setState(new DesignerDashboardState());
+    }
+
 }

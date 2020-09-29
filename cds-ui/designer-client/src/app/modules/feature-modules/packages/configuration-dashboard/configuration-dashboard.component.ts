@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
 import {PackageCreationStore} from '../package-creation/package-creation.store';
@@ -18,13 +18,15 @@ import {NgxFileDropEntry} from 'ngx-file-drop';
 import {PackageCreationService} from '../package-creation/package-creation.service';
 import {ComponentCanDeactivate} from '../../../../common/core/canDactivate/ComponentCanDeactivate';
 import {PackageCreationExtractionService} from '../package-creation/package-creation-extraction.service';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 @Component({
     selector: 'app-configuration-dashboard',
     templateUrl: './configuration-dashboard.component.html',
     styleUrls: ['./configuration-dashboard.component.css'],
 })
-export class ConfigurationDashboardComponent extends ComponentCanDeactivate implements OnInit {
+export class ConfigurationDashboardComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     @ViewChild(MetadataTabComponent, {static: false})
     metadataTabComponent: MetadataTabComponent;
@@ -47,6 +49,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     metadataClasses = 'nav-item nav-link active';
     private cbaPackage: CBAPackage = new CBAPackage();
     dataTarget: any = '';
+    ngUnsubscribe = new Subject();
+    private designerState: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -61,15 +65,25 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     ) {
         super();
 
-        this.packageCreationStore.state$.subscribe(
-            cbaPackage => {
-                this.cbaPackage = cbaPackage;
-            });
+
     }
 
     ngOnInit() {
         this.vlbDefinition.topology_template = new TemplateTopology();
-
+        this.packageCreationStore.state$
+            .pipe(distinctUntilChanged((a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)),
+                takeUntil(this.ngUnsubscribe))
+            .subscribe(
+                cbaPackage => {
+                    this.cbaPackage = cbaPackage;
+                });
+        this.designerStore.state$.pipe(
+            distinctUntilChanged((a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)),
+            takeUntil(this.ngUnsubscribe))
+            .subscribe(state => {
+                this.designerState = state;
+                this.vlbDefinition.topology_template.content = this.packageCreationUtils.transformToJson(state.template);
+            });
         this.elementRef.nativeElement.focus();
         this.refreshCurrentPackage();
         const regexp = RegExp(this.versionPattern);
@@ -206,13 +220,17 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     }
 
     textChanged($event: {}) {
-        this.packageCreationStore.addTopologyTemplate(this.vlbDefinition.topology_template);
+        this.cbaPackage.templateTopology.node_templates = this.designerState.template.node_templates;
+        this.cbaPackage.templateTopology.workflows = this.designerState.template.workflows;
+        this.cbaPackage.templateTopology.content = this.vlbDefinition.topology_template.content;
     }
 
     enrichBluePrint() {
-
+        this.packageCreationStore.addTopologyTemplate(this.cbaPackage.templateTopology);
         this.formTreeData();
         this.enrichPackage();
+        this.designerStore.clear();
+        this.packageCreationStore.clear();
     }
 
 
@@ -259,13 +277,18 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         return this.isSaveEnabled;
     }
 
+    ngOnDestroy() {
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
+    }
+
     checkSkipTypesOfAction() {
         console.log(this.cbaPackage);
         if (this.cbaPackage.templateTopology.node_templates && this.cbaPackage.templateTopology.workflows) {
-            console.log('eeeeee');
             this.goToDesignerMode(this.id);
         } else {
             this.dataTarget = '#exampleModalLong';
         }
     }
 }
+
