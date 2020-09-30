@@ -71,7 +71,8 @@
                         </div>
                     </div>
                     <div class="create-template-import">Use the editor to add parameters or you can also
-                        <a href="#" data-toggle="modal" data-target="#templateModal"><b>Import
+                        <a href="#" data-toggle="modal" (click)="allowedExt=['.'+templateExt]"
+                            data-target="#templateModal"><b>Import
                                 File</b></a>. <br /> <span class="templateNote"><i class="icon-info"
                                 aria-hidden="true"></i> When you import new file, the new attributes will replace
                             current attributes.</span></div>
@@ -98,8 +99,8 @@
                 <div class="card-body">
                     <p class="text-center"><b>Select a source to load config parameters</b></p>
                     <div class="text-center">
-                        <button [disabled]="!(variables?.length>0 && templateFileContent?.trim()?.length > 0)"
-                            (click)="getMappingTableFromTemplate($event)" class="mapping-source-load" [ngClass]="variables?.length>0 && templateFileContent?.trim()?.length > 0
+                        <button [disabled]="!(templateFileContent?.trim()?.length > 0)"
+                            (click)="getMappingTableFromTemplate($event)" class="mapping-source-load" [ngClass]="templateFileContent?.trim()?.length > 0
                             ?'hover-enable':'hover-disable'">
                             <i class="icon-use-attributes"></i>
                             <br />
@@ -153,12 +154,13 @@
                                 <th>Dictionary Source</th>
                                 <th>Dependancies</th>
                                 <th>Default</th>
+                                <th>Velocity</th>
                                 <th>Data Type</th>
                                 <th>Entry Schema</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let dict of resourceDictionaryRes">
+                            <tr *ngFor="let dict of resourceDictionaryRes;let i=index;trackBy: identify">
                                 <td>
                                     <div class="custom-control custom-checkbox" tooltip="Select" placement="bottom">
                                         <input type="checkbox" class="custom-control-input"
@@ -189,12 +191,13 @@
                                     <!-- <select class="custom-select">
                                         <option *ngFor="let val of getKeys(dependancies)">
                                             {{ getValue(dict.name)}}</option>
-
                                     </select> -->
                                     <input type="text" class="form-control" [ngModel]="getValue(dict.name)">
                                     <!-- {{ dict.definition.sources }} -->
                                 </td>
                                 <td>{{ dict.definition?.property?.default }}</td>
+                                <td><input type="text" class="form-control" #velocity
+                                        (input)="setVelocity(i,velocity.value)"></td>
                                 <td>{{ dict.definition?.property?.type }}</td>
                                 <td>{{ dict.definition?.property['entry_schema'] }}</td>
                             </tr>
@@ -225,6 +228,7 @@
                                 <th>Dictionary Source</th>
                                 <th>Dependancies</th>
                                 <th>Default</th>
+                                <th>Velocity</th>
                                 <th>Data Type</th>
                                 <th>Entry Schema</th>
                             </tr>
@@ -257,6 +261,10 @@
                                     <!-- {{ dict.definition.sources }} -->
                                 </td>
                                 <td>{{ dict['property']['default'] }}</td>
+                                <td *ngIf="dict?.property?.metadata">
+                                    {{dict?.property?.metadata['transform-template']}}
+                                </td>
+                                <td *ngIf="!dict?.property?.metadata"></td>
                                 <td>{{ dict['property']['type'] }}</td>
                                 <td>{{ dict['property']['entry_schema'] }}</td>
                             </tr>
