@@ -203,7 +203,8 @@
                             <div *ngIf="!showAction" class="custom-control">
                                 <ul>
                                     <li *ngFor="let customActionName of actions">
-                                        <label><i class="icon-file" aria-hidden="true"></i>
+                                        <label><i class="icon-file" aria-hidden="true"
+                                        (click)="openFunctionAttributes(customActionName)"></i>
                                             {{customActionName}} </label>
                                     </li>
                                 </ul>

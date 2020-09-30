@@ -1,6 +1,6 @@
 import {Injectable, ViewChild} from '@angular/core';
 import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
-import {VlbDefinition} from './mapping-models/definitions/VlbDefinition';
+import {TemplateTopology, VlbDefinition} from './mapping-models/definitions/VlbDefinition';
 import {DslDefinition} from './mapping-models/CBAPacakge.model';
 import {PackageCreationStore} from './package-creation.store';
 import * as JSZip from 'jszip';
@@ -103,7 +103,11 @@ export class PackageCreationExtractionService {
             const nodeTemplates = 'node_templates';
             content[nodeTemplates] = definition.topology_template ? definition.topology_template.node_templates : {};
             this.designerStore.saveSourceContent(JSON.stringify(content));
-            this.packageCreationStore.addTopologyTemplate(definition.topology_template);
+            if (definition.topology_template) {
+                this.packageCreationStore.addTopologyTemplate(definition.topology_template);
+            } else {
+                this.packageCreationStore.addTopologyTemplate(new TemplateTopology());
+            }
 
 
         }

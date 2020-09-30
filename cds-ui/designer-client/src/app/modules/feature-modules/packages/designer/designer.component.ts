@@ -470,4 +470,8 @@ export class DesignerComponent implements OnInit, OnDestroy {
                     });
             });
     }
+
+    openFunctionAttributes(customActionName: string) {
+        
+    }
 }
