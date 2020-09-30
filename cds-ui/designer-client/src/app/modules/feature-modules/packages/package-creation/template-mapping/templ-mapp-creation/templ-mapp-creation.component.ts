@@ -301,8 +301,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 const fileReader = new FileReader();
                 fileReader.onload = (e) => {
                     this.templateFileContent = fileReader.result.toString();
-                    this.variables = this.getTemplateVariable(this.templateFileContent);
-                    console.log(this.variables);
+                    // this.variables = this.getTemplateVariable(this.templateFileContent);
+                    // console.log(this.variables);
 
                 };
                 fileReader.readAsText(file);
@@ -338,12 +338,27 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.showCreationView.emit('close create form and open list');
     }
 
+    identify(index, item) {
+        return item.name;
+    }
+    setVelocity(index, value) {
+        // console.log('velocity value = ' + value);
+        // console.log(this.resourceDictionaryRes[index]);
+        // tslint:disable-next-line: no-string-literal
+        this.resourceDictionaryRes[index].definition.property['metadata'] = {
+            'transform-template': value
+        };
+        console.log(this.resourceDictionaryRes[index]);
+    }
+
     getMappingTableFromTemplate(e) {
         console.log('-' + this.templateFileContent + '-');
         this.resourceDictionaryRes = [];
         if (e) {
             e.preventDefault();
         }
+        this.variables = this.getTemplateVariable(this.templateFileContent);
+        console.log(this.variables);
         if (this.variables && this.variables.length > 0) {
             console.log('base');
             this.packageCreationService.getTemplateAndMapping(this.variables).subscribe(res => {
