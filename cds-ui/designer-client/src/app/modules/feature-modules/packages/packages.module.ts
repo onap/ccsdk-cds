@@ -33,6 +33,7 @@ import {NgxUiLoaderModule} from 'ngx-ui-loader';
 import {TourMatMenuModule} from 'ngx-tour-md-menu';
 import {ComponentCanDeactivateGuard} from '../../../common/core/canDactivate/ComponentCanDeactivateGuard';
 import { ImportPackageComponent } from './packages-dashboard/import-package/import-package.component';
+import { FunctionsAttributeComponent } from './designer/functions-attribute/functions-attribute.component';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -56,6 +57,7 @@ import { ImportPackageComponent } from './packages-dashboard/import-package/impo
         DslDefinitionsTabComponent,
         DesignerSourceViewComponent,
         ImportPackageComponent,
+        FunctionsAttributeComponent,
 
     ],
     imports: [
