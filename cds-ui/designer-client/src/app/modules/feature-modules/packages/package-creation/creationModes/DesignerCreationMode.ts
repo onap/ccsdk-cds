@@ -80,24 +80,25 @@ export class DesignerCreationMode extends PackageCreationModes {
                 if (!key.includes(cbaPackage.metaData.name)) {
                     files.push({file: key});
                 } else {
-                    // it means this is entry definition
                     insideVlbDefinition = JSON.parse(valueOfFile);
                 }
             });
         }
         console.log(vlbDefinition);
-        vlbDefinition.imports = files;
-        if (insideVlbDefinition && insideVlbDefinition.topology_template) {
-            vlbDefinition.topology_template = insideVlbDefinition.topology_template;
-        }
         console.log(cbaPackage.definitions.dslDefinition.content);
-        if (cbaPackage.definitions.dslDefinition.content) {
+        if (cbaPackage.definitions && cbaPackage.definitions.dslDefinition &&
+            cbaPackage.definitions.dslDefinition.content) {
             vlbDefinition.dsl_definitions = JSON.parse(cbaPackage.definitions.dslDefinition.content);
         }
 
-        if (cbaPackage.templateTopology.content) {
+        vlbDefinition.imports = files;
+        if (insideVlbDefinition && insideVlbDefinition.topology_template) {
+            vlbDefinition.topology_template = insideVlbDefinition.topology_template;
+        } else if (cbaPackage.templateTopology && cbaPackage.templateTopology.content) {
             vlbDefinition.topology_template = JSON.parse(cbaPackage.templateTopology.content);
         }
+
+
         console.log(vlbDefinition);
 
         const value = packageCreationUtils.transformToJson(vlbDefinition);

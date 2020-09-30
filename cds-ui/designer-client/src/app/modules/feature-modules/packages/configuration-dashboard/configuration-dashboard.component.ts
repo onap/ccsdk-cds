@@ -284,7 +284,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
 
     checkSkipTypesOfAction() {
         console.log(this.cbaPackage);
-        if (this.cbaPackage.templateTopology.node_templates && this.cbaPackage.templateTopology.workflows) {
+        if (this.cbaPackage.templateTopology && this.cbaPackage.templateTopology.node_templates
+            && this.cbaPackage.templateTopology.workflows) {
             this.goToDesignerMode(this.id);
         } else {
             this.dataTarget = '#exampleModalLong';
