@@ -172,6 +172,13 @@
                                         (click)="selectProp(dict.name)"></td> -->
                                 </td>
                                 <td>
+                                    <div class="custom-control custom-checkbox reuiredInput">
+                                        <input type="checkbox" class="custom-control-input"
+                                            id="customCheck-{{dict.name}}" [checked]="selectedProps.has(dict.name)"
+                                            (click)="selectProp(dict.name)">
+                                        <label class="custom-control-label" for="customCheck-{{dict.name}}"></label>
+                                    </div>
+                                    
                                     <img *ngIf="dict.definition?.property?.required"
                                         src="/assets/img/icon-required-yes.svg">
                                     <img *ngIf="!dict.definition?.property?.required"

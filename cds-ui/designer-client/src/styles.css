@@ -18,7 +18,7 @@ body{
   transition: 0.3s !important;
 }
 /*Bootstrap*/
-.custom-control-input:checked ~ .custom-control-label::before {
+.custom-control-input:checked ~ .custom-control-label::before{
   border-color: transparent !important;
 }
 .btn-outline-danger{
@@ -32,6 +32,28 @@ body{
 .custom-control-label::before{
   border: solid 1px #C3CDDB !important;
   border-radius: 0 !important;
+}
+.reuiredInput .custom-control-label::before{
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+}
+
+.reuiredInput .custom-control-label::after{
+  content: "_";
+  color: #C4CEDB !important;
+  width: 18px !important;
+  height: 18px !important;
+  line-height: 6px;
+  text-align: center;
+}
+.reuiredInput .custom-control-input:checked ~ .custom-control-label::after{
+  top: 4px !important;
+  left: -24px !important; 
+  content: "";
+}
+.reuiredInput .custom-control-input:checked ~ .custom-control-label::before{
+  background: #66BB00 !important;
 }
 .custom-control-input:checked ~ .custom-control-label::before{
   background: #1B3E6F !important;
