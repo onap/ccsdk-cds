@@ -84,27 +84,21 @@ export class DesignerCreationMode extends PackageCreationModes {
                 }
             });
         }
-        console.log(vlbDefinition);
-        console.log(cbaPackage.definitions.dslDefinition.content);
+
         if (cbaPackage.definitions && cbaPackage.definitions.dslDefinition &&
             cbaPackage.definitions.dslDefinition.content) {
             vlbDefinition.dsl_definitions = JSON.parse(cbaPackage.definitions.dslDefinition.content);
         }
 
         vlbDefinition.imports = files;
-        if (insideVlbDefinition && insideVlbDefinition.topology_template) {
-            vlbDefinition.topology_template = insideVlbDefinition.topology_template;
-        } else if (cbaPackage.templateTopology && cbaPackage.templateTopology.content) {
+        if (cbaPackage.templateTopology && cbaPackage.templateTopology.content) {
             vlbDefinition.topology_template = JSON.parse(cbaPackage.templateTopology.content);
+        } else if (insideVlbDefinition && insideVlbDefinition.topology_template) {
+            vlbDefinition.topology_template = insideVlbDefinition.topology_template;
         }
-
-
-        console.log(vlbDefinition);
 
         const value = packageCreationUtils.transformToJson(vlbDefinition);
         FilesContent.putData(filenameEntry, value);
-        console.log('hello there');
         console.log(FilesContent.getMapOfFilesNamesAndContent());
-
     }
 }

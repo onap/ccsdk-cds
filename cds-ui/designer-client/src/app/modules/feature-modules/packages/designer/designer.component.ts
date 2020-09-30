@@ -80,6 +80,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     zipFile: JSZip = new JSZip();
     cbaPackage: CBAPackage;
     actions: string[] = [];
+    dataTarget: string;
 
     constructor(
         private designerStore: DesignerStore,
@@ -469,5 +470,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
                         console.log('Error -' + error.message);
                     });
             });
+    }
+
+    openFunctionAttributes(customActionName: string) {
+        console.log('opening here function attributes');
     }
 }
