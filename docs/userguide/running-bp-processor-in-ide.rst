@@ -41,9 +41,31 @@ file present on the distribution module. This database will require a local dire
 
 Navigate to the docker-compose file in the distribution module:
 
-.. code-block:: bash
+.. tabs::
 
-   ms/blueprintsprocessor/distribution/src/main/dc
+   .. group-tab:: Latest
+
+      .. code-block:: bash
+
+         cd ms/blueprintsprocessor/application/src/main/dc
+
+   .. group-tab:: Frankfurt
+
+      .. code-block:: bash
+
+         cd ms/blueprintsprocessor/application/src/main/dc
+
+   .. group-tab:: El Alto
+
+      .. code-block:: bash
+
+         ms/blueprintsprocessor/distribution/src/main/dc
+
+   .. group-tab:: Dublin
+
+      .. code-block:: bash
+
+         ms/blueprintsprocessor/distribution/src/main/dc
 
 And run docker-composer:
 
