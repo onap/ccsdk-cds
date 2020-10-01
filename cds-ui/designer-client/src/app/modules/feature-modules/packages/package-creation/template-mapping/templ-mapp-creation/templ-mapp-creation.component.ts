@@ -126,6 +126,14 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             pageLength: 25,
             destroy: true,
             retrieve: true,
+            columnDefs: [
+                {
+                    targets: [0, 1, 2], // column or columns numbers
+                    orderable: false, // set orderable for selected columns
+                    searchable: false,
+                },
+
+            ],
         };
         this.dtOptions = {
             pagingType: 'full_numbers',
@@ -135,6 +143,10 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         };
     }
 
+    setProp(e, propName, index) {
+        this.resourceDictionaryRes[index][propName] = e.checked;
+        console.log(this.resourceDictionaryRes[index]);
+    }
     selectProp(value) {
         console.log(value);
         if (this.selectedProps.has(value)) {
@@ -374,6 +386,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             }, err => {
                 this.toastr.error('Error');
             });
+        } else {
+            this.toastr.error('Empty or Invalid file format. Validate your file first');
         }
     }
 
@@ -466,6 +480,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         // Do not forget to unsubscribe the event
         this.dtTrigger.unsubscribe();
         this.resTableDtTrigger.unsubscribe();
+        // this.templateStore.unsubscribe();
     }
 }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { PackageCreationStore } from '../../package-creation.store';
 import { Mapping, Template } from '../../mapping-models/CBAPacakge.model';
 import { TemplateInfo, TemplateStore } from '../../template.store';
@@ -15,7 +15,7 @@ import { of } from 'rxjs';
     templateUrl: './templ-mapp-listing.component.html',
     styleUrls: ['./templ-mapp-listing.component.css']
 })
-export class TemplMappListingComponent implements OnInit {
+export class TemplMappListingComponent implements OnInit, OnDestroy {
     @Output() showCreationView = new EventEmitter<any>();
     @Output() showListView = new EventEmitter<any>();
     templateAndMappingMap = new Map<string, TemplateAndMapping>();
@@ -34,6 +34,10 @@ export class TemplMappListingComponent implements OnInit {
         private tourService: TourService,
 
     ) {
+    }
+    ngOnDestroy(): void {
+        // this.templateStore.unsubscribe();
+        // this.packageCreationStore.unsubscribe();
     }
 
     ngOnInit() {
