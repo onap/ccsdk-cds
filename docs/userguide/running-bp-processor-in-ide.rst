@@ -41,9 +41,25 @@ file present on the distribution module. This database will require a local dire
 
 Navigate to the docker-compose file in the distribution module:
 
-.. code-block:: bash
+.. tabs::
 
-   ms/blueprintsprocessor/distribution/src/main/dc
+   .. group-tab:: Frankfurt - Latest
+
+      .. code-block:: bash
+
+         cd ms/blueprintsprocessor/application/src/main/dc
+
+   .. group-tab:: El Alto
+
+      .. code-block:: bash
+
+         ms/blueprintsprocessor/distribution/src/main/dc
+
+   .. group-tab:: Dublin
+
+      .. code-block:: bash
+
+         ms/blueprintsprocessor/distribution/src/main/dc
 
 And run docker-composer:
 
@@ -104,35 +120,7 @@ Import the project into the IDE
 
       .. tabs::
 
-         .. group-tab:: Latest
-
-            Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
-
-            ``ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.kt``.
-
-            Right-click inside it, at any point, to load the context menu and select create
-            BlueprintProcessorApplication configuration from context:
-
-            |imageCreateRunConfigkt|
-
-            **The following window will open:**
-
-            |imageRunConfigKt|
-
-            **Add the following in the field `VM Options`:**
-
-            .. code-block:: bash
-               :caption: **Custom values for properties**
-
-               -Dspring.profiles.active=dev
-
-            You can override any value from **application-dev.properties** file here. Use the following pattern:
-
-            .. code-block:: java
-
-               -D<application-dev.properties key>=<application-dev.properties value>
-
-         .. group-tab:: Frankfurt
+         .. group-tab:: Frankfurt - Latest
 
             Navigate to the main class of the Blueprints Processor, the BlueprintProcessorApplication class:
 
@@ -278,7 +266,7 @@ Import the project into the IDE
 
       .. tabs::
 
-         .. group-tab:: Latest
+         .. group-tab:: Frankfurt - Latest
 
             * **Step #1** - Make sure your installation of Visual Studio Code is up to date. This guide was writen using version 1.48
             * **Step #2** - Install `Kotlin extension from the Visual Studio Code Marketplace <https://marketplace.visualstudio.com/items?itemName=fwcd.kotlin>`_
