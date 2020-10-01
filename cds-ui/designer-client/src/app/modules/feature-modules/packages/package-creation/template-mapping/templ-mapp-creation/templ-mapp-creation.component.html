@@ -149,6 +149,7 @@
                             <tr>
                                 <th></th>
                                 <th>Required</th>
+                                <th>Template Input</th>
                                 <th>Parameter Name</th>
                                 <th>Dictionary Name</th>
                                 <th>Dictionary Source</th>
@@ -173,16 +174,18 @@
                                 </td>
                                 <td>
                                     <div class="custom-control custom-checkbox reuiredInput">
-                                        <input type="checkbox" class="custom-control-input"
-                                            id="customCheck-{{dict.name}}" [checked]="selectedProps.has(dict.name)"
-                                            (click)="selectProp(dict.name)">
-                                        <label class="custom-control-label" for="customCheck-{{dict.name}}"></label>
+                                        <input type="checkbox" class="custom-control-input" #requiredInput
+                                            (click)="setProp(requiredInput,'required',i)"
+                                            id="requiredCheck-{{dict.name}}">
+                                        <label class="custom-control-label" for="requiredCheck-{{dict.name}}"></label>
                                     </div>
-                                    
-                                    <img *ngIf="dict.definition?.property?.required"
-                                        src="/assets/img/icon-required-yes.svg">
-                                    <img *ngIf="!dict.definition?.property?.required"
-                                        src="/assets/img/icon-required-no.svg">
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox reuiredInput">
+                                        <input type="checkbox" class="custom-control-input" #tempInput
+                                            (click)="setProp(tempInput,'input-param',i)" id="inputCheck-{{dict.name}}">
+                                        <label class="custom-control-label" for="inputCheck-{{dict.name}}"></label>
+                                    </div>
                                 </td>
                                 <td>{{ dict.name }}</td>
                                 <td>{{ dict.name }}</td>
@@ -230,6 +233,7 @@
                             <tr>
                                 <!-- <th></th> -->
                                 <th>Required</th>
+                                <th>Template Input</th>
                                 <th>Parameter Name</th>
                                 <th>Dictionary Name</th>
                                 <th>Dictionary Source</th>
@@ -251,10 +255,12 @@
                                     </div>
                                 </td> -->
                                 <td>
-                                    <img *ngIf="dict.definition?.property?.required"
-                                        src="/assets/img/icon-required-yes.svg">
-                                    <img *ngIf="!dict.definition?.property?.required"
-                                        src="/assets/img/icon-required-no.svg">
+                                    <img *ngIf="dict?.property?.required" src="/assets/img/icon-required-yes.svg">
+                                    <img *ngIf="!dict?.property?.required" src="/assets/img/icon-required-no.svg">
+                                </td>
+                                <td>
+                                    <img *ngIf="dict['input-param']" src="/assets/img/icon-required-yes.svg">
+                                    <img *ngIf="!dict['input-param']" src="/assets/img/icon-required-no.svg">
                                 </td>
                                 <td>{{ dict['name'] }}</td>
                                 <td>{{ dict['name'] }}</td>

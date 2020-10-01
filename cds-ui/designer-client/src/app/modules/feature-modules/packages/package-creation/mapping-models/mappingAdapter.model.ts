@@ -10,12 +10,14 @@ export class MappingAdapter {
         private dependanciesSource: Map<string, string>) { }
 
     ToMapping(): Mapping {
-       // console.log(this.resourceDictionary.definition.property);
+        // console.log(this.resourceDictionary.definition.property);
         const mapping = new Mapping();
         mapping.name = this.resourceDictionary.name;
         mapping.dictionaryName = this.resourceDictionary.name;
         mapping.property = Object.assign({}, this.resourceDictionary.definition.property);
-        mapping.inputParam = false;
+        mapping.inputParam = this.resourceDictionary['input-param'] || false;
+        // tslint:disable-next-line: no-string-literal
+        mapping.property['required'] = this.resourceDictionary['required'] || false;
         mapping.dictionarySource = this.dependanciesSource.get(mapping.name);
         if (this.dependancies.get(mapping.name)) {
             mapping.dependencies = this.dependancies.get(mapping.name);

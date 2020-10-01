@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PackageCreationStore } from '../package-creation.store';
 import { SharedService } from './shared-service';
@@ -8,7 +8,7 @@ import { SharedService } from './shared-service';
     templateUrl: './template-mapping.component.html',
     styleUrls: ['./template-mapping.component.css']
 })
-export class TemplateMappingComponent implements OnInit {
+export class TemplateMappingComponent implements OnInit, OnDestroy {
     creationView = false;
     listView = true;
 
@@ -17,6 +17,11 @@ export class TemplateMappingComponent implements OnInit {
         private pakcageStore: PackageCreationStore,
         private sharedService: SharedService
     ) {
+    }
+    ngOnDestroy(): void {
+        // this.sharedService.list.unsubscribe();
+        // this.sharedService.mode.unsubscribe();
+        // this.pakcageStore.unsubscribe();
     }
 
     ngOnInit() {
