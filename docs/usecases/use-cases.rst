@@ -10,3 +10,4 @@ Use Cases
    :maxdepth: 1
 
    wordpress-cnf-poc
+   pnf-simulator
