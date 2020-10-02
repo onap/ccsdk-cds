@@ -136,7 +136,7 @@ here but they are not tested by the author of this guide.
       You can check all installed modules with ``sysrepoctl -l``.  `sample-plugin` module should appear with ``I`` flag.
 
       Execute the following the commands to initialise the Yang model with one pg-stream record.
-      We will be using CDS to perform the day-1 configuration and day-2 configuration changes.
+      We will be using CDS to perform the day-1 and day-2 configuration changes.
 
       .. code-block:: sh
 
@@ -337,7 +337,7 @@ Config-assign and config-deploy in CDS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the following steps the CBA is published in CDS, config-assignment is done and the config is deployed to to the
-Netconf server through CDS in the last step. We will use this CBA: :download:`zip <pnf-simulator-demo-cba.zip>`.
+Netconf server through CDS in the last step. We will use this CBA: :download:`zip <media/pnf-simulator-demo-cba.zip>`.
 If you want to use scripts instead of Postman the CBA also contains all necessary scripts.
 
 .. tabs::
@@ -345,7 +345,7 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
    .. tab:: Scripts
 
       **There will be different scripts depending on your CDS installation. For running it in an IDE always use scripts with**
-      **-ide.sh prefix. For running in kubernetes use the scripts with -k8s.sh ending. For IDE scripts host will be localhost**
+      **-ide.sh prefix. For running in kubernetes use the scripts with k8s.sh ending. For IDE scripts host will be localhost**
       **and port will be 8081. For K8s host ip adress gets automatically detected, port is 8000.**
 
       **Set up CDS:**
@@ -361,7 +361,7 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          # bash -x ./bootstrap-cds-k8s.sh
 
       Call ``bash -x ./get-cds-blueprint-models-ide.sh`` / ``bash -x ./get-cds-blueprint-models-k8s.sh`` to get all blueprint models in the CDS database.
-      You will see a default model "artifactName": "vFW-CDS"  which was loaded by calling bootstrap.
+      You will see a default model ``"artifactName": "vFW-CDS"``  which was loaded by calling bootstrap.
 
       Push the PNF CDS blueprint model data dictionary to CDS by calling ``bash -x ./dd-microk8s-ide.sh ./dd.json`` /
       ``bash -x ./dd-microk8s-k8s.sh ./dd.json``.
@@ -416,9 +416,9 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
       Move to the main folder of the CBA with ``cd ..`` and archive all folders with ``zip -r pnf-demo.zip *``.
 
       .. warning::
-         The provided CBA is already enriched, the following steps anyhow will enrich the CBA again to show the full workflow.
+         The provided CBA is already enriched, the following step anyhow will enrich the CBA again to show the full workflow.
          For Frankfurt release this causes an issue when the configuration is deployed later on. This happens because some parameters
-         get deleted when enrichment is done a second time. Skip the next steps until Deploy/Save Blueprint if you use
+         get deleted when enrichment is done a second time. Skip the next step until Deploy/Save Blueprint if you use
          Frankfurt release and use the CBA as it is. In future this step should fixed and executed based on an unenriched CBA.
 
       Enrich the blueprint through calling the following script. Take care to provide the zip file you downloader earlier.
@@ -448,7 +448,7 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
 
       The assumption is that we are using the same host to run PNF NETCONF simulator as well as CDS. You will need the
       IP Adress of the Netconf server container which can be found out with
-      ``docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_id_or_name``. In the
+      ``docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' netopeer2``. In the
       following examples we will use 172.17.0.2.
 
       Day-1 configuration:
@@ -569,7 +569,7 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          </rpc>
 
       .. note::
-         Till this point CDS did not interact with the PNF simulator or device. We just created the day-1 and day-2
+         Until this step CDS did not interact with the PNF simulator or device. We just created the day-1 and day-2
          configurations and stored in CDS database
 
       **Config-Deploy:**
@@ -630,3 +630,270 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          but this is not targeted in this guide.
 
    .. tab:: Postman
+
+      Download the Postman collection :download:`json <media/pnf-simulator.postman_collection.json>` and import it into
+      your Postman application. Set the collection variables `ip adress` and `port` depending on your CDS installation.
+      This can be done by right clicking the collection, click `edit` and then go to variables.
+      Localhost with port 8081 is default.
+
+      **Set up CDS:**
+
+      First run `Bootstrap` request which will call Bootstrap API of CDS. This loads the CDS default model artifacts into CDS DB.
+      You should get HTTP status 200 for the below command.
+
+      You can execute `Get Blueprints` to get all blueprint models in the CDS database. You will see a default
+      model "artifactName": "vFW-CDS"  in the response body which was loaded by calling bootstrap.
+
+      Push the PNF CDS blueprint model data dictionary to CDS with `Data Dictionary` request. Request body contains the
+      data from ``dd.json`` of the CBA. This will call the data dictionary endpoint of CDS.
+
+      Check CDS database for PNF data dictionaries by entering the DB in a terminal. You should see 6 rows as shown below.
+      Replace the container id with your running mariadb container id.
+
+      CDS running in an IDE:
+
+      .. code-block:: sh
+
+         sudo docker exec -it mariadb_container_id mysql -uroot -psdnctl
+         > USE sdnctl;
+         > select name, data_type from RESOURCE_DICTIONARY where updated_by='Aarna service <vmuthukrishnan@aarnanetworks.com>';
+
+         +---------------------+-----------+
+         | name | data_type |
+         +---------------------+-----------+
+         | netconf-password | string |
+         | netconf-server-port | string |
+         | netconf-username | string |
+         | pnf-id | string |
+         | pnf-ipv4-address | string |
+         | stream-count | integer |
+         +---------------------+-----------+
+
+      CDS running in K8s:
+
+      Go to  ``/Scripts`` directory of your CBA and open in terminal.
+
+      .. code-block:: sh
+
+         ./connect-cds-mariadb-k8s.sh
+
+         select name, data_type from RESOURCE_DICTIONARY where updated_by='Aarna service <vmuthukrishnan@aarnanetworks.com>';
+
+         +---------------------+-----------+
+         | name | data_type |
+         +---------------------+-----------+
+         | netconf-password | string |
+         | netconf-server-port | string |
+         | netconf-username | string |
+         | pnf-id | string |
+         | pnf-ipv4-address | string |
+         | stream-count | integer |
+         +---------------------+-----------+
+
+         quit
+
+         exit
+
+      **Enrichment:**
+
+      .. warning::
+         The provided CBA is already enriched, the following steps anyhow will enrich the CBA again to show the full workflow.
+         For Frankfurt release this causes an issue when the configuration is deployed later on. This happens because some parameters
+         get deleted when enrichment is done a second time. Skip the next steps until Deploy/Save Blueprint if you use
+         Frankfurt release and use the CBA as it is. In future this step should fixed and executed based on an unenriched CBA.
+
+      Enrich the blueprint through executing the `Enrich Blueprint` request. Take care to provide the CBA file which you
+      downloaded earlier in the request body. After the request got executed save the response body, this will be the
+      enriched CBA file.
+
+      |saveResponseImage|
+
+
+      **Deploy/Save the Blueprint into CDS database**
+
+      Run `Save Blueprint` request to save/deploy the Blueprint into the CDS database. Provide the enriched file which
+      you saved in the last step in the request body.
+
+      Now you should see the new model "artifactName": "pnf_netconf" by calling `Get Blueprints` request.
+
+      **Config-Assign**
+
+      The assumption is that we are using the same host to run PNF NETCONF simulator as well as CDS. You will need the
+      IP Adress of the Netconf server container which can be found out in terminal with
+      ``docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' netopeer2``. In the
+      postman collection we use 172.17.0.2 by default.
+
+      For creating the day-n config we are using the template file ``day-n-pnf-config.template`` in the CBA. ``CONFIG_NAME``,
+      ``PNF_IP_ADDRESS`` and ``STREAM_COUNT`` are replaced with specific values.
+
+      Day-1 configuration:
+
+      Execute the request `Create Config Assign Day-1`. Replace the values in the reqest body if needed.
+
+      You can verify the day-1 NETCONF RPC payload looking into CDS DB. You should see the NETCONF RPC with 5
+      streams (fw_udp_1 TO fw_udp_5). Connect to the DB like mentioned above an run following statement.
+
+      .. code-block:: sh
+
+         MariaDB [sdnctl]> select * from TEMPLATE_RESOLUTION where resolution_key='day-1' AND artifact_name='netconfrpc';
+
+         <rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
+            <edit-config>
+               <target>
+                  <running/>
+               </target>
+               <config>
+                  <sample-plugin xmlns="urn:opendaylight:params:xml:ns:yang:sample-plugin">
+                     <pg-streams>
+                        <pg-stream>
+                           <id>fw_udp_1</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_2</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_3</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_4</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_5</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                     </pg-streams>
+                  </sample-plugin>
+               </config>
+            </edit-config>
+         </rpc>
+
+
+      **Day-2 configuration:**
+
+      Execute the request `Create Config Assign Day-2`. It will make the same request like in day-1-config just with
+      different values (resolution-key = day-2, stream-count = 10).
+
+      You can verify the day-2 NETCONF RPC payload looking into CDS DB. You should see the NETCONF RPC with 10
+      streams (fw_udp_1 TO fw_udp_10). Connect to the DB like mentioned above and run following statement.
+
+      .. code-block:: sh
+
+         MariaDB [sdnctl]> select * from TEMPLATE_RESOLUTION where resolution_key='day-2' AND artifact_name='netconfrpc';
+
+         <rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
+            <edit-config>
+               <target>
+                  <running/>
+               </target>
+               <config>
+                  <sample-plugin xmlns="urn:opendaylight:params:xml:ns:yang:sample-plugin">
+                     <pg-streams>
+                        <pg-stream>
+                           <id>fw_udp_1</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_2</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_3</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_4</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_5</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_6</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_7</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_8</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_9</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                        <pg-stream>
+                           <id>fw_udp_10</id>
+                           <is-enabled>true</is-enabled>
+                        </pg-stream>
+                     </pg-streams>
+                  </sample-plugin>
+               </config>
+            </edit-config>
+         </rpc>
+
+      .. note::
+         Until this step CDS did not interact with the PNF simulator or device. We just created the day-1 and day-2
+         configurations and stored in CDS database
+
+      **Config-Deploy:**
+
+      Now we will make the CDS REST API calls to push the day-1 and day-2 configuration changes to the PNF simulator.
+
+      If you run CDS in Kubernetes open a new terminal and keep it running with ``bash -x ./tail-cds-bp-log.sh``,
+      we can use it to review the config-deploy actions. If you run CDS in an IDE you can have a look into the IDE terminal.
+
+      Executing `Config Assign Day-1 Deploy` request will deploy day-1 configuration. You have to replace the PNF IP Adress
+      in the request body.
+
+      Go back to PNF netopeer cli console and verify if you can see 5 streams  fw_udp_1 to fw_udp_5 enabled
+
+      .. code-block:: sh
+
+         > get --filter-xpath /sample-plugin:*
+         DATA
+         <sample-plugin xmlns="urn:opendaylight:params:xml:ns:yang:sample-plugin">
+            <pg-streams>
+               <pg-stream>
+                  <id>1</id>
+                  <is-enabled>true</is-enabled>
+               </pg-stream>
+               <pg-stream>
+                  <id>fw_udp_1</id>
+                  <is-enabled>true</is-enabled>
+               </pg-stream>
+               <pg-stream>
+                  <id>fw_udp_2</id>
+                  <is-enabled>true</is-enabled>
+               </pg-stream>
+               <pg-stream>
+                  <id>fw_udp_3</id>
+                  <is-enabled>true</is-enabled>
+               </pg-stream>
+               <pg-stream>
+                  <id>fw_udp_4</id>
+                  <is-enabled>true</is-enabled>
+               </pg-stream>
+               <pg-stream>
+                  <id>fw_udp_5</id>
+                  <is-enabled>true</is-enabled>
+               </pg-stream>
+            </pg-streams>
+         </sample-plugin>
+         >
+
+      The same can be done for day-2 config (follow same steps just with day-2 resolution key)
+
+      .. note::
+         Through deployment we did not deploy the PNF, we just modified the PNF. The PNF could also be installed by CDS
+         but this is not targeted in this guide.
+
+
+.. |saveResponseImage| image:: media/save-response-postman.png
+   :width: 500pt
