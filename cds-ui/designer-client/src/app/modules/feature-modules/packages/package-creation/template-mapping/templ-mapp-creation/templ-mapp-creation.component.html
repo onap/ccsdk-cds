@@ -5,9 +5,11 @@
                 class="fa fa-chevron-left mr-2"></i>Template List</button>
     </div>
     <div class="col text-right">
+        <button (click)="cancel()" [hidden]="!templatesExist || edit" class="btn btn-outline-danger"
+            title="Delete Template">Cancel</button>
         <button data-toggle="modal" [hidden]="!edit" data-target="#templateDeletionModal2"
             class="btn btn-outline-danger" title="Delete Template">Delete</button>
-        <button (click)="cancel()" [hidden]="fileName?.length <=0 || edit"
+        <button (click)="clear()" [hidden]="fileName?.length <=0 || edit"
             class="btn btn-outline-secondary">Clear</button>
         <button tourAnchor="tm-templateFinish" (click)="saveToStore()" [disabled]="fileName?.length <=0"
             title="Submit template and close" class="btn btn-primary">Finish</button>

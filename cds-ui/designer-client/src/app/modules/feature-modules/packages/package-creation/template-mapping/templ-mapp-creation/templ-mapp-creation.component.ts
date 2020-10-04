@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { PackageCreationStore } from '../../package-creation.store';
 import { TemplateInfo, TemplateStore } from '../../template.store';
@@ -52,6 +52,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     currentTemplate: any;
     currentMapping: any;
     edit = false;
+    templatesExist = false;
     fileToDelete: any = {};
     parserFactory: ParserFactory;
     selectedProps: Set<string>;
@@ -107,6 +108,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
 
         this.sharedService.isEdit().subscribe(res => {
             console.log('------------------------....');
+            this.templatesExist = this.packageCreationStore.state.templates.files.size > 0
+                || this.packageCreationStore.state.mapping.files.size > 0;
             console.log(res);
             this.edit = res;
 
@@ -397,7 +400,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         }
         return map.key;
     }
-    cancel() {
+    clear() {
         this.fileName = '';
         this.templateFileContent = '';
         this.resourceDictionaryRes = [];
@@ -405,6 +408,9 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.currentMapping = {};
         this.currentTemplate = {};
         //   this.closeCreationForm();
+    }
+    cancel() {
+        this.openListView();
     }
     saveToStore() {
         if (this.fileName) {
