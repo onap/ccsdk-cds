@@ -80,7 +80,7 @@ export class PackageCreationExtractionService {
 
     public setImports(filename: string, fileData: any, packageName: string) {
         console.log(filename);
-        if (filename.includes(packageName)) {
+        if (filename.includes('Definitions/' + packageName.trim() + '.json')) {
             let definition = new VlbDefinition();
             definition = fileData as VlbDefinition;
             definition = JSON.parse(fileData);
@@ -92,6 +92,7 @@ export class PackageCreationExtractionService {
                     mapOfCustomKeys.set(metadataKey + '', definition.metadata[metadataKey + '']);
                 }
             }
+
             this.packageCreationStore.changeDslDefinition(dslDefinition);
             this.packageCreationStore.setCustomKeys(mapOfCustomKeys);
             this.setPackageDescription(definition.metadata.template_description);
