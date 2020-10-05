@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e627037_5431f518",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Plans/CONFIG_ConfigDeploy-post.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2020-10-05T11:45:13Z",
+      "side": 1,
+      "message": "we can remove DG workflow and just use imperative workflow natively.",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 27,
+        "endChar": 16
+      },
+      "revId": "8a16c7ff5a3832730bf037a3c8699e623eeebb2d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc545f7f_f4d09ba3",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Plans/CONFIG_ConfigDeploy-put.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2020-10-05T11:45:13Z",
+      "side": 1,
+      "message": "we can remove DG workflow and just use imperative workflow natively.",
+      "revId": "8a16c7ff5a3832730bf037a3c8699e623eeebb2d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
