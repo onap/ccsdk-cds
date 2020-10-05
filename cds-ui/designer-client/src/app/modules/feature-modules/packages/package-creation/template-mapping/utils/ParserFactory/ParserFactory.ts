@@ -23,6 +23,7 @@ export class ParserFactory {
             } else if (this.isASCII(fileContent)) {
                 parser = new ASCIIParser();
             } else {
+                console.log('Velocity YML parser....');
                 parser = new VtlYMLParser();
             }
 
@@ -35,6 +36,7 @@ export class ParserFactory {
             } else if (this.isASCII(fileContent)) {
                 parser = new ASCIIParser();
             } else {
+                console.log('Jinja YML parser....');
                 parser = new JinjaYMLParser();
             }
 

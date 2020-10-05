@@ -4,16 +4,28 @@ export class JinjaYMLParser implements Parser {
     variables: Set<string> = new Set();
     getVariables(fileContent: string): string[] {
         if (fileContent.includes('{{')) {
-            const xmlSplit = fileContent.split(new RegExp('[{]+[ ]*.[V-v]alues.'));
+            // '[{]+[ ]*.[V-v]alues.' old regex
+            const xmlSplit = fileContent.split(new RegExp('[{]+[ ]*.'));
             for (const val of xmlSplit) {
                 const res = val.substring(0, val.indexOf('}}'));
                 if (res && res.length > 0) {
-                    this.variables.add(res.trim());
+                    console.log(res);
+                    if (res.includes('Value')) {
+                        this.variables.add(this.extractValues(res.trim()));
+                    } else {
+                        this.variables.add(this.extractParent(res.trim()).toLowerCase());
+                    }
                 }
-
             }
         }
         return [...this.variables];
+    }
+
+    extractValues(value) {
+        return value.split('Values.')[1];
+    }
+    extractParent(value): string {
+        return value.split('.')[0];
     }
 
 }

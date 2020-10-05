@@ -7,7 +7,7 @@ export class VtlYMLParser implements Parser {
             const xmlSplit = fileContent.split('${');
             for (const val of xmlSplit) {
                 const res = val.substring(0, val.indexOf('}'));
-                if (res && res.length > 0) {
+                if (res && res.length > 0 && !res.includes('{')) {
                     this.variables.add(res);
                 }
 

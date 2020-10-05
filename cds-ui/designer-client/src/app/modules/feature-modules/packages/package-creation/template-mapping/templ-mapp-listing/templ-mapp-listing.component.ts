@@ -41,6 +41,8 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.templateAndMappingMap = new Map<string, TemplateAndMapping>();
+        this.edit = false;
         if (this.route.snapshot.paramMap.has('id')) {
             this.isCreate = false;
             this.sharedService.isEdit().subscribe(res => {
@@ -152,7 +154,9 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
             }
             this.templateStore.changeTemplateInfo(templateInfo);
             this.openCreationView();
-            this.sharedService.enableEdit();
+            if (templateInfo.fileName && templateInfo.fileName.length > 0) {
+                this.sharedService.enableEdit();
+            }
         });
     }
 

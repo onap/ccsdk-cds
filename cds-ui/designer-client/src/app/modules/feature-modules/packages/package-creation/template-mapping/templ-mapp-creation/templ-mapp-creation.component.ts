@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { PackageCreationStore } from '../../package-creation.store';
 import { TemplateInfo, TemplateStore } from '../../template.store';
@@ -290,7 +290,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                         const parser = new XmlParser();
                         this.variables = parser.getVariables(fileReader.result.toString());
                     }
-                    console.log(this.variables);
+                    console.log('variables = ' + this.variables);
                     this.getMappingTableFromTemplate(null);
 
                 };
@@ -373,7 +373,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             e.preventDefault();
         }
         this.variables = this.getTemplateVariable(this.templateFileContent);
-        console.log(this.variables);
+        console.log('variables = ' + this.variables);
         if (this.variables && this.variables.length > 0) {
             console.log('base');
             this.packageCreationService.getTemplateAndMapping(this.variables).subscribe(res => {

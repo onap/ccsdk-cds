@@ -10,11 +10,17 @@ export class SharedService {
     // based on edit Mode, edit=false
     mode = new BehaviorSubject(false);
     list = new BehaviorSubject('');
+    modeState: Observable<boolean>;
+    listState: Observable<string>;
     constructor() {
+        this.mode = new BehaviorSubject(false);
+        this.list = new BehaviorSubject('');
+        this.modeState = this.mode.asObservable();
+        this.listState = this.list.asObservable();
     }
 
     isEdit(): Observable<boolean> {
-        return this.mode.asObservable();
+        return this.modeState;
     }
     enableEdit() {
         this.mode.next(true);
@@ -28,7 +34,7 @@ export class SharedService {
         this.list.next(filename);
     }
     listAction(): Observable<string> {
-        return this.list.asObservable();
+        return this.listState;
     }
 
 }

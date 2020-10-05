@@ -72,7 +72,7 @@ fdescribe('ImportsTabComponent', () => {
         const parser = parserFactory.getParser(fileContent, FileExtension.Jinja);
         const res = parser.getVariables(fileContent);
         console.log(res);
-        expect(res.length).toEqual(2);
+        expect(res.length).toEqual(4);
         expect(res[0]).toEqual('vpg_name_0');
         expect(res[1]).toEqual('vnf_name');
 
@@ -115,4 +115,39 @@ fdescribe('ImportsTabComponent', () => {
 
 
     });
+
+
+
+
+
+    it('Test Velocity YML Parser', () => {
+        const fileContent = `apiVersion: v1
+                kind: Service
+                metadata:
+                name: {{ .Values.vpg_name_0 }}-ssh
+                labels:
+                vnf-name: {{ .Values.vnf_name }}
+                vf-module-name: {{ .Values.vpg_name_0 }}
+                release: {{ .Release.Name }}
+                chart: {{ .Chart.Name }}
+                spec:
+                type: NodePort
+                ports:
+                port: 22
+                nodePort: \${vpg-management-port}
+                selector:
+                vf-module-name: {{ .Values.vpg_name_0 }}
+                release: {{ .Release.Name }}
+                chart: {{ .Chart.Name }}`;
+
+        const parser = parserFactory.getParser(fileContent, FileExtension.Velocity);
+        const res = parser.getVariables(fileContent);
+        console.log(res);
+        expect(res.length).toEqual(1);
+        expect(res[0]).toEqual('vpg-management-port');
+
+    });
+
+
+
 });
