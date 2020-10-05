@@ -2928,7 +2928,7 @@ animation: glowing 1500ms infinite;
   top: 13px;
 }
 .ace_scroller{
-  overflow: auto !important;
+  /* overflow: auto !important; */
 }
 .ace_print-margin{
   left: 100% !important;

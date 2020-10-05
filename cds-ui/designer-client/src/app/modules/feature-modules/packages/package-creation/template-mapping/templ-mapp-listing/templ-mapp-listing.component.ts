@@ -1,12 +1,12 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {PackageCreationStore} from '../../package-creation.store';
-import {Mapping, Template} from '../../mapping-models/CBAPacakge.model';
-import {TemplateInfo, TemplateStore} from '../../template.store';
-import {TemplateAndMapping} from '../TemplateAndMapping';
-import {ActivatedRoute} from '@angular/router';
-import {SharedService} from '../shared-service';
-import {TourService} from 'ngx-tour-md-menu';
-import {TemplateType} from '../utils/TemplateType';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { PackageCreationStore } from '../../package-creation.store';
+import { Mapping, Template } from '../../mapping-models/CBAPacakge.model';
+import { TemplateInfo, TemplateStore } from '../../template.store';
+import { TemplateAndMapping } from '../TemplateAndMapping';
+import { ActivatedRoute } from '@angular/router';
+import { SharedService } from '../shared-service';
+import { TourService } from 'ngx-tour-md-menu';
+import { TemplateType } from '../utils/TemplateType';
 
 
 @Component({
@@ -186,8 +186,9 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
     }
 
     condifrmDelete() {
-        const file = this.fileToDelete.split('/')[1].split('-')[0];
-        const ext = this.fileToDelete.split('/')[1].split('.')[1];
+        const fullName = this.fileToDelete.split('/')[1];
+        const file = fullName.substr(0, fullName.lastIndexOf('-'));
+        const ext = fullName.substr(fullName.lastIndexOf('.') + 1);
         this.templateAndMappingMap.delete(file);
         if (this.templateAndMappingMap.size <= 0) {
             this.openCreationView();

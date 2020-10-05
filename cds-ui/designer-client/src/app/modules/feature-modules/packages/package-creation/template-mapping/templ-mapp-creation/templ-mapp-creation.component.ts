@@ -79,7 +79,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             this.fileToDelete = templateInfo.fileName;
             this.fileName = templateInfo.fileName.split('/')[1];
             if (this.fileName) {
-                this.fileName = this.fileName.split('-')[0];
+                this.fileName = this.fileName.substr(0, this.fileName.lastIndexOf('-'));
             }
             if (templateInfo.type === 'mapping' || templateInfo.type.includes('mapping')) {
                 this.mappingRes = templateInfo.mapping;
