@@ -208,19 +208,20 @@
          },
          "config-deploy":{
             "steps":{
-               "config-deploy":{
-                  "description":"Config Deploy Workflow",
-                  "target":"config-deploy-process"
+               "imperative-workflow-step-1": {
+                  "description": "Config Deploy workflow",
+                  "target": "execute-post",
+                  "activities": [
+                     {
+                        "call_operation": "ComponentScriptExecutor.process"
+                     }
+                  ]
                }
             },
             "inputs":{
                "resolution-key":{
                   "required":false,
                   "type":"string"
-               },
-               "store-result":{
-                  "required":true,
-                  "type":"boolean"
                },			   
                "service-instance-id":{
                   "required":false,
@@ -235,19 +236,20 @@
          },
          "config-deploy-day-2":{
             "steps":{
-               "config-deploy":{
-                  "description":"Config Deploy Day 2 Workflow",
-                  "target":"config-deploy-process-2"
+               "imperative-workflow-step-1": {
+                  "description": "Config Deploy workflow",
+                  "target": "execute-put",
+                  "activities": [
+                     {
+                        "call_operation": "ComponentScriptExecutor.process"
+                     }
+                  ]
                }
             },
             "inputs":{
                "resolution-key":{
                   "required":false,
                   "type":"string"
-               },
-               "store-result":{
-                  "required":true,
-                  "type":"boolean"
                },			   
                "service-instance-id":{
                   "required":false,
@@ -396,53 +398,6 @@
                }
             }
          },
-         "config-deploy-process":{
-            "type":"dg-generic",
-            "properties":{
-               "content":{
-                  "get_artifact":[
-                     "SELF",
-                     "dg-config-deploy-process"
-                  ]
-               },
-               "dependency-node-templates":[
-                  "nf-account-collection-post",
-                  "execute-post"
-               ]
-            },
-            "artifacts":{
-               "dg-config-deploy-process":{
-                  "type":"artifact-directed-graph",
-                  "file":"Plans/CONFIG_ConfigDeploy-post.xml"
-               }
-            }
-         },
-         "nf-account-collection-post":{
-            "type":"component-resource-resolution",
-            "interfaces":{
-               "ResourceResolutionComponent":{
-                  "operations":{
-                     "process":{
-                        "inputs":{
-                           "artifact-prefix-names":[
-                              "nf-params"
-                           ]
-                        }
-                     }
-                  }
-               }
-            },
-            "artifacts":{
-               "nf-params-template":{
-                  "type":"artifact-template-velocity",
-                  "file":"Templates/nf-params-template.vtl"
-               },
-               "nf-params-mapping":{
-                  "type":"artifact-mapping-resource",
-                  "file":"Templates/nf-params-mapping.json"
-               }
-            }
-         },
          "execute-post":{
             "type":"component-script-executor",
             "interfaces":{
@@ -456,53 +411,6 @@
                         }
                      }
                   }
-               }
-            }
-         },
-         "config-deploy-process-2":{
-            "type":"dg-generic",
-            "properties":{
-               "content":{
-                  "get_artifact":[
-                     "SELF",
-                     "dg-config-deploy-process-2"
-                  ]
-               },
-               "dependency-node-templates":[
-                  "nf-account-collection-put",
-                  "execute-put"
-               ]
-            },
-            "artifacts":{
-               "dg-config-deploy-process-2":{
-                  "type":"artifact-directed-graph",
-                  "file":"Plans/CONFIG_ConfigDeploy-put.xml"
-               }
-            }
-         },
-         "nf-account-collection-put":{
-            "type":"component-resource-resolution",
-            "interfaces":{
-               "ResourceResolutionComponent":{
-                  "operations":{
-                     "process":{
-                        "inputs":{
-                           "artifact-prefix-names":[
-                              "nf-paramsput"
-                           ]
-                        }
-                     }
-                  }
-               }
-            },
-            "artifacts":{
-               "nf-paramsput-template":{
-                  "type":"artifact-template-velocity",
-                  "file":"Templates/nf-paramsput-template.vtl"
-               },
-               "nf-paramsput-mapping":{
-                  "type":"artifact-mapping-resource",
-                  "file":"Templates/nf-paramsput-mapping.json"
                }
             }
          },
