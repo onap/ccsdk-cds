@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?pg9o1c');
-  src:  url('fonts/icomoon.eot?pg9o1c#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?pg9o1c') format('truetype'),
-    url('fonts/icomoon.woff?pg9o1c') format('woff'),
-    url('fonts/icomoon.svg?pg9o1c#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?h11si2');
+  src:  url('fonts/icomoon.eot?h11si2#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?h11si2') format('truetype'),
+    url('fonts/icomoon.woff?h11si2') format('woff'),
+    url('fonts/icomoon.svg?h11si2#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -35,6 +35,24 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-function-attribute:before {
+  content: "\e90e";
+}
+.icon-custom-attribute:before {
+  content: "\e90f";
+  color: #1b3e6f;
+}
+.icon-add-circle:before {
+  content: "\e90d";
+  color: #103d73;
+}
+.icon-required-star:before {
+  content: "\e90b";
+  color: #ff6469;
+}
+.icon-source:before {
+  content: "\e90c";
+}
 .icon-autoMap:before {
   content: "\e90a";
 }

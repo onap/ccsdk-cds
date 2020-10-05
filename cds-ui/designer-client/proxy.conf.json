@@ -1,12 +1,12 @@
 {
   "/controllerblueprint/*": {
-    "target": "https://localhost:3000",
+    "target": "https://41.128.168.208:3000",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
   },
   "/resourcedictionary/*": {
-    "target": "https://localhost:3000",
+    "target": "https://41.128.168.208:3000",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
