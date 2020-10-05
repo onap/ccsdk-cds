@@ -3081,6 +3081,7 @@ padding: 0 10px 0 0;
 }
 .template-mapping-list:hover, 
 .template-mapping-list.active {
+  cursor: pointer;
   /* background: #1B3E6F;  */
   text-decoration: none;
   /* color: #fff !important; */

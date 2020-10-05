@@ -61,7 +61,7 @@ import {ToastrService} from 'ngx-toastr';
 export class DesignerComponent implements OnInit, OnDestroy {
 
     controllerSideBar: boolean;
-    attributesSideBar: boolean;
+    actionAttributesSideBar: boolean;
     functionAttributeSidebar: boolean;
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     customActionName: string;
@@ -96,7 +96,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
         private packageCreationExtractionService: PackageCreationExtractionService,
         private toastService: ToastrService) {
         this.controllerSideBar = true;
-        this.attributesSideBar = false;
+        this.actionAttributesSideBar = false;
         this.showAction = false;
         this.functionAttributeSidebar = false;
 
@@ -113,7 +113,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     }
 
     _toggleSidebar2() {
-        this.attributesSideBar = !this.attributesSideBar;
+        this.actionAttributesSideBar = !this.actionAttributesSideBar;
     }
 
     publishBluePrint() {
