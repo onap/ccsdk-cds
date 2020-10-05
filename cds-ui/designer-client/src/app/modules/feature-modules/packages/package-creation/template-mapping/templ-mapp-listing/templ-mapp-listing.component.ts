@@ -1,13 +1,12 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { PackageCreationStore } from '../../package-creation.store';
-import { Mapping, Template } from '../../mapping-models/CBAPacakge.model';
-import { TemplateInfo, TemplateStore } from '../../template.store';
-import { TemplateAndMapping } from '../TemplateAndMapping';
-import { ActivatedRoute } from '@angular/router';
-import { SharedService } from '../shared-service';
-import { TourService } from 'ngx-tour-md-menu';
-import { TemplateType } from '../utils/TemplateType';
-import { of } from 'rxjs';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {PackageCreationStore} from '../../package-creation.store';
+import {Mapping, Template} from '../../mapping-models/CBAPacakge.model';
+import {TemplateInfo, TemplateStore} from '../../template.store';
+import {TemplateAndMapping} from '../TemplateAndMapping';
+import {ActivatedRoute} from '@angular/router';
+import {SharedService} from '../shared-service';
+import {TourService} from 'ngx-tour-md-menu';
+import {TemplateType} from '../utils/TemplateType';
 
 
 @Component({
@@ -32,9 +31,9 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private sharedService: SharedService,
         private tourService: TourService,
-
     ) {
     }
+
     ngOnDestroy(): void {
         // this.templateStore.unsubscribe();
         // this.packageCreationStore.unsubscribe();
@@ -79,7 +78,9 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
     }
 
     private setIsMappingOrTemplate(key: string, templateAndMapping: TemplateAndMapping, isFromTemplate: boolean) {
-        const nameOfFile = key.split('/')[1].split('.')[0].split('-')[0];
+        let nameOfFile = isFromTemplate ?
+            key.split('/')[1].split('.')[0].split('-template')[0]
+            : key.split('/')[1].split('.')[0].split('-mapping')[0];
         // const fullName = nameOfFile + ',' + key.split('.');
         if (this.templateAndMappingMap.has(nameOfFile)) {
             const templateAndMappingExisted = this.templateAndMappingMap.get(nameOfFile);
@@ -112,10 +113,12 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
             this.tourService.goto('tm-templateName');
         }
     }
+
     openCreationView() {
         this.showCreationView.emit('tell parent to open create views');
         console.log('disable edit mode');
     }
+
     openListView() {
         console.log('open list view');
         this.showListView.emit('show full view');
@@ -163,6 +166,7 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
     getValue(file: string) {
         return this.templateAndMappingMap.get(file);
     }
+
     initDelete(file) {
         console.log(file);
         const templateKey = 'Templates/' + file + '-template';
@@ -176,6 +180,7 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
         }
 
     }
+
     condifrmDelete() {
         const file = this.fileToDelete.split('/')[1].split('-')[0];
         const ext = this.fileToDelete.split('/')[1].split('.')[1];
