@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3bf5319_1d39bc32",
+        "filename": "cds-ui/designer-client/proxy.conf.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 4567
+      },
+      "writtenOn": "2020-10-05T13:36:49Z",
+      "side": 1,
+      "message": "Sarah, Did you intended to change target ?",
+      "revId": "7c1b0e6f07909a3ca5ace39dd04817cfc0902f22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
