@@ -424,6 +424,12 @@ p.compType-4{
   height: 65vh !important;
   overflow-y: auto;
 }
+.actionsList ul{
+  padding-left: 0;
+}
+.actionsList li{
+  list-style: none;
+}
 .componentsList .list-group-item{
   margin-bottom: 10px;
   padding-left: 40px;
@@ -449,10 +455,10 @@ p.compType-4{
   color: #C7D0DD;
   font-size: 12px;
 }
-.custom-control-input:checked ~ .custom-control-label{
+/* .custom-control-input:checked ~ .custom-control-label{
   background-color: #1B3E6F !important;
   color: #fff;
-}
+} */
 .inserActionBtns .btn{
   border-radius: 15px !important;
   padding: 6px 20px;
@@ -1053,5 +1059,67 @@ ul.editor{
 .modal-holder.modal-backdrop{z-index: 100}
 .modal-holder + .modal-dialog {z-index: 1000}
 .modal-dialog{
-  max-width: 680px;
+  max-width: 50%;
+}
+.modal-body{
+  font-size: 14px;
+}
+.nav-link{
+  padding-top: 0 !important;
+}
+.createAttributeTabs .nav-link.active{
+  border-bottom-width: 1px !important;
+}
+.createAttributeTabs .nav-item{
+  margin-left: 50px;
+}
+.createAttributeTabs .tab-content{
+  margin-top: 20px;
+  padding: 20px 50px;
+  border: solid 1px #F4F9FE;
+}
+/*FORM*/
+.create-form .col-form-label{
+  color: #1B3E6F;
+  font-size: 12px;
+  font-weight: bold;
+}
+.create-form .col-form-label span{
+  color: #FF6469;
+}
+.create-form .form-control{
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  border: 0;
+  border-bottom: solid 1px #EFEFF4;
+  font-size: 13px;
+  color: #1B3E6F;
+}
+.create-form .form-control::placeholder{
+  color: #C3CDDB;
+}
+.create-form .form-control:focus{
+  border-bottom-color: #1B3E6F;
+  -webkit-box-shadow: 0 4px 6px -6px rgba(18, 115, 235, .6);
+  -moz-box-shadow: 0 4px 6px -6px rgba(18, 115, 235, .6);
+  box-shadow: 0 4px 6px -6px rgba(18, 115, 235, .6);
+  background-color: transparent !important;
+  text-shadow: none;
+}
+.list-group-item{
+  padding: 6px 1.25rem;
+  border-color: #E6EDF5;
+  font-size: 11px;
+  color: #1B3E6F;
+  font-weight: bold;
+  text-align: center;
+}
+.list-group-item.active{
+  color: #1B3E6F;
+  background-color: #C3CDDB;
+  border-color: #C3CDDB;
+}
+.list-group-horizontal .list-group-item + .list-group-item{
+  border-left-width: 1px;
 }

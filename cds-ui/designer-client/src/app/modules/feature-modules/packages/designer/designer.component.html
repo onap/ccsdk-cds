@@ -23,7 +23,7 @@
                 </ol>
                 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
                     aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLongTitle">Package Details</h5>
@@ -192,7 +192,8 @@
                         aria-labelledby="nav-action-tab">
                         <!--Action Search Box-->
                         <input type="text" class="form-control input-search-controller" placeholder="Search Actions">
-                        <button (click)="sidebarRight1.open()" type="button" class="btn btn-primary">
+
+                        <button (click)="sidebarRight1.open()" type="button" class="btn btn-primary mt-4">
                             Action Attributes
                         </button>
                         <br /><br />
@@ -285,10 +286,10 @@
                         <div class="col-3 pl-0">
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button type="button" class="btn view-source" tooltip="View Action Source"
-                                    placement="bottom"><i class="icon-source"></i></button>
-                                <button type="button" class="btn trash-item" tooltip="Delete Action"
-                                    placement="bottom"><i class="icon-delete-sm" type="button"
-                                        aria-hidden="true"></i></button>
+                                    placement="bottom"><i class="icon-source" aria-hidden="true"></i></button>
+                                <button type="button" data-toggle="modal" data-target="#exampleModalScrollable1"
+                                    class="btn trash-item" tooltip="Delete Action" placement="bottom"><i
+                                        class="icon-delete-sm" aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>
@@ -343,12 +344,11 @@
                                                         <i class="icon-required-star" type="button"
                                                             aria-hidden="true"></i></label>
                                                     <div class="attributeOptions">
-                                                        <a data-toggle="modal" data-target="#templateDeletionModal"
+                                                        <a data-toggle="modal" data-target="#exampleModalScrollable2"
                                                             class="accordion-delete editAttribute"
                                                             tooltip="Edit Attribute" placement="bottom"><i
-                                                                class="icon-edit"></i></a><a data-toggle="modal"
-                                                            data-target="#templateDeletionModal"
-                                                            class="accordion-delete deleteAttribute"
+                                                                class="icon-edit"></i></a>
+                                                        <a class="accordion-delete deleteAttribute"
                                                             tooltip="Delete Attribute" placement="bottom"><i
                                                                 class="icon-delete-sm"></i></a>
                                                     </div>
@@ -358,12 +358,11 @@
                                                             class="icon-required-star" type="button"
                                                             aria-hidden="true"></i></label>
                                                     <div class="attributeOptions">
-                                                        <a data-toggle="modal" data-target="#templateDeletionModal"
+                                                        <a data-toggle="modal" data-target="#exampleModalScrollable2"
                                                             class="accordion-delete editAttribute"
                                                             tooltip="Edit Attribute" placement="bottom"><i
-                                                                class="icon-edit"></i></a><a data-toggle="modal"
-                                                            data-target="#templateDeletionModal"
-                                                            class="accordion-delete deleteAttribute"
+                                                                class="icon-edit"></i></a>
+                                                        <a class="accordion-delete deleteAttribute"
                                                             tooltip="Delete Attribute" placement="bottom"><i
                                                                 class="icon-delete-sm"></i></a>
                                                     </div>
@@ -373,12 +372,11 @@
                                                             class="icon-required-star optional-attribute" type="button"
                                                             aria-hidden="true"></i></label>
                                                     <div class="attributeOptions">
-                                                        <a data-toggle="modal" data-target="#templateDeletionModal"
+                                                        <a data-toggle="modal" data-target="#exampleModalScrollable2"
                                                             class="accordion-delete editAttribute"
                                                             tooltip="Edit Attribute" placement="bottom"><i
-                                                                class="icon-edit"></i></a><a data-toggle="modal"
-                                                            data-target="#templateDeletionModal"
-                                                            class="accordion-delete deleteAttribute"
+                                                                class="icon-edit"></i></a>
+                                                        <a class="accordion-delete deleteAttribute"
                                                             tooltip="Delete Attribute" placement="bottom"><i
                                                                 class="icon-delete-sm"></i></a>
                                                     </div>
@@ -388,12 +386,11 @@
                                                         <i class="icon-required-star optional-attribute" type="button"
                                                             aria-hidden="true"></i></label>
                                                     <div class="attributeOptions">
-                                                        <a data-toggle="modal" data-target="#templateDeletionModal"
+                                                        <a data-toggle="modal" data-target="#exampleModalScrollable2"
                                                             class="accordion-delete editAttribute"
                                                             tooltip="Edit Attribute" placement="bottom"><i
-                                                                class="icon-edit"></i></a><a data-toggle="modal"
-                                                            data-target="#templateDeletionModal"
-                                                            class="accordion-delete deleteAttribute"
+                                                                class="icon-edit"></i></a>
+                                                        <a class="accordion-delete deleteAttribute"
                                                             tooltip="Delete Attribute" placement="bottom"><i
                                                                 class="icon-delete-sm"></i></a>
                                                     </div>
@@ -614,8 +611,7 @@
                                                     <span>Mapping</span>
                                                     <span>Template</span>
 
-                                                    <a data-toggle="modal"
-                                                        data-target="#templateDeletionModal"
+                                                    <a data-toggle="modal" data-target="#templateDeletionModal"
                                                         class="accordion-delete deleteTemplate"
                                                         title="Delete Template"><i class="icon-delete-sm"></i></a>
                                                 </a>
@@ -626,8 +622,7 @@
                                                     <p>vpkg</p>
                                                     <span>Mapping</span>
                                                     <span>Template</span>
-                                                    <a data-toggle="modal"
-                                                        data-target="#templateDeletionModal"
+                                                    <a data-toggle="modal" data-target="#templateDeletionModal"
                                                         class="accordion-delete deleteTemplate"
                                                         title="Delete Template"><i class="icon-delete-sm"></i></a>
                                                 </a>
@@ -651,7 +646,7 @@
 <!--Action - Add Custom Attribute - Modal-->
 <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle">
@@ -660,23 +655,208 @@
                     <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body createAttributeTabs">
+                <!--Action - Inputs & Outputs Attribute-->
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                            aria-controls="home" aria-selected="true">Inputs</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                            aria-controls="profile" aria-selected="false">Outputs</a>
                     </li>
-                  </ul>
-                  <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                  </div>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <!--INPUTS Tab-->
+                    <div class="tab-pane fade show active create-form" id="home" role="tabpanel"
+                        aria-labelledby="home-tab">
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" placeholder="Attribute name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-3 col-form-label">Description</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputPassword3"
+                                    placeholder="Add some description">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-3 pt-0">Type <span>*</span></label>
+                            <div class="col-sm-9">
+                                <div class="list-group list-group-horizontal">
+                                    <button type="button"
+                                        class="list-group-item list-group-item-action active">String</button>
+                                    <button type="button"
+                                        class="list-group-item list-group-item-action">Integer</button>
+                                    <button type="button"
+                                        class="list-group-item list-group-item-action">Boolean</button>
+                                    <button type="button" class="list-group-item list-group-item-action">List</button>
+                                    <button type="button" class="list-group-item list-group-item-action">Other</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-3 pt-0">Required <span>*</span></label>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="customRadioInline1" name="customRadioInline1"
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadioInline1">True</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="customRadioInline2" name="customRadioInline1"
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadioInline2">False</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--OUTPUTS Tab-->
+                    <div class="tab-pane fade create-form" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail3" placeholder="Attribute name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-3 col-form-label">Description</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputPassword3"
+                                    placeholder="Add some description">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-3 pt-0">Type <span>*</span></label>
+                            <div class="col-sm-9">
+                                <div class="list-group list-group-horizontal">
+                                    <button type="button" class="list-group-item list-group-item-action">String</button>
+                                    <button type="button"
+                                        class="list-group-item list-group-item-action">Integer</button>
+                                    <button type="button"
+                                        class="list-group-item list-group-item-action">Boolean</button>
+                                    <button type="button" class="list-group-item list-group-item-action">List</button>
+                                    <button type="button"
+                                        class="list-group-item list-group-item-action active">Other</button>
+                                </div>
+                                <input type="text" class="form-control mt-2 mb-2" id="inputPassword3"
+                                    placeholder="Add Other type name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-3 pt-0">Required <span>*</span></label>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="customRadioInline1" name="customRadioInline1"
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadioInline1">True</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="customRadioInline2" name="customRadioInline1"
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="customRadioInline2">False</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary">Submit Attributes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Delete Action - Modal-->
+<div class="modal fade" id="exampleModalScrollable1" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalScrollableTitle1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle1">
+                    Delete Action</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <img src="assets/img/icon-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <b>resource-assignment</b> action?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Action - Edit Custom Attribute - Modal-->
+<div class="modal fade" id="exampleModalScrollable2" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalScrollableTitle2" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle2">
+                    Edit Custom Attributes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <img src="assets/img/icon-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body createAttributeTabs">
+                <div class="create-form">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
+                        <div class="col-sm-9">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="Attribute name" value="resource-assignment-properties">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputPassword3"
+                                placeholder="Add some description" value="Dynamic PropertyDefinition for workflow(resource-assignment).">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3 pt-0">Type <span>*</span></label>
+                        <div class="col-sm-9">
+                            <div class="list-group list-group-horizontal">
+                                <button type="button"
+                                    class="list-group-item list-group-item-action">String</button>
+                                <button type="button" class="list-group-item list-group-item-action">Integer</button>
+                                <button type="button" class="list-group-item list-group-item-action">Boolean</button>
+                                <button type="button" class="list-group-item list-group-item-action">List</button>
+                                <button type="button" class="list-group-item list-group-item-action active">Other</button>
+                            </div>
+                            <input type="text" class="form-control mt-2 mb-2" id="inputPassword3"
+                                    placeholder="Add Other type name" value="dt-resource-assignment-properties">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-3 pt-0">Required <span>*</span></label>
+                        <div class="col-sm-9">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="customRadioInline1" name="customRadioInline1"
+                                    class="custom-control-input" checked>
+                                <label class="custom-control-label" for="customRadioInline1">True</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="customRadioInline2" name="customRadioInline1"
+                                    class="custom-control-input">
+                                <label class="custom-control-label" for="customRadioInline2">False</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
             </div>
         </div>
     </div>
