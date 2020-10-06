@@ -101,7 +101,7 @@ open class DatabaseResourceAssignmentProcessor(
         }
 
         sourceProperties.inputKeyMapping
-            ?.mapValues { raRuntimeService.getDictionaryStore(it.value) }
+            ?.mapValues { raRuntimeService.getResolutionStore(it.value) }
             ?.map { KeyIdentifier(it.key, it.value) }
             ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
 
