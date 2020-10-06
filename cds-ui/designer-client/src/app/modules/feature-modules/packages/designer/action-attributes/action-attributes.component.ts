@@ -18,10 +18,6 @@ export class ActionAttributesComponent implements OnInit {
     ngOnInit() {
     }
 
-    _toggleSidebar2() {
-        this.actionAttributesSideBar = !this.actionAttributesSideBar;
-    }
-
     addInput(input: InputActionAttribute) {
         this.inputs.push(input);
     }
