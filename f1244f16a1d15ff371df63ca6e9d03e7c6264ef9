@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e34b106c_cac54f96",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Scripts/kotlin/KotlinK8sProfileUpload.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-06T11:57:48Z",
+      "side": 1,
+      "message": "This code is not ver readable. Wrong varable names and the way how override_values file is generated is really unclear. It would be good to describe the at least in some comment what happens to let others understand the way how override_values file is generated",
+      "range": {
+        "startLine": 146,
+        "startChar": 8,
+        "endLine": 152,
+        "endChar": 0
+      },
+      "revId": "f1244f16a1d15ff371df63ca6e9d03e7c6264ef9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56a4de7a_ea6e924b",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Scripts/kotlin/KotlinK8sProfileUpload.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-06T11:57:48Z",
+      "side": 1,
+      "message": "why you do not use templating mechanism of CDS instead to generate the override file content?",
+      "range": {
+        "startLine": 167,
+        "startChar": 3,
+        "endLine": 167,
+        "endChar": 64
+      },
+      "revId": "f1244f16a1d15ff371df63ca6e9d03e7c6264ef9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
