@@ -34,6 +34,7 @@ import {TourMatMenuModule} from 'ngx-tour-md-menu';
 import {ComponentCanDeactivateGuard} from '../../../common/core/canDactivate/ComponentCanDeactivateGuard';
 import { ImportPackageComponent } from './packages-dashboard/import-package/import-package.component';
 import { FunctionsAttributeComponent } from './designer/functions-attribute/functions-attribute.component';
+import { ActionAttributesComponent } from './designer/action-attributes/action-attributes.component';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -58,6 +59,7 @@ import { FunctionsAttributeComponent } from './designer/functions-attribute/func
         DesignerSourceViewComponent,
         ImportPackageComponent,
         FunctionsAttributeComponent,
+        ActionAttributesComponent,
 
     ],
     imports: [

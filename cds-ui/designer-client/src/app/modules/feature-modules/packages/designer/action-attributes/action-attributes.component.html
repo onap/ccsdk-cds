@@ -1,0 +1,202 @@
+<ng-sidebar [(opened)]="actionAttributesSideBar" [sidebarClass]="'demo-sidebar attributesSideBar '" [mode]="'push'"
+            [position]="'right'" #sidebarRight1>
+    <div class="container-fluid0">
+        <div class="row m-0">
+            <div class="col attributesContainer">
+                <div class="row m-0 attributesContainertTitle">
+                    <div class="col-2 pl-0">
+                        <button (click)="sidebarRight1.close()" class="closeBar" tooltip="Close"
+                                placement="bottom"><i class="icon-close" type="button" aria-hidden="true"></i></button>
+                    </div>
+                    <h6 class="col pl-0">Action Attributes</h6>
+                    <div class="col-3 pl-0">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn view-source" tooltip="View Action Source"
+                                    placement="bottom"><i class="icon-source"></i></button>
+                            <button type="button" class="btn trash-item" tooltip="Delete Action"
+                                    placement="bottom"><i class="icon-delete-sm" type="button"
+                                                          aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="scrollWrapper">
+                    <div class="row m-0">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Action Name</label>
+                                <input type="text" class="form-control" placeholder="Action Name"
+                                       value="resource-assignment">
+                            </div>
+                        </div>
+                    </div>
+                    <!--Add Attribute-->
+                    <div class="row m-b add-attribute">
+                        <div class="col">
+                            <h5>Add Attribute</h5>
+                            <div class="row">
+                                <div class="col pr-0 text-center">
+                                    <button type="button" data-toggle="modal" data-target="#exampleModalScrollable"
+                                            class="btn btn-secondary"><i class="icon-custom-attribute" type="button"
+                                                                         aria-hidden="true"></i></button>
+                                    <span>Custom Attribute</span>
+
+
+                                </div>
+                                <div class="col text-center">
+                                    <button type="button" class="btn btn-secondary"><i
+                                            class="icon-function-attribute" type="button"
+                                            aria-hidden="true"></i></button>
+                                    <span>Function Attribute</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--INPUTS-->
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <div class="card-header row" id="headingOne">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Inputs
+                                </button>
+                            </div>
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                 data-parent="#accordionExample">
+                                <div class="card-body action-attributes">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1">template-prefix
+                                                    <i class="icon-required-star" type="button"
+                                                       aria-hidden="true"></i></label>
+                                                <div class="attributeOptions">
+                                                    <a data-toggle="modal" data-target="#templateDeletionModal"
+                                                       class="accordion-delete editAttribute"
+                                                       tooltip="Edit Attribute" placement="bottom"><i
+                                                            class="icon-edit"></i></a><a data-toggle="modal"
+                                                                                         data-target="#templateDeletionModal"
+                                                                                         class="accordion-delete deleteAttribute"
+                                                                                         tooltip="Delete Attribute"
+                                                                                         placement="bottom"><i
+                                                        class="icon-delete-sm"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">resource-assignment-properties <i
+                                                        class="icon-required-star" type="button"
+                                                        aria-hidden="true"></i></label>
+                                                <div class="attributeOptions">
+                                                    <a data-toggle="modal" data-target="#templateDeletionModal"
+                                                       class="accordion-delete editAttribute"
+                                                       tooltip="Edit Attribute" placement="bottom"><i
+                                                            class="icon-edit"></i></a><a data-toggle="modal"
+                                                                                         data-target="#templateDeletionModal"
+                                                                                         class="accordion-delete deleteAttribute"
+                                                                                         tooltip="Delete Attribute"
+                                                                                         placement="bottom"><i
+                                                        class="icon-delete-sm"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">occurrence <i
+                                                        class="icon-required-star optional-attribute" type="button"
+                                                        aria-hidden="true"></i></label>
+                                                <div class="attributeOptions">
+                                                    <a data-toggle="modal" data-target="#templateDeletionModal"
+                                                       class="accordion-delete editAttribute"
+                                                       tooltip="Edit Attribute" placement="bottom"><i
+                                                            class="icon-edit"></i></a><a data-toggle="modal"
+                                                                                         data-target="#templateDeletionModal"
+                                                                                         class="accordion-delete deleteAttribute"
+                                                                                         tooltip="Delete Attribute"
+                                                                                         placement="bottom"><i
+                                                        class="icon-delete-sm"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1">store-result
+                                                    <i class="icon-required-star optional-attribute" type="button"
+                                                       aria-hidden="true"></i></label>
+                                                <div class="attributeOptions">
+                                                    <a data-toggle="modal" data-target="#templateDeletionModal"
+                                                       class="accordion-delete editAttribute"
+                                                       tooltip="Edit Attribute" placement="bottom"><i
+                                                            class="icon-edit"></i></a><a data-toggle="modal"
+                                                                                         data-target="#templateDeletionModal"
+                                                                                         class="accordion-delete deleteAttribute"
+                                                                                         tooltip="Delete Attribute"
+                                                                                         placement="bottom"><i
+                                                        class="icon-delete-sm"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--OUTPUTS-->
+                    <div class="accordion" id="accordionExample1">
+                        <div class="card">
+                            <div class="card-header row" id="headingOne">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                    Outputs
+                                </button>
+                            </div>
+
+                            <div id="collapseTwo" class="collapse show" aria-labelledby="headingOne"
+                                 data-parent="#accordionExample1">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1">resolved-data
+                                                    <i class="icon-required-star optional-attribute" type="button"
+                                                       aria-hidden="true"></i></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-sidebar>
+
+<!--Action - Add Custom Attribute - Modal-->
+<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">
+                    Add Custom Attributes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <img src="assets/img/icon-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Submit Attributes</button>
+            </div>
+        </div>
+    </div>
+</div>
