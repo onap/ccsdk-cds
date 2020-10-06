@@ -79,9 +79,9 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                     checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
                 val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping).toMutableMap()
 
-                inputKeyMapping?.mapValues { raRuntimeService.getDictionaryStore(it.value) }
-                        ?.map { KeyIdentifier(it.key, it.value) }
-                        ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
+                resolvedInputKeyMapping.map { KeyIdentifier(it.key, it.value) }.let {
+                    resourceAssignment.keyIdentifiers.addAll(it)
+                }
 
                 // Resolving content Variables
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
