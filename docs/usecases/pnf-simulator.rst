@@ -6,8 +6,6 @@
 PNF Simulator Day-N config-assign/deploy
 ========================================
 
-
-
 Overview
 ~~~~~~~~~~
 
@@ -31,8 +29,6 @@ it is easy and enables debugging.
 * CDS in Minikube: https://wiki.onap.org/display/DW/Running+CDS+in+minikube (RDT link to be added)
 * CDS in an IDE:  https://docs.onap.org/projects/onap-ccsdk-cds/en/latest/userguide/running-bp-processor-in-ide.html
 
-After CDS is running remember the port of blueprint processor, you will need it later on.
-
 Run PNF Simulator and install module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -48,7 +44,9 @@ here but they are not tested by the author of this guide.
 
       .. warning::
          Currently there is an issue for the SSH connection between CDS and the netconf server because of unmatching
-         exchange key algorhithms. Use legacy version until the issue is resolved.
+         exchange key algorhithms
+         (see `Stackoverflow <https://stackoverflow.com/questions/64047502/java-lang-illegalstateexception-unable-to-negotiate-key-exchange-for-server-hos>`_).
+         **Use legacy version (right tab) until the issue is resolved.**
 
       Download and run docker container with ``docker run -d --name netopeer2 -p 830:830 -p 6513:6513 sysrepo/sysrepo-netopeer2:latest``
 
@@ -56,7 +54,7 @@ here but they are not tested by the author of this guide.
 
       Browse to the target location where all YANG modules exist: ``cd /etc/sysrepo/yang``
 
-      Create a simple mock YANG model for a packet generator (pg.yang).
+      Create a simple mock YANG model for a packet generator (:file:`pg.yang`).
 
       .. code-block:: sh
          :caption: **pg.yang**
@@ -105,7 +103,7 @@ here but they are not tested by the author of this guide.
             }
          }
 
-      Create the following sample XML data definition for the above model (pg-data.xml).
+      Create the following sample XML data definition for the above model (:file:`pg-data.xml`).
       Later on this will initialise one single PG stream.
 
       .. code-block:: sh
@@ -173,7 +171,7 @@ here but they are not tested by the author of this guide.
 
       Browse to the target location where all YANG modules exist: ``cd /opt/dev/sysrepo/yang``
 
-      Create a simple mock YANG model for a packet generator (pg.yang).
+      Create a simple mock YANG model for a packet generator (:file:`pg.yang`).
 
       .. code-block:: sh
          :caption: **pg.yang**
@@ -222,7 +220,7 @@ here but they are not tested by the author of this guide.
             }
          }
 
-      Create the following sample XML data definition for the above model (pg-data.xml).
+      Create the following sample XML data definition for the above model (:file:`pg-data.xml`).
       Later on this will initialise one single PG (packet-generator) stream.
 
       .. code-block:: sh
@@ -248,8 +246,8 @@ here but they are not tested by the author of this guide.
       In legacy version of `sysrepo/sysrepo-netopeer2` subscribers of a module are required, otherwise they are not
       running and configurations changes are not accepted, see https://github.com/sysrepo/sysrepo/issues/1395. There is
       an predefined application mock up which can be used for that. The usage is described
-      `https://github.com/sysrepo/sysrepo/issues/1395 <https://asciinema.org/a/160247>`_. You need to run the following
-      commands to start the example application for subscribing to sample-plugin Yang module.
+      here: https://asciinema.org/a/160247. You need to run the following
+      commands to start the example application for subscribing to our sample-plugin YANG module.
 
       .. code-block:: sh
 
@@ -260,15 +258,14 @@ here but they are not tested by the author of this guide.
 
       .. code-block:: sh
 
-         ========== STARTUP CONFIG sample-plugin APPLIED AS RUNNING ==========
-
-         ========== CONFIG HAS CHANGED, CURRENT RUNNING CONFIG sample-plugin: ==========
+         ========== READING STARTUP CONFIG sample-plugin: ==========
 
          /sample-plugin:sample-plugin (container)
          /sample-plugin:sample-plugin/pg-streams (container)
-         /sample-plugin:sample-plugin/pg-streams/pg-stream[id='1'] (list instance)
-         /sample-plugin:sample-plugin/pg-streams/pg-stream[id='1']/id = 1
-         /sample-plugin:sample-plugin/pg-streams/pg-stream[id='1']/is-enabled = true
+
+
+         ========== STARTUP CONFIG sample-plugin APPLIED AS RUNNING ==========
+
 
       The terminal session needs to be kept open after application has started.
 
@@ -301,6 +298,9 @@ here but they are not tested by the author of this guide.
                </pg-stream>
             </pg-streams>
          </sample-plugin>
+
+      You can also see that there are additional logs in the subscriber application after editing the configuration of our
+      YANG module.
 
    .. tab:: PNF simulator integration project
 
@@ -345,8 +345,8 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
    .. tab:: Scripts
 
       **There will be different scripts depending on your CDS installation. For running it in an IDE always use scripts with**
-      **-ide.sh prefix. For running in kubernetes use the scripts with k8s.sh ending. For IDE scripts host will be localhost**
-      **and port will be 8081. For K8s host ip adress gets automatically detected, port is 8000.**
+      **-ide.sh prefix. For running CDS in Kubernetes use scripts with -k8s.sh ending. In scripts with -ide.sh prefix**
+      **host will be localhost and port will be 8081. For K8s host ip adress gets automatically detected, port is 8000.**
 
       **Set up CDS:**
 
@@ -369,7 +369,7 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
 
       Check CDS database for PNF data dictionaries by entering the DB. You should see 6 rows as shown below.
 
-      For IDE:
+      **For running CDS in an IDE (accessing mariadb container):**
 
       .. code-block:: sh
 
@@ -388,7 +388,12 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          | stream-count | integer |
          +---------------------+-----------+
 
-      For K8s:
+         quit
+
+      Replace the container id with your running mariadb container id.
+
+
+      **For running CDS in K8s (accessing MariaDB pod):**
 
       .. code-block:: sh
 
@@ -409,8 +414,6 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
 
          quit
 
-         exit
-
       **Enrichment:**
 
       Move to the main folder of the CBA with ``cd ..`` and archive all folders with ``zip -r pnf-demo.zip *``.
@@ -419,7 +422,7 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          The provided CBA is already enriched, the following step anyhow will enrich the CBA again to show the full workflow.
          For Frankfurt release this causes an issue when the configuration is deployed later on. This happens because some parameters
          get deleted when enrichment is done a second time. Skip the next step until Deploy/Save Blueprint if you use
-         Frankfurt release and use the CBA as it is. In future this step should fixed and executed based on an unenriched CBA.
+         Frankfurt release and use the CBA as it is. In future this step should be fixed and executed based on an unenriched CBA.
 
       Enrich the blueprint through calling the following script. Take care to provide the zip file you downloader earlier.
 
@@ -442,7 +445,7 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          bash -x ./save-enriched-blueprint-ide.sh ../pnf-demo.zip
          # bash -x ./save-enriched-blueprint-k8s.sh ../pnf-demo.zip
 
-      Now you should see the new model "artifactName": "pnf_netconf" by calling ``bash -x ./get-cds-blueprint-models.sh``
+      After that you should see the new model "artifactName": "pnf_netconf" by calling ``bash -x ./get-cds-blueprint-models.sh``
 
       **Config-Assign**
 
@@ -459,7 +462,8 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          # bash -x ./create-config-assing-data-k8s.sh day-1 172.17.0.2 5
 
       You can verify the day-1 NETCONF RPC payload looking into CDS DB. You should see the NETCONF RPC with 5
-      streams (fw_udp_1 TO fw_udp_5). Connect to the DB like mentioned above an run following statement.
+      streams (fw_udp_1 TO fw_udp_5). Connect to the DB like mentioned above and run the below statement. You should
+      see the day-1 configuration as an output.
 
       .. code-block:: sh
 
@@ -508,7 +512,8 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          # bash -x ./create-config-assing-data-k8s.sh day-2 172.17.0.2 10
 
       You can verify the day-2 NETCONF RPC payload looking into CDS DB. You should see the NETCONF RPC with 10
-      streams (fw_udp_1 TO fw_udp_10). Connect to the DB like mentioned above and run following statement.
+      streams (fw_udp_1 TO fw_udp_10). Connect to the DB like mentioned above and run the below statement. You should
+      see the day-2 configuration as an output.
 
       .. code-block:: sh
 
@@ -570,14 +575,14 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
 
       .. note::
          Until this step CDS did not interact with the PNF simulator or device. We just created the day-1 and day-2
-         configurations and stored in CDS database
+         configurations and stored it in CDS database
 
       **Config-Deploy:**
 
       Now we will make the CDS REST API calls to push the day-1 and day-2 configuration changes to the PNF simulator.
 
       If you run CDS in Kubernetes open a new terminal and keep it running with ``bash -x ./tail-cds-bp-log.sh``,
-      we can use it to review the config-deploy actions. If you run CDS in an IDE you can have a look into the IDE terminal.
+      we can use this to review the config-deploy actions. If you run CDS in an IDE you can have a look into the IDE terminal.
 
       Following command will deploy day-1 configuration.
       Syntax is ``# bash -x ./process-config-deploy.sh RESOLUTION_KEY PNF_IP_ADDRESS``
@@ -587,7 +592,8 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          bash -x ./process-config-deploy-ide.sh day-1 127.17.0.2
          # bash -x ./process-config-deploy-k8s.sh day-1 127.17.0.2
 
-      Go back to PNF netopeer cli console and verify if you can see 5 streams  fw_udp_1 to fw_udp_5 enabled
+      Go back to PNF netopeer cli console like mentioned above and verify if you can see 5 streams fw_udp_1 to fw_udp_5 enabled. If the 5 streams
+      appear in the output as follows, the day-1 configuration got successfully deployed and the use case is successfully done.
 
       .. code-block:: sh
 
@@ -623,7 +629,7 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          </sample-plugin>
          >
 
-      The same can be done for day-2 config (follow same steps just with day-2 configuration)
+      The same can be done for day-2 config (follow same steps just with day-2 configuration).
 
       .. note::
          Through deployment we did not deploy the PNF, we just modified the PNF. The PNF could also be installed by CDS
@@ -634,12 +640,19 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
       Download the Postman collection :download:`json <media/pnf-simulator.postman_collection.json>` and import it into
       your Postman application. Set the collection variables `ip adress` and `port` depending on your CDS installation.
       This can be done by right clicking the collection, click `edit` and then go to variables.
-      Localhost with port 8081 is default.
+      For running CDS in an IDE host should be localhost and port should be 8081. If you run CDS in Kubernetes you can find
+      out ip adress and port number of CDS blueprint processor by executing following command:
+
+      .. code-block:: bash
+
+         kubectl get svc -n onap | grep 'cds-blueprints-processor-http'
+
+         cds-blueprints-processor-http      ClusterIP   10.152.183.211   <none>        8080/TCP              3h19m
 
       **Set up CDS:**
 
       First run `Bootstrap` request which will call Bootstrap API of CDS. This loads the CDS default model artifacts into CDS DB.
-      You should get HTTP status 200 for the below command.
+      You should get HTTP status 200 as a response.
 
       You can execute `Get Blueprints` to get all blueprint models in the CDS database. You will see a default
       model "artifactName": "vFW-CDS"  in the response body which was loaded by calling bootstrap.
@@ -647,10 +660,16 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
       Push the PNF CDS blueprint model data dictionary to CDS with `Data Dictionary` request. Request body contains the
       data from ``dd.json`` of the CBA. This will call the data dictionary endpoint of CDS.
 
-      Check CDS database for PNF data dictionaries by entering the DB in a terminal. You should see 6 rows as shown below.
-      Replace the container id with your running mariadb container id.
+      .. note::
+         For every data dictionary entry CDS API needs to be called seperately. The postman collection contains a loop to
+         go through all entries of :file:`dd.json` and call data dictionary endpoint seperately. To execute this loop,
+         open `Runner` in Postman and run `Data Dictionary` request like it is shown in the picture below.
 
-      CDS running in an IDE:
+      |imageDDPostmanRunner|
+
+      Check CDS database for PNF data dictionaries by entering the DB in a terminal. You should see 6 rows as shown below.
+
+      For running CDS in an IDE (accessing mariadb container):
 
       .. code-block:: sh
 
@@ -669,9 +688,12 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          | stream-count | integer |
          +---------------------+-----------+
 
-      CDS running in K8s:
+      Replace the container id with your running mariadb container id.
 
-      Go to  ``/Scripts`` directory of your CBA and open in terminal.
+
+      For running CDS in K8s (accessing MariaDB pod):
+
+      Open a terminal and go to  ``/Scripts`` directory of your CBA.
 
       .. code-block:: sh
 
@@ -690,9 +712,6 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          | stream-count | integer |
          +---------------------+-----------+
 
-         quit
-
-         exit
 
       **Enrichment:**
 
@@ -700,7 +719,7 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          The provided CBA is already enriched, the following steps anyhow will enrich the CBA again to show the full workflow.
          For Frankfurt release this causes an issue when the configuration is deployed later on. This happens because some parameters
          get deleted when enrichment is done a second time. Skip the next steps until Deploy/Save Blueprint if you use
-         Frankfurt release and use the CBA as it is. In future this step should fixed and executed based on an unenriched CBA.
+         Frankfurt release and use the CBA as it is. In future this step should be fixed and executed based on an unenriched CBA.
 
       Enrich the blueprint through executing the `Enrich Blueprint` request. Take care to provide the CBA file which you
       downloaded earlier in the request body. After the request got executed save the response body, this will be the
@@ -711,27 +730,28 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
 
       **Deploy/Save the Blueprint into CDS database**
 
-      Run `Save Blueprint` request to save/deploy the Blueprint into the CDS database. Provide the enriched file which
-      you saved in the last step in the request body.
+      Run `Save Blueprint` request to save/deploy the Blueprint into the CDS database. Take care to provide the enriched
+      CBA file in the request body.
 
-      Now you should see the new model "artifactName": "pnf_netconf" by calling `Get Blueprints` request.
+      After that you should see the new model "artifactName": "pnf_netconf" by calling `Get Blueprints` request.
 
       **Config-Assign**
 
       The assumption is that we are using the same host to run PNF NETCONF simulator as well as CDS. You will need the
       IP Adress of the Netconf server container which can be found out in terminal with
-      ``docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' netopeer2``. In the
-      postman collection we use 172.17.0.2 by default.
+      ``docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' netopeer2``. In the provided
+      postman collection 172.17.0.2 is set as default.
 
-      For creating the day-n config we are using the template file ``day-n-pnf-config.template`` in the CBA. ``CONFIG_NAME``,
-      ``PNF_IP_ADDRESS`` and ``STREAM_COUNT`` are replaced with specific values.
+      For creating the day-n config we are using the template file ``day-n-pnf-config.template`` in the folder
+      ``Scripts/templates`` of the CBA. ``CONFIG_NAME``, ``PNF_IP_ADDRESS`` and ``STREAM_COUNT`` are replaced with specific values.
 
       Day-1 configuration:
 
       Execute the request `Create Config Assign Day-1`. Replace the values in the reqest body if needed.
 
       You can verify the day-1 NETCONF RPC payload looking into CDS DB. You should see the NETCONF RPC with 5
-      streams (fw_udp_1 TO fw_udp_5). Connect to the DB like mentioned above an run following statement.
+      streams (fw_udp_1 TO fw_udp_5). Connect to the DB like mentioned above and run the below statement. You should
+      see the day-1 configuration as an output.
 
       .. code-block:: sh
 
@@ -774,11 +794,12 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
 
       **Day-2 configuration:**
 
-      Execute the request `Create Config Assign Day-2`. It will make the same request like in day-1-config just with
+      Execute the request `Create Config Assign Day-2`. It will do the same request like in day-1-config just with
       different values (resolution-key = day-2, stream-count = 10).
 
       You can verify the day-2 NETCONF RPC payload looking into CDS DB. You should see the NETCONF RPC with 10
-      streams (fw_udp_1 TO fw_udp_10). Connect to the DB like mentioned above and run following statement.
+      streams (fw_udp_1 TO fw_udp_10). Connect to the DB like mentioned above and run the below statement. You should
+      see the day-2 configuration as an output.
 
       .. code-block:: sh
 
@@ -840,19 +861,20 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
 
       .. note::
          Until this step CDS did not interact with the PNF simulator or device. We just created the day-1 and day-2
-         configurations and stored in CDS database
+         configurations and stored it in CDS database
 
       **Config-Deploy:**
 
       Now we will make the CDS REST API calls to push the day-1 and day-2 configuration changes to the PNF simulator.
 
-      If you run CDS in Kubernetes open a new terminal and keep it running with ``bash -x ./tail-cds-bp-log.sh``,
-      we can use it to review the config-deploy actions. If you run CDS in an IDE you can have a look into the IDE terminal.
+      If you run CDS in Kubernetes open a terminal in `/Scripts` folder and keep it running with ``bash -x ./tail-cds-bp-log.sh``,
+      we can use this to review the config-deploy actions. If you run CDS in an IDE you can have a look into the IDE terminal.
 
-      Executing `Config Assign Day-1 Deploy` request will deploy day-1 configuration. You have to replace the PNF IP Adress
-      in the request body.
+      Executing `Config Assign Day-1 Deploy` request will deploy day-1 configuration. Take care to provide the right PNF
+      IP Adress in the request body.
 
-      Go back to PNF netopeer cli console and verify if you can see 5 streams  fw_udp_1 to fw_udp_5 enabled
+      Go back to PNF netopeer cli console like mentioned above and verify if you can see 5 streams fw_udp_1 to fw_udp_5 enabled. If the 5 streams
+      appear in the output as follows, the day-1 configuration got successfully deployed and the use case is successfully done.
 
       .. code-block:: sh
 
@@ -888,12 +910,31 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
          </sample-plugin>
          >
 
-      The same can be done for day-2 config (follow same steps just with day-2 resolution key)
+      Day-2 configuration can be deployed the same way, just use `day-2` as a resolution key in the `Config Assign Depoy`
+      request.
 
       .. note::
          Through deployment we did not deploy the PNF, we just modified the PNF. The PNF could also be installed by CDS
          but this is not targeted in this guide.
 
 
+.. warning::
+   Both CBA file and Postman collection should be integrated into source code of CDS. There is already an approach for that,
+   see https://gerrit.onap.org/r/c/ccsdk/cds/+/112288. Updated Scripts and Postman collection needs to be added to this change.
+
+
+Creators of this guide
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Deutsche Telekom AG
+
+Jakob Krieg (Rocketchat @jakob.Krieg); Eli Halych (Rocketchat @elihalych)
+
+This guide is a derivate from https://wiki.onap.org/display/DW/PNF+Simulator+Day-N+config-assign+and+config-deploy+use+case.
+
+
 .. |saveResponseImage| image:: media/save-response-postman.png
+   :width: 500pt
+
+.. |imageDDPostmanRunner| image:: media/dd-postman-runner.png
    :width: 500pt
