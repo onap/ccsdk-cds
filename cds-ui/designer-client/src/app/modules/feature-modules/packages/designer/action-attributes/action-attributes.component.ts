@@ -8,11 +8,14 @@ import {InputActionAttribute, OutputActionAttribute} from './models/InputActionA
 })
 export class ActionAttributesComponent implements OnInit {
 
-    inputs: [InputActionAttribute];
-    outputs: [OutputActionAttribute];
+    inputs = [];
+    outputs = [];
     actionAttributesSideBar: boolean;
+    inputActionAttribute = new InputActionAttribute();
+    outputActionAttribute = new OutputActionAttribute();
 
     constructor() {
+
     }
 
     ngOnInit() {
@@ -28,5 +31,28 @@ export class ActionAttributesComponent implements OnInit {
 
     addOutput(output: OutputActionAttribute) {
         this.outputs.push(output);
+    }
+
+    setInputType(type) {
+        this.inputActionAttribute.type = type;
+    }
+
+    setInputRequired(isRequired) {
+        this.inputActionAttribute.required = isRequired;
+    }
+
+    setOutputRequired(isRequired) {
+        this.outputActionAttribute.required = isRequired;
+    }
+
+    setOutputType(type) {
+        this.outputActionAttribute.type = type;
+    }
+
+    submitAttributes() {
+        console.log(this.inputActionAttribute);
+        console.log(this.outputActionAttribute);
+        this.inputs.push(this.inputActionAttribute);
+        this.outputs.push(this.outputActionAttribute);
     }
 }
