@@ -69,7 +69,6 @@ limitations under the License.
         <!-- docker related properties -->
         <docker.verbose>true</docker.verbose>
         <docker.skip.push>false</docker.skip.push>
-        <docker.push.phase>deploy</docker.push.phase>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
 
