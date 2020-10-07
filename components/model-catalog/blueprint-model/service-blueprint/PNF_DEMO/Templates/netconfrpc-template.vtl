@@ -1,0 +1,19 @@
+<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
+ <edit-config>
+ <target>
+ <running/>
+ </target>
+ <config>
+    <sample-plugin xmlns="urn:opendaylight:params:xml:ns:yang:sample-plugin">
+      <pg-streams>
+       #foreach($i in [1..${stream-count.asInt()}])
+       <pg-stream>
+        <id>fw_udp_$i</id>
+        <is-enabled>true</is-enabled>
+       </pg-stream>
+       #end
+    </pg-streams>
+    </sample-plugin>
+ </config>
+ </edit-config>
+</rpc>
