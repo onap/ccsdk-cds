@@ -38,6 +38,7 @@
         <name.space>org.onap.ccsdk.cds</name.space>
         <serviceArtifactName>blueprintsprocessor</serviceArtifactName>
         <image.name>onap/ccsdk-blueprintsprocessor</image.name>
+        <docker.build.pahse>install</docker.build.pahse>
     </properties>
 
     <dependencies>
@@ -357,6 +358,13 @@
                             <skipPush>${docker.skip.push}</skipPush>
                         </configuration>
                         <executions>
+                            <execution>
+                                <id>generate-images</id>
+                                <phase>${docker.build.pahse}</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
                             <execution>
                                 <id>build-push-images</id>
                                 <phase>${docker.push.phase}</phase>

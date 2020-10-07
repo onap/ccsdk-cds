@@ -35,6 +35,7 @@
         <name.space>org.onap.ccsdk.cds</name.space>
         <serviceArtifactName>sdclistener</serviceArtifactName>
         <image.name>onap/ccsdk-sdclistener</image.name>
+        <docker.build.pahse>install</docker.build.pahse>
         <!--disabled for now to mirror #85964 https://gerrit.onap.org/r/#/c/85964/2/ms/command-executor/pom.xml-->
         <!--<docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>-->
     </properties>
@@ -161,6 +162,13 @@
                             <skipPush>${docker.skip.push}</skipPush>
                         </configuration>
                         <executions>
+                            <execution>
+                                <id>generate-images</id>
+                                <phase>${docker.build.pahse}</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
                             <execution>
                                 <id>build-push-images</id>
                                 <phase>${docker.push.phase}</phase>
