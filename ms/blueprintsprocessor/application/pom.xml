@@ -359,7 +359,6 @@
                         <executions>
                             <execution>
                                 <id>build-push-images</id>
-                                <phase>${docker.push.phase}</phase>
                                 <goals>
                                     <goal>build</goal>
                                     <goal>push</goal>
