@@ -44,7 +44,7 @@ open class DatabaseResourceSource : ResourceSourceProperties() {
     @get:JsonProperty("output-key-mapping")
     var outputKeyMapping: MutableMap<String, String>? = null
     @get:JsonProperty("key-dependencies")
-    lateinit var keyDependencies: MutableList<String>
+    var keyDependencies: MutableList<String>? = null
 }
 
 open class RestResourceSource : ResourceSourceProperties() {

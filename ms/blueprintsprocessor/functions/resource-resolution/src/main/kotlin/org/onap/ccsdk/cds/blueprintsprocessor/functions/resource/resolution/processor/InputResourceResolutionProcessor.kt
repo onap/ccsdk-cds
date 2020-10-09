@@ -20,12 +20,11 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.DatabaseResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceDomains
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.updateErrorMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
@@ -38,6 +37,9 @@ import org.springframework.stereotype.Service
 @Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-input")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
+    companion object InputResourceResolutionProcessor {
+        private val logger = LoggerFactory.getLogger(InputResourceResolutionProcessor::class.toString())
+    }
 
     override fun getName(): String {
         return "${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-input"
@@ -52,8 +54,8 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: BluePrintProcessorException) {
             val errorMsg = "Failed to process input resource resolution in template key ($resourceAssignment) assignments."
-            throw e.updateErrorMessage(ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
-                    "Wrong input value was set.")
+            ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
+            logger.error(errorMsg)
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with : (${e.message})", e)
@@ -70,17 +72,21 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
         val resourceSource = resourceAssignment.dictionarySourceDefinition
             ?: resourceDefinition?.sources?.get(dSource)
             ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
-        val resourceSourceProperties = checkNotNull(resourceSource.properties) {
-            "failed to get source properties for $dName "
-        }
-        val sourceProperties =
-            JacksonUtils.getInstanceFromMap(resourceSourceProperties, DatabaseResourceSource::class.java)
+        try {
+            val resourceSourceProperties = checkNotNull(resourceSource.properties) {
+                "failed to get source properties for $dName "
+            }
+            val sourceProperties =
+                JacksonUtils.getInstanceFromMap(resourceSourceProperties, DatabaseResourceSource::class.java)
 
-        val keyDependency = checkNotNull(sourceProperties.keyDependencies) {
-            "failed to get input-key-mappings for $dName under $dSource properties"
+            val keyDependency = checkNotNull(sourceProperties.keyDependencies) {
+                "failed to get input-key-mappings for $dName under $dSource properties"
+            }
+            // keyDependency = service-instance.service-instance-id
+            setFromInputKeyDependencies(keyDependency, resourceAssignment); // New API which picks attributes from Input
+        } catch (e: IllegalStateException) {
+            throw BluePrintProcessorException(e)
         }
-        // keyDependency = service-instance.service-instance-id
-        setFromInputKeyDependencies(keyDependency, resourceAssignment); // New API which picks arrtibute from Input
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
