@@ -198,16 +198,13 @@ open class K8sProfileUploadComponent(
     private suspend fun prepareProfileFile(k8sRbProfileName: String, ks8ProfileSource: String, ks8ProfileLocation: String): Path {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val bluePrintBasePath: String = bluePrintContext.rootPath
-        val profileSourceFileFolderPath: String = bluePrintBasePath.plus(File.separator)
-            .plus(ks8ProfileLocation)
-        val profileFilePathTarGz: String = profileSourceFileFolderPath.plus(".tar.gz")
-        val profileFilePathTgz: String = profileSourceFileFolderPath.plus(".tgz")
+        val profileSourceFileFolderPath: Path = Paths.get(
+            bluePrintBasePath.plus(File.separator).plus(ks8ProfileLocation)
+        )
 
-        if (Paths.get(profileFilePathTarGz).toFile().exists())
-            return Paths.get(profileFilePathTarGz)
-        else if (Paths.get(profileFilePathTgz).toFile().exists())
-            return Paths.get(profileFilePathTgz)
-        else if (Paths.get(profileSourceFileFolderPath).toFile().exists()) {
+        if (profileSourceFileFolderPath.toFile().exists() && !profileSourceFileFolderPath.toFile().isDirectory)
+            return profileSourceFileFolderPath
+        else if (profileSourceFileFolderPath.toFile().exists()) {
             log.info("Profile building started from source $ks8ProfileSource")
             val properties: MutableMap<String, Any> = mutableMapOf()
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = false
@@ -227,12 +224,12 @@ open class K8sProfileUploadComponent(
 
             try {
                 val manifestFiles: ArrayList<File>? = readManifestFiles(
-                    Paths.get(profileSourceFileFolderPath).toFile(),
+                    profileSourceFileFolderPath.toFile(),
                     tempProfilePath
                 )
                 if (manifestFiles != null) {
                     templateLocation(
-                        Paths.get(profileSourceFileFolderPath).toFile(), resolutionResult.second,
+                        profileSourceFileFolderPath.toFile(), resolutionResult.second,
                         tempProfilePath, manifestFiles
                     )
                 } else
@@ -258,7 +255,7 @@ open class K8sProfileUploadComponent(
                 throw t
             }
         } else
-            throw BluePrintProcessorException("Profile source $ks8ProfileSource is missing in CBA folder")
+            throw BluePrintProcessorException("Profile source $ks8ProfileLocation is missing in CBA folder")
     }
 
     private fun readManifestFiles(profileSource: File, destinationFolder: File): ArrayList<File>? {
