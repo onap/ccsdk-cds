@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f8dfb24_d7e33d22",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-10-10T00:31:26Z",
+      "side": 0,
+      "message": "It was appending extensions earlier, so there is behavior change !\n\nEarlier it worked even if \"artifact -\u003e \"file\" contains name without extension\nBut now it\u0027s mandate for user/cba creator to make sure file contains name with an extension.\n\nIf above is expected, then I am ok.. \nelse need need to add back those extension contactination.",
+      "revId": "cef859c192e84d61f2e98afc6f208772c1ac4699",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
