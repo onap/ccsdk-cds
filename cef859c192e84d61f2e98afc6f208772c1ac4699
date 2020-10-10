@@ -34,6 +34,24 @@
       "revId": "cef859c192e84d61f2e98afc6f208772c1ac4699",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc0afd3a_f379c69f",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-10-10T20:24:24Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "016c4ae2_f13e67da",
+      "revId": "cef859c192e84d61f2e98afc6f208772c1ac4699",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
