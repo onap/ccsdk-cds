@@ -16,6 +16,24 @@
       "revId": "cef859c192e84d61f2e98afc6f208772c1ac4699",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "016c4ae2_f13e67da",
+        "filename": "ms/blueprintsprocessor/functions/k8s-profile-upload/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/profile/upload/K8sProfileUploadComponent.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-10T18:48:31Z",
+      "side": 0,
+      "message": "This is new feature and is not used anyware. Current code cannot work at all because BP during validation does not accept \"file\" that do not exist in CBA. In consequence we had to place tar.gz file in cba but in definition was without extension so all together was not acceptable. Now user needs to explicitly define file like in the CBA what is much more readable and what is the most... now works and pass the validation of CBA.",
+      "parentUuid": "7f8dfb24_d7e33d22",
+      "revId": "cef859c192e84d61f2e98afc6f208772c1ac4699",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
