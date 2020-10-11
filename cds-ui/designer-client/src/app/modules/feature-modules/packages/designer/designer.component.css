@@ -87,6 +87,14 @@ header{
   color: #1B3E6F;
   font-size: 10px;
 }
+.template-list.active {
+  display: inline;
+  padding: 4px 10px;
+  background: #F4F9FE;
+  border-radius: 10px;
+  color: #1B3E6F;
+  font-size: 10px;
+}
 .designer-breadcrumb .fa-angle-right::before {
   color: #fff;
   line-height: 38px;
