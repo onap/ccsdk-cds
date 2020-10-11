@@ -13,6 +13,10 @@ export class ActionAttributesComponent implements OnInit {
     actionAttributesSideBar: boolean;
     inputActionAttribute = new InputActionAttribute();
     outputActionAttribute = new OutputActionAttribute();
+    isInputOtherType: boolean;
+    isOutputOtherType: boolean;
+    outputOtherType: string = '';
+    inputOtherType: string = '';
 
     constructor() {
 
@@ -26,15 +30,22 @@ export class ActionAttributesComponent implements OnInit {
     }
 
     addInput(input: InputActionAttribute) {
-        this.inputs.push(input);
+        if (input && input.type && input.name) {
+            const insertedInputActionAttribute = Object.assign({}, input);
+            this.inputs.push(insertedInputActionAttribute);
+        }
     }
 
     addOutput(output: OutputActionAttribute) {
-        this.outputs.push(output);
+        if (output && output.type && output.name) {
+            const insertedOutputActionAttribute = Object.assign({}, output);
+            this.outputs.push(insertedOutputActionAttribute);
+        }
     }
 
-    setInputType(type) {
+    setInputType(type: string) {
         this.inputActionAttribute.type = type;
+        this.isInputOtherType = this.checkIfTypeIsOther(type);
     }
 
     setInputRequired(isRequired) {
@@ -45,14 +56,27 @@ export class ActionAttributesComponent implements OnInit {
         this.outputActionAttribute.required = isRequired;
     }
 
-    setOutputType(type) {
+    setOutputType(type: string) {
         this.outputActionAttribute.type = type;
+        this.isOutputOtherType = this.checkIfTypeIsOther(type);
+    }
+
+    checkIfTypeIsOther(type) {
+        return type.includes('Other');
     }
 
     submitAttributes() {
         console.log(this.inputActionAttribute);
         console.log(this.outputActionAttribute);
-        this.inputs.push(this.inputActionAttribute);
-        this.outputs.push(this.outputActionAttribute);
+        this.addInput(this.inputActionAttribute);
+        this.addOutput(this.outputActionAttribute);
+        this.clearFormInputs();
+    }
+
+    private clearFormInputs() {
+        this.inputActionAttribute = new InputActionAttribute();
+        this.outputActionAttribute = new OutputActionAttribute();
+        this.outputOtherType = '';
+        this.inputOtherType = '';
     }
 }
