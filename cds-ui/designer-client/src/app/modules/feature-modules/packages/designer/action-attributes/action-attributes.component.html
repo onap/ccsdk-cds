@@ -83,10 +83,11 @@
                             <div class="form-group" *ngFor="let output of outputs">
                                 <label for="exampleFormControlTextarea1">{{output.name}}
                                     <i [hidden]="output.required"
-                                       class="icon-required-star optional-attribute" type="button"
+                                       class="icon-required-star" type="button"
                                        aria-hidden="true"></i>
-                                    <i [hidden]="output.required" class="optional-attribute"
+                                    <i [hidden]="!output.required" class="optional-attribute"
                                        type="button" aria-hidden="true"></i>
+
                                 </label>
                             </div>
                         </div>
@@ -162,8 +163,12 @@
                                     <button type="button" class="list-group-item list-group-item-action"
                                             (click)="setInputType('Other')">Other
                                     </button>
-
                                 </div>
+                                <input [hidden]="!isInputOtherType" type="text" class="form-control mt-2 mb-2"
+                                       id="inputPassword4"
+                                       placeholder="Add Other type name"
+                                       [(ngModel)]="inputOtherType" (change)="setInputType(inputOtherType)">
+
                             </div>
                         </div>
                         <div class="form-group row">
@@ -224,8 +229,10 @@
                                         Other
                                     </button>
                                 </div>
-                                <input type="text" class="form-control mt-2 mb-2" id="inputPassword3"
-                                       placeholder="Add Other type name">
+                                <input [hidden]="!isOutputOtherType" type="text" class="form-control mt-2 mb-2"
+                                       id="inputPassword3"
+                                       placeholder="Add Other type name"
+                                       [(ngModel)]="outputOtherType" (change)="setOutputType(outputOtherType)">
                             </div>
                         </div>
                         <div class="form-group row">

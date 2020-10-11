@@ -8,7 +8,7 @@ export class InputActionAttribute {
         this.name = '';
         this.description = '';
         this.type = '';
-        this.required = false;
+        this.required = true;
     }
 }
 
