@@ -20,7 +20,7 @@ declare module 'jointjs' {
 }
 
 const rectWidth = 260;
-const rectHeight = 60;
+const rectHeight = 50;
 // custom element implementation
 // https://resources.jointjs.com/tutorials/joint/tutorials/custom-elements.html#markup
 const FunctionElement = joint.shapes.standard.Rectangle.define('palette.FunctionElement', {
@@ -45,7 +45,7 @@ const FunctionElement = joint.shapes.standard.Rectangle.define('palette.Function
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="7.1-Designer" transform="translate(-14.000000, -618.000000)">
-            <g id="controller" transform="translate(0.000000, 60.000000)">
+            <g id="controller" transform="translate(0.000000, 70.000000)">
                 <g id="functions" transform="translate(0.000000, 479.000000)">
                     <g id="list" transform="translate(8.000000, 51.000000)">
                         <g id="1" transform="translate(12.000000, 32.000000)">
