@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CBAPackage } from '../../package-creation/mapping-models/CBAPacakge.model';
 import { TemplateAndMapping } from '../../package-creation/template-mapping/TemplateAndMapping';
+import { FunctionsStore } from '../functions.store';
 
 @Component({
     selector: 'app-functions-attribute',
@@ -19,10 +20,16 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     templateAndMappingMap = new Map<string, TemplateAndMapping>();
     selectedTemplates = new Map<string, TemplateAndMapping>();
     fileToDelete: string;
+    requiredInputs = [];
+    requiredOutputs = [];
+    OptionalInputs = [];
+    optionalOutputs = [];
+    artifactPrefix = false;
 
     constructor(
         private designerStore: DesignerStore,
-        private packageCreationStore: PackageCreationStore
+        private packageCreationStore: PackageCreationStore,
+        private functionStore: FunctionsStore
     ) {
     }
 
@@ -36,9 +43,6 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
             });
 
         this.packageCreationStore.state$
-            .pipe(
-                distinctUntilChanged((a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)),
-                takeUntil(this.ngUnsubscribe))
             .subscribe(cbaPackage => {
                 this.cbaPackage = cbaPackage;
                 console.log('File name =>================== ');
@@ -58,6 +62,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                     this.setIsMappingOrTemplate(key, templateAndMapping, isFromTemplate);
                 });
             });
+        this.getNodeType('component-resource-resolution');
 
     }
 
@@ -99,4 +104,61 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     getValue(file: string) {
         return this.templateAndMappingMap.get(file);
     }
+
+    getObjectKey(object) {
+        // console.log(object);
+        return Object.keys(object);
+    }
+    getObjectValue(object) {
+        return Object.values(object);
+    }
+    getNodeType(nodeName: string) {
+        this.functionStore.state$
+            .subscribe(state => {
+                console.log(state);
+                const functions = state.serverFunctions;
+                // tslint:disable-next-line: prefer-for-of
+                for (let i = 0; i < functions.length; i++) {
+                    if (functions[i].modelName === nodeName) {
+                        // tslint:disable: no-string-literal
+                        console.log(functions[i].definition['interfaces']);
+                        this.getInputFields(functions[i].definition['interfaces'], 'ResourceResolutionComponent', 'inputs');
+                        this.getInputFields(functions[i].definition['interfaces'], 'ResourceResolutionComponent', 'outputs');
+                        break;
+                    }
+                }
+            });
+    }
+
+    getInputFields(interfaces, nodeName, type) {
+        console.log(interfaces[nodeName]['operations']['process'][type]);
+        const fields = interfaces[nodeName]['operations']['process'][type];
+
+        for (const [key, value] of Object.entries(fields)) {
+            const object = {};
+            object[key] = value;
+
+            if (key === 'artifact-prefix-names') {
+                this.artifactPrefix = true;
+            } else if (value['required']) {
+                console.log('This field is required = ' + key);
+                if (type === 'inputs') {
+                    this.requiredInputs.push(Object.assign({}, object));
+                } else {
+                    this.requiredOutputs.push(Object.assign({}, object));
+                }
+            } else {
+                console.log('This field is Optional ' + key);
+                if (type === 'inputs') {
+                    this.OptionalInputs.push(Object.assign({}, object));
+                } else {
+                    this.optionalOutputs.push(Object.assign({}, object));
+                }
+            }
+        }
+
+        // console.log(this.requiredOutputs);
+    }
+
+
 }
