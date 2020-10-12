@@ -145,6 +145,17 @@ export class DesignerStore extends Store<DesignerDashboardState> {
         });
     }
 
+    setInputsToSpecificWorkflow(inputs: Map<string, string>) {
+        const mapOfWorkflows = this.state.template.workflows;
+        /*mapOfWorkflows.forEach(((value, key) => {
+            if (value.includes('resource-assignment')) {
+                value += inputs;
+            }
+        }));*/
+        console.log('the new workflows');
+        console.log(mapOfWorkflows);
+    }
+
     clear() {
         this.setState(new DesignerDashboardState());
     }
