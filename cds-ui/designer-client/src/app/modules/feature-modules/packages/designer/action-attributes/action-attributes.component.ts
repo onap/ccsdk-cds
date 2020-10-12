@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {InputActionAttribute, OutputActionAttribute} from './models/InputActionAttribute';
+import {DesignerStore} from '../designer.store';
 
 @Component({
     selector: 'app-action-attributes',
@@ -18,7 +19,7 @@ export class ActionAttributesComponent implements OnInit {
     outputOtherType = '';
     inputOtherType = '';
 
-    constructor() {
+    constructor(private designerStore: DesignerStore) {
 
     }
 
@@ -67,6 +68,9 @@ export class ActionAttributesComponent implements OnInit {
         this.addInput(this.inputActionAttribute);
         this.addOutput(this.outputActionAttribute);
         this.clearFormInputs();
+        console.log(this.storeInputs(this.inputs));
+        this.designerStore.setInputsToSpecificWorkflow(this.storeInputs(this.inputs));
+        console.log(this.storeOutputs(this.outputs));
     }
 
     private clearFormInputs() {
@@ -74,5 +78,35 @@ export class ActionAttributesComponent implements OnInit {
         this.outputActionAttribute = new OutputActionAttribute();
         this.outputOtherType = '';
         this.inputOtherType = '';
+    }
+
+    private storeInputs(InputActionAttributes: InputActionAttribute[]) {
+
+        let inputs = '';
+        InputActionAttributes.forEach(input => {
+            inputs += this.appendAttributes(input);
+
+        });
+        const returnedInputMap = new Map<string, string>();
+        returnedInputMap.set('inputs', inputs);
+        return returnedInputMap;
+    }
+
+    private storeOutputs(OutputActionAttributes: OutputActionAttribute[]) {
+        let outputs = '';
+        OutputActionAttributes.forEach(output => {
+            outputs += this.appendAttributes(output);
+        });
+        const returnedOutputMap = new Map<string, string>();
+        returnedOutputMap.set('outputs', outputs);
+        return returnedOutputMap;
+    }
+
+    private appendAttributes(output: OutputActionAttribute) {
+        return '"' + output.name + '":{\n' +
+            '                \'required\': ' + output.required + ',\n' +
+            '                \'type\': "' + output.type + '",\n' +
+            '                \'description\': "' + output.description + '"\n' +
+            '            }' + '\n';
     }
 }
