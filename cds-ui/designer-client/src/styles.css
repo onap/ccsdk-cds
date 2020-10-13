@@ -78,6 +78,9 @@ body{
   width: 14px !important;
   height: 14px;
 }
+.btn[aria-expanded="true"] > .card{
+  overflow: visible;
+}
 .card-header .btn[aria-expanded="true"],
 .card-header .btn[aria-expanded="false"]{
   padding-left: 25px !important;
@@ -2925,9 +2928,6 @@ animation: glowing 1500ms infinite;
   left: 13px;
   position: absolute;
   top: 13px;
-}
-.ace_scroller{
-  /* overflow: auto !important; */
 }
 .ace_print-margin{
   left: 100% !important;

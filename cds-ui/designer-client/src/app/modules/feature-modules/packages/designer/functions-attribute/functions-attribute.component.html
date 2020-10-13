@@ -5,7 +5,7 @@
                 <label for="exampleInputEmail1">Function Instance Name</label>
                 <input type="text" class="form-control" placeholder="Function Instance Name">
             </div>
-            <div class="form-group">
+            <div class="form-group mb-0">
                 <label>Function Type</label>
                 <label class="attribute-value">component-resource-resolution</label>
             </div>
@@ -15,14 +15,17 @@
             </div>
         </div>
     </div>
-    <!--INTERFACES-->
-    <div class="accordion" id="accordionExample">
+
+    <div class="accordion function-accordion" id="accordionExample">
+        <!--INTERFACES-->
         <div class="card">
-            <div class="card-header row" id="headingOne">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                    aria-expanded="true" aria-controls="collapseOne">
-                    Interfaces
-                </button>
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        Interfaces
+                    </button>
+                </h2>
             </div>
 
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -39,6 +42,7 @@
                         </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
+                        <!--Inputs-->
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                             aria-labelledby="pills-home-tab">
                             <div class="row">
@@ -64,8 +68,8 @@
                                         </div>
                                         <br />
                                         <button type="button" data-toggle="modal" data-target="#templateModal"
-                                            class="btn btn-select-template"><i class="icon-add-circle" type="button"
-                                                aria-hidden="true"></i> Select Template</button>
+                                            class="btn btn-select-template m-auto"><i class="icon-add-circle"
+                                                type="button" aria-hidden="true"></i> Select Template</button>
                                     </div>
                                     <!--string-->
                                     <div class="attribute-wrap" *ngFor="let requiredInput of requiredInputs">
@@ -102,10 +106,41 @@
                                             <label class="custom-control-label" for="customRadioInline2">False</label>
                                         </div>
                                     </div> -->
-                                    <!-- Add Optional Attributes button -->
+                                </div>
+                            </div>
+                            <!-- Add Optional Attributes button -->
+                            <div class="row">
+                                <div class="col p-0">
+                                    <div class="optional-attributes-menu">
+                                        <div class="dropdown">
+                                            <input class="dropdown-toggle" type="text">
+                                            <div class="dropdown-text">
+                                                <i class="icon-add-circle" type="button" aria-hidden="true"></i> Add
+                                                Optional Attributes
+                                            </div>
+                                            <ul class="dropdown-content save-blueprint">
+                                                <li>
+                                                    <a>resolution-key</a>
+                                                    <i class="icon-add-circle float-right" type="button"
+                                                        aria-hidden="true"></i>
+                                                </li>
+                                                <li>
+                                                    <a>occurrence</a>
+                                                    <i class="icon-add-circle float-right" type="button"
+                                                        aria-hidden="true"></i>
+                                                </li>
+                                                <li>
+                                                    <a>store-result</a>
+                                                    <i class="icon-add-circle float-right" type="button"
+                                                        aria-hidden="true"></i>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <!--Outputs-->
                         <!-- Optional params -->
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel"
                             aria-labelledby="pills-profile-tab">
@@ -121,18 +156,17 @@
                 </div>
             </div>
         </div>
-    </div>
     <!--ARTIFACTS-->
-    <div [hidden]="selectedTemplates.size == 0" class="accordion" id="accordionExample1">
-        <div class="card">
-            <div class="card-header row" id="headingOne">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    Artifacts
-                </button>
+        <div class="card" [hidden]="selectedTemplates.size == 0" class="accordion" id="accordionExample1">
+            <div class="card-header" id="headingTwo">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                        aria-expanded="true" aria-controls="collapseTwo">
+                        Artifacts
+                    </button>
+                </h2>
             </div>
-
-            <div id="collapseTwo" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample1">
+            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12" *ngFor="let file of  getKeys(selectedTemplates)">
@@ -157,7 +191,7 @@
 <!--function - Select Template - Modal-->
 <div class="modal fade" id="templateModal" tabindex="-1" role="dialog" aria-labelledby="templateModalTitle"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="templateModalTitle">

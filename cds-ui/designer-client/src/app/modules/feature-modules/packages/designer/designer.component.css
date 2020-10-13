@@ -469,10 +469,10 @@ p.compType-4{
   color: #C7D0DD;
   font-size: 12px;
 }
-.custom-control-input:checked ~ .custom-control-label{
+/* .custom-control-input:checked ~ .custom-control-label{
   background-color: #1B3E6F !important;
   color: #fff;
-}
+} */
 .inserActionBtns .btn{
   border-radius: 15px !important;
   padding: 6px 20px;
@@ -845,6 +845,7 @@ p.compType-4{
 }
 
 .btn-select-template{
+  display: inherit;
   background-color: #C3CDDB;
   border-radius: 2px;
   color: #1B3E6F;
@@ -858,6 +859,11 @@ p.compType-4{
   padding-bottom: 15px;
   margin-bottom: 9px;
   border-bottom: solid 1px #F4F9FE;
+}
+.function-accordion .attribute-wrap:nth-last-child(1){
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 .attribute-wrap .form-group{
   margin-bottom: 0;
@@ -880,19 +886,30 @@ p.compType-4{
   color: #103D73;
   font-size: 10px !important;
 }
+/*Accordion*/
 .accordion{
   margin-top: 12px;
 }
+.accordion .card-header .btn-link{
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
 .accordion > .card{
+  box-shadow: none;
   margin-bottom: 0 !important;
-  border: 0;
+}
+.accordion > .card .card-body{
+  padding-bottom: 0 !important; 
+}
+.function-accordion .card{
+  overflow: inherit !important;
   box-shadow: none;
 }
-.card-header .btn-link,
+/* 
 .accordion .card-header .btn-link[aria-expanded="true"], 
 .accordion .card-header .btn-link[aria-expanded="false"]{
-  padding-left: 15px !important;
-  padding-right: 15px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
 }
 .accordion > .card .card-header{
   margin: 0;
@@ -928,7 +945,11 @@ p.compType-4{
   float: left;
   font-weight: normal;
   font-size: 12px;
-}
+} */
+
+
+
+
 /* .accordion .card-header .btn-link[aria-expanded="true"]:after{
   content: "\f078";    
 }
@@ -1164,4 +1185,73 @@ ul.editor{
 .create-form .custom-control-input:checked ~ .custom-control-label{
   background-color: transparent !important;
   color: #1B3E6F;
+}
+/*Optional Attributes Menu*/
+.optional-attributes-menu{
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-top: solid 1px #ECEDF2;
+  border-bottom: solid 1px #ECEDF2;
+  background-color: #F4F9FE;
+}
+.optional-attributes-menu .dropdown{
+  width: 100%;
+}
+.optional-attributes-menu .dropdown-text,
+.optional-attributes-menu .dropdown-text:hover,
+.optional-attributes-menu .dropdown-toggle:hover ~ .dropdown-text,
+.optional-attributes-menu .dropdown-toggle:focus ~ .dropdown-text{
+  top: 0;
+  text-align: center;
+  font-weight: normal;
+  text-indent: 0;
+  background-color: #fff;
+  box-shadow: none;
+  border: solid 1px #C1CDDD;
+  border-radius: 2px;
+}
+.optional-attributes-menu .dropdown-toggle:hover ~ .dropdown-text,
+.optional-attributes-menu .dropdown-toggle:focus ~ .dropdown-text{
+  background-color: #D0DFF1 !important;
+  border-color: #C1CDDD;
+  border-radius: 2px !important;
+  color: #1B3E6F !important;
+}
+.optional-attributes-menu .dropdown-text i{
+  font-size: 17px;
+  vertical-align: middle;
+}
+.optional-attributes-menu .dropdown-content:hover, 
+.optional-attributes-menu .dropdown-toggle:focus ~ .dropdown-content{
+  top: 36px;
+  width: 100%;
+  padding: 5px 0;
+  border-radius: 2px;
+  background-color: #F4F9FE;
+  border-color: #D0DFF1;
+  font-size: 13px;
+}
+.optional-attributes-menu .dropdown-content li{
+  padding: 0 5px;
+  line-height: 36px;
+  border-bottom: solid 1px #EAF4FF;
+}
+.optional-attributes-menu .dropdown-content li a{
+  display: inline;
+}
+.optional-attributes-menu .dropdown-content li:hover,
+.optional-attributes-menu .dropdown-content li:hover a{
+  background-color: #D0DFF1;
+}
+.optional-attributes-menu li i{
+  font-size: 20px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.temp-buttons .btn{
+  font-size: 13px;
+  margin: 12px;
+  padding: 8px 12px !important;
+  line-height: 14px;
 }
