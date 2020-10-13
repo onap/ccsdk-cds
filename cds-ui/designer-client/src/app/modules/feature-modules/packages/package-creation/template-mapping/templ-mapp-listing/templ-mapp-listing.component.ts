@@ -174,6 +174,7 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
     initDelete(file) {
         console.log(file);
         const templateKey = 'Templates/' + file + '-template';
+        const mappingKey = 'Templates/' + file + '-mapping.json';
         // tslint:disable-next-line: forin
         for (const templateType in TemplateType) {
             const fileName = templateKey + '.' + TemplateType[templateType];
@@ -182,11 +183,19 @@ export class TemplMappListingComponent implements OnInit, OnDestroy {
                 break;
             }
         }
+        if (this.fileToDelete.length <= 0) {
+            // tslint:disable-next-line: forin
+            if (this.packageCreationStore.state.mapping.files.has(mappingKey)) {
+                this.fileToDelete = mappingKey;
+            }
+
+        }
 
     }
 
     condifrmDelete() {
         const fullName = this.fileToDelete.split('/')[1];
+        console.log(this.fileToDelete + ' -- ' + fullName);
         const file = fullName.substr(0, fullName.lastIndexOf('-'));
         const ext = fullName.substr(fullName.lastIndexOf('.') + 1);
         this.templateAndMappingMap.delete(file);

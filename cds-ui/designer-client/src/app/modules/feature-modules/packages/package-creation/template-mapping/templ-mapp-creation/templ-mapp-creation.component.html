@@ -146,7 +146,8 @@
                             <span>({{resourceDictionaryRes.length}} attributes in total)</span>
                         </div>
                     </div>
-                    <table datatable [dtOptions]="initDtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+                    <table datatable id="init-table" [dtOptions]="initDtOptions" [dtTrigger]="dtTrigger"
+                        class="row-border hover">
                         <thead>
                             <tr>
                                 <th></th>
@@ -230,7 +231,8 @@
                         <button [disabled]="selectedProps.size <=0" type="button" class="btn" (click)="removeProps()"
                             tooltip="Remove" placement="bottom"><i class="icon-delete-sm"></i></button>
                     </div> -->
-                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="resTableDtTrigger" class="row-border hover">
+                    <table datatable id="res-table" [dtOptions]="dtOptions" [dtTrigger]="resTableDtTrigger"
+                        class="row-border hover">
                         <thead>
                             <tr>
                                 <!-- <th></th> -->
