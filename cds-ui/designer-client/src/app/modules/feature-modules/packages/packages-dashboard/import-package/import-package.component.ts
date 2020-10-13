@@ -123,4 +123,23 @@ export class ImportPackageComponent implements OnInit {
             });
         });
     }
+
+    importAndDeploy() {
+        const file = this.getFile(this.uploadedFiles[this.uploadedFiles.length - 1]);
+        this.zipFile = new JSZip();
+        this.zipFile.loadAsync(file).then(zip => {
+            this.zipFile = zip;
+            console.log(this.zipFile);
+            this.resetTheUploadedFiles();
+            this.zipFile.generateAsync({type: 'blob'}).then(blob => {
+                this.packageCreationService.deploy(blob).subscribe(
+                    bluePrintDetailModels => {
+                        this.toastService.info('package is imported and deployed successfully ');
+                        this.router.navigate(['/packages']);
+                        this.packagesStore.getAll();
+                    }, error =>
+                        this.toastService.error('there is an error happened ' + error));
+            });
+        });
+    }
 }

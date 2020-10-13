@@ -43,7 +43,7 @@ export class DesignerCreationMode extends PackageCreationModes {
             });
         }
 
-        const filenameEntry = 'Definitions/' + cbaPackage.metaData.name + '.json';
+        const filenameEntry = 'Definitions/' + cbaPackage.metaData.name.trim() + '.json';
         const vlbDefinition: VlbDefinition = new VlbDefinition();
         const metadata: Metadata = new Metadata();
 

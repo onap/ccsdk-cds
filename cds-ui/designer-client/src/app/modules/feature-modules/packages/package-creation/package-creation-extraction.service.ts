@@ -42,7 +42,7 @@ export class PackageCreationExtractionService {
                             if (filename.includes('TOSCA-Metadata/')) {
 
                                 const metaDataTabInfo: MetaDataTabModel = this.getMetaDataTabInfo(fileData);
-                                packageName = metaDataTabInfo.name;
+                                packageName = metaDataTabInfo.name.trim();
                                 this.setMetaData(metaDataTabInfo);
                                 console.log('found file ' + packageName);
                             }
@@ -145,7 +145,7 @@ export class PackageCreationExtractionService {
             map.set(currentKey, currentValue);
         }
         metaDataTabModel.entryFileName = map.get(this.toscaMetaDataKeys[3]);
-        metaDataTabModel.name = map.get(this.toscaMetaDataKeys[4]);
+        metaDataTabModel.name = map.get(this.toscaMetaDataKeys[4]).trim();
         metaDataTabModel.version = map.get(this.toscaMetaDataKeys[5]).trim();
         metaDataTabModel.mode = map.get(this.toscaMetaDataKeys[6]);
         if (map.get(this.toscaMetaDataKeys[7])) {
