@@ -328,7 +328,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
 
     textChanges(code: any, fileName: string) {
         //  this.packageCreationStore.addTemplate(fileName, code);
-        this.templateFileContent = code;
+        // this.templateFileContent = code;
     }
 
     public fileOver(event) {
@@ -413,9 +413,11 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         this.openListView();
     }
     saveToStore() {
-        if (this.fileName) {
+        const filename = this.fileName;
+        if (filename) {
             // check file duplication
             console.log('----------- mode ' + this.edit);
+            const fileContent = this.templateFileContent;
             if (
                 (!(this.packageCreationStore.fileExist('Templates/' + this.fileName + '-mapping.json')
                     || this.packageCreationStore.fileExist('Templates/' + this.fileName + '-template' + this.getFileExtension())))
@@ -430,8 +432,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 }
                 // Save Template to store
                 // if (this.templateFileContent) {
-                this.packageCreationStore.addTemplate('Templates/' + this.fileName + '-template' + this.getFileExtension(),
-                    this.templateFileContent);
+                this.packageCreationStore.addTemplate('Templates/' + filename + '-template' + this.getFileExtension(),
+                    fileContent);
                 this.templateFileContent = '';
                 //  }
                 this.fileName = '';
