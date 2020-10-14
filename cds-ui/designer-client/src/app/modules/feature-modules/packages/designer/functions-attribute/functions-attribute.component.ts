@@ -20,10 +20,10 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     templateAndMappingMap = new Map<string, TemplateAndMapping>();
     selectedTemplates = new Map<string, TemplateAndMapping>();
     fileToDelete: string;
-    requiredInputs = [];
-    requiredOutputs = [];
-    OptionalInputs = [];
-    optionalOutputs = [];
+    requiredInputs = new Map<string, {}>();
+    requiredOutputs = new Map<string, {}>();
+    OptionalInputs = new Map<string, {}>();
+    optionalOutputs = new Map<string, {}>();
     artifactPrefix = false;
 
     constructor(
@@ -88,6 +88,10 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     }
 
     addTemplates() { }
+    addToInputs(optionalInput) {
+        this.requiredInputs.set(optionalInput, this.OptionalInputs.get(optionalInput));
+        this.OptionalInputs.delete(optionalInput);
+    }
 
     setTemplate(file: string) {
         if (this.selectedTemplates.has(file)) {
@@ -98,11 +102,11 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         console.log(this.selectedTemplates);
     }
 
-    getKeys(templateAndMappingMap: Map<string, TemplateAndMapping>) {
-        return Array.from(templateAndMappingMap.keys());
+    getKeys(map: Map<string, any>) {
+        return Array.from(map.keys());
     }
-    getValue(file: string) {
-        return this.templateAndMappingMap.get(file);
+    getValue(file: string, map: Map<string, any>) {
+        return map.get(file);
     }
 
     getObjectKey(object) {
@@ -135,24 +139,21 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         const fields = interfaces[nodeName]['operations']['process'][type];
 
         for (const [key, value] of Object.entries(fields)) {
-            const object = {};
-            object[key] = value;
-
             if (key === 'artifact-prefix-names') {
                 this.artifactPrefix = true;
             } else if (value['required']) {
                 console.log('This field is required = ' + key);
                 if (type === 'inputs') {
-                    this.requiredInputs.push(Object.assign({}, object));
+                    this.requiredInputs.set(key, Object.assign({}, value));
                 } else {
-                    this.requiredOutputs.push(Object.assign({}, object));
+                    this.requiredOutputs.set(key, Object.assign({}, value));
                 }
             } else {
                 console.log('This field is Optional ' + key);
                 if (type === 'inputs') {
-                    this.OptionalInputs.push(Object.assign({}, object));
+                    this.OptionalInputs.set(key, Object.assign({}, value));
                 } else {
-                    this.optionalOutputs.push(Object.assign({}, object));
+                    this.optionalOutputs.set(key, Object.assign({}, value));
                 }
             }
         }

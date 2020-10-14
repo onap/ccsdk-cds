@@ -48,7 +48,7 @@
                             <div class="row">
                                 <div class="col">
                                     <!--list-->
-                                    <div class="attribute-wrap">
+                                    <div class="attribute-wrap" *ngIf="artifactPrefix">
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">artifact-prefix-names
                                                 <i class="icon-required-star" type="button"
@@ -72,10 +72,11 @@
                                                 type="button" aria-hidden="true"></i> Select Template</button>
                                     </div>
                                     <!--string-->
-                                    <div class="attribute-wrap" *ngFor="let requiredInput of requiredInputs">
+                                    <div class="attribute-wrap" *ngFor="let requiredInput of getKeys(requiredInputs)">
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">{{ getObjectKey(requiredInput)[0] }}<i
+                                            <label for="exampleInputEmail1">{{ requiredInput }}<i
                                                     class="icon-required-star" type="button"
+                                                    [ngClass]="{'optional-attribute' : getValue(requiredInput,requiredInputs).required==false}"
                                                     aria-hidden="true"></i></label>
                                             <input type="text" class="form-control">
                                         </div>
@@ -119,19 +120,10 @@
                                                 Optional Attributes
                                             </div>
                                             <ul class="dropdown-content save-blueprint">
-                                                <li>
-                                                    <a>resolution-key</a>
-                                                    <i class="icon-add-circle float-right" type="button"
-                                                        aria-hidden="true"></i>
-                                                </li>
-                                                <li>
-                                                    <a>occurrence</a>
-                                                    <i class="icon-add-circle float-right" type="button"
-                                                        aria-hidden="true"></i>
-                                                </li>
-                                                <li>
-                                                    <a>store-result</a>
-                                                    <i class="icon-add-circle float-right" type="button"
+                                                <li *ngFor="let optionalInput of getKeys(OptionalInputs)">
+                                                    <a (click)="addToInputs(optionalInput)">{{ optionalInput }}</a>
+                                                    <i (click)="addToInputs(optionalInput)"
+                                                        class="icon-add-circle float-right" type="button"
                                                         aria-hidden="true"></i>
                                                 </li>
                                             </ul>
@@ -144,10 +136,10 @@
                         <!-- Optional params -->
                         <div class="tab-pane fade" id="pills-profile" role="tabpanel"
                             aria-labelledby="pills-profile-tab">
-                            <div class="attribute-wrap" *ngFor="let requiredOutput of requiredOutputs">
+                            <div class="attribute-wrap" *ngFor="let requiredOutput of getKeys(requiredOutputs)">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">{{ getObjectKey(requiredOutput)[0] }} <i
-                                            class="icon-required-star" type="button" aria-hidden="true"></i></label>
+                                    <label for="exampleInputEmail1">{{ requiredOutput }} <i class="icon-required-star"
+                                            type="button" aria-hidden="true"></i></label>
                                     <input type="text" class="form-control">
                                 </div>
                             </div>
@@ -156,7 +148,7 @@
                 </div>
             </div>
         </div>
-    <!--ARTIFACTS-->
+        <!--ARTIFACTS-->
         <div class="card" [hidden]="selectedTemplates.size == 0" class="accordion" id="accordionExample1">
             <div class="card-header" id="headingTwo">
                 <h2 class="mb-0">
@@ -172,8 +164,8 @@
                         <div class="col-12" *ngFor="let file of  getKeys(selectedTemplates)">
                             <a class="template-mapping-list">
                                 <p>{{file}}</p>
-                                <span *ngIf="getValue(file).isMapping">Mapping</span>
-                                <span *ngIf="getValue(file).isTemplate">Template</span>
+                                <span *ngIf="getValue(file,templateAndMappingMap).isMapping">Mapping</span>
+                                <span *ngIf="getValue(file,templateAndMappingMap).isTemplate">Template</span>
 
                                 <a data-toggle="modal" (click)="fileToDelete = file"
                                     data-target="#templateDeletionModal" class="accordion-delete deleteTemplate"
@@ -204,8 +196,8 @@
                 <div class="col-4" *ngFor="let file of  getKeys(templateAndMappingMap)">
                     <a class="template-mapping-list float" [ngClass]="{'active':selectedTemplates.has(file)}">
                         <p (click)="setTemplate(file)">{{file}}</p>
-                        <span *ngIf="getValue(file).isMapping">Mapping</span>
-                        <span *ngIf="getValue(file).isTemplate">Template</span>
+                        <span *ngIf="getValue(file,templateAndMappingMap).isMapping">Mapping</span>
+                        <span *ngIf="getValue(file,templateAndMappingMap).isTemplate">Template</span>
                     </a>
 
                 </div>
