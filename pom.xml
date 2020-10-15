@@ -78,7 +78,6 @@ limitations under the License.
     <build>
         <pluginManagement>
             <plugins>
-                <!--TODO: This plugin is broken. Find replacement-->
                 <!-- Plugin to Format/Validate POM Files -->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>

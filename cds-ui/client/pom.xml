@@ -55,33 +55,26 @@ limitations under the License.
                         </goals>
                         <phase>generate-resources</phase>
                     </execution>
-
                     <execution>
                         <id>npm install</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-
                         <phase>generate-resources</phase>
-
                         <configuration>
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
-
                     <execution>
                         <id>npm build</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-
                         <phase>generate-resources</phase>
-
                         <configuration>
                             <arguments>run build</arguments>
                         </configuration>
                     </execution>
-
                 </executions>
             </plugin>
         </plugins>
