@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db982dfa_3750d48c",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Definitions/artifact_types.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-16T08:14:07Z",
+      "side": 1,
+      "message": "please verify formatting in whole CBA as tabs are mixed with white spaces. and somewhere are unnecessary tabs added what gerrit shows",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 5
+      },
+      "revId": "a3ab91fe9bea869f50e34137850a5b1c4a7653e0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}

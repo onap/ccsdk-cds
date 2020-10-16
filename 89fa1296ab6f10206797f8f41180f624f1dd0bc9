@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a7493bb_a544aec9",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Definitions/data_types.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-16T08:14:07Z",
+      "side": 1,
+      "message": "would be good to provide some description for use case specific fields",
+      "range": {
+        "startLine": 22,
+        "startChar": 16,
+        "endLine": 22,
+        "endChar": 32
+      },
+      "revId": "89fa1296ab6f10206797f8f41180f624f1dd0bc9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
