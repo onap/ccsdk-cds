@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { PackageCreationStore } from '../../package-creation.store';
 import { TemplateInfo, TemplateStore } from '../../template.store';
@@ -15,14 +15,17 @@ import { TourService } from 'ngx-tour-md-menu';
 import { PackageCreationService } from '../../package-creation.service';
 import { ParserFactory } from '../utils/ParserFactory/ParserFactory';
 import { TemplateType, FileExtension } from '../utils/TemplateType';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { ChangeDetectorRef } from '@angular/core';
 declare var $: any;
+
 
 @Component({
     selector: 'app-templ-mapp-creation',
     templateUrl: './templ-mapp-creation.component.html',
     styleUrls: ['./templ-mapp-creation.component.css']
 })
-export class TemplMappCreationComponent implements OnInit, OnDestroy {
+export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() showListView = new EventEmitter<any>();
     @Output() showCreationView = new EventEmitter<any>();
     public uploadedFiles: FileSystemFileEntry[] = [];
@@ -56,6 +59,25 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     fileToDelete: any = {};
     parserFactory: ParserFactory;
     selectedProps: Set<string>;
+    resColumns: string[] = [
+        'Required', 'Template Input',
+        'name', 'Dictionary Name',
+        'dictionary-source', 'dependencies',
+        'default', 'Velocity', 'Data Type',
+        'Entry Schema'
+    ];
+    initColumn: string[] = ['select', ...this.resColumns];
+
+
+
+    // displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
+    dataSource: MatTableDataSource<{}>;
+    initDataSource: MatTableDataSource<{}>;
+    // dataSource = new MatTableDataSource();
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) initPaginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) initSort: MatSort;
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -65,10 +87,21 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         private sharedService: SharedService,
         private packageCreationService: PackageCreationService,
         private tourService: TourService,
+        private cdr: ChangeDetectorRef
     ) {
     }
 
+    ngAfterViewInit() {
+        try {
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.initDataSource.paginator = this.initPaginator;
+            this.initDataSource.sort = this.initSort;
+        } catch (e) { }
+    }
+
     ngOnInit() {
+
         this.selectedProps = new Set<string>();
         this.parserFactory = new ParserFactory();
         this.templateStore.state$.subscribe(templateInfo => {
@@ -85,7 +118,13 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                 this.mappingRes = templateInfo.mapping;
                 this.currentMapping = Object.assign({}, templateInfo);
                 this.resourceDictionaryRes = [];
-                this.resTableDtTrigger.next();
+                // Assign the data to the data source for the table to render
+                this.dataSource = new MatTableDataSource(this.mappingRes);
+                //   this.cdr.detectChanges();
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
+
+
             } else {
                 this.mappingRes = [];
                 this.currentMapping = Any;
@@ -124,26 +163,6 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.initDtOptions = {
-            pagingType: 'full_numbers',
-            pageLength: 25,
-            destroy: true,
-            retrieve: true,
-            columnDefs: [
-                {
-                    targets: [0, 1, 2], // column or columns numbers
-                    orderable: false, // set orderable for selected columns
-                    searchable: false,
-                },
-
-            ],
-        };
-        this.dtOptions = {
-            pagingType: 'full_numbers',
-            pageLength: 25,
-            destroy: true,
-            retrieve: true,
-        };
     }
 
     setProp(e, propName, index) {
@@ -159,6 +178,22 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
         }
     }
 
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
+    }
+
+    initApplyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.initDataSource.filter = filterValue.trim().toLowerCase();
+        if (this.initDataSource.paginator) {
+            this.initDataSource.paginator.firstPage();
+        }
+    }
+
     removeProps() {
         console.log(this.selectedProps);
         this.selectedProps.forEach(prop => {
@@ -167,6 +202,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
                     console.log('delete...');
                     this.resourceDictionaryRes.splice(index, 1);
                     this.selectedProps.delete(prop);
+                    this.rerender();
                 }
             });
         });
@@ -481,7 +517,10 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy {
     }
 
     rerender(): void {
-        this.dtTrigger.next();
+        this.initDataSource = new MatTableDataSource(this.resourceDictionaryRes);
+        //   this.cdr.detectChanges();
+        this.initDataSource.paginator = this.initPaginator;
+        this.initDataSource.sort = this.initSort;
     }
 
     ngOnDestroy(): void {
