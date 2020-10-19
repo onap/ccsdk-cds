@@ -11,5 +11,13 @@ export class NodeTemplate {
     constructor(type) {
         this.type = type;
         this.properties = {};
+        this.artifacts = {};
+        this.interfaces = {};
     }
 }
+
+export class NodeProcess {
+    inputs: {} = {};
+    outputs: {} = {};
+}
+

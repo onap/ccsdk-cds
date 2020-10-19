@@ -149,12 +149,13 @@
                                 <span>({{resourceDictionaryRes.length}} attributes in total)</span>
                             </div>
                         </div>
-                        <mat-paginator [pageSizeOptions]="[10, 25,50, 100]"></mat-paginator>
+                        <mat-paginator [pageSizeOptions]="[10, 25,50, 100,this.resourceDictionaryRes.length]">
+                        </mat-paginator>
                         <mat-form-field class="tableFilter float-right">
                             <mat-label>Filter</mat-label>
                             <input matInput (keyup)="initApplyFilter($event)" placeholder="Ex. Mia" #input>
                         </mat-form-field>
-                        <table mat-table [dataSource]="initDataSource" matSort>
+                        <table mat-table matSortDisableClear [dataSource]="initDataSource" matSort>
                             <!-- select Column -->
                             <ng-container matColumnDef="select">
                                 <th mat-header-cell *matHeaderCellDef> </th>
@@ -262,8 +263,8 @@
                             <mat-label>Filter</mat-label>
                             <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
                         </mat-form-field>
-                        <mat-paginator [pageSizeOptions]="[10, 25,50, 100]"></mat-paginator>
-                        <table mat-table [dataSource]="dataSource" matSort>
+                        <mat-paginator #paginate="matPaginator" [pageSizeOptions]="[10, 25,50, 100]"></mat-paginator>
+                        <table matSortDisableClear mat-table [dataSource]="dataSource" #sort="matSort" matSort>
                             <!-- Required Column -->
                             <ng-container matColumnDef="Required">
                                 <th mat-header-cell *matHeaderCellDef> Required </th>

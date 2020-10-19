@@ -6,6 +6,7 @@ import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { CBAPackage } from '../../package-creation/mapping-models/CBAPacakge.model';
 import { TemplateAndMapping } from '../../package-creation/template-mapping/TemplateAndMapping';
 import { FunctionsStore } from '../functions.store';
+import { NodeProcess, NodeTemplate } from '../model/desinger.nodeTemplate.model';
 
 @Component({
     selector: 'app-functions-attribute',
@@ -25,6 +26,8 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     OptionalInputs = new Map<string, {}>();
     optionalOutputs = new Map<string, {}>();
     artifactPrefix = false;
+    currentFuncion = new NodeProcess();
+    nodeTemplates = new NodeTemplate('');
 
     constructor(
         private designerStore: DesignerStore,
@@ -70,8 +73,42 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         this.ngUnsubscribe.next();
         this.ngUnsubscribe.complete();
     }
-    // Template logic
 
+    displayFunctionData() {
+        this.selectedTemplates.forEach((value, key) => {
+            console.log(key);
+            console.log(value);
+
+            if (value.isMapping) {
+                this.nodeTemplates.artifacts[key + '-mapping'] = {
+                    type: 'artifact-mapping-resource',
+                    file: 'Templates/' + key + '-mapping.json'
+                };
+            }
+
+            if (value.isTemplate) {
+                this.nodeTemplates.artifacts[key + '-template'] = {
+                    type: 'artifact-template-resource',
+                    file: 'Templates/' + key + '-template.vtl'
+                };
+            }
+        });
+        this.nodeTemplates.interfaces = {
+            ResourceResolutionComponent: {
+                operations: {
+                    process: {
+                        ...this.currentFuncion
+                    }
+                }
+            }
+        };
+        setTimeout(() => {
+            console.log(this.currentFuncion);
+            console.log(this.nodeTemplates);
+
+        }, 1500);
+    }
+    // Template logic
     private setIsMappingOrTemplate(key: string, templateAndMapping: TemplateAndMapping, isFromTemplate: boolean) {
         const nameOfFile = isFromTemplate ?
             key.split('/')[1].split('.')[0].split('-template')[0]
@@ -88,6 +125,13 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     }
 
     addTemplates() { }
+    setArtifact(predefined: boolean) {
+        if (predefined) {
+
+        } else {
+            this.currentFuncion.inputs['artifact-prefix-names'] = { get_input: 'template-prefix' };
+        }
+    }
     addToInputs(optionalInput) {
         this.requiredInputs.set(optionalInput, this.OptionalInputs.get(optionalInput));
         this.OptionalInputs.delete(optionalInput);
