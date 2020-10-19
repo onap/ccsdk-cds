@@ -50,20 +50,20 @@
                                     <!--list-->
                                     <div class="attribute-wrap" *ngIf="artifactPrefix">
                                         <div class="form-group">
-                                            <label for="exampleFormControlTextarea1">artifact-prefix-names
+                                            <label for="exampleFormControlTextarea">artifact-prefix-names
                                                 <i class="icon-required-star" type="button"
                                                     aria-hidden="true"></i></label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="customRadioInline1" name="customRadioInline1"
+                                            <input type="radio" id="functionRadioInline" name="functionRadioInline"
                                                 class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadioInline1">Pre-defined
+                                            <label class="custom-control-label" for="functionRadioInline">Pre-defined
                                                 Template</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="customRadioInline2" name="customRadioInline1"
+                                            <input type="radio" id="functionRadioInline-a" name="functionRadioInline"
                                                 class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadioInline2">Input Drivin
+                                            <label class="custom-control-label" for="functionRadioInline-a">Input Drivin
                                                 Template</label>
                                         </div>
                                         <br />
@@ -71,42 +71,57 @@
                                             class="btn btn-select-template m-auto"><i class="icon-add-circle"
                                                 type="button" aria-hidden="true"></i> Select Template</button>
                                     </div>
-                                    <!--string-->
-                                    <div class="attribute-wrap" *ngFor="let requiredInput of getKeys(requiredInputs)">
-                                        <div class="form-group">
+
+                                    <div class="attribute-wrap"
+                                        *ngFor="let requiredInput of getKeys(requiredInputs); let i=index">
+                                        <!--string-->
+                                        <div *ngIf="getValue(requiredInput,requiredInputs).type=='string' || getValue(requiredInput,requiredInputs).type=='json'"
+                                            class="form-group">
                                             <label for="exampleInputEmail1">{{ requiredInput }}<i
                                                     class="icon-required-star" type="button"
                                                     [ngClass]="{'optional-attribute' : getValue(requiredInput,requiredInputs).required==false}"
                                                     aria-hidden="true"></i></label>
                                             <input type="text" class="form-control">
                                         </div>
+                                        <!-- Integer -->
+                                        <div class="form-group"
+                                            *ngIf="getValue(requiredInput,requiredInputs).type=='integer'">
+                                            <label for="exampleInputEmail1">{{ requiredInput }} <i
+                                                    class="icon-required-star" type="button"
+                                                    [ngClass]="{'optional-attribute' : getValue(requiredInput,requiredInputs).required==false}"
+                                                    aria-hidden="true"></i></label>
+                                            <input type="number" class="form-control" placeholder="">
+                                        </div>
+                                        <!--boolean-->
+                                        <!-- <div *ngIf="getValue(requiredInput,requiredInputs).type=='boolean'"> -->
+                                        <div class="form-group"
+                                            *ngIf="getValue(requiredInput,requiredInputs).type=='boolean'">
+                                            <label for="exampleFormControlTextarea1">{{ requiredInput }}
+                                                <i class="icon-required-star" type="button"
+                                                    [ngClass]="{'optional-attribute' : getValue(requiredInput,requiredInputs).required==false}"
+                                                    aria-hidden="true"></i></label><br />
+
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" id="{{'functionRadioInline' + i}}"
+                                                    name="{{'functionRadioInline' + i}}" class="custom-control-input">
+                                                <label class="custom-control-label"
+                                                    for="{{'functionRadioInline' + i}}">True</label>
+                                            </div><br />
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" id="{{'functionRadioInline' + i+'-a'}}"
+                                                    name="{{'functionRadioInline' + i}}" class="custom-control-input">
+                                                <label class="custom-control-label"
+                                                    for="{{'functionRadioInline' + i+'-a'}}">False</label>
+                                            </div>
+                                        </div>
+                                        <!-- </div> -->
                                     </div>
+
                                     <!--integer-->
                                     <!-- <div class="attribute-wrap">
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">request-id <i class="icon-required-star"
-                                                    type="button" aria-hidden="true"></i></label>
-                                            <input type="number" class="form-control" placeholder="" value="356">
-                                        </div>
+                                        
                                     </div> -->
-                                    <!--boolean-->
-                                    <!-- <div class="attribute-wrap">
-                                        <div class="form-group">
-                                            <label for="exampleFormControlTextarea1">resolution-summary
-                                                <i class="icon-required-star optional-attribute" type="button"
-                                                    aria-hidden="true"></i></label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="customRadioInline1" name="customRadioInline1"
-                                                class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadioInline1">True</label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" id="customRadioInline2" name="customRadioInline1"
-                                                class="custom-control-input">
-                                            <label class="custom-control-label" for="customRadioInline2">False</label>
-                                        </div>
-                                    </div> -->
+
                                 </div>
                             </div>
                             <!-- Add Optional Attributes button -->
