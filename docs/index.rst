@@ -77,8 +77,6 @@ Modeling Concept Links:
    :maxdepth: 1
 
    modelingconcepts/index
-   microservices/controllerBlueprintMS
-   microservices/blueprintsProcessorMS
 
 Scripts
 -------
