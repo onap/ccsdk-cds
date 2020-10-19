@@ -32,8 +32,8 @@ Spin up a Docker container with the database
 The Blueprints Processor project uses a database to store information about the blueprints
 and therefore it needs to be online before attempting to run it.
 
-One way to create the database is by using the :file:`docker-compose.yaml`
-file present on the distribution module. This database will require a local directory to mount a volume, before running docker-compose remember to create following directory:
+One way to create the database is by using the :file:`docker-compose.yaml` file.
+This database will require a local directory to mount a volume, before running docker-compose remember to create following directory:
 
 .. code-block:: bash
 
@@ -123,7 +123,7 @@ Import the project into the IDE
             Right-click inside it, at any point, to load the context menu and select create
             BlueprintProcessorApplication configuration from context:
 
-            |imageCreateRunConfigkt|
+            |imageCreateRunConfigKt|
 
             **The following window will open:**
 
