@@ -3298,7 +3298,7 @@ margin-right: 5px;
 .mapping-table th{
   padding-top: 10px !important;
   padding-bottom: 10px !important;
-  background: #F4F9FE;
+  /* background: #F4F9FE; */
 }
 .mapping-table td{
   border-top: 0 !important;
