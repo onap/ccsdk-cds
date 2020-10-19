@@ -74,8 +74,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     dataSource: MatTableDataSource<{}>;
     initDataSource: MatTableDataSource<{}>;
     // dataSource = new MatTableDataSource();
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild('paginate', { static: true }) paginator: MatPaginator;
+    @ViewChild('sort', { static: true }) sort: MatSort;
     @ViewChild(MatPaginator, { static: true }) initPaginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) initSort: MatSort;
 
@@ -519,6 +519,11 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     rerender(): void {
         this.initDataSource = new MatTableDataSource(this.resourceDictionaryRes);
         //   this.cdr.detectChanges();
+        /*
+        Hint: the intial page size for the table will be the result size; I did that because the table doesn't load element in DOM,
+        as result some function are not working well like save and you have to move to other pages to fix that.
+        */
+        this.initPaginator.pageSize = this.resourceDictionaryRes.length;
         this.initDataSource.paginator = this.initPaginator;
         this.initDataSource.sort = this.initSort;
     }
