@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb037a70_e7f1bf3b",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Definitions/5G_Core.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-19T21:50:21Z",
+      "side": 1,
+      "message": "formatting",
+      "range": {
+        "startLine": 253,
+        "startChar": 16,
+        "endLine": 253,
+        "endChar": 20
+      },
+      "revId": "63c045e093223c6190ebc3badb4c42dc0ffccca9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3399077_9775f8df",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Definitions/node_types.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-19T21:50:21Z",
+      "side": 1,
+      "message": "formatting",
+      "range": {
+        "startLine": 357,
+        "startChar": 0,
+        "endLine": 361,
+        "endChar": 1
+      },
+      "revId": "63c045e093223c6190ebc3badb4c42dc0ffccca9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "872b2b88_8fb0aea2",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Definitions/resources_definition_types.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-19T21:50:21Z",
+      "side": 1,
+      "message": "tabs or spaces?",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "63c045e093223c6190ebc3badb4c42dc0ffccca9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdc6dd73_2e7853d3",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Templates/base_template-template.vtl",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-19T21:50:21Z",
+      "side": 1,
+      "message": "tabs",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 6
+      },
+      "revId": "63c045e093223c6190ebc3badb4c42dc0ffccca9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2ac5f28_b1e9325a",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Templates/baseconfigput-template.vtl",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-19T21:50:21Z",
+      "side": 1,
+      "message": "tabs...",
+      "revId": "63c045e093223c6190ebc3badb4c42dc0ffccca9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e29c7c6_3b3f9e66",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Templates/smf-template.vtl",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-19T21:50:21Z",
+      "side": 1,
+      "message": "tabs...",
+      "revId": "63c045e093223c6190ebc3badb4c42dc0ffccca9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4924e127_739ae3b9",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Templates/upf-template.vtl",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-19T21:50:21Z",
+      "side": 1,
+      "message": "tabs...",
+      "range": {
+        "startLine": 96,
+        "startChar": 1,
+        "endLine": 114,
+        "endChar": 10
+      },
+      "revId": "63c045e093223c6190ebc3badb4c42dc0ffccca9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad00a865_19e5ff6f",
+        "filename": "components/model-catalog/blueprint-model/service-blueprint/5GC_Simulator_CNF_CDS/Templates/vnf-template.vtl",
+        "patchSetId": 9
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2020-10-19T21:50:21Z",
+      "side": 1,
+      "message": "tabs...",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 73,
+        "endChar": 1
+      },
+      "revId": "63c045e093223c6190ebc3badb4c42dc0ffccca9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
