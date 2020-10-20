@@ -17,7 +17,7 @@
       "properties": {
         "verb": "GET",
         "type": "JSON",
-        "url-path": "/aai/v14/network/pnfs/pnf/$pnf-id",
+        "url-path": "/aai/v21/network/pnfs/pnf/$pnf-id",
         "path": "/pnf-name",
         "headers" : {
           "Accept": "application/json",
