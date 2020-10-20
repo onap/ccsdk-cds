@@ -17,6 +17,9 @@ body{
 :hover{
   transition: 0.3s !important;
 }
+button:focus{
+  outline: 0 !important;
+}
 /*Bootstrap*/
 .custom-control-input:checked ~ .custom-control-label::before{
   border-color: transparent !important;
@@ -2411,7 +2414,6 @@ padding-left: 20px !important;
 }
 .single-custom-key{
   width: 100%;
-  margin-bottom: 21px;
 }
 .single-line-custom-key{
   width: 45%;

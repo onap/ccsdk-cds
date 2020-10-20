@@ -251,6 +251,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
                 el: $('#palette-paper'),
                 model: this.paletteGraph,
                 width: 318,
+                // height: '100%',
                 height: $('#palette-paper').height(),
                 // background: {
                 //   color: 'rgba(0, 255, 0, 0.3)'
@@ -268,12 +269,12 @@ export class DesignerComponent implements OnInit, OnDestroy {
             this.boardPaper = new joint.dia.Paper({
                 el: $('#board-paper'),
                 model: this.boardGraph,
-                // height: 720,
-                // width: 1100,
+                height: 720,
+                width: 1100,
                 gridSize: 10,
                 drawGrid: true,
-                // background: {
-                //   color: 'rgba(0, 255, 0, 0.3)'
+                 // background: {
+                 // color: 'rgba(0, 255, 0, 0.3)'
                 // },
                 cellViewNamespace: joint.shapes
             });

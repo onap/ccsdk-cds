@@ -266,12 +266,13 @@ button.rotate{
 .rotate a:hover{
   text-decoration: none;
 }
-#board-paper svg{
+/*PAUSE*/
+/* #board-paper svg{
   top: 30px;
   left: 0;
   height: 95%;
-}
-.componentsList tspan{
+} */
+.functionsList tspan{
   /* width:30px !important;  */
   font: normal 13px sans-serif; 
   fill: #1B3E6F !important; 
@@ -307,7 +308,7 @@ tspan#type{
   text-shadow: none;
   border-color: #DEE8F3;
 }
-.componentsList p{
+.functionsList p{
   margin-bottom: 0;
   padding-left: 30px;
   background-position: left center;
@@ -385,8 +386,9 @@ p.compType-4{
   font-size: 12px;
   color: #C3CDDB;
 }
-.controllerSidebar .joint-paper{
-  width: 98% !important;
+/*PAUSE*/
+.functionsList .joint-paper{
+  width: 100% !important;
   height: 72vh !important;
   margin: 0 !important;
 }
@@ -411,15 +413,9 @@ p.compType-4{
 .new-action:hover{
   background: #D7E7F9;
 }
-.componentsList{
-  margin-top: 16px;
-  padding: 0 20px 10px;
-}
-.componentsList{
-  padding-bottom: 0;
-  /* height: calc( 100vh - 218px)!important;
-  overflow: scroll;*/
-  background: #F4F9FE !important;
+.functionsList{
+  height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 .custom-control.custom-checkbox:hover,
 .custom-control-label:hover{
@@ -433,8 +429,7 @@ p.compType-4{
 .custom-control:hover{
     background-color: white;
 }
-.actionsList,
-.componentsList{
+.actionsList{
   height: 65vh !important;
   overflow-y: auto;
 }
@@ -444,12 +439,15 @@ p.compType-4{
 .actionsList li{
   list-style: none;
 }
-.componentsList .list-group-item{
+.functionsList .list-group-item{
   margin-bottom: 10px;
   padding-left: 40px;
   background: #fff;
   box-shadow: 0 2px 6px rgba(47, 83, 151, .15);
   border-radius: 2px;
+}
+.functionsList .joint-paper{
+  background: transparent !important;
 }
 .actionsList .custom-control-label{
   width: 100%;
@@ -499,7 +497,7 @@ p.compType-4{
   margin-right: 9px;
 }
 /*Components List*/
-.componentsList .list-group-item{
+.functionsList .list-group-item{
   padding-left: 36px;
   border: 0;
   font-size: 14px;
@@ -1043,13 +1041,13 @@ p.compType-4{
   background-color: #1B3E6F !important;
   color: #fff !important;
 }
-
-
+/*PAUSE*/
+/* 
 .joint-paper{
   width: 96.4% !important;
   height: 80vh !important;
   margin: 60px auto 0 !important;
-}
+} */
 ul.templateLegend{
   margin: 0;
 }
