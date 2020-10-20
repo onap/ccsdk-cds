@@ -17,6 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import kotlinx.coroutines.runBlocking
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
@@ -26,12 +28,28 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyS
 fun BluePrintDependencyService.resourceResolutionService(): ResourceResolutionService =
     instance(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
+fun BluePrintDependencyService.resourceResolutionDBService(): ResourceResolutionDBService =
+    instance(ResourceResolutionDBService::class.java)
+
 suspend fun AbstractComponentFunction.storedContentFromResolvedArtifactNB(
     resolutionKey: String,
     artifactName: String
 ): String {
     return BluePrintDependencyService.resourceResolutionService()
         .resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
+}
+
+suspend fun AbstractComponentFunction.storedResourceResolutionsNB(
+    resolutionKey: String,
+    artifactName: String,
+    occurrence: Int = 1
+): List<ResourceResolution> {
+    return BluePrintDependencyService.resourceResolutionDBService()
+            .findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
+            bluePrintRuntimeService,
+            resolutionKey,
+            occurrence,
+            artifactName)
 }
 
 /**
