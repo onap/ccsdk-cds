@@ -14,9 +14,8 @@ declare module 'jointjs' {
         }
     }
 }
-
-const rectWidth = '100%';
-const rectHeight = '100%';
+const rectWidth = 616;
+const rectHeight = 381;
 // custom element implementation
 // https://resources.jointjs.com/tutorials/joint/tutorials/custom-elements.html#markup
 const ActionElement = joint.shapes.standard.Rectangle.define(ActionElementTypeName, {
@@ -40,8 +39,19 @@ const ActionElement = joint.shapes.standard.Rectangle.define(ActionElementTypeNa
         <g id="7.2-Designer---Insert-Action" transform="translate(-395.000000, -137.000000)">
             <g id="workflow-container" transform="translate(401.000000, 137.000000)">
                 <g id="Card">
-                    <use fill="black" fill-opacity="0" filter="url(#filter-2)" xlink:href="#custom-action"></use>
-                    <use fill-rule="evenodd" xlink:href="#custom-action"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#custom-action"></use>
+                    <use stroke="#1273EB" stroke-width="1" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#custom-action"></use>
+                    </g>
+                    <g id="name">
+                        <path d="M2,0 L85,0 C86.1045695,-2.02906125e-16 87,
+                        0.8954305 87,2 L87,30 L87,30 L0,30 L0,
+                        2 C-1.3527075e-16,0.8954305 0.8954305,
+                        2.02906125e-16 2,0 Z" id="Rectangle"
+                        fill="#C3CDDB"></path>
+                        <text id="Action-1" font-family="HelveticaNeue-Bold, Helvetica Neue"
+                        font-size="12" font-weight="bold" fill="#1B3E6F">
+                            <tspan id="label" x="20" y="20">Action 1</tspan>
+                        </text>
                 </g>
             </g>
         </g>

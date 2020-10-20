@@ -233,9 +233,6 @@
                                     <input type="text" class="form-control" #velocity
                                         (input)="setVelocity(initDataSource.filteredData.indexOf(dict),velocity.value)">
                                 </td>
-
-
-
                             </ng-container>
                             <!-- Data Type Column -->
                             <ng-container matColumnDef="Data Type">
@@ -259,11 +256,11 @@
                 <!------ View Table------->
                 <div id="mapping-table-res" [hidden]="mappingRes?.length == 0" class="mapping-table mx-4 my-2">
                     <div class="mat-elevation-z8">
+                        <mat-paginator #paginate="matPaginator" [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
                         <mat-form-field class="tableFilter float-right">
                             <mat-label>Filter</mat-label>
                             <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-                        </mat-form-field>
-                        <mat-paginator #paginate="matPaginator" [pageSizeOptions]="[10, 25,50, 100]"></mat-paginator>
+                        </mat-form-field>                        
                         <table matSortDisableClear mat-table [dataSource]="dataSource" #sort="matSort" matSort>
                             <!-- Required Column -->
                             <ng-container matColumnDef="Required">
