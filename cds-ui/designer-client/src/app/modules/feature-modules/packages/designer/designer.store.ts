@@ -146,7 +146,9 @@ export class DesignerStore extends Store<DesignerDashboardState> {
     }
 
     setInputsToSpecificWorkflow(inputs: Map<string, string>) {
-        const mapOfWorkflows = this.state.template.workflows;
+        /* tslint:disable:no-string-literal */
+        let mapOfWorkflows = this.state.template.workflows['Action1']['steps'];
+        mapOfWorkflows += inputs;
         /*mapOfWorkflows.forEach(((value, key) => {
             if (value.includes('resource-assignment')) {
                 value += inputs;

@@ -19,7 +19,7 @@ import {PackageCreationService} from '../package-creation/package-creation.servi
 import {ComponentCanDeactivate} from '../../../../common/core/canDactivate/ComponentCanDeactivate';
 import {PackageCreationExtractionService} from '../package-creation/package-creation-extraction.service';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {Subject, throwError} from 'rxjs';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -264,8 +264,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     this.router.navigate(['/packages/package/' + id]);
                 });
             }, error => {
-                this.toastService.error('error happened when deploying ' + error.message);
-                console.log('Error -' + error.message);
+                this.handleError(error);
             });
     }
 
@@ -290,6 +289,20 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         } else {
             this.dataTarget = '#exampleModalLong';
         }
+    }
+
+    handleError(error) {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+            // client-side error
+            errorMessage = `Error: ${error.error.message}`;
+        } else {
+            // server-side error
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+        }
+        this.toastService.error('error happened when deploying ' + errorMessage);
+        console.log('Error -' + errorMessage);
+        return throwError(errorMessage);
     }
 }
 
