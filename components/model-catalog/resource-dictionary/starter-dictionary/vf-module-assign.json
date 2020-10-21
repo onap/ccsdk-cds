@@ -16,7 +16,7 @@
                 "headers": {
                     "Content-Type": "application/merge-patch+json"
                 },
-                "url-path": "/aai/v21/network/generic-vnfs/generic-vnf/$vnf-id/vf-modules/vf-module/$vf-module-id",
+                "url-path": "/aai/v22/network/generic-vnfs/generic-vnf/$vnf-id/vf-modules/vf-module/$vf-module-id",
                 "payload": "{\r\n\"vf-module-name\":\"${vf-module-name}\", \r\n\"selflink\": \"restconf/config/GENERIC-RESOURCE-API:services/service/${service-instance-id}/service-data/vnfs/vnf/${vnf-id}/vnf-data/vf-modules/vf-module/${vf-module-id}/vf-module-data/vf-module-topology/\"\r\n  \r\n}",
                 "path": "",
                 "input-key-mapping": {

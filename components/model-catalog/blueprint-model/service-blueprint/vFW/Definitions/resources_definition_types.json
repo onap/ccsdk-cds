@@ -1347,7 +1347,7 @@
         "properties" : {
           "type" : "JSON",
           "verb" : "GET",
-          "url-path" : "/aai/v21/network/generic-vnfs/generic-vnf/$vnf-id",
+          "url-path" : "/aai/v22/network/generic-vnfs/generic-vnf/$vnf-id",
           "path" : "",
           "input-key-mapping" : {
             "vnf-id" : "vnf-id"

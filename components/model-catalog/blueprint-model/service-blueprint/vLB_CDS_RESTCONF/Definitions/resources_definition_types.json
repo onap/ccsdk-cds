@@ -87,7 +87,7 @@
         "properties" : {
           "verb" : "PATCH",
           "type" : "JSON",
-          "url-path" : "/aai/v21/network/generic-vnfs/generic-vnf/$vnf-id/nm-profile-name",
+          "url-path" : "/aai/v22/network/generic-vnfs/generic-vnf/$vnf-id/nm-profile-name",
           "payload" : "{\"nm-profile-name\":\"$vf-module-id\"}",
           "path" : "",
           "input-key-mapping" : {
@@ -1426,7 +1426,7 @@
         "properties" : {
           "verb" : "GET",
           "type" : "JSON",
-          "url-path" : "/aai/v21/network/generic-vnfs/generic-vnf/$vnf-id",
+          "url-path" : "/aai/v22/network/generic-vnfs/generic-vnf/$vnf-id",
           "path" : "",
           "input-key-mapping" : {
             "vnf-id" : "vnf-id"

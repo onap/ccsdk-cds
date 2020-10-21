@@ -222,7 +222,7 @@ class RestClientServiceTest {
             val get1 = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
                     HttpMethod.GET.name,
-                    "/sample/aai/v21/business/customers", "", headers,
+                    "/sample/aai/v22/business/customers", "", headers,
                     Customer::class.java
                 ).body
             }
@@ -230,7 +230,7 @@ class RestClientServiceTest {
             val get2 = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
                     HttpMethod.GET.name,
-                    "/sample/aai/v21/business/customers", "", headers,
+                    "/sample/aai/v22/business/customers", "", headers,
                     Customer::class.java
                 ).body
             }
@@ -238,7 +238,7 @@ class RestClientServiceTest {
             val post = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
                     HttpMethod.POST.name,
-                    "/sample/aai/v21/business/customers", post1, headers,
+                    "/sample/aai/v22/business/customers", post1, headers,
                     String::class.java
                 ).body
             }
@@ -246,7 +246,7 @@ class RestClientServiceTest {
             val put = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
                     HttpMethod.PUT.name,
-                    "/sample/aai/v21/business/customers", post1, headers,
+                    "/sample/aai/v22/business/customers", post1, headers,
                     String::class.java
                 ).body
             }
@@ -254,7 +254,7 @@ class RestClientServiceTest {
             val patch = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
                     HttpMethod.PATCH.name,
-                    "/sample/aai/v21/business/customers", post1, headers,
+                    "/sample/aai/v22/business/customers", post1, headers,
                     String::class.java
                 ).body
             }
@@ -262,7 +262,7 @@ class RestClientServiceTest {
             val delete = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
                     HttpMethod.DELETE.name,
-                    "/sample/aai/v21/business/customers", "", headers,
+                    "/sample/aai/v22/business/customers", "", headers,
                     String::class.java
                 ).body
             }
@@ -321,7 +321,7 @@ open class SampleController {
     @GetMapping("/basic")
     fun getBasic(): String = "Basic request arrived successfully"
 
-    @GetMapping("/aai/v21/business/customers")
+    @GetMapping("/aai/v22/business/customers")
     fun getAaiCustomers(
         @RequestHeader(name = "X-TransactionId", required = true)
         transId: String,
@@ -339,7 +339,7 @@ open class SampleController {
             "}"
     }
 
-    @PostMapping("/aai/v21/business/customers")
+    @PostMapping("/aai/v22/business/customers")
     fun postAaiCustomers(
         @RequestHeader(name = "X-TransactionId", required = true)
         transId: String,
@@ -352,7 +352,7 @@ open class SampleController {
         return "The message is successfully posted"
     }
 
-    @PutMapping("/aai/v21/business/customers")
+    @PutMapping("/aai/v22/business/customers")
     fun putAaiCustomers(
         @RequestHeader(name = "X-TransactionId", required = true)
         transId: String,
@@ -365,7 +365,7 @@ open class SampleController {
         return "The put request is success"
     }
 
-    @PatchMapping("/aai/v21/business/customers")
+    @PatchMapping("/aai/v22/business/customers")
     fun patchAaiCustomers(
         @RequestHeader(name = "X-TransactionId", required = true)
         transId: String,
@@ -378,7 +378,7 @@ open class SampleController {
         return "The patch request is success"
     }
 
-    @DeleteMapping("/aai/v21/business/customers")
+    @DeleteMapping("/aai/v22/business/customers")
     fun deleteAaiCustomers(
         @RequestHeader(name = "X-TransactionId", required = true)
         transId: String,
