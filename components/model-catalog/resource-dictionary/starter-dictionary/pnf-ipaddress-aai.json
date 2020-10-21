@@ -13,7 +13,7 @@
       "properties": {
         "type": "JSON",
         "verb": "GET",
-        "url-path": "/aai/v21/network/pnfs/pnf/$pnf-id",
+        "url-path": "/aai/v22/network/pnfs/pnf/$pnf-id",
         "path": "/ipaddress-v4-oam",
         "input-key-mapping": {
           "pnf-id": "pnf-id"

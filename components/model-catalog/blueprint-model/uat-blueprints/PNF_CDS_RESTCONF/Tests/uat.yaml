@@ -157,7 +157,7 @@ external-services:
     expectations:
       - request:
           method: GET
-          path: [ /aai/v21/network/pnfs/pnf, *pnfId]
+          path: [ /aai/v22/network/pnfs/pnf, *pnfId]
           headers:
             Accept: application/json
         response:
