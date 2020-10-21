@@ -5,7 +5,7 @@ nodeName=BlueprintsProcessor_1.0.0_$(cat /proc/self/cgroup | grep docker | sed s
 echo "${CLUSTER_ID}:${CLUSTER_NODE_ID} APP Config HOME : ${APP_CONFIG_HOME}"
 export APP_HOME=/opt/app/onap
 
-keytool -import -noprompt -trustcacerts -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit -alias ONAP -import -file $APP_CONFIG_HOME/ONAP_RootCA.cer
+keytool -import -noprompt -trustcacerts -keystore $JAVA_HOME/lib/security/cacerts -storepass changeit -alias ONAP -file $APP_CONFIG_HOME/ONAP_RootCA.cer
 
 exec java -classpath "/etc:${APP_HOME}/lib/*:/lib/*:/src:/schema:/generated-sources:${APP_CONFIG_HOME}:${APP_HOME}" \
 -DappName=${APP_NAME} -DappVersion=${BUNDLEVERSION} \
