@@ -6,6 +6,8 @@ COPY startService.sh /opt/app/onap/blueprints-processor/startService.sh
 # add application
 COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
 
+
+
 RUN tar -xzf /source.tar.gz -C /tmp \
  && cp -rf /tmp/@project.build.finalName@/opt / \
  && rm -rf /source.tar.gz \
@@ -16,6 +18,10 @@ RUN tar -xzf /source.tar.gz -C /tmp \
  && mkdir -p /opt/app/onap/blueprints/deploy \
  && chown onap:onap /opt -R \
  && chmod 755 /opt/app/onap/blueprints-processor/startService.sh
+
+# Install ONAP CA certificates
+COPY truststoreONAPall.jks /tmp
+RUN keytool -importkeystore -srckeystore /tmp/truststoreONAPall.jks -srcstorepass changeit -destkeystore /opt/java/openjdk/lib/security/cacerts  -deststorepass changeit -noprompt
 
 USER onap
 ENTRYPOINT [ "/opt/app/onap/blueprints-processor/startService.sh" ]
