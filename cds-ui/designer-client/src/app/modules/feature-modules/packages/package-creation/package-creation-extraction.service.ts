@@ -1,6 +1,6 @@
 import {Injectable, ViewChild} from '@angular/core';
 import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
-import {TemplateTopology, VlbDefinition} from './mapping-models/definitions/VlbDefinition';
+import {CBADefinition, TemplateTopology} from './mapping-models/definitions/CBADefinition';
 import {DslDefinition} from './mapping-models/CBAPacakge.model';
 import {PackageCreationStore} from './package-creation.store';
 import * as JSZip from 'jszip';
@@ -67,6 +67,10 @@ export class PackageCreationExtractionService {
 
                         } else if (filename.includes('Definitions/')) {
                             this.setImports(filename, fileData, packageName);
+                        } else if (filename.includes('Plans/')) {
+                            this.setPlans(filename, fileData);
+                        } else if (filename.includes('Requirements/')) {
+                            this.setRequirements(filename, fileData);
                         }
                     }
                 });
@@ -78,11 +82,19 @@ export class PackageCreationExtractionService {
         this.packageCreationStore.addScripts(filename, fileData);
     }
 
+    public setPlans(filename: string, fileData: any) {
+        this.packageCreationStore.addPlans(filename, fileData);
+    }
+
+    public setRequirements(filename: string, fileData: any) {
+        this.packageCreationStore.addRequirements(filename, fileData);
+    }
+
     public setImports(filename: string, fileData: any, packageName: string) {
         console.log(filename);
         if (filename.includes('Definitions/' + packageName.trim() + '.json')) {
-            let definition = new VlbDefinition();
-            definition = fileData as VlbDefinition;
+            let definition = new CBADefinition();
+            definition = fileData as CBADefinition;
             definition = JSON.parse(fileData);
             const dslDefinition = new DslDefinition();
             dslDefinition.content = this.packageCreationUtils.transformToJson(definition.dsl_definitions);

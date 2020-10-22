@@ -1,5 +1,5 @@
 import {MetaDataTabModel} from './metadata/MetaDataTab.model';
-import {TemplateTopology} from './definitions/VlbDefinition';
+import {TemplateTopology} from './definitions/CBADefinition';
 
 export class Definition {
 
@@ -65,6 +65,13 @@ export class Scripts {
     }
 }
 
+export class Plans extends Base {
+
+}
+
+export class Requirements extends Base {
+}
+
 
 export class Template {
     public files: Map<string, string>;
@@ -94,6 +101,8 @@ export class CBAPackage {
     public templates: Template;
     public mapping: Mapping;
     public templateTopology: TemplateTopology;
+    public plans: Plans;
+    public requirements: Requirements;
 
 
     constructor() {
@@ -103,6 +112,8 @@ export class CBAPackage {
         this.templates = new Template();
         this.mapping = new Mapping();
         this.templateTopology = new TemplateTopology();
+        this.plans = new Plans();
+        this.requirements = new Requirements();
     }
 
 

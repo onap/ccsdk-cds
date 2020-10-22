@@ -9,7 +9,7 @@ export class TemplateTopology {
 }
 
 @JsonObject
-export class VlbDefinition {
+export class CBADefinition {
 
     // tslint:disable-next-line:variable-name
     tosca_definitions_version: string;

@@ -6,7 +6,7 @@ import {FilesContent, FolderNodeElement} from '../package-creation/mapping-model
 import {MetadataTabComponent} from '../package-creation/metadata-tab/metadata-tab.component';
 import * as JSZip from 'jszip';
 import {ConfigurationDashboardService} from './configuration-dashboard.service';
-import {TemplateTopology, VlbDefinition} from '../package-creation/mapping-models/definitions/VlbDefinition';
+import {TemplateTopology, CBADefinition} from '../package-creation/mapping-models/definitions/CBADefinition';
 import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
 import {PackageCreationUtils} from '../package-creation/package-creation.utils';
 import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
@@ -43,7 +43,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     id: any;
 
     currentBlob = new Blob();
-    vlbDefinition: VlbDefinition = new VlbDefinition();
+    vlbDefinition: CBADefinition = new CBADefinition();
     isSaveEnabled = false;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     metadataClasses = 'nav-item nav-link active';

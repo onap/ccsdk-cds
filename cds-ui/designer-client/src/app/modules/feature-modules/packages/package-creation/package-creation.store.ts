@@ -25,7 +25,7 @@ import {Store} from '../../../../common/core/stores/Store';
 
 import {CBAPackage, DslDefinition} from './mapping-models/CBAPacakge.model';
 import {MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
-import {TemplateTopology} from './mapping-models/definitions/VlbDefinition';
+import {TemplateTopology} from './mapping-models/definitions/CBADefinition';
 
 
 @Injectable({
@@ -78,6 +78,22 @@ export class PackageCreationStore extends Store<CBAPackage> {
         this.setState({
             ...this.state,
             scripts: this.state.scripts.setScripts(name, content)
+        });
+
+    }
+
+    addPlans(name: string, content: string) {
+        this.setState({
+            ...this.state,
+            plans: this.state.plans.setContent(name, content)
+        });
+
+    }
+
+    addRequirements(name: string, content: string) {
+        this.setState({
+            ...this.state,
+            requirements: this.state.requirements.setContent(name, content)
         });
 
     }
