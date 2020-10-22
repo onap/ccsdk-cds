@@ -1,7 +1,7 @@
 import {PackageCreationModes} from './PackageCreationModes';
-import {CBAPackage, Scripts} from '../mapping-models/CBAPacakge.model';
+import {CBAPackage, Plans, Requirements, Scripts} from '../mapping-models/CBAPacakge.model';
 import {FilesContent} from '../mapping-models/metadata/MetaDataTab.model';
-import {Import, Metadata, VlbDefinition} from '../mapping-models/definitions/VlbDefinition';
+import {CBADefinition, Import, Metadata} from '../mapping-models/definitions/CBADefinition';
 import {PackageCreationUtils} from '../package-creation.utils';
 
 
@@ -17,10 +17,24 @@ export class DesignerCreationMode extends PackageCreationModes {
         this.createDefinitionsFolder(cbaPackage, packageCreationUtils);
         this.addScriptsFolder(cbaPackage.scripts);
         this.addTemplateFolder(cbaPackage);
+        this.addPlansFolder(cbaPackage.plans);
+        this.addRequirementsFolder(cbaPackage.requirements);
     }
 
     private addScriptsFolder(scripts: Scripts) {
         scripts.files.forEach((value, key) => {
+            FilesContent.putData(key, value);
+        });
+    }
+
+    private addRequirementsFolder(requirements: Requirements) {
+        requirements.files.forEach((value, key) => {
+            FilesContent.putData(key, value);
+        });
+    }
+
+    private addPlansFolder(plans: Plans) {
+        plans.files.forEach((value, key) => {
             FilesContent.putData(key, value);
         });
     }
@@ -44,7 +58,7 @@ export class DesignerCreationMode extends PackageCreationModes {
         }
 
         const filenameEntry = 'Definitions/' + cbaPackage.metaData.name.trim() + '.json';
-        const vlbDefinition: VlbDefinition = new VlbDefinition();
+        const cbaDefinition: CBADefinition = new CBADefinition();
         const metadata: Metadata = new Metadata();
 
         metadata.template_author = 'Shaaban Ebrahim';
@@ -72,9 +86,9 @@ export class DesignerCreationMode extends PackageCreationModes {
             });
         }
         metadata.template_tags = fullTags;
-        vlbDefinition.metadata = metadata;
+        cbaDefinition.metadata = metadata;
         const files: Import[] = [];
-        let insideVlbDefinition: VlbDefinition = null;
+        let insideVlbDefinition: CBADefinition = null;
         if (cbaPackage.definitions.imports && cbaPackage.definitions.imports.size > 0) {
             cbaPackage.definitions.imports.forEach((valueOfFile, key) => {
                 if (!key.includes(cbaPackage.metaData.name)) {
@@ -86,20 +100,20 @@ export class DesignerCreationMode extends PackageCreationModes {
                 }
             });
         }
-        vlbDefinition.imports = files;
+        cbaDefinition.imports = files;
         if (cbaPackage.definitions && cbaPackage.definitions.dslDefinition &&
             cbaPackage.definitions.dslDefinition.content) {
-            vlbDefinition.dsl_definitions = JSON.parse(cbaPackage.definitions.dslDefinition.content);
+            cbaDefinition.dsl_definitions = JSON.parse(cbaPackage.definitions.dslDefinition.content);
         }
 
-        // vlbDefinition.imports = files;
+        // cbaDefinition.imports = files;
         if (cbaPackage.templateTopology && cbaPackage.templateTopology.content) {
-            vlbDefinition.topology_template = JSON.parse(cbaPackage.templateTopology.content);
+            cbaDefinition.topology_template = JSON.parse(cbaPackage.templateTopology.content);
         } else if (insideVlbDefinition && insideVlbDefinition.topology_template) {
-            vlbDefinition.topology_template = insideVlbDefinition.topology_template;
+            cbaDefinition.topology_template = insideVlbDefinition.topology_template;
         }
 
-        const value = packageCreationUtils.transformToJson(vlbDefinition);
+        const value = packageCreationUtils.transformToJson(cbaDefinition);
         FilesContent.putData(filenameEntry, value);
         console.log(FilesContent.getMapOfFilesNamesAndContent());
     }
