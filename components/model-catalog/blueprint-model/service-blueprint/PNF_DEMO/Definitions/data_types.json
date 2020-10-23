@@ -1,162 +1,71 @@
 {
-  "data_types": {
-    "dt-config-assign-properties": {
-      "description": "Dynamic DataType definition for workflow(config-assign).",
-      "version": "1.0.0",
-      "properties": {
-        "netconf-server-port": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+  "data_types" : {
+    "dt-config-assign-properties" : {
+      "description" : "Dynamic DataType definition for workflow(config-assign).",
+      "version" : "1.0.0",
+      "properties" : {
+        "netconf-server-port" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "pnf-ipv4-address": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+        "pnf-ipv4-address" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "netconf-username": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+        "netconf-username" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "pnf-id": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+        "pnf-id" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "netconf-password": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+        "netconf-password" : {
+          "description" : "",
+          "required" : true,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "stream-count": {
-          "description": "",
-          "required": true,
-          "type": "integer",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+        "stream-count" : {
+          "description" : "",
+          "required" : true,
+          "type" : "integer",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         }
       },
-      "derived_from": "tosca.datatypes.Dynamic"
-    },
-    "dt-config-deploy-properties": {
-      "description": "Dynamic DataType definition for workflow(config-assign).",
-      "version": "1.0.0",
-      "properties": {
-        "netconf-server-port": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
-          }
-        },
-        "pnf-ipv4-address": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
-          }
-        },
-        "netconf-username": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
-          }
-        },
-        "pnf-id": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
-          }
-        },
-        "netconf-password": {
-          "description": "",
-          "required": true,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
-          }
-        },
-        "stream-count": {
-          "description": "",
-          "required": true,
-          "type": "integer",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
-          }
-        }
-      },
-      "derived_from": "tosca.datatypes.Dynamic"
+      "derived_from" : "tosca.datatypes.Dynamic"
     }
   }
 }

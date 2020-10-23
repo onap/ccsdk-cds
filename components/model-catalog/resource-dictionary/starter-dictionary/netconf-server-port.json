@@ -1,0 +1,15 @@
+{
+	"tags": "netconf-server-port",
+	"name": "netconf-server-port",
+	"property": {
+		"description": "netconf-server-port string attribute",
+		"type": "string"
+	},
+	"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+	"sources": {
+		"input": {
+			"type": "source-input",
+			"properties": {}
+		}
+	}
+}

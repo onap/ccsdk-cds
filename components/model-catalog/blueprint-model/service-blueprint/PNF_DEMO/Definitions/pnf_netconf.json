@@ -1,192 +1,171 @@
 {
-  "tosca_definitions_version": "controller_blueprint_1_0_0",
-  "metadata": {
-    "template_author": "Aarna Services",
-    "author_email": "vmuthukrishnan@aarnanetworks.com",
-    "user_groups": "ADMIN, OPERATION",
-    "template_name": "pnf_netconf",
-    "template_version": "1.0.0",
-    "template_tags": "pnf_netconf",
-    "template_type": "DEFAULT"
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "Aarna Services",
+    "author_email" : "aarna_services@aarnanetworks.com",
+    "user_groups" : "ADMIN, OPERATION",
+    "template_name" : "pnf_netconf",
+    "template_version" : "1.0.0",
+    "template_tags" : "pnf_netconf",
+    "template_type" : "DEFAULT"
   },
-  "imports": [
-    {
-      "file": "Definitions/data_types.json"
-    },
-    {
-      "file": "Definitions/relationship_types.json"
-    },
-    {
-      "file": "Definitions/artifact_types.json"
-    },
-    {
-      "file": "Definitions/node_types.json"
-    },
-    {
-      "file": "Definitions/policy_types.json"
-    }
-  ],
-  "dsl_definitions": {
-    "config-deploy-properties": {
-      "resolution-key": {
-        "get_input": "resolution-key"
+  "imports" : [ {
+    "file" : "Definitions/data_types.json"
+  }, {
+    "file" : "Definitions/relationship_types.json"
+  }, {
+    "file" : "Definitions/artifact_types.json"
+  }, {
+    "file" : "Definitions/node_types.json"
+  }, {
+    "file" : "Definitions/policy_types.json"
+  } ],
+  "dsl_definitions" : {
+    "config-deploy-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
       }
     }
   },
-  "topology_template": {
-    "workflows": {
-      "config-assign": {
-        "steps": {
-          "activate-process": {
-            "description": "Create a configlet",
-            "target": "config-assign",
-            "activities": [
-              {
-                "call_operation": ""
-              }
-            ]
+  "topology_template" : {
+    "workflows" : {
+      "config-assign" : {
+        "steps" : {
+          "activate-process" : {
+            "description" : "Create a configlet",
+            "target" : "config-assign",
+            "activities" : [ {
+              "call_operation" : ""
+            } ]
           }
         },
-        "inputs": {
-          "resolution-key": {
-            "required": true,
-            "type": "string"
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
           },
-          "store-result": {
-            "required": true,
-            "type": "boolean"
+          "store-result" : {
+            "required" : true,
+            "type" : "boolean"
           },
-          "config-assign-properties": {
-            "description": "Dynamic PropertyDefinition for workflow(config-assign).",
-            "required": true,
-            "type": "dt-config-assign-properties"
+          "config-assign-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(config-assign).",
+            "required" : true,
+            "type" : "dt-config-assign-properties"
           }
         }
       },
-      "config-deploy": {
-        "steps": {
-          "imperative-workflow-step-1": {
-            "description": "execute restconf",
-            "target": "execute",
-            "activities": [
-              {
-                "call_operation": "ComponentScriptExecutor.process"
-              }
-            ]
+      "config-deploy" : {
+        "steps" : {
+          "imperative-workflow-step-1" : {
+            "description" : "execute restconf",
+            "target" : "execute",
+            "activities" : [ {
+              "call_operation" : "ComponentScriptExecutor.process"
+            } ]
           }
         },
-        "inputs": {
-          "resolution-key": {
-            "required": true,
-            "type": "string"
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
           },
-          "netconf-password": {
-            "required": true,
-            "type": "string"
+          "netconf-password" : {
+            "required" : true,
+            "type" : "string"
           },
-          "netconf-username": {
-            "required": true,
-            "type": "string"
+          "netconf-username" : {
+            "required" : true,
+            "type" : "string"
           },
-          "pnf-ipv4-address": {
-            "required": true,
-            "type": "string"
-          },
-          "config-deploy-properties": {
-            "description": "Dynamic PropertyDefinition for workflow(config-assign).",
-            "required": true,
-            "type": "dt-config-assign-properties"
+          "pnf-ipv4-address" : {
+            "required" : true,
+            "type" : "string"
           }
         }
       }
     },
-    "node_templates": {
-      "netconf-device": {
-        "type": "vnf-netconf-device",
-        "capabilities": {
-          "netconf": {
-            "properties": {
-               "login-key": {
-                "get_input": "netconf-password"
+    "node_templates" : {
+      "netconf-device" : {
+        "type" : "vnf-netconf-device",
+        "capabilities" : {
+          "netconf" : {
+            "properties" : {
+              "login-key" : {
+                "get_input" : "netconf-password"
               },
-              "login-account": {
-                "get_input": "netconf-username"
+              "login-account" : {
+                "get_input" : "netconf-username"
               },
-              "target-ip-address": {
-                "get_input": "pnf-ipv4-address"
+              "target-ip-address" : {
+                "get_input" : "pnf-ipv4-address"
               },
-              "port-number": 830,
-              "connection-time-out": 60
+              "port-number" : 830,
+              "connection-time-out" : 5
             }
           }
         }
       },
-      "config-assign": {
-        "type": "component-resource-resolution",
-        "interfaces": {
-          "ResourceResolutionComponent": {
-            "operations": {
-              "process": {
-                "inputs": {
-                  "resolution-key": {
-                    "get_input": "resolution-key"
+      "config-assign" : {
+        "type" : "component-resource-resolution",
+        "interfaces" : {
+          "ResourceResolutionComponent" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "resolution-key" : {
+                    "get_input" : "resolution-key"
                   },
-                  "store-result": true,
-                  "artifact-prefix-names": [
-                    "pnf",
-                    "netconfrpc"
-                  ]
+                  "store-result" : true,
+                  "artifact-prefix-names" : [ "pnf", "netconfrpc" ]
                 },
-                "outputs": {
-                  "resource-assignment-params": {
-                    "get_attribute": [
-                      "SELF",
-                      "assignment-params"
-                    ]
+                "outputs" : {
+                  "resource-assignment-params" : {
+                    "get_attribute" : [ "SELF", "assignment-params" ]
                   },
-                  "status": "success"
+                  "status" : "success"
                 }
               }
             }
           }
         },
-        "artifacts": {
-          "pnf-template": {
-            "type": "artifact-template-velocity",
-            "file": "Templates/pnf-template.vtl"
+        "artifacts" : {
+          "pnf-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/pnf-template.vtl"
           },
-          "pnf-mapping": {
-            "type": "artifact-mapping-resource",
-            "file": "Templates/pnf-mapping.json"
+          "pnf-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/pnf-mapping.json"
           },
-          "netconfrpc-template": {
-            "type": "artifact-template-velocity",
-            "file": "Templates/netconfrpc-template.vtl"
+          "netconfrpc-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/netconfrpc-template.vtl"
           },
-          "netconfrpc-mapping": {
-            "type": "artifact-mapping-resource",
-            "file": "Templates/netconfrpc-mapping.json"
+          "netconfrpc-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/netconfrpc-mapping.json"
           }
         }
       },
-      "execute": {
-        "type": "component-script-executor",
-        "requirements": {
-          "netconf-connection": {
-            "capability": "netconf",
-            "node": "netconf-device",
-            "relationship": "tosca.relationships.ConnectsTo"
+      "execute" : {
+        "type" : "component-netconf-executor",
+        "requirements" : {
+          "netconf-connection" : {
+            "capability" : "netconf",
+            "node" : "netconf-device",
+            "relationship" : "tosca.relationships.ConnectsTo"
           }
         },
-        "interfaces": {
-          "ComponentScriptExecutor": {
-            "operations": {
-              "process": {
-                "inputs": {
-                  "script-type": "kotlin",
-                  "script-class-reference": "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.ConfigDeploy",
-                  "instance-dependencies": [],
-                  "dynamic-properties": "*config-deploy-properties"
+        "interfaces" : {
+          "ComponentNetconfExecutor" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.ConfigDeploy",
+                  "instance-dependencies" : [ ],
+                  "dynamic-properties" : "*config-deploy-properties"
                 }
               }
             }

@@ -51,15 +51,36 @@
     "tags" : "pnf-id",
     "name" : "pnf-id",
     "property" : {
-      "description" : "pnf-id string attribute",
+      "description" : "pnf-id",
       "type" : "string"
     },
     "group" : "default",
-    "updated-by" : "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+    "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
     "sources" : {
       "input" : {
         "type" : "source-input",
         "properties" : { }
+      },
+      "aai-data" : {
+        "type" : "source-rest",
+        "properties" : {
+          "verb" : "GET",
+          "type" : "JSON",
+          "url-path" : "/aai/v22/network/pnfs/pnf/$pnf-id",
+          "path" : "/pnf-name",
+          "headers" : {
+            "Accept" : "application/json",
+            "X-TransactionId" : "AAI-Temp-Tool",
+            "X-FromAppId" : "AAI-Temp-Tool"
+          },
+          "input-key-mapping" : {
+            "pnf-id" : "pnf.pnf-id"
+          },
+          "output-key-mapping" : {
+            "pnf-id" : "pnf-name"
+          },
+          "key-dependencies" : [ "pnf.pnf-id" ]
+        }
       }
     }
   },
@@ -67,11 +88,11 @@
     "tags" : "pnf-ipv4-address",
     "name" : "pnf-ipv4-address",
     "property" : {
-      "description" : "pnf-ipv4-address string attribute",
+      "description" : "pnf-ipv4-address",
       "type" : "string"
     },
     "group" : "default",
-    "updated-by" : "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+    "updated-by" : "Rodrigo Ottero <rodrigo.ottero@est.tech>",
     "sources" : {
       "input" : {
         "type" : "source-input",

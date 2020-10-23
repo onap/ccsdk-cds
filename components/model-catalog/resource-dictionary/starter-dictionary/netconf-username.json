@@ -1,0 +1,24 @@
+{
+		"name": "netconf-username",
+		"tags": "netconf-username",
+		"data_type": "string",
+		"description": "netconf-username",
+		"entry_schema": "string",
+		"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+		"updatedBy": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+		"definition": {
+			"tags": "netconf-username",
+			"name": "netconf-username",
+			"property": {
+				"description": "netconf-username string attribute",
+				"type": "string"
+			},
+			"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+			"sources": {
+				"input": {
+					"type": "source-input",
+					"properties": {}
+				}
+			}
+		}
+	}

@@ -1,0 +1,22 @@
+{
+	"tags": "stream-count",
+	"name": "stream-count",
+	"property": {
+		"description": "stream-count string attribute",
+		"type": "integer"
+	},
+	"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+	"sources": {
+		"input": {
+			"type": "source-default",
+			"properties": {}
+		},
+		"default": {
+
+			"type": "source-default",
+
+			"properties": {}
+
+		}
+	}
+}
