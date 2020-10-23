@@ -1,100 +1,16 @@
 {
-  "netconf-password" : {
-    "tags" : "netconf-password",
-    "name" : "netconf-password",
+  "input-source" : {
+    "tags" : "input-source",
+    "name" : "input-source",
     "property" : {
-      "description" : "netconf-password string attribute",
+      "description" : "name of the ",
       "type" : "string"
     },
     "group" : "default",
-    "updated-by" : "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+    "updated-by" : "brindasanth@onap.com",
     "sources" : {
       "input" : {
         "type" : "source-input",
-        "properties" : { }
-      }
-    }
-  },
-  "netconf-server-port" : {
-    "tags" : "netconf-server-port",
-    "name" : "netconf-server-port",
-    "property" : {
-      "description" : "netconf-server-port string attribute",
-      "type" : "string"
-    },
-    "group" : "default",
-    "updated-by" : "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-    "sources" : {
-      "input" : {
-        "type" : "source-input",
-        "properties" : { }
-      }
-    }
-  },
-  "netconf-username" : {
-    "tags" : "netconf-username",
-    "name" : "netconf-username",
-    "property" : {
-      "description" : "netconf-username string attribute",
-      "type" : "string"
-    },
-    "group" : "default",
-    "updated-by" : "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-    "sources" : {
-      "input" : {
-        "type" : "source-input",
-        "properties" : { }
-      }
-    }
-  },
-  "pnf-id" : {
-    "tags" : "pnf-id",
-    "name" : "pnf-id",
-    "property" : {
-      "description" : "pnf-id string attribute",
-      "type" : "string"
-    },
-    "group" : "default",
-    "updated-by" : "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-    "sources" : {
-      "input" : {
-        "type" : "source-input",
-        "properties" : { }
-      }
-    }
-  },
-  "pnf-ipv4-address" : {
-    "tags" : "pnf-ipv4-address",
-    "name" : "pnf-ipv4-address",
-    "property" : {
-      "description" : "pnf-ipv4-address string attribute",
-      "type" : "string"
-    },
-    "group" : "default",
-    "updated-by" : "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-    "sources" : {
-      "input" : {
-        "type" : "source-input",
-        "properties" : { }
-      }
-    }
-  },
-  "stream-count" : {
-    "tags" : "stream-count",
-    "name" : "stream-count",
-    "property" : {
-      "description" : "stream-count string attribute",
-      "type" : "integer"
-    },
-    "group" : "default",
-    "updated-by" : "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-    "sources" : {
-      "input" : {
-        "type" : "source-default",
-        "properties" : { }
-      },
-      "default" : {
-        "type" : "source-default",
         "properties" : { }
       }
     }
