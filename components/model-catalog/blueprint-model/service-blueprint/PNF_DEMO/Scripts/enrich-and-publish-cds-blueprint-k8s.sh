@@ -26,26 +26,15 @@ fi
 
 if [ ! -f "$zip_file" ]
  then
-   echo "Invalid CDS blueprint zip file argument $zip_file"
-   echo "Usage: $0 <CDS Blueprint ZIP file path>"
+   echo "Invalid Enriched CDS blueprint zip file argument $zip_file"
+   echo "Usage: $0 <Enriched CDS Blueprint ZIP file path>"
    exit 0
 fi
 
-
-# Remove the temporary CBA
-rm -rf /tmp/CBA
-mkdir -p /tmp/CBA
-
-# Enriched CBA file
-ENRICHED_CBA_FILE="/tmp/CBA/ENRICHED-CBA.zip"
-
-
 # Make the REST API to load the models
-curl -v --location --request POST http://${CDS_BP_SVC_IP}:8080/api/v1/blueprint-model/enrich \
+curl -v --location --request POST http://${CDS_BP_SVC_IP}:8080/api/v1/blueprint-model/enrichandpublish \
 --header 'Authorization: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==' \
---form "file=@${zip_file}" \
--o ${ENRICHED_CBA_FILE} 
+--form "file=@${zip_file}" 
 
-echo "You can take a look at the enriched CBA archive file ${ENRICHED_CBA_FILE}"
 
 exit 0

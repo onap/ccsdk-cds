@@ -5,8 +5,8 @@
 		"data_type": "string",
 		"description": "netconf-password",
 		"entry_schema": "string",
-		"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-		"updatedBy": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+		"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
+		"updatedBy": "Aarna service <aarna_services@aarnanetworks.com>",
 		"definition": {
 			"tags": "netconf-password",
 			"name": "netconf-password",
@@ -14,7 +14,7 @@
 				"description": "netconf-password string attribute",
 				"type": "string"
 			},
-			"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+			"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
 			"sources": {
 				"input": {
 					"type": "source-input",
@@ -29,8 +29,8 @@
 		"data_type": "string",
 		"description": "netconf-username",
 		"entry_schema": "string",
-		"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-		"updatedBy": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+		"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
+		"updatedBy": "Aarna service <aarna_services@aarnanetworks.com>",
 		"definition": {
 			"tags": "netconf-username",
 			"name": "netconf-username",
@@ -38,7 +38,7 @@
 				"description": "netconf-username string attribute",
 				"type": "string"
 			},
-			"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+			"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
 			"sources": {
 				"input": {
 					"type": "source-input",
@@ -53,8 +53,8 @@
 		"data_type": "string",
 		"description": "netconf-server-port",
 		"entry_schema": "string",
-		"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-		"updatedBy": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+		"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
+		"updatedBy": "Aarna service <aarna_services@aarnanetworks.com>",
 		"definition": {
 			"tags": "netconf-server-port",
 			"name": "netconf-server-port",
@@ -62,7 +62,7 @@
 				"description": "netconf-server-port string attribute",
 				"type": "string"
 			},
-			"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+			"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
 			"sources": {
 				"input": {
 					"type": "source-input",
@@ -77,8 +77,8 @@
 		"data_type": "string",
 		"description": "pnf-id",
 		"entry_schema": "string",
-		"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-		"updatedBy": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+		"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
+		"updatedBy": "Aarna service <aarna_services@aarnanetworks.com>",
 		"definition": {
 			"tags": "pnf-id",
 			"name": "pnf-id",
@@ -86,7 +86,7 @@
 				"description": "pnf-id string attribute",
 				"type": "string"
 			},
-			"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+			"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
 			"sources": {
 				"input": {
 					"type": "source-input",
@@ -102,8 +102,8 @@
 		"data_type": "string",
 		"description": "pnf-ipv4-address",
 		"entry_schema": "string",
-		"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-		"updatedBy": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+		"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
+		"updatedBy": "Aarna service <aarna_services@aarnanetworks.com>",
 		"definition": {
 			"tags": "pnf-ipv4-address",
 			"name": "pnf-ipv4-address",
@@ -111,7 +111,7 @@
 				"description": "pnf-ipv4-address string attribute",
 				"type": "string"
 			},
-			"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+			"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
 			"sources": {
 				"input": {
 					"type": "source-input",
@@ -127,8 +127,8 @@
 		"data_type": "string",
 		"description": "stream-count",
 		"entry_schema": "string",
-		"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
-		"updatedBy": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+		"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
+		"updatedBy": "Aarna service <aarna_services@aarnanetworks.com>",
 		"definition": {
 			"tags": "stream-count",
 			"name": "stream-count",
@@ -136,7 +136,7 @@
 				"description": "stream-count string attribute",
 				"type": "integer"
 			},
-			"updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+			"updated-by": "Aarna service <aarna_services@aarnanetworks.com>",
 			"sources": {
 				"input": {
 					"type": "source-default",

@@ -1,0 +1,15 @@
+{
+  "tags": "netconf-username",
+  "name": "netconf-username",
+  "property": {
+    "description": "netconf-username string attribute",
+    "type": "string"
+  },
+  "updated-by": "Aarna service <vmuthukrishnan@aarnanetworks.com>",
+  "sources": {
+    "input": {
+      "type": "source-input",
+      "properties": {}
+    }
+  }
+}

@@ -1,5 +1,77 @@
 {
   "node_types" : {
+    "component-netconf-executor" : {
+      "description" : "This is Netconf Transaction Configuration Component API",
+      "version" : "1.0.0",
+      "attributes" : {
+        "response-data" : {
+          "required" : false,
+          "type" : "json"
+        }
+      },
+      "capabilities" : {
+        "component-node" : {
+          "type" : "tosca.capabilities.Node"
+        }
+      },
+      "requirements" : {
+        "netconf-connection" : {
+          "capability" : "netconf",
+          "node" : "vnf-netconf-device",
+          "relationship" : "tosca.relationships.ConnectsTo"
+        }
+      },
+      "interfaces" : {
+        "ComponentNetconfExecutor" : {
+          "operations" : {
+            "process" : {
+              "inputs" : {
+                "script-type" : {
+                  "description" : "Script type, kotlin type is supported",
+                  "required" : true,
+                  "type" : "string",
+                  "constraints" : [ {
+                    "valid_values" : [ "kotlin", "jython", "internal" ]
+                  } ],
+                  "default" : "internal"
+                },
+                "script-class-reference" : {
+                  "description" : "Kotlin Script class name or jython script name.",
+                  "required" : true,
+                  "type" : "string"
+                },
+                "instance-dependencies" : {
+                  "description" : "Instance names to inject to Jython or Kotlin Script.",
+                  "required" : true,
+                  "type" : "list",
+                  "entry_schema" : {
+                    "type" : "string"
+                  }
+                },
+                "dynamic-properties" : {
+                  "description" : "Dynamic Json Content or DSL Json reference.",
+                  "required" : false,
+                  "type" : "json"
+                }
+              },
+              "outputs" : {
+                "response-data" : {
+                  "description" : "Execution Response Data in JSON format.",
+                  "required" : false,
+                  "type" : "string"
+                },
+                "status" : {
+                  "description" : "Status of the Component Execution ( success or failure )",
+                  "required" : true,
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from" : "tosca.nodes.Component"
+    },
     "component-resource-resolution" : {
       "description" : "This is Resource Assignment Component API",
       "version" : "1.0.0",
@@ -100,63 +172,6 @@
       },
       "derived_from" : "tosca.nodes.Component"
     },
-    "component-script-executor" : {
-      "description" : "This is CLI Transaction Configuration Component API",
-      "version" : "1.0.0",
-      "attributes" : {
-        "response-data" : {
-          "required" : false,
-          "type" : "json"
-        }
-      },
-      "capabilities" : {
-        "component-node" : {
-          "type" : "tosca.capabilities.Node"
-        }
-      },
-      "interfaces" : {
-        "ComponentScriptExecutor" : {
-          "operations" : {
-            "process" : {
-              "inputs" : {
-                "script-type" : {
-                  "description" : "Script type, kotlin type is supported",
-                  "required" : true,
-                  "type" : "string",
-                  "constraints" : [ {
-                    "valid_values" : [ "kotlin", "jython", "internal" ]
-                  } ],
-                  "default" : "internal"
-                },
-                "script-class-reference" : {
-                  "description" : "Kotlin Script class name or jython script name.",
-                  "required" : true,
-                  "type" : "string"
-                },
-                "dynamic-properties" : {
-                  "description" : "Dynamic Json Content or DSL Json reference.",
-                  "required" : false,
-                  "type" : "json"
-                }
-              },
-              "outputs" : {
-                "response-data" : {
-                  "description" : "Execution Response Data.",
-                  "required" : false,
-                  "type" : "string"
-                },
-                "status" : {
-                  "description" : "Status of the Component Execution ( success or failure )",
-                  "required" : true,
-                  "type" : "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "derived_from" : "tosca.nodes.Component"
-    },
     "source-default" : {
       "description" : "This is Default Resource Source Node Type",
       "version" : "1.0.0",
@@ -167,6 +182,82 @@
       "description" : "This is Input Resource Source Node Type",
       "version" : "1.0.0",
       "properties" : { },
+      "derived_from" : "tosca.nodes.ResourceSource"
+    },
+    "source-rest" : {
+      "description" : "This is Rest Resource Source Node Type",
+      "version" : "1.0.0",
+      "properties" : {
+        "type" : {
+          "required" : true,
+          "type" : "string",
+          "constraints" : [ {
+            "valid_values" : [ "JSON" ]
+          } ],
+          "default" : "JSON"
+        },
+        "headers" : {
+          "required" : false,
+          "type" : "map",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        },
+        "verb" : {
+          "required" : true,
+          "type" : "string",
+          "constraints" : [ {
+            "valid_values" : [ "GET", "POST", "DELETE", "PUT" ]
+          } ],
+          "default" : "GET"
+        },
+        "payload" : {
+          "required" : false,
+          "type" : "string",
+          "default" : ""
+        },
+        "endpoint-selector" : {
+          "required" : false,
+          "type" : "string"
+        },
+        "url-path" : {
+          "required" : true,
+          "type" : "string"
+        },
+        "path" : {
+          "required" : true,
+          "type" : "string"
+        },
+        "expression-type" : {
+          "required" : false,
+          "type" : "string",
+          "constraints" : [ {
+            "valid_values" : [ "JSON_PATH", "JSON_POINTER" ]
+          } ],
+          "default" : "JSON_PATH"
+        },
+        "input-key-mapping" : {
+          "required" : false,
+          "type" : "map",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        },
+        "output-key-mapping" : {
+          "required" : false,
+          "type" : "map",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        },
+        "key-dependencies" : {
+          "required" : true,
+          "type" : "list",
+          "entry_schema" : {
+            "type" : "string"
+          }
+        }
+      },
       "derived_from" : "tosca.nodes.ResourceSource"
     },
     "tosca.nodes.Component" : {
@@ -214,6 +305,32 @@
               "required" : true,
               "type" : "integer",
               "default" : 830
+            },
+            "connection-time-out" : {
+              "required" : false,
+              "type" : "integer",
+              "default" : 30
+            }
+          }
+        },
+        "restconf" : {
+          "type" : "tosca.capabilities.Restconf",
+          "properties" : {
+            "login-key" : {
+              "required" : true,
+              "type" : "string"
+            },
+            "login-account" : {
+              "required" : true,
+              "type" : "string"
+            },
+            "target-ip-address" : {
+              "required" : true,
+              "type" : "string"
+            },
+            "port-number" : {
+              "required" : true,
+              "type" : "integer"
             },
             "connection-time-out" : {
               "required" : false,
