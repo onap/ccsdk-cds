@@ -75,6 +75,12 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     }
 
     displayFunctionData() {
+
+        // tslint:disable-next-line: variable-name
+        const node_templates = {};
+        const type = 'component-resource-resolution';
+        const instanceName = this.currentFuncion['instance-name'];
+        // insert selected templates in nodeTemplates.artifacts
         this.selectedTemplates.forEach((value, key) => {
             console.log(key);
             console.log(value);
@@ -93,20 +99,27 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                 };
             }
         });
+        // instantiate the final node_template object to save
+
+        this.nodeTemplates.type = 'component-resource-resolution';
+        node_templates[this.currentFuncion['instance-name']] = this.nodeTemplates;
+
+        delete this.currentFuncion['instance-name'];
+
         this.nodeTemplates.interfaces = {
             ResourceResolutionComponent: {
                 operations: {
                     process: {
-                        ...this.currentFuncion
+                        ...this.currentFuncion,
                     }
                 }
             }
         };
-        setTimeout(() => {
-            console.log(this.currentFuncion);
-            console.log(this.nodeTemplates);
 
-        }, 1500);
+        console.log(this.currentFuncion);
+        console.log(node_templates);
+        // tslint:disable-next-line: no-unused-expression
+        this.designerStore.addNodeTemplate(instanceName, type, node_templates[instanceName]);
     }
     // Template logic
     private setIsMappingOrTemplate(key: string, templateAndMapping: TemplateAndMapping, isFromTemplate: boolean) {
