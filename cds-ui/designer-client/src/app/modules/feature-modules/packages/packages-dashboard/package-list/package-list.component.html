@@ -63,7 +63,7 @@
                                     </a>
                                 </li>
                                 <li class="action-delete">
-                                    <a href="#">
+                                    <a (click)="deletePackage(bluePrint.id)">
                                         <i class="icon-delete-sm" aria-hidden="true"></i>
                                         Delete
                                     </a>
@@ -111,7 +111,7 @@
                                     class="icon-btn-card-config" aria-hidden="true"></i>Configuration</button>
                         </div>
                         <div class="col">
-                            <button type="button" class="btn btn-card-topology"><i class="icon-btn-card-topology"
+                            <button type="button" (click)="viewDesigner(bluePrint.id)" class="btn btn-card-topology"><i class="icon-btn-card-topology"
                                     aria-hidden="true"></i>Designer Mode
                             </button>
                         </div>
@@ -125,3 +125,4 @@
 
 
 <app-import-package></app-import-package>
+

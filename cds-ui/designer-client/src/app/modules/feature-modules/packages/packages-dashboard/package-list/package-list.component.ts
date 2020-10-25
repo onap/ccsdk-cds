@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { BlueprintModel } from '../../model/BluePrint.model';
-import { PackagesStore } from '../../packages.store';
-import { Router } from '@angular/router';
-import { ConfigurationDashboardService } from '../../configuration-dashboard/configuration-dashboard.service';
-import { saveAs } from 'file-saver';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { TourService } from 'ngx-tour-md-menu';
+import {Component, OnInit} from '@angular/core';
+import {BlueprintModel} from '../../model/BluePrint.model';
+import {PackagesStore} from '../../packages.store';
+import {Router} from '@angular/router';
+import {ConfigurationDashboardService} from '../../configuration-dashboard/configuration-dashboard.service';
+import {saveAs} from 'file-saver';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
+import {TourService} from 'ngx-tour-md-menu';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
     selector: 'app-packages-list',
@@ -23,9 +24,9 @@ export class PackageListComponent implements OnInit {
         private configurationDashboardService: ConfigurationDashboardService,
         private ngxLoader: NgxUiLoaderService,
         private tourService: TourService,
+        private toastService: ToastrService
     ) {
         console.log('PackageListComponent');
-
 
 
         this.packagesStore.state$.subscribe(state => {
@@ -51,8 +52,23 @@ export class PackageListComponent implements OnInit {
 
     downloadPackage(artifactName: string, artifactVersion: string) {
         this.configurationDashboardService.downloadResource(artifactName + '/' + artifactVersion).subscribe(response => {
-            const blob = new Blob([response], { type: 'application/octet-stream' });
+            const blob = new Blob([response], {type: 'application/octet-stream'});
             saveAs(blob, artifactName + '-' + artifactVersion + '-CBA.zip');
         });
+    }
+
+    viewDesigner(id: string) {
+        this.router.navigate(['/packages/designer', id]);
+    }
+
+    deletePackage(id: string) {
+        this.configurationDashboardService.deletePackage(id).subscribe(res => {
+            this.toastService.info('package deleted successfully ');
+            this.router.navigate(['/packages']);
+            this.packagesStore.getAll();
+        }, err => {
+            this.toastService.error('error deleting package' + err.message);
+        });
+
     }
 }
