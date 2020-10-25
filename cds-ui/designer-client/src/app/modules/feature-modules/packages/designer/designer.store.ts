@@ -19,12 +19,12 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Injectable} from '@angular/core';
-import {Store} from '../../../../common/core/stores/Store';
-import {DesignerService} from './designer.service';
-import {DesignerDashboardState} from './model/designer.dashboard.state';
-import {DeclarativeWorkflow} from './model/designer.workflow';
-import {NodeTemplate} from './model/desinger.nodeTemplate.model';
+import { Injectable } from '@angular/core';
+import { Store } from '../../../../common/core/stores/Store';
+import { DesignerService } from './designer.service';
+import { DesignerDashboardState } from './model/designer.dashboard.state';
+import { DeclarativeWorkflow } from './model/designer.workflow';
+import { NodeTemplate } from './model/desinger.nodeTemplate.model';
 
 
 @Injectable({
@@ -93,14 +93,14 @@ export class DesignerStore extends Store<DesignerDashboardState> {
      * you can add node template and don't add workflow step when you add dependencies for the
      * dg-generic function for example
      */
-    addNodeTemplate(nodeTemplateName: string, type: string) {
+    addNodeTemplate(nodeTemplateName: string, type: string, nodeTemplate: {} = new NodeTemplate(type)) {
         this.setState({
             ...this.state,
             template: {
                 ...this.state.template,
                 node_templates: {
                     ...this.state.template.node_templates,
-                    [nodeTemplateName]: new NodeTemplate(type)
+                    [nodeTemplateName]: nodeTemplate
                 }
             }
         });
