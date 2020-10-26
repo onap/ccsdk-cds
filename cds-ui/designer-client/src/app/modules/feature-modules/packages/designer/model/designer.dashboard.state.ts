@@ -19,13 +19,13 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {ModelType} from './ModelType.model';
-import { TopologyTemplate } from './designer.topologyTemplate.model';
+import {TopologyTemplate} from './designer.topologyTemplate.model';
 
 export class DesignerDashboardState {
 
     template: TopologyTemplate;
     sourceContent: string;
+    actionName: string;
 
     constructor() {
         this.template = new TopologyTemplate();

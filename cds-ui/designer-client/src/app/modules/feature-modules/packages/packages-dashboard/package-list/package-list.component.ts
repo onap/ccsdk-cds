@@ -58,7 +58,7 @@ export class PackageListComponent implements OnInit {
     }
 
     viewDesigner(id: string) {
-        this.router.navigate(['/packages/designer', id]);
+        this.router.navigate(['/packages/designer', id, {actionName: ''}]);
     }
 
     deletePackage(id: string) {
