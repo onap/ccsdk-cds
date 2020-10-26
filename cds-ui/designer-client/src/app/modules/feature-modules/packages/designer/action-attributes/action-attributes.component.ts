@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {InputActionAttribute, OutputActionAttribute} from './models/InputActionAttribute';
 import {DesignerStore} from '../designer.store';
+import {DesignerDashboardState} from '../model/designer.dashboard.state';
 
 @Component({
     selector: 'app-action-attributes',
@@ -18,12 +19,21 @@ export class ActionAttributesComponent implements OnInit {
     isOutputOtherType: boolean;
     outputOtherType = '';
     inputOtherType = '';
+    actionName = '';
+    designerState: DesignerDashboardState;
 
     constructor(private designerStore: DesignerStore) {
 
     }
 
     ngOnInit() {
+        this.designerStore.state$.subscribe(designerState => {
+            this.designerState = designerState;
+            if (this.designerState && this.designerState.actionName) {
+                this.actionName = this.designerState.actionName;
+                const action = this.designerState.template.workflows[this.actionName];
+            }
+        });
     }
 
     addInput(input: InputActionAttribute) {
@@ -63,14 +73,11 @@ export class ActionAttributesComponent implements OnInit {
     }
 
     submitAttributes() {
-        console.log(this.inputActionAttribute);
-        console.log(this.outputActionAttribute);
         this.addInput(this.inputActionAttribute);
         this.addOutput(this.outputActionAttribute);
         this.clearFormInputs();
-        console.log(this.storeInputs(this.inputs));
-        this.designerStore.setInputsToSpecificWorkflow(this.storeInputs(this.inputs));
-        console.log(this.storeOutputs(this.outputs));
+        this.designerStore.setInputsAndOutputsToSpecificWorkflow(this.storeInputs(this.inputs)
+            , this.storeOutputs(this.outputs), this.actionName);
     }
 
     private clearFormInputs() {
@@ -87,9 +94,10 @@ export class ActionAttributesComponent implements OnInit {
             inputs += this.appendAttributes(input);
 
         });
-        const returnedInputMap = new Map<string, string>();
-        returnedInputMap.set('inputs', inputs);
-        return returnedInputMap;
+        if (inputs.endsWith(',')) {
+            inputs = inputs.substr(0, inputs.length - 1);
+        }
+        return JSON.parse('{' + inputs + '}');
     }
 
     private storeOutputs(OutputActionAttributes: OutputActionAttribute[]) {
@@ -97,16 +105,17 @@ export class ActionAttributesComponent implements OnInit {
         OutputActionAttributes.forEach(output => {
             outputs += this.appendAttributes(output);
         });
-        const returnedOutputMap = new Map<string, string>();
-        returnedOutputMap.set('outputs', outputs);
-        return returnedOutputMap;
+        if (outputs.endsWith(',')) {
+            outputs = outputs.substr(0, outputs.length - 1);
+        }
+        return JSON.parse('{' + outputs + '}');
     }
 
     private appendAttributes(output: OutputActionAttribute) {
-        return '"' + output.name + '":{\n' +
-            '                \'required\': ' + output.required + ',\n' +
-            '                \'type\': "' + output.type + '",\n' +
-            '                \'description\': "' + output.description + '"\n' +
-            '            }' + '\n';
+        return '"' + output.name + '" : {\n' +
+            '            "required" : ' + output.required + ',\n' +
+            '            "type" : "' + output.type + '",\n' +
+            '            "description" : "' + output.description + '"\n' +
+            '          },';
     }
 }
