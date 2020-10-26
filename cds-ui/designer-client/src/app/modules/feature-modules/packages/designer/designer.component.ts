@@ -231,6 +231,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
                         rankDir: 'TB'
                     });
                     this.actions = [];
+                    console.log('here');
                     for (const workflowsKey in topologtTemplate.workflows) {
                         if (workflowsKey && !this.actions.includes(workflowsKey)) {
                             this.actions.push(workflowsKey);
@@ -273,8 +274,8 @@ export class DesignerComponent implements OnInit, OnDestroy {
                 width: 1100,
                 gridSize: 10,
                 drawGrid: true,
-                 // background: {
-                 // color: 'rgba(0, 255, 0, 0.3)'
+                // background: {
+                // color: 'rgba(0, 255, 0, 0.3)'
                 // },
                 cellViewNamespace: joint.shapes
             });
@@ -326,9 +327,13 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
     insertCustomActionIntoBoard() {
         console.log('saving action to store action workflow....');
-        const actionName = this.graphUtil.generateNewActionName();
+        let actionName = this.graphUtil.generateNewActionName();
+        while (this.actions.includes(actionName)) {
+            actionName = this.graphUtil.generateNewActionName();
+        }
         this.graphUtil.createCustomActionWithName(actionName, this.boardGraph);
         this.designerStore.addDeclarativeWorkFlow(actionName);
+        this.actions.push(actionName);
     }
 
     stencilPaperEventListeners() {
@@ -475,5 +480,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
     openFunctionAttributes(customActionName: string) {
         console.log('opening here function attributes');
+        this.actionAttributesSideBar = true;
+        this.designerStore.setCurrentAction(customActionName);
     }
 }
