@@ -12,7 +12,7 @@
                     <li class="breadcrumb-item">
                         <a routerLink="/packages/package/{{viewedPackage.id}}">{{viewedPackage.artifactName}}</a>
                         <button type="button" class="btn package-info-btn tooltip-bottom" data-toggle="modal"
-                            data-target="#exampleModalLong" data-tooltip="Package Details">
+                                data-target="#exampleModalLong" data-tooltip="Package Details">
                             <i class="icon-info" aria-hidden="true"></i>
                         </button>
                     </li>
@@ -22,13 +22,13 @@
                     </li>
                 </ol>
                 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                     aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLongTitle">Package Details</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <img src="assets/img/icon-close.svg" />
+                                    <img src="assets/img/icon-close.svg"/>
                                 </button>
                             </div>
                             <div class="modal-body package-info">
@@ -70,15 +70,15 @@
                 <li>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
-                            data-tooltip="Preview">
+                           data-tooltip="Preview">
                             <i class="fa fa-eye"></i>
                         </a>
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
-                            data-tooltip="Download">
+                           data-tooltip="Download">
                             <i class="fa fa-download"></i>
                         </a>
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
-                            data-tooltip="Share">
+                           data-tooltip="Share">
                             <i class="fa fa-share-square"></i>
                         </a>
                     </div>
@@ -107,7 +107,7 @@
 <nav class="editNavbar row source-button {{cl}} navbar navbar-expand-lg">
     <!--Actions/Functions Side Menu Toogole Button-->
     <button (click)="_toggleSidebar1()" class="toggoleBtn active btn tooltip-bottom" title="" aria-pressed="true"
-        data-tooltip="Collapse Side bar">
+            data-tooltip="Collapse Side bar">
         <i class="fa arr-size">&#xf100;</i>
     </button>
     <!--Nav Tabs-->
@@ -119,9 +119,9 @@
                     <div class="col-12">
                         <div class="nav nav-tabs " id="nav-tab" role="tablist">
                             <a class="nav-item nav-link active col-6" id=" " data-toggle="tab" href="" role="tab"
-                                aria-controls=" " aria-selected="false" autofocus #nameit>Workflow</a>
+                               aria-controls=" " aria-selected="false" autofocus #nameit>Workflow</a>
                             <a class="nav-item nav-link col-6" id=" " data-toggle="tab" href="" role="tab"
-                                aria-controls=" " aria-selected="false">Template</a>
+                               aria-controls=" " aria-selected="false">Template</a>
                         </div>
                     </div>
                 </nav>
@@ -162,7 +162,7 @@
                 <div class="btn-group viewBtns" role="group">
                     <button type="button" class="btn btn-secondary topologySource active">Designer</button>
                     <button [routerLink]="['/designer/source', viewedPackage.id]" type="button"
-                        class="btn btn-secondary topologyView">Scripting
+                            class="btn btn-secondary topologyView">Scripting
                     </button>
                 </div>
             </li>
@@ -173,15 +173,15 @@
 <ng-sidebar-container class="sidebar-container">
     <!--Left Side Menu-->
     <ng-sidebar [(opened)]="controllerSideBar" [sidebarClass]="'demo-sidebar controllerSidebar container-fluid'"
-        [mode]="'push'" #sidebarLeft>
+                [mode]="'push'" #sidebarLeft>
         <nav class="row">
             <!--Nav Tabs-->
             <div class="col">
                 <div class="nav nav-tabs " id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active col-6" id="nav-action-tab" data-toggle="tab" href="#nav-action"
-                        role="tab" aria-controls="nav-action" aria-selected="false" autofocus #nameit>Actions</a>
+                       role="tab" aria-controls="nav-action" aria-selected="false" autofocus #nameit>Actions</a>
                     <a class="nav-item nav-link col-6" id="nav-function-tab" data-toggle="tab" href="#nav-function"
-                        role="tab" aria-controls="nav-function" aria-selected="false">Functions</a>
+                       role="tab" aria-controls="nav-function" aria-selected="false">Functions</a>
                 </div>
             </div>
         </nav>
@@ -190,15 +190,15 @@
                 <div class="tab-content" id="nav-tabContent">
                     <!--Action List-->
                     <div class="tab-pane fade show active" id="nav-action" role="tabpanel"
-                        aria-labelledby="nav-action-tab">
+                         aria-labelledby="nav-action-tab">
                         <!--Action Search Box-->
                         <input type="text" class="form-control input-search-controller" placeholder="Search Actions">
 
                         <div class="row temp-buttons">
                             <div class="col text-center">
-                                <button (click)="sidebarRight1.open()" type="button" class="btn btn-primary">
-                                    Action Attributes
-                                </button>
+                                <!-- <button (click)="sidebarRight1.open()" type="button" class="btn btn-primary">
+                                     Action Attributes
+                                 </button> -->
                             </div>
                             <div class="col text-center">
                                 <button (click)="sidebarRight2.open()" type="button" class="btn btn-secondary">
@@ -219,7 +219,7 @@
                                     <li *ngFor="let customActionName of actions">
                                         <label>
                                             <i class="icon-file" aria-hidden="true" class="icon-file"
-                                                (click)="openFunctionAttributes(customActionName)"></i>
+                                               (click)="openFunctionAttributes(customActionName)"></i>
                                             {{customActionName}} </label>
                                     </li>
                                 </ul>
@@ -279,7 +279,7 @@
         <!--<button (click)="_toggleSidebar2()" style="float:right;">Toggle sidebar right</button> -->
     </div>
     <ng-sidebar [(opened)]="actionAttributesSideBar" [sidebarClass]="'demo-sidebar attributesSideBar '" [mode]="'push'"
-        [position]="'right'" #sidebarRight1>
+                [position]="'right'" #sidebarRight1>
         <div class="container-fluid0">
             <div class="row m-0">
                 <div class="col attributesContainer">
@@ -292,9 +292,9 @@
                         <div class="col-3 pl-0">
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button type="button" class="btn view-source" tooltip="View Action Source"
-                                    placement="bottom"><i class="icon-source"></i></button>
+                                        placement="bottom"><i class="icon-source"></i></button>
                                 <button type="button" data-toggle="modal" data-target="#exampleModalScrollable1"
-                                    class="btn trash-item" tooltip="Delete Action" placement="bottom"><i
+                                        class="btn trash-item" tooltip="Delete Action" placement="bottom"><i
                                         class="icon-delete-sm" aria-hidden="true"></i></button>
                             </div>
                         </div>
@@ -306,24 +306,24 @@
     </ng-sidebar>
     <!--Right Side Menu - Function Attribute-->
     <ng-sidebar [(opened)]="functionAttributeSidebar" [sidebarClass]="'demo-sidebar attributesSideBar'" [mode]="'push'"
-        [position]="'right'" #sidebarRight2>
+                [position]="'right'" #sidebarRight2>
         <div class="container-fluid0">
             <div class="row m-0">
                 <div class="col attributesContainer">
                     <div class="row m-0 attributesContainertTitle">
                         <div class="col-2 pl-0">
                             <button (click)="sidebarRight2.close()" class="closeBar" tooltip="Close"
-                                placement="bottom"><i class="icon-close" type="button" aria-hidden="true"></i>
+                                    placement="bottom"><i class="icon-close" type="button" aria-hidden="true"></i>
                             </button>
                         </div>
                         <h6 class="col pl-0">Function Attributes</h6>
                         <div class="col-3 pl-0">
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button type="button" class="btn view-source" tooltip="View Function Source"
-                                    placement="bottom"><i class="icon-source"></i></button>
+                                        placement="bottom"><i class="icon-source"></i></button>
                                 <button type="button" class="btn trash-item" tooltip="Delete Function"
-                                    placement="bottom"><i class="icon-delete-sm" type="button"
-                                        aria-hidden="true"></i></button>
+                                        placement="bottom"><i class="icon-delete-sm" type="button"
+                                                              aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>
