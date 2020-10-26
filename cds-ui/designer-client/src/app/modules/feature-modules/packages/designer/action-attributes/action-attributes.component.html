@@ -79,9 +79,9 @@
                         <div class="col">
                             <div class="form-group" *ngFor="let output of outputs">
                                 <label for="exampleFormControlTextarea1">{{output.name}}
-                                    <i [hidden]="output.required" class="icon-required-star" type="button"
+                                    <i [hidden]="!output.required" class="icon-required-star" type="button"
                                         aria-hidden="true"></i>
-                                    <i [hidden]="!output.required" class="optional-attribute" type="button"
+                                    <i [hidden]="output.required" class="optional-attribute" type="button"
                                         aria-hidden="true"></i>
 
                                 </label>
@@ -198,7 +198,8 @@
                             <label class="col-form-label col-sm-3 pt-0">Type <span>*</span></label>
                             <div class="col-sm-9">
                                 <div class="list-group list-group-horizontal">
-                                    <button type="button" class="list-group-item list-group-item-action">String</button>
+                                    <button type="button" class="list-group-item list-group-item-action"
+                                            (click)="setOutputType('String')">String</button>
                                     <button type="button" class="list-group-item list-group-item-action"
                                         (click)="setOutputType('Integer')">
                                         Integer

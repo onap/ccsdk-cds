@@ -19,12 +19,14 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Injectable } from '@angular/core';
-import { Store } from '../../../../common/core/stores/Store';
-import { DesignerService } from './designer.service';
-import { DesignerDashboardState } from './model/designer.dashboard.state';
-import { DeclarativeWorkflow } from './model/designer.workflow';
-import { NodeTemplate } from './model/desinger.nodeTemplate.model';
+import {Injectable} from '@angular/core';
+import {Store} from '../../../../common/core/stores/Store';
+import {DesignerService} from './designer.service';
+import {DesignerDashboardState} from './model/designer.dashboard.state';
+import {DeclarativeWorkflow} from './model/designer.workflow';
+import {NodeTemplate} from './model/desinger.nodeTemplate.model';
+import {PackageCreationUtils} from '../package-creation/package-creation.utils';
+import {Action} from './action-attributes/models/Action';
 
 
 @Injectable({
@@ -32,7 +34,7 @@ import { NodeTemplate } from './model/desinger.nodeTemplate.model';
 })
 export class DesignerStore extends Store<DesignerDashboardState> {
 
-    constructor(private designerService: DesignerService) {
+    constructor(private designerService: DesignerService, private packageCreationUtils: PackageCreationUtils) {
         super(new DesignerDashboardState());
     }
 
@@ -145,17 +147,11 @@ export class DesignerStore extends Store<DesignerDashboardState> {
         });
     }
 
-    setInputsToSpecificWorkflow(inputs: Map<string, string>) {
-        /* tslint:disable:no-string-literal */
-        let mapOfWorkflows = this.state.template.workflows['Action1']['steps'];
-        mapOfWorkflows += inputs;
-        /*mapOfWorkflows.forEach(((value, key) => {
-            if (value.includes('resource-assignment')) {
-                value += inputs;
-            }
-        }));*/
-        console.log('the new workflows');
-        console.log(mapOfWorkflows);
+    setInputsAndOutputsToSpecificWorkflow(inputs: string, outputs: string) {
+        const action = this.state.template.workflows['Action1'] as Action;
+        action.inputs = inputs;
+        action.outputs = outputs;
+        this.saveSourceContent(this.packageCreationUtils.transformToJson(this.state.template));
     }
 
     clear() {
