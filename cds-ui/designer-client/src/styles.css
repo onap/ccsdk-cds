@@ -2938,6 +2938,11 @@ animation: glowing 1500ms infinite;
   position: absolute;
   top: 13px;
 }
+/* -------- ace editor style -------- */
+.editor-container{
+  height: 55vh !important;
+  overflow: scroll;
+}
 .ace_print-margin{
   left: 100% !important;
   background: #eee !important;
@@ -2946,7 +2951,7 @@ animation: glowing 1500ms infinite;
   width: 100% !important;
 }
 .ace_editor{
-  height: 55vh !important;
+  /* height: 55vh !important; */
   line-height: 25px;
   border: 1px solid #ECEDF2;
   background-color: #fff;
@@ -2967,6 +2972,7 @@ animation: glowing 1500ms infinite;
 .ace-tm .ace_marker-layer .ace_active-line{
   background: #F4F9FE !important;
 }
+/* -------- end of ace editor style -------- */
 .breadcrumb-header{
   padding: 0px;
   margin: 0px;

@@ -25,16 +25,17 @@ export class SourceEditorComponent implements OnInit, AfterViewInit {
 
 
     ngAfterViewInit() {
-
         console.log(this.lang);
         this.editor.setTheme('eclipse');
         this.editor.getEditor().setOptions({
             enableBasicAutocompletion: true,
             highlightSelectedWord: true,
-            maxLines: Infinity,
             enableSnippets: true,
             enableLiveAutocompletion: true,
             showFoldWidgets: true,
+            maxLines: 900000,
+            // autoScrollEditorIntoView: true,
+            // vScrollBarAlwaysVisible: true
         });
 
         this.editor.getEditor().commands.addCommand({
