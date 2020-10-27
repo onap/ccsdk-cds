@@ -51,7 +51,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     templateExt = 'vtl';
     dependancies = new Map<string, Array<string>>();
     dependanciesSource = new Map<string, string>();
-    mappingRes = [];
+    mappingRes: Mapping[] = [];
     currentTemplate: any;
     currentMapping: any;
     edit = false;
@@ -73,9 +73,6 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     // displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
     dataSource: MatTableDataSource<{}>;
     initDataSource: MatTableDataSource<{}>;
-    // dataSource = new MatTableDataSource();
-    @ViewChild('paginate', { static: true }) paginator: MatPaginator;
-    @ViewChild('sort', { static: true }) sort: MatSort;
     @ViewChild(MatPaginator, { static: true }) initPaginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) initSort: MatSort;
 
@@ -93,8 +90,6 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
 
     ngAfterViewInit() {
         try {
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
             this.initDataSource.paginator = this.initPaginator;
             this.initDataSource.sort = this.initSort;
         } catch (e) { }
@@ -115,16 +110,12 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
                 this.fileName = this.fileName.substr(0, this.fileName.lastIndexOf('-'));
             }
             if (templateInfo.type === 'mapping' || templateInfo.type.includes('mapping')) {
+                console.log(templateInfo.mapping);
                 this.mappingRes = templateInfo.mapping;
                 this.currentMapping = Object.assign({}, templateInfo);
                 this.resourceDictionaryRes = [];
                 // Assign the data to the data source for the table to render
-                this.dataSource = new MatTableDataSource(this.mappingRes);
-                //   this.cdr.detectChanges();
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
-
-
+                this.rerender();
             } else {
                 this.mappingRes = [];
                 this.currentMapping = Any;
@@ -165,9 +156,22 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
 
     }
 
+    initApplyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.initDataSource.filter = filterValue.trim().toLowerCase();
+        if (this.initDataSource.paginator) {
+            this.initDataSource.paginator.firstPage();
+        }
+    }
     setProp(e, propName, index) {
-        this.resourceDictionaryRes[index][propName] = e.checked;
-        console.log(this.resourceDictionaryRes[index]);
+        if (propName === 'input-param') {
+            this.mappingRes[index][propName] = e.checked;
+
+        } else {
+            // tslint:disable-next-line: no-string-literal
+            this.mappingRes[index]['property'][propName] = e.checked;
+        }
+        //  console.log(this.mappingRes[index]);
     }
     selectProp(value) {
         console.log(value);
@@ -178,29 +182,13 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
         }
     }
 
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-        if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
-        }
-    }
-
-    initApplyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.initDataSource.filter = filterValue.trim().toLowerCase();
-        if (this.initDataSource.paginator) {
-            this.initDataSource.paginator.firstPage();
-        }
-    }
-
     removeProps() {
         console.log(this.selectedProps);
         this.selectedProps.forEach(prop => {
-            this.resourceDictionaryRes.forEach((res, index) => {
+            this.mappingRes.forEach((res, index) => {
                 if (res.name === prop) {
                     console.log('delete...');
-                    this.resourceDictionaryRes.splice(index, 1);
+                    this.mappingRes.splice(index, 1);
                     this.selectedProps.delete(prop);
                     this.rerender();
                 }
@@ -208,11 +196,12 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
         });
     }
     selectAllProps() {
-        if (this.resourceDictionaryRes.length === this.selectedProps.size) {
+        // if all items are already selected, unselect them
+        if (this.mappingRes.length === this.selectedProps.size) {
             this.selectedProps = new Set<string>();
         } else {
-            this.resourceDictionaryRes.forEach(prop => {
-                console.log(prop);
+            this.mappingRes.forEach(prop => {
+                // console.log(prop);
                 this.selectedProps.add(prop.name);
             });
         }
@@ -224,8 +213,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
             console.log('base');
             this.packageCreationService.getTemplateAndMapping([...this.selectedProps]).subscribe(res => {
                 let message = 'Re-Auto mapping';
-                this.mappingRes = [];
-                currentResDictionary = res;
+                //  this.mappingRes = [];
+                currentResDictionary = this.convertDictionaryToMap(res);
                 console.log(currentResDictionary);
                 if (currentResDictionary && currentResDictionary.length <= 0) {
                     message = 'No values for those attributes';
@@ -233,14 +222,15 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
 
                 // Replcae new values with the old ones
                 currentResDictionary.forEach(curr => {
-                    for (let i = 0; i < this.resourceDictionaryRes.length; i++) {
-                        if (this.resourceDictionaryRes[i].name === curr.name) {
-                            this.resourceDictionaryRes[i] = curr;
+                    for (let i = 0; i < this.mappingRes.length; i++) {
+                        if (this.mappingRes[i].name === curr.name) {
+                            this.mappingRes[i] = curr;
                         }
                     }
                 });
                 this.rerender();
                 this.toastr.success(message, 'Success');
+                this.selectedProps = new Set();
             }, err => {
                 this.toastr.error('Error');
             });
@@ -346,6 +336,17 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
         return mapArray;
     }
 
+    private finalMapping(mappingArray: Mapping[]): Mapping[] {
+        const mapArray: Mapping[] = [];
+        for (const mapping of mappingArray) {
+            this.MappingAdapter = new MappingAdapter(null, this.dependancies, this.dependanciesSource);
+            mapArray.push(this.MappingAdapter.finalize(mapping));
+            console.log(mapping);
+        }
+        console.log(mapArray);
+        return mapArray;
+    }
+
     setTemplateFilesToStore() {
         for (const droppedFile of this.uploadedFiles) {
             droppedFile.file((file: File) => {
@@ -393,10 +394,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
         return item.name;
     }
     setVelocity(index, value) {
-        // console.log('velocity value = ' + value);
-        // console.log(this.resourceDictionaryRes[index]);
         // tslint:disable-next-line: no-string-literal
-        this.resourceDictionaryRes[index].definition.property['metadata'] = {
+        this.mappingRes[index].property['metadata'] = {
             'transform-template': value
         };
         console.log(this.resourceDictionaryRes[index]);
@@ -417,6 +416,8 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
                 this.mappingRes = [];
                 this.resourceDictionaryRes = res;
                 console.log(this.resourceDictionaryRes);
+                this.mappingRes = this.convertDictionaryToMap(this.resourceDictionaryRes);
+                console.log(this.mappingRes);
                 this.rerender();
                 if (this.resourceDictionaryRes && this.resourceDictionaryRes.length <= 0) {
                     message = 'No values for those attributes';
@@ -448,6 +449,13 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     cancel() {
         this.openListView();
     }
+
+    objectToString(object) {
+        if (object) {
+            return JSON.stringify(object);
+        }
+        return '';
+    }
     saveToStore() {
         const filename = this.fileName;
         if (filename) {
@@ -455,16 +463,23 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
             console.log('----------- mode ' + this.edit);
             const fileContent = this.templateFileContent;
             if (
-                (!(this.packageCreationStore.fileExist('Templates/' + this.fileName + '-mapping.json')
-                    || this.packageCreationStore.fileExist('Templates/' + this.fileName + '-template' + this.getFileExtension())))
+                (!(this.packageCreationStore.fileExist('Templates/' + filename + '-mapping.json')
+                    || this.packageCreationStore.fileExist('Templates/' + filename + '-template' + this.getFileExtension())))
                 || this.edit
             ) {
                 // Save Mapping to Store
-                if (this.resourceDictionaryRes && this.resourceDictionaryRes.length > 0) {
-                    const mapArray = this.convertDictionaryToMap(this.resourceDictionaryRes);
-                    this.packageCreationStore.addMapping('Templates/' + this.fileName + '-mapping.json',
-                        this.packageCreationUtils.transformToJson(this.jsonConvert.serialize(mapArray)));
-                    this.resourceDictionaryRes = [];
+                if (this.mappingRes && this.mappingRes.length > 0) {
+                    const mapArray = this.finalMapping(this.mappingRes);
+                    console.log(mapArray);
+                    //  this.packageCreationUtils.transformToJson(this.jsonConvert.serialize(mapArray)))
+                    if (this.edit) {
+                        this.packageCreationStore.addMapping('Templates/' + filename + '-mapping.json',
+                            JSON.stringify(mapArray));
+                    } else {
+                        this.packageCreationStore.addMapping('Templates/' + filename + '-mapping.json',
+                            this.packageCreationUtils.transformToJson(this.jsonConvert.serialize(mapArray)));
+                    }
+                    this.mappingRes = [];
                 }
                 // Save Template to store
                 // if (this.templateFileContent) {
@@ -493,7 +508,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
         let keyDepend = null;
         this.dependancies.set(dict.name, null);
         try {
-            keyDepend = dict.definition.sources[source].properties['key-dependencies'] || null;
+            keyDepend = dict.sources[source].properties['key-dependencies'] || null;
         } catch (e) { }
         console.log(dict);
         console.log(source);
@@ -517,13 +532,12 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     rerender(): void {
-        this.initDataSource = new MatTableDataSource(this.resourceDictionaryRes);
-        //   this.cdr.detectChanges();
+        this.initDataSource = new MatTableDataSource(this.mappingRes);
         /*
         Hint: the intial page size for the table will be the result size; I did that because the table doesn't load element in DOM,
         as result some function are not working well like save and you have to move to other pages to fix that.
         */
-        this.initPaginator.pageSize = this.resourceDictionaryRes.length;
+        this.initPaginator.pageSize = this.mappingRes.length;
         this.initDataSource.paginator = this.initPaginator;
         this.initDataSource.sort = this.initSort;
     }
@@ -536,14 +550,3 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     }
 }
 
-class DependancyVal {
-    source: string;
-    keyDepend: any;
-    constructor(
-        source: string,
-        keyDepend: any
-    ) {
-        this.source = source;
-        this.keyDepend = keyDepend;
-    }
-}
