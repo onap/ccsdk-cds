@@ -17,6 +17,7 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,7 +46,8 @@ import kotlin.test.assertTrue
 @ContextConfiguration(
     classes = [
         ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, SelfServiceApiTestConfiguration::class, ErrorCatalogTestConfiguration::class
+        BluePrintCatalogService::class, SelfServiceApiTestConfiguration::class,
+        ErrorCatalogTestConfiguration::class, SimpleMeterRegistry::class
     ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])

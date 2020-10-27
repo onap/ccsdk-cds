@@ -15,6 +15,10 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils
 
+import io.micrometer.core.instrument.Tag
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.SelfServiceMetricConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.springframework.http.HttpStatus
 import org.springframework.http.codec.multipart.FilePart
@@ -60,3 +64,23 @@ fun determineHttpStatusCode(statusCode: Int): HttpStatus {
         return HttpStatus.valueOf(INTERNAL_SERVER_ERROR_HTTP_STATUS_CODE)
     }
 }
+
+fun cbaMetricTags(executionServiceInput: ExecutionServiceInput): MutableList<Tag> =
+    executionServiceInput.actionIdentifiers.let {
+        mutableListOf(
+            Tag.of(SelfServiceMetricConstants.TAG_BP_NAME, it.blueprintName),
+            Tag.of(SelfServiceMetricConstants.TAG_BP_VERSION, it.blueprintVersion),
+            Tag.of(SelfServiceMetricConstants.TAG_BP_ACTION, it.actionName)
+        )
+    }
+
+fun cbaMetricTags(executionServiceOutput: ExecutionServiceOutput): MutableList<Tag> =
+    executionServiceOutput.let {
+        mutableListOf(
+            Tag.of(SelfServiceMetricConstants.TAG_BP_NAME, it.actionIdentifiers.blueprintName),
+            Tag.of(SelfServiceMetricConstants.TAG_BP_VERSION, it.actionIdentifiers.blueprintVersion),
+            Tag.of(SelfServiceMetricConstants.TAG_BP_ACTION, it.actionIdentifiers.actionName),
+            Tag.of(SelfServiceMetricConstants.TAG_BP_STATUS, it.status.code.toString()),
+            Tag.of(SelfServiceMetricConstants.TAG_BP_OUTCOME, it.status.message)
+        )
+    }
