@@ -21,6 +21,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 import com.google.protobuf.util.JsonFormat
 import io.grpc.stub.StreamObserver
 import io.grpc.testing.GrpcServerRule
+import io.micrometer.core.instrument.MeterRegistry
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -33,6 +34,7 @@ import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceIn
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -51,6 +53,9 @@ import kotlin.test.BeforeTest
 class BluePrintProcessingGRPCHandlerTest {
 
     private val log = LoggerFactory.getLogger(BluePrintProcessingGRPCHandlerTest::class.java)
+
+    @MockBean
+    lateinit var meterRegistry: MeterRegistry
 
     @get:Rule
     val grpcServerRule = GrpcServerRule().directExecutor()

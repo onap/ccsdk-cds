@@ -16,6 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import io.micrometer.core.instrument.MeterRegistry
+import io.mockk.coVerify
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -32,6 +34,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractService
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import org.springframework.test.context.ContextConfiguration
@@ -50,6 +53,9 @@ import kotlin.test.assertTrue
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ExecutionServiceHandlerTest {
+
+    @MockBean
+    lateinit var meterRegistry: MeterRegistry
 
     @Autowired
     lateinit var applicationContext: ApplicationContext
@@ -74,7 +80,7 @@ class ExecutionServiceHandlerTest {
             }
         }
         runBlocking {
-            val executionServiceHandler = ExecutionServiceHandler(mockk(), mockk(), mockk(), mockk())
+            val executionServiceHandler = ExecutionServiceHandler(mockk(), mockk(), mockk(), mockk(), mockk(relaxed = true))
             val isServiceFunction = executionServiceHandler.checkServiceFunction(executionServiceInput)
             assertTrue(isServiceFunction, "failed to checkServiceFunction")
             val executionServiceOutput = executionServiceHandler.executeServiceFunction(executionServiceInput)
@@ -102,7 +108,8 @@ class ExecutionServiceHandlerTest {
             mockk(),
             mockk(),
             mockk(),
-            publishAuditService
+            publishAuditService,
+            mockk(relaxed = true)
         )
 
         coEvery { publishAuditService.publishExecutionInput(ExecutionServiceInput()) } just Runs

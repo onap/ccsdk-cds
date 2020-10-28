@@ -18,6 +18,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
 import io.grpc.stub.StreamObserver
+import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.Timer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,6 +29,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.toProto
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.SelfServiceMetricConstants.COUNTER_PROCESS
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.SelfServiceMetricConstants.TIMER_PROCESS
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.cbaMetricTags
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
@@ -45,7 +50,8 @@ class ExecutionServiceHandler(
     private val blueprintsProcessorCatalogService: BluePrintCatalogService,
     private val bluePrintWorkflowExecutionService:
         BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>,
-    private val publishAuditService: PublishAuditService
+    private val publishAuditService: PublishAuditService,
+    private val meterRegistry: MeterRegistry
 ) {
 
     private val log = LoggerFactory.getLogger(ExecutionServiceHandler::class.toString())
@@ -75,6 +81,7 @@ class ExecutionServiceHandler(
                     "Failed to process request, 'actionIdentifiers.mode' not specified. Valid value are: 'sync' or 'async'.",
                     true
                 )
+                meterRegistry.counter(COUNTER_PROCESS, cbaMetricTags(executionServiceOutput)).increment()
                 publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput)
                 responseObserver.onNext(
                     executionServiceOutput.toProto()
@@ -93,8 +100,10 @@ class ExecutionServiceHandler(
 
         log.info("processing request id $requestId")
 
+        // Audit input
         publishAuditService.publishExecutionInput(executionServiceInput)
 
+        val sample = Timer.start()
         try {
             /** Check Blueprint is needed for this request */
             if (checkServiceFunction(executionServiceInput)) {
@@ -120,7 +129,11 @@ class ExecutionServiceHandler(
             log.error("fail processing request id $requestId", e)
             executionServiceOutput = response(executionServiceInput, e.localizedMessage ?: e.message ?: e.toString(), true)
         }
+        // Update process metrics
+        sample.stop(meterRegistry.timer(TIMER_PROCESS, cbaMetricTags(executionServiceInput)))
+        meterRegistry.counter(COUNTER_PROCESS, cbaMetricTags(executionServiceOutput)).increment()
 
+        // Audit output
         publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput)
         return executionServiceOutput
     }
