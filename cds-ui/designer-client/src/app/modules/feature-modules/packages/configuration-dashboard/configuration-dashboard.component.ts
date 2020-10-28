@@ -1,25 +1,26 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
-import {PackageCreationStore} from '../package-creation/package-creation.store';
-import {FilesContent, FolderNodeElement} from '../package-creation/mapping-models/metadata/MetaDataTab.model';
-import {MetadataTabComponent} from '../package-creation/metadata-tab/metadata-tab.component';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
+import { PackageCreationStore } from '../package-creation/package-creation.store';
+import { FilesContent, FolderNodeElement } from '../package-creation/mapping-models/metadata/MetaDataTab.model';
+import { MetadataTabComponent } from '../package-creation/metadata-tab/metadata-tab.component';
 import * as JSZip from 'jszip';
-import {ConfigurationDashboardService} from './configuration-dashboard.service';
-import {TemplateTopology, CBADefinition} from '../package-creation/mapping-models/definitions/CBADefinition';
-import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
-import {PackageCreationUtils} from '../package-creation/package-creation.utils';
-import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
-import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
-import {saveAs} from 'file-saver';
-import {DesignerStore} from '../designer/designer.store';
-import {ToastrService} from 'ngx-toastr';
-import {NgxFileDropEntry} from 'ngx-file-drop';
-import {PackageCreationService} from '../package-creation/package-creation.service';
-import {ComponentCanDeactivate} from '../../../../common/core/canDactivate/ComponentCanDeactivate';
-import {PackageCreationExtractionService} from '../package-creation/package-creation-extraction.service';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
-import {Subject, throwError} from 'rxjs';
+import { ConfigurationDashboardService } from './configuration-dashboard.service';
+import { TemplateTopology, CBADefinition } from '../package-creation/mapping-models/definitions/CBADefinition';
+import { CBAPackage } from '../package-creation/mapping-models/CBAPacakge.model';
+import { PackageCreationUtils } from '../package-creation/package-creation.utils';
+import { PackageCreationModes } from '../package-creation/creationModes/PackageCreationModes';
+import { PackageCreationBuilder } from '../package-creation/creationModes/PackageCreationBuilder';
+import { saveAs } from 'file-saver';
+import { DesignerStore } from '../designer/designer.store';
+import { ToastrService } from 'ngx-toastr';
+import { NgxFileDropEntry } from 'ngx-file-drop';
+import { PackageCreationService } from '../package-creation/package-creation.service';
+import { ComponentCanDeactivate } from '../../../../common/core/canDactivate/ComponentCanDeactivate';
+import { PackageCreationExtractionService } from '../package-creation/package-creation-extraction.service';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject, throwError } from 'rxjs';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
     selector: 'app-configuration-dashboard',
@@ -28,13 +29,13 @@ import {Subject, throwError} from 'rxjs';
 })
 export class ConfigurationDashboardComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
-    @ViewChild(MetadataTabComponent, {static: false})
+    @ViewChild(MetadataTabComponent, { static: false })
     metadataTabComponent: MetadataTabComponent;
     public customActionName = '';
 
     entryDefinitionKeys: string[] = ['template_tags', 'user-groups',
         'author-email', 'template_version', 'template_name', 'template_author', 'template_description'];
-    @ViewChild('nameit', {static: true})
+    @ViewChild('nameit', { static: true })
     elementRef: ElementRef;
     uploadedFiles = [];
     zipFile: JSZip = new JSZip();
@@ -61,6 +62,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         private router: Router,
         private designerStore: DesignerStore,
         private toastService: ToastrService,
+        private ngxService: NgxUiLoaderService,
         private packageCreationExtractionService: PackageCreationExtractionService
     ) {
         super();
@@ -118,13 +120,14 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     private downloadCBAPackage(bluePrintDetailModels: BluePrintDetailModel) {
         this.configurationDashboardService.downloadResource(
             this.viewedPackage.artifactName + '/' + this.viewedPackage.artifactVersion).subscribe(response => {
-            const blob = new Blob([response], {type: 'application/octet-stream'});
-            this.currentBlob = blob;
-            this.packageCreationExtractionService.extractBlobToStore(blob);
-        });
+                const blob = new Blob([response], { type: 'application/octet-stream' });
+                this.currentBlob = blob;
+                this.packageCreationExtractionService.extractBlobToStore(blob);
+            });
     }
 
     editBluePrint() {
+        this.ngxService.start();
         this.configurationDashboardService.deletePackage(this.viewedPackage.id).subscribe(res => {
             this.formTreeData();
             this.saveBluePrintToDataBase();
@@ -148,7 +151,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({type: 'blob'})
+        this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
                 this.packageCreationService.savePackage(blob).subscribe(
                     bluePrintDetailModels => {
@@ -162,6 +165,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     }, error => {
                         this.toastService.error('error happened when editing ' + error.message);
                         console.log('Error -' + error.message);
+                    }, () => {
+                        this.ngxService.stop();
                     });
             });
     }
@@ -191,20 +196,23 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     }
 
     downloadPackage(artifactName: string, artifactVersion: string) {
+        this.ngxService.start();
         this.configurationDashboardService.downloadResource(artifactName + '/' + artifactVersion).subscribe(response => {
-            const blob = new Blob([response], {type: 'application/octet-stream'});
+            const blob = new Blob([response], { type: 'application/octet-stream' });
             saveAs(blob, artifactName + '-' + artifactVersion + '-CBA.zip');
+            this.ngxService.stop();
         });
     }
 
     deployCurrentPackage() {
+        this.ngxService.start();
         this.formTreeData();
         this.deployPackage();
 
     }
 
     goToDesignerMode(id) {
-        this.router.navigate(['/packages/designer', id, {actionName: this.customActionName}]);
+        this.router.navigate(['/packages/designer', id, { actionName: this.customActionName }]);
     }
 
     public dropped(files: NgxFileDropEntry[]) {
@@ -226,6 +234,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     }
 
     enrichBluePrint() {
+        this.ngxService.start();
         this.packageCreationStore.addTopologyTemplate(this.cbaPackage.templateTopology);
         this.formTreeData();
         this.enrichPackage();
@@ -236,11 +245,11 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
 
     private enrichPackage() {
         this.create();
-        this.zipFile.generateAsync({type: 'blob'})
+        this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
                 this.packageCreationService.enrichPackage(blob).subscribe(response => {
                     console.log('success');
-                    const blobInfo = new Blob([response], {type: 'application/octet-stream'});
+                    const blobInfo = new Blob([response], { type: 'application/octet-stream' });
                     this.currentBlob = blobInfo;
                     this.packageCreationStore.clear();
                     this.packageCreationExtractionService.extractBlobToStore(this.currentBlob);
@@ -250,12 +259,14 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
             }, error => {
                 this.toastService.error('error happened when enrich ' + error.message);
                 console.error('Error -' + error.message);
+            }, () => {
+                this.ngxService.stop();
             });
     }
 
     private deployPackage() {
         this.create();
-        this.zipFile.generateAsync({type: 'blob'})
+        this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
                 this.packageCreationService.deploy(blob).subscribe(response => {
                     this.toastService.info('deployed successfully ');
@@ -265,6 +276,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                 });
             }, error => {
                 this.handleError(error);
+            }, () => {
+                this.ngxService.stop();
             });
     }
 

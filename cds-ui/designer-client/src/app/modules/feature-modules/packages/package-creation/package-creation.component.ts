@@ -19,22 +19,23 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FilesContent, FolderNodeElement, MetaDataTabModel} from './mapping-models/metadata/MetaDataTab.model';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FilesContent, FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
 
 import * as JSZip from 'jszip';
-import {PackageCreationStore} from './package-creation.store';
-import {CBAPackage, Definition} from './mapping-models/CBAPacakge.model';
-import {PackageCreationModes} from './creationModes/PackageCreationModes';
-import {PackageCreationBuilder} from './creationModes/PackageCreationBuilder';
-import {PackageCreationUtils} from './package-creation.utils';
-import {MetadataTabComponent} from './metadata-tab/metadata-tab.component';
-import {Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
-import {TourService} from 'ngx-tour-md-menu';
-import {PackageCreationService} from './package-creation.service';
-import {ComponentCanDeactivate} from '../../../../common/core/canDactivate/ComponentCanDeactivate';
-import {DesignerStore} from '../designer/designer.store';
+import { PackageCreationStore } from './package-creation.store';
+import { CBAPackage, Definition } from './mapping-models/CBAPacakge.model';
+import { PackageCreationModes } from './creationModes/PackageCreationModes';
+import { PackageCreationBuilder } from './creationModes/PackageCreationBuilder';
+import { PackageCreationUtils } from './package-creation.utils';
+import { MetadataTabComponent } from './metadata-tab/metadata-tab.component';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { TourService } from 'ngx-tour-md-menu';
+import { PackageCreationService } from './package-creation.service';
+import { ComponentCanDeactivate } from '../../../../common/core/canDactivate/ComponentCanDeactivate';
+import { DesignerStore } from '../designer/designer.store';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 
 @Component({
@@ -55,6 +56,7 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
         private router: Router,
         private tourService: TourService,
         private toastService: ToastrService,
+        private ngxService: NgxUiLoaderService,
         private designerStore: DesignerStore) {
 
         super();
@@ -62,8 +64,8 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
 
     counter = 0;
     modes: object[] = [
-        {name: 'Designer Mode', style: 'mode-icon icon-designer-mode'},
-        {name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode'}];
+        { name: 'Designer Mode', style: 'mode-icon icon-designer-mode' },
+        { name: 'Scripting Mode', style: 'mode-icon icon-scripting-mode' }];
     metaDataTab: MetaDataTabModel = new MetaDataTabModel();
     folder: FolderNodeElement = new FolderNodeElement();
     zipFile: JSZip = new JSZip();
@@ -71,10 +73,10 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
     definition: Definition = new Definition();
     isSaveEnabled = false;
 
-    @ViewChild(MetadataTabComponent, {static: false})
+    @ViewChild(MetadataTabComponent, { static: false })
     metadataTabComponent: MetadataTabComponent;
 
-    @ViewChild('nameit', {static: true})
+    @ViewChild('nameit', { static: true })
     elementRef: ElementRef;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     metadataClasses = 'nav-item nav-link active complete';
@@ -108,6 +110,7 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
     }
 
     saveBluePrint() {
+        this.ngxService.start();
         console.log(this.cbaPackage);
         FilesContent.clear();
         let packageCreationModes: PackageCreationModes;
@@ -126,7 +129,7 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({type: 'blob'})
+        this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
                 this.packageCreationService.savePackage(blob).subscribe(
                     bluePrintDetailModels => {
@@ -139,6 +142,8 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
                     }, error => {
                         // this.toastService.error('error happened when editing ' + error.message);
                         console.log('Error -' + error.message);
+                    }, () => {
+                        this.ngxService.stop();
                     });
             });
     }

@@ -39,6 +39,7 @@ export class PackageListComponent implements OnInit {
 
 
     ngOnInit() {
+        this.ngxLoader.start();
         this.packagesStore.getAll();
     }
 
