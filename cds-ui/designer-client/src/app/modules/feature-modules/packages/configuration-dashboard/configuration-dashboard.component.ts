@@ -71,6 +71,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     }
 
     ngOnInit() {
+        this.ngxService.start();
         this.vlbDefinition.topology_template = new TemplateTopology();
         this.packageCreationStore.state$
             .pipe(distinctUntilChanged((a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)),
@@ -114,6 +115,9 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     this.downloadCBAPackage(bluePrintDetailModels);
                     this.packageCreationStore.clear();
                 }
+            }, err => { },
+            () => {
+                //  this.ngxService.stop();
             });
     }
 
@@ -123,7 +127,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                 const blob = new Blob([response], { type: 'application/octet-stream' });
                 this.currentBlob = blob;
                 this.packageCreationExtractionService.extractBlobToStore(blob);
-            });
+            }, err => { },
+                () => {
+                    this.ngxService.stop();
+                });
     }
 
     editBluePrint() {

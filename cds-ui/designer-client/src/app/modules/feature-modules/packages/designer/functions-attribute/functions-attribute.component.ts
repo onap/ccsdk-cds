@@ -7,6 +7,8 @@ import { CBAPackage } from '../../package-creation/mapping-models/CBAPacakge.mod
 import { TemplateAndMapping } from '../../package-creation/template-mapping/TemplateAndMapping';
 import { FunctionsStore } from '../functions.store';
 import { NodeProcess, NodeTemplate } from '../model/desinger.nodeTemplate.model';
+import { DesignerDashboardState } from '../model/designer.dashboard.state';
+import { Action } from '../action-attributes/models/Action';
 
 @Component({
     selector: 'app-functions-attribute',
@@ -28,6 +30,11 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     artifactPrefix = false;
     currentFuncion = new NodeProcess();
     nodeTemplates = new NodeTemplate('');
+    designerState: DesignerDashboardState;
+    actionName = '';
+    functionName = '';
+    interfaceChildName = '';
+
 
     constructor(
         private designerStore: DesignerStore,
@@ -43,6 +50,20 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                 takeUntil(this.ngUnsubscribe))
             .subscribe(designerDashboardState => {
                 this.designerDashboardState = designerDashboardState;
+                this.designerState = designerDashboardState;
+                this.actionName = this.designerState.actionName;
+                const action = this.designerState.template.workflows[this.actionName] as Action;
+
+                console.log(action);
+                if (action) {
+                    const child = Object.keys(action.steps)[0];
+                    this.functionName = action.steps[child].target;
+                    console.log(this.designerState.template.node_templates[this.functionName]);
+                    //  this.currentFuncion = this.designerState.template.node_templates[this.functionName];
+                    // reset inouts&outputs
+                    this.toNodeProcess(this.designerState.template.node_templates[this.functionName], this.functionName);
+                    this.getNodeType(this.functionName);
+                }
             });
 
         this.packageCreationStore.state$
@@ -65,10 +86,40 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                     this.setIsMappingOrTemplate(key, templateAndMapping, isFromTemplate);
                 });
             });
-        this.getNodeType('component-resource-resolution');
+
 
     }
 
+    toNodeProcess(nodeTemplate, functionName) {
+        this.requiredInputs = new Map<string, {}>();
+        this.requiredOutputs = new Map<string, {}>();
+        this.OptionalInputs = new Map<string, {}>();
+        this.optionalOutputs = new Map<string, {}>();
+        console.log(nodeTemplate);
+        this.currentFuncion['instance-name'] = functionName;
+        // tslint:disable-next-line: no-string-literal
+        this.currentFuncion['type'] = nodeTemplate['type'];
+        if (Object.keys(nodeTemplate.interfaces).length > 0) {
+            const nodeName = Object.keys(nodeTemplate.interfaces)[0];
+            // tslint:disable-next-line: no-string-literal
+            const inputs = nodeTemplate.interfaces[nodeName]['operations']['process']['inputs'];
+            // tslint:disable-next-line: no-string-literal
+            const outputs = nodeTemplate.interfaces[nodeName]['operations']['process']['outputs'];
+
+            if (inputs) {
+                for (const [key, value] of Object.entries(inputs)) {
+                    console.log(key + '-' + value);
+                    this.currentFuncion.inputs[key] = value;
+                }
+            }
+            if (outputs) {
+                for (const [key, value] of Object.entries(outputs)) {
+                    console.log(key + '-' + value);
+                    this.currentFuncion.outputs[key] = value;
+                }
+            }
+        }
+    }
     ngOnDestroy() {
         this.ngUnsubscribe.next();
         this.ngUnsubscribe.complete();
@@ -78,7 +129,8 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
 
         // tslint:disable-next-line: variable-name
         const node_templates = {};
-        const type = 'component-resource-resolution';
+        // tslint:disable-next-line: no-string-literal
+        const type = this.currentFuncion['type'];
         const instanceName = this.currentFuncion['instance-name'];
         // insert selected templates in nodeTemplates.artifacts
         this.selectedTemplates.forEach((value, key) => {
@@ -101,13 +153,15 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         });
         // instantiate the final node_template object to save
 
-        this.nodeTemplates.type = 'component-resource-resolution';
+        this.nodeTemplates.type = type;
         node_templates[this.currentFuncion['instance-name']] = this.nodeTemplates;
 
         delete this.currentFuncion['instance-name'];
+        // tslint:disable-next-line: no-string-literal
+        delete this.currentFuncion['type'];
 
         this.nodeTemplates.interfaces = {
-            ResourceResolutionComponent: {
+            [this.interfaceChildName]: {
                 operations: {
                     process: {
                         ...this.currentFuncion,
@@ -183,18 +237,29 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                     if (functions[i].modelName === nodeName) {
                         // tslint:disable: no-string-literal
                         console.log(functions[i].definition['interfaces']);
-                        this.getInputFields(functions[i].definition['interfaces'], 'ResourceResolutionComponent', 'inputs');
-                        this.getInputFields(functions[i].definition['interfaces'], 'ResourceResolutionComponent', 'outputs');
+                        this.getInputFields(functions[i].definition['interfaces'], 'outputs');
+                        this.getInputFields(functions[i].definition['interfaces'], 'inputs');
                         break;
                     }
                 }
             });
     }
 
-    getInputFields(interfaces, nodeName, type) {
+    getInputFields(interfaces, type) {
+
+        if (type === 'inputs') {
+            this.requiredInputs = new Map<string, {}>();
+            this.OptionalInputs = new Map<string, {}>();
+        } else {
+            this.requiredOutputs = new Map<string, {}>();
+            this.optionalOutputs = new Map<string, {}>();
+
+        }
+        const nodeName = Object.keys(interfaces)[0];
+        this.interfaceChildName = nodeName;
         console.log(interfaces[nodeName]['operations']['process'][type]);
         const fields = interfaces[nodeName]['operations']['process'][type];
-
+        this.artifactPrefix = false;
         for (const [key, value] of Object.entries(fields)) {
             if (key === 'artifact-prefix-names') {
                 this.artifactPrefix = true;
