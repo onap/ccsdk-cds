@@ -3,6 +3,8 @@ import {InputActionAttribute, OutputActionAttribute} from './models/InputActionA
 import {DesignerStore} from '../designer.store';
 import {DesignerDashboardState} from '../model/designer.dashboard.state';
 import {Action} from './models/Action';
+import {FunctionsStore} from '../functions.store';
+import {FunctionsState} from '../model/functions.state';
 
 @Component({
     selector: 'app-action-attributes',
@@ -22,8 +24,10 @@ export class ActionAttributesComponent implements OnInit {
     inputOtherType = '';
     actionName = '';
     designerState: DesignerDashboardState;
+    isFunctionAttributeActive = false;
+    functions: FunctionsState;
 
-    constructor(private designerStore: DesignerStore) {
+    constructor(private designerStore: DesignerStore, private functionsStore: FunctionsStore) {
 
     }
 
@@ -33,6 +37,20 @@ export class ActionAttributesComponent implements OnInit {
             if (this.designerState && this.designerState.actionName) {
                 this.actionName = this.designerState.actionName;
                 const action = this.designerState.template.workflows[this.actionName] as Action;
+                if (action.steps) {
+                    const steps = Object.keys(action.steps);
+                    if (steps && steps.length > 0) {
+                        this.isFunctionAttributeActive = true;
+                    } else {
+                        this.isFunctionAttributeActive = false;
+                    }
+                    steps.forEach(step => {
+                        const target = action.steps[step].target;
+                        this.getInputs(target);
+                    });
+                }
+
+
                 this.inputs = [];
                 if (action.inputs) {
                     const namesOfInput = Object.keys(action.inputs);
@@ -44,6 +62,10 @@ export class ActionAttributesComponent implements OnInit {
                     this.outputs = this.extractFields(namesOfOutput, action.outputs);
                 }
             }
+        });
+
+        this.functionsStore.state$.subscribe(functions => {
+            this.functions = functions;
         });
     }
 
@@ -143,5 +165,42 @@ export class ActionAttributesComponent implements OnInit {
             '            "type" : "' + output.type + '",\n' +
             '            "description" : "' + output.description + '"\n' +
             '          },';
+    }
+
+    getInputs(targetName) {
+        const nodeTemplate = this.designerState.template.node_templates[targetName];
+        /* tslint:disable:no-string-literal */
+        console.log(nodeTemplate['type']);
+        this.functions.serverFunctions
+            /* tslint:disable:no-string-literal */
+            .filter(currentFunction => currentFunction.modelName.includes(nodeTemplate['type']))
+            .forEach(currentFunction => {
+                console.log(currentFunction);
+                /* tslint:disable:no-string-literal */
+                if (currentFunction['definition'] && currentFunction['definition']['interfaces']) {
+                    const interfaces = Object.keys(currentFunction['definition']['interfaces']);
+                    if (interfaces && interfaces.length > 0) {
+                        const interfaceName = interfaces[0];
+                        if (nodeTemplate['interfaces'][interfaceName]['operations'] &&
+                            nodeTemplate['interfaces'][interfaceName]['operations']['process']
+                        ) {
+                            if (nodeTemplate['interfaces'][interfaceName]['operations']['process']['inputs']) {
+                                /* tslint:disable:no-string-literal */
+                                console.log(Object.keys(nodeTemplate['interfaces'][interfaceName]['operations']['process']['inputs']));
+                            }
+                            if (nodeTemplate['interfaces'][interfaceName]['operations']['process']['outputs']) {
+                                /* tslint:disable:no-string-literal */
+                                console.log(Object.keys(nodeTemplate['interfaces'][interfaceName]['operations']['process']['outputs']));
+                            }
+
+                        }
+                    }
+                }
+            });
+        console.log(nodeTemplate);
+    }
+
+    printSomethings() {
+        console.log('something');
     }
 }
