@@ -3,12 +3,12 @@
         <div class="col">
             <div class="form-group">
                 <label for="exampleInputEmail1">Function Instance Name</label>
-                <input type="text" [(ngModel)]="currentFuncion['instance-name']" class="form-control"
+                <input disabled type="text" [(ngModel)]="currentFuncion['instance-name']" class="form-control"
                     placeholder="Function Instance Name">
             </div>
             <div class="form-group mb-0">
                 <label>Function Type</label>
-                <label class="attribute-value">component-resource-resolution</label>
+                <label class="attribute-value">{{currentFuncion['type']}}</label>
             </div>
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">Description</label>
@@ -50,7 +50,7 @@
                             <div class="row">
                                 <div class="col">
                                     <!--list-->
-                                    <div class="attribute-wrap" *ngIf="artifactPrefix">
+                                    <div class="attribute-wrap" [hidden]="!artifactPrefix">
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea">artifact-prefix-names
                                                 <i class="icon-required-star" type="button"
