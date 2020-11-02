@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.components.cba</groupId>
         <artifactId>blueprint-model</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>test-blueprint-kotlin-parent</artifactId>
