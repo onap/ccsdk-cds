@@ -14,13 +14,14 @@
             <div class="row">
                 <div class="col pr-0 text-center">
                     <button type="button" data-toggle="modal" data-target="#exampleModalScrollable"
-                            class="btn btn-secondary"><i class="icon-custom-attribute" type="button"
-                                                         aria-hidden="true"></i></button>
+                        class="btn btn-secondary"><i class="icon-custom-attribute" type="button"
+                            aria-hidden="true"></i></button>
                     <span>Custom Attribute</span>
                 </div>
                 <div class="col text-center">
-                    <button (click)="printSomethings()" [disabled]="!isFunctionAttributeActive" type="button" class="btn btn-secondary"><i class="icon-function-attribute" type="button"
-                                                                       aria-hidden="true"></i></button>
+                    <button (click)="printSomethings()" [disabled]="!isFunctionAttributeActive" type="button"
+                        data-toggle="modal" data-target="#exampleModalScrollable3" class="btn btn-secondary"><i
+                            class="icon-function-attribute" type="button" aria-hidden="true"></i></button>
                     <span>Function Attribute</span>
                 </div>
             </div>
@@ -32,7 +33,7 @@
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                            aria-expanded="true" aria-controls="collapseOne">
+                        aria-expanded="true" aria-controls="collapseOne">
                         Inputs
                     </button>
                 </h2>
@@ -44,15 +45,16 @@
                             <div class="form-group" *ngFor="let input of inputs">
                                 <label for="exampleFormControlTextarea1">{{input.name}}
                                     <i [hidden]="!input.required" class="icon-required-star" type="button"
-                                       aria-hidden="true"></i>
-                                    <i [hidden]="input.required" class="icon-required-star optional-attribute" type="button" aria-hidden="true"></i>
+                                        aria-hidden="true"></i>
+                                    <i [hidden]="input.required" class="icon-required-star optional-attribute"
+                                        type="button" aria-hidden="true"></i>
                                 </label>
                                 <div class="attributeOptions">
                                     <a data-toggle="modal" data-target="#exampleModalScrollable2"
-                                       class="accordion-delete editAttribute" tooltip="Edit Attribute"
-                                       placement="bottom"><i class="icon-edit"></i></a>
+                                        class="accordion-delete editAttribute" tooltip="Edit Attribute"
+                                        placement="bottom"><i class="icon-edit"></i></a>
                                     <a class="accordion-delete deleteAttribute" tooltip="Delete Attribute"
-                                       placement="bottom"><i class="icon-delete-sm"></i></a>
+                                        placement="bottom"><i class="icon-delete-sm"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +69,7 @@
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="true" aria-controls="collapseTwo">
+                        aria-expanded="true" aria-controls="collapseTwo">
                         Outputs
                     </button>
                 </h2>
@@ -80,9 +82,9 @@
                             <div class="form-group" *ngFor="let output of outputs">
                                 <label for="exampleFormControlTextarea1">{{output.name}}
                                     <i [hidden]="!output.required" class="icon-required-star" type="button"
-                                       aria-hidden="true"></i>
-                                    <i [hidden]="output.required" class="icon-required-star optional-attribute" type="button"
-                                       aria-hidden="true"></i>
+                                        aria-hidden="true"></i>
+                                    <i [hidden]="output.required" class="icon-required-star optional-attribute"
+                                        type="button" aria-hidden="true"></i>
 
                                 </label>
                             </div>
@@ -95,14 +97,14 @@
 </div>
 <!--Action - Add Custom Attribute - Modal-->
 <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
     <div class="modal-dialog  modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle">
                     Add Custom Attributes</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <img src="assets/img/icon-close.svg"/>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body createAttributeTabs">
@@ -110,29 +112,29 @@
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                           aria-controls="home" aria-selected="true">Inputs</a>
+                            aria-controls="home" aria-selected="true">Inputs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                           aria-controls="profile" aria-selected="false">Outputs</a>
+                            aria-controls="profile" aria-selected="false">Outputs</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <!--INPUTS Tab-->
                     <div class="tab-pane fade show active create-form" id="home" role="tabpanel"
-                         aria-labelledby="home-tab">
+                        aria-labelledby="home-tab">
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
                             <div class="col-sm-9">
                                 <input [(ngModel)]="inputActionAttribute.name" type="email" class="form-control"
-                                       id="inputEmail3" placeholder="Attribute name">
+                                    id="inputEmail3" placeholder="Attribute name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Description</label>
                             <div class="col-sm-9">
                                 <input [(ngModel)]="inputActionAttribute.description" type="text" class="form-control"
-                                       id="inputPassword3" placeholder="Add some description">
+                                    id="inputPassword3" placeholder="Add some description">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -140,26 +142,25 @@
                             <div class="col-sm-9">
                                 <div class="list-group list-group-horizontal">
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('String')">
+                                        (click)="setInputType('String')">
                                         String
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('Integer')">Integer
+                                        (click)="setInputType('Integer')">Integer
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('Boolean')">Boolean
+                                        (click)="setInputType('Boolean')">Boolean
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('List')">List
+                                        (click)="setInputType('List')">List
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('Other')">Other
+                                        (click)="setInputType('Other')">Other
                                     </button>
                                 </div>
                                 <input [hidden]="!isInputOtherType" type="text" class="form-control mt-2 mb-2"
-                                       id="inputPassword4" placeholder="Add Other type name"
-                                       [(ngModel)]="inputOtherType"
-                                       (change)="setInputType(inputOtherType)">
+                                    id="inputPassword4" placeholder="Add Other type name" [(ngModel)]="inputOtherType"
+                                    (change)="setInputType(inputOtherType)">
 
                             </div>
                         </div>
@@ -168,12 +169,12 @@
                             <div class="col-sm-9">
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline1" name="customRadioInline1"
-                                           class="custom-control-input" (click)="setInputRequired(true)">
+                                        class="custom-control-input" (click)="setInputRequired(true)">
                                     <label class="custom-control-label" for="customRadioInline1">True</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline2" name="customRadioInline1"
-                                           class="custom-control-input" (click)="setInputRequired(false)">
+                                        class="custom-control-input" (click)="setInputRequired(false)">
                                     <label class="custom-control-label" for="customRadioInline2">False</label>
                                 </div>
                             </div>
@@ -185,14 +186,14 @@
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
                             <div class="col-sm-9">
                                 <input [(ngModel)]="outputActionAttribute.name" type="email" class="form-control"
-                                       id="inputEmail3" placeholder="Attribute name">
+                                    id="inputEmail3" placeholder="Attribute name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Description</label>
                             <div class="col-sm-9">
                                 <input [(ngModel)]="outputActionAttribute.description" type="text" class="form-control"
-                                       id="inputPassword3" placeholder="Add some description">
+                                    id="inputPassword3" placeholder="Add some description">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -200,29 +201,28 @@
                             <div class="col-sm-9">
                                 <div class="list-group list-group-horizontal">
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('String')">String
+                                        (click)="setOutputType('String')">String
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('Integer')">
+                                        (click)="setOutputType('Integer')">
                                         Integer
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('Boolean')">
+                                        (click)="setOutputType('Boolean')">
                                         Boolean
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('List')">
+                                        (click)="setOutputType('List')">
                                         List
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('Other')">
+                                        (click)="setOutputType('Other')">
                                         Other
                                     </button>
                                 </div>
                                 <input [hidden]="!isOutputOtherType" type="text" class="form-control mt-2 mb-2"
-                                       id="inputPassword3" placeholder="Add Other type name"
-                                       [(ngModel)]="outputOtherType"
-                                       (change)="setOutputType(outputOtherType)">
+                                    id="inputPassword3" placeholder="Add Other type name" [(ngModel)]="outputOtherType"
+                                    (change)="setOutputType(outputOtherType)">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -230,14 +230,14 @@
                             <div class="col-sm-9">
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline3" name="customRadioInline3"
-                                           class="custom-control-input" (click)="setOutputRequired(true)">
+                                        class="custom-control-input" (click)="setOutputRequired(true)">
                                     <label class="custom-control-label" for="customRadioInline3">True</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline4" name="customRadioInline3"
-                                           class="custom-control-input">
+                                        class="custom-control-input">
                                     <label class="custom-control-label" for="customRadioInline4"
-                                           (click)="setOutputRequired(false)">False</label>
+                                        (click)="setOutputRequired(false)">False</label>
                                 </div>
                             </div>
                         </div>
@@ -251,16 +251,130 @@
         </div>
     </div>
 </div>
+
+<!--Action - Add Attribute From Function - Modal-->
+<div class="modal fade" id="exampleModalScrollable3" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalScrollableTitle3" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle3">
+                    Add Attributes from Function</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <img src="assets/img/icon-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body createAttributeTabs">
+                <!--Action - Inputs & Outputs Attribute-->
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                            aria-controls="home" aria-selected="true">Inputs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                            aria-controls="profile" aria-selected="false">Outputs</a>
+                    </li>
+                </ul>
+                <div class="tab-content border-0 mt-2" id="myTabContent">
+                    <!--INPUTS Tab-->
+                    <div class="tab-pane fade show active create-form" id="home" role="tabpanel"
+                        aria-labelledby="home-tab">
+                        <div class="form-group row">
+                            <div class="col">
+                                <input type="email" class="form-control" id="inputEmail3" placeholder="Attributes">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <b class="listBoxTitle">1. Choose Function Name</b>
+                                <div class="list-group addedFunctionsList" id="list-tab" role="tablist">
+                                    <input type="text" class="form-control input-search-controller"
+                                        placeholder="Functions">
+                                    <div class="scrollWrapper">
+                                        <a class="list-group-item list-group-item-action active" id="list-home-list"
+                                            data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
+                                                class="icon-resource_resolution mr-1" aria-hidden="true"></i>
+                                            resource-assignment <i class="icon-next_arrow" aria-hidden="true"></i></a>
+                                        <a class="list-group-item list-group-item-action" id="list-profile-list"
+                                            data-toggle="list" href="#list-profile" role="tab"
+                                            aria-controls="profile"><i class="icon-netconf_executer mr-1"
+                                                aria-hidden="true"></i> netconf-device <i class="icon-next_arrow"
+                                                aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <b class="listBoxTitle">2. Choose Input Attribute Name</b>
+                                <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
+                                    <input type="text" class="form-control input-search-controller"
+                                        placeholder="Attributes">
+                                    <div class="tab-pane fade show active" id="list-home" role="tabpanel"
+                                        aria-labelledby="list-home-list">
+                                        <div class="scrollWrapper">
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                <label class="btn btn-secondary active">
+                                                    <input type="radio" name="options" id="option1" autocomplete="off"
+                                                        checked> resolution-key
+                                                </label>
+                                                <label class="btn btn-secondary">
+                                                    <input type="radio" name="options" id="option2" autocomplete="off">
+                                                    occurrence
+                                                </label>
+                                                <label class="btn btn-secondary">
+                                                    <input type="radio" name="options" id="option3" autocomplete="off">
+                                                    store-result
+                                                </label>
+                                                <label class="btn btn-secondary">
+                                                    <input type="radio" name="options" id="option4" autocomplete="off">
+                                                    resource-type
+                                                </label>
+                                                <label class="btn btn-secondary">
+                                                    <input type="radio" name="options" id="option5" autocomplete="off">
+                                                    resolution-summary
+                                                </label>
+                                                <label class="btn btn-secondary">
+                                                    <input type="radio" name="options" id="option6" autocomplete="off">
+                                                    artifact-prefix-names
+                                                </label>
+                                                <label class="btn btn-secondary">
+                                                    <input type="radio" name="options" id="option7" autocomplete="off">
+                                                    request-id
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="list-profile" role="tabpanel"
+                                        aria-labelledby="list-profile-list">2</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--OUTPUTS Tab-->
+                    <div class="tab-pane fade create-form" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+d
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="submitAttributes()">Submit Attributes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--Delete Action - Modal-->
 <div class="modal fade" id="exampleModalScrollable1" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalScrollableTitle1" aria-hidden="true">
+    aria-labelledby="exampleModalScrollableTitle1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle1">
                     Delete Action</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <img src="assets/img/icon-close.svg"/>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body">
@@ -275,14 +389,14 @@
 </div>
 <!--Action - Edit Custom Attribute - Modal-->
 <div class="modal fade" id="exampleModalScrollable2" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalScrollableTitle2" aria-hidden="true">
+    aria-labelledby="exampleModalScrollableTitle2" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle2">
                     Edit Custom Attributes</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <img src="assets/img/icon-close.svg"/>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body createAttributeTabs">
@@ -291,15 +405,15 @@
                         <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
                         <div class="col-sm-9">
                             <input type="email" class="form-control" id="inputEmail3" placeholder="Attribute name"
-                                   value="resource-assignment-properties">
+                                value="resource-assignment-properties">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword3" class="col-sm-3 col-form-label">Description</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="inputPassword3"
-                                   placeholder="Add some description"
-                                   value="Dynamic PropertyDefinition for workflow(resource-assignment).">
+                                placeholder="Add some description"
+                                value="Dynamic PropertyDefinition for workflow(resource-assignment).">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -315,7 +429,7 @@
                                 </button>
                             </div>
                             <input type="text" class="form-control mt-2 mb-2" id="inputPassword3"
-                                   placeholder="Add Other type name" value="dt-resource-assignment-properties">
+                                placeholder="Add Other type name" value="dt-resource-assignment-properties">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -323,12 +437,12 @@
                         <div class="col-sm-9">
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" id="customRadioInline1" name="customRadioInline1"
-                                       class="custom-control-input" checked>
+                                    class="custom-control-input" checked>
                                 <label class="custom-control-label" for="customRadioInline1">True</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" id="customRadioInline2" name="customRadioInline1"
-                                       class="custom-control-input">
+                                    class="custom-control-input">
                                 <label class="custom-control-label" for="customRadioInline2">False</label>
                             </div>
                         </div>

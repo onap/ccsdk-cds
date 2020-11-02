@@ -1,7 +1,8 @@
 <div class="dropdown packagesFilter w-100">
     <input class="dropdown-toggle" type="text">
-    <div class="dropdown-text">Filter By Tags <span class="fillteredTags">{{checkBoxTages.substr(0,checkBoxTages.length-1)}}</span></div>
-    <ul class="dropdown-content w-100">
+    <div class="dropdown-text">Filter By Tags <span
+            class="fillteredTags">{{checkBoxTages.substr(0,checkBoxTages.length-1)}}</span></div>
+    <!-- <ul class="dropdown-content w-100">
         <li>
             <div class="form-group">
                 <input type="text" (input)="reloadChanges($event)" class="form-control" placeholder="Search" autofocus>
@@ -14,5 +15,21 @@
             </div>
         </li>
         <li class="reset-filter"><a (click)="resetFilter()">Reset filter</a></li>
-    </ul>
+    </ul> -->
+
+    <div class="dropdown-content w-100">
+        <div class="form-group">
+            <input type="text" (input)="reloadChanges($event)" class="form-control" placeholder="Search" autofocus>
+        </div>
+        <ul>
+            <li *ngFor="let tag of viewedTags">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" (click)="reloadPackages($event)" class="custom-control-input" id={{tag}}
+                        #checkboxes>
+                    <label class="custom-control-label" for={{tag}}>{{tag}}</label>
+                </div>
+            </li>
+        </ul>
+        <div class="reset-filter"><a (click)="resetFilter()">Reset filter</a></div>
+    </div>
 </div>

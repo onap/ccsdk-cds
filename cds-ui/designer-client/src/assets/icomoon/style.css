@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?h11si2');
-  src:  url('fonts/icomoon.eot?h11si2#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?h11si2') format('truetype'),
-    url('fonts/icomoon.woff?h11si2') format('woff'),
-    url('fonts/icomoon.svg?h11si2#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?pyhe9j');
+  src:  url('fonts/icomoon.eot?pyhe9j#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?pyhe9j') format('truetype'),
+    url('fonts/icomoon.woff?pyhe9j') format('woff'),
+    url('fonts/icomoon.svg?pyhe9j#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -35,6 +35,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-dg_generic:before {
+  content: "\e910";
+  color: #1b3e6f;
+}
+.icon-remote_ansible:before {
+  content: "\e911";
+  color: #1b3e6f;
+}
+.icon-netconf_executer:before {
+  content: "\e912";
+  color: #1b3e6f;
+}
+.icon-resource_resolution:before {
+  content: "\e913";
+  color: #1b3e6f;
+}
+.icon-next_arrow:before {
+  content: "\e914";
+  color: #1b3e6f;
+}
 .icon-function-attribute:before {
   content: "\e90e";
 }

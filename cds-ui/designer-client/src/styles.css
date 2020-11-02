@@ -468,6 +468,7 @@ height: 40px;
   background: none !important;
   text-decoration: none;
   color: #1B3E6F;
+  cursor: pointer;
 }
 .tags-filter-list{
   max-height: 260px;
@@ -1164,6 +1165,14 @@ height: 40px;
   border-top-right-radius: 0;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
+}
+.packagesFilter .dropdown-content ul{
+  max-height: 200px;
+  overflow-y: auto;
+  padding-left: 0;
+}
+.packagesFilter .dropdown-content li{
+  list-style: none;
 }
 .packagesFilter .dropdown-content li:hover .custom-checkbox{
   cursor: pointer;
