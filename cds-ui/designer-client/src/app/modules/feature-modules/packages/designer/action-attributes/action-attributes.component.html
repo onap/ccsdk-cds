@@ -19,7 +19,7 @@
                     <span>Custom Attribute</span>
                 </div>
                 <div class="col text-center">
-                    <button type="button" class="btn btn-secondary"><i class="icon-function-attribute" type="button"
+                    <button (click)="printSomethings()" [disabled]="!isFunctionAttributeActive" type="button" class="btn btn-secondary"><i class="icon-function-attribute" type="button"
                                                                        aria-hidden="true"></i></button>
                     <span>Function Attribute</span>
                 </div>
@@ -45,7 +45,7 @@
                                 <label for="exampleFormControlTextarea1">{{input.name}}
                                     <i [hidden]="!input.required" class="icon-required-star" type="button"
                                        aria-hidden="true"></i>
-                                    <i [hidden]="input.required" type="button" aria-hidden="true"></i>
+                                    <i [hidden]="input.required" class="icon-required-star optional-attribute" type="button" aria-hidden="true"></i>
                                 </label>
                                 <div class="attributeOptions">
                                     <a data-toggle="modal" data-target="#exampleModalScrollable2"
@@ -81,7 +81,7 @@
                                 <label for="exampleFormControlTextarea1">{{output.name}}
                                     <i [hidden]="!output.required" class="icon-required-star" type="button"
                                        aria-hidden="true"></i>
-                                    <i [hidden]="output.required" class="optional-attribute" type="button"
+                                    <i [hidden]="output.required" class="icon-required-star optional-attribute" type="button"
                                        aria-hidden="true"></i>
 
                                 </label>

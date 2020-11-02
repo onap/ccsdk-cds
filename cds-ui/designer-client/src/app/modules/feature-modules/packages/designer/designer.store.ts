@@ -169,4 +169,11 @@ export class DesignerStore extends Store<DesignerDashboardState> {
             actionName: customActionName
         });
     }
+
+    setCurrentFunction(customFunctionName: string) {
+        this.setState({
+            ...this.state,
+            functionName: customFunctionName
+        });
+    }
 }

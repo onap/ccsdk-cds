@@ -26,6 +26,7 @@ export class DesignerDashboardState {
     template: TopologyTemplate;
     sourceContent: string;
     actionName: string;
+    functionName: string;
 
     constructor() {
         this.template = new TopologyTemplate();

@@ -51,6 +51,7 @@ import {PackageCreationExtractionService} from '../package-creation/package-crea
 import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
 import {TopologyTemplate} from './model/designer.topologyTemplate.model';
 import {ToastrService} from 'ngx-toastr';
+import {DesignerDashboardState} from './model/designer.dashboard.state';
 
 @Component({
     selector: 'app-designer',
@@ -81,6 +82,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
     cbaPackage: CBAPackage;
     actions: string[] = [];
     dataTarget: string;
+    steps: string[];
+    designerState: DesignerDashboardState;
+    currentActionName: string;
 
     constructor(
         private designerStore: DesignerStore,
@@ -207,6 +211,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
                 distinctUntilChanged((a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)),
                 takeUntil(this.ngUnsubscribe))
             .subscribe(state => {
+                this.designerState = state;
                 if (state.sourceContent) {
                     console.log('inside desinger.component---> ', state);
                     // generate graph from store objects if exist
@@ -478,9 +483,20 @@ export class DesignerComponent implements OnInit, OnDestroy {
             });
     }
 
-    openFunctionAttributes(customActionName: string) {
-        console.log('opening here function attributes');
+    openActionAttributes(customActionName: string) {
+        console.log('opening here action attributes');
+        this.currentActionName = customActionName;
         this.actionAttributesSideBar = true;
+        this.functionAttributeSidebar = false;
         this.designerStore.setCurrentAction(customActionName);
+        /* tslint:disable:no-string-literal */
+        this.steps = Object.keys(this.designerState.template.workflows[customActionName]['steps']);
+    }
+
+    openFunctionAttributes(customFunctionName: string) {
+        this.actionAttributesSideBar = false;
+        this.functionAttributeSidebar = true;
+        this.designerStore.setCurrentFunction(this.designerState.template.workflows[this.currentActionName]
+            ['steps'][customFunctionName]['target']);
     }
 }
