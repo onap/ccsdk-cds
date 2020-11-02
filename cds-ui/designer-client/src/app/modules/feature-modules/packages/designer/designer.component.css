@@ -1106,6 +1106,7 @@ ul.editor{
   max-width: 50%;
 }
 .modal-body{
+  padding: 18px 24px !important;
   font-size: 14px;
 }
 .createAttributeTabs .nav-link{
@@ -1131,6 +1132,88 @@ ul.editor{
   margin-top: 20px;
   padding: 20px 50px;
   border: solid 1px #F4F9FE;
+}
+.createAttributeTabs .listBoxTitle{
+  font-size: 11px;
+  line-height: 29px;
+}
+.addedFunctionsList,
+.nestedAttributes{
+  background: #F4F9FE;
+  border: solid 1px #D0DFF1 !important;
+}
+.addedFunctionsList .scrollWrapper,
+.nestedAttributes .scrollWrapper{
+  height: 150px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.addedFunctionsList .input-search-controller,
+.nestedAttributes .input-search-controller{
+  height: 32px;
+  padding-left: 28px !important;
+  background-position: 9px;
+}
+.addedFunctionsList .input-search-controller::placeholder,
+.nestedAttributes .input-search-controller::placeholder{
+  font-weight: bold;
+}
+.create-form .addedFunctionsList .input-search-controller:focus,
+.create-form .nestedAttributes .input-search-controller:focus{
+  background-color: #fff !important;
+}
+.addedFunctionsList .list-group-item{
+  margin-bottom: 0;
+  padding-left: 10px;
+  padding-right: 12px;
+  text-align: left;
+  font-size: 12px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+}
+.addedFunctionsList .list-group-item:hover{
+  background-color: #fff !important;
+  color: #1B3E6F;
+}
+.addedFunctionsList .list-group-item.active{
+  background-color: #E0E8F2 !important;
+}
+.addedFunctionsList .list-group-item i{
+  font-size: 18px;
+  vertical-align: middle;
+}
+.addedFunctionsList .list-group-item i:last-child{
+  float: right;
+  font-size: 15px;
+  line-height: 17px;
+}
+.nestedAttributes .btn-group{
+  display: grid;
+}
+.nestedAttributes .btn-group .btn{
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  height: 36px;
+  border-radius: 0;
+  background-color: transparent;
+  border: 0;
+  color: #1B3E6F !important;
+  text-align: left;
+  font-weight: normal;
+  line-height: 24px;
+}
+.nestedAttributes .btn-group .btn:hover{
+  background-color: #fff !important;
+}
+.nestedAttributes .btn-group .btn.active,
+.nestedAttributes .btn-group .btn.active:hover{
+  background-color: #E0E8F2 !important;
+  outline: 0;
+}
+.nestedAttributes .btn-group .btn.active:focus{
+  box-shadow: none;
+  border: 0;
 }
 /*FORM*/
 .create-form .col-form-label{
