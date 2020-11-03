@@ -26,6 +26,13 @@ export class ActionAttributesComponent implements OnInit {
     designerState: DesignerDashboardState;
     isFunctionAttributeActive = false;
     functions: FunctionsState;
+    steps: string[];
+    suggestedInputs: string[] = [];
+    suggestedOutputs: string[] = [];
+
+    tempInputs: string[] = [];
+    tempOutputs: string[] = [];
+    currentInterfaceName: string;
 
     constructor(private designerStore: DesignerStore, private functionsStore: FunctionsStore) {
 
@@ -44,10 +51,13 @@ export class ActionAttributesComponent implements OnInit {
                     } else {
                         this.isFunctionAttributeActive = false;
                     }
-                    steps.forEach(step => {
+                    this.steps = steps;
+                    this.suggestedOutputs = [];
+                    this.suggestedInputs = [];
+                    /*steps.forEach(step => {
                         const target = action.steps[step].target;
                         this.getInputs(target);
-                    });
+                    });*/
                 }
 
 
@@ -92,6 +102,7 @@ export class ActionAttributesComponent implements OnInit {
     }
 
     addOutput(output: OutputActionAttribute) {
+        console.log(output);
         if (output && output.type && output.name) {
             const insertedOutputActionAttribute = Object.assign({}, output);
             this.outputs.push(insertedOutputActionAttribute);
@@ -167,8 +178,11 @@ export class ActionAttributesComponent implements OnInit {
             '          },';
     }
 
-    getInputs(targetName) {
+    setInputAndOutputs(targetName) {
+        console.log(targetName);
         const nodeTemplate = this.designerState.template.node_templates[targetName];
+        console.log(this.designerState.template.node_templates);
+        console.log(nodeTemplate);
         /* tslint:disable:no-string-literal */
         console.log(nodeTemplate['type']);
         this.functions.serverFunctions
@@ -181,16 +195,25 @@ export class ActionAttributesComponent implements OnInit {
                     const interfaces = Object.keys(currentFunction['definition']['interfaces']);
                     if (interfaces && interfaces.length > 0) {
                         const interfaceName = interfaces[0];
-                        if (nodeTemplate['interfaces'][interfaceName]['operations'] &&
+                        console.log(interfaceName);
+                        this.currentInterfaceName = interfaceName;
+
+                        if (nodeTemplate['interfaces'] &&
+                            nodeTemplate['interfaces'][interfaceName]['operations'] &&
                             nodeTemplate['interfaces'][interfaceName]['operations']['process']
                         ) {
+                            console.log('here');
                             if (nodeTemplate['interfaces'][interfaceName]['operations']['process']['inputs']) {
                                 /* tslint:disable:no-string-literal */
-                                console.log(Object.keys(nodeTemplate['interfaces'][interfaceName]['operations']['process']['inputs']));
+                                this.suggestedInputs = Object.keys(nodeTemplate['interfaces']
+                                    [interfaceName]['operations']['process']['inputs']);
+                                console.log(this.suggestedInputs);
                             }
                             if (nodeTemplate['interfaces'][interfaceName]['operations']['process']['outputs']) {
                                 /* tslint:disable:no-string-literal */
-                                console.log(Object.keys(nodeTemplate['interfaces'][interfaceName]['operations']['process']['outputs']));
+                                this.suggestedOutputs = Object.keys(nodeTemplate['interfaces']
+                                    [interfaceName]['operations']['process']['outputs']);
+                                console.log(this.suggestedInputs);
                             }
 
                         }
@@ -202,5 +225,59 @@ export class ActionAttributesComponent implements OnInit {
 
     printSomethings() {
         console.log('something');
+    }
+
+    addTempInput(suggestedInput: string) {
+        this.addAttribute(this.tempInputs, suggestedInput);
+        this.deleteAttribute(this.suggestedInputs, suggestedInput);
+    }
+
+    addTempOutput(suggestedOutput: string) {
+        this.addAttribute(this.tempOutputs, suggestedOutput);
+        this.deleteAttribute(this.suggestedOutputs, suggestedOutput);
+    }
+
+    deleteAttribute(container: string[], suggestedAttribute: string) {
+        if (container && suggestedAttribute && container.includes(suggestedAttribute)) {
+            const index: number = container.indexOf(suggestedAttribute);
+            if (index !== -1) {
+                container.splice(index, 1);
+            }
+        }
+    }
+
+    addAttribute(container: string[], suggestedAttribute: string) {
+        if (container && suggestedAttribute && !container.includes(suggestedAttribute)) {
+            container.push(suggestedAttribute);
+        }
+    }
+
+
+    submitTempAttributes() {
+        if (this.tempInputs && this.tempInputs.length > 0) {
+            let newInputs = '';
+            this.tempInputs.forEach(tempAttribute => {
+                const currentInputNode: string = this.designerState.template.node_templates[this.actionName]['interfaces']
+                    [this.currentInterfaceName]['operations']['process']['inputs'][tempAttribute];
+                const currentInputNodeAsString = JSON.stringify(currentInputNode);
+                newInputs += '"' + tempAttribute + '": ' + currentInputNodeAsString + ',';
+
+            });
+            if (newInputs.endsWith(',')) {
+                newInputs = newInputs.substr(0, newInputs.length - 1);
+            }
+            const originalInputs = JSON.stringify(this.designerState.template.workflows[this.actionName]['inputs']);
+            console.log(originalInputs.substr(0, originalInputs.length - 1) + ',' + newInputs + '}');
+            this.designerState.template.workflows[this.actionName]['inputs'] =
+                JSON.parse(originalInputs.substr(0, originalInputs.length - 1) + ',' + newInputs + '}');
+        }
+
+        if (this.tempOutputs && this.tempOutputs.length > 0) {
+            this.tempOutputs.forEach(tempAttribute => {
+                const currentOutputNode = this.designerState.template.node_templates[this.actionName]['interfaces']
+                    [this.currentInterfaceName]['operations']['process']['outputs'][tempAttribute];
+                console.log(currentOutputNode);
+            });
+        }
     }
 }
