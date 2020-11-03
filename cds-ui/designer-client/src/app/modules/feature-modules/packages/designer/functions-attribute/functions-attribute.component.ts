@@ -62,7 +62,8 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                     //  this.currentFuncion = this.designerState.template.node_templates[this.functionName];
                     // reset inouts&outputs
                     this.toNodeProcess(this.designerState.template.node_templates[this.functionName], this.functionName);
-                    this.getNodeType(this.functionName);
+                    const type = this.designerState.template.node_templates[this.functionName].type;
+                    this.getNodeType(type);
                 }
             });
 
@@ -99,7 +100,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         this.currentFuncion['instance-name'] = functionName;
         // tslint:disable-next-line: no-string-literal
         this.currentFuncion['type'] = nodeTemplate['type'];
-        if (Object.keys(nodeTemplate.interfaces).length > 0) {
+        if (nodeTemplate.interfaces && Object.keys(nodeTemplate.interfaces).length > 0) {
             const nodeName = Object.keys(nodeTemplate.interfaces)[0];
             // tslint:disable-next-line: no-string-literal
             const inputs = nodeTemplate.interfaces[nodeName]['operations']['process']['inputs'];
@@ -125,13 +126,14 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         this.ngUnsubscribe.complete();
     }
 
-    displayFunctionData() {
+    saveFunctionData() {
 
         // tslint:disable-next-line: variable-name
         const node_templates = {};
+        const finalFunctionData = this.currentFuncion;
         // tslint:disable-next-line: no-string-literal
-        const type = this.currentFuncion['type'];
-        const instanceName = this.currentFuncion['instance-name'];
+        const type = finalFunctionData['type'];
+        const instanceName = finalFunctionData['instance-name'];
         // insert selected templates in nodeTemplates.artifacts
         this.selectedTemplates.forEach((value, key) => {
             console.log(key);
@@ -154,23 +156,23 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         // instantiate the final node_template object to save
 
         this.nodeTemplates.type = type;
-        node_templates[this.currentFuncion['instance-name']] = this.nodeTemplates;
+        node_templates[finalFunctionData['instance-name']] = this.nodeTemplates;
 
-        delete this.currentFuncion['instance-name'];
+        delete finalFunctionData['instance-name'];
         // tslint:disable-next-line: no-string-literal
-        delete this.currentFuncion['type'];
+        delete finalFunctionData['type'];
 
         this.nodeTemplates.interfaces = {
             [this.interfaceChildName]: {
                 operations: {
                     process: {
-                        ...this.currentFuncion,
+                        ...finalFunctionData,
                     }
                 }
             }
         };
 
-        console.log(this.currentFuncion);
+        console.log(finalFunctionData);
         console.log(node_templates);
         // tslint:disable-next-line: no-unused-expression
         this.designerStore.addNodeTemplate(instanceName, type, node_templates[instanceName]);
@@ -231,6 +233,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         this.functionStore.state$
             .subscribe(state => {
                 console.log(state);
+                console.log(nodeName);
                 const functions = state.serverFunctions;
                 // tslint:disable-next-line: prefer-for-of
                 for (let i = 0; i < functions.length; i++) {
@@ -257,6 +260,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         }
         const nodeName = Object.keys(interfaces)[0];
         this.interfaceChildName = nodeName;
+        console.log(nodeName + ' ------ ' + type);
         console.log(interfaces[nodeName]['operations']['process'][type]);
         const fields = interfaces[nodeName]['operations']['process'][type];
         this.artifactPrefix = false;
