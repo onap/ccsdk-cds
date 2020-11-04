@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Aarna Networks, Inc. 
+ * Copyright © 2019 IBM, Bell Canada, AT&T, Orange
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientSe
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod
 import org.springframework.web.client.RestTemplate
@@ -66,6 +67,7 @@ open class ConfigDeploy : AbstractScriptComponentFunction() {
          */
         val dev_response = netconf_rpc_client.invokeRpc(payload)
         log.info("NETCONF device response message : dev_response\n")
+        setAttribute("response-data", dev_response.asJsonType())
 
         /**
         netconf_rpc_client.lock("candidate")
