@@ -207,6 +207,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         this.configurationDashboardService.downloadResource(artifactName + '/' + artifactVersion).subscribe(response => {
             const blob = new Blob([response], { type: 'application/octet-stream' });
             saveAs(blob, artifactName + '-' + artifactVersion + '-CBA.zip');
+
+        }, err => { }, () => {
             this.ngxService.stop();
         });
     }

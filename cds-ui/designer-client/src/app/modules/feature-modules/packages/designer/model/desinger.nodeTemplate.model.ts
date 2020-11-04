@@ -3,10 +3,10 @@ export class NodeTemplate {
     properties?: {
         'dependency-node-templates'?: string[]
     };
-    interfaces?: {};
     artifacts?: {};
     cabapilities?: {};
     requirements?: {};
+    interfaces?: {};
 
     constructor(type) {
         this.type = type;

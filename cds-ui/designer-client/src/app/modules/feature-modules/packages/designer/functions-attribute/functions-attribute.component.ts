@@ -64,6 +64,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                     this.toNodeProcess(this.designerState.template.node_templates[this.functionName], this.functionName);
                     const type = this.designerState.template.node_templates[this.functionName].type;
                     this.getNodeType(type);
+                    this.onInitMapping();
                 }
             });
 
@@ -88,7 +89,25 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                 });
             });
 
+    }
 
+    onInitMapping() {
+        // selectedTemplates , templateAndMappingMap
+        this.selectedTemplates = new Map<string, TemplateAndMapping>();
+        try {
+            const functionMap = this.designerState.template.node_templates[this.functionName].artifacts;
+            console.log(this.templateAndMappingMap);
+
+            Object.keys(functionMap).forEach((file) => {
+                const filename = file.substring(0, file.lastIndexOf('-'));
+                console.log(filename);
+                if (this.templateAndMappingMap.has(filename)) {
+                    this.selectedTemplates.set(filename, this.templateAndMappingMap.get(filename));
+                }
+            });
+
+
+        } catch (e) { }
     }
 
     toNodeProcess(nodeTemplate, functionName) {
@@ -138,6 +157,11 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         this.selectedTemplates.forEach((value, key) => {
             console.log(key);
             console.log(value);
+            console.log(finalFunctionData.inputs['artifact-prefix-names']);
+
+            if (Array.isArray(finalFunctionData.inputs['artifact-prefix-names'])) {
+                finalFunctionData.inputs['artifact-prefix-names'].push(key);
+            }
 
             if (value.isMapping) {
                 this.nodeTemplates.artifacts[key + '-mapping'] = {
@@ -196,7 +220,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     addTemplates() { }
     setArtifact(predefined: boolean) {
         if (predefined) {
-
+            this.currentFuncion.inputs['artifact-prefix-names'] = [];
         } else {
             this.currentFuncion.inputs['artifact-prefix-names'] = { get_input: 'template-prefix' };
         }
