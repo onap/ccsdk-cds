@@ -9,7 +9,7 @@ Running Blueprints Processor Microservice in an IDE
 Objective
 ~~~~~~~~~~~~
 
-Have the blueprint processor running locally is to use the IDE to run the code, while having the database running in a container.
+Run the blueprint processor locally in an IDE, while having the database running in a container.
 This way, code changes can be conveniently tested and debugged.
 
 Check out the code
@@ -26,6 +26,8 @@ In the checked out directory, type
 
    mvn clean install -Pq -Dadditionalparam=-Xdoclint:none
 
+Wait for the maven install command to finish until you go further.
+
 Spin up a Docker container with the database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -33,7 +35,7 @@ The Blueprints Processor project uses a database to store information about the 
 and therefore it needs to be online before attempting to run it.
 
 One way to create the database is by using the :file:`docker-compose.yaml` file.
-This database will require a local directory to mount a volume, before running docker-compose remember to create following directory:
+This database will require a local directory to mount a volume, therefore before running docker-compose create following directory:
 
 .. code-block:: bash
 
@@ -99,18 +101,21 @@ Import the project into the IDE
 
    .. tab:: IntelliJ IDEA
 
-      Go to *File | Open* and choose the :file:`pom.xml` file of the cds directory:
+      .. note::
+         This is the recommended IDE for running CDS blueprint processor.
+
+      Go to *File | Open* and choose the :file:`pom.xml` file of the cds/ms/blueprintprocessor directory:
 
       |imageImportProject|
 
-      Sometimes it may be necessary to reimport Maven project:
+      Import as a project. Sometimes it may be necessary to reimport Maven project, e.g. if some dependencies can't be found:
 
       |imageReimportMaven|
 
       **Override some application properties:**
 
-      After the project is compiled, a Run Configuration profile overriding some application properties
-      with custom values needs to be created, to reflect the local environment characteristics.
+      Next steps will create a run configuration profile overriding some application properties with custom values,
+      to reflect the local environment characteristics.
 
       .. tabs::
 
@@ -120,8 +125,10 @@ Import the project into the IDE
 
             ``ms/blueprintsprocessor/application/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.kt``.
 
-            Right-click inside it, at any point, to load the context menu and select create
-            BlueprintProcessorApplication configuration from context:
+            After dependencies are imported and indexes are set up you will see a green arrow
+            next to main function of BlueprintProcessorApplication class, indicating that the run configuration can now be
+            created. Right-click inside the class at any point to load the context menu and select create
+            a run configuration from context:
 
             |imageCreateRunConfigKt|
 
@@ -136,7 +143,7 @@ Import the project into the IDE
 
                -Dspring.profiles.active=dev
 
-            You can override any value from **application-dev.properties** file here. Use the following pattern:
+            Optional: You can override any value from **application-dev.properties** file here. In this case use the following pattern:
 
             .. code-block:: java
 
@@ -148,8 +155,10 @@ Import the project into the IDE
 
             ``ms/blueprintsprocessor/application/src/main/java/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.java.``
 
-            Right-click inside it, at any point, to load the context menu and select create
-            BlueprintProcessorApplication configuration from context:
+            After dependencies are imported and indexes are set up you will see a green arrow
+            next to main function of BlueprintProcessorApplication class, indicating that the run configuration can now be
+            created. Right-click inside the class at any point to load the context menu and select create
+            a run configuration from context:
 
             |imageCreateRunConfigJava|
 
@@ -164,7 +173,7 @@ Import the project into the IDE
 
                -Dspring.profiles.active=dev
 
-            You can override any value from **application-dev.properties** file here. Use the following pattern:
+            Optional: You can override any value from **application-dev.properties** file here. In this case use the following pattern:
 
             .. code-block:: java
 
@@ -176,8 +185,10 @@ Import the project into the IDE
 
             ``ms/blueprintsprocessor/application/src/main/java/org/onap/ccsdk/cds/blueprintsprocessor/BlueprintProcessorApplication.java``.
 
-            Right-click inside it, at any point, to load the context menu and select create
-            BlueprintProcessorApplication configuration from context:
+            After dependencies are imported and indexes are set up you will see a green arrow
+            next to main function of BlueprintProcessorApplication class, indicating that the run configuration can now be
+            created. Right-click inside the class at any point to load the context menu and select create
+            a run configuration from context:
 
             |imageCreateRunConfigJava|
 
@@ -185,7 +196,7 @@ Import the project into the IDE
 
             |imageRunConfigJava|
 
-            **Add the following in that field:**
+            **Add the following in the field `VM Options`**
 
             .. code-block:: java
                :caption: **Custom values for properties**
@@ -233,10 +244,14 @@ Import the project into the IDE
                -Dserver.port=55555
 
 
-      **Browse Working Directory to your application path**  ``.../cds/ms/blueprintsprocessor/application``
+      **In the field 'Working Directory' browse to your application path**  ``.../cds/ms/blueprintsprocessor/application``
       **if path is not already specified correctly.**
 
-      **Add/replace the following in Blueprint's application-dev.properties file:**
+      Run configuration should now look something like this:
+
+      |imageRunConfigSetUp|
+
+      **Add/replace the following in Blueprint's application-dev.properties file.**
 
       .. code-block:: java
 
@@ -247,10 +262,13 @@ Import the project into the IDE
 
          blueprintprocessor.remoteScriptCommand.enabled=true
 
+      Take care that if a parameter already exist you need to change the value of the existing parameter to avoid duplicates.
+
 
       **Run the application:**
 
-      Select either run or debug for this Run Configuration to start the Blueprints Processor:
+      Before running Blueprint Processor check that you use the correct Java version in IntelliJ.
+      Select either run or debug for the created Run Configuration to start the Blueprints Processor:
 
       |imageRunDebug|
 
@@ -360,7 +378,6 @@ Imported packages or annotiations are not found, Run Config not available?
 
 Compilation error?
 *******************
-
 * Change Java Version to 11
 
 
@@ -399,5 +416,9 @@ Compilation error?
    :align: middle
 
 .. |imageLogsVSC| image:: media/vsc_logs.png
+   :width: 500pt
+   :align: middle
+
+.. |imageRunConfigSetUp| image:: media/run-config-set-up.png
    :width: 500pt
    :align: middle
