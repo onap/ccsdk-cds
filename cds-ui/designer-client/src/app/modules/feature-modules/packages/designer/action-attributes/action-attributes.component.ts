@@ -33,6 +33,9 @@ export class ActionAttributesComponent implements OnInit {
     tempInputs: string[] = [];
     tempOutputs: string[] = [];
     currentInterfaceName: string;
+    functionAndAttributesInput: Map<string, string[]> = new Map<string, string[]>();
+    private currentTargetFunctionName: any;
+    private functionAndAttributesOutput: Map<string, string[]> = new Map<string, string[]>();
 
     constructor(private designerStore: DesignerStore, private functionsStore: FunctionsStore) {
 
@@ -156,7 +159,7 @@ export class ActionAttributesComponent implements OnInit {
         if (inputs.endsWith(',')) {
             inputs = inputs.substr(0, inputs.length - 1);
         }
-        return JSON.parse('{' + inputs + '}');
+        return this.convertToObject('{' + inputs + '}');
     }
 
     private storeOutputs(OutputActionAttributes: OutputActionAttribute[]) {
@@ -167,7 +170,7 @@ export class ActionAttributesComponent implements OnInit {
         if (outputs.endsWith(',')) {
             outputs = outputs.substr(0, outputs.length - 1);
         }
-        return JSON.parse('{' + outputs + '}');
+        return this.convertToObject('{' + outputs + '}');
     }
 
     private appendAttributes(output: OutputActionAttribute) {
@@ -198,6 +201,16 @@ export class ActionAttributesComponent implements OnInit {
                         console.log(interfaceName);
                         this.currentInterfaceName = interfaceName;
 
+                        if (!this.functionAndAttributesInput.has(targetName)) {
+                            this.currentTargetFunctionName = targetName;
+                            this.functionAndAttributesInput.set(targetName, []);
+                        }
+
+                        if (!this.functionAndAttributesOutput.has(targetName)) {
+                            this.currentTargetFunctionName = targetName;
+                            this.functionAndAttributesOutput.set(targetName, []);
+                        }
+
                         if (nodeTemplate['interfaces'] &&
                             nodeTemplate['interfaces'][interfaceName]['operations'] &&
                             nodeTemplate['interfaces'][interfaceName]['operations']['process']
@@ -207,7 +220,6 @@ export class ActionAttributesComponent implements OnInit {
                                 /* tslint:disable:no-string-literal */
                                 this.suggestedInputs = Object.keys(nodeTemplate['interfaces']
                                     [interfaceName]['operations']['process']['inputs']);
-                                console.log(this.suggestedInputs);
                             }
                             if (nodeTemplate['interfaces'][interfaceName]['operations']['process']['outputs']) {
                                 /* tslint:disable:no-string-literal */
@@ -230,11 +242,13 @@ export class ActionAttributesComponent implements OnInit {
     addTempInput(suggestedInput: string) {
         this.addAttribute(this.tempInputs, suggestedInput);
         this.deleteAttribute(this.suggestedInputs, suggestedInput);
+        this.addAttribute(this.functionAndAttributesInput.get(this.currentTargetFunctionName), suggestedInput);
     }
 
     addTempOutput(suggestedOutput: string) {
         this.addAttribute(this.tempOutputs, suggestedOutput);
         this.deleteAttribute(this.suggestedOutputs, suggestedOutput);
+        this.addAttribute(this.functionAndAttributesOutput.get(this.currentTargetFunctionName), suggestedOutput);
     }
 
     deleteAttribute(container: string[], suggestedAttribute: string) {
@@ -254,30 +268,82 @@ export class ActionAttributesComponent implements OnInit {
 
 
     submitTempAttributes() {
-        if (this.tempInputs && this.tempInputs.length > 0) {
-            let newInputs = '';
-            this.tempInputs.forEach(tempAttribute => {
-                const currentInputNode: string = this.designerState.template.node_templates[this.actionName]['interfaces']
-                    [this.currentInterfaceName]['operations']['process']['inputs'][tempAttribute];
-                const currentInputNodeAsString = JSON.stringify(currentInputNode);
-                newInputs += '"' + tempAttribute + '": ' + currentInputNodeAsString + ',';
-
-            });
-            if (newInputs.endsWith(',')) {
-                newInputs = newInputs.substr(0, newInputs.length - 1);
-            }
-            const originalInputs = JSON.stringify(this.designerState.template.workflows[this.actionName]['inputs']);
-            console.log(originalInputs.substr(0, originalInputs.length - 1) + ',' + newInputs + '}');
-            this.designerState.template.workflows[this.actionName]['inputs'] =
-                JSON.parse(originalInputs.substr(0, originalInputs.length - 1) + ',' + newInputs + '}');
-        }
-
-        if (this.tempOutputs && this.tempOutputs.length > 0) {
-            this.tempOutputs.forEach(tempAttribute => {
-                const currentOutputNode = this.designerState.template.node_templates[this.actionName]['interfaces']
-                    [this.currentInterfaceName]['operations']['process']['outputs'][tempAttribute];
-                console.log(currentOutputNode);
-            });
-        }
+        this.writeSelectedAttributeInputs();
+        this.writeSelectedAttributeOutputs();
     }
+
+    private writeSelectedAttributeOutputs() {
+        this.functionAndAttributesOutput.forEach((key, value) => {
+            const nodeTemplate = this.getNodeTemplate(value);
+            this.functions.serverFunctions
+                /* tslint:disable:no-string-literal */
+                .filter(currentFunction => currentFunction.modelName.includes(nodeTemplate['type']))
+                .forEach(currentFunction => {
+                    if (currentFunction['definition'] && currentFunction['definition']['interfaces']
+                        [Object.keys(currentFunction['definition'] && currentFunction['definition']['interfaces'])]
+                        ['operations']['process']['outputs']) {
+                        let newOutputs = '';
+                        const outputs = currentFunction['definition'] && currentFunction['definition']['interfaces']
+                            [Object.keys(currentFunction['definition'] && currentFunction['definition']['interfaces'])]
+                            ['operations']['process']['outputs'];
+                        key.forEach(attribute => {
+                            newOutputs += '"' + attribute + '": ' + this.convertToString(outputs[attribute]) + ',';
+                        });
+                        if (key.length > 0) {
+                            newOutputs = this.removeTheLastComma(newOutputs);
+                            const originalOutputs = this.convertToString(this.designerState.template.workflows[this.actionName]['outputs']);
+                            console.log(originalOutputs.substr(0, originalOutputs.length - 1) + ',' + newOutputs + '}');
+                            this.designerState.template.workflows[this.actionName]['outputs'] =
+                                this.convertToObject(originalOutputs.substr(0, originalOutputs.length - 1) + ',' + newOutputs + '}');
+                        }
+                    }
+                });
+        });
+    }
+
+
+    private writeSelectedAttributeInputs() {
+        this.functionAndAttributesInput.forEach((key, value) => {
+            const nodeTemplate = this.getNodeTemplate(value);
+            this.functions.serverFunctions
+                /* tslint:disable:no-string-literal */
+                .filter(currentFunction => currentFunction.modelName.includes(nodeTemplate['type']))
+                .forEach(currentFunction => {
+                    if (currentFunction['definition'] && currentFunction['definition']['interfaces']
+                        [Object.keys(currentFunction['definition'] && currentFunction['definition']['interfaces'])]
+                        ['operations']['process']['inputs']) {
+                        let newInputs = '';
+                        const inputs = currentFunction['definition'] && currentFunction['definition']['interfaces']
+                            [Object.keys(currentFunction['definition'] && currentFunction['definition']['interfaces'])]
+                            ['operations']['process']['inputs'];
+                        key.forEach(attribute => {
+                            newInputs += '"' + attribute + '": ' + this.convertToString(inputs[attribute]) + ',';
+                        });
+                        if (key.length > 0) {
+                            newInputs = this.removeTheLastComma(newInputs);
+                            const originalInputs = this.convertToString(this.designerState.template.workflows[this.actionName]['inputs']);
+                            console.log(originalInputs.substr(0, originalInputs.length - 1) + ',' + newInputs + '}');
+                            this.designerState.template.workflows[this.actionName]['inputs'] =
+                                this.convertToObject(originalInputs.substr(0, originalInputs.length - 1) + ',' + newInputs + '}');
+                        }
+                    }
+
+
+                });
+        });
+    }
+
+    private removeTheLastComma = (newInputs: string) => {
+        if (newInputs.endsWith(',')) {
+            newInputs = newInputs.substr(0, newInputs.length - 1);
+        }
+        return newInputs;
+    }
+
+    private convertToString = object => JSON.stringify(object);
+
+    private convertToObject = stringValue => JSON.parse(stringValue);
+
+    private getNodeTemplate = (value: string) => this.designerState.template.node_templates[value];
+
 }
