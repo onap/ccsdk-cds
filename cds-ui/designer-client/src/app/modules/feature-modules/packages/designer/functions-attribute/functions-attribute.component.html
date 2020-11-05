@@ -58,6 +58,8 @@
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" id="functionRadioInline" name="functionRadioInline"
+                                                [checked]="!currentFuncion['inputs']['artifact-prefix-names']?.get_input"
+                                                (click)="setArtifact(true)"
                                                 class="custom-control-input">
                                             <label class="custom-control-label" for="functionRadioInline">Pre-defined
                                                 Template</label>
