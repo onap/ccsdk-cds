@@ -272,6 +272,10 @@ button.rotate{
   left: 0;
   height: 95%;
 } */
+/* .ng-sidebar__content.ng-sidebar__content--animate{
+  padding-top: 70px !important;
+} */
+
 .functionsList tspan{
   /* width:30px !important;  */
   font: normal 13px sans-serif; 
@@ -337,6 +341,45 @@ p.compType-4{
   margin: 0 auto;
   background: red;
 }
+.actionSubList{
+  margin:0 0 0 4px; /* indentation */
+  padding:0;
+  list-style:none;
+  position:relative;
+}
+.actionSubList:before {
+  content: "";
+  display: block;
+  width: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-left: 1px solid #C1CDDD;
+}
+.actionSubList li{
+  margin: 0;
+  padding: 0 1.5em; /* indentation + .5em */
+  line-height: 32px;
+  position: relative;
+}
+.actionSubList li::before{
+  content: "";
+  display: block;
+  width: 10px; /* same with indentation */
+  height: 0;
+  border-top: 1px solid #C1CDDD;
+  margin-top: -1px; /* border top width */
+  position: absolute;
+  top: 16px; /* (line-height/2) */
+  left: 0;
+}
+.actionSubList li:last-child:before {
+  background: #F4F9FE; /* same with body background */
+  height: auto;
+  top: 16px; /* (line-height/2) */
+  bottom: 0;
+}
 
 .controllerSidebar{
   width: 320px;
@@ -400,7 +443,10 @@ p.compType-4{
   font-weight: bold;
   /* outline: 0 !important; */
   float: left;
-  
+}
+.actionsList li:hover,
+.actionsList li label:hover{
+  cursor: pointer;
 }
 .new-action,
 .new-action:hover{
@@ -674,6 +720,9 @@ p.compType-4{
   background-color: #1B3E6F;
   color: #fff !important;
 }
+.add-attribute .btn i{
+  font-weight: bold;
+}
 .attributesContainer h1{
   margin-bottom: 10px;
   padding: 12px 0 12px 15px;
@@ -802,6 +851,7 @@ p.compType-4{
   height: 60px;
 }
 .icon-required-star{
+  margin-left: 2px;
   font-size: 10px;
 }
 .optional-attribute::before{
@@ -1109,8 +1159,12 @@ ul.editor{
   padding: 18px 24px !important;
   font-size: 14px;
 }
+
 .createAttributeTabs .nav-link{
   padding-top: 0 !important;
+}
+.createAttributeTabs .nav-item a{
+  color: #C3CDDB !important;
 }
 .createAttributeTabs .nav-item a,
 .createAttributeTabs .nav-item a.active{
@@ -1137,6 +1191,11 @@ ul.editor{
   font-size: 11px;
   line-height: 29px;
 }
+.createAttributeTabs .notation{
+  margin-left: 3px;
+  color: #C3CDDB !important;
+  font-weight: normal;
+}
 .addedFunctionsList,
 .nestedAttributes{
   background: #F4F9FE;
@@ -1161,6 +1220,11 @@ ul.editor{
 .create-form .addedFunctionsList .input-search-controller:focus,
 .create-form .nestedAttributes .input-search-controller:focus{
   background-color: #fff !important;
+}
+.nestedAttributes .noAttributes{
+  margin: 12px;
+  font-weight: bold;
+  font-size: 12px;
 }
 .addedFunctionsList .list-group-item{
   margin-bottom: 0;

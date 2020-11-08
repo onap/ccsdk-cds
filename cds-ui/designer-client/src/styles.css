@@ -2981,6 +2981,19 @@ animation: glowing 1500ms infinite;
 .ace-tm .ace_marker-layer .ace_active-line{
   background: #F4F9FE !important;
 }
+.ace_dark .ace_fold-widget,
+.ace_dark .ace_fold-widget.ace_closed{
+  background-position: center center !important;
+  background-size: 7px;
+  background-repeat: no-repeat !important;
+}
+.ace_dark .ace_fold-widget{
+  background-image: url(/assets/img/icon-codeOpen.svg) !important;
+}
+.ace_dark .ace_fold-widget.ace_closed{
+  background-image: url(/assets/img/icon-codeClosed.svg) !important;
+  background-size: 4px;
+}
 /* -------- end of ace editor style -------- */
 .breadcrumb-header{
   padding: 0px;
