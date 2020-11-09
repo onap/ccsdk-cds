@@ -46,23 +46,15 @@ export class ActionAttributesComponent implements OnInit {
             this.designerState = designerState;
             if (this.designerState && this.designerState.actionName) {
                 this.actionName = this.designerState.actionName;
+                console.log(this.actionName);
                 const action = this.designerState.template.workflows[this.actionName] as Action;
                 if (action.steps) {
                     const steps = Object.keys(action.steps);
-                    if (steps && steps.length > 0) {
-                        this.isFunctionAttributeActive = true;
-                    } else {
-                        this.isFunctionAttributeActive = false;
-                    }
+                    this.isFunctionAttributeActive = steps && steps.length > 0;
                     this.steps = steps;
                     this.suggestedOutputs = [];
                     this.suggestedInputs = [];
-                    /*steps.forEach(step => {
-                        const target = action.steps[step].target;
-                        this.getInputs(target);
-                    });*/
                 }
-
 
                 this.inputs = [];
                 if (action.inputs) {
@@ -268,67 +260,38 @@ export class ActionAttributesComponent implements OnInit {
 
 
     submitTempAttributes() {
-        this.writeSelectedAttributeInputs();
-        this.writeSelectedAttributeOutputs();
+        this.writeSelectedAttribute(this.functionAndAttributesInput, 'inputs');
+        this.writeSelectedAttribute(this.functionAndAttributesOutput, 'outputs');
     }
 
-    private writeSelectedAttributeOutputs() {
-        this.functionAndAttributesOutput.forEach((key, value) => {
-            const nodeTemplate = this.getNodeTemplate(value);
+    private writeSelectedAttribute(map: Map<string, string[]>, attributeType: string) {
+        map.forEach((value, key) => {
+            const nodeTemplate = this.getNodeTemplate(key);
             this.functions.serverFunctions
                 /* tslint:disable:no-string-literal */
                 .filter(currentFunction => currentFunction.modelName.includes(nodeTemplate['type']))
                 .forEach(currentFunction => {
+
                     if (currentFunction['definition'] && currentFunction['definition']['interfaces']
                         [Object.keys(currentFunction['definition'] && currentFunction['definition']['interfaces'])]
-                        ['operations']['process']['outputs']) {
-                        let newOutputs = '';
-                        const outputs = currentFunction['definition'] && currentFunction['definition']['interfaces']
+                        ['operations']['process'][attributeType]) {
+                        let newAttributes = '';
+                        const attributes = currentFunction['definition'] && currentFunction['definition']['interfaces']
                             [Object.keys(currentFunction['definition'] && currentFunction['definition']['interfaces'])]
-                            ['operations']['process']['outputs'];
-                        key.forEach(attribute => {
-                            newOutputs += '"' + attribute + '": ' + this.convertToString(outputs[attribute]) + ',';
+                            ['operations']['process'][attributeType];
+                        value.forEach(attribute => {
+                            newAttributes += '"' + attribute + '": ' + this.convertToString(attributes[attribute]) + ',';
                         });
-                        if (key.length > 0) {
-                            newOutputs = this.removeTheLastComma(newOutputs);
-                            const originalOutputs = this.convertToString(this.designerState.template.workflows[this.actionName]['outputs']);
-                            console.log(originalOutputs.substr(0, originalOutputs.length - 1) + ',' + newOutputs + '}');
-                            this.designerState.template.workflows[this.actionName]['outputs'] =
-                                this.convertToObject(originalOutputs.substr(0, originalOutputs.length - 1) + ',' + newOutputs + '}');
+                        if (value.length > 0) {
+                            newAttributes = this.removeTheLastComma(newAttributes);
+                            const originalAttributes = this.convertToString(this.designerState.template.workflows[this.actionName]
+                                [attributeType]);
+                            console.log(originalAttributes.substr(0, originalAttributes.length - 1) + ',' + newAttributes + '}');
+                            this.designerState.template.workflows[this.actionName][attributeType] =
+                                this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
+                                    + ',' + newAttributes + '}');
                         }
                     }
-                });
-        });
-    }
-
-
-    private writeSelectedAttributeInputs() {
-        this.functionAndAttributesInput.forEach((key, value) => {
-            const nodeTemplate = this.getNodeTemplate(value);
-            this.functions.serverFunctions
-                /* tslint:disable:no-string-literal */
-                .filter(currentFunction => currentFunction.modelName.includes(nodeTemplate['type']))
-                .forEach(currentFunction => {
-                    if (currentFunction['definition'] && currentFunction['definition']['interfaces']
-                        [Object.keys(currentFunction['definition'] && currentFunction['definition']['interfaces'])]
-                        ['operations']['process']['inputs']) {
-                        let newInputs = '';
-                        const inputs = currentFunction['definition'] && currentFunction['definition']['interfaces']
-                            [Object.keys(currentFunction['definition'] && currentFunction['definition']['interfaces'])]
-                            ['operations']['process']['inputs'];
-                        key.forEach(attribute => {
-                            newInputs += '"' + attribute + '": ' + this.convertToString(inputs[attribute]) + ',';
-                        });
-                        if (key.length > 0) {
-                            newInputs = this.removeTheLastComma(newInputs);
-                            const originalInputs = this.convertToString(this.designerState.template.workflows[this.actionName]['inputs']);
-                            console.log(originalInputs.substr(0, originalInputs.length - 1) + ',' + newInputs + '}');
-                            this.designerState.template.workflows[this.actionName]['inputs'] =
-                                this.convertToObject(originalInputs.substr(0, originalInputs.length - 1) + ',' + newInputs + '}');
-                        }
-                    }
-
-
                 });
         });
     }
