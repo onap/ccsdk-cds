@@ -235,7 +235,7 @@
                             <div class="col">
                                 <input type="email" class="form-control" id="inputEmail3" placeholder="Attributes">
                                 <div class="container">
-                                    <div *ngFor="let tempInput of tempInputs">{{tempInput}}</div>
+                                    <div *ngFor="let tempInput of steps">{{tempInput}}</div>
                                 </div>
                             </div>
                         </div>
@@ -249,7 +249,7 @@
                                         <a class="list-group-item list-group-item-action active" id="list-home-list"
                                             data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
                                                 class="icon-resource_resolution mr-1" aria-hidden="true"></i>
-                                            {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="setInputAndOutputs(
+                                            {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="getAttributesAndOutputs(
                                                                     this.designerState.template.workflows[actionName]['steps'][step]['target']
                                                                     )"></i></a>
                                     </div>
@@ -263,20 +263,20 @@
                                     <div class="tab-pane fade show active" id="list-home" role="tabpanel"
                                         aria-labelledby="list-home-list">
                                         <div class="scrollWrapper">
-                                            <div *ngIf="suggestedInputs.length>0" class="btn-group btn-group-toggle"
+                                            <div *ngIf="suggestedOutputsAndAttributes.length>0" class="btn-group btn-group-toggle"
                                                 data-toggle="buttons">
                                                 <label class="btn btn-secondary active" 
-                                                    *ngFor="let suggestedInput of suggestedInputs"
-                                                    (click)="addTempInput(suggestedInput)">
-                                                    <input type="radio" name="options" [id]="suggestedInput"
-                                                        autocomplete="off" (click)="addTempInput(suggestedInput)">
-                                                    {{suggestedInput}} 
+                                                    *ngFor="let suggestedOutputAndAttribute of suggestedOutputsAndAttributes"
+                                                    (click)="addTempOutputAttr(suggestedOutputAndAttribute)">
+                                                    <input type="radio" name="options" [id]="suggestedOutputAndAttribute"
+                                                        autocomplete="off" (click)="addTempOutputAttr(suggestedOutputAndAttribute)">
+                                                    {{suggestedOutputAndAttribute}}
 
                                                     
                                                 </label>
                                                 
                                             </div>
-                                            <div *ngIf="suggestedInputs.length == 0">
+                                            <div *ngIf="suggestedOutputsAndAttributes.length == 0">
                                                 <p class="noAttributes">No Attributes Available</p>
                                                 <!--Attribute Details
                                                 <div class="nav-item dropdown helpMenu">
