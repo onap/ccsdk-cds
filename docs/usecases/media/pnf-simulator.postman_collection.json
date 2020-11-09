@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1fa613b3-d757-4887-b6b4-94c596bbe821",
+		"_postman_id": "0175f488-96af-4253-ad35-d2a670330091",
 		"name": "CDS PNF Simulator Use Case",
 		"description": "This collection contains all API calls to do the \"PNF Simulator Day-N config-assign and config-deploy use case\" in CDS. ",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -341,7 +341,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "ffcd53f6-a19e-4ecb-9220-bea23105b997",
+						"id": "697ce54a-7333-4b86-9d51-9591f741ad7d",
 						"exec": [
 							"var allDD = pm.environment.get(\"allDD\");\r",
 							"\r",
@@ -517,7 +517,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "79594336-6372-432e-8111-9b1d2c89d2e2",
+						"id": "ba9ff38c-cfb4-4e76-a58c-11c28b62a394",
 						"exec": [
 							"var allDD = pm.environment.get(\"allDD\");\r",
 							"\r",
@@ -874,7 +874,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"actionIdentifiers\": {\n        \"mode\": \"sync\",\n        \"blueprintName\": \"pnf_netconf\",\n        \"blueprintVersion\": \"1.0.0\",\n        \"actionName\": \"config-assign\"\n    },\n    \"payload\": {\n        \"config-assign-request\": {\n            \"template-prefix\": [\n                \"pnf\", \"netconfrpc\"\n            ],\n            \"resolution-key\": \"day-1\",\n            \"config-assign-properties\": {\n                \"pnf-id\": \"abcd\",\n                \"pnf-ipv4-address\": \"172.17.0.2\",\n                \"netconf-password\": \"netconf\",\n                \"netconf-username\": \"netconf\",\n                \"netconf-server-port\": \"830\",\n                \"stream-count\": 5\n            }\n        }\n    },\n    \"commonHeader\": {\n        \"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n        \"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n        \"originatorId\": \"SDNC_DG\"\n    }\n}",
+					"raw": "{\n\n    \"actionIdentifiers\": {\n        \"mode\": \"sync\",\n        \"blueprintName\": \"pnf_netconf\",\n        \"blueprintVersion\": \"1.0.0\",\n        \"actionName\": \"config-assign\"\n    },\n    \"payload\": {\n        \"config-assign-request\": {\n            \"resolution-key\": \"day-1\",\n            \"config-assign-properties\": {\n                \"stream-count\": 5\n            }\n        }\n    },\n    \"commonHeader\": {\n        \"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n        \"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n        \"originatorId\": \"SDNC_DG\"\n    }\n}",
 					"options": {
 						"formdata": {},
 						"raw": {
@@ -951,7 +951,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"actionIdentifiers\": {\n        \"mode\": \"sync\",\n        \"blueprintName\": \"pnf_netconf\",\n        \"blueprintVersion\": \"1.0.0\",\n        \"actionName\": \"config-assign\"\n    },\n    \"payload\": {\n        \"config-assign-request\": {\n            \"template-prefix\": [\n                \"pnf\", \"netconfrpc\"\n            ],\n            \"resolution-key\": \"day-2\",\n            \"config-assign-properties\": {\n                \"pnf-id\": \"abcd\",\n                \"pnf-ipv4-address\": \"172.17.0.2\",\n                \"netconf-password\": \"netconf\",\n                \"netconf-username\": \"netconf\",\n                \"netconf-server-port\": \"830\",\n                \"stream-count\": 10\n            }\n        }\n    },\n    \"commonHeader\": {\n        \"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n        \"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n        \"originatorId\": \"SDNC_DG\"\n    }\n}",
+					"raw": "{\n    \"actionIdentifiers\": {\n        \"mode\": \"sync\",\n        \"blueprintName\": \"pnf_netconf\",\n        \"blueprintVersion\": \"1.0.0\",\n        \"actionName\": \"config-assign\"\n    },\n    \"payload\": {\n        \"config-assign-request\": {\n            \"resolution-key\": \"day-2\",\n            \"config-assign-properties\": {\n                \"stream-count\": 10\n            }\n        }\n    },\n    \"commonHeader\": {\n        \"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n        \"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n        \"originatorId\": \"SDNC_DG\"\n    }\n}",
 					"options": {
 						"formdata": {},
 						"raw": {
@@ -1028,7 +1028,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"actionIdentifiers\": {\n\t\t\"mode\": \"sync\",\n\t\t\"blueprintName\": \"pnf_netconf\",\n\t\t\"blueprintVersion\": \"1.0.0\",\n\t\t\"actionName\": \"config-deploy\"\n\t},\n\t\"payload\": {\n\t\t\"config-deploy-request\": {\n\t\t\t\"resolution-key\": \"day-1\",\n\t\t\t\"config-deploy-properties\": {\n\t\t\t\t\"pnf-id\": \"abcd\",\n\t\t\t\t\"pnf-ipv4-address\": \"172.17.0.2\",\n\t\t\t\t\"netconf-password\": \"netconf\",\n\t\t\t\t\"netconf-username\": \"netconf\"\n\t\t\t}\n\t\t}\n\t}\n\n\t,\n\t\"commonHeader\": {\n\t\t\"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n\t\t\"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n\t\t\"originatorId\": \"SDNC_DG\"\n\t}\n}\n",
+					"raw": "{\n\t\"actionIdentifiers\": {\n\t\t\"mode\": \"sync\",\n\t\t\"blueprintName\": \"pnf_netconf\",\n\t\t\"blueprintVersion\": \"1.0.0\",\n\t\t\"actionName\": \"config-deploy\"\n\t},\n\t\"payload\": {\n\t\t\"config-deploy-request\": {\n\t\t\t\"resolution-key\": \"day-1\",\n\t\t\t\t\"pnf-ipv4-address\": \"{{pnf-ipv4-address}}\",\n                \"netconf-username\": \"{{netconf-username}}\",\n\t\t\t\t\"netconf-password\": \"{{netconf-password}}\"\n\t\t}\n\t},\n\t\"commonHeader\": {\n\t\t\"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n\t\t\"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n\t\t\"originatorId\": \"SDNC_DG\"\n\t}\n}",
 					"options": {
 						"formdata": {},
 						"raw": {
@@ -1105,7 +1105,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"actionIdentifiers\": {\n\t\t\"mode\": \"sync\",\n\t\t\"blueprintName\": \"pnf_netconf\",\n\t\t\"blueprintVersion\": \"1.0.0\",\n\t\t\"actionName\": \"config-deploy\"\n\t},\n\t\"payload\": {\n\t\t\"config-deploy-request\": {\n\t\t\t\"resolution-key\": \"day-2\",\n\t\t\t\"config-deploy-properties\": {\n\t\t\t\t\"pnf-id\": \"abcd\",\n\t\t\t\t\"pnf-ipv4-address\": \"172.17.0.2\",\n\t\t\t\t\"netconf-password\": \"netconf\",\n\t\t\t\t\"netconf-username\": \"netconf\"\n\t\t\t}\n\t\t}\n\t}\n\n\t,\n\t\"commonHeader\": {\n\t\t\"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n\t\t\"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n\t\t\"originatorId\": \"SDNC_DG\"\n\t}\n}\n",
+					"raw": "{\n\t\"actionIdentifiers\": {\n\t\t\"mode\": \"sync\",\n\t\t\"blueprintName\": \"pnf_netconf\",\n\t\t\"blueprintVersion\": \"1.0.0\",\n\t\t\"actionName\": \"config-deploy\"\n\t},\n\t\"payload\": {\n\t\t\"config-deploy-request\": {\n\t\t\t\"resolution-key\": \"day-2\",\n\t\t\t\t\"pnf-ipv4-address\": \"{{pnf-ipv4-address}}\",\n                \"netconf-username\": \"{{netconf-username}}\",\n\t\t\t\t\"netconf-password\": \"{{netconf-password}}\"\n\t\t}\n\t},\n\t\"commonHeader\": {\n\t\t\"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n\t\t\"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n\t\t\"originatorId\": \"SDNC_DG\"\n\t}\n}",
 					"options": {
 						"formdata": {},
 						"raw": {
@@ -1135,7 +1135,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "2bd5eabc-8019-408f-844e-35354a896c38",
+				"id": "b3476f00-24ef-4484-af58-525137927dc5",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1145,7 +1145,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "b52b4979-114a-4642-84d7-73534f26c077",
+				"id": "4715993f-2476-4d02-a1e3-7f72b9dafeba",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1155,14 +1155,29 @@
 	],
 	"variable": [
 		{
-			"id": "9cedb535-6b95-4348-8e42-8786c0731503",
+			"id": "a1d2b48e-7c0f-4c95-a476-430be6228e95",
 			"key": "host",
 			"value": "localhost"
 		},
 		{
-			"id": "4dcce46f-d0c4-4059-9ba0-157f9b85e8ad",
+			"id": "9202dd75-6852-44fd-b7b0-b8ad0714e8c7",
 			"key": "port",
 			"value": "8081"
+		},
+		{
+			"id": "0087a55c-64f3-44c6-9b56-6300c4b4362e",
+			"key": "pnf-ipv4-address",
+			"value": "127.17.0.2"
+		},
+		{
+			"id": "fd1a7cfe-9526-4261-beb4-61935e8d4ab0",
+			"key": "netconf-username",
+			"value": "netconf"
+		},
+		{
+			"id": "8b004a49-14a3-415e-9646-5c82033bf0ea",
+			"key": "netconf-password",
+			"value": "netconf"
 		}
 	],
 	"protocolProfileBehavior": {}
