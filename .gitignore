@@ -157,3 +157,6 @@ MacOS
 
 # Generated dependency list
 direct-dependencies.txt
+
+# VSCode
+.vscode
