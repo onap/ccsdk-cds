@@ -15,6 +15,8 @@ export class ActionAttributesComponent implements OnInit {
 
     inputs = [];
     outputs = [];
+    newInputs = [];
+    newOutputs = [];
     actionAttributesSideBar: boolean;
     inputActionAttribute = new InputActionAttribute();
     outputActionAttribute = new OutputActionAttribute();
@@ -36,6 +38,9 @@ export class ActionAttributesComponent implements OnInit {
     functionAndAttributesInput: Map<string, string[]> = new Map<string, string[]>();
     private currentTargetFunctionName: any;
     private functionAndAttributesOutput: Map<string, string[]> = new Map<string, string[]>();
+    suggestedAttributes: string[] = [];
+    selectedFunctionName = '';
+    selectedAttributeName = '';
 
     constructor(private designerStore: DesignerStore, private functionsStore: FunctionsStore) {
 
@@ -92,7 +97,7 @@ export class ActionAttributesComponent implements OnInit {
     addInput(input: InputActionAttribute) {
         if (input && input.type && input.name) {
             const insertedInputActionAttribute = Object.assign({}, input);
-            this.inputs.push(insertedInputActionAttribute);
+            this.newInputs.push(insertedInputActionAttribute);
         }
     }
 
@@ -100,7 +105,7 @@ export class ActionAttributesComponent implements OnInit {
         console.log(output);
         if (output && output.type && output.name) {
             const insertedOutputActionAttribute = Object.assign({}, output);
-            this.outputs.push(insertedOutputActionAttribute);
+            this.newOutputs.push(insertedOutputActionAttribute);
         }
     }
 
@@ -128,10 +133,21 @@ export class ActionAttributesComponent implements OnInit {
 
     submitAttributes() {
         this.addInput(this.inputActionAttribute);
+        if (this.selectedFunctionName && this.selectedAttributeName) {
+            this.outputActionAttribute.value =
+                '["' + this.selectedFunctionName + '","' + this.selectedAttributeName + '"]';
+        }
         this.addOutput(this.outputActionAttribute);
         this.clearFormInputs();
-        this.designerStore.setInputsAndOutputsToSpecificWorkflow(this.storeInputs(this.inputs)
-            , this.storeOutputs(this.outputs), this.actionName);
+        this.storeOutputs(this.newOutputs);
+        this.storeInputs((this.newInputs));
+        this.newInputs.forEach(input => {
+            this.inputs.push(input);
+        });
+
+        this.newOutputs.forEach(output => {
+            this.outputs.push(output);
+        });
     }
 
     private clearFormInputs() {
@@ -148,28 +164,22 @@ export class ActionAttributesComponent implements OnInit {
             inputs += this.appendAttributes(input);
 
         });
-        if (inputs.endsWith(',')) {
-            inputs = inputs.substr(0, inputs.length - 1);
-        }
-        return this.convertToObject('{' + inputs + '}');
+        this.writeAttribute(inputs, 'inputs');
     }
 
     private storeOutputs(OutputActionAttributes: OutputActionAttribute[]) {
         let outputs = '';
         OutputActionAttributes.forEach(output => {
-            outputs += this.appendAttributes(output);
+            outputs += this.appendOutputAttributes(output);
         });
-        if (outputs.endsWith(',')) {
-            outputs = outputs.substr(0, outputs.length - 1);
-        }
-        return this.convertToObject('{' + outputs + '}');
+        this.writeAttribute(outputs, 'outputs');
     }
 
-    private appendAttributes(output: OutputActionAttribute) {
-        return '"' + output.name + '" : {\n' +
-            '            "required" : ' + output.required + ',\n' +
-            '            "type" : "' + output.type + '",\n' +
-            '            "description" : "' + output.description + '"\n' +
+    private appendAttributes(inputActionAttribute: InputActionAttribute) {
+        return '"' + inputActionAttribute.name + '" : {\n' +
+            '            "required" : ' + inputActionAttribute.required + ',\n' +
+            '            "type" : "' + inputActionAttribute.type + '",\n' +
+            '            "description" : "' + inputActionAttribute.description + '"\n' +
             '          },';
     }
 
@@ -283,17 +293,21 @@ export class ActionAttributesComponent implements OnInit {
                             newAttributes += '"' + attribute + '": ' + this.convertToString(attributes[attribute]) + ',';
                         });
                         if (value.length > 0) {
-                            newAttributes = this.removeTheLastComma(newAttributes);
-                            const originalAttributes = this.convertToString(this.designerState.template.workflows[this.actionName]
-                                [attributeType]);
-                            console.log(originalAttributes.substr(0, originalAttributes.length - 1) + ',' + newAttributes + '}');
-                            this.designerState.template.workflows[this.actionName][attributeType] =
-                                this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
-                                    + ',' + newAttributes + '}');
+                            this.writeAttribute(newAttributes, attributeType);
                         }
                     }
                 });
         });
+    }
+
+    private writeAttribute(newAttributes: string, attributeType: string) {
+        newAttributes = this.removeTheLastComma(newAttributes);
+        const originalAttributes = this.convertToString(this.designerState.template.workflows[this.actionName]
+            [attributeType]);
+        console.log(originalAttributes.substr(0, originalAttributes.length - 1) + ',' + newAttributes + '}');
+        this.designerState.template.workflows[this.actionName][attributeType] =
+            this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
+                + ',' + newAttributes + '}');
     }
 
     private removeTheLastComma = (newInputs: string) => {
@@ -309,4 +323,42 @@ export class ActionAttributesComponent implements OnInit {
 
     private getNodeTemplate = (value: string) => this.designerState.template.node_templates[value];
 
+    getAttributesAndOutputs(functionName: string) {
+        this.suggestedAttributes = [];
+        console.log(functionName);
+        const nodeTemplate = this.designerState.template.node_templates[functionName];
+        console.log(this.designerState.template.node_templates);
+        console.log(nodeTemplate);
+        /* tslint:disable:no-string-literal */
+        console.log(nodeTemplate['type']);
+        this.functions.serverFunctions
+            /* tslint:disable:no-string-literal */
+            .filter(currentFunction => currentFunction.modelName.includes(nodeTemplate['type']))
+            .forEach(currentFunction => {
+                if (currentFunction.definition['attributes']) {
+                    Object.keys(currentFunction.definition['attributes']).forEach(attribute => {
+                        this.suggestedAttributes.push(attribute);
+                    });
+                }
+                console.log(this.suggestedAttributes);
+                this.selectedFunctionName = functionName;
+            });
+    }
+
+    addTempOutputAttr(suggestedOutputAndAttribute: string) {
+        this.selectedAttributeName = suggestedOutputAndAttribute;
+    }
+
+
+    private appendOutputAttributes(output: OutputActionAttribute) {
+        return '"' + output.name + '" : {\n' +
+            '            "required" : ' + output.required + ',\n' +
+            '            "type" : "' + output.type + '",\n' +
+            '            "description" : "' + output.description + '",\n' +
+            '            "value\" :' + '{\n' +
+            '             "get_attribute" : ' + output.value + '\n' +
+            '            }\n' +
+            '          },';
+
+    }
 }
