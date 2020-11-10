@@ -201,14 +201,14 @@
                             <div class="col-sm-9">
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline3" name="customRadioInline3"
-                                           class="custom-control-input" (click)="setOutputRequired(true)">
+                                        class="custom-control-input" (click)="setOutputRequired(true)">
                                     <label class="custom-control-label" for="customRadioInline3">True</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline4" name="customRadioInline3"
-                                           class="custom-control-input">
+                                        class="custom-control-input">
                                     <label class="custom-control-label" for="customRadioInline4"
-                                           (click)="setOutputRequired(false)">False</label>
+                                        (click)="setOutputRequired(false)">False</label>
                                 </div>
                             </div>
                         </div>
@@ -255,46 +255,57 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-4">
-                            <div class="col-6">
-                                <b class="listBoxTitle">1. Choose Function Name</b>
-                                <div class="list-group addedFunctionsList" id="list-tab" role="tablist">
-                                    <input type="text" class="form-control input-search-controller"
-                                        placeholder="Functions">
-                                    <div class="scrollWrapper" *ngFor="let step of steps">
-                                        <a class="list-group-item list-group-item-action active" id="list-home-list"
-                                            data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
-                                                class="icon-resource_resolution mr-1" aria-hidden="true"></i>
-                                            {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="getAttributesAndOutputs(
+
+
+
+
+                        <section class="carousel" aria-label="Gallery">
+
+                            <ol class="carousel__viewport">
+                                <!--Function-->
+                                <li id="carousel__slide1" tabindex="0" class="carousel__slide">
+                                    <b class="listBoxTitle">1. Choose Function Name</b>
+                                    <div class="list-group addedFunctionsList" id="list-tab" role="tablist">
+                                        <input type="text" class="form-control input-search-controller"
+                                            placeholder="Functions">
+                                        <div class="scrollWrapper" *ngFor="let step of steps">
+                                            <a class="list-group-item list-group-item-action active" id="list-home-list"
+                                                data-toggle="list" href="#list-home" role="tab" aria-controls="home">
+                                                <i class="icon-resource_resolution mr-1" aria-hidden="true"></i>
+                                                {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="getAttributesAndOutputs(
                                                                     this.designerState.template.workflows[actionName]['steps'][step]['target']
                                                                     )"></i></a>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <b class="listBoxTitle">2. Choose Input Attribute Name</b>
-                                <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
-                                    <input type="text" class="form-control input-search-controller"
-                                        placeholder="Attributes">
-                                    <div class="tab-pane fade show active" id="list-home" role="tabpanel"
-                                        aria-labelledby="list-home-list">
-                                        <div class="scrollWrapper">
-                                            <div *ngIf="suggestedAttributes.length>0" class="btn-group btn-group-toggle"
-                                                 data-toggle="buttons">
-                                                <label class="btn btn-secondary active" 
-                                                    *ngFor="let suggestedAttribute of suggestedAttributes"
-                                                    (click)="addTempOutputAttr(suggestedAttribute)">
-                                                    <input type="radio" name="options" [id]="suggestedAttribute"
-                                                        autocomplete="off" (click)="addTempOutputAttr(suggestedAttribute)">
-                                                    {{suggestedAttribute}}
+                                    <div class="carousel__snapper">
+                                        <a href="#carousel__slide4" class="carousel__prev">Parmeters</a>
+                                        <a href="#carousel__slide2" class="carousel__next">Attributes</a>
+                                    </div>
+                                </li>
+                                <!--Attribute-->
+                                <li id="carousel__slide2" tabindex="0" class="carousel__slide">
+                                    <b class="listBoxTitle">2. Choose Attribute Name</b>
+                                    <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
+                                        <input type="text" class="form-control input-search-controller"
+                                            placeholder="Attributes">
+                                        <div class="tab-pane fade show active" id="list-home" role="tabpanel"
+                                            aria-labelledby="list-home-list">
+                                            <div class="scrollWrapper">
+                                                <div *ngIf="suggestedAttributes.length>0"
+                                                    class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-secondary active"
+                                                        *ngFor="let suggestedAttribute of suggestedAttributes"
+                                                        (click)="addTempOutputAttr(suggestedAttribute)">
+                                                        <input type="radio" name="options" [id]="suggestedAttribute"
+                                                            autocomplete="off"
+                                                            (click)="addTempOutputAttr(suggestedAttribute)">
+                                                        {{suggestedAttribute}}
+                                                    </label>
 
-                                                    
-                                                </label>
-                                                
-                                            </div>
-                                            <div *ngIf="suggestedAttributes.length == 0">
-                                                <p class="noAttributes">No Attributes Available</p>
-                                                <!--Attribute Details
+                                                </div>
+                                                <div *ngIf="suggestedAttributes.length == 0">
+                                                    <p class="noAttributes">No Attributes Available</p>
+                                                    <!--Attribute Details
                                                 <div class="nav-item dropdown helpMenu">
                                                     <input class="dropdown-toggle" type="text">
                                                     <div class="dropdown-text"><i class="icon-info" aria-hidden="true"></i></div>
@@ -312,13 +323,94 @@
                                                     </ul>
                                                   </div>
                                                   -->
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!---->
+                                    <div class="carousel__snapper"></div>
+                                    <a href="#carousel__slide1" class="carousel__prev">Functions</a>
+                                    <a href="#carousel__slide3" class="carousel__next">Artifacts</a>
+                                </li>
+                                <!--Artifact-->
+                                <li id="carousel__slide3" tabindex="0" class="carousel__slide">
+                                    <b class="listBoxTitle">3. Choose Artifact Name</b>
+                                    <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
+                                        <input type="text" class="form-control input-search-controller"
+                                            placeholder="Attributes">
+                                        <div class="tab-pane fade show active" id="list-home" role="tabpanel"
+                                            aria-labelledby="list-home-list">
+                                            <div class="scrollWrapper">
+                                                <div *ngIf="suggestedAttributes.length>0"
+                                                    class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-secondary active"
+                                                        *ngFor="let suggestedAttribute of suggestedAttributes"
+                                                        (click)="addTempOutputAttr(suggestedAttribute)">
+                                                        <input type="radio" name="options" [id]="suggestedAttribute"
+                                                            autocomplete="off"
+                                                            (click)="addTempOutputAttr(suggestedAttribute)">
+                                                        {{suggestedAttribute}}
+                                                    </label>
+
+                                                </div>
+                                                <div *ngIf="suggestedAttributes.length == 0">
+                                                    <p class="noAttributes">No Attributes Available</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel__snapper"></div>
+                                    <a href="#carousel__slide2" class="carousel__prev">Attributes</a>
+                                    <a href="#carousel__slide4" class="carousel__next">Parmeters</a>
+                                </li>
+                                <!--Parameter-->
+                                <li id="carousel__slide4" tabindex="0" class="carousel__slide">
+                                    <b class="listBoxTitle">4. Choose Parameter Name</b>
+                                    <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
+                                        <input type="text" class="form-control input-search-controller"
+                                            placeholder="Attributes">
+                                        <div class="tab-pane fade show active" id="list-home" role="tabpanel"
+                                            aria-labelledby="list-home-list">
+                                            <div class="scrollWrapper">
+                                                <div *ngIf="suggestedAttributes.length>0"
+                                                    class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-secondary active"
+                                                        *ngFor="let suggestedAttribute of suggestedAttributes"
+                                                        (click)="addTempOutputAttr(suggestedAttribute)">
+                                                        <input type="radio" name="options" [id]="suggestedAttribute"
+                                                            autocomplete="off"
+                                                            (click)="addTempOutputAttr(suggestedAttribute)">
+                                                        {{suggestedAttribute}}
+                                                    </label>
+
+                                                </div>
+                                                <div *ngIf="suggestedAttributes.length == 0">
+                                                    <p class="noAttributes">No Attributes Available</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel__snapper"></div>
+                                    <a href="#carousel__slide3" class="carousel__prev">Artifacts</a>
+                                    <a href="#carousel__slide1" class="carousel__next">Functions</a>
+                                </li>
+                            </ol>
+                            <aside class="carousel__navigation">
+                                <ol class="carousel__navigation-list">
+                                    <li class="carousel__navigation-item">
+                                        <a href="#carousel__slide1" class="carousel__navigation-button">Functions</a>
+                                    </li>
+                                    <li class="carousel__navigation-item">
+                                        <a href="#carousel__slide2" class="carousel__navigation-button">Attributes</a>
+                                    </li>
+                                    <li class="carousel__navigation-item">
+                                        <a href="#carousel__slide3" class="carousel__navigation-button">Artifacts</a>
+                                    </li>
+                                    <li class="carousel__navigation-item">
+                                        <a href="#carousel__slide4" class="carousel__navigation-button">Parameters</a>
+                                    </li>
+                                </ol>
+                            </aside>
+                        </section>
                     </div>
                 </div>
             </div>
@@ -401,7 +493,9 @@
                                                     {{suggestedInput}}
                                                 </label>
                                             </div>
-                                            <div *ngIf="suggestedInputs.length == 0">you don't have data</div>
+                                            <div *ngIf="suggestedInputs.length == 0">
+                                                <p class="noAttributes">No Attributes Available</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -453,7 +547,9 @@
                                                 </label>
 
                                             </div>
-                                            <div *ngIf="suggestedOutputs.length == 0">you don't have data</div>
+                                            <div *ngIf="suggestedOutputs.length == 0">
+                                                <p class="noAttributes">No Attributes Available</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
