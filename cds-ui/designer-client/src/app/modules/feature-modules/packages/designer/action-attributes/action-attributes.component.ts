@@ -41,12 +41,17 @@ export class ActionAttributesComponent implements OnInit {
     suggestedAttributes: string[] = [];
     selectedFunctionName = '';
     selectedAttributeName = '';
+    isNotComponentResourceResolution = true;
+    currentArtifacts: string[] = [];
+    isParametersHidden = true;
 
     constructor(private designerStore: DesignerStore, private functionsStore: FunctionsStore) {
 
     }
 
     ngOnInit() {
+        console.log('is paramters hidden' + this.isParametersHidden);
+        console.log('is artifacts hidden' + this.isNotComponentResourceResolution);
         this.designerStore.state$.subscribe(designerState => {
             this.designerState = designerState;
             if (this.designerState && this.designerState.actionName) {
@@ -323,9 +328,14 @@ export class ActionAttributesComponent implements OnInit {
 
     private getNodeTemplate = (value: string) => this.designerState.template.node_templates[value];
 
+
     getAttributesAndOutputs(functionName: string) {
         this.suggestedAttributes = [];
         console.log(functionName);
+        if (functionName.includes('component-resource-resolution')) {
+            this.isNotComponentResourceResolution = false;
+            this.isParametersHidden = true;
+        }
         const nodeTemplate = this.designerState.template.node_templates[functionName];
         console.log(this.designerState.template.node_templates);
         console.log(nodeTemplate);
@@ -338,15 +348,33 @@ export class ActionAttributesComponent implements OnInit {
                 if (currentFunction.definition['attributes']) {
                     Object.keys(currentFunction.definition['attributes']).forEach(attribute => {
                         this.suggestedAttributes.push(attribute);
+                        this.suggestedAttributes.push('assignment-map');
                     });
                 }
                 console.log(this.suggestedAttributes);
+
                 this.selectedFunctionName = functionName;
+
+
             });
     }
 
     addTempOutputAttr(suggestedOutputAndAttribute: string) {
+        console.log('ssss');
         this.selectedAttributeName = suggestedOutputAndAttribute;
+        this.currentArtifacts = [];
+        const nodeTemplate = this.designerState.template.node_templates[this.selectedFunctionName];
+        if (nodeTemplate['artifacts']
+        ) {
+            Object.keys(nodeTemplate['artifacts']).forEach(key => {
+                const mappingName = key.split('-')[0];
+                if (!this.currentArtifacts.includes(mappingName)) {
+                    this.currentArtifacts.push(mappingName);
+                }
+            });
+        }
+        console.log('happend');
+
     }
 
 
@@ -359,6 +387,14 @@ export class ActionAttributesComponent implements OnInit {
             '             "get_attribute" : ' + output.value + '\n' +
             '            }\n' +
             '          },';
+
+    }
+
+    addArtifactFile(suggestedArtifact: string) {
+        console.log(suggestedArtifact);
+        if (this.selectedAttributeName.includes('assignment-map')) {
+            this.isParametersHidden = false;
+        }
 
     }
 }
