@@ -44,29 +44,33 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.designerStore.state$
-            .pipe(
-                distinctUntilChanged((a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)),
-                takeUntil(this.ngUnsubscribe))
-            .subscribe(designerDashboardState => {
-                this.designerDashboardState = designerDashboardState;
-                this.designerState = designerDashboardState;
-                this.actionName = this.designerState.actionName;
-                const action = this.designerState.template.workflows[this.actionName] as Action;
-
+        this.designerStore.state$.subscribe(designerDashboardState => {
+            this.designerState = designerDashboardState;
+            this.actionName = this.designerState.actionName;
+            const action = this.designerState.template.workflows[this.actionName] as Action;
+            this.currentFuncion = new NodeProcess();
+            try {
                 console.log(action);
                 if (action) {
+                    // this.designerState.functionName
                     const child = Object.keys(action.steps)[0];
-                    this.functionName = action.steps[child].target;
+                    this.functionName = this.designerState.functionName;
+                    console.log(this.designerState.template.node_templates);
+                    console.log(this.designerState);
                     console.log(this.designerState.template.node_templates[this.functionName]);
                     //  this.currentFuncion = this.designerState.template.node_templates[this.functionName];
                     // reset inouts&outputs
+                    this.requiredInputs = new Map<string, {}>();
+                    this.requiredOutputs = new Map<string, {}>();
+                    this.OptionalInputs = new Map<string, {}>();
+                    this.optionalOutputs = new Map<string, {}>();
                     this.toNodeProcess(this.designerState.template.node_templates[this.functionName], this.functionName);
                     const type = this.designerState.template.node_templates[this.functionName].type;
                     this.getNodeType(type);
                     this.onInitMapping();
                 }
-            });
+            } catch (e) { }
+        });
 
         this.packageCreationStore.state$
             .subscribe(cbaPackage => {
@@ -111,24 +115,23 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     }
 
     toNodeProcess(nodeTemplate, functionName) {
-        this.requiredInputs = new Map<string, {}>();
-        this.requiredOutputs = new Map<string, {}>();
-        this.OptionalInputs = new Map<string, {}>();
-        this.optionalOutputs = new Map<string, {}>();
         console.log(nodeTemplate);
         this.currentFuncion['instance-name'] = functionName;
         // tslint:disable-next-line: no-string-literal
         this.currentFuncion['type'] = nodeTemplate['type'];
         if (nodeTemplate.interfaces && Object.keys(nodeTemplate.interfaces).length > 0) {
             const nodeName = Object.keys(nodeTemplate.interfaces)[0];
+            // console.log(Object.keys(nodeTemplate.interfaces));
             // tslint:disable-next-line: no-string-literal
             const inputs = nodeTemplate.interfaces[nodeName]['operations']['process']['inputs'];
             // tslint:disable-next-line: no-string-literal
             const outputs = nodeTemplate.interfaces[nodeName]['operations']['process']['outputs'];
 
+            // console.log(inputs);
+
             if (inputs) {
                 for (const [key, value] of Object.entries(inputs)) {
-                    console.log(key + '-' + value);
+                    console.log(key + ' - ' + value);
                     this.currentFuncion.inputs[key] = value;
                 }
             }
@@ -145,8 +148,10 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         this.ngUnsubscribe.complete();
     }
 
-    saveFunctionData() {
+    addTemplates() { }
 
+    saveFunctionData() {
+        this.nodeTemplates = new NodeTemplate('');
         // tslint:disable-next-line: variable-name
         const node_templates = {};
         const finalFunctionData = this.currentFuncion;
@@ -159,7 +164,12 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
             console.log(value);
             console.log(finalFunctionData.inputs['artifact-prefix-names']);
 
-            if (Array.isArray(finalFunctionData.inputs['artifact-prefix-names'])) {
+            if (finalFunctionData.inputs['artifact-prefix-names'] === undefined) {
+                finalFunctionData.inputs['artifact-prefix-names'] = [key];
+            } else if (
+                Array.isArray(finalFunctionData.inputs['artifact-prefix-names']) &&
+                !finalFunctionData.inputs['artifact-prefix-names'].includes(key)
+            ) {
                 finalFunctionData.inputs['artifact-prefix-names'].push(key);
             }
 
@@ -217,7 +227,6 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
 
     }
 
-    addTemplates() { }
     setArtifact(predefined: boolean) {
         if (predefined) {
             this.currentFuncion.inputs['artifact-prefix-names'] = [];
@@ -291,6 +300,11 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         for (const [key, value] of Object.entries(fields)) {
             if (key === 'artifact-prefix-names') {
                 this.artifactPrefix = true;
+                // in edit&view mode need to check first if this input||output already exists
+            } else if (key in this.currentFuncion.inputs) {
+                this.requiredInputs.set(key, Object.assign({}, value));
+            } else if (key in this.currentFuncion.outputs) {
+                this.requiredOutputs.set(key, Object.assign({}, value));
             } else if (value['required']) {
                 console.log('This field is required = ' + key);
                 if (type === 'inputs') {

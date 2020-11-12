@@ -217,15 +217,16 @@
                             <div *ngIf="!showAction" class="custom-control">
                                 <ul>
                                     <li *ngFor="let customActionName of actions">
-                                        <label [attr.for]="customActionName">
-                                            <i class="icon-file" aria-hidden="true" class="icon-file"
-                                                (click)="openActionAttributes(customActionName)"></i>
+                                        <label (click)="openActionAttributes(customActionName)"
+                                            [attr.for]="customActionName">
+                                            <i class="icon-file" aria-hidden="true" class="icon-file"></i>
                                             {{customActionName}} </label>
 
-                                        <ul *ngIf="customActionName.includes(this.currentActionName)" class="actionSubList">
-                                            <li [attr.for]="customActionName" *ngFor="let currentFunction of steps">
-                                                <span
-                                                    (click)="openFunctionAttributes(currentFunction)">{{currentFunction}}</span>
+                                        <ul *ngIf="customActionName.includes(this.currentActionName)"
+                                            class="actionSubList">
+                                            <li (click)="openFunctionAttributes(currentFunction)"
+                                                [attr.for]="customActionName" *ngFor="let currentFunction of steps">
+                                                <span>{{getTarget(currentFunction)}}</span>
                                             </li>
                                         </ul>
                                     </li>
