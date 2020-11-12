@@ -132,19 +132,6 @@ class RestClientServiceTest {
     }
 
     @Test
-    fun testGetPathParamWithWhitespace() {
-        val restClientService = bluePrintRestLibPropertyService
-            .blueprintWebClientService("sample")
-        val response = restClientService.exchangeResource(
-            HttpMethod.GET.name, "/sample/path/id 3/get", ""
-        )
-        assertEquals(
-            "path param id:id 3", response.body,
-            "failed to get query param response"
-        )
-    }
-
-    @Test
     fun testPatch() {
         val restClientService = bluePrintRestLibPropertyService
             .blueprintWebClientService("sample")
