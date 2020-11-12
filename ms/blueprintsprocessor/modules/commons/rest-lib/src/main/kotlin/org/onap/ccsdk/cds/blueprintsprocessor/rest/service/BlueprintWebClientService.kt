@@ -94,15 +94,14 @@ interface BlueprintWebClientService {
          * the difference is in convertToBasicHeaders vs basicHeaders
          */
         val convertedHeaders: Array<BasicHeader> = convertToBasicHeaders(headers)
-        val encodedPath = UriUtils.encodeQuery(path, StandardCharsets.UTF_8.name())
         return when (HttpMethod.resolve(methodType)) {
-            HttpMethod.DELETE -> delete(encodedPath, convertedHeaders, String::class.java)
-            HttpMethod.GET -> get(encodedPath, convertedHeaders, String::class.java)
-            HttpMethod.POST -> post(encodedPath, request, convertedHeaders, String::class.java)
-            HttpMethod.PUT -> put(encodedPath, request, convertedHeaders, String::class.java)
-            HttpMethod.PATCH -> patch(encodedPath, request, convertedHeaders, String::class.java)
+            HttpMethod.DELETE -> delete(path, convertedHeaders, String::class.java)
+            HttpMethod.GET -> get(path, convertedHeaders, String::class.java)
+            HttpMethod.POST -> post(path, request, convertedHeaders, String::class.java)
+            HttpMethod.PUT -> put(path, request, convertedHeaders, String::class.java)
+            HttpMethod.PATCH -> patch(path, request, convertedHeaders, String::class.java)
             else -> throw BluePrintProcessorException(
-                "Unsupported methodType($methodType) attempted on path($encodedPath)"
+                "Unsupported methodType($methodType) attempted on path($path)"
             )
         }
     }
