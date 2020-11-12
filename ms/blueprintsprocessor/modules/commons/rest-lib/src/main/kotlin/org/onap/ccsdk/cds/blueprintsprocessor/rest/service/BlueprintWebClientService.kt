@@ -42,11 +42,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintIOUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
-import org.springframework.web.util.UriUtils
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
 interface BlueprintWebClientService {
 
@@ -94,15 +92,14 @@ interface BlueprintWebClientService {
          * the difference is in convertToBasicHeaders vs basicHeaders
          */
         val convertedHeaders: Array<BasicHeader> = convertToBasicHeaders(headers)
-        val encodedPath = UriUtils.encodeQuery(path, StandardCharsets.UTF_8.name())
         return when (HttpMethod.resolve(methodType)) {
-            HttpMethod.DELETE -> delete(encodedPath, convertedHeaders, String::class.java)
-            HttpMethod.GET -> get(encodedPath, convertedHeaders, String::class.java)
-            HttpMethod.POST -> post(encodedPath, request, convertedHeaders, String::class.java)
-            HttpMethod.PUT -> put(encodedPath, request, convertedHeaders, String::class.java)
-            HttpMethod.PATCH -> patch(encodedPath, request, convertedHeaders, String::class.java)
+            HttpMethod.DELETE -> delete(path, convertedHeaders, String::class.java)
+            HttpMethod.GET -> get(path, convertedHeaders, String::class.java)
+            HttpMethod.POST -> post(path, request, convertedHeaders, String::class.java)
+            HttpMethod.PUT -> put(path, request, convertedHeaders, String::class.java)
+            HttpMethod.PATCH -> patch(path, request, convertedHeaders, String::class.java)
             else -> throw BluePrintProcessorException(
-                "Unsupported methodType($methodType) attempted on path($encodedPath)"
+                "Unsupported methodType($methodType) attempted on path($path)"
             )
         }
     }
