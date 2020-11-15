@@ -362,15 +362,15 @@
                                         <div class="tab-pane fade show active" id="list-home" role="tabpanel"
                                              aria-labelledby="list-home-list">
                                             <div class="scrollWrapper">
-                                                <div *ngIf="suggestedAttributes.length>0"
+                                                <div *ngIf="suggestedMappingParameters.length>0"
                                                      class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-secondary active"
-                                                           *ngFor="let suggestedAttribute of suggestedAttributes"
-                                                           (click)="addTempOutputAttr(suggestedAttribute)">
-                                                        <input type="radio" name="options" [id]="suggestedAttribute"
+                                                           *ngFor="let suggestedMappingParameter of suggestedMappingParameters"
+                                                           (click)="addTempOutputAttr(suggestedMappingParameter)">
+                                                        <input type="radio" name="options" [id]="suggestedMappingParameter"
                                                                autocomplete="off"
-                                                               (click)="addTempOutputAttr(suggestedAttribute)">
-                                                        {{suggestedAttribute}}
+                                                               (click)="addSuggestedMappingParameter(suggestedMappingParameter)">
+                                                        {{suggestedMappingParameter}}
                                                     </label>
 
                                                 </div>

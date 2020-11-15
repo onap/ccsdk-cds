@@ -5,6 +5,8 @@ import {DesignerDashboardState} from '../model/designer.dashboard.state';
 import {Action} from './models/Action';
 import {FunctionsStore} from '../functions.store';
 import {FunctionsState} from '../model/functions.state';
+import {PackageCreationStore} from '../../package-creation/package-creation.store';
+import {CBAPackage} from '../../package-creation/mapping-models/CBAPacakge.model';
 
 @Component({
     selector: 'app-action-attributes',
@@ -44,8 +46,14 @@ export class ActionAttributesComponent implements OnInit {
     isNotComponentResourceResolution = true;
     currentArtifacts: string[] = [];
     isParametersHidden = true;
+    cbaPackage: CBAPackage;
+    suggestedMappingParameters: string[] = [];
+    selectedParameterList: string[] = [];
+    currentSuggestedArtifact: string;
 
-    constructor(private designerStore: DesignerStore, private functionsStore: FunctionsStore) {
+    constructor(private designerStore: DesignerStore,
+                private functionsStore: FunctionsStore,
+                private packageCreationStore: PackageCreationStore) {
 
     }
 
@@ -82,6 +90,12 @@ export class ActionAttributesComponent implements OnInit {
         this.functionsStore.state$.subscribe(functions => {
             this.functions = functions;
         });
+
+        this.packageCreationStore.state$
+            .subscribe(cbaPackage => {
+                this.cbaPackage = cbaPackage;
+
+            });
     }
 
 
@@ -139,20 +153,42 @@ export class ActionAttributesComponent implements OnInit {
     submitAttributes() {
         this.addInput(this.inputActionAttribute);
         if (this.selectedFunctionName && this.selectedAttributeName) {
+            console.log(this.getValue());
             this.outputActionAttribute.value =
-                '["' + this.selectedFunctionName + '","' + this.selectedAttributeName + '"]';
+                this.getValue();
         }
         this.addOutput(this.outputActionAttribute);
         this.clearFormInputs();
         this.storeOutputs(this.newOutputs);
         this.storeInputs((this.newInputs));
         this.newInputs.forEach(input => {
-            this.inputs.push(input);
+            if (!this.inputs.includes(input)) {
+                this.inputs.push(input);
+            }
         });
 
         this.newOutputs.forEach(output => {
-            this.outputs.push(output);
+            if (!this.outputs.includes(output)) {
+                this.outputs.push(output);
+            }
         });
+    }
+
+    private getValue() {
+        let value = '["' + this.selectedFunctionName + '", "' + '","' + this.selectedAttributeName;
+
+        if (!this.isParametersHidden) {
+            let currentSelected = '';
+            this.selectedParameterList.forEach(selectedParameter => {
+                currentSelected += '"' + selectedParameter + '",';
+            });
+            value += '","' + this.currentSuggestedArtifact + '","' + currentSelected.substr(0, value.length - 1) + '';
+        } else if (!this.isNotComponentResourceResolution) {
+            value += '","' + this.currentSuggestedArtifact + '';
+
+        }
+
+        return value += '"]';
     }
 
     private clearFormInputs() {
@@ -309,10 +345,19 @@ export class ActionAttributesComponent implements OnInit {
         newAttributes = this.removeTheLastComma(newAttributes);
         const originalAttributes = this.convertToString(this.designerState.template.workflows[this.actionName]
             [attributeType]);
-        console.log(originalAttributes.substr(0, originalAttributes.length - 1) + ',' + newAttributes + '}');
-        this.designerState.template.workflows[this.actionName][attributeType] =
-            this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
-                + ',' + newAttributes + '}');
+        if (originalAttributes.length > 2) {
+            this.designerState.template.workflows[this.actionName][attributeType] =
+                this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
+                    + ',' + newAttributes + '}');
+        } else {
+            this.designerState.template.workflows[this.actionName][attributeType] =
+                this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
+                    + newAttributes + '}');
+        }
+        /* console.log(originalAttributes.substr(0, originalAttributes.length - 1) + ',' + newAttributes + '}');
+         this.designerState.template.workflows[this.actionName][attributeType] =
+             this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
+                 + ',' + newAttributes + '}');*/
     }
 
     private removeTheLastComma = (newInputs: string) => {
@@ -332,16 +377,15 @@ export class ActionAttributesComponent implements OnInit {
     getAttributesAndOutputs(functionName: string) {
         this.suggestedAttributes = [];
         console.log(functionName);
-        if (functionName.includes('component-resource-resolution')) {
+
+        const nodeTemplate = this.designerState.template.node_templates[functionName];
+        if (nodeTemplate['type'].includes('component-resource-resolution')) {
             this.isNotComponentResourceResolution = false;
             this.isParametersHidden = true;
         } else {
             this.isNotComponentResourceResolution = true;
             this.isParametersHidden = true;
         }
-        const nodeTemplate = this.designerState.template.node_templates[functionName];
-        console.log(this.designerState.template.node_templates);
-        console.log(nodeTemplate);
         /* tslint:disable:no-string-literal */
         console.log(nodeTemplate['type']);
         this.functions.serverFunctions
@@ -396,6 +440,27 @@ export class ActionAttributesComponent implements OnInit {
     addArtifactFile(suggestedArtifact: string) {
         console.log(suggestedArtifact);
         this.isParametersHidden = !this.selectedAttributeName.includes('assignment-map');
-        console.log('assignement map ' + this.isParametersHidden);
+        if (!this.isParametersHidden) {
+            this.suggestedMappingParameters = this.getSuggestedMappingParameters(suggestedArtifact);
+        }
+    }
+
+    private getSuggestedMappingParameters(suggestedArtifact: string) {
+        const suggestedMappingParameters = [];
+        this.currentSuggestedArtifact = suggestedArtifact;
+        this.cbaPackage.mapping.files.forEach(((value, key) => {
+            if (key.includes(suggestedArtifact)) {
+
+                JSON.parse(value).forEach(value2 => {
+                    suggestedMappingParameters.push(value2['name']);
+                });
+            }
+        }));
+        return suggestedMappingParameters;
+    }
+
+    addSuggestedMappingParameter(suggestedMappingParameter: string) {
+        this.selectedParameterList.push(suggestedMappingParameter);
+
     }
 }
