@@ -14,8 +14,8 @@
             <div class="row">
                 <div class="col pr-0 text-center">
                     <button type="button" data-toggle="modal" data-target="#exampleModalScrollable"
-                            class="btn btn-secondary"><i class="icon-custom-attribute" type="button"
-                                                         aria-hidden="true"></i></button>
+                            class="btn btn-secondary" (click)="clearFormInputs()"><i class="icon-custom-attribute" type="button"
+                                                         aria-hidden="true" ></i></button>
                     <span>Create Custom</span>
                 </div>
                 <div class="col text-center">
@@ -277,11 +277,6 @@
                                                                     )"></i></a>
                                         </div>
                                     </div>
-                                    <div class="carousel__snapper" [hidden]="!isNotComponentResourceResolution">
-                                        <a href="#carousel__slide4" [hidden]="isParametersHidden"
-                                           class="carousel__prev">Parameters</a>
-                                        <a href="#carousel__slide2" class="carousel__next">Attributes</a>
-                                    </div>
                                 </li>
                                 <!--Attribute-->
                                 <li id="carousel__slide2" tabindex="1" class="carousel__slide">
@@ -294,13 +289,13 @@
                                             <div class="scrollWrapper">
                                                 <div *ngIf="suggestedAttributes.length>0"
                                                      class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-secondary active"
+                                                    <label class="btn btn-secondary"
                                                            *ngFor="let suggestedAttribute of suggestedAttributes"
                                                            [id]="suggestedAttribute"
                                                            (click)="addTempOutputAttr(suggestedAttribute)">
                                                         <input type="radio" name="options"
                                                                [id]="suggestedAttribute+'.,.'"
-                                                               autocomplete="off">
+                                                               autocomplete="off" [checked]="suggestedAttributes[0].includes(suggestedAttribute)">
                                                         {{suggestedAttribute}}
                                                     </label>
 
@@ -311,11 +306,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="carousel__snapper"></div>
-                                    <a href="#carousel__slide1" class="carousel__prev">Functions</a>
-                                    <a href="#carousel__slide3" [hidden]="!isNotComponentResourceResolution"
-                                       class="carousel__next">Artifacts</a>
-
                                 </li>
                                 <!--Artifact-->
                                 <li id="carousel__slide3" [hidden]="isNotComponentResourceResolution" tabindex="2"
@@ -329,12 +319,14 @@
                                             <div class="scrollWrapper">
                                                 <div *ngIf="currentArtifacts.length>0"
                                                      class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-secondary active"
+                                                    <label class="btn btn-secondary"
                                                            *ngFor="let suggestedArtifact of currentArtifacts"
                                                            (click)="addArtifactFile(suggestedArtifact)">
                                                         <input type="radio" name="options" [id]="suggestedArtifact"
                                                                autocomplete="off"
-                                                               (click)="addTempOutputAttr(suggestedArtifact)">
+                                                               (click)="addArtifactFile(suggestedArtifact)"
+                                                               [checked]="currentArtifacts[0].includes(suggestedArtifact)"
+                                                        >
                                                         {{suggestedArtifact}}
                                                     </label>
 
@@ -344,11 +336,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="carousel__snapper" [hidden]="!isNotComponentResourceResolution">
-                                        <a href="#carousel__slide2" class="carousel__prev">Attributes</a>
-                                        <a href="#carousel__slide4" [hidden]="isParametersHidden"
-                                           class="carousel__next">Parmeters</a>
                                     </div>
                                 </li>
                                 <!--Parameter-->
@@ -362,29 +349,28 @@
                                         <div class="tab-pane fade show active" id="list-home" role="tabpanel"
                                              aria-labelledby="list-home-list">
                                             <div class="scrollWrapper">
-                                                <div *ngIf="suggestedAttributes.length>0"
+                                                <div *ngIf="suggestedMappingParameters.length>0"
                                                      class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-secondary active"
-                                                           *ngFor="let suggestedAttribute of suggestedAttributes"
-                                                           (click)="addTempOutputAttr(suggestedAttribute)">
-                                                        <input type="radio" name="options" [id]="suggestedAttribute"
+                                                    <label class="btn btn-secondary"
+                                                           *ngFor="let suggestedMappingParameter of suggestedMappingParameters"
+                                                           (click)="addSuggestedMappingParameter(suggestedMappingParameter)">
+                                                           <!--[class]="suggestedMappingParameters[0].includes(suggestedMappingParameter)?'btn btn-secondary active':'btn btn-secondary'">
+                                                       --> <input type="radio" name="options" [id]="suggestedMappingParameter"
                                                                autocomplete="off"
-                                                               (click)="addTempOutputAttr(suggestedAttribute)">
-                                                        {{suggestedAttribute}}
+                                                               (click)="addSuggestedMappingParameter(suggestedMappingParameter)"
+                                                               [checked]="suggestedMappingParameters[0].includes(suggestedMappingParameter)"
+
+                                                        >
+                                                        {{suggestedMappingParameter}}
                                                     </label>
 
                                                 </div>
-                                                <div *ngIf="suggestedAttributes.length == 0">
+                                                <div *ngIf="suggestedMappingParameters.length == 0">
                                                     <p class="noAttributes">No Attributes Available</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="carousel__snapper"></div>
-                                    <a href="#carousel__slide3" [hidden]="isNotComponentResourceResolution"
-                                       class="carousel__prev">Artifacts</a>
-                                    <a href="#carousel__slide1" class="carousel__next">Functions</a>
-
                                 </li>
                             </ol>
                             <aside class="carousel__navigation">
@@ -434,11 +420,11 @@
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#input" role="tab"
-                           aria-controls="home" aria-selected="true">Inputs</a>
+                           aria-controls="home" aria-selected="true" >Inputs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#output" role="tab"
-                           aria-controls="profile" aria-selected="false">Outputs</a>
+                           aria-controls="profile" aria-selected="false" >Outputs</a>
                     </li>
                 </ul>
                 <div class="tab-content border-0 mt-2" id="myTabContent">

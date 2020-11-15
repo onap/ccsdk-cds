@@ -5,6 +5,8 @@ import {DesignerDashboardState} from '../model/designer.dashboard.state';
 import {Action} from './models/Action';
 import {FunctionsStore} from '../functions.store';
 import {FunctionsState} from '../model/functions.state';
+import {PackageCreationStore} from '../../package-creation/package-creation.store';
+import {CBAPackage} from '../../package-creation/mapping-models/CBAPacakge.model';
 
 @Component({
     selector: 'app-action-attributes',
@@ -44,8 +46,14 @@ export class ActionAttributesComponent implements OnInit {
     isNotComponentResourceResolution = true;
     currentArtifacts: string[] = [];
     isParametersHidden = true;
+    cbaPackage: CBAPackage;
+    suggestedMappingParameters: string[] = [];
+    selectedParameterList: string[] = [];
+    currentSuggestedArtifact: string;
 
-    constructor(private designerStore: DesignerStore, private functionsStore: FunctionsStore) {
+    constructor(private designerStore: DesignerStore,
+                private functionsStore: FunctionsStore,
+                private packageCreationStore: PackageCreationStore) {
 
     }
 
@@ -82,6 +90,12 @@ export class ActionAttributesComponent implements OnInit {
         this.functionsStore.state$.subscribe(functions => {
             this.functions = functions;
         });
+
+        this.packageCreationStore.state$
+            .subscribe(cbaPackage => {
+                this.cbaPackage = cbaPackage;
+
+            });
     }
 
 
@@ -139,23 +153,47 @@ export class ActionAttributesComponent implements OnInit {
     submitAttributes() {
         this.addInput(this.inputActionAttribute);
         if (this.selectedFunctionName && this.selectedAttributeName) {
+            console.log(this.getValue());
             this.outputActionAttribute.value =
-                '["' + this.selectedFunctionName + '","' + this.selectedAttributeName + '"]';
+                this.getValue();
         }
         this.addOutput(this.outputActionAttribute);
         this.clearFormInputs();
         this.storeOutputs(this.newOutputs);
         this.storeInputs((this.newInputs));
         this.newInputs.forEach(input => {
-            this.inputs.push(input);
+            if (!this.inputs.includes(input)) {
+                this.inputs.push(input);
+            }
         });
 
         this.newOutputs.forEach(output => {
-            this.outputs.push(output);
+            if (!this.outputs.includes(output)) {
+                this.outputs.push(output);
+            }
         });
     }
 
-    private clearFormInputs() {
+    private getValue() {
+        let value = '["' + this.selectedFunctionName + '", "' + '","' + this.selectedAttributeName;
+
+        if (!this.isParametersHidden) {
+            let currentSelected = '';
+            for (const selectedParameter of this.selectedParameterList) {
+                currentSelected += '"' + selectedParameter + '",';
+            }
+            value += '","' + this.currentSuggestedArtifact + '",'
+                + currentSelected.substr(0, currentSelected.length - 2) + '';
+        } else if (!this.isNotComponentResourceResolution && this.currentSuggestedArtifact) {
+            value += '","' + this.currentSuggestedArtifact + '';
+
+        }
+
+        return value += '"]';
+    }
+
+    public clearFormInputs() {
+        console.log('trying to clear ');
         this.inputActionAttribute = new InputActionAttribute();
         this.outputActionAttribute = new OutputActionAttribute();
         this.outputOtherType = '';
@@ -167,9 +205,11 @@ export class ActionAttributesComponent implements OnInit {
         let inputs = '';
         InputActionAttributes.forEach(input => {
             inputs += this.appendAttributes(input);
-
+            console.log(inputs);
         });
-        this.writeAttribute(inputs, 'inputs');
+        if (inputs.length > 0) {
+            this.writeAttribute(inputs, 'inputs');
+        }
     }
 
     private storeOutputs(OutputActionAttributes: OutputActionAttribute[]) {
@@ -177,7 +217,10 @@ export class ActionAttributesComponent implements OnInit {
         OutputActionAttributes.forEach(output => {
             outputs += this.appendOutputAttributes(output);
         });
-        this.writeAttribute(outputs, 'outputs');
+        if (outputs.length > 0) {
+            this.writeAttribute(outputs, 'outputs');
+        }
+
     }
 
     private appendAttributes(inputActionAttribute: InputActionAttribute) {
@@ -307,15 +350,25 @@ export class ActionAttributesComponent implements OnInit {
 
     private writeAttribute(newAttributes: string, attributeType: string) {
         newAttributes = this.removeTheLastComma(newAttributes);
+        console.log(newAttributes);
         const originalAttributes = this.convertToString(this.designerState.template.workflows[this.actionName]
             [attributeType]);
-        console.log(originalAttributes.substr(0, originalAttributes.length - 1) + ',' + newAttributes + '}');
-        this.designerState.template.workflows[this.actionName][attributeType] =
-            this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
-                + ',' + newAttributes + '}');
+        if (originalAttributes.length > 2) {
+            this.designerState.template.workflows[this.actionName][attributeType] =
+                this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
+                    + ',' + newAttributes + '}');
+        } else {
+            this.designerState.template.workflows[this.actionName][attributeType] =
+                this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
+                    + newAttributes + '}');
+        }
+        /* console.log(originalAttributes.substr(0, originalAttributes.length - 1) + ',' + newAttributes + '}');
+         this.designerState.template.workflows[this.actionName][attributeType] =
+             this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
+                 + ',' + newAttributes + '}');*/
     }
 
-    private removeTheLastComma = (newInputs: string) => {
+    private removeTheLastComma(newInputs: string): string {
         if (newInputs.endsWith(',')) {
             newInputs = newInputs.substr(0, newInputs.length - 1);
         }
@@ -332,16 +385,15 @@ export class ActionAttributesComponent implements OnInit {
     getAttributesAndOutputs(functionName: string) {
         this.suggestedAttributes = [];
         console.log(functionName);
-        if (functionName.includes('component-resource-resolution')) {
+
+        const nodeTemplate = this.designerState.template.node_templates[functionName];
+        if (nodeTemplate['type'].includes('component-resource-resolution')) {
             this.isNotComponentResourceResolution = false;
             this.isParametersHidden = true;
         } else {
             this.isNotComponentResourceResolution = true;
             this.isParametersHidden = true;
         }
-        const nodeTemplate = this.designerState.template.node_templates[functionName];
-        console.log(this.designerState.template.node_templates);
-        console.log(nodeTemplate);
         /* tslint:disable:no-string-literal */
         console.log(nodeTemplate['type']);
         this.functions.serverFunctions
@@ -394,8 +446,31 @@ export class ActionAttributesComponent implements OnInit {
     }
 
     addArtifactFile(suggestedArtifact: string) {
-        console.log(suggestedArtifact);
+        this.currentSuggestedArtifact = suggestedArtifact;
         this.isParametersHidden = !this.selectedAttributeName.includes('assignment-map');
-        console.log('assignement map ' + this.isParametersHidden);
+        if (!this.isParametersHidden) {
+            this.suggestedMappingParameters = this.getSuggestedMappingParameters(suggestedArtifact);
+        }
     }
+
+    private getSuggestedMappingParameters(suggestedArtifact: string) {
+        const suggestedMappingParameters = [];
+
+        this.cbaPackage.mapping.files.forEach(((value, key) => {
+            if (key.includes(suggestedArtifact)) {
+
+                JSON.parse(value).forEach(value2 => {
+                    suggestedMappingParameters.push(value2['name']);
+                });
+            }
+        }));
+        return suggestedMappingParameters;
+    }
+
+    addSuggestedMappingParameter(suggestedMappingParameter: string) {
+        this.addAttribute(this.selectedParameterList, suggestedMappingParameter);
+        this.deleteAttribute(this.suggestedMappingParameters, suggestedMappingParameter);
+
+    }
+
 }
