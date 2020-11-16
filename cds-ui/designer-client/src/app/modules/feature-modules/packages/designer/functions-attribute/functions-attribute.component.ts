@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { DesignerStore } from '../designer.store';
 import { PackageCreationStore } from '../../package-creation/package-creation.store';
 import { Subject } from 'rxjs';
@@ -34,6 +34,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     actionName = '';
     functionName = '';
     interfaceChildName = '';
+    @Output() saveEvent = new EventEmitter<string>();
 
 
     constructor(
@@ -132,7 +133,11 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
             if (inputs) {
                 for (const [key, value] of Object.entries(inputs)) {
                     console.log(key + ' - ' + value);
-                    this.currentFuncion.inputs[key] = value;
+                    if (typeof value === 'object') {
+                        this.currentFuncion.inputs[key] = JSON.stringify(value);
+                    } else {
+                        this.currentFuncion.inputs[key] = value;
+                    }
                 }
             }
             if (outputs) {
@@ -210,6 +215,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         console.log(node_templates);
         // tslint:disable-next-line: no-unused-expression
         this.designerStore.addNodeTemplate(instanceName, type, node_templates[instanceName]);
+        this.saveEvent.emit('save');
     }
     // Template logic
     private setIsMappingOrTemplate(key: string, templateAndMapping: TemplateAndMapping, isFromTemplate: boolean) {
@@ -262,6 +268,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     getObjectValue(object) {
         return Object.values(object);
     }
+
     getNodeType(nodeName: string) {
         this.functionStore.state$
             .subscribe(state => {

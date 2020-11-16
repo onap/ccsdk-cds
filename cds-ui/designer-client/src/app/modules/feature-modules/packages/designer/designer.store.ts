@@ -78,7 +78,7 @@ export class DesignerStore extends Store<DesignerDashboardState> {
     }
 
     saveSourceContent(code: string) {
-        console.log(code);
+      //  console.log(code);
         if (code) {
             const topologyTemplate = JSON.parse(code);
             this.setState({
