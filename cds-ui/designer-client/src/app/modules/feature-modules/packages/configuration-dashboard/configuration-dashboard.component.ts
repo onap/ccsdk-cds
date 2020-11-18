@@ -264,6 +264,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     this.packageCreationExtractionService.extractBlobToStore(this.currentBlob);
                     this.isSaveEnabled = true;
                     this.toastService.info('enriched successfully ');
+                }, err => {
+                    this.handleError(err);
+                }, () => {
+                    this.ngxService.stop();
                 });
             }, error => {
                 this.toastService.error('error happened when enrich ' + error.message);
@@ -282,6 +286,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     const id = response.toString().split('id')[1].split(':')[1].split('"')[1];
                     this.isSaveEnabled = false;
                     this.router.navigate(['/packages/package/' + id]);
+                }, err => {
+                    this.handleError(err);
+                }, () => {
+                    this.ngxService.stop();
                 });
             }, error => {
                 this.handleError(error);
@@ -324,6 +332,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         }
         this.toastService.error('error happened when deploying ' + errorMessage);
         console.log('Error -' + errorMessage);
+        this.ngxService.stop();
+        this.toastService.error('error happened when deploying' + error.message);
         return throwError(errorMessage);
     }
 }
