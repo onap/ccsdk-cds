@@ -22,6 +22,7 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     public customActionName = '';
     cl = 'editBar';
+    packageId: string;
 
     constructor(
         private store: DesignerStore,
@@ -31,15 +32,15 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
         private sourceViewService: SourceViewService) {
         this.controllerSideBar = true;
     }
-     _toggleSidebar1() {
+    _toggleSidebar1() {
         this.controllerSideBar = !this.controllerSideBar;
         if (this.controllerSideBar === false) {
-          this.cl = 'editBar2';
-       }
+            this.cl = 'editBar2';
+        }
         if (this.controllerSideBar === true) {
-        this.cl = 'editBar';
-       }
-      }
+            this.cl = 'editBar';
+        }
+    }
 
     ngOnInit() {
         this.store.state$.subscribe(
@@ -55,13 +56,17 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
                     this.viewedPackage = bluePrintDetailModels[0];
                 }
             });
+
+        this.route.paramMap.subscribe(res => {
+            this.packageId = res.get('id');
+        });
     }
 
     convertAndOpenInDesingerView(id) {
         // TODO validate json against scheme
         console.log('convertAndOpenInDesingerView ...', this.content);
         this.store.saveSourceContent(this.content);
-        this.router.navigate(['/packages/designer', id, { actionName: this.customActionName }]);
+        this.router.navigate(['/packages/designer', this.packageId, { actionName: this.customActionName }]);
     }
 
     ngOnDestroy() {
