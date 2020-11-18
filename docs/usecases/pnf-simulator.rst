@@ -42,12 +42,6 @@ here but they are not tested by the author of this guide.
 
    .. tab:: sysrepo/sysrepo-netopeer2 (latest)
 
-      .. warning::
-         Currently there is an issue for the SSH connection between CDS and the netconf server because of unmatching
-         exchange key algorhithms
-         (see `Stackoverflow <https://stackoverflow.com/questions/64047502/java-lang-illegalstateexception-unable-to-negotiate-key-exchange-for-server-hos>`_).
-         **Use legacy version (right tab) until the issue is resolved.**
-
       Download and run docker container with ``docker run -d --name netopeer2 -p 830:830 -p 6513:6513 sysrepo/sysrepo-netopeer2:latest``
 
       Enter the container with ``docker exec -it netopeer2 bin/bash``
