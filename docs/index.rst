@@ -132,6 +132,15 @@ CDS Designer UI
    ui/designer
 
 
+Offerer APIs
+----------------------------------
+
+.. toctree::
+   :maxdepth: 3
+
+   api-reference/index
+
+
 Controller Design Studio Presentation
 -------------------------------------
 

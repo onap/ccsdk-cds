@@ -1,0 +1,220 @@
+{
+	"info": {
+		"_postman_id": "481808a1-8f9d-47b3-8e03-9302d22731d9",
+		"name": "Blueprints Processor API Reference Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Endpoints",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				},
+				"description": "Lists all endpoints from blueprints processor"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Blueprints",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "ccsdkapps",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ccsdkapps",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"loadModelType\" : true,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"v1",
+						"blueprint-model"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "CDS Bootstrap",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"bootstrap"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-ONAP-RequestID",
+							"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+						},
+						{
+							"key": "X-ONAP-InvocationID",
+							"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+						},
+						{
+							"key": "X-ONAP-PartnerName",
+							"value": "cds-controller"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1 ; mode=block"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "ac0bd38e-a1ae-48ea-9a99-e09c59dada9a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ce5f2837-00f5-4dde-9a45-2460c6cebd12",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "3d10b67b-766c-40e4-bfc4-a2b913414336",
+			"key": "host",
+			"value": "localhost"
+		},
+		{
+			"id": "ef57cc1c-95c6-4679-8da1-42d356a060fe",
+			"key": "port",
+			"value": "8081"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
