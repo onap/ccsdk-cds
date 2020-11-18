@@ -187,7 +187,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
 
             if (value.isTemplate) {
                 this.nodeTemplates.artifacts[key + '-template'] = {
-                    type: 'artifact-template-resource',
+                    type: 'artifact-template-velocity',
                     file: 'Templates/' + key + '-template.vtl'
                 };
             }
