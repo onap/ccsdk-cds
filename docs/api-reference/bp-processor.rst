@@ -142,6 +142,94 @@ Blueprint Model Catalog API
 Blueprint-model resource contains all Controller Blueprints Archive (CBA) packages which are available in CDS.
 With blueprint-model API you can manage your CBAs.
 
+Bootstrap
+~~~~~~~~~~~
+
+POST ``/blueprint-model/bootstrap``
+....................................
+
+Loads all Model Types, Resource Dictionaries and CBAs which are included in CDS by default.
+
+
+Request
+...........
+
+.. code-block:: curl
+   :caption: **sample request**
+
+   curl --location --request POST 'http://localhost:8081/api/v1/blueprint-model/bootstrap' \
+   --header 'Authorization: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==' \
+   --header 'Content-Type: application/json' \
+   --data-raw '{
+   "loadModelType" : true,
+   "loadResourceDictionary" : true,
+   "loadCBA" : true
+   }'
+
+**Request Body Parameters:**
+
+.. list-table::
+   :widths: 20 20 20 40
+   :header-rows: 1
+
+   * - Parameter
+     - Type
+     - Required
+     - Description
+   * - loadModelType
+     - Boolean
+     - yes
+     - Specifies if default model types should be loaded
+   * - loadResourceDictionary
+     - Boolean
+     - Yes
+     - Specifies if default data dictionaries should be loaded
+   * - loadCBA
+     - Boolean
+     - Yes
+     - Specifies if default CBAs should be loaded
+
+Success Response
+......................
+
+HTTP Status 202 OK
+
+
+Consumes
+............
+
+``application/json``
+
+
+Functional Description
+..............................
+
+Before starting to work with CDS, bootstrap should be called to load all the basic models that each orginization might support.
+Parameter values can be set as `false`  to skip loading e.g. the Resource Dictioniaries but this is not recommended.
+The loaded CBAs are already enriched, that's why CBAs can be loaded even without Data Dictionaries or Model Types. If
+validation of a CBA fails the CBA is skipped and the call is still executed successfully. You can find the error logs e.g.
+in the console of an IDE.
+
+
+Technical Description
+...........................
+
+All Model Types which are loaded by bootstrap are in folder `/components/model-catalog/definition-type/starter-type`,
+all Resource Dictionaries in `components/model-catalog/resource-dictionary/starter-dictionary`, all CBAs in
+`model-catalog/blueprint-model/service-blueprint`.
+
+**Called class/method:** ``org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BlueprintModelController#bootstrap``.
+
+Related topics
+..................
+
+.. toctree::
+   :maxdepth: 1
+
+   ../modelingconcepts/cba
+   ../modelingconcepts/data-dictionary
+   ../modelingconcepts/data-type
+
 
 List all blueprint models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -213,4 +301,4 @@ Technical Description
 
 Loads all Blueprint Models which are saved in the CDS database in table `BLUEPRINT_MODEL`. Unpublished and unproceeded
 Blueprint Models are also included.
-Called class/method: ``org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BlueprintModelController#allBlueprintModel()``.
+**Called class/method:** ``org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BlueprintModelController#allBlueprintModel()``.
