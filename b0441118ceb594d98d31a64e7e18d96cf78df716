@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "831f8f5d_a74a7a93",
+        "filename": "ms/blueprintsprocessor/functions/restconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/restconf/executor/RestconfExecutorExtensions.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-11-20T17:07:06Z",
+      "side": 1,
+      "message": "deviceID being used only while throwing exception? \nbetter remove it from API definition and use mountUrl instead while throwing exception",
+      "revId": "b0441118ceb594d98d31a64e7e18d96cf78df716",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "876434c8_9bca4f92",
+        "filename": "ms/blueprintsprocessor/functions/restconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/restconf/executor/RestconfExecutorExtensions.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-11-20T17:07:06Z",
+      "side": 1,
+      "message": "isn\u0027t it better to overload restconfMountDevice instead duplicating",
+      "revId": "b0441118ceb594d98d31a64e7e18d96cf78df716",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
