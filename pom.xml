@@ -83,6 +83,9 @@ limitations under the License.
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>tidy-maven-plugin</artifactId>
                     <version>1.1.0</version>
+                    <configuration>
+                        <lineLength>120</lineLength>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>format-pom</id>
