@@ -114,6 +114,7 @@ export class ActionAttributesComponent implements OnInit {
     }
 
     addInput(input: InputActionAttribute) {
+        console.log(input);
         if (input && input.type && input.name) {
             const insertedInputActionAttribute = Object.assign({}, input);
             this.newInputs.push(insertedInputActionAttribute);
@@ -224,11 +225,21 @@ export class ActionAttributesComponent implements OnInit {
     }
 
     private appendAttributes(inputActionAttribute: InputActionAttribute) {
-        return '"' + inputActionAttribute.name + '" : {\n' +
+        const entrySchema: string = this.getEntrySchema(inputActionAttribute);
+        const input = '"' + inputActionAttribute.name + '" : {\n' +
             '            "required" : ' + inputActionAttribute.required + ',\n' +
             '            "type" : "' + inputActionAttribute.type + '",\n' +
-            '            "description" : "' + inputActionAttribute.description + '"\n' +
-            '          },';
+            '            "description" : "' + inputActionAttribute.description + '"';
+        return input + entrySchema;
+    }
+
+    private getEntrySchema(inputActionAttribute: InputActionAttribute) {
+        return inputActionAttribute.type.includes('list') ?
+            ',\n\t' + '"entry_schema" : {\n' +
+            '              "type" : "string"\n' +
+            '            }\n},'
+            :
+            '\n },';
     }
 
     setInputAndOutputs(targetName) {
@@ -436,15 +447,17 @@ export class ActionAttributesComponent implements OnInit {
     }
 
 
-    private appendOutputAttributes(output: OutputActionAttribute) {
-        return '"' + output.name + '" : {\n' +
-            '            "required" : ' + output.required + ',\n' +
-            '            "type" : "' + output.type + '",\n' +
-            '            "description" : "' + output.description + '",\n' +
+    private appendOutputAttributes(outputActionAttribute: OutputActionAttribute) {
+        const entrySchema: string = this.getEntrySchema(outputActionAttribute);
+        const output = '"' + outputActionAttribute.name + '" : {\n' +
+            '            "required" : ' + outputActionAttribute.required + ',\n' +
+            '            "type" : "' + outputActionAttribute.type + '",\n' +
+            '            "description" : "' + outputActionAttribute.description + '",\n' +
             '            "value\" :' + '{\n' +
-            '             "get_attribute" : ' + output.value + '\n' +
-            '            }\n' +
-            '          },';
+            '             "get_attribute" : ' + outputActionAttribute.value + '\n' +
+            '            }\n';
+
+        return output + entrySchema;
 
     }
 
@@ -484,5 +497,9 @@ export class ActionAttributesComponent implements OnInit {
         if (!originalAttributes) {
             this.designerState.template.workflows[this.actionName][attributeType] = {};
         }
+    }
+
+    private checkIfTypeIsList(type: string) {
+        return type.includes('list');
     }
 }
