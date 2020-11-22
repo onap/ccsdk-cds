@@ -59,8 +59,7 @@
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" id="functionRadioInline" name="functionRadioInline"
                                                 [checked]="!currentFuncion['inputs']['artifact-prefix-names']?.get_input"
-                                                (click)="setArtifact(true)"
-                                                class="custom-control-input">
+                                                (click)="setArtifact(true)" class="custom-control-input">
                                             <label class="custom-control-label" for="functionRadioInline">Pre-defined
                                                 Template</label>
                                         </div>
@@ -77,7 +76,6 @@
                                             class="btn btn-select-template m-auto"><i class="icon-add-circle"
                                                 type="button" aria-hidden="true"></i> Select Template</button>
                                     </div>
-
                                     <div class="attribute-wrap"
                                         *ngFor="let requiredInput of getKeys(requiredInputs); let i=index">
                                         <!--string-->
@@ -102,13 +100,13 @@
                                         </div>
                                         <!--boolean-->
                                         <!-- <div *ngIf="getValue(requiredInput,requiredInputs).type=='boolean'"> -->
-                                        <div class="form-group"
-                                            *ngIf="getValue(requiredInput,requiredInputs).type=='boolean'">
-                                            <label for="exampleFormControlTextarea1">{{ requiredInput }}
-                                                <i class="icon-required-star" type="button"
-                                                    [ngClass]="{'optional-attribute' : getValue(requiredInput,requiredInputs).required==false}"
-                                                    aria-hidden="true"></i></label><br />
-
+                                        <div *ngIf="getValue(requiredInput,requiredInputs).type=='boolean'">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1">{{ requiredInput }}
+                                                    <i class="icon-required-star" type="button"
+                                                        [ngClass]="{'optional-attribute' : getValue(requiredInput,requiredInputs).required==false}"
+                                                        aria-hidden="true"></i></label><br />
+                                            </div>
                                             <div class="custom-control custom-radio custom-control-inline">
                                                 <input [value]="true"
                                                     [(ngModel)]="currentFuncion['inputs'][requiredInput]" type="radio"
@@ -116,7 +114,7 @@
                                                     name="{{'functionRadioInline' + i}}" class="custom-control-input">
                                                 <label class="custom-control-label"
                                                     for="{{'functionRadioInline' + i}}">True</label>
-                                            </div><br />
+                                            </div>
                                             <div class="custom-control custom-radio custom-control-inline">
                                                 <input [value]="false"
                                                     [(ngModel)]="currentFuncion['inputs'][requiredInput]" type="radio"

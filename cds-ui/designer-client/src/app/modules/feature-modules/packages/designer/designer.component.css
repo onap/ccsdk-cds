@@ -219,15 +219,6 @@ header{
 
 
 
-
-
-
-
-
-
-
-
-
 /*Rotated Text*/
 button.rotate{
   position: absolute;
@@ -949,7 +940,8 @@ p.compType-4{
 .accordion > .card .card-body{
   padding-bottom: 0 !important; 
 }
-.function-accordion .card{
+.function-accordion .card,
+.action-accordion .card{
   overflow: inherit !important;
   box-shadow: none;
 }
@@ -1186,9 +1178,10 @@ ul.editor{
   margin-left: 50px;
 }
 .createAttributeTabs .tab-content{
-  margin-top: 20px;
+  /* margin-top: 20px; */
   padding: 20px 50px;
   border: solid 1px #F4F9FE;
+  border-top: 0;
 }
 .createAttributeTabs .listBoxTitle{
   font-size: 11px;
@@ -1281,6 +1274,26 @@ ul.editor{
 .nestedAttributes .btn-group .btn.active:focus{
   box-shadow: none;
   border: 0;
+}
+.container{
+  min-height: 66px;
+  border-bottom: solid 1px #EFEFF4;
+  line-height: 24px;
+}
+.container label{
+  display: block;
+  /* color: #C3CDDB; */
+}
+.container .selectedWrapper{
+  display: inline-block;
+  width: auto;
+  margin-right: 6px;
+  margin-bottom: 9px;
+  padding: 0 10px;
+  background: #E0E8F2;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 24px;
 }
 /*FORM*/
 .create-form .col-form-label{
@@ -1649,3 +1662,72 @@ ul.editor{
 .carousel::after {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='100,50 20,100 20,0' fill='%23fff'/%3E%3C/svg%3E");
 } */
+
+
+.tooltipHTML{
+  position: relative;
+  display: inline-block;
+}
+.tooltipHTML .tooltiptext{
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  top: 35px;
+  left: 50px;
+  width: 316px;
+  margin-left: -62px;
+  padding: 9px 12px;
+  background-color: #fff;
+  color: #1B3E6F;
+  border-radius: 2px;
+  font-weight: normal;
+  box-shadow: 0 2px 6px rgba(47, 83, 151, .1);
+  border: solid 1px #DEE8F3;
+  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+  opacity: 0;
+  transition: opacity 1s;
+}
+.tooltipHTML.tooltipGetAtt .tooltiptext{
+  top: 38px;
+  left: 70px;
+  width: auto;
+}
+.tooltipHTML .tooltiptext::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #DEE8F3;
+  left: 9px;
+  top: -6px;
+}
+.tooltipHTML:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.tooltiptext h5{
+  margin-bottom: 5px;
+}
+.tooltipGetAtt h5{
+  margin-bottom: 0;
+  font-size: 12px;
+}
+.tooltiptext h6{
+  background: transparent;
+  line-height: 24px !important;
+  color: #C3CDDB;
+  text-transform: initial;
+}
+.tooltipHTML .tooltiptext span{
+  display: inline-block;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  padding: 3px 6px;
+  background-color: #E0E8F2;
+  border-radius: 12px;
+  line-height: 16px;
+  color: #1B3E6F;
+}
