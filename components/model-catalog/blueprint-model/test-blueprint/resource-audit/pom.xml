@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.onap.ccsdk.cds.components.cba</groupId>
         <artifactId>test-blueprint-model</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
 
     <artifactId>resource-audit</artifactId>
