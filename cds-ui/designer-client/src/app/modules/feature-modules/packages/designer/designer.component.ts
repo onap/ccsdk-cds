@@ -138,10 +138,6 @@ export class DesignerComponent implements OnInit, OnDestroy {
             });
     }
 
-    // private _toggleSidebar3() {
-    //   this.functionAttributeSidebar = !this.functionAttributeSidebar;
-    // }
-
 
     /**
      * - There is a board (main paper) that will the action and function selected from the palette
