@@ -1,0 +1,19 @@
+---
+distribution_type: 'container'
+container_release_tag: '1.0.3'
+project: 'ccsdk-cds'
+log_dir: 'ccsdk-cds-maven-docker-stage-guilin/79/'
+ref: ae57ee93527ae2852ad720e41be20923ab95eb03
+containers:
+    - name: 'ccsdk-blueprintsprocessor'
+      version: '1.0.3-STAGING-20201123T131512Z'
+    - name: 'ccsdk-commandexecutor'
+      version: '1.0.3-STAGING-20201123T131512Z'
+    - name: 'ccsdk-py-executor'
+      version: '1.0.3-STAGING-20201123T131512Z'
+    - name: 'ccsdk-sdclistener'
+      version: '1.0.3-STAGING-20201123T131512Z'
+    - name: 'ccsdk-cds-ui-server'
+      version: '1.0.3-STAGING-20201123T131512Z'
+    - name: 'ccsdk-cds-ui'
+      version: '1.0.3-STAGING-20201123T131512Z'
