@@ -282,15 +282,12 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     confirmDelete() {
         // Delete from templates
         this.sharedService.deleteFromList(this.fileName);
-        this.packageCreationStore.state.templates.files.delete(this.fileToDelete);
+        console.log('Templates/' + this.fileName + '-template.' + this.templateInfo.ext);
+        this.packageCreationStore.state.templates.files.delete('Templates/' + this.fileName + '-template.' + this.templateInfo.ext);
         // Delete from Mapping
         this.packageCreationStore.state.mapping.files.delete(this.fileToDelete);
-        if (
-            this.packageCreationStore.state.templates.files.size > 0 ||
-            this.packageCreationStore.state.mapping.files.size > 0
-        ) {
-            this.openListView();
-        }
+        this.openListView();
+
 
     }
     uploadFile() {

@@ -195,11 +195,16 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         // instantiate the final node_template object to save
 
         this.nodeTemplates.type = type;
+        delete this.nodeTemplates.properties;
         node_templates[finalFunctionData['instance-name']] = this.nodeTemplates;
 
         delete finalFunctionData['instance-name'];
         // tslint:disable-next-line: no-string-literal
         delete finalFunctionData['type'];
+
+        if (finalFunctionData.outputs === {} || Object.keys(finalFunctionData.outputs).length <= 0) {
+            delete finalFunctionData.outputs;
+        }
 
         this.nodeTemplates.interfaces = {
             [this.interfaceChildName]: {
@@ -210,11 +215,12 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                 }
             }
         };
-
         console.log(finalFunctionData);
         console.log(node_templates);
+        // save function to store
         // tslint:disable-next-line: no-unused-expression
         this.designerStore.addNodeTemplate(instanceName, type, node_templates[instanceName]);
+        // create a new package
         this.saveEvent.emit('save');
     }
     // Template logic
