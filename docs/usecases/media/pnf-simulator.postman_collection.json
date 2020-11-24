@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "295cc7b7-a544-44f5-8045-54effcd41108",
+		"_postman_id": "1fa613b3-d757-4887-b6b4-94c596bbe821",
 		"name": "CDS PNF Simulator Use Case",
 		"description": "This collection contains all API calls to do the \"PNF Simulator Day-N config-assign and config-deploy use case\" in CDS. ",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -341,7 +341,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "c927b543-b143-4ab9-963c-6289a7d1040e",
+						"id": "ffcd53f6-a19e-4ecb-9220-bea23105b997",
 						"exec": [
 							"var allDD = pm.environment.get(\"allDD\");\r",
 							"\r",
@@ -517,7 +517,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "bd26b9e6-4237-4591-a037-0520f737439f",
+						"id": "79594336-6372-432e-8111-9b1d2c89d2e2",
 						"exec": [
 							"var allDD = pm.environment.get(\"allDD\");\r",
 							"\r",
@@ -977,7 +977,7 @@
 			"response": []
 		},
 		{
-			"name": "Config Assign Day-1 Deploy",
+			"name": "Day-1 Config Deploy",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -1052,13 +1052,90 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Day-2 Config Deploy",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "ccsdkapps",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ccsdkapps",
+							"type": "string"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "gzip,deflate",
+						"disabled": true
+					},
+					{
+						"key": "Referer",
+						"type": "text",
+						"value": "http://84.39.39.116:30497/blueprint",
+						"disabled": true
+					},
+					{
+						"key": "Origin",
+						"type": "text",
+						"value": "http://84.39.39.116:30497",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"actionIdentifiers\": {\n\t\t\"mode\": \"sync\",\n\t\t\"blueprintName\": \"pnf_netconf\",\n\t\t\"blueprintVersion\": \"1.0.0\",\n\t\t\"actionName\": \"config-deploy\"\n\t},\n\t\"payload\": {\n\t\t\"config-deploy-request\": {\n\t\t\t\"resolution-key\": \"day-2\",\n\t\t\t\"config-deploy-properties\": {\n\t\t\t\t\"pnf-id\": \"abcd\",\n\t\t\t\t\"pnf-ipv4-address\": \"172.17.0.2\",\n\t\t\t\t\"netconf-password\": \"netconf\",\n\t\t\t\t\"netconf-username\": \"netconf\"\n\t\t\t}\n\t\t}\n\t}\n\n\t,\n\t\"commonHeader\": {\n\t\t\"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n\t\t\"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n\t\t\"originatorId\": \"SDNC_DG\"\n\t}\n}\n",
+					"options": {
+						"formdata": {},
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/api/v1/execution-service/process",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"v1",
+						"execution-service",
+						"process"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "1d6b0502-1031-4cec-adec-6a02e2505fb2",
+				"id": "2bd5eabc-8019-408f-844e-35354a896c38",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1068,7 +1145,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "a97568b2-3520-450b-89c0-c344945c40e4",
+				"id": "b52b4979-114a-4642-84d7-73534f26c077",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1078,12 +1155,12 @@
 	],
 	"variable": [
 		{
-			"id": "f593c13c-9ebc-4b88-9622-a08889662808",
+			"id": "9cedb535-6b95-4348-8e42-8786c0731503",
 			"key": "host",
 			"value": "localhost"
 		},
 		{
-			"id": "bcefbf57-f5df-41e3-be88-c3af5b76f916",
+			"id": "4dcce46f-d0c4-4059-9ba0-157f9b85e8ad",
 			"key": "port",
 			"value": "8081"
 		}

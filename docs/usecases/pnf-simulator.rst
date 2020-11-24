@@ -337,7 +337,7 @@ Config-assign and config-deploy in CDS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the following steps the CBA is published in CDS, config-assignment is done and the config is deployed to to the
-Netconf server through CDS in the last step. We will use this CBA: :download:`zip <media/pnf-simulator-demo-cba.zip>`.
+Netconf server through CDS in the last step. We will use this CBA: :download:`zip <media/pnf-simulator-demo-cba-unenriched.zip>`.
 If you want to use scripts instead of Postman the CBA also contains all necessary scripts.
 
 .. tabs::
@@ -419,10 +419,10 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
       Move to the main folder of the CBA with ``cd ..`` and archive all folders with ``zip -r pnf-demo.zip *``.
 
       .. warning::
-         The provided CBA is already enriched, the following step anyhow will enrich the CBA again to show the full workflow.
-         For Frankfurt release this causes an issue when the configuration is deployed later on. This happens because some parameters
-         get deleted when enrichment is done a second time. Skip the next step until Deploy/Save Blueprint if you use
-         Frankfurt release and use the CBA as it is. In future this step should be fixed and executed based on an unenriched CBA.
+         Sometimes there might be issues during enrichment (e.g. some parameters get deleted in the CBA)). If you face problems
+         during enrichment or deployment later on use the following CBA, which is already enriched:
+         :download:`zip <media/pnf-simulator-demo-cba-enriched.zip>`. If you use the enriched CBA, skip
+         this section until Deploy/Save Blueprint.
 
       Enrich the blueprint through calling the following script. Take care to provide the zip file you downloader earlier.
 
@@ -716,10 +716,10 @@ If you want to use scripts instead of Postman the CBA also contains all necessar
       **Enrichment:**
 
       .. warning::
-         The provided CBA is already enriched, the following steps anyhow will enrich the CBA again to show the full workflow.
-         For Frankfurt release this causes an issue when the configuration is deployed later on. This happens because some parameters
-         get deleted when enrichment is done a second time. Skip the next steps until Deploy/Save Blueprint if you use
-         Frankfurt release and use the CBA as it is. In future this step should be fixed and executed based on an unenriched CBA.
+         Sometimes there might be issues during enrichment (e.g. some parameters get deleted in the CBA). If you face problems
+         during enrichment or deployment later on use the following CBA, which is already enriched:
+         :download:`zip <media/pnf-simulator-demo-cba-enriched.zip>`. If you use the enriched CBA, skip
+         this section until Deploy/Save Blueprint.
 
       Enrich the blueprint through executing the `Enrich Blueprint` request. Take care to provide the CBA file which you
       downloaded earlier in the request body. After the request got executed save the response body, this will be the
