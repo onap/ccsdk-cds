@@ -82,8 +82,7 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
    :header-rows: 1
 
    * - vf-module-label data dictionary
-   * - .. code-block:: JSON
-
+   * - .. code-block:: json
 
         {
           "name" : "vf-module-label",
