@@ -173,8 +173,11 @@ Called class, methods, other hints.
 Related topics
 ......................
 
- * Topic 1
- * Topic 2
+.. toctree::
+   :maxdepth: 1
+
+   topic1
+   topic2
 
 
 Method 2 Endpoint 1
