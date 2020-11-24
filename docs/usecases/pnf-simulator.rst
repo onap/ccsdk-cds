@@ -9,7 +9,7 @@ PNF Simulator Day-N config-assign/deploy
 Overview
 ~~~~~~~~~~
 
-This use case shows in a very simple how the day-n configuration is assigned and deployed to a PNF through CDS.
+This use case shows in a very simple way how the day-n configuration is assigned and deployed to a PNF through CDS.
 A Netconf server (docker image `sysrepo/sysrepo-netopeer2`) is used for simulating the PNF.
 
 This use case (POC) solely requires a running CDS and the PNF Simulator running on a VM (Ubuntu is used by the author).
@@ -456,7 +456,7 @@ For creating day-2 configuration call the same endpoint and use the following pa
 **Config-Deploy:**
 
 Now we will make the CDS REST API calls to push the day-1 and day-2 configuration changes to the PNF simulator.
-Call the same `process` endpoint with the following payload:
+Call the same endpoint `process` with the following payload:
 
 .. code-block::  JSON
 
