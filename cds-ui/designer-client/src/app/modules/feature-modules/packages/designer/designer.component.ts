@@ -52,6 +52,7 @@ import { CBAPackage } from '../package-creation/mapping-models/CBAPacakge.model'
 import { TopologyTemplate } from './model/designer.topologyTemplate.model';
 import { ToastrService } from 'ngx-toastr';
 import { DesignerDashboardState } from './model/designer.dashboard.state';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
     selector: 'app-designer',
@@ -100,6 +101,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
         private packageCreationService: PackageCreationService,
         private packageCreationExtractionService: PackageCreationExtractionService,
         private activatedRoute: ActivatedRoute,
+        private ngxService: NgxUiLoaderService,
         private toastService: ToastrService) {
         this.controllerSideBar = true;
         this.actionAttributesSideBar = false;
@@ -152,6 +154,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
      */
 
     ngOnInit() {
+        // this.ngxService.start();
         this.customActionName = this.route.snapshot.paramMap.get('actionName');
         if (this.customActionName !== '') {
             this.showAction = true;
@@ -450,7 +453,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     }
 
     saveBluePrint() {
-
+        this.ngxService.start();
         FilesContent.clear();
         let packageCreationModes: PackageCreationModes;
         this.cbaPackage = PackageCreationModes.mapModeType(this.cbaPackage);
@@ -463,6 +466,46 @@ export class DesignerComponent implements OnInit, OnDestroy {
         this.filesData.push(this.folder.TREE_DATA);
         this.saveBluePrintToDataBase();
 
+    }
+
+    enrichBluePrint() {
+        this.ngxService.start();
+        this.packageCreationStore.addTopologyTemplate(this.cbaPackage.templateTopology);
+        this.formTreeData();
+        this.enrichPackage();
+        this.designerStore.clear();
+        this.packageCreationStore.clear();
+    }
+
+    private formTreeData() {
+        FilesContent.clear();
+        let packageCreationModes: PackageCreationModes;
+        this.cbaPackage = PackageCreationModes.mapModeType(this.cbaPackage);
+        this.cbaPackage.metaData = PackageCreationModes.setEntryPoint(this.cbaPackage.metaData);
+        packageCreationModes = PackageCreationBuilder.getCreationMode(this.cbaPackage);
+        packageCreationModes.execute(this.cbaPackage, this.packageCreationUtils);
+        this.filesData.push(this.folder.TREE_DATA);
+    }
+    private enrichPackage() {
+        this.create();
+        this.zipFile.generateAsync({ type: 'blob' })
+            .then(blob => {
+                this.packageCreationService.enrichPackage(blob).subscribe(response => {
+                    console.log('success');
+                    const blobInfo = new Blob([response], { type: 'application/octet-stream' });
+                    this.packageCreationStore.clear();
+                    this.packageCreationExtractionService.extractBlobToStore(blobInfo);
+                    this.toastService.info('enriched successfully ');
+                }, err => {
+                }, () => {
+                    this.ngxService.stop();
+                });
+            }, error => {
+                this.toastService.error('error happened when enrich ' + error.message);
+                console.error('Error -' + error.message);
+            }, () => {
+                this.ngxService.stop();
+            });
     }
 
     create() {
@@ -487,8 +530,11 @@ export class DesignerComponent implements OnInit, OnDestroy {
                     }, error => {
                         this.toastService.error('error happened when editing ' + error.message);
                         console.log('Error -' + error.message);
+                    }, () => {
+                        this.ngxService.stop();
                     });
-            });
+            }, err => { },
+                () => { this.ngxService.stop(); });
     }
 
     openActionAttributes(customActionName: string) {
