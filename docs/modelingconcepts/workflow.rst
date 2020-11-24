@@ -19,7 +19,7 @@ A workflow defines an overall action to be taken on the service, hence is an
 entry-point for the run-time execution of the :ref:`CBA Package <cba>`.
 
 A workflow also defines **inputs** and **outputs** that will defined the **payload contract**
-of the **request** and **response** (see :ref:`Dynamic API`)
+of the **request** and **response** (see :ref:`dynamic_payload`)
 
 A workflow can be **composed** of one or multiple **sub-actions** to execute.
 
