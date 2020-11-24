@@ -12,12 +12,13 @@ CONTROLLER DESIGN STUDIO (CDS)
 
 Introduction
 ------------
-The system is designed to be self service, which means that users, not just
+    The system is designed to be self service, which means that users, not just
 programmers, can reconfigure the software system as needed to meet customer
 requirements. To accomplish this goal, the system is built around models that
 provide for real-time changes in how the system operates.  Users merely need
 to change a model to change how a service operates.
-Self service is a completely new way of delivering services.  It removes the
+
+    Self service is a completely new way of delivering services.  It removes the
 dependence on code releases and the delays they cause and puts the control of
 services into the hands of the service providers.  They can change a model and
 its parameters and create a new service without writing a single line of code.
@@ -30,13 +31,14 @@ The Controller Design Studio is composed of two major components:
    * The GUI (or frontend)
    * The Run Time (or backend)
 
-The GUI handles direct user input and allows for displaying both design time
+    The GUI handles direct user input and allows for displaying both design time
 and run time activities. For design time, it allows for the creation of
 controller blueprint, from selecting the DGs to be included, to incorporating
 the artifact templates, to adding necessary components.  For run time, it
 allows the user to direct the system to resolve the unresolved elements of the
 controller blueprint and download the resulting configuration into a VNF.
-At a more basic level, it allows for creation of data dictionaries,
+
+    At a more basic level, it allows for creation of data dictionaries,
 capabilities catalogs, and controller blueprint, the basic elements that are
 used to generate a configuration. The essential function of the Controller
 Design Studio is to create and populate a controller blueprint, create a
@@ -49,11 +51,11 @@ configuration file (configlet) to a VNF/PNF.
 Modeling Concept
 ----------------
 
-In Dublin release, the CDS community has contributed a framework to automate
+    In Dublin release, the CDS community has contributed a framework to automate
 the resolution of resources for instantiation and any config provisioning
 operation, such as day0, day1 or day2 configuration.
 
-The content of the CBA Package is driven from a catalog of reusable data
+    The content of the CBA Package is driven from a catalog of reusable data
 dictionary, component and workflow, delivering a reusable and simplified
 self service experience.
 
@@ -66,7 +68,7 @@ https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definitio
 
 Tosca Model Reference:
 
-|image0|
+|toscaModel|
 
 Modeling Concept Links:
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,22 +76,9 @@ Modeling Concept Links:
 .. toctree::
    :maxdepth: 1
 
-   modelingconcepts/overview
-   microservices/controllerBlueprintStudioProcessorMS
-   microservices/bluePrintsProcessorMS
-   microservices/expression
-   microservices/dynamicapi
-   microservices/flexibleplugin
-
-
-Design tools
-------------
-.. toctree::
-   :maxdepth: 1
-   :glob:
-
-   CBA/index
-   datadictionary/index
+   modelingconcepts/index
+   microservices/controllerBlueprintMS
+   microservices/blueprintsProcessorMS
 
 Scripts
 -------
@@ -99,62 +88,54 @@ Library
 
 * NetconfClient
 
-In order to facilitate NETCONF interaction within scripts, a python NetconfClient binded to our Kotlin implementation is made available. This NetconfClient can be used when using the component-netconf-executor.
+    In order to facilitate NETCONF interaction within scripts, a python NetconfClient binded to our Kotlin implementation is made available. This NetconfClient can be used when using the component-netconf-executor.
 
-The client can be find here: https://github.com/onap/ccsdk-cds/blob/master/components/scripts/python/ccsdk_netconf/netconfclient.py
+    The client can be find here: https://github.com/onap/ccsdk-cds/blob/master/components/scripts/python/ccsdk_netconf/netconfclient.py
 
 * ResolutionHelper
 
-When executing a component executor script, designer might want to perform
-resource resolution along with template meshing directly from the script
-itself.
+    When executing a component executor script, designer might want to perform
+    resource resolution along with template meshing directly from the script
+    itself.
 
-The helper can be found in below link: 
-https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_netconf/common.py
+    The helper can be found in below link:
+    https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_netconf/common.py
 
-.. |image0| image:: media/tosca_model.jpg
-   :width: 7.88889in
-   :height: 4.43750in
+.. |toscaModel| image:: media/tosca_model.jpg
+   :width: 500pt
 
-.. |cdsArchitectureImage| image:: media/CDS_architecture_latest.png
-   :scale: 30 %
-
-Developer Guide
-----------
-
-.. toctree::
-   :maxdepth: 2
-
-   developerguide/developer-guide
+.. |cdsArchitectureImage| image:: media/CDS_architecture.jpg
+   :width: 500pt
 
 User Guide
 ----------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-   installation
-   designtime
+   userguide/developer-guide
+   userguide/installation
+   userguide/designtime
 
 Use Cases
-----------
+---------
 
 .. toctree::
    :maxdepth: 2
 
    usecases/use-cases
 
-CDS Desginer UI
+CDS Designer UI
 ---------------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   CDS_Designer_Guide
+   ui/designer
 
 
 Controller Design Studio Presentation
 -------------------------------------
 
 Details about CDS Architecture and Design detail, Please click the link.
-:download:`CDS_Architecture_Design.pptx`
+:download:`CDS_Architecture_Design <media/CDS_Architecture_Design.pptx>`
