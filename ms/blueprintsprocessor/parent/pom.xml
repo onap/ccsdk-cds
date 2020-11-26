@@ -34,9 +34,7 @@
         <!-- Override CDS version from parent to be project.version -->
         <error.catalog.version>${project.version}</error.catalog.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
-        <!-- Should be using released artifact as soon as available: -->
-        <!-- https://github.com/springfox/springfox/milestone/44 -->
-        <springfox.swagger2.version>2.10.5</springfox.swagger2.version>
+        <springfox.swagger2.version>3.0.0</springfox.swagger2.version>
         <eelf.version>1.0.0</eelf.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <hazelcast.version>4.0</hazelcast.version>
@@ -81,7 +79,7 @@
             <!--Swagger Dependencies -->
             <dependency>
                 <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
+                <artifactId>springfox-boot-starter</artifactId>
                 <version>${springfox.swagger2.version}</version>
                 <exclusions>
                     <exclusion>
@@ -90,31 +88,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${springfox.swagger2.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <!--
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-spring-webflux</artifactId>
-                <version>${springfox.swagger2.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            -->
 
             <!-- Common Utils Dependencies -->
             <dependency>
@@ -613,21 +586,7 @@
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>io.springfox</groupId>-->
-        <!--            <artifactId>springfox-spring-webflux</artifactId>-->
-        <!--        </dependency>-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
+            <artifactId>springfox-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
