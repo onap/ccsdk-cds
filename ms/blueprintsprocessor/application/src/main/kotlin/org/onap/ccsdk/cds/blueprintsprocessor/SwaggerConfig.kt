@@ -33,7 +33,6 @@ import springfox.documentation.spring.web.plugins.Docket
  * @author Brinda Santh
  */
 @Configuration
-// @EnableSwagger2WebFlux
 open class SwaggerConfig {
 
     @Bean
