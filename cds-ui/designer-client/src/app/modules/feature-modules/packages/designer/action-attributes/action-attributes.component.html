@@ -14,8 +14,8 @@
             <div class="row">
                 <div class="col pr-0 text-center">
                     <button type="button" data-toggle="modal" data-target="#exampleModalScrollable"
-                            class="btn btn-secondary" (click)="clearFormInputs()"><i class="icon-custom-attribute" type="button"
-                                                         aria-hidden="true" ></i></button>
+                        class="btn btn-secondary" (click)="clearFormInputs()"><i class="icon-custom-attribute"
+                            type="button" aria-hidden="true"></i></button>
                     <span>Create Custom</span>
                 </div>
                 <div class="col text-center">
@@ -28,7 +28,7 @@
         </div>
     </div>
     <!--INPUTS-->
-    <div class="accordion" id="accordionExample">
+    <div class="accordion action-accordion" id="accordionExample">
         <div class="card">
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
@@ -43,7 +43,15 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group" *ngFor="let input of inputs">
-                                <label >{{input.name}}
+                                <label class="tooltipHTML">{{input.name}}
+                                    <span class="tooltiptext">
+                                        <h5>integer</h5>
+                                        <h6>Value:</h6>
+                                        <span>function_name</span>
+                                        <span>attribute_name</span>
+                                        <span>artifact_name</span>
+                                        <span>parameter_name</span>
+                                    </span>
                                     <i [hidden]="!input.required" class="icon-required-star" type="button"
                                        aria-hidden="true"></i>
                                     <i [hidden]="input.required" class="icon-required-star optional-attribute"
@@ -64,7 +72,7 @@
         </div>
     </div>
     <!--OUTPUTS-->
-    <div class="accordion" id="accordionExample1">
+    <div class="accordion action-accordion" id="accordionExample1">
         <div class="card">
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
@@ -80,7 +88,15 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group" *ngFor="let output of outputs">
-                                <label >{{output.name}}
+                                <label class="tooltipHTML">{{output.name}}
+                                    <span class="tooltiptext">
+                                        <h5>integer</h5>
+                                        <h6>Value:</h6>
+                                        <span>function_name</span>
+                                        <span>attribute_name</span>
+                                        <span>artifact_name</span>
+                                        <span>parameter_name</span>
+                                    </span>
                                     <i [hidden]="!output.required" class="icon-required-star" type="button"
                                        aria-hidden="true"></i>
                                     <i [hidden]="output.required" class="icon-required-star optional-attribute"
@@ -259,8 +275,8 @@
                         <div class="form-group row">
                             <div class="col">
                                 <input type="email" class="form-control" id="inputEmail3" placeholder="Attributes">
-                                <div class="container">
-                                    <!-- <div *ngFor="let tempInput of steps">{{tempInput}}</div>-->
+                                <div class="container p-0">
+                                    <!-- <div *ngFor="let tempInput of steps" class="selectedWrapper">{{tempInput}}</div> -->
                                 </div>
                             </div>
                         </div>
@@ -295,15 +311,20 @@
                                              aria-labelledby="list-home-list">
                                             <div class="scrollWrapper">
                                                 <div *ngIf="suggestedAttributes.length>0"
-                                                     class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-secondary"
-                                                           *ngFor="let suggestedAttribute of suggestedAttributes"
-                                                           [id]="suggestedAttribute"
-                                                           (click)="addTempOutputAttr(suggestedAttribute)">
+                                                    class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn tooltipHTML tooltipGetAtt"
+                                                        *ngFor="let suggestedAttribute of suggestedAttributes"
+                                                        [id]="suggestedAttribute"
+                                                        (click)="addTempOutputAttr(suggestedAttribute)">
+                                                        <span class="tooltiptext">
+                                                            <h5>integer</h5>
+                                                        </span>
                                                         <input type="radio" name="options"
                                                                [id]="suggestedAttribute+'.,.'"
                                                                autocomplete="off" [checked]="suggestedAttributes[0].includes(suggestedAttribute)">
                                                         {{suggestedAttribute}}
+                                                        <i class="icon-required-star" type="button"
+                                                            aria-hidden="true"></i>
                                                     </label>
 
                                                 </div>
@@ -434,15 +455,17 @@
                            aria-controls="profile" aria-selected="false" >Outputs</a>
                     </li>
                 </ul>
-                <div class="tab-content border-0 mt-2" id="myTabContent">
+                <div class="tab-content border-0" id="myTabContent">
                     <!--INPUTS Tab-->
                     <div class="tab-pane fade show active create-form" id="input" role="tabpanel"
                          aria-labelledby="input-tab">
                         <div class="form-group row">
                             <div class="col">
-                                <input type="email" class="form-control" id="inputEmail3" placeholder="Attributes">
-                                <div class="container">
-                                    <div *ngFor="let tempInput of tempInputs">{{tempInput}}</div>
+<!--<input type="email" class="form-control" id="inputEmail3" placeholder="Attributes">-->
+                                <div class="container p-0">
+                                    <label>Selected Attributes</label>
+                                    <div *ngFor="let tempInput of tempInputs" class="selectedWrapper">{{tempInput}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -472,13 +495,18 @@
                                          aria-labelledby="list-home-list">
                                         <div class="scrollWrapper">
                                             <div *ngIf="suggestedInputs.length>0" class="btn-group btn-group-toggle"
-                                                 data-toggle="buttons">
-                                                <label class="btn btn-secondary active"
-                                                       *ngFor="let suggestedInput of suggestedInputs"
-                                                       (click)="addTempInput(suggestedInput)">
+                                                data-toggle="buttons">
+                                                <label class="btn tooltipHTML tooltipGetAtt active"
+                                                    *ngFor="let suggestedInput of suggestedInputs"
+                                                    (click)="addTempInput(suggestedInput)">
+                                                    <span class="tooltiptext">
+                                                        <h5>integer</h5>
+                                                    </span>
                                                     <input type="radio" name="options" [id]="suggestedInput"
                                                            autocomplete="off" (click)="addTempInput(suggestedInput)">
                                                     {{suggestedInput}}
+                                                    <i class="icon-required-star" type="button"
+                                                        aria-hidden="true"></i>
                                                 </label>
                                             </div>
                                             <div *ngIf="suggestedInputs.length == 0">
@@ -495,8 +523,9 @@
                         <div class="form-group row">
                             <div class="col">
                                 <input type="email" class="form-control" id="inputEmail3" placeholder="Attributes">
-                                <div class="container">
-                                    <div *ngFor="let tempOutput of tempOutputs">{{tempOutput}}</div>
+                                <div class="container p-0">
+                                    <div *ngFor="let tempOutput of tempOutputs" class="selectedWrapper">{{tempOutput}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -526,13 +555,18 @@
                                          aria-labelledby="list-home-list">
                                         <div class="scrollWrapper">
                                             <div *ngIf="suggestedOutputs.length > 0" class="btn-group btn-group-toggle"
-                                                 data-toggle="buttons">
-                                                <label class="btn btn-secondary active"
-                                                       *ngFor="let suggestedOutput of suggestedOutputs">
+                                                data-toggle="buttons">
+                                                <label class="btn tooltipHTML tooltipGetAtt active"
+                                                    *ngFor="let suggestedOutput of suggestedOutputs">
+                                                    <span class="tooltiptext">
+                                                        <h5>integer</h5>
+                                                    </span>
                                                     <input type="radio" name="options" [id]="suggestedOutput"
                                                            autocomplete="off"
                                                            (dblclick)="addTempOutput(suggestedOutput)">
                                                     {{suggestedOutput}}
+                                                    <i class="icon-required-star" type="button"
+                                                        aria-hidden="true"></i>
                                                 </label>
 
                                             </div>
