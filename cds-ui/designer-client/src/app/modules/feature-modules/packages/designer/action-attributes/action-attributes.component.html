@@ -14,8 +14,9 @@
             <div class="row">
                 <div class="col pr-0 text-center">
                     <button type="button" data-toggle="modal" data-target="#exampleModalScrollable"
-                        class="btn btn-secondary" (click)="clearFormInputs()"><i class="icon-custom-attribute"
-                            type="button" aria-hidden="true"></i></button>
+                            class="btn btn-secondary" (click)="clearFormInputs()"><i class="icon-custom-attribute"
+                                                                                     type="button"
+                                                                                     aria-hidden="true"></i></button>
                     <span>Create Custom</span>
                 </div>
                 <div class="col text-center">
@@ -45,12 +46,11 @@
                             <div class="form-group" *ngFor="let input of inputs">
                                 <label class="tooltipHTML">{{input.name}}
                                     <span class="tooltiptext">
-                                        <h5>integer</h5>
-                                        <h6>Value:</h6>
-                                        <span>function_name</span>
-                                        <span>attribute_name</span>
-                                        <span>artifact_name</span>
-                                        <span>parameter_name</span>
+                                        <h5>{{input.type}}</h5>
+                                        <div *ngIf="input.value">
+                                            <h6>Value:</h6>
+                                        <span>{{input.value}}</span>
+                                        </div>
                                     </span>
                                     <i [hidden]="!input.required" class="icon-required-star" type="button"
                                        aria-hidden="true"></i>
@@ -62,7 +62,9 @@
                                        class="accordion-delete editAttribute" tooltip="Edit Attribute"
                                        placement="bottom" (click)="editAttribute(input)"><i class="icon-edit"></i></a>
                                     <a class="accordion-delete deleteAttribute" tooltip="Delete Attribute"
-                                       placement="bottom"><i class="icon-delete-sm"></i></a>
+                                       (click)="markDeletedInput(input)"
+                                       data-toggle="modal" data-target="#exampleModalScrollable1" placement="bottom"><i
+                                            class="icon-delete-sm"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -90,12 +92,16 @@
                             <div class="form-group" *ngFor="let output of outputs">
                                 <label class="tooltipHTML">{{output.name}}
                                     <span class="tooltiptext">
-                                        <h5>integer</h5>
-                                        <h6>Value:</h6>
-                                        <span>function_name</span>
-                                        <span>attribute_name</span>
-                                        <span>artifact_name</span>
-                                        <span>parameter_name</span>
+                                        <h5>{{output.type}}</h5>
+                                       <div *ngIf="output?.value !=null
+                                       && output?.value['get_attribute'] !=null">
+                                           <h6>Value:</h6>
+                                        <span>{{output.value.get_attribute[0]}}</span>
+                                           <span>{{output.value.get_attribute[1]}}</span>
+                                        <span>{{output.value.get_attribute[2]}}</span>
+                                        <span>{{output.value.get_attribute[3]}}</span>
+                                        <span>{{output.value.get_attribute[4]}}</span>
+                                       </div>
                                     </span>
                                     <i [hidden]="!output.required" class="icon-required-star" type="button"
                                        aria-hidden="true"></i>
@@ -104,11 +110,13 @@
 
                                 </label>
                                 <div class="attributeOptions">
-                                    <a data-toggle="modal" data-target="#exampleModalScrollable2"
+                                    <a data-toggle="modal" data-target="#exampleModalScrollablte"
                                        class="accordion-delete editAttribute" tooltip="Edit Attribute"
                                        placement="bottom" (click)="editAttribute(output)"><i class="icon-edit"></i></a>
                                     <a class="accordion-delete deleteAttribute" tooltip="Delete Attribute"
-                                       placement="bottom"><i class="icon-delete-sm"></i></a>
+                                       (click)="markDeletedInput(output)"
+                                       data-toggle="modal" data-target="#exampleModalScrollable1" placement="bottom"><i
+                                            class="icon-delete-sm"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -311,20 +319,21 @@
                                              aria-labelledby="list-home-list">
                                             <div class="scrollWrapper">
                                                 <div *ngIf="suggestedAttributes.length>0"
-                                                    class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                     class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn tooltipHTML tooltipGetAtt"
-                                                        *ngFor="let suggestedAttribute of suggestedAttributes"
-                                                        [id]="suggestedAttribute"
-                                                        (click)="addTempOutputAttr(suggestedAttribute)">
+                                                           *ngFor="let suggestedAttribute of suggestedAttributes"
+                                                           [id]="suggestedAttribute"
+                                                           (click)="addTempOutputAttr(suggestedAttribute)">
                                                         <span class="tooltiptext">
                                                             <h5>integer</h5>
                                                         </span>
                                                         <input type="radio" name="options"
                                                                [id]="suggestedAttribute+'.,.'"
-                                                               autocomplete="off" [checked]="suggestedAttributes[0].includes(suggestedAttribute)">
+                                                               autocomplete="off"
+                                                               [checked]="suggestedAttributes[0].includes(suggestedAttribute)">
                                                         {{suggestedAttribute}}
                                                         <i class="icon-required-star" type="button"
-                                                            aria-hidden="true"></i>
+                                                           aria-hidden="true"></i>
                                                     </label>
 
                                                 </div>
@@ -382,13 +391,14 @@
                                                     <label class="btn btn-secondary"
                                                            *ngFor="let suggestedMappingParameter of suggestedMappingParameters"
                                                            (click)="addSuggestedMappingParameter(suggestedMappingParameter)">
-                                                           <!--[class]="suggestedMappingParameters[0].includes(suggestedMappingParameter)?'btn btn-secondary active':'btn btn-secondary'">
-                                                       --> <input type="radio" name="options" [id]="suggestedMappingParameter"
+                                                        <!--[class]="suggestedMappingParameters[0].includes(suggestedMappingParameter)?'btn btn-secondary active':'btn btn-secondary'">
+                                                    --> <input type="radio" name="options"
+                                                               [id]="suggestedMappingParameter"
                                                                autocomplete="off"
                                                                (click)="addSuggestedMappingParameter(suggestedMappingParameter)"
                                                                [checked]="suggestedMappingParameters[0].includes(suggestedMappingParameter)"
 
-                                                        >
+                                                    >
                                                         {{suggestedMappingParameter}}
                                                     </label>
 
@@ -448,11 +458,11 @@
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#input" role="tab"
-                           aria-controls="home" aria-selected="true" >Inputs</a>
+                           aria-controls="home" aria-selected="true">Inputs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#output" role="tab"
-                           aria-controls="profile" aria-selected="false" >Outputs</a>
+                           aria-controls="profile" aria-selected="false">Outputs</a>
                     </li>
                 </ul>
                 <div class="tab-content border-0" id="myTabContent">
@@ -461,7 +471,7 @@
                          aria-labelledby="input-tab">
                         <div class="form-group row">
                             <div class="col">
-<!--<input type="email" class="form-control" id="inputEmail3" placeholder="Attributes">-->
+                                <!--<input type="email" class="form-control" id="inputEmail3" placeholder="Attributes">-->
                                 <div class="container p-0">
                                     <label>Selected Attributes</label>
                                     <div *ngFor="let tempInput of tempInputs" class="selectedWrapper">{{tempInput}}
@@ -495,10 +505,10 @@
                                          aria-labelledby="list-home-list">
                                         <div class="scrollWrapper">
                                             <div *ngIf="suggestedInputs.length>0" class="btn-group btn-group-toggle"
-                                                data-toggle="buttons">
+                                                 data-toggle="buttons">
                                                 <label class="btn tooltipHTML tooltipGetAtt active"
-                                                    *ngFor="let suggestedInput of suggestedInputs"
-                                                    (click)="addTempInput(suggestedInput)">
+                                                       *ngFor="let suggestedInput of suggestedInputs"
+                                                       (click)="addTempInput(suggestedInput)">
                                                     <span class="tooltiptext">
                                                         <h5>integer</h5>
                                                     </span>
@@ -506,7 +516,7 @@
                                                            autocomplete="off" (click)="addTempInput(suggestedInput)">
                                                     {{suggestedInput}}
                                                     <i class="icon-required-star" type="button"
-                                                        aria-hidden="true"></i>
+                                                       aria-hidden="true"></i>
                                                 </label>
                                             </div>
                                             <div *ngIf="suggestedInputs.length == 0">
@@ -555,9 +565,9 @@
                                          aria-labelledby="list-home-list">
                                         <div class="scrollWrapper">
                                             <div *ngIf="suggestedOutputs.length > 0" class="btn-group btn-group-toggle"
-                                                data-toggle="buttons">
+                                                 data-toggle="buttons">
                                                 <label class="btn tooltipHTML tooltipGetAtt active"
-                                                    *ngFor="let suggestedOutput of suggestedOutputs">
+                                                       *ngFor="let suggestedOutput of suggestedOutputs">
                                                     <span class="tooltiptext">
                                                         <h5>integer</h5>
                                                     </span>
@@ -566,7 +576,7 @@
                                                            (dblclick)="addTempOutput(suggestedOutput)">
                                                     {{suggestedOutput}}
                                                     <i class="icon-required-star" type="button"
-                                                        aria-hidden="true"></i>
+                                                       aria-hidden="true"></i>
                                                 </label>
 
                                             </div>
@@ -604,11 +614,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete <b>resource-assignment</b> action?
+                Are you sure you want to delete <b>{{suggestedDeletedInput.name}}</b> from {{actionName}}?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Delete</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteActionAttribute()">
+                    Delete
+                </button>
             </div>
         </div>
     </div>
@@ -631,7 +643,7 @@
                         <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
                         <div class="col-sm-9">
                             <input type="email" class="form-control" id="inputEmail3" placeholder="Attribute name"
-                                   value="resource-assignment-properties">
+                                   [ngModel]="this.suggestedEditedAttribute.name">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -639,19 +651,27 @@
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="inputPassword3"
                                    placeholder="Add some description"
-                                   value="Dynamic PropertyDefinition for workflow(resource-assignment).">
+                                   [ngModel]="this.suggestedEditedAttribute.description">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-sm-3 pt-0">Type <span>*</span></label>
                         <div class="col-sm-9">
                             <div class="list-group list-group-horizontal">
-                                <button type="button" class="list-group-item list-group-item-action">String
+                                <button type="button" class="list-group-item list-group-item-action"
+                                [className]="suggestedEditedAttribute.type.includes('string')?'' +
+                                 'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">String
                                 </button>
-                                <button type="button" class="list-group-item list-group-item-action">Integer</button>
-                                <button type="button" class="list-group-item list-group-item-action">Boolean</button>
-                                <button type="button" class="list-group-item list-group-item-action">List</button>
-                                <button type="button" class="list-group-item list-group-item-action active">Other
+                                <button type="button" class="list-group-item list-group-item-action"
+                                        [className]="suggestedEditedAttribute.type.includes('integer')?'' +
+                                         ' list-group-item list-group-item-action active':'list-group-item list-group-item-action'">Integer</button>
+                                <button type="button" class="list-group-item list-group-item-action"
+                                        [className]="suggestedEditedAttribute.type.includes('boolean')?'' +
+                                         'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">Boolean</button>
+                                <button type="button" class="list-group-item list-group-item-action"
+                                        [className]="suggestedEditedAttribute.type.includes('list')?'' +
+                                         'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">List</button>
+                                <button type="button" class="list-group-item list-group-item-action">Other
                                 </button>
                             </div>
                             <input type="text" class="form-control mt-2 mb-2" id="inputPassword3"
@@ -663,12 +683,14 @@
                         <div class="col-sm-9">
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" id="customRadioInline1" name="customRadioInline1"
-                                       class="custom-control-input" checked>
+                                       class="custom-control-input"
+                                       [ngModel]="suggestedEditedAttribute.required" [checked]="suggestedEditedAttribute.required">
                                 <label class="custom-control-label" for="customRadioInline1">True</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" id="customRadioInline2" name="customRadioInline1"
-                                       class="custom-control-input">
+                                       class="custom-control-input"
+                                       [checked]="!suggestedEditedAttribute.required">
                                 <label class="custom-control-label" for="customRadioInline2">False</label>
                             </div>
                         </div>
