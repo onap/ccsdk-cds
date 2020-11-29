@@ -131,8 +131,10 @@ export class DesignerComponent implements OnInit, OnDestroy {
                 const formData = new FormData();
                 formData.append('file', blob);
                 this.designerService.publishBlueprint(formData).subscribe(res => {
+                    this.toastService.success('Package Deployed Successfuly');
                     console.log('Package Deployed...');
                 }, error => {
+                    this.toastService.error(error.message, 'Package error');
                     console.log(error);
                 }, () => {
                     //  this.deployBluePrint = false;
@@ -495,13 +497,15 @@ export class DesignerComponent implements OnInit, OnDestroy {
                     const blobInfo = new Blob([response], { type: 'application/octet-stream' });
                     this.packageCreationStore.clear();
                     this.packageCreationExtractionService.extractBlobToStore(blobInfo);
-                    this.toastService.info('enriched successfully ');
+                    this.toastService.success('Enriched successfully ');
                 }, err => {
+                    console.log(err);
+                    this.toastService.error(err.message, 'Enrich Failed');
                 }, () => {
                     this.ngxService.stop();
                 });
             }, error => {
-                this.toastService.error('error happened when enrich ' + error.message);
+                this.toastService.error(error.mesasge, 'error happened ');
                 console.error('Error -' + error.message);
             }, () => {
                 this.ngxService.stop();
