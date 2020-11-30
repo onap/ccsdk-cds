@@ -50,6 +50,8 @@ export class ActionAttributesComponent implements OnInit {
     suggestedMappingParameters: string[] = [];
     selectedParameterList: string[] = [];
     currentSuggestedArtifact: string;
+    suggestedDeletedInput: any = {};
+    suggestedEditedAttribute: any = {};
 
     constructor(private designerStore: DesignerStore,
                 private functionsStore: FunctionsStore,
@@ -107,6 +109,8 @@ export class ActionAttributesComponent implements OnInit {
             fieldAttribute.description = container[nameOutput].description;
             fieldAttribute.required = container[nameOutput].required;
             fieldAttribute.type = container[nameOutput].type;
+            fieldAttribute.value = container[nameOutput].value;
+            console.log(fieldAttribute.value);
             const insertedOutputActionAttribute = Object.assign({}, fieldAttribute);
             fields.push(insertedOutputActionAttribute);
         }
@@ -490,7 +494,7 @@ export class ActionAttributesComponent implements OnInit {
     }
 
     editAttribute(input: any) {
-        console.log(input);
+        this.suggestedEditedAttribute = input;
     }
 
     private createAttributeTypeIfNotExisted(originalAttributes: string, attributeType: string) {
@@ -501,5 +505,19 @@ export class ActionAttributesComponent implements OnInit {
 
     private checkIfTypeIsList(type: string) {
         return type.includes('list');
+    }
+
+    markDeletedInput(input: any) {
+        this.suggestedDeletedInput = input;
+    }
+
+    deleteActionAttribute() {
+        delete this.designerState.template.workflows[this.actionName]
+            ['inputs'][this.suggestedDeletedInput.name];
+        this.deleteAttribute(this.inputs, this.suggestedDeletedInput);
+
+        delete this.designerState.template.workflows[this.actionName]
+            ['outputs'][this.suggestedDeletedInput.name];
+        this.deleteAttribute(this.outputs, this.suggestedDeletedInput);
     }
 }
