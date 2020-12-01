@@ -38,7 +38,7 @@
                     <h5 class="mb-0 d-flex justify-content-between">
                         <button class="btn btn-link " data-toggle="collapse" aria-expanded="false"
                             (click)="changeDivShow(mapIndex)">
-                            <i class="icon-file-code"></i> {{file.key}}
+                            <i class="icon-file-code"></i> {{file.key}} <span class="readonlyTxt">(ReadOnly)</span>
                         </button>
 
                         <a data-toggle="modal" (click)="initDelete(file)" data-target="#exampleModal1"
@@ -64,7 +64,7 @@
                                         <button type="button" class="btn btn-secondary"
                                             data-dismiss="modal">Cancel</button>
                                         <button type="button" data-dismiss="modal" (click)="removeFile()"
-                                            class="btn btn-primary">Delete</button>
+                                            class="btn btn-danger">Delete</button>
                                     </div>
                                 </div>
                             </div>

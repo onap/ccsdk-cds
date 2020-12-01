@@ -2,7 +2,7 @@ html, body{
   height: 100%;
 }
 body{
-  background: #FAFAFA !important;
+  background: #FAFAFA !important; /*FDFDFD*/
   /* background-image: linear-gradient(-45deg, #000 10%, #fff 0);
   background-size: 6px 6px; */
   margin: 0;
@@ -57,7 +57,10 @@ button:focus{
   height: 18px !important;
   border-radius: 50% !important;
 }
-
+.readonlyTxt{
+  color: #BABBC3; 
+  font-size: 11px;
+}
 .reuiredInput .custom-control-label::after{
   content: "_";
   color: #C4CEDB !important;
@@ -1590,6 +1593,9 @@ ul.package-contributers{
   font-size: 14px;
   font-weight: bold;
 }
+.icon-action-close::before{
+  font-size: 13px;
+}
 .createActionModal .modal-body{
   padding-top: 0 !important;
   padding-bottom: 10px !important;
@@ -2536,8 +2542,16 @@ hr{
 .action-button.save:hover{
   opacity: .9;
 } */
-
-
+.action-button.save:disabled{
+  color: #C3CDDB !important;
+}
+.action-button.save:disabled i{
+  background-color: #C3CDDB;
+  animation: none;
+}
+.action-button.save:disabled i::before{
+  color: #fff;
+}
 .action-button.save{
   color: #66BB00 !important;
 }
@@ -3286,6 +3300,11 @@ margin-right: 5px;
   padding: 4px 20px;
   font-size: 13px;
 }
+.template-mapping-action .btn-primary:disabled{
+  background:#C3CDDB !important ;
+  border-color:#C3CDDB !important ;
+  color: #fff !important ;
+}
 .template-mapping-action .btn-primary{
   background:#66BB00 !important ;
   border-color:#66BB00 !important ;
@@ -3353,8 +3372,14 @@ tr.mat-header-row{
 .mat-form-field-appearance-legacy .mat-form-field-wrapper{
   padding-bottom: 0;
 }
+.mat-paginator-page-size-select{
+  margin-top: 12px;
+}
 .mat-paginator-page-size-select .mat-form-field-wrapper{
   padding-bottom: 14px;
+}
+.mat-paginator-range-label{
+  margin-right: 8px;
 }
 .mat-form-field-infix,
 .dataTables_filter input{
@@ -3367,10 +3392,10 @@ tr.mat-header-row{
   border-bottom: 0 !important;
 }
 .tableFilter{
-  margin-top: 9px;
+  margin-top: 12px;
 }
 .tableFilter .mat-form-field-wrapper{
-  padding-bottom: 0;
+  padding-bottom: 0 !important;
 }
 .tableFilter .mat-form-field-infix{
   background: url(../src/assets/img/icon-search.svg) 9px center no-repeat;
@@ -3424,6 +3449,11 @@ table.dataTable.no-footer{
 }
 .mat-paginator-container{
   padding-right: 0;
+}
+.mappingSelectedAtt{
+  padding-left: 3px;
+  line-height: 35px;
+  font-size: 10px;
 }
 .dataTables_info{
   padding-top: 12px;

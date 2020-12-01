@@ -144,17 +144,18 @@
                             <button [disabled]="selectedProps.size <=0" type="button" class="btn"
                                 (click)="removeProps()" tooltip="Remove" placement="bottom"><i
                                     class="icon-delete-sm"></i></button>
-                            <div style="line-height: 35px;font-size: 10px;">
+                            <div class="mappingSelectedAtt">
                                 <span>{{selectedProps.size}} selected </span>
                                 <span>({{mappingRes.length}} attributes in total)</span>
                             </div>
                         </div>
-                        <mat-paginator [pageSizeOptions]="[10, 25,50, 100,this.mappingRes.length]">
-                        </mat-paginator>
                         <mat-form-field class="tableFilter float-right">
                             <mat-label>Filter</mat-label>
                             <input matInput (keyup)="initApplyFilter($event)" placeholder="Ex. Mia" #input>
                         </mat-form-field>
+                        <mat-paginator [pageSizeOptions]="[10, 25,50, 100,this.mappingRes.length]">
+                        </mat-paginator>
+                        
                         <table mat-table matSortDisableClear [dataSource]="initDataSource" matSort>
                             <!-- select Column -->
                             <ng-container matColumnDef="select">
@@ -338,7 +339,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" (click)="confirmDelete()" data-dismiss="modal"
-                    class="btn btn-primary">Delete</button>
+                    class="btn btn-danger">Delete</button>
             </div>
         </div>
     </div>

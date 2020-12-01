@@ -14,14 +14,13 @@
             <div class="row">
                 <div class="col pr-0 text-center">
                     <button type="button" data-toggle="modal" data-target="#exampleModalScrollable"
-                            class="btn btn-secondary" (click)="clearFormInputs()"><i class="icon-custom-attribute"
-                                                                                     type="button"
-                                                                                     aria-hidden="true"></i></button>
+                        class="btn btn-secondary" (click)="clearFormInputs()"><i class="icon-custom-attribute"
+                            type="button" aria-hidden="true"></i></button>
                     <span>Create Custom</span>
                 </div>
                 <div class="col text-center">
                     <button (click)="printSomethings()" [disabled]="!isFunctionAttributeActive" type="button"
-                            data-toggle="modal" data-target="#exampleModalScrollable3" class="btn btn-secondary"><i
+                        data-toggle="modal" data-target="#exampleModalScrollable3" class="btn btn-secondary"><i
                             class="icon-function-attribute" type="button" aria-hidden="true"></i></button>
                     <span>Import From Function</span>
                 </div>
@@ -34,7 +33,7 @@
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
-                            aria-expanded="true" aria-controls="collapseOne">
+                        aria-expanded="true" aria-controls="collapseOne">
                         Inputs
                     </button>
                 </h2>
@@ -49,21 +48,21 @@
                                         <h5>{{input.type}}</h5>
                                         <div *ngIf="input.value">
                                             <h6>Value:</h6>
-                                        <span>{{input.value}}</span>
+                                            <span>{{input.value}}</span>
                                         </div>
                                     </span>
                                     <i [hidden]="!input.required" class="icon-required-star" type="button"
-                                       aria-hidden="true"></i>
+                                        aria-hidden="true"></i>
                                     <i [hidden]="input.required" class="icon-required-star optional-attribute"
-                                       type="button" aria-hidden="true"></i>
+                                        type="button" aria-hidden="true"></i>
                                 </label>
                                 <div class="attributeOptions">
                                     <a data-toggle="modal" data-target="#exampleModalScrollable2"
-                                       class="accordion-delete editAttribute" tooltip="Edit Attribute"
-                                       placement="bottom" (click)="editAttribute(input)"><i class="icon-edit"></i></a>
+                                        class="accordion-delete editAttribute" tooltip="Edit Attribute"
+                                        placement="bottom" (click)="editAttribute(input)"><i class="icon-edit"></i></a>
                                     <a class="accordion-delete deleteAttribute" tooltip="Delete Attribute"
-                                       (click)="markDeletedInput(input)"
-                                       data-toggle="modal" data-target="#exampleModalScrollable1" placement="bottom"><i
+                                        (click)="markDeletedInput(input)" data-toggle="modal"
+                                        data-target="#exampleModalScrollable1" placement="bottom"><i
                                             class="icon-delete-sm"></i></a>
                                 </div>
                             </div>
@@ -79,7 +78,7 @@
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo"
-                            aria-expanded="true" aria-controls="collapseTwo">
+                        aria-expanded="true" aria-controls="collapseTwo">
                         Outputs
                     </button>
                 </h2>
@@ -93,29 +92,29 @@
                                 <label class="tooltipHTML">{{output.name}}
                                     <span class="tooltiptext">
                                         <h5>{{output.type}}</h5>
-                                       <div *ngIf="output?.value !=null
+                                        <div *ngIf="output?.value !=null
                                        && output?.value['get_attribute'] !=null">
-                                           <h6>Value:</h6>
-                                        <span>{{output.value.get_attribute[0]}}</span>
-                                           <span>{{output.value.get_attribute[1]}}</span>
-                                        <span>{{output.value.get_attribute[2]}}</span>
-                                        <span>{{output.value.get_attribute[3]}}</span>
-                                        <span>{{output.value.get_attribute[4]}}</span>
-                                       </div>
+                                            <h6>Value:</h6>
+                                            <span>{{output.value.get_attribute[0]}}</span>
+                                            <span>{{output.value.get_attribute[1]}}</span>
+                                            <span>{{output.value.get_attribute[2]}}</span>
+                                            <span>{{output.value.get_attribute[3]}}</span>
+                                            <span>{{output.value.get_attribute[4]}}</span>
+                                        </div>
                                     </span>
                                     <i [hidden]="!output.required" class="icon-required-star" type="button"
-                                       aria-hidden="true"></i>
+                                        aria-hidden="true"></i>
                                     <i [hidden]="output.required" class="icon-required-star optional-attribute"
-                                       type="button" aria-hidden="true"></i>
+                                        type="button" aria-hidden="true"></i>
 
                                 </label>
                                 <div class="attributeOptions">
                                     <a data-toggle="modal" data-target="#exampleModalScrollablte"
-                                       class="accordion-delete editAttribute" tooltip="Edit Attribute"
-                                       placement="bottom" (click)="editAttribute(output)"><i class="icon-edit"></i></a>
+                                        class="accordion-delete editAttribute" tooltip="Edit Attribute"
+                                        placement="bottom" (click)="editAttribute(output)"><i class="icon-edit"></i></a>
                                     <a class="accordion-delete deleteAttribute" tooltip="Delete Attribute"
-                                       (click)="markDeletedInput(output)"
-                                       data-toggle="modal" data-target="#exampleModalScrollable1" placement="bottom"><i
+                                        (click)="markDeletedInput(output)" data-toggle="modal"
+                                        data-target="#exampleModalScrollable1" placement="bottom"><i
                                             class="icon-delete-sm"></i></a>
                                 </div>
                             </div>
@@ -128,14 +127,14 @@
 </div>
 <!--Action - Add Custom Attribute - Modal-->
 <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
     <div class="modal-dialog  modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle">
                     Add Custom Attributes</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <img src="assets/img/icon-close.svg"/>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body createAttributeTabs">
@@ -143,29 +142,29 @@
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                           aria-controls="home" aria-selected="true">Inputs</a>
+                            aria-controls="home" aria-selected="true">Inputs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                           aria-controls="profile" aria-selected="false">Outputs</a>
+                            aria-controls="profile" aria-selected="false">Outputs</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <!--INPUTS Tab-->
                     <div class="tab-pane fade show active create-form" id="home" role="tabpanel"
-                         aria-labelledby="home-tab">
+                        aria-labelledby="home-tab">
                         <div class="form-group row">
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
                             <div class="col-sm-9">
                                 <input [(ngModel)]="inputActionAttribute.name" type="email" class="form-control"
-                                       id="inputEmail3" placeholder="Attribute name">
+                                    id="inputEmail3" placeholder="Attribute name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Description</label>
                             <div class="col-sm-9">
                                 <input [(ngModel)]="inputActionAttribute.description" type="text" class="form-control"
-                                       id="inputPassword3" placeholder="Add some description">
+                                    id="inputPassword3" placeholder="Add some description">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -173,26 +172,25 @@
                             <div class="col-sm-9">
                                 <div class="list-group list-group-horizontal">
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('string')">
+                                        (click)="setInputType('string')">
                                         String
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('integer')">Integer
+                                        (click)="setInputType('integer')">Integer
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('boolean')">Boolean
+                                        (click)="setInputType('boolean')">Boolean
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('list')">List
+                                        (click)="setInputType('list')">List
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setInputType('Other')">Other
+                                        (click)="setInputType('Other')">Other
                                     </button>
                                 </div>
                                 <input [hidden]="!isInputOtherType" type="text" class="form-control mt-2 mb-2"
-                                       id="inputPassword4" placeholder="Add Other type name"
-                                       [(ngModel)]="inputOtherType"
-                                       (change)="setInputType(inputOtherType)">
+                                    id="inputPassword4" placeholder="Add Other type name" [(ngModel)]="inputOtherType"
+                                    (change)="setInputType(inputOtherType)">
 
                             </div>
                         </div>
@@ -201,12 +199,12 @@
                             <div class="col-sm-9">
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline1" name="customRadioInline1"
-                                           class="custom-control-input" (click)="setInputRequired(true)">
+                                        class="custom-control-input" (click)="setInputRequired(true)">
                                     <label class="custom-control-label" for="customRadioInline1">True</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline2" name="customRadioInline1"
-                                           class="custom-control-input" (click)="setInputRequired(false)">
+                                        class="custom-control-input" (click)="setInputRequired(false)">
                                     <label class="custom-control-label" for="customRadioInline2">False</label>
                                 </div>
                             </div>
@@ -218,14 +216,14 @@
                             <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
                             <div class="col-sm-9">
                                 <input [(ngModel)]="outputActionAttribute.name" type="email" class="form-control"
-                                       id="inputEmail3" placeholder="Attribute name">
+                                    id="inputEmail3" placeholder="Attribute name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputPassword3" class="col-sm-3 col-form-label">Description</label>
                             <div class="col-sm-9">
                                 <input [(ngModel)]="outputActionAttribute.description" type="text" class="form-control"
-                                       id="inputPassword3" placeholder="Add some description">
+                                    id="inputPassword3" placeholder="Add some description">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -233,14 +231,14 @@
                             <div class="col-sm-9">
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline3" name="customRadioInline3"
-                                           class="custom-control-input" (click)="setOutputRequired(true)">
+                                        class="custom-control-input" (click)="setOutputRequired(true)">
                                     <label class="custom-control-label" for="customRadioInline3">True</label>
                                 </div>
                                 <div class="custom-control custom-radio custom-control-inline">
                                     <input type="radio" id="customRadioInline4" name="customRadioInline3"
-                                           class="custom-control-input">
+                                        class="custom-control-input">
                                     <label class="custom-control-label" for="customRadioInline4"
-                                           (click)="setOutputRequired(false)">False</label>
+                                        (click)="setOutputRequired(false)">False</label>
                                 </div>
                             </div>
                         </div>
@@ -249,29 +247,28 @@
                             <div class="col-sm-9">
                                 <div class="list-group list-group-horizontal">
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('string')">String
+                                        (click)="setOutputType('string')">String
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('integer')">
+                                        (click)="setOutputType('integer')">
                                         Integer
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('boolean')">
+                                        (click)="setOutputType('boolean')">
                                         Boolean
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('list')">
+                                        (click)="setOutputType('list')">
                                         List
                                     </button>
                                     <button type="button" class="list-group-item list-group-item-action"
-                                            (click)="setOutputType('Other')">
+                                        (click)="setOutputType('Other')">
                                         Other
                                     </button>
                                 </div>
                                 <input [hidden]="!isOutputOtherType" type="text" class="form-control mt-2 mb-2"
-                                       id="inputPassword3" placeholder="Add Other type name"
-                                       [(ngModel)]="outputOtherType"
-                                       (change)="setOutputType(outputOtherType)">
+                                    id="inputPassword3" placeholder="Add Other type name" [(ngModel)]="outputOtherType"
+                                    (change)="setOutputType(outputOtherType)">
                             </div>
                         </div>
                         <!--Get Attribute Value-->
@@ -298,10 +295,10 @@
                                     <b class="listBoxTitle">1. Choose Function Name</b>
                                     <div class="list-group addedFunctionsList" id="list-tab" role="tablist">
                                         <input type="text" class="form-control input-search-controller"
-                                               placeholder="Functions">
+                                            placeholder="Functions">
                                         <div class="scrollWrapper" *ngFor="let step of steps">
                                             <a class="list-group-item list-group-item-action active" id="list-home-list"
-                                               data-toggle="list" href="#list-home" role="tab" aria-controls="home">
+                                                data-toggle="list" href="#list-home" role="tab" aria-controls="home">
                                                 <i class="icon-resource_resolution mr-1" aria-hidden="true"></i>
                                                 {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="getAttributesAndOutputs(
                                                                     this.designerState.template.workflows[actionName]['steps'][step]['target']
@@ -314,26 +311,25 @@
                                     <b class="listBoxTitle">2. Choose Attribute Name</b>
                                     <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
                                         <input type="text" class="form-control input-search-controller"
-                                               placeholder="Attributes">
+                                            placeholder="Attributes">
                                         <div class="tab-pane fade show active" id="list-home" role="tabpanel"
-                                             aria-labelledby="list-home-list">
+                                            aria-labelledby="list-home-list">
                                             <div class="scrollWrapper">
                                                 <div *ngIf="suggestedAttributes.length>0"
-                                                     class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn tooltipHTML tooltipGetAtt"
-                                                           *ngFor="let suggestedAttribute of suggestedAttributes"
-                                                           [id]="suggestedAttribute"
-                                                           (click)="addTempOutputAttr(suggestedAttribute)">
+                                                        *ngFor="let suggestedAttribute of suggestedAttributes"
+                                                        [id]="suggestedAttribute"
+                                                        (click)="addTempOutputAttr(suggestedAttribute)">
                                                         <span class="tooltiptext">
                                                             <h5>integer</h5>
                                                         </span>
                                                         <input type="radio" name="options"
-                                                               [id]="suggestedAttribute+'.,.'"
-                                                               autocomplete="off"
-                                                               [checked]="suggestedAttributes[0].includes(suggestedAttribute)">
+                                                            [id]="suggestedAttribute+'.,.'" autocomplete="off"
+                                                            [checked]="suggestedAttributes[0].includes(suggestedAttribute)">
                                                         {{suggestedAttribute}}
                                                         <i class="icon-required-star" type="button"
-                                                           aria-hidden="true"></i>
+                                                            aria-hidden="true"></i>
                                                     </label>
 
                                                 </div>
@@ -350,20 +346,19 @@
                                     <b class="listBoxTitle">3. Choose Artifact Name</b>
                                     <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
                                         <input type="text" class="form-control input-search-controller"
-                                               placeholder="Attributes">
+                                            placeholder="Attributes">
                                         <div class="tab-pane fade show active" id="list-home" role="tabpanel"
-                                             aria-labelledby="list-home-list">
+                                            aria-labelledby="list-home-list">
                                             <div class="scrollWrapper">
                                                 <div *ngIf="currentArtifacts.length>0"
-                                                     class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-secondary"
-                                                           *ngFor="let suggestedArtifact of currentArtifacts"
-                                                           (click)="addArtifactFile(suggestedArtifact)">
+                                                        *ngFor="let suggestedArtifact of currentArtifacts"
+                                                        (click)="addArtifactFile(suggestedArtifact)">
                                                         <input type="radio" name="options" [id]="suggestedArtifact"
-                                                               autocomplete="off"
-                                                               (click)="addArtifactFile(suggestedArtifact)"
-                                                               [checked]="currentArtifacts[0].includes(suggestedArtifact)"
-                                                        >
+                                                            autocomplete="off"
+                                                            (click)="addArtifactFile(suggestedArtifact)"
+                                                            [checked]="currentArtifacts[0].includes(suggestedArtifact)">
                                                         {{suggestedArtifact}}
                                                     </label>
 
@@ -376,29 +371,25 @@
                                     </div>
                                 </li>
                                 <!--Parameter-->
-                                <li id="carousel__slide4"
-                                    [hidden]="isParametersHidden" tabindex="3"
+                                <li id="carousel__slide4" [hidden]="isParametersHidden" tabindex="3"
                                     class="carousel__slide">
                                     <b class="listBoxTitle">4. Choose Parameter Name</b>
                                     <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
                                         <input type="text" class="form-control input-search-controller"
-                                               placeholder="Attributes">
+                                            placeholder="Attributes">
                                         <div class="tab-pane fade show active" id="list-home" role="tabpanel"
-                                             aria-labelledby="list-home-list">
+                                            aria-labelledby="list-home-list">
                                             <div class="scrollWrapper">
                                                 <div *ngIf="suggestedMappingParameters.length>0"
-                                                     class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-secondary"
-                                                           *ngFor="let suggestedMappingParameter of suggestedMappingParameters"
-                                                           (click)="addSuggestedMappingParameter(suggestedMappingParameter)">
+                                                        *ngFor="let suggestedMappingParameter of suggestedMappingParameters"
+                                                        (click)="addSuggestedMappingParameter(suggestedMappingParameter)">
                                                         <!--[class]="suggestedMappingParameters[0].includes(suggestedMappingParameter)?'btn btn-secondary active':'btn btn-secondary'">
                                                     --> <input type="radio" name="options"
-                                                               [id]="suggestedMappingParameter"
-                                                               autocomplete="off"
-                                                               (click)="addSuggestedMappingParameter(suggestedMappingParameter)"
-                                                               [checked]="suggestedMappingParameters[0].includes(suggestedMappingParameter)"
-
-                                                    >
+                                                            [id]="suggestedMappingParameter" autocomplete="off"
+                                                            (click)="addSuggestedMappingParameter(suggestedMappingParameter)"
+                                                            [checked]="suggestedMappingParameters[0].includes(suggestedMappingParameter)">
                                                         {{suggestedMappingParameter}}
                                                     </label>
 
@@ -422,10 +413,8 @@
                                     <li class="carousel__navigation-item" [hidden]="isNotComponentResourceResolution">
                                         <a href="#carousel__slide3" class="carousel__navigation-button">Artifacts</a>
                                     </li>
-                                    <li class="carousel__navigation-item"
-                                        [hidden]="isParametersHidden">
-                                        <a href="#carousel__slide4"
-                                           class="carousel__navigation-button">Parameters</a>
+                                    <li class="carousel__navigation-item" [hidden]="isParametersHidden">
+                                        <a href="#carousel__slide4" class="carousel__navigation-button">Parameters</a>
                                     </li>
                                 </ol>
                             </aside>
@@ -443,14 +432,14 @@
 
 <!--Action - Add Attribute From Function - Modal-->
 <div class="modal fade" id="exampleModalScrollable3" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalScrollableTitle3" aria-hidden="true">
+    aria-labelledby="exampleModalScrollableTitle3" aria-hidden="true">
     <div class="modal-dialog  modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle3">
                     Add Attributes from Function</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <img src="assets/img/icon-close.svg"/>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body createAttributeTabs">
@@ -458,17 +447,17 @@
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#input" role="tab"
-                           aria-controls="home" aria-selected="true">Inputs</a>
+                            aria-controls="home" aria-selected="true">Inputs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="profile-tab" data-toggle="tab" href="#output" role="tab"
-                           aria-controls="profile" aria-selected="false">Outputs</a>
+                            aria-controls="profile" aria-selected="false">Outputs</a>
                     </li>
                 </ul>
                 <div class="tab-content border-0" id="myTabContent">
                     <!--INPUTS Tab-->
                     <div class="tab-pane fade show active create-form" id="input" role="tabpanel"
-                         aria-labelledby="input-tab">
+                        aria-labelledby="input-tab">
                         <div class="form-group row">
                             <div class="col">
                                 <!--<input type="email" class="form-control" id="inputEmail3" placeholder="Attributes">-->
@@ -485,10 +474,10 @@
                                 <b class="listBoxTitle">1. Choose Function Name</b>
                                 <div class="list-group addedFunctionsList" id="list-tab" role="tablist">
                                     <input type="text" class="form-control input-search-controller"
-                                           placeholder="Functions">
+                                        placeholder="Functions">
                                     <div class="scrollWrapper" *ngFor="let step of steps">
                                         <a class="list-group-item list-group-item-action active" id="list-home-list"
-                                           data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
+                                            data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
                                                 class="icon-resource_resolution mr-1" aria-hidden="true"></i>
                                             {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="setInputAndOutputs(
                                             this.designerState.template.workflows[actionName]['steps'][step]['target']
@@ -500,23 +489,22 @@
                                 <b class="listBoxTitle">2. Choose Input Attribute Name</b>
                                 <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
                                     <input type="text" class="form-control input-search-controller"
-                                           placeholder="Attributes">
+                                        placeholder="Attributes">
                                     <div class="tab-pane fade show active" id="list-home" role="tabpanel"
-                                         aria-labelledby="list-home-list">
+                                        aria-labelledby="list-home-list">
                                         <div class="scrollWrapper">
                                             <div *ngIf="suggestedInputs.length>0" class="btn-group btn-group-toggle"
-                                                 data-toggle="buttons">
+                                                data-toggle="buttons">
                                                 <label class="btn tooltipHTML tooltipGetAtt active"
-                                                       *ngFor="let suggestedInput of suggestedInputs"
-                                                       (click)="addTempInput(suggestedInput)">
+                                                    *ngFor="let suggestedInput of suggestedInputs"
+                                                    (click)="addTempInput(suggestedInput)">
                                                     <span class="tooltiptext">
                                                         <h5>integer</h5>
                                                     </span>
                                                     <input type="radio" name="options" [id]="suggestedInput"
-                                                           autocomplete="off" (click)="addTempInput(suggestedInput)">
+                                                        autocomplete="off" (click)="addTempInput(suggestedInput)">
                                                     {{suggestedInput}}
-                                                    <i class="icon-required-star" type="button"
-                                                       aria-hidden="true"></i>
+                                                    <i class="icon-required-star" type="button" aria-hidden="true"></i>
                                                 </label>
                                             </div>
                                             <div *ngIf="suggestedInputs.length == 0">
@@ -545,10 +533,10 @@
                                 <b class="listBoxTitle">1. Choose Function Name</b>
                                 <div class="list-group addedFunctionsList" id="list-tab" role="tablist">
                                     <input type="text" class="form-control input-search-controller"
-                                           placeholder="Functions">
+                                        placeholder="Functions">
                                     <div class="scrollWrapper" *ngFor="let step of steps">
                                         <a class="list-group-item list-group-item-action active" id="list-home-list"
-                                           data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
+                                            data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
                                                 class="icon-resource_resolution mr-1" aria-hidden="true"></i>
                                             {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="setInputAndOutputs(
                                             this.designerState.template.workflows[actionName]['steps'][step]['target']
@@ -560,23 +548,21 @@
                                 <b class="listBoxTitle">2. Choose output Attribute Name</b>
                                 <div class="tab-content nestedAttributes mt-0 p-0" id="nav-tabContent">
                                     <input type="text" class="form-control input-search-controller"
-                                           placeholder="Attributes">
+                                        placeholder="Attributes">
                                     <div class="tab-pane fade show active" id="list-home" role="tabpanel"
-                                         aria-labelledby="list-home-list">
+                                        aria-labelledby="list-home-list">
                                         <div class="scrollWrapper">
                                             <div *ngIf="suggestedOutputs.length > 0" class="btn-group btn-group-toggle"
-                                                 data-toggle="buttons">
+                                                data-toggle="buttons">
                                                 <label class="btn tooltipHTML tooltipGetAtt active"
-                                                       *ngFor="let suggestedOutput of suggestedOutputs">
+                                                    *ngFor="let suggestedOutput of suggestedOutputs">
                                                     <span class="tooltiptext">
                                                         <h5>integer</h5>
                                                     </span>
                                                     <input type="radio" name="options" [id]="suggestedOutput"
-                                                           autocomplete="off"
-                                                           (dblclick)="addTempOutput(suggestedOutput)">
+                                                        autocomplete="off" (dblclick)="addTempOutput(suggestedOutput)">
                                                     {{suggestedOutput}}
-                                                    <i class="icon-required-star" type="button"
-                                                       aria-hidden="true"></i>
+                                                    <i class="icon-required-star" type="button" aria-hidden="true"></i>
                                                 </label>
 
                                             </div>
@@ -603,22 +589,22 @@
 
 <!--Delete Action - Modal-->
 <div class="modal fade" id="exampleModalScrollable1" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalScrollableTitle1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
+    aria-labelledby="exampleModalScrollableTitle1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document" style="width: 30%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle1">
-                    Delete Action</h5>
+                    Delete Action "{{actionName}}"</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <img src="assets/img/icon-close.svg"/>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete <b>{{suggestedDeletedInput.name}}</b> from {{actionName}}?
+                Are you sure you want to delete <b>{{suggestedDeletedInput.name}}</b> action "{{actionName}}"?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteActionAttribute()">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteActionAttribute()">
                     Delete
                 </button>
             </div>
@@ -627,14 +613,14 @@
 </div>
 <!--Action - Edit Custom Attribute - Modal-->
 <div class="modal fade" id="exampleModalScrollable2" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalScrollableTitle2" aria-hidden="true">
+    aria-labelledby="exampleModalScrollableTitle2" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle2">
                     Edit Custom Attributes</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <img src="assets/img/icon-close.svg"/>
+                    <img src="assets/img/icon-close.svg" />
                 </button>
             </div>
             <div class="modal-body createAttributeTabs">
@@ -643,15 +629,15 @@
                         <label for="inputEmail3" class="col-sm-3 col-form-label">Name <span>*</span></label>
                         <div class="col-sm-9">
                             <input type="email" class="form-control" id="inputEmail3" placeholder="Attribute name"
-                                   [ngModel]="this.suggestedEditedAttribute.name">
+                                [ngModel]="this.suggestedEditedAttribute.name">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword3" class="col-sm-3 col-form-label">Description</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="inputPassword3"
-                                   placeholder="Add some description"
-                                   [ngModel]="this.suggestedEditedAttribute.description">
+                                placeholder="Add some description"
+                                [ngModel]="this.suggestedEditedAttribute.description">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -659,23 +645,23 @@
                         <div class="col-sm-9">
                             <div class="list-group list-group-horizontal">
                                 <button type="button" class="list-group-item list-group-item-action"
-                                [className]="suggestedEditedAttribute.type.includes('string')?'' +
+                                    [className]="suggestedEditedAttribute.type.includes('string')?'' +
                                  'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">String
                                 </button>
                                 <button type="button" class="list-group-item list-group-item-action"
-                                        [className]="suggestedEditedAttribute.type.includes('integer')?'' +
+                                    [className]="suggestedEditedAttribute.type.includes('integer')?'' +
                                          ' list-group-item list-group-item-action active':'list-group-item list-group-item-action'">Integer</button>
                                 <button type="button" class="list-group-item list-group-item-action"
-                                        [className]="suggestedEditedAttribute.type.includes('boolean')?'' +
+                                    [className]="suggestedEditedAttribute.type.includes('boolean')?'' +
                                          'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">Boolean</button>
                                 <button type="button" class="list-group-item list-group-item-action"
-                                        [className]="suggestedEditedAttribute.type.includes('list')?'' +
+                                    [className]="suggestedEditedAttribute.type.includes('list')?'' +
                                          'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">List</button>
                                 <button type="button" class="list-group-item list-group-item-action">Other
                                 </button>
                             </div>
                             <input type="text" class="form-control mt-2 mb-2" id="inputPassword3"
-                                   placeholder="Add Other type name" value="dt-resource-assignment-properties">
+                                placeholder="Add Other type name" value="dt-resource-assignment-properties">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -683,14 +669,13 @@
                         <div class="col-sm-9">
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" id="customRadioInline1" name="customRadioInline1"
-                                       class="custom-control-input"
-                                       [ngModel]="suggestedEditedAttribute.required" [checked]="suggestedEditedAttribute.required">
+                                    class="custom-control-input" [ngModel]="suggestedEditedAttribute.required"
+                                    [checked]="suggestedEditedAttribute.required">
                                 <label class="custom-control-label" for="customRadioInline1">True</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" id="customRadioInline2" name="customRadioInline1"
-                                       class="custom-control-input"
-                                       [checked]="!suggestedEditedAttribute.required">
+                                    class="custom-control-input" [checked]="!suggestedEditedAttribute.required">
                                 <label class="custom-control-label" for="customRadioInline2">False</label>
                             </div>
                         </div>

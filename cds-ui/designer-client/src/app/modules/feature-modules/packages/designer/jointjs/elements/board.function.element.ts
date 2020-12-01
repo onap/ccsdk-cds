@@ -22,13 +22,13 @@ const FunctionElement = joint.shapes.standard.Rectangle.define('board.FunctionEl
     }
 }, {
     markup:
-    `<g id="func-board-element" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    `<g id="func-board-element" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(25,100)">
         <g id="func-board-element-parent-component" transform="translate(-742.000000, -207.000000)">
             <g id="workflow-container" transform="translate(401.000000, 137.000000)">
                 <g id="func-board-element-conponent" transform="translate(30.000000, 70.000000)">
                     <g id="execute" transform="translate(304.000000, 0.000000)">
                         <g id="Group" transform="translate(7.000000, 0.000000)">
-                            <rect id="func-board-element-rectangle" fill="#1B3E6F" x="15" y="0" width="280" height="150" rx="3"></rect>
+                            <rect id="func-board-element-rectangle" fill="#1B3E6F" x="5" y="0" width="280" height="150" rx="3"></rect>
                             <g id="Group-4" transform="translate(20.000000, 25.000000)" fill="#FFFFFF">
                                 <g id="database0-copy" transform="translate(115.000000, 5.000000)" fill-rule="nonzero">
                                     <path d="M35.544,6.00705882 C34.7265882,

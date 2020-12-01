@@ -289,8 +289,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
                 el: $('#board-paper'),
                 model: this.boardGraph,
                 height: 720,
-                width: 1100,
-                gridSize: 10,
+                width: 1300,
+                // origin: { x: 80, y: 70 },
+                gridSize: 10, // background line sizes
                 drawGrid: true,
                 // background: {
                 // color: 'rgba(0, 255, 0, 0.3)'

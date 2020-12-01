@@ -2,7 +2,7 @@
 body{
   /* background-image: linear-gradient(-45deg, #000 9%, #fff 0) !important;
   background-size: 6px 6px !important;   */
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJ2LTQiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzIGlkPSJ2LTMiPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuXzAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjAiIHk9IjAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHJlY3QgaWQ9InYtNSIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0iI0FBQUFBQSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgaWQ9InYtNyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuXzApIi8+PC9zdmc+") !important;
+  /* background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJ2LTQiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzIGlkPSJ2LTMiPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuXzAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHg9IjAiIHk9IjAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHJlY3QgaWQ9InYtNSIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0iI0FBQUFBQSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3QgaWQ9InYtNyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuXzApIi8+PC9zdmc+") !important; */
   background-color: #fff !important;
 }
 
@@ -273,6 +273,8 @@ button.rotate{
   height: 95%;
 } */
 /* .ng-sidebar__content.ng-sidebar__content--animate{
+  position: relative;
+  top: 200px;
   padding-top: 70px !important;
 } */
 
@@ -430,6 +432,10 @@ p.compType-4{
   color: #C3CDDB;
 }
 /*PAUSE*/
+/* .ng-sidebar__content .joint-paper > svg{
+  top: 80px;
+  left: 30px;
+} */
 .functionsList .joint-paper{
   width: 100% !important;
   height: 72vh !important;
@@ -756,8 +762,8 @@ p.compType-4{
   width: 100%;
   background-color: #fff;
   border: solid 1px #C1CDDD;
-  color: #1B3E6F;
-  line-height: 18px;
+  color: #1B3E6F !important;
+  line-height: 18px !important;
   border-radius: 4px;
 }
 .add-attribute .btn:hover{
@@ -769,8 +775,8 @@ p.compType-4{
 .add-attribute .btn:focus{
   box-shadow: none;
 }
-.icon-function-attribute{
-  font-size: 18px;
+.icon-function-attribute::before{
+  font-size: 16px;
 }
 .add-attribute span{ 
   font-size: 11px;
