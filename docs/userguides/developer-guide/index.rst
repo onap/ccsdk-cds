@@ -5,7 +5,7 @@
 Developer Guide
 =================
 
-Blueprints Processor Microservice:
+Blueprints Processor Microservice
 ----------------------------------
 
 Micro service to Manage Controller Blueprint Models, such as Resource Dictionary, Service Models, Velocity Templates etc,  which will serve service for Controller Design Studio and Controller runtimes.
@@ -13,11 +13,12 @@ Micro service to Manage Controller Blueprint Models, such as Resource Dictionary
 This microservice is used to deploy Controller Blueprint Archive file in Run time database. This also helps to test the Valid CBA.
 
 .. toctree::
+   :caption: Guide how to run Blueprint Processor in an IDE:
    :maxdepth: 1
 
    running-bp-processor-in-ide
 
-Architecture:
+Architecture
 ~~~~~~~~~~~~~
 
 |image0|
@@ -26,8 +27,8 @@ Architecture:
    :width: 400pt
 
 
-Testing in local environment:
------------------------------
+Testing in local environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Point your browser to http://localhost:8000/api/v1/execution-service/ping (please note that the port is 8000, not 8080)
 

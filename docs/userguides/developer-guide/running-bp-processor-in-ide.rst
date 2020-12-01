@@ -26,6 +26,10 @@ In the checked out directory, type
 
    mvn clean install -Pq -Dadditionalparam=-Xdoclint:none
 
+.. note::
+   If an error ``invalid flag: --release`` appears when executing the maven install command, you need to upgrade Java version of your local
+   Maven installation. Use something like ``export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64``.
+
 Wait for the maven install command to finish until you go further.
 
 Spin up a Docker container with the database
@@ -419,6 +423,6 @@ Compilation error?
    :width: 500pt
    :align: middle
 
-.. |imageRunConfigSetUp| image:: media/run-config-set-up.png
+.. |imageRunConfigSetUp| image:: media/run_config_set_up.png
    :width: 500pt
    :align: middle

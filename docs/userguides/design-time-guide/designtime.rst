@@ -45,6 +45,6 @@ Services:
 .. toctree::
    :maxdepth: 2
 
-   ../cba/index
-   ../resourcedefinition/index
+   ../../cba/index
+   ../../resourcedefinition/index
    resourceassignment

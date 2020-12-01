@@ -27,6 +27,8 @@ Most of the TOSCA modeled entity presented in the bellow documentation
 can be found
 `here <https://github.com/onap/ccsdk-cds/tree/master/components/model-catalog/definition-type/starter-type>`_.
 
+
+
 .. toctree::
    :caption: Table of Contents
    :maxdepth: 1
