@@ -83,8 +83,6 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
 
             // Invoke componentResourceAssignmentProcessor
             componentResourceAssignmentProcessor!!.executeScript(resourceAssignment)
-
-            componentFunctionScriptingService.cleanupInstance(raRuntimeService.bluePrintContext(), scriptType)
         }
     }
 

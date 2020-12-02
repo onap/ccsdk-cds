@@ -32,6 +32,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.util
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
@@ -87,11 +88,8 @@ class NamingResolutionCapabilityTest {
                     .scriptInstance<ResourceAssignmentProcessor>(any(), any(), any())
             } returns NamingResolutionCapability()
 
-            coEvery {
-                componentFunctionScriptingService.cleanupInstance(any(), any())
-            } returns mockk()
-
             val raRuntimeService = mockk<ResourceAssignmentRuntimeService>()
+            every { raRuntimeService.getBluePrintError() } returns BluePrintError()
             every { raRuntimeService.bluePrintContext() } returns mockk<BluePrintContext>()
             every { raRuntimeService.getInputValue("vf-module-name") } returns NullNode.getInstance()
             every { raRuntimeService.getInputValue("vnfc-name") } returns NullNode.getInstance()
