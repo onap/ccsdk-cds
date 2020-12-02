@@ -369,7 +369,7 @@
                                 </securityDefinition>
                             </securityDefinitions>
                             <outputFormats>json,yaml</outputFormats>
-                            <swaggerDirectory>${basedir}/target/swagger</swaggerDirectory>
+                            <swaggerDirectory>${basedir}/../../../docs/api-reference/media</swaggerDirectory>
                             <swaggerFileName>cds-bp-api-swagger</swaggerFileName>
                             <jsonExampleValues>true</jsonExampleValues>
                             <operationIdFormat>{{className}}_{{methodName}}_{{httpMethod}}.{{packageName}}</operationIdFormat>
