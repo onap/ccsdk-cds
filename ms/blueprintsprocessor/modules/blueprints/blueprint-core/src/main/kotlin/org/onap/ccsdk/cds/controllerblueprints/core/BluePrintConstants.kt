@@ -235,8 +235,6 @@ object BluePrintConstants {
 
     const val TOSCA_SPEC = "TOSCA"
 
-    val USE_SCRIPT_COMPILE_CACHE: Boolean = (System.getenv("USE_SCRIPT_COMPILE_CACHE") ?: "true").toBoolean()
-
     const val LOG_PROTECT: String = "log-protect"
 
     /** Cluster Properties */

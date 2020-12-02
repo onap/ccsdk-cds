@@ -61,8 +61,6 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
 
         // Handles both script processing and error handling
         scriptComponentFunction.executeScript(executionServiceInput)
-
-        componentFunctionScriptingService.cleanupInstance(bluePrintRuntimeService.bluePrintContext(), scriptType)
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

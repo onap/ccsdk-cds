@@ -69,7 +69,7 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
             val instanceDependencies = capabilityResourceSourceProperty.instanceDependencies ?: listOf()
 
             componentResourceAssignmentProcessor =
-                scriptInstance(scriptType, scriptClassReference, instanceDependencies)
+                    scriptInstance(scriptType, scriptClassReference, instanceDependencies)
 
             checkNotNull(componentResourceAssignmentProcessor) {
                 "failed to get capability resource assignment processor($scriptClassReference)"
@@ -78,13 +78,10 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
             // Assign Current Blueprint runtime and ResourceDictionaries
             componentResourceAssignmentProcessor!!.scriptType = scriptType
             componentResourceAssignmentProcessor!!.raRuntimeService = raRuntimeService
-            componentResourceAssignmentProcessor!!.resourceAssignments = resourceAssignments
             componentResourceAssignmentProcessor!!.resourceDictionaries = resourceDictionaries
 
             // Invoke componentResourceAssignmentProcessor
             componentResourceAssignmentProcessor!!.executeScript(resourceAssignment)
-
-            componentFunctionScriptingService.cleanupInstance(raRuntimeService.bluePrintContext(), scriptType)
         }
     }
 

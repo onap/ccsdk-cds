@@ -18,6 +18,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service
 
+import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.BlueprintClusterTopic
+import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.optionalClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
@@ -34,6 +36,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.reCreateNBDirs
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
@@ -60,7 +63,7 @@ class BlueprintProcessorCatalogServiceImpl(
         // Clean blueprint script cache
         val cacheKey = BluePrintFileUtils
             .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, name, version))
-        BluePrintCompileCache.cleanClassLoader(cacheKey)
+        cleanClassLoader(cacheKey)
         log.info("removed cba file name($name), version($version) from cache")
         // Cleaning Deployed Blueprint
         deleteNBDir(bluePrintLoadConfiguration.blueprintDeployPath, name, version)
@@ -132,7 +135,7 @@ class BlueprintProcessorCatalogServiceImpl(
                 normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, artifactName, artifactVersion)
 
             val cacheKey = BluePrintFileUtils.compileCacheKey(deployFile)
-            BluePrintCompileCache.cleanClassLoader(cacheKey)
+            cleanClassLoader(cacheKey)
 
             deleteNBDir(deployFile).let {
                 if (it) log.info("Deleted deployed blueprint model :$artifactName::$artifactVersion")
@@ -172,6 +175,16 @@ class BlueprintProcessorCatalogServiceImpl(
                     "is already exist in database: ${ex.message}",
                 ex
             )
+        }
+    }
+
+    private suspend fun cleanClassLoader(cacheKey: String) {
+        val clusterService = BluePrintDependencyService.optionalClusterService()
+        if (null == clusterService)
+            BluePrintCompileCache.cleanClassLoader(cacheKey)
+        else {
+            log.info("Sending ClusterMessage: Clean Classloader Cache")
+            clusterService.sendMessage(BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE, cacheKey)
         }
     }
 }

@@ -16,8 +16,13 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.scripts
 
+import com.google.common.cache.CacheBuilder
+import com.google.common.cache.CacheLoader
+import com.google.common.cache.LoadingCache
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.jetbrains.kotlin.cli.common.ExitCode
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
@@ -44,6 +49,8 @@ open class BluePrintCompileService {
         val classPaths = classpathFromClasspathProperty()?.joinToString(File.pathSeparator) {
             it.absolutePath
         }
+        val mutexCache: LoadingCache<String, Mutex> = CacheBuilder.newBuilder()
+                .build(CacheLoader.from { s -> Mutex() })
     }
 
     /** Compile the [bluePrintSourceCode] and get the [kClassName] instance for the constructor [args] */
@@ -54,8 +61,11 @@ open class BluePrintCompileService {
     ): T {
         /** Compile the source code if needed */
         log.debug("Jar Exists : ${bluePrintSourceCode.targetJarFile.exists()}, Regenerate : ${bluePrintSourceCode.regenerate}")
-        if (!bluePrintSourceCode.targetJarFile.exists() || bluePrintSourceCode.regenerate) {
-            compile(bluePrintSourceCode)
+
+        mutexCache.get(bluePrintSourceCode.targetJarFile.absolutePath).withLock {
+            if (!bluePrintSourceCode.targetJarFile.exists() || bluePrintSourceCode.regenerate) {
+                compile(bluePrintSourceCode)
+            }
         }
 
         val classLoaderWithDependencies = BluePrintCompileCache.classLoader(bluePrintSourceCode.cacheKey)
