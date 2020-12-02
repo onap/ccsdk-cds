@@ -223,6 +223,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ApiOperation(
         value = "Delete a CBA",
         notes = "Delete the CBA package identified by its name and version.",
+        nickname = "BlueprintModelController_deleteBlueprint_1_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasRole('USER')")
