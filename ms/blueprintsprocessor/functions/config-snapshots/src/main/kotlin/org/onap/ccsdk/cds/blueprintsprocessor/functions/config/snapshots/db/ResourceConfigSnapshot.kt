@@ -46,7 +46,7 @@ import javax.persistence.TemporalType
 @Proxy(lazy = false)
 class ResourceConfigSnapshot : Serializable {
 
-    @get:ApiModelProperty(value = "Resource type.", required = true, example = "ServiceInstance, VfModule, VNF, PNF")
+    @get:ApiModelProperty(value = "Resource type.", required = true, example = "\"ServiceInstance\"")
     @Column(name = "resource_type", nullable = false)
     var resourceType: String? = null
 
