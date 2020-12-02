@@ -30,9 +30,14 @@ import com.hazelcast.core.HazelcastInstance
 import com.hazelcast.cp.CPSubsystemManagementService
 import com.hazelcast.cp.lock.FencedLock
 import com.hazelcast.scheduledexecutor.IScheduledExecutorService
+import com.hazelcast.topic.Message
+import com.hazelcast.topic.MessageListener
 import kotlinx.coroutines.delay
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterMessage
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterMessageListener
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterInfo
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterJoinedEvent
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterMember
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
@@ -40,12 +45,15 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ClusterUtils
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import java.time.Duration
+import java.util.UUID
+
 import java.util.concurrent.TimeUnit
 
 @Service
-open class HazelcastClusterService : BluePrintClusterService {
+open class HazelcastClusterService(private val applicationEventPublisher: ApplicationEventPublisher) : BluePrintClusterService {
 
     private val log = logger(HazelcastClusterService::class)
     lateinit var hazelcast: HazelcastInstance
@@ -123,6 +131,7 @@ open class HazelcastClusterService : BluePrintClusterService {
         log.info(
             "Cluster(${hazelcast.config.clusterName}) node(${hazelcast.name}) created successfully...."
         )
+        applicationEventPublisher.publishEvent(ClusterJoinedEvent(this))
     }
 
     override fun isClient(): Boolean {
@@ -182,6 +191,21 @@ open class HazelcastClusterService : BluePrintClusterService {
             delay(duration.toMillis())
             HazelcastClusterUtils.terminate(hazelcast)
         }
+    }
+
+    override suspend fun <T> sendMessage(topic: BlueprintClusterTopic, message: T) {
+        hazelcast.getReliableTopic<T>(topic.name).publish(message)
+    }
+
+    override fun <T> addBlueprintClusterMessageListener(topic: BlueprintClusterTopic, listener: BlueprintClusterMessageListener<T>): UUID {
+        log.info("Cluster(${hazelcast.config.clusterName}) node(${hazelcast.name}) listening to topic($topic)...")
+        return hazelcast.getReliableTopic<T>(topic.name)
+            .addMessageListener(HazelcastMessageListenerAdapter(listener))
+    }
+
+    override fun removeBlueprintClusterMessageListener(topic: BlueprintClusterTopic, uuid: UUID): Boolean {
+        log.info("Cluster(${hazelcast.config.clusterName}) node(${hazelcast.name}) has stopped listening to topic($topic)...")
+        return hazelcast.getReliableTopic<Any>(topic.name).removeMessageListener(uuid)
     }
 
     /** Utils */
@@ -272,4 +296,15 @@ open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val
 
     override fun close() {
     }
+}
+
+class HazelcastMessageListenerAdapter<E>(val listener: BlueprintClusterMessageListener<E>) : MessageListener<E> {
+    override fun onMessage(message: Message<E>?) = message?.let {
+        BluePrintClusterMessage<E>(
+            BlueprintClusterTopic.valueOf(it.source as String),
+            it.messageObject,
+            it.publishTime,
+            it.publishingMember.toClusterMember()
+        )
+    }.let { listener.onMessage(it) }
 }

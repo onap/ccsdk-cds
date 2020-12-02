@@ -22,6 +22,7 @@ import com.hazelcast.cluster.Member
 import com.hazelcast.config.FileSystemYamlConfig
 import com.hazelcast.instance.impl.HazelcastInstanceFactory
 import com.hazelcast.map.IMap
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -32,7 +33,9 @@ import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterMessage
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterMessageListener
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterInfo
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
@@ -41,6 +44,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import java.io.Serializable
 import java.util.Properties
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -91,6 +95,40 @@ class HazelcastClusterServiceTest {
         }
     }
 
+    @Test
+    fun testClusterMessaging() {
+        runBlocking {
+            val bluePrintClusterServiceOne =
+                createCluster(arrayListOf(1, 2, 3)).toMutableList()
+            printReachableMembers(bluePrintClusterServiceOne)
+            testMessageReceived(bluePrintClusterServiceOne)
+        }
+    }
+
+    private suspend fun testMessageReceived(bluePrintClusterServices: List<BluePrintClusterService>) {
+        val sender = bluePrintClusterServices[0] as HazelcastClusterService
+        val receiver = bluePrintClusterServices[1] as HazelcastClusterService
+        val messageSent = "hello world"
+        var isMessageReceived = false
+        val uuid = receiver.addBlueprintClusterMessageListener(
+            BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE,
+            object : BlueprintClusterMessageListener<String> {
+                override fun onMessage(message: BluePrintClusterMessage<String>?) {
+                    log.info("Message received - ${message?.payload}")
+                    isMessageReceived = messageSent == message?.payload
+                }
+            }
+        )
+
+        assertNotNull(uuid)
+        sender.sendMessage(BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE, messageSent)
+        delay(1000)
+        assertTrue(isMessageReceived)
+
+        assertTrue(receiver.removeBlueprintClusterMessageListener(BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE, uuid))
+        assertFalse(receiver.removeBlueprintClusterMessageListener(BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE, uuid))
+    }
+
     private suspend fun createCluster(
         ids: List<Int>,
         joinAsClient: Boolean? = false
@@ -117,7 +155,7 @@ class HazelcastClusterServiceTest {
                                 properties = properties
                             )
                         }
-                    val hazelcastClusterService = HazelcastClusterService()
+                    val hazelcastClusterService = HazelcastClusterService(mockk(relaxed = true))
                     hazelcastClusterService.startCluster(clusterInfo)
                     hazelcastClusterService
                 }

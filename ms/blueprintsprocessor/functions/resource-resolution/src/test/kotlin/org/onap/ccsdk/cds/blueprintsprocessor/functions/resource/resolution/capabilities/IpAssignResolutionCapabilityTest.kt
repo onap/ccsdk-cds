@@ -86,10 +86,6 @@ class IpAssignResolutionCapabilityTest {
                     .scriptInstance<ResourceAssignmentProcessor>(any(), any(), any())
             } returns IpAssignResolutionCapability()
 
-            coEvery {
-                componentFunctionScriptingService.cleanupInstance(any(), any())
-            } returns mockk()
-
             val raRuntimeService = mockk<ResourceAssignmentRuntimeService>()
             every { raRuntimeService.bluePrintContext() } returns mockk()
             every { raRuntimeService.getInputValue("fixed_ipv4_Address_01") } returns NullNode.getInstance()

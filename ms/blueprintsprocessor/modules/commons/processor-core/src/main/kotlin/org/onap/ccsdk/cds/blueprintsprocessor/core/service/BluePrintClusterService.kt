@@ -16,8 +16,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.core.service
 
+import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.BlueprintClusterTopic
+import org.springframework.context.ApplicationEvent
 import java.time.Duration
 import java.util.Properties
+import java.util.UUID
 
 interface BluePrintClusterService {
 
@@ -53,6 +56,15 @@ interface BluePrintClusterService {
 
     /** Shut down the cluster with [duration] */
     suspend fun shutDown(duration: Duration)
+
+    /** Send [message] to the listener(s) of a [topic] */
+    suspend fun <T> sendMessage(topic: BlueprintClusterTopic, message: T)
+
+    /** Register a [listener] to a [topic] and returns his UUID */
+    fun <T> addBlueprintClusterMessageListener(topic: BlueprintClusterTopic, listener: BlueprintClusterMessageListener<T>): UUID
+
+    /** Unregister a listener from a [topic] using his [uuid] and returns true if it succeeded */
+    fun removeBlueprintClusterMessageListener(topic: BlueprintClusterTopic, uuid: UUID): Boolean
 }
 
 data class ClusterInfo(
@@ -82,5 +94,13 @@ interface ClusterLock {
     fun isLockedByCurrentThread(): Boolean
     fun close()
 }
+
+class BluePrintClusterMessage<E>(val topic: BlueprintClusterTopic, val payload: E, publishTime: Long, clusterMember: ClusterMember)
+
+interface BlueprintClusterMessageListener<E> {
+    fun onMessage(message: BluePrintClusterMessage<E>?)
+}
+
+class ClusterJoinedEvent(source: Any) : ApplicationEvent(source)
 
 const val CDS_LOCK_GROUP = "cds-lock"
