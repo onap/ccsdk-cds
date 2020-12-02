@@ -21,6 +21,11 @@ button:focus{
   outline: 0 !important;
 }
 /*Bootstrap*/
+.form-control[readonly]{
+  background-color: inherit !important;
+  opacity: .85 !important;
+  font-weight: bold;
+}
 .custom-control-input:checked ~ .custom-control-label::before{
   border-color: transparent !important;
 }
@@ -2439,6 +2444,9 @@ padding-left: 20px !important;
 .single-custom-key{
   width: 100%;
 }
+.single-custom-key:last-child{
+  margin-bottom: 20px;
+}
 .single-line-custom-key{
   width: 45%;
   display: inline-block;
@@ -2534,7 +2542,7 @@ hr{
 }
 .action-button i.icon-discard-sm{
   font-size: 11px;
-  color: #C3CDDB;
+  color: #BABBC3;
 }
 /* .action-button.save{
   color: #1273EB !important;
