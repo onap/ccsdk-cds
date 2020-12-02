@@ -288,8 +288,8 @@ export class DesignerComponent implements OnInit, OnDestroy {
             this.boardPaper = new joint.dia.Paper({
                 el: $('#board-paper'),
                 model: this.boardGraph,
-                height: 720,
-                width: 1300,
+                height: '100%',
+                width: '100%',
                 // origin: { x: 80, y: 70 },
                 gridSize: 10, // background line sizes
                 drawGrid: true,
