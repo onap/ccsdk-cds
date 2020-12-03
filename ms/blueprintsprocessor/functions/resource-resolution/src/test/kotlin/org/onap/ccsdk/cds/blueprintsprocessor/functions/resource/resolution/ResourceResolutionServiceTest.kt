@@ -29,11 +29,10 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.MockCapabilityScriptRA
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -137,15 +136,20 @@ class ResourceResolutionServiceTest {
                 "baseconfig",
                 props
             )
-        }.let { (templateMap, assignmentMap) ->
+        }.let { (templateMap, assignmentList) ->
             assertEquals("This is Sample Velocity Template", templateMap)
 
-            val expectedAssignmentMap = hashMapOf(
+            val expectedAssignmentList = mutableListOf(
                 "service-instance-id" to "siid_1234",
                 "vnf-id" to "vnf_1234",
                 "vnf_name" to "temp_vnf"
-            ).asJsonType()
-            assertEquals(expectedAssignmentMap, assignmentMap)
+            )
+            assertEquals(expectedAssignmentList.size, assignmentList.size)
+
+            val areEqual = expectedAssignmentList.zip(assignmentList).all { (it1, it2) ->
+                it1.first == it2.name && it1.second == it2.property?.value?.asText() ?: null
+            }
+            assertEquals(true, areEqual)
         }
     }
 
@@ -327,7 +331,9 @@ class ResourceResolutionServiceTest {
                 """.trimIndent(),
                 it.first
             )
-            assertEquals("siid_1234", it.second["service-instance-id"].asText())
+            val areEqual = it.second.first().name == "service-instance-id" &&
+                "siid_1234" == it.second.first().property?.value?.asText() ?: null
+            assertEquals(true, areEqual)
         }
     }
 
