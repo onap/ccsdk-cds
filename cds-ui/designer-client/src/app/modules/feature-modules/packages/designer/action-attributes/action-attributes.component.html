@@ -326,7 +326,7 @@
                                                         </span>
                                                         <input type="radio" name="options"
                                                             [id]="suggestedAttribute+'.,.'" autocomplete="off"
-                                                            [checked]="suggestedAttributes[0].includes(suggestedAttribute)">
+                                                            [checked]="suggestedAttributes[0]?.includes(suggestedAttribute)">
                                                         {{suggestedAttribute}}
                                                         <i class="icon-required-star" type="button"
                                                             aria-hidden="true"></i>
@@ -358,7 +358,7 @@
                                                         <input type="radio" name="options" [id]="suggestedArtifact"
                                                             autocomplete="off"
                                                             (click)="addArtifactFile(suggestedArtifact)"
-                                                            [checked]="currentArtifacts[0].includes(suggestedArtifact)">
+                                                            [checked]="currentArtifacts[0]?.includes(suggestedArtifact)">
                                                         {{suggestedArtifact}}
                                                     </label>
 
@@ -389,7 +389,7 @@
                                                     --> <input type="radio" name="options"
                                                             [id]="suggestedMappingParameter" autocomplete="off"
                                                             (click)="addSuggestedMappingParameter(suggestedMappingParameter)"
-                                                            [checked]="suggestedMappingParameters[0].includes(suggestedMappingParameter)">
+                                                            [checked]="suggestedMappingParameters[0]?.includes(suggestedMappingParameter)">
                                                         {{suggestedMappingParameter}}
                                                     </label>
 
@@ -645,17 +645,17 @@
                         <div class="col-sm-9">
                             <div class="list-group list-group-horizontal">
                                 <button type="button" class="list-group-item list-group-item-action"
-                                    [className]="suggestedEditedAttribute.type.includes('string')?'' +
+                                    [className]="suggestedEditedAttribute?.type?.includes('string')?'' +
                                  'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">String
                                 </button>
                                 <button type="button" class="list-group-item list-group-item-action"
-                                    [className]="suggestedEditedAttribute.type.includes('integer')?'' +
+                                    [className]="suggestedEditedAttribute?.type?.includes('integer')?'' +
                                          ' list-group-item list-group-item-action active':'list-group-item list-group-item-action'">Integer</button>
                                 <button type="button" class="list-group-item list-group-item-action"
-                                    [className]="suggestedEditedAttribute.type.includes('boolean')?'' +
+                                    [className]="suggestedEditedAttribute?.type?.includes('boolean')?'' +
                                          'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">Boolean</button>
                                 <button type="button" class="list-group-item list-group-item-action"
-                                    [className]="suggestedEditedAttribute.type.includes('list')?'' +
+                                    [className]="suggestedEditedAttribute?.type?.includes('list')?'' +
                                          'list-group-item list-group-item-action active':'list-group-item list-group-item-action'">List</button>
                                 <button type="button" class="list-group-item list-group-item-action">Other
                                 </button>
