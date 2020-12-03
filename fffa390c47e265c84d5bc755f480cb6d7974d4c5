@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f59cd4b5_fa1fca1c",
+        "filename": "ms/blueprintsprocessor/functions/ansible-awx-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/ansible/executor/ComponentRemoteAnsibleExecutor.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-12-03T17:35:41Z",
+      "side": 1,
+      "message": "Do we not want populateJobRunResponse to always run? If i understand it correctly, this does a second call to get the job outputs. So now we will not have those logs?",
+      "revId": "fffa390c47e265c84d5bc755f480cb6d7974d4c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
