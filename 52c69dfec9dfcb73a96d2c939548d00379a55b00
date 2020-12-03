@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c948452_1c425085",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-12-03T19:38:26Z",
+      "side": 1,
+      "message": "remove debug log",
+      "revId": "52c69dfec9dfcb73a96d2c939548d00379a55b00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f4805dc_9764cdbd",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-12-03T19:38:26Z",
+      "side": 1,
+      "message": "change to log.error and have it say something like \"failed to resolve required resources ${failedResources}\"",
+      "revId": "52c69dfec9dfcb73a96d2c939548d00379a55b00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a217dc3b_765273d0",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionServiceTest.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2020-12-03T19:38:26Z",
+      "side": 1,
+      "message": "I suggest changing the expected value rather than transforming the actual value to match the expectation. Also rename it, as it is no longer a map but a list.",
+      "revId": "52c69dfec9dfcb73a96d2c939548d00379a55b00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
