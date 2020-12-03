@@ -73,7 +73,7 @@ interface ResourceResolutionService {
         nodeTemplateName: String,
         artifactPrefix: String,
         properties: Map<String, Any>
-    ): Pair<String, JsonNode>
+    ): Pair<String, MutableList<ResourceAssignment>>
 
     /** Resolve resources for all the sources defined in a particular resource Definition[resolveDefinition]
      * with other [resourceDefinitions] dependencies for the sources [sources]
@@ -137,12 +137,22 @@ open class ResourceResolutionServiceImpl(
         val templateMap: MutableMap<String, String> = hashMapOf()
         val assignmentMap: MutableMap<String, JsonNode> = hashMapOf()
         artifactNames.forEach { artifactName ->
-            val (resolvedStringContent, resolvedJsonContent) = resolveResources(
+            val (resolvedStringContent, resourceAssignmentList) = resolveResources(
                 resourceAssignmentRuntimeService, nodeTemplateName,
                 artifactName, properties
             )
+            val resolvedJsonContent = resourceAssignmentList
+                .associateBy({ it.name }, { it.property?.value })
+                .asJsonNode()
+
             templateMap[artifactName] = resolvedStringContent
             assignmentMap[artifactName] = resolvedJsonContent
+
+            val failedResolution = resourceAssignmentList.filter { it.status != "success" && it.property?.required == true }.map { it.name }
+            if (failedResolution.isNotEmpty()) {
+                log.error("Failed to resolve required resources($failedResolution)")
+                bluePrintRuntimeService.setBluePrintError(resourceAssignmentRuntimeService.getBluePrintError())
+            }
         }
         return ResourceResolutionResult(templateMap, assignmentMap)
     }
@@ -152,7 +162,7 @@ open class ResourceResolutionServiceImpl(
         nodeTemplateName: String,
         artifactPrefix: String,
         properties: Map<String, Any>
-    ): Pair<String, JsonNode> {
+    ): Pair<String, MutableList<ResourceAssignment>> {
 
         // Template Artifact Definition Name
         val artifactTemplate = "$artifactPrefix-template"
@@ -196,9 +206,7 @@ open class ResourceResolutionServiceImpl(
             ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY,
             false
         ) as Boolean
-        val assignmentMap = resourceAssignments
-            .associateBy({ it.name }, { it.property?.value })
-            .asJsonNode()
+
         val resolvedParamJsonContent =
             ResourceAssignmentUtils.generateResourceDataForAssignments(resourceAssignments.toList())
         val artifactTemplateDefinition =
@@ -229,7 +237,7 @@ open class ResourceResolutionServiceImpl(
             log.info("Template resolution saved into database successfully : ($properties)")
         }
 
-        return Pair(resolvedContent, assignmentMap)
+        return Pair(resolvedContent, resourceAssignments)
     }
 
     override suspend fun resolveResourceDefinition(
