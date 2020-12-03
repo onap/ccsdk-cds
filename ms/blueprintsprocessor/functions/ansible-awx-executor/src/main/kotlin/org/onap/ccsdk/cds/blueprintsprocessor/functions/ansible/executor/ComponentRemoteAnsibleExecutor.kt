@@ -226,9 +226,9 @@ open class ComponentRemoteAnsibleExecutor(
                 val message = "Execution of job template $job_template_name failed for requestId $processId." + " (Response: ${response.body}) "
                 log.error(message)
                 setNodeOutputErrors(ATTRIBUTE_EXEC_CMD_STATUS_ERROR, message)
-            } else {
-                populateJobRunResponse(awxClient, jobId, workflowPrefix, jobStatus)
             }
+
+            populateJobRunResponse(awxClient, jobId, workflowPrefix, jobStatus)
         } else {
             // The job template requirements were not fulfilled with the values passed in. The message below will
             // provide more information via the response, like the ignored_fields, or variables_needed_to_start,
