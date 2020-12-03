@@ -30,6 +30,11 @@
               "required": false,
               "type": "string"
             },
+            "ansible-fire-failure": {
+              "description": "ansible fire failue status ",
+              "required": false,
+              "type": "boolean"
+            },
             "workflow-job-template-id": {
               "description": "Primary key (name not supported) of the workflow job template to launch new job.",
               "required": false,

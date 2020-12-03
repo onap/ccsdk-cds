@@ -73,6 +73,8 @@ open class ComponentRemoteAnsibleExecutor(
         // input fields names accepted by this executor
         const val INPUT_ENDPOINT_SELECTOR = "endpoint-selector"
         const val INPUT_JOB_TEMPLATE_NAME = "job-template-name"
+        const val ANSIBLE_FIRE_FAILURE = "ansible-fire-failure"
+        const val ANSIBLE_FAILED_STATUS = "failed"
         const val INPUT_WORKFLOW_JOB_TEMPLATE_NAME = "workflow-job-template-id"
         const val INPUT_LIMIT_TO_HOST = "limit"
         const val INPUT_INVENTORY = "inventory"
@@ -100,10 +102,14 @@ open class ComponentRemoteAnsibleExecutor(
                 jobTemplateName = getOperationInput(INPUT_WORKFLOW_JOB_TEMPLATE_NAME).asText()
                 workflowURIPrefix = "workflow_"
             }
+            var isAnsibleFireFailure = false
+            if (getOptionalOperationInput(ANSIBLE_FIRE_FAILURE) != null) {
+                isAnsibleFireFailure = getOperationInput(ANSIBLE_FIRE_FAILURE).asBoolean()
+            }
 
             val jtId = lookupJobTemplateIDByName(restClientService, jobTemplateName, workflowURIPrefix)
             if (jtId.isNotEmpty()) {
-                runJobTemplateOnAWX(restClientService, jobTemplateName, jtId, workflowURIPrefix)
+                runJobTemplateOnAWX(restClientService, jobTemplateName, jtId, workflowURIPrefix, isAnsibleFireFailure)
             } else {
                 val message = "Workflow/Job template $jobTemplateName does not exists"
                 log.error(message)
@@ -176,7 +182,8 @@ open class ComponentRemoteAnsibleExecutor(
         awxClient: BlueprintWebClientService,
         job_template_name: String?,
         jtId: String,
-        workflowPrefix: String
+        workflowPrefix: String,
+        isAnsibleFireFailure: Boolean
     ) {
         setNodeOutputProperties("preparing".asJsonPrimitive(), "".asJsonPrimitive(), "".asJsonPrimitive())
 
@@ -215,7 +222,13 @@ open class ComponentRemoteAnsibleExecutor(
 
             log.info("Execution of job template $job_template_name in job #$jobId finished with status ($jobStatus) for requestId $processId")
 
-            populateJobRunResponse(awxClient, jobId, workflowPrefix, jobStatus)
+            if (isAnsibleFireFailure && jobStatus == ANSIBLE_FAILED_STATUS) {
+                val message = "Execution of job template $job_template_name failed for requestId $processId." + " (Response: ${response.body}) "
+                log.error(message)
+                setNodeOutputErrors(ATTRIBUTE_EXEC_CMD_STATUS_ERROR, message)
+            } else {
+                populateJobRunResponse(awxClient, jobId, workflowPrefix, jobStatus)
+            }
         } else {
             // The job template requirements were not fulfilled with the values passed in. The message below will
             // provide more information via the response, like the ignored_fields, or variables_needed_to_start,
