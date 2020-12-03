@@ -256,6 +256,32 @@ export class BlueprintRestController {
     });
   }
 
+  @post('/controllerblueprint/enrichandpublish')
+  async enrichAndPublish(
+    @requestBody({
+      description: 'multipart/form-data value.',
+      required: true,
+      content: {
+        'multipart/form-data': {
+          // Skip body parsing
+          'x-parser': 'stream',
+          schema: { type: 'object' },
+        },
+      },
+    })
+    request: Request,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<Response> {
+    return new Promise((resolve, reject) => {
+      this.getFileFromMultiPartForm(request).then(file => {
+        if (appConfig.action.grpcEnabled)
+          return this.uploadFileToBlueprintProcessorGrpc(file, 'ENRICH', response);
+        else
+          return this.uploadFileToBlueprintController(file, '/blueprint-model/enrichandpublish/', response);
+      });
+    });
+  }
+
   @get('/controllerblueprint/download-blueprint/{name}/{version}')
   async download(
     @param.path.string('name') name: string,

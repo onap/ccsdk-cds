@@ -493,15 +493,17 @@ export class DesignerComponent implements OnInit, OnDestroy {
         this.create();
         this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
-                this.packageCreationService.enrichPackage(blob).subscribe(response => {
+                this.packageCreationService.enrichAndDeployPackage(blob).subscribe(response => {
+                    // this.packageCreationService.enrichPackage(blob).subscribe(response => {
                     console.log('success');
                     const blobInfo = new Blob([response], { type: 'application/octet-stream' });
                     this.packageCreationStore.clear();
                     this.packageCreationExtractionService.extractBlobToStore(blobInfo);
-                    this.toastService.success('Enriched successfully ');
+                    this.toastService.success('Enriched & Deployed successfully ');
                 }, err => {
                     console.log(err);
                     this.toastService.error(err.message, 'Enrich Failed');
+                    this.ngxService.stop();
                 }, () => {
                     this.ngxService.stop();
                 });

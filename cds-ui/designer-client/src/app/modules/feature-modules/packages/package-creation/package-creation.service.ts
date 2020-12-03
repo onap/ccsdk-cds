@@ -63,6 +63,10 @@ export class PackageCreationService {
         return this.api.post(BlueprintURLs.enrich, body, {responseType: 'blob'});
     }
 
+    private enrichandpublish(body: any | null, options?: any): Observable<any> {
+        return this.api.post(BlueprintURLs.enrichandpublish, body, {responseType: 'blob'});
+    }
+
     private deployBluePrint(body: any | null, options?: any): Observable<any> {
         return this.api.post(BlueprintURLs.deploy, body, {responseType: 'text'});
     }
@@ -84,6 +88,11 @@ export class PackageCreationService {
     enrichPackage(blob) {
         const formData = this.getFormData(blob);
         return this.enrichBlueprint(formData);
+    }
+
+    enrichAndDeployPackage(blob) {
+        const formData = this.getFormData(blob);
+        return this.enrichandpublish(formData);
     }
 
     deploy(blob) {

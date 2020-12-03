@@ -855,7 +855,7 @@ height: 40px;
 .dropdown-content{
   position: absolute;
   top: 32px;
-  width: 140px;
+  width: 160px;
   margin: 0;
   padding: 0;
   opacity: 0;
