@@ -174,7 +174,7 @@ header{
   box-shadow: 0 2px 6px rgba(47, 83, 151, .15)
 }
 .topology-actions .dropdown-content a{
-  padding: 0 20px;
+  padding: 0 20px 0 15px;
   color: #1B3E6F;
   font-size: 13px;
 }
@@ -210,6 +210,13 @@ header{
   margin-bottom: 0;
   font-size: 11px;
   line-height: 20px;
+}
+.save-blueprint i{
+  margin-right: 7px;
+  font-size: 14px;
+}
+.save-blueprint i.icon-save-sm{
+  font-size: 10px;
 }
 .save-blueprint li:hover{
   cursor: pointer;
@@ -543,6 +550,7 @@ p.compType-4{
   margin-top: 14px;
 }
 .controllerSidebar .custom-control label{
+  width: 100%;
   margin-bottom: 0;
 }
 .controllerSidebar .custom-control i{
@@ -681,7 +689,7 @@ p.compType-4{
   margin-top: 45px;
 }
 .attributesSideBar .attributesContainer{
-  height: 85.9vh;
+  height: calc(100vh - 106px) /*85.9vh*/;
   overflow-y: hidden;
   padding-bottom: 20px;
   background: #fff;
@@ -859,6 +867,7 @@ p.compType-4{
 .icon-required-star{
   margin-left: 2px;
   font-size: 10px;
+  color: #FF6469;
 }
 .optional-attribute::before{
   color: #CAD3E0;
@@ -1725,6 +1734,7 @@ ul.editor{
 }
 .tooltiptext h5{
   margin-bottom: 5px;
+  font-size: 15px;
 }
 .tooltipGetAtt h5{
   margin-bottom: 0;
