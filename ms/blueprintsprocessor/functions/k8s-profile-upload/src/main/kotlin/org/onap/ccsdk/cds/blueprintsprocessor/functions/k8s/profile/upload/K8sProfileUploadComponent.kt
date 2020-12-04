@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
@@ -213,7 +214,7 @@ open class K8sProfileUploadComponent(
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = ""
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = 1
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY] = false
-            val resolutionResult: Pair<String, JsonNode> = resourceResolutionService.resolveResources(
+            val resolutionResult: Pair<String, MutableList<ResourceAssignment>> = resourceResolutionService.resolveResources(
                 bluePrintRuntimeService,
                 nodeTemplateName,
                 ks8ProfileSource,
@@ -222,6 +223,10 @@ open class K8sProfileUploadComponent(
             val tempMainPath: File = createTempDir("k8s-profile-", "")
             val tempProfilePath: File = createTempDir("content-", "", tempMainPath)
 
+            val resolvedJsonContent = resolutionResult.second
+                .associateBy({ it.name }, { it.property?.value })
+                .asJsonNode()
+
             try {
                 val manifestFiles: ArrayList<File>? = readManifestFiles(
                     profileSourceFileFolderPath.toFile(),
@@ -229,7 +234,7 @@ open class K8sProfileUploadComponent(
                 )
                 if (manifestFiles != null) {
                     templateLocation(
-                        profileSourceFileFolderPath.toFile(), resolutionResult.second,
+                        profileSourceFileFolderPath.toFile(), resolvedJsonContent,
                         tempProfilePath, manifestFiles
                     )
                 } else
