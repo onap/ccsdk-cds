@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "082aadcf_a2b08660",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 7260
+      },
+      "writtenOn": "2020-12-04T12:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c948452_1c425085",
+      "revId": "52c69dfec9dfcb73a96d2c939548d00379a55b00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8f4805dc_9764cdbd",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "69ddf60e_da6ef3ef",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 7260
+      },
+      "writtenOn": "2020-12-04T12:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f4805dc_9764cdbd",
+      "revId": "52c69dfec9dfcb73a96d2c939548d00379a55b00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a217dc3b_765273d0",
         "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionServiceTest.kt",
         "patchSetId": 1
@@ -50,6 +86,24 @@
       "revId": "52c69dfec9dfcb73a96d2c939548d00379a55b00",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e31d415_9fc05805",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionServiceTest.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 7260
+      },
+      "writtenOn": "2020-12-04T12:54:11Z",
+      "side": 1,
+      "message": "Good point - I have taken it into account, fixing it now.",
+      "parentUuid": "a217dc3b_765273d0",
+      "revId": "52c69dfec9dfcb73a96d2c939548d00379a55b00",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
