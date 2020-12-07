@@ -52,6 +52,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     dataTarget: any = '';
     ngUnsubscribe = new Subject();
     private designerState: any;
+    packageId: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -63,7 +64,8 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         private designerStore: DesignerStore,
         private toastService: ToastrService,
         private ngxService: NgxUiLoaderService,
-        private packageCreationExtractionService: PackageCreationExtractionService
+        private packageCreationExtractionService: PackageCreationExtractionService,
+        private activatedRoute: ActivatedRoute,
     ) {
         super();
 
@@ -100,6 +102,9 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
             this.metadataClasses = this.metadataClasses.replace('complete', '');
             this.isSaveEnabled = false;
         }
+        this.activatedRoute.paramMap.subscribe(res => {
+            this.packageId = res.get('id');
+        });
 
 
     }
@@ -135,7 +140,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
 
     editBluePrint() {
         this.ngxService.start();
-        this.configurationDashboardService.deletePackage(this.viewedPackage.id).subscribe(res => {
+        this.configurationDashboardService.deletePackage(this.packageId).subscribe(res => {
             this.formTreeData();
             this.saveBluePrintToDataBase();
 
