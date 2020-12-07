@@ -25,34 +25,35 @@ limitations under the License.
 
 import dagre from 'dagre';
 import graphlib from 'graphlib';
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import * as joint from 'jointjs';
 import './jointjs/elements/palette.function.element';
 import './jointjs/elements/action.element';
 import './jointjs/elements/board.function.element';
-import { DesignerStore } from './designer.store';
-import { ActionElementTypeName } from 'src/app/common/constants/app-constants';
-import { GraphUtil } from './graph.util';
-import { GraphGenerator } from './graph.generator.util';
-import { FunctionsStore } from './functions.store';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DesignerService } from './designer.service';
-import { FilesContent, FolderNodeElement } from '../package-creation/mapping-models/metadata/MetaDataTab.model';
-import { PackageCreationModes } from '../package-creation/creationModes/PackageCreationModes';
-import { PackageCreationBuilder } from '../package-creation/creationModes/PackageCreationBuilder';
-import { PackageCreationStore } from '../package-creation/package-creation.store';
-import { PackageCreationService } from '../package-creation/package-creation.service';
-import { PackageCreationUtils } from '../package-creation/package-creation.utils';
+import {DesignerStore} from './designer.store';
+import {ActionElementTypeName} from 'src/app/common/constants/app-constants';
+import {GraphUtil} from './graph.util';
+import {GraphGenerator} from './graph.generator.util';
+import {FunctionsStore} from './functions.store';
+import {Subject} from 'rxjs';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DesignerService} from './designer.service';
+import {FilesContent, FolderNodeElement} from '../package-creation/mapping-models/metadata/MetaDataTab.model';
+import {PackageCreationModes} from '../package-creation/creationModes/PackageCreationModes';
+import {PackageCreationBuilder} from '../package-creation/creationModes/PackageCreationBuilder';
+import {PackageCreationStore} from '../package-creation/package-creation.store';
+import {PackageCreationService} from '../package-creation/package-creation.service';
+import {PackageCreationUtils} from '../package-creation/package-creation.utils';
 import * as JSZip from 'jszip';
-import { PackageCreationExtractionService } from '../package-creation/package-creation-extraction.service';
-import { CBAPackage } from '../package-creation/mapping-models/CBAPacakge.model';
-import { TopologyTemplate } from './model/designer.topologyTemplate.model';
-import { ToastrService } from 'ngx-toastr';
-import { DesignerDashboardState } from './model/designer.dashboard.state';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
+import {saveAs} from 'file-saver';
+import {PackageCreationExtractionService} from '../package-creation/package-creation-extraction.service';
+import {CBAPackage} from '../package-creation/mapping-models/CBAPacakge.model';
+import {TopologyTemplate} from './model/designer.topologyTemplate.model';
+import {ToastrService} from 'ngx-toastr';
+import {DesignerDashboardState} from './model/designer.dashboard.state';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Component({
     selector: 'app-designer',
@@ -76,7 +77,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     paletteGraph: joint.dia.Graph;
     palettePaper: joint.dia.Paper;
     ngUnsubscribe = new Subject();
-    opt = { tx: 100, ty: 100 };
+    opt = {tx: 100, ty: 100};
     filesData: any = [];
     folder: FolderNodeElement = new FolderNodeElement();
     zipFile: JSZip = new JSZip();
@@ -126,7 +127,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
     publishBluePrint() {
         this.create();
-        this.zipFile.generateAsync({ type: 'blob' })
+        this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
                 const formData = new FormData();
                 formData.append('file', blob);
@@ -172,7 +173,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
                     this.packageCreationService.downloadPackage(this.viewedPackage.artifactName + '/'
                         + this.viewedPackage.artifactVersion)
                         .subscribe(response => {
-                            const blob = new Blob([response], { type: 'application/octet-stream' });
+                            const blob = new Blob([response], {type: 'application/octet-stream'});
                             this.packageCreationExtractionService.extractBlobToStore(blob);
                         });
                 }
@@ -235,7 +236,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
                         setLinkVertices: false,
                         marginX: 10,
                         marginY: 10,
-                        clusterPadding: { top: 100, left: 30, right: 10, bottom: 100 },
+                        clusterPadding: {top: 100, left: 30, right: 10, bottom: 100},
                         rankDir: 'TB'
                     });
                     this.actions = [];
@@ -489,14 +490,15 @@ export class DesignerComponent implements OnInit, OnDestroy {
         packageCreationModes.execute(this.cbaPackage, this.packageCreationUtils);
         this.filesData.push(this.folder.TREE_DATA);
     }
+
     private enrichPackage() {
         this.create();
-        this.zipFile.generateAsync({ type: 'blob' })
+        this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
                 this.packageCreationService.enrichAndDeployPackage(blob).subscribe(response => {
                     // this.packageCreationService.enrichPackage(blob).subscribe(response => {
                     console.log('success');
-                    const blobInfo = new Blob([response], { type: 'application/octet-stream' });
+                    const blobInfo = new Blob([response], {type: 'application/octet-stream'});
                     this.packageCreationStore.clear();
                     this.packageCreationExtractionService.extractBlobToStore(blobInfo);
                     this.toastService.success('Enriched & Deployed successfully ');
@@ -526,22 +528,25 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
     saveBluePrintToDataBase() {
         this.create();
-        this.zipFile.generateAsync({ type: 'blob' })
+        this.zipFile.generateAsync({type: 'blob'})
             .then(blob => {
-                this.packageCreationService.savePackage(blob).subscribe(
-                    bluePrintDetailModels => {
-                        this.toastService.info('success updating the package');
-                        const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
-                        this.router.navigate(['/packages/designer/' + id]);
-                        console.log('success');
-                    }, error => {
-                        this.toastService.error('error happened when editing ' + error.message);
-                        console.log('Error -' + error.message);
-                    }, () => {
-                        this.ngxService.stop();
-                    });
-            }, err => { },
-                () => { this.ngxService.stop(); });
+                    this.packageCreationService.savePackage(blob).subscribe(
+                        bluePrintDetailModels => {
+                            this.toastService.info('success updating the package');
+                            const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
+                            this.router.navigate(['/packages/designer/' + id]);
+                            console.log('success');
+                        }, error => {
+                            this.toastService.error('error happened when editing ' + error.message);
+                            console.log('Error -' + error.message);
+                        }, () => {
+                            this.ngxService.stop();
+                        });
+                }, err => {
+                },
+                () => {
+                    this.ngxService.stop();
+                });
     }
 
     openActionAttributes(customActionName: string) {
@@ -561,11 +566,29 @@ export class DesignerComponent implements OnInit, OnDestroy {
         // console.log(this.designerState.template.workflows[this.currentActionName]
         // ['steps'][customFunctionName]['target']);
         this.designerStore.setCurrentFunction(this.designerState.template.workflows[this.currentActionName]
-        ['steps'][customFunctionName]['target']);
+            ['steps'][customFunctionName]['target']);
     }
 
     getTarget(stepname) {
         return this.designerState.template.workflows[this.currentActionName]
-        ['steps'][stepname]['target'];
+            ['steps'][stepname]['target'];
+    }
+
+    downloadPackage() {
+
+        this.ngxService.start();
+        this.packageCreationService.downloadPackage(this.viewedPackage.artifactName + '/'
+            + this.viewedPackage.artifactVersion).subscribe(response => {
+            const blob = new Blob([response], {type: 'application/octet-stream'});
+            saveAs(blob, this.viewedPackage.artifactName + '-' + this.viewedPackage.artifactVersion + '-CBA.zip');
+
+        }, err => {
+            this.toastService.error('package ' + this.viewedPackage.artifactName + 'has error when downloading' +
+                err.message);
+            this.ngxService.stop();
+        }, () => {
+            this.toastService.success('package ' + this.viewedPackage.artifactName + 'downloaded successfully');
+            this.ngxService.stop();
+        });
     }
 }
