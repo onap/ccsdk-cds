@@ -19,13 +19,13 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import { Injectable } from '@angular/core';
-import { BluePrintPage } from './model/BluePrint.model';
-import { Store } from '../../../common/core/stores/Store';
-import { PackagesApiService } from './packages-api.service';
-import { PackagesDashboardState } from './model/packages-dashboard.state';
-import { Observable, of } from 'rxjs';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
+import {Injectable} from '@angular/core';
+import {BluePrintPage} from './model/BluePrint.model';
+import {Store} from '../../../common/core/stores/Store';
+import {PackagesApiService} from './packages-api.service';
+import {PackagesDashboardState} from './model/packages-dashboard.state';
+import {Observable, of} from 'rxjs';
+import {NgxUiLoaderService} from 'ngx-ui-loader';
 
 @Injectable({
     providedIn: 'root'
@@ -154,7 +154,7 @@ export class PackagesStore extends Store<PackagesDashboardState> {
                             tag = tag.replace(',', '');
                         }
                         bluePrintModel.tags.split(',').forEach(bluePrintModelTag => {
-                            if (bluePrintModelTag === tag) {
+                            if (tag.includes(bluePrintModelTag.trim())) {
                                 this.bluePrintContent.content.push(bluePrintModel);
                             }
                         });

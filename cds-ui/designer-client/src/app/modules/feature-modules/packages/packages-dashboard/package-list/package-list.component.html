@@ -8,11 +8,11 @@
             <div class="card-footer row">
                 <div class="col text-center">
                     <a tourAnchor="create" routerLink="/packages/createPackage" role="button" aria-pressed="true"
-                        class="btn-create-package float"><i class="icon-create-white" aria-hidden="true"></i>Create
+                       class="btn-create-package float"><i class="icon-create-white" aria-hidden="true"></i>Create
                         Package
                     </a>
-                    <br />
-                    <a data-target="#importPackageModal" data-toggle="modal"  id="clone-btn" role="button"
+                    <br/>
+                    <a data-target="#importPackageModal" data-toggle="modal" id="clone-btn" role="button"
                        aria-pressed="true" class="btn-import-package float"><i
                             class="icon-import-blue" aria-hidden="true"></i>Import Package
                     </a>
@@ -28,7 +28,7 @@
                 <div class="row">
                     <div class="col-10 pr-0">
                         <a class="card-title" [routerLink]="['/packages/package', bluePrint.id]"
-                            (click)="testDispatch(bluePrint)">
+                           (click)="testDispatch(bluePrint)">
                             <!-- <img class="icon-deployed" src="/assets/img/icon-deploy.svg"> -->
                             <p class="packageName" tooltip="{{bluePrint.artifactName}}" placement="bottom">
                                 {{bluePrint.artifactName}}</p>
@@ -79,11 +79,12 @@
                         </p>
                         <p class="mb-2">By {{bluePrint.updatedBy.split('<')[0]}}</p>
                         <p class="package-desc" [delay]="300" tooltip="{{bluePrint.artifactDescription}}"
-                            placement="bottom left">{{bluePrint.artifactDescription}}</p>
+                           placement="bottom left">{{bluePrint.artifactDescription}}</p>
+                        <p>{{bluePrint.tags}}</p>
                         <ul class="package-contributers">
                             <li>
                                 <button type="button" class="border-fade" data-toggle="tooltip" data-placement="bottom"
-                                    title="User name">
+                                        title="User name">
                                     <img src="/assets/img/img-user1.jpeg">
                                 </button>
                             </li>
@@ -108,10 +109,12 @@
 
                         <div class="col">
                             <button type="button" (click)="view(bluePrint.id)" class="btn btn-card-config"><i
-                                    class="icon-btn-card-config" aria-hidden="true"></i>Configuration</button>
+                                    class="icon-btn-card-config" aria-hidden="true"></i>Configuration
+                            </button>
                         </div>
                         <div class="col">
-                            <button type="button" (click)="viewDesigner(bluePrint.id)" class="btn btn-card-topology"><i class="icon-btn-card-topology"
+                            <button type="button" (click)="viewDesigner(bluePrint.id)" class="btn btn-card-topology"><i
+                                    class="icon-btn-card-topology"
                                     aria-hidden="true"></i>Designer Mode
                             </button>
                         </div>
