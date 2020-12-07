@@ -475,10 +475,18 @@
                                 <div class="list-group addedFunctionsList" id="list-tab" role="tablist">
                                     <input type="text" class="form-control input-search-controller"
                                         placeholder="Functions">
-                                    <div class="scrollWrapper" *ngFor="let step of steps">
-                                        <a class="list-group-item list-group-item-action active" id="list-home-list"
-                                            data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
-                                                class="icon-resource_resolution mr-1" aria-hidden="true"></i>
+                                    <div class="scrollWrapper">
+                                        <a [class]="steps.indexOf(step) === 0?
+                                        'list-group-item list-group-item-action active':
+                                        'list-group-item list-group-item-action'" [id]="step"
+                                            data-toggle="list" href="#list-home" role="tab" aria-controls="home"
+                                           *ngFor="let step of steps" >
+
+                                            <i class="icon-resource_resolution mr-1" aria-hidden="true"
+                                               (click)="setInputAndOutputs(
+                                            this.designerState.template.workflows[actionName]['steps'][step]['target']
+                                            )"
+                                        ></i>
                                             {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="setInputAndOutputs(
                                             this.designerState.template.workflows[actionName]['steps'][step]['target']
                                             )"></i></a>
@@ -535,7 +543,10 @@
                                     <input type="text" class="form-control input-search-controller"
                                         placeholder="Functions">
                                     <div class="scrollWrapper" *ngFor="let step of steps">
-                                        <a class="list-group-item list-group-item-action active" id="list-home-list"
+                                        <a  [class]="steps.indexOf(step) === 0?
+                                        'list-group-item list-group-item-action active':
+                                        'list-group-item list-group-item-action'" [id]="step"
+                                            *ngFor="let step of steps"
                                             data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
                                                 class="icon-resource_resolution mr-1" aria-hidden="true"></i>
                                             {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="setInputAndOutputs(

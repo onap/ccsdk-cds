@@ -285,12 +285,14 @@ export class ActionAttributesComponent implements OnInit {
                                 /* tslint:disable:no-string-literal */
                                 this.suggestedInputs = Object.keys(nodeTemplate['interfaces']
                                     [interfaceName]['operations']['process']['inputs']);
+                                this.filterTwoCollections(this.suggestedInputs, this.inputs);
+
                             }
                             if (nodeTemplate['interfaces'][interfaceName]['operations']['process']['outputs']) {
                                 /* tslint:disable:no-string-literal */
                                 this.suggestedOutputs = Object.keys(nodeTemplate['interfaces']
                                     [interfaceName]['operations']['process']['outputs']);
-                                console.log(this.suggestedInputs);
+                                this.filterTwoCollections(this.suggestedOutputs, this.outputs);
                             }
 
                         }
@@ -300,8 +302,18 @@ export class ActionAttributesComponent implements OnInit {
         console.log(nodeTemplate);
     }
 
+    private filterTwoCollections(suggestedInputs: string[], inputs: any[]) {
+        inputs.forEach(input => {
+            if (suggestedInputs.includes(input.name)) {
+                this.deleteAttribute(suggestedInputs, input.name);
+            }
+        });
+    }
+
     printSomethings() {
-        console.log('something');
+        this.setInputAndOutputs(
+            this.designerState.template.workflows[this.actionName]['steps'][this.steps[0]]['target']
+        );
     }
 
     addTempInput(suggestedInput: string) {
@@ -319,6 +331,7 @@ export class ActionAttributesComponent implements OnInit {
     deleteAttribute(container: string[], suggestedAttribute: string) {
         if (container && suggestedAttribute && container.includes(suggestedAttribute)) {
             const index: number = container.indexOf(suggestedAttribute);
+            console.log(index);
             if (index !== -1) {
                 container.splice(index, 1);
             }
