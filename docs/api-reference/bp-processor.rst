@@ -8,9 +8,10 @@ Blueprint Processor API Reference
 Introduction
 --------------
 
-This section shows all resources and endpoints which CDS BP processor currently provides with sample requests/responses,
-parameter description and other information. If there is a new API and you want do document it, you can use this template
-:download:`rst <api-doc-template.rst>`.
+This section shows all resources and endpoints which CDS BP processor currently provides through a swagger file
+which is automatically created during CDS build process by Swagger Maven Plugin. A corresponding Postman collection is 
+also included. Endpoints can also be described using this template
+:download:`api-doc-template.rst <api-doc-template.rst>` but this is not the prefered way to describe the CDS API.
 
 Authentification
 -----------------
@@ -20,7 +21,13 @@ Use Basic athentification with `ccsdkapps` as a username and password, in Header
 Download
 ------------
 
-You can find a postman collection including sample requests here: :download:`JSON <media/bp-processor.postman_collection.json>`
+Here is the automatically created swagger file for CDS Blueprint Processor API:
+:download:`cds-bp-processor-api-swagger.json <media/cds-bp-processor-api-swagger.json>`
+:download:`cds-bp-processor-api-swagger.yaml <media/cds-bp-processor-api-swagger.yaml>`
+
+You can find a postman collection including sample requests for all endpoints here: 
+:download:`bp-processor.postman_collection.json <media/bp-processor.postman_collection.json>`.
+Please keep the Postman Collection up-to-date for new endpoints.
 
 General Setup
 --------------
@@ -136,169 +143,13 @@ HTTP Status 202 OK
       }
    }
 
-Blueprint Model Catalog API
-----------------------------
 
-Blueprint-model resource contains all Controller Blueprints Archive (CBA) packages which are available in CDS.
-With blueprint-model API you can manage your CBAs.
+API Reference
+--------------
 
-Bootstrap
-~~~~~~~~~~~
+.. warning::
+   In the used Sphinx plugin `sphinxcontrib-swaggerdoc` some information of the swagger file is not
+   rendered completely, e.g. the request body. Use your favorite Swagger Editor and paste the swagger file
+   to get a complete view of the API reference, e.g. on https://editor.swagger.io/.
 
-POST ``/blueprint-model/bootstrap``
-....................................
-
-Loads all Model Types, Resource Dictionaries and CBAs which are included in CDS by default.
-
-
-Request
-...........
-
-.. code-block:: curl
-   :caption: **sample request**
-
-   curl --location --request POST 'http://localhost:8081/api/v1/blueprint-model/bootstrap' \
-   --header 'Authorization: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==' \
-   --header 'Content-Type: application/json' \
-   --data-raw '{
-   "loadModelType" : true,
-   "loadResourceDictionary" : true,
-   "loadCBA" : true
-   }'
-
-**Request Body Parameters:**
-
-.. list-table::
-   :widths: 20 20 20 40
-   :header-rows: 1
-
-   * - Parameter
-     - Type
-     - Required
-     - Description
-   * - loadModelType
-     - Boolean
-     - yes
-     - Specifies if default model types should be loaded
-   * - loadResourceDictionary
-     - Boolean
-     - Yes
-     - Specifies if default data dictionaries should be loaded
-   * - loadCBA
-     - Boolean
-     - Yes
-     - Specifies if default CBAs should be loaded
-
-Success Response
-......................
-
-HTTP Status 202 OK
-
-
-Consumes
-............
-
-``application/json``
-
-
-Functional Description
-..............................
-
-Before starting to work with CDS, bootstrap should be called to load all the basic models that each orginization might support.
-Parameter values can be set as `false`  to skip loading e.g. the Resource Dictioniaries but this is not recommended.
-The loaded CBAs are already enriched, that's why CBAs can be loaded even without Data Dictionaries or Model Types. If
-validation of a CBA fails the CBA is skipped and the call is still executed successfully. You can find the error logs e.g.
-in the console of an IDE.
-
-
-Technical Description
-...........................
-
-All Model Types which are loaded by bootstrap are in folder `/components/model-catalog/definition-type/starter-type`,
-all Resource Dictionaries in `components/model-catalog/resource-dictionary/starter-dictionary`, all CBAs in
-`model-catalog/blueprint-model/service-blueprint`.
-
-**Called class/method:** ``org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BlueprintModelController#bootstrap``.
-
-Related topics
-..................
-
-.. toctree::
-   :maxdepth: 1
-
-   ../modelingconcepts/cba
-   ../modelingconcepts/data-dictionary
-   ../modelingconcepts/data-type
-
-
-List all blueprint models
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-GET ``/blueprint-model``
-..............................
-
-Lists all blueprint models which are saved in CDS.
-
-Request
-...........
-
-.. code-block:: curl
-   :caption: **request**
-
-   curl --location --request GET 'http://{{ip_adress}}:{{port}}/api/v1/blueprint-model' \
-   --header 'Authorization: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=='
-
-Produces
-...........
-
-``application/json``
-
-
-Success Response
-......................
-
-HTTP Status 200 OK
-
-.. code-block:: json
-   :caption: **example response**
-
-   [
-    {
-        "blueprintModel": {
-            "id": "109e725d-5145-4f70-a2e7-ee6640e2fb5f",
-            "artifactUUId": null,
-            "artifactType": "SDNC_MODEL",
-            "artifactVersion": "1.0.0",
-            "artifactDescription": "",
-            "internalVersion": null,
-            "createdDate": "2020-11-09T19:00:20.000Z",
-            "artifactName": "vLB_CDS_RESTCONF",
-            "published": "Y",
-            "updatedBy": "DanielEmmarts>",
-            "tags": "vLB-CDS"
-        }
-    },
-    {
-        "blueprintModel": {
-            "id": "5cce3804-09eb-473d-b513-81f8547a7240",
-            "artifactUUId": null,
-            "artifactType": "SDNC_MODEL",
-            "artifactVersion": "1.0.0",
-            "artifactDescription": "",
-            "internalVersion": null,
-            "createdDate": "2020-11-09T19:00:20.000Z",
-            "artifactName": "vLB_CDS",
-            "published": "Y",
-            "updatedBy": "TomKennedy>",
-            "tags": "vLB_CDS"
-        }
-    }
-   ]
-
-Technical Description
-...........................
-
-Loads all Blueprint Models which are saved in the CDS database in table `BLUEPRINT_MODEL`. Unpublished and unproceeded
-Blueprint Models are also included.
-**Called class/method:** ``org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BlueprintModelController#allBlueprintModel()``.
+.. swaggerv2doc:: media/cds-bp-processor-api-swagger.json

@@ -1,185 +1,2661 @@
 {
 	"info": {
 		"_postman_id": "481808a1-8f9d-47b3-8e03-9302d22731d9",
-		"name": "Blueprints Processor API Reference Collection",
+		"name": " CDS Blueprint Processor API Reference",
+		"description": "Shows all resources and endpoints which CDS BP processor currently provides with sample requests/responses, parameter description and other information.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Get All Endpoints",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": ""
-				},
-				"description": "Lists all endpoints from blueprints processor"
-			},
-			"response": []
-		},
-		{
-			"name": "Get Blueprints",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "password",
-							"value": "ccsdkapps",
-							"type": "string"
-						},
-						{
-							"key": "username",
-							"value": "ccsdkapps",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "",
-						"value": "",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n\"loadModelType\" : true,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
-					"options": {
-						"raw": {}
-					}
-				},
-				"url": {
-					"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model",
-					"protocol": "http",
-					"host": [
-						"{{host}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"api",
-						"v1",
-						"blueprint-model"
-					]
-				}
-			},
-			"response": [
+			"name": "Blueprint Model Catalog API",
+			"item": [
 				{
-					"name": "CDS Bootstrap",
-					"originalRequest": {
+					"name": "List all Blueprint Models",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model"
+							]
+						},
+						"description": "Lists all blueprint models which are saved in CDS."
+					},
+					"response": []
+				},
+				{
+					"name": "Save a Blueprint Model",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/jakob/Downloads/cba.zip"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model"
+							]
+						},
+						"description": "Saves a blueprint model by the given file input. There is no validation of the attached CBA happening when this API is called."
+					},
+					"response": []
+				},
+				{
+					"name": "Bootstrap CDS",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"value": "application/json",
+								"disabled": true
 							},
 							{
 								"key": "",
-								"value": "",
 								"type": "text",
+								"value": "",
 								"disabled": true
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+							"raw": "{\r\n\"loadModelType\" : true,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : true\r\n}",
 							"options": {
-								"raw": {}
+								"raw": {
+									"language": "json"
+								}
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/bootstrap",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
-							"port": "8081",
+							"port": "{{port}}",
 							"path": [
 								"api",
 								"v1",
 								"blueprint-model",
 								"bootstrap"
 							]
-						}
+						},
+						"description": "Loads all Model Types, Resource Dictionaries and blueprint models which are included in CDS by default.Before starting to work with CDS, bootstrap should be called to load all the basic models that each orginization might support.Parameter values can be set as false to skip loading e.g. the Resource Dictionaries but this is not recommended."
 					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
+					"response": [
 						{
-							"key": "X-ONAP-RequestID",
-							"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
-						},
-						{
-							"key": "X-ONAP-InvocationID",
-							"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
-						},
-						{
-							"key": "X-ONAP-PartnerName",
-							"value": "cds-controller"
-						},
-						{
-							"key": "Vary",
-							"value": "Origin"
-						},
-						{
-							"key": "Vary",
-							"value": "Access-Control-Request-Method"
-						},
-						{
-							"key": "Vary",
-							"value": "Access-Control-Request-Headers"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"key": "Content-Length",
-							"value": "0"
-						},
-						{
-							"key": "Cache-Control",
-							"value": "no-cache, no-store, max-age=0, must-revalidate"
-						},
-						{
-							"key": "Pragma",
-							"value": "no-cache"
-						},
-						{
-							"key": "Expires",
-							"value": "0"
-						},
-						{
-							"key": "X-Content-Type-Options",
-							"value": "nosniff"
-						},
-						{
-							"key": "X-Frame-Options",
-							"value": "DENY"
-						},
-						{
-							"key": "X-XSS-Protection",
-							"value": "1 ; mode=block"
-						},
-						{
-							"key": "Referrer-Policy",
-							"value": "no-referrer"
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
 						}
-					],
-					"cookie": [],
-					"body": ""
+					]
+				},
+				{
+					"name": "Get a Blueprint Model by Name and Version",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {},
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"loadModelType\" : true,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/download/by-name/pnf_netconf/version/1.0.0",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"download",
+								"by-name",
+								"pnf_netconf",
+								"version",
+								"1.0.0"
+							]
+						},
+						"description": "Get Meta-Data of a Blueprint Model by its name and version."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Download a Blueprint Model by ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/download/416f241d-3ef9-4cb6-8834-956ae4f70b07",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"download",
+								"416f241d-3ef9-4cb6-8834-956ae4f70b07"
+							]
+						},
+						"description": "Gets the CBA of a blueprint model by its ID. Response can be saved to a file to download the CBA."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Enrich a Blueprint Model",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/jakob/Downloads/PNF_DEMO.zip"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/enrich",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"enrich"
+							]
+						},
+						"description": "Enriches the attached CBA and returns the enriched CBA zip file in the response.The enrichment process will complete the package by providing all the definition of types used."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Enrich and publish a Blueprint Model",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/jakob/Downloads/PNF_DEMO.zip"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/enrichandpublish",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"enrichandpublish"
+							]
+						},
+						"description": "Enriches the attached CBA, validates it and saves it in CDS if validation was successful."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Search for Blueprints by a Keyword",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/meta-data/pnf_netconf",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"meta-data",
+								"pnf_netconf"
+							]
+						},
+						"description": "Lists all blueprint models by a matching keyword in any of the meta-data of the blueprint models.Blueprint models are just returned if a whole keyword is matching, not just parts of it. Not case-sensitive.Used by CDS UI."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Delete a Blueprint Model by Name",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/name/pnf_netconf/version/1.0.0",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"name",
+								"pnf_netconf",
+								"version",
+								"1.0.0"
+							]
+						},
+						"description": "Delete a blueprint model identified by its name and version from CDS."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get Blueprints ordered",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/paged?limit=5&sort=DATE",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"paged"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "sort",
+									"value": "DATE"
+								}
+							]
+						},
+						"description": "Lists all blueprint models which are saved in CDS in an ordered mode."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Search for Blueprints by a Keyword in an ordered mode",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/paged/meta-data/test?limit=5&sort=DATE",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"paged",
+								"meta-data",
+								"test"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "sort",
+									"value": "DATE"
+								}
+							]
+						},
+						"description": "Lists all blueprint models by a matching keyword in any of the meta-data of the blueprint models in an ordered mode. Blueprint models are just returned if a whole keyword is matching, not just parts of it. Not case-sensitive. Used by CDS UI."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Publish a Blueprint Model",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/jakob/Downloads/cba.zip"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/publish",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"publish"
+							]
+						},
+						"description": "Validates the attached CBA file and saves it in CDS if validation was successful. CBA needs to be already enriched."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Search for a Blueprint by Tag",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/search/test",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"search",
+								"test"
+							]
+						},
+						"description": "Searches for all blueprint models which contain the specified input parameter in their tags. Blueprint models which contain just parts of the searched word in their tags are also returned."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get Workflow Specification",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"blueprintName\" : \"vLB_CDS_KOTLIN\",\n    \"workflowName\": \"config-assign\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/workflow-spec",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"workflow-spec"
+							]
+						},
+						"description": "Get the workflow of a blueprint identified by Blueprint and workflow name. Inputs, outputs and data types of workflow is returned."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get Workflows of a Blueprint",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/workflows/blueprint-name/vLB_CDS_KOTLIN/version/1.0.0",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"workflows",
+								"blueprint-name",
+								"vLB_CDS_KOTLIN",
+								"version",
+								"1.0.0"
+							]
+						},
+						"description": "Get all available workflows of a Blueprint by its name and version."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get a Blueprint Model by ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/416f241d-3ef9-4cb6-8834-956ae4f70b07",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"416f241d-3ef9-4cb6-8834-956ae4f70b07"
+							]
+						},
+						"description": "Get a blueprint model by its internally created ID."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Delete a Blueprint Model by its ID",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/416f241d-3ef9-4cb6-8834-956ae4f70b07",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"416f241d-3ef9-4cb6-8834-956ae4f70b07"
+							]
+						},
+						"description": "Delete a blueprint model a a given ID. ID is the internally created ID of blueprint, not the name of blueprint."
+					},
+					"response": [
+						{
+							"name": "CDS Bootstrap",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
+									"options": {
+										"raw": {}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"v1",
+										"blueprint-model",
+										"bootstrap"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-ONAP-RequestID",
+									"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+								},
+								{
+									"key": "X-ONAP-InvocationID",
+									"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+								},
+								{
+									"key": "X-ONAP-PartnerName",
+									"value": "cds-controller"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1 ; mode=block"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
 				}
-			]
+			],
+			"description": "Manages all blueprint models which are available in CDS",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "List all endpoints",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "ccsdkapps",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "ccsdkapps",
+							"type": "string"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}:{{port}}/actuator/mappings",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"actuator",
+						"mappings"
+					]
+				},
+				"description": "Lists all available endpoints from blueprints processor API."
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -206,12 +2682,12 @@
 	],
 	"variable": [
 		{
-			"id": "3d10b67b-766c-40e4-bfc4-a2b913414336",
+			"id": "86d601d8-fded-49c0-8870-545b57019003",
 			"key": "host",
 			"value": "localhost"
 		},
 		{
-			"id": "ef57cc1c-95c6-4679-8da1-42d356a060fe",
+			"id": "b53854bd-6fbb-42bb-a001-9b77a3883cf8",
 			"key": "port",
 			"value": "8081"
 		}
