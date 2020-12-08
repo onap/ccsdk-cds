@@ -334,10 +334,12 @@
                         <apiSource>
                             <springmvc>true</springmvc>
                             <locations>
-                                <location>org.onap.ccsdk.cds.blueprintsprocessor.designer.api</location>
+                                <location>org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BlueprintModelController</location>
+                                <!-- These locations are not implemented yet
                                 <location>org.onap.ccsdk.cds.blueprintsprocessor.resource.api</location>
                                 <location>org.onap.ccsdk.cds.blueprintsprocessor.configs.api</location>
                                 <location>org.onap.ccsdk.cds.blueprintsprocessor.healthapi</location>
+                                -->
                             </locations>
                             <schemes>
                                 <scheme>http</scheme>
@@ -370,7 +372,7 @@
                             </securityDefinitions>
                             <outputFormats>json,yaml</outputFormats>
                             <swaggerDirectory>${basedir}/../../../docs/api-reference/media</swaggerDirectory>
-                            <swaggerFileName>cds-bp-api-swagger</swaggerFileName>
+                            <swaggerFileName>cds-bp-processor-api-swagger</swaggerFileName>
                             <jsonExampleValues>true</jsonExampleValues>
                             <operationIdFormat>{{className}}_{{methodName}}_{{httpMethod}}.{{packageName}}</operationIdFormat>
                         </apiSource>
