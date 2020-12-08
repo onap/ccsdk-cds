@@ -1,0 +1,837 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Shows all resources and endpoints which CDS BP processor currently provides with sample requests/responses, parameter description and other information.",
+    "version" : "v1",
+    "title" : "CDS Blueprint Processor API Reference",
+    "termsOfService" : "https://www.onap.org/",
+    "contact" : {
+      "name" : "ONAP Community",
+      "url" : "https://www.onap.org/",
+      "email" : "onap-discuss@lists.onap.org"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "localhost:8080",
+  "tags" : [ {
+    "name" : "Blueprint Model Catalog API",
+    "description" : "Manages all blueprint models which are available in CDS"
+  } ],
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/api/v1/blueprint-model" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "List all Blueprint Models",
+        "description" : "Lists all meta-data of blueprint models which are saved in CDS.",
+        "operationId" : "BlueprintModelController_allBlueprintModel_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/BlueprintModelSearch"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Save a Blueprint Model",
+        "description" : "Saves a blueprint model by the given CBA zip file input. There is no validation of the attached CBA happening when this API is called.",
+        "operationId" : "BlueprintModelController_saveBlueprint_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "multipart/form-data" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "file",
+          "description" : "CBA file to be uploaded (example: cba.zip)",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/FilePart"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/bootstrap" : {
+      "post" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Bootstrap CDS",
+        "description" : "Loads all Model Types, Resource Dictionaries and Blueprint Models which are included in CDS by default. Before starting to work with CDS, bootstrap should be called to load all the basic models that each orginization might support. Parameter values can be set as `false`  to skip loading e.g. the Resource Dictionaries but this is not recommended.",
+        "operationId" : "BlueprintModelController_bootstrap_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Specifies which elements to load",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/BootstrapRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/by-name/{name}/version/{version}" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Get a Blueprint Model by Name and Version",
+        "description" : "Get Meta-Data of a Blueprint Model by its name and version.",
+        "operationId" : "BlueprintModelController_getBlueprintByNameAndVersion_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "description" : "Name of the blueprint model",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "pnf_netconf"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "description" : "Version of the blueprint model",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "1.0.0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/download/by-name/{name}/version/{version}" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Download a Blueprint Model",
+        "description" : "Gets the CBA of a blueprint model by its name and version. Response can be saved to a file to download the CBA.",
+        "operationId" : "BlueprintModelController_downloadBlueprintByNameAndVersion_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "description" : "Name of the blueprint model",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "pnf_netconf"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "description" : "Version of the blueprint model",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "1.0.0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/download/{id}" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Download a Blueprint Model by ID",
+        "description" : "Gets the CBA of a blueprint model by its ID. Response can be saved to a file to download the CBA.",
+        "operationId" : "BlueprintModelController_downloadBluePrint_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID of the blueprint model to download",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "67ec1f96-ab55-4b81-aff9-23ee0ed1d7a4"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/enrich" : {
+      "post" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Enrich a Blueprint Model",
+        "description" : "Enriches the attached CBA and returns the enriched CBA zip file in the response. The enrichment process will complete the package by providing all the definition of types used.",
+        "operationId" : "BlueprintModelController_enrichBlueprint_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "multipart/form-data" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "file",
+          "description" : "CBA zip file to be uploaded (example: cba_unenriched.zip)",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/FilePart"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/enrichandpublish" : {
+      "post" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Enrich and publish a Blueprint Model",
+        "description" : "Enriches the attached CBA, validates it and saves it in CDS if validation was successful.",
+        "operationId" : "BlueprintModelController_enrichAndPubishlueprint_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "multipart/form-data" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "file",
+          "description" : "Unenriched CBA zip file to be uploaded (example: cba_unenriched.zip)",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/FilePart"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "503" : {
+            "description" : "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/meta-data/{keyword}" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Search for Blueprints by a Keyword",
+        "description" : "Lists all blueprint models by a matching keyword in any of the meta-data of the blueprint models. Blueprint models are just returned if a whole keyword is matching, not just parts of it. Not case-sensitive. Used by CDS UI.",
+        "operationId" : "BlueprintModelController_allBlueprintModelMetaData_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "keyword",
+          "in" : "path",
+          "description" : "Keyword to search for in blueprint model meta-data",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "pnf_netconf"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/name/{name}/version/{version}" : {
+      "delete" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Delete a Blueprint Model by Name",
+        "description" : "Deletes a blueprint model identified by its name and version from CDS.",
+        "operationId" : "BlueprintModelController_deleteBlueprintByName_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "description" : "Name of the blueprint model",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "pnf_netconf"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "description" : "Version of the blueprint model",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "1.0.0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/paged" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Get Blueprints ordered",
+        "description" : "Lists all blueprint models which are saved in CDS in an ordered mode.",
+        "operationId" : "BlueprintModelController_allBlueprintModelPaged_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Maximum number of returned blueprint models",
+          "required" : false,
+          "type" : "integer",
+          "default" : 20,
+          "format" : "int32"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "Offset",
+          "required" : false,
+          "type" : "integer",
+          "default" : 0,
+          "format" : "int32"
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "Order of returned blueprint models",
+          "required" : false,
+          "type" : "string",
+          "default" : "DATE",
+          "enum" : [ "DATE", "NAME", "VERSION" ]
+        }, {
+          "name" : "sortType",
+          "in" : "query",
+          "description" : "Ascend or descend ordering",
+          "required" : false,
+          "type" : "string",
+          "default" : "ASC"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/PageBlueprintModelSearch"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/paged/meta-data/{keyword}" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Search for Blueprints by a Keyword in an ordered mode",
+        "description" : "Lists all blueprint models by a matching keyword in any of the meta-data of the blueprint models in an ordered mode. Blueprint models are just returned if a whole keyword is matching, not just parts of it. Not case-sensitive. Used by CDS UI.",
+        "operationId" : "BlueprintModelController_allBlueprintModelMetaDataPaged_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "keyword",
+          "in" : "path",
+          "description" : "Keyword to search for in blueprint model meta-data",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "pnf_netconf"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Maximum number of returned blueprint models",
+          "required" : false,
+          "type" : "integer",
+          "default" : 20,
+          "format" : "int32"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "Offset",
+          "required" : false,
+          "type" : "integer",
+          "default" : 0,
+          "format" : "int32"
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "Order of returned blueprint models",
+          "required" : false,
+          "type" : "string",
+          "default" : "DATE",
+          "enum" : [ "DATE", "NAME", "VERSION" ]
+        }, {
+          "name" : "sortType",
+          "in" : "query",
+          "description" : "Ascend or descend ordering",
+          "required" : false,
+          "type" : "string",
+          "default" : "ASC"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/PageBlueprintModelSearch"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/publish" : {
+      "post" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Publish a Blueprint Model",
+        "description" : "Validates the attached CBA file and saves it in CDS if validation was successful. CBA needs to be already enriched.",
+        "operationId" : "BlueprintModelController_publishBlueprint_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "multipart/form-data" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "file",
+          "description" : "Enriched CBA zip file to be uploaded (example: cba_enriched.zip)",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/FilePart"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/search/{tags}" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Search for a Blueprint by Tag",
+        "description" : "Searches for all blueprint models which contain the specified input parameter in their tags. Blueprint models which contain just parts of the searched word in their tags are also returned.",
+        "operationId" : "BlueprintModelController_searchBlueprintModels_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "tags",
+          "in" : "path",
+          "description" : "Tag to search for",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "test"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/workflow-spec" : {
+      "post" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Get Workflow Specification",
+        "description" : "Get the workflow of a blueprint identified by Blueprint and workflow name. Inputs, outputs and data types of workflow is returned.",
+        "operationId" : "BlueprintModelController_workflowSpec_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/WorkFlowSpecRequest"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/workflows/blueprint-name/{name}/version/{version}" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Get Workflows of a Blueprint",
+        "description" : "Get all available workflows of a Blueprint identified by its name and version.",
+        "operationId" : "BlueprintModelController_getWorkflowList_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "description" : "Name of the blueprint model",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "pnf_netconf"
+        }, {
+          "name" : "version",
+          "in" : "path",
+          "description" : "Version of the blueprint model",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "1.0.0"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprint-model/{id}" : {
+      "get" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Get a Blueprint Model by ID",
+        "description" : "Get meta-data of a blueprint model by its internally created ID.",
+        "operationId" : "BlueprintModelController_getBlueprintModel_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID of the blueprint model to search for",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "67ec1f96-ab55-4b81-aff9-23ee0ed1d7a4"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "404" : {
+            "description" : "Not Found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Blueprint Model Catalog API" ],
+        "summary" : "Delete a Blueprint Model by ID",
+        "description" : "Delete a blueprint model by its ID. ID is the internally created ID of blueprint, not the name of blueprint.",
+        "operationId" : "BlueprintModelController_deleteBlueprint_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID of the blueprint model to delete",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "67ec1f96-ab55-4b81-aff9-23ee0ed1d7a4"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "object"
+            }
+          },
+          "404" : {
+            "description" : "RESOURCE_NOT_FOUND"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions" : {
+    "Basic Auth" : {
+      "type" : "basic"
+    }
+  },
+  "definitions" : {
+    "BlueprintModelSearch" : {
+      "type" : "object",
+      "required" : [ "artifactName", "artifactVersion", "createdDate", "id", "published", "tags", "updatedBy" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "658f9a48-7f54-41ba-ae18-c69f26f3dc94",
+          "description" : "ID of Blueprint model, is automatically created by CDS"
+        },
+        "artifactUUId" : {
+          "type" : "string",
+          "example" : null,
+          "description" : "Artifact UUID, usually null"
+        },
+        "artifactType" : {
+          "type" : "string",
+          "example" : "SDNC_MODEL",
+          "description" : "Artifact Type, usually null"
+        },
+        "artifactVersion" : {
+          "type" : "string",
+          "example" : "1.0.0",
+          "description" : "Artifact Version, usually 1.0.0"
+        },
+        "artifactDescription" : {
+          "type" : "string",
+          "example" : "",
+          "description" : "Artifact Description, usually empty"
+        },
+        "internalVersion" : {
+          "type" : "integer",
+          "format" : "int32",
+          "example" : null,
+          "description" : "Internal Version of CBA, usually null"
+        },
+        "createdDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : "2020-11-19T10:34:56.000Z",
+          "description" : "Datetime of the creation of CBA in CDS"
+        },
+        "artifactName" : {
+          "type" : "string",
+          "example" : "pnf_netconf",
+          "description" : "Artifact Name, defined in Metadata"
+        },
+        "published" : {
+          "type" : "string",
+          "example" : "pnf_netconf",
+          "description" : "Artifact Name, defined in Metadata"
+        },
+        "updatedBy" : {
+          "type" : "string",
+          "example" : "Deutsche Telekom AG",
+          "description" : "Name of publisher, defined in Metadata"
+        },
+        "tags" : {
+          "type" : "string",
+          "example" : "test",
+          "description" : "Tags to identify the CBA, defined in Metadata"
+        }
+      }
+    },
+    "BootstrapRequest" : {
+      "type" : "object",
+      "required" : [ "loadCBA", "loadModelType", "loadResourceDictionary" ],
+      "properties" : {
+        "loadModelType" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "Specifies if default model types should be loaded"
+        },
+        "loadResourceDictionary" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "Specifies if default data dictionaries should be loaded"
+        },
+        "loadCBA" : {
+          "type" : "boolean",
+          "example" : true,
+          "description" : "Specifies if default blueprint models should be loaded"
+        }
+      }
+    },
+    "FilePart" : {
+      "type" : "object"
+    },
+    "Page" : {
+      "type" : "object",
+      "properties" : {
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "size" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "content" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object"
+          }
+        },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
+        "last" : {
+          "type" : "boolean"
+        },
+        "numberOfElements" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageable" : {
+          "$ref" : "#/definitions/Pageable"
+        },
+        "first" : {
+          "type" : "boolean"
+        },
+        "empty" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "PageBlueprintModelSearch" : {
+      "type" : "object",
+      "properties" : {
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "size" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "content" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/BlueprintModelSearch"
+          }
+        },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
+        "last" : {
+          "type" : "boolean"
+        },
+        "numberOfElements" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageable" : {
+          "$ref" : "#/definitions/Pageable"
+        },
+        "first" : {
+          "type" : "boolean"
+        },
+        "empty" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "Pageable" : {
+      "type" : "object",
+      "properties" : {
+        "offset" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
+        "paged" : {
+          "type" : "boolean"
+        },
+        "unpaged" : {
+          "type" : "boolean"
+        },
+        "pageNumber" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "format" : "int32"
+        }
+      }
+    },
+    "Sort" : {
+      "type" : "object",
+      "properties" : {
+        "unsorted" : {
+          "type" : "boolean"
+        },
+        "sorted" : {
+          "type" : "boolean"
+        },
+        "empty" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "WorkFlowSpecRequest" : {
+      "type" : "object",
+      "required" : [ "blueprintName", "workflowName" ],
+      "properties" : {
+        "blueprintName" : {
+          "type" : "string",
+          "example" : "pnf_netconf",
+          "description" : "Name of the BLueprint"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "returnContent" : {
+          "type" : "string"
+        },
+        "workflowName" : {
+          "type" : "string",
+          "example" : "config-assign",
+          "description" : "Name of the Workflow"
+        },
+        "specType" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}

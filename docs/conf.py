@@ -7,7 +7,7 @@ linkcheck_ignore = [
     'http://localhost',
 ]
 
-extensions = ['sphinx_tabs.tabs']
+extensions = ['sphinx_tabs.tabs', 'sphinxcontrib.swaggerdoc']
 
 intersphinx_mapping = {}
 
