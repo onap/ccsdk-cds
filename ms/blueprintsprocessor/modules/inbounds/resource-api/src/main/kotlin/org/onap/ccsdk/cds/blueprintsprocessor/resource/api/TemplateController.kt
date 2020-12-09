@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/template")
 @Api(
-    value = "/api/v1/template",
+    value = "Resource template",
     description = "Interaction with resolved template."
 )
 open class TemplateController(private val templateResolutionService: TemplateResolutionService) {
@@ -146,8 +146,7 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         value = "Store a resolved template w/ resolution-key",
         notes = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
             "artifact name and resolution key.",
-        response = TemplateResolution::class,
-        produces = MediaType.APPLICATION_JSON_VALUE
+        response = TemplateResolution::class
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -178,8 +177,7 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         value = "Store a resolved template w/ resourceId and resourceType",
         notes = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
             "artifact name, resourceId and resourceType.",
-        response = TemplateResolution::class,
-        produces = MediaType.APPLICATION_JSON_VALUE
+        response = TemplateResolution::class
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")

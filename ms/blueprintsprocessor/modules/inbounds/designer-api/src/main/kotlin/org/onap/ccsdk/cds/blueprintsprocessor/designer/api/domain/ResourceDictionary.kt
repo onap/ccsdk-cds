@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.springframework.data.annotation.LastModifiedDate
@@ -40,40 +41,42 @@ import javax.persistence.TemporalType
  * @version 1.0
  */
 @EntityListeners(AuditingEntityListener::class)
+@ApiModel
 @Entity
 @Table(name = "RESOURCE_DICTIONARY")
 class ResourceDictionary : Serializable {
 
     @Id
     @Column(name = "name", nullable = false)
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "Name", required = true, example = "\"sample-db-source\"")
     lateinit var name: String
 
     @Column(name = "data_type", nullable = false)
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "Data type", required = true, example = "\"string\"")
     lateinit var dataType: String
 
     @Column(name = "entry_schema")
+    @ApiModelProperty(value = "Entry schema", required = true, example = "\"dt-license-key\"")
     var entrySchema: String? = null
 
     @Column(name = "resource_dictionary_group")
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "Resource dictionary group", required = true, example = "\"default\"")
     var resourceDictionaryGroup: String? = null
 
     @Lob
     @Convert(converter = JpaResourceDefinitionConverter::class)
     @Column(name = "definition", nullable = false)
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "Definition", required = true)
     lateinit var definition: ResourceDefinition
 
     @Lob
     @Column(name = "description", nullable = false)
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "Description", required = true, example = "\"demo_artifacts_version\"")
     lateinit var description: String
 
     @Lob
     @Column(name = "tags", nullable = false)
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "Tags", required = true, example = "\"hostname\"")
     lateinit var tags: String
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -83,7 +86,7 @@ class ResourceDictionary : Serializable {
     var creationDate: Date? = null
 
     @Column(name = "updated_by", nullable = false)
-    @ApiModelProperty(required = true)
+    @ApiModelProperty(value = "Updated by", required = true, example = "\"username\"")
     lateinit var updatedBy: String
 
     override fun toString(): String {
