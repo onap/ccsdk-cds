@@ -115,11 +115,11 @@ export class ImportPackageComponent implements OnInit {
             this.zipFile.generateAsync({type: 'blob'}).then(blob => {
                 this.packageCreationService.savePackage(blob).subscribe(
                     bluePrintDetailModels => {
-                        this.toastService.info('package is imported and saved successfully ');
+                        this.toastService.info('Package is imported and saved successfully ');
                         this.router.navigate(['/packages']);
                         this.packagesStore.getAll();
                     }, error =>
-                        this.toastService.error('there is an error happened ' + error));
+                        this.toastService.error('Errot occured ' + error));
             });
         });
     }
@@ -134,11 +134,11 @@ export class ImportPackageComponent implements OnInit {
             this.zipFile.generateAsync({type: 'blob'}).then(blob => {
                 this.packageCreationService.deploy(blob).subscribe(
                     bluePrintDetailModels => {
-                        this.toastService.info('package is imported and deployed successfully ');
+                        this.toastService.info('Package is imported and deployed successfully ');
                         this.router.navigate(['/packages']);
                         this.packagesStore.getAll();
                     }, error =>
-                        this.toastService.error('there is an error happened ' + error));
+                        this.toastService.error('Errot occured ' + error));
             });
         });
     }
