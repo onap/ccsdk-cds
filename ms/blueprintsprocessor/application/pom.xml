@@ -370,7 +370,7 @@
                                     <type>basic</type>
                                 </securityDefinition>
                             </securityDefinitions>
-                            <outputFormats>json,yaml</outputFormats>
+                            <outputFormats>json</outputFormats>
                             <swaggerDirectory>${basedir}/../../../docs/api-reference/media</swaggerDirectory>
                             <swaggerFileName>cds-bp-processor-api-swagger</swaggerFileName>
                             <jsonExampleValues>true</jsonExampleValues>
