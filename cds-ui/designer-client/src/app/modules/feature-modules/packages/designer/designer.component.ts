@@ -506,7 +506,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
                     this.ngxService.stop();
                 });
             }, error => {
-                this.toastService.error(error.mesasge, 'error happened ');
+                this.toastService.error(error.mesasge, 'Error occurs during enrichment process');
                 console.error('Error -' + error.message);
             }, () => {
                 this.ngxService.stop();

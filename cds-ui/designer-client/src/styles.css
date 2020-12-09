@@ -147,6 +147,11 @@ button:focus{
   vertical-align: middle;
 }
 /*Components*/
+.copyright{
+  font-size: 10px;
+  color: #a6b2c3;
+  padding-bottom: 14px;
+}
 /* Menu Styles */
 .primary-nav{
   /* left: 0; */
@@ -178,6 +183,14 @@ button:focus{
   top: 0;
   z-index: 1000;
   cursor: pointer;
+}
+.app_version{
+  color: #1B3E6F;
+  position: absolute;
+  top: 46px;
+  z-index: 100000;
+  font-size: 8px;
+  left: 14px;
 }
 .primary-nav .menu li{
   position: relative;
@@ -1233,6 +1246,9 @@ height: 40px;
   color: #1B3E6F;
   font-weight: bold;
   border-radius: 4px;
+}
+.fillteredTags:empty{
+  visibility: hidden;
 }
 /**Packages Sort**/
 .sort-packages{

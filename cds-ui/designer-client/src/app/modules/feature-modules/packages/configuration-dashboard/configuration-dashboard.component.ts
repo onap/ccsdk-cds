@@ -263,14 +263,14 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     this.packageCreationStore.clear();
                     this.packageCreationExtractionService.extractBlobToStore(this.currentBlob);
                     this.isSaveEnabled = true;
-                    this.toastService.info('enriched successfully ');
+                    this.toastService.success('Enriched done successfully');
                 }, err => {
                     this.handleError(err);
                 }, () => {
                     this.ngxService.stop();
                 });
             }, error => {
-                this.toastService.error('error happened when enrich ' + error.message);
+                this.toastService.error('Error occurs during enrichment process' + error.message);
                 console.error('Error -' + error.message);
             }, () => {
                 this.ngxService.stop();

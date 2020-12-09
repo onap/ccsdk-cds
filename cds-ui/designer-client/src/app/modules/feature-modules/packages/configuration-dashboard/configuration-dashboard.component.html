@@ -79,8 +79,6 @@
                 </div>
             </div>
         </header>
-
-
         <div class="container-fluid body-container">
             <ngx-ui-loader></ngx-ui-loader> 
             <div class="container">
@@ -796,6 +794,7 @@
             </div>
         </div>
     </div>
+    <div class="copyright text-center w-100 m-auto">Copyright &#64;2020 CDS Designer UI - v1.0.0</div>
 </div>
 
 <!-- Enrich Modal -->
@@ -818,7 +817,7 @@
                 <ace-editor [(text)]="this.vlbDefinition.topology_template.content" [mode]="'json'"
                             [autoUpdateContent]="true" [durationBeforeCallback]="1000" [theme]="'eclipse'"
                             (textChanged)="textChanged($event)"
-                            #editor style="height:300px;">
+                            #editor style="height:250px;">
                 </ace-editor>
             </div>
             <div class="modal-footer">

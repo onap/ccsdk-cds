@@ -445,7 +445,7 @@ p.compType-4{
 } */
 .functionsList .joint-paper{
   width: 100% !important;
-  height: 72vh !important;
+  height: 100% !important; /*72vh*/
   margin: 0 !important;
 }
 .actionBtns .btn{
@@ -1300,7 +1300,8 @@ ul.editor{
   border: 0;
 }
 .container{
-  min-height: 66px;
+  min-height: 33px;
+  margin-bottom: 15px;
   border-bottom: solid 1px #EFEFF4;
   line-height: 24px;
 }
