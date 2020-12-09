@@ -91,7 +91,9 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ApiOperation(
         value = "Save a Blueprint Model",
-        notes = "Saves a blueprint model by the given CBA zip file input. There is no validation of the attached CBA happening when this API is called."
+        notes = "Saves a blueprint model by the given CBA zip file input. " +
+            "There is no validation of the attached CBA happening when this API is called.",
+        response = BlueprintModelSearch::class
     )
     @ApiResponses(
         ApiResponse(code = 200, message = "OK"),
@@ -148,7 +150,9 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         value = "Search for Blueprints by a Keyword",
         notes = "Lists all blueprint models by a matching keyword in any of the meta-data of the blueprint models. " +
             "Blueprint models are just returned if a whole keyword is matching, not just parts of it. Not case-sensitive. " +
-            "Used by CDS UI."
+            "Used by CDS UI.",
+        responseContainer = "List",
+        response = BlueprintModelSearch::class
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -206,7 +210,8 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @GetMapping("/by-name/{name}/version/{version}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(
         value = "Get a Blueprint Model by Name and Version",
-        notes = "Get Meta-Data of a Blueprint Model by its name and version."
+        notes = "Get Meta-Data of a Blueprint Model by its name and version.",
+        response = BlueprintModelSearch::class
     )
     @ApiResponses(
         ApiResponse(code = 200, message = "OK"),
@@ -249,7 +254,8 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(
         value = "Get a Blueprint Model by ID",
-        notes = "Get meta-data of a blueprint model by its internally created ID."
+        notes = "Get meta-data of a blueprint model by its internally created ID.",
+        response = BlueprintModelSearch::class
     )
     @ApiResponses(
         ApiResponse(code = 200, message = "OK"),
@@ -316,7 +322,8 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     )
     @ApiOperation(
         value = "Enrich and publish a Blueprint Model",
-        notes = "Enriches the attached CBA, validates it and saves it in CDS if validation was successful."
+        notes = "Enriches the attached CBA, validates it and saves it in CDS if validation was successful.",
+        response = BlueprintModelSearch::class
     )
     @ApiResponses(
         ApiResponse(code = 200, message = "OK"),
@@ -335,7 +342,8 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @PostMapping("/publish", produces = [MediaType.APPLICATION_JSON_VALUE], consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @ApiOperation(
         value = "Publish a Blueprint Model",
-        notes = "Validates the attached CBA file and saves it in CDS if validation was successful. CBA needs to be already enriched."
+        notes = "Validates the attached CBA file and saves it in CDS if validation was successful. CBA needs to be already enriched.",
+        response = BlueprintModelSearch::class
     )
     @ResponseBody
     @Throws(BluePrintException::class)
@@ -351,7 +359,9 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ApiOperation(
         value = "Search for a Blueprint by Tag",
         notes = "Searches for all blueprint models which contain the specified input parameter in their tags. " +
-            "Blueprint models which contain just parts of the searched word in their tags are also returned."
+            "Blueprint models which contain just parts of the searched word in their tags are also returned.",
+        responseContainer = "List",
+        response = BlueprintModelSearch::class
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
@@ -397,7 +407,10 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
     @ResponseBody
     @Throws(BluePrintException::class)
     @PreAuthorize("hasRole('USER')")
-    suspend fun workflowSpec(@RequestBody workFlowSpecReq: WorkFlowSpecRequest):
+    suspend fun workflowSpec(
+        @ApiParam(required = true, value = "Blueprint and workflow identification")
+        @RequestBody workFlowSpecReq: WorkFlowSpecRequest
+    ):
         ResponseEntity<String> = mdcWebCoroutineScope {
             var json = bluePrintModelHandler.prepareWorkFlowSpec(workFlowSpecReq)
                 .asJsonString()
