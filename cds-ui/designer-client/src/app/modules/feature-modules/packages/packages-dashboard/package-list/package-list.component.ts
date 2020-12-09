@@ -64,11 +64,11 @@ export class PackageListComponent implements OnInit {
 
     deletePackage(id: string) {
         this.configurationDashboardService.deletePackage(id).subscribe(res => {
-            this.toastService.info('package deleted successfully ');
+            this.toastService.success('Package Deleted Successfully ');
             this.router.navigate(['/packages']);
             this.packagesStore.getAll();
         }, err => {
-            this.toastService.error('error deleting package' + err.message);
+            this.toastService.error('Error Deleting Package' + err.message);
         });
 
     }

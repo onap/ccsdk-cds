@@ -206,6 +206,7 @@
             </div>
         </div>
     </div>
+    <br/>
     <button class="btn btn-select-template m-auto" (click)="saveFunctionData()">Save</button>
 </div>
 
@@ -222,20 +223,21 @@
                 </button>
             </div>
             <div class="modal-body createAttributeTabs">
-                <div class="col-4" *ngFor="let file of  getKeys(templateAndMappingMap)">
+                <div class="row">
+                <div class="col-6" *ngFor="let file of  getKeys(templateAndMappingMap)">
                     <a class="template-mapping-list float" [ngClass]="{'active':selectedTemplates.has(file)}">
                         <p (click)="setTemplate(file)">{{file}}</p>
                         <span *ngIf="getValue(file,templateAndMappingMap).isMapping">Mapping</span>
                         <span *ngIf="getValue(file,templateAndMappingMap).isTemplate">Template</span>
                     </a>
-
+                </div>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addTemplates()">Add
-                    Templates</button>
+                    Template</button>
             </div>
         </div>
     </div>
