@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/resources")
 @Api(
-    value = "/api/v1/resources",
+    value = "Resources",
     description = "Interaction with resolved resources."
 )
 open class ResourceController(private var resourceResolutionDBService: ResourceResolutionDBService) {
@@ -116,8 +116,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
     )
     @ApiOperation(
         value = "Delete resources using resolution key",
-        notes = "Delete all the resources associated to a resolution-key using blueprint metadata, artifact name and the resolution-key.",
-        produces = MediaType.APPLICATION_JSON_VALUE
+        notes = "Delete all the resources associated to a resolution-key using blueprint metadata, artifact name and the resolution-key."
     )
     @PreAuthorize("hasRole('USER')")
     fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
@@ -148,8 +147,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
     )
     @ApiOperation(
         value = "Fetch a resource value using resolution key.",
-        notes = "Retrieve a stored resource value using the blueprint metadata, artifact name, resolution-key along with the name of the resource value to retrieve.",
-        produces = MediaType.APPLICATION_JSON_VALUE
+        notes = "Retrieve a stored resource value using the blueprint metadata, artifact name, resolution-key along with the name of the resource value to retrieve."
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
