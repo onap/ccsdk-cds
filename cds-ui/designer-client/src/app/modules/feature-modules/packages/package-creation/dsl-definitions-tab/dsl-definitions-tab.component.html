@@ -1,10 +1,10 @@
 <ul class="defintionsNote">
-    <li><b>To add new property: </b></li>
+    <li><b>To add new dsl_definitions: </b></li>
     <li>1. Use Copy and paste option or</li>
-    <li>2. Write them manually </li>
+    <li>2. Write them manually in the editor below</li>
 </ul>
 <ace-editor [(text)]="dslDefinition.content" [mode]="'javascript'" [autoUpdateContent]="true"
-    [durationBeforeCallback]="1000" (textChanged)="textChanged($event)" [theme]="'eclipse'" #editor style="height:300px;">
+    [durationBeforeCallback]="1000" (textChanged)="textChanged($event)" [theme]="'eclipse'" #editor style="height:340px;">
 </ace-editor>
 
 <!-- <app-source-editor [lang]="'javascript'" (textChanged)="textChanged($event)" [(text)]="dslDefinition.content"></app-source-editor> -->

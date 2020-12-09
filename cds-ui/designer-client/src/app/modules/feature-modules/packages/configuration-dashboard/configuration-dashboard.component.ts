@@ -169,13 +169,13 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     bluePrintDetailModels => {
                         if (bluePrintDetailModels) {
                             const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
-                            this.toastService.info('package updated successfully ');
+                            this.toastService.info('Package Updated Successfully ');
                             this.isSaveEnabled = false;
                             this.router.navigate(['/packages/package/' + id]);
                             this.refreshCurrentPackage(id);
                         }
                     }, error => {
-                        this.toastService.error('error happened when editing ' + error.message);
+                        this.toastService.error('Error occured when editing ' + error.message);
                         console.log('Error -' + error.message);
                     }, () => {
                         this.ngxService.stop();
@@ -268,14 +268,14 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     this.packageCreationStore.clear();
                     this.packageCreationExtractionService.extractBlobToStore(this.currentBlob);
                     this.isSaveEnabled = true;
-                    this.toastService.info('enriched successfully ');
+                    this.toastService.success('Enriched Done Successfully');
                 }, err => {
                     this.handleError(err);
                 }, () => {
                     this.ngxService.stop();
                 });
             }, error => {
-                this.toastService.error('error happened when enrich ' + error.message);
+                this.toastService.error('Error occured during enrichment process' + error.message);
                 console.error('Error -' + error.message);
             }, () => {
                 this.ngxService.stop();
@@ -287,7 +287,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
                 this.packageCreationService.deploy(blob).subscribe(response => {
-                    this.toastService.info('deployed successfully ');
+                    this.toastService.info('Package Deployed Successfully ');
                     const id = response.toString().split('id')[1].split(':')[1].split('"')[1];
                     this.isSaveEnabled = false;
                     this.router.navigate(['/packages/package/' + id]);
@@ -335,10 +335,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
             // server-side error
             errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
         }
-        this.toastService.error('error happened when deploying ' + errorMessage);
+        this.toastService.error('Error occured when deploying ' + errorMessage);
         console.log('Error -' + errorMessage);
         this.ngxService.stop();
-        this.toastService.error('error happened when deploying' + error.message);
+        this.toastService.error('Error occured when deploying' + error.message);
         return throwError(errorMessage);
     }
 }
