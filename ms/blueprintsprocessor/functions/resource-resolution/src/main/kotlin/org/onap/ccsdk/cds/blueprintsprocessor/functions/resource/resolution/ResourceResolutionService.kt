@@ -150,8 +150,11 @@ open class ResourceResolutionServiceImpl(
 
             val failedResolution = resourceAssignmentList.filter { it.status != "success" && it.property?.required == true }.map { it.name }
             if (failedResolution.isNotEmpty()) {
-                log.error("Failed to resolve required resources($failedResolution)")
-                bluePrintRuntimeService.setBluePrintError(resourceAssignmentRuntimeService.getBluePrintError())
+                // The following error message is returned by default to handle a scenario when
+                // error message comes empty even when resolution has actually failed.
+                // Example: input-source type resolution seems to fail with no error code.
+                bluePrintRuntimeService.getBluePrintError().errors.add("Failed to resolve required resources($failedResolution)")
+                bluePrintRuntimeService.getBluePrintError().errors.addAll(resourceAssignmentRuntimeService.getBluePrintError().errors)
             }
         }
         return ResourceResolutionResult(templateMap, assignmentMap)
