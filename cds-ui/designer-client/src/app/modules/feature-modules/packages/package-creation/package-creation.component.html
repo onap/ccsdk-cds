@@ -14,6 +14,8 @@
         <div class="col profile-help">
           <nav class="navbar navbar-expand-lg navbar-light">
             <ul class="navbar-nav ml-auto">
+              <!--Version-->
+              <div class="nav-item copyright">v1.0.0</div>
               <!--Help Menu-->
               <div class="nav-item dropdown helpMenu">
                 <input class="dropdown-toggle" type="text">
@@ -76,7 +78,7 @@
     </header>
 
     <div class="container-fluid body-container">
-      <ngx-ui-loader></ngx-ui-loader> 
+      <ngx-ui-loader></ngx-ui-loader>
       <div class="container">
         <div class="creat-action-container">
           <!--  <a class="action-button save" [hidden]="!isSaveEnabled" (click)="saveBluePrint()">
@@ -94,7 +96,8 @@
             <div class="nav nav-tabs " id="nav-tab" role="tablist">
               <a (click)="openTourGuide('metadataTab')" tourAnchor="metadataTab" class="nav-item nav-link active"
                 id="nav-metadata-tab" data-toggle="tab" href="#nav-metadata" role="tab" aria-controls="nav-metadata"
-                aria-selected="false" autofocus #nameit  (focusout)="saveMetaData()"  [classList]="metadataClasses">METADATA</a>
+                aria-selected="false" autofocus #nameit (focusout)="saveMetaData()"
+                [classList]="metadataClasses">METADATA</a>
 
 
               <a (click)="openTourGuide('tm-templateTab')" tourAnchor="tm-templateTab" class="nav-item nav-link"
