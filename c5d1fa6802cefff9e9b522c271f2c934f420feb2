@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "664db314_3d923b6f",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-12-09T05:17:01Z",
+      "side": 1,
+      "message": "These lines can be replaced with just two lines below:\n```\nbluePrintRuntimeService.getBluePrintError().errors.add(\"Failed to resolve required resources($failedResolution)\")\nbluePrintRuntimeService.getBluePrintError().errors.addAll(resourceAssignmentRuntimeService.getBluePrintError().errors)\n```",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 85
+      },
+      "revId": "c5d1fa6802cefff9e9b522c271f2c934f420feb2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
