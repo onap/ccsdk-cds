@@ -191,11 +191,11 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
     }
 
     fun addError(type: String, name: String, error: String) {
-        raRuntimeService.getBlueprintError().addError(type, name, error)
+        raRuntimeService.getBlueprintError().addError(type, name, error, getName())
     }
 
     fun addError(error: String) {
-        raRuntimeService.getBlueprintError().addError(error)
+        raRuntimeService.getBlueprintError().addError(error, getName())
     }
 
     fun isTemplateKeyValueNull(resourceAssignment: ResourceAssignment): Boolean {

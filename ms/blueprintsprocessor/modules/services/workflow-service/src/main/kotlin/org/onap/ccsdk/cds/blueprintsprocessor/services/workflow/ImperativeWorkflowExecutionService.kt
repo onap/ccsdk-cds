@@ -108,7 +108,7 @@ open class ImperativeBlueprintWorkflowService(private val nodeTemplateExecutionS
             if (exceptions.isNotEmpty()) {
                 exceptions.forEach {
                     val errorMessage = it.message ?: ""
-                    bluePrintRuntimeService.getBlueprintError().addError(errorMessage)
+                    bluePrintRuntimeService.getBlueprintError().addError(errorMessage, "workflow")
                     log.error("workflow($workflowId) exception :", it)
                 }
                 message = BlueprintConstants.STATUS_FAILURE
@@ -154,12 +154,15 @@ open class ImperativeBlueprintWorkflowService(private val nodeTemplateExecutionS
 
         /** execute node template */
         val executionServiceOutput = nodeTemplateExecutionService
-            .executeNodeTemplate(bluePrintRuntimeService, nodeTemplateName, nodeInput)
+            .executeNodeTemplate(bluePrintRuntimeService, node.id, nodeTemplateName, nodeInput)
 
-        return when (executionServiceOutput.status.message) {
-            BlueprintConstants.STATUS_FAILURE -> EdgeLabel.FAILURE
-            else -> EdgeLabel.SUCCESS
+        if (executionServiceOutput.status.message == BlueprintConstants.STATUS_FAILURE) {
+            // Clear step errors so that the workflow does not fail
+            bluePrintRuntimeService.getBlueprintError().stepErrors(node.id)?.clear()
+            return EdgeLabel.FAILURE
         }
+
+        return EdgeLabel.SUCCESS
     }
 
     override suspend fun skipNode(

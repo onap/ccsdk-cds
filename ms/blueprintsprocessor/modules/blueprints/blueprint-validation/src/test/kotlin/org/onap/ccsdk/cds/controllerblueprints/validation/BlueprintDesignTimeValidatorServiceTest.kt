@@ -63,10 +63,10 @@ class BlueprintDesignTimeValidatorServiceTest {
         workflow.steps = mutableMapOf("test" to step)
         workflowValidator.validate(bluePrintRuntime, workflowName, workflow)
 
-        assertEquals(1, bluePrintRuntime.getBlueprintError().errors.size)
+        assertEquals(1, bluePrintRuntime.getBlueprintError().allErrors().size)
         assertEquals(
             "Failed to validate Workflow(resource-assignment)'s step(test)'s definition : resource-assignment/steps/test : could't get node template for the name(TestCaseFailNoNodeTemplate)",
-            bluePrintRuntime.getBlueprintError().errors[0]
+            bluePrintRuntime.getBlueprintError().allErrors()[0]
         )
     }
 
@@ -96,12 +96,12 @@ class BlueprintDesignTimeValidatorServiceTest {
         workflow.steps = mutableMapOf("test" to step)
         workflowValidator.validate(bluePrintRuntime, workflowName, workflow)
 
-        assertEquals(1, bluePrintRuntime.getBlueprintError().errors.size)
+        assertEquals(1, bluePrintRuntime.getBlueprintError().allErrors().size)
         assertEquals(
             "Failed to validate Workflow(resource-assignment)'s step(test)'s definition : " +
                 "resource-assignment/steps/test : NodeType(TestNodeType) derived from is 'tosca.nodes.TEST', " +
                 "Expected 'tosca.nodes.Workflow' or 'tosca.nodes.Component'",
-            bluePrintRuntime.getBlueprintError().errors[0]
+            bluePrintRuntime.getBlueprintError().allErrors()[0]
         )
     }
 

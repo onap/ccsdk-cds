@@ -65,7 +65,8 @@ interface ResourceResolutionService {
         bluePrintRuntimeService: BlueprintRuntimeService<*>,
         nodeTemplateName: String,
         artifactNames: List<String>,
-        properties: Map<String, Any>
+        properties: Map<String, Any>,
+        stepName: String
     ): ResourceResolutionResult
 
     suspend fun resolveResources(
@@ -128,7 +129,8 @@ open class ResourceResolutionServiceImpl(
         bluePrintRuntimeService: BlueprintRuntimeService<*>,
         nodeTemplateName: String,
         artifactNames: List<String>,
-        properties: Map<String, Any>
+        properties: Map<String, Any>,
+        stepName: String
     ): ResourceResolutionResult {
 
         val resourceAssignmentRuntimeService =
@@ -150,11 +152,10 @@ open class ResourceResolutionServiceImpl(
 
             val failedResolution = resourceAssignmentList.filter { it.status != "success" && it.property?.required == true }.map { it.name }
             if (failedResolution.isNotEmpty()) {
-                // The following error message is returned by default to handle a scenario when
-                // error message comes empty even when resolution has actually failed.
-                // Example: input-source type resolution seems to fail with no error code.
-                bluePrintRuntimeService.getBlueprintError().errors.add("Failed to resolve required resources($failedResolution)")
-                bluePrintRuntimeService.getBlueprintError().errors.addAll(resourceAssignmentRuntimeService.getBlueprintError().errors)
+                val errorMessages = mutableListOf("Failed to resolve required values: $failedResolution").apply {
+                    this.addAll(resourceAssignmentRuntimeService.getBlueprintError().allErrors())
+                }
+                bluePrintRuntimeService.getBlueprintError().addErrors(stepName, errorMessages)
             }
         }
         return ResourceResolutionResult(templateMap, assignmentMap)

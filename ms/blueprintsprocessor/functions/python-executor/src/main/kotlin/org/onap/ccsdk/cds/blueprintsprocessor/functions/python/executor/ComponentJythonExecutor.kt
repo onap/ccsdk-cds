@@ -56,8 +56,7 @@ open class ComponentJythonExecutor(
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBlueprintError()
-            .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
+        addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
     }
 
     private suspend fun populateJythonComponentInstance() {

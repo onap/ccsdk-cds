@@ -89,7 +89,7 @@ open class HealthCheck : AbstractScriptComponentFunction() {
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         log.info("Executing Recovery")
-        bluePrintRuntimeService.getBlueprintError().addError("${runtimeException.message}")
+        addError("${runtimeException.message}")
     }
 }
 

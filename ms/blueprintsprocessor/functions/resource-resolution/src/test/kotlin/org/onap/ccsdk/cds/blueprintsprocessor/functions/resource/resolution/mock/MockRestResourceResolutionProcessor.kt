@@ -110,7 +110,7 @@ class MockRestResourceResolutionProcessor(
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
-        raRuntimeService.getBlueprintError().addError(runtimeException.message!!)
+        addError(runtimeException.message!!)
     }
 
     private fun blueprintWebClientService(resourceAssignment: ResourceAssignment): MockBlueprintWebClientService {

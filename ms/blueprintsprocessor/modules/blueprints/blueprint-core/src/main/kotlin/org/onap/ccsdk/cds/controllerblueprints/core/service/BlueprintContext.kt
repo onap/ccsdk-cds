@@ -103,8 +103,11 @@ class BlueprintContext(val serviceTemplate: ServiceTemplate) {
 
     fun workflowInputs(workFlowName: String) = workflowByName(workFlowName).inputs
 
+    fun workflowSteps(workFlowName: String) =
+        workflowByName(workFlowName).steps ?: throw BlueprintException("could't get steps for workflow($workFlowName)")
+
     fun workflowStepByName(workFlowName: String, stepName: String): Step {
-        return workflowByName(workFlowName).steps?.get(stepName)
+        return workflowSteps(workFlowName)[stepName]
             ?: throw BlueprintException("could't get step($stepName) for workflow($workFlowName)")
     }
 
@@ -114,8 +117,9 @@ class BlueprintContext(val serviceTemplate: ServiceTemplate) {
     }
 
     fun workflowFirstStepNodeTemplate(workFlowName: String): String {
-        val firstStepName = workflowByName(workFlowName).steps?.keys?.first()
-            ?: throw BlueprintException("could't get first step for workflow($workFlowName)")
+        val firstStepName = workflowSteps(workFlowName).keys.ifEmpty {
+            throw BlueprintException("could't get first step for workflow($workFlowName)")
+        }.first()
         return workflowStepNodeTemplate(workFlowName, firstStepName)
     }
 

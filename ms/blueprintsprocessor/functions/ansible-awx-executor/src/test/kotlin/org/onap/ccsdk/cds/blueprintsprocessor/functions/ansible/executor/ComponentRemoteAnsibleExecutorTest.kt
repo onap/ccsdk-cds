@@ -112,7 +112,7 @@ class ComponentRemoteAnsibleExecutorTest {
         }
 
         // then
-        assertTrue(bluePrintRuntimeService.getBlueprintError().errors.isEmpty())
+        assertTrue(bluePrintRuntimeService.getBlueprintError().allErrors().isEmpty())
     }
 
     @Test
@@ -146,7 +146,7 @@ class ComponentRemoteAnsibleExecutorTest {
         }
 
         // then
-        val errors = bluePrintRuntimeService.getBlueprintError().errors
+        val errors = bluePrintRuntimeService.getBlueprintError().allErrors()
         assertEquals(1, errors.size)
     }
 
@@ -187,7 +187,7 @@ class ComponentRemoteAnsibleExecutorTest {
         }
 
         // then
-        val errors = bluePrintRuntimeService.getBlueprintError().errors
+        val errors = bluePrintRuntimeService.getBlueprintError().allErrors()
         assertEquals(1, errors.size)
     }
 

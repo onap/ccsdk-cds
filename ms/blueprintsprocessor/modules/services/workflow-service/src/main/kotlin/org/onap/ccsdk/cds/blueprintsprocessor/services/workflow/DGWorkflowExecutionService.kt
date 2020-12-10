@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.utils.SvcGraphUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintWorkflowExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
@@ -44,6 +45,11 @@ open class DGWorkflowExecutionService(private val blueprintSvcLogicService: Blue
 
         // Get the DG Node Template
         val nodeTemplateName = bluePrintContext.workflowFirstStepNodeTemplate(workflowName)
+
+        val stepName = bluePrintContext.workflowSteps(workflowName).keys.first()
+        executionServiceInput.stepData = StepData().apply {
+            name = stepName
+        }
 
         log.info("Executing workflow($workflowName) directed graph NodeTemplate($nodeTemplateName)")
 

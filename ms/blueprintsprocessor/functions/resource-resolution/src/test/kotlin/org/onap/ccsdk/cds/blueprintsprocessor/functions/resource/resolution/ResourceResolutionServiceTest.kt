@@ -182,7 +182,8 @@ class ResourceResolutionServiceTest {
                 bluePrintRuntimeService,
                 "resource-assignment",
                 artifactNames,
-                props
+                props,
+                "mockStep"
             )
         }.let {
             assertEquals(artifactNames.toSet(), it.templateMap.keys)
