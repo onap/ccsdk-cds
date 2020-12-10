@@ -65,7 +65,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
 
     override fun getName(): String {
-        return stepName
+        return "$stepName - $nodeTemplateName"
     }
 
     override suspend fun prepareRequestNB(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
@@ -143,8 +143,12 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
                 properties = stepOutputs
             }
             executionServiceOutput.stepData = stepOutputData
-            // Set the Default Step Status
+
             status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
+
+            bluePrintRuntimeService.getBlueprintError().stepErrors(stepName)?.let {
+                status.message = BlueprintConstants.STATUS_FAILURE
+            }
         } catch (e: Exception) {
             status.message = BlueprintConstants.STATUS_FAILURE
             status.eventType = EventType.EVENT_COMPONENT_FAILURE.name
@@ -192,11 +196,11 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     fun addError(type: String, name: String, error: String) {
-        bluePrintRuntimeService.getBlueprintError().addError(type, name, error)
+        bluePrintRuntimeService.getBlueprintError().addError(type, name, error, stepName)
     }
 
     fun addError(error: String) {
-        bluePrintRuntimeService.getBlueprintError().addError(error)
+        bluePrintRuntimeService.getBlueprintError().addError(error, stepName)
     }
 
     /**

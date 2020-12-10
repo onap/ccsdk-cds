@@ -118,7 +118,7 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
-        raRuntimeService.getBlueprintError().addError(runtimeException.message!!)
+        addError(runtimeException.message!!)
     }
 
     /** Generates aggregated request payload for Naming mS. Parses the resourceassignments of

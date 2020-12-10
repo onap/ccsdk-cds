@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation
 
+import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTypeValidatorService
@@ -57,9 +58,10 @@ open class BlueprintDesignTimeValidatorService(
         // Validate Resource Definitions
         validateResourceDefinitions(bluePrintRuntimeService)
 
-        if (bluePrintRuntimeService.getBlueprintError().errors.size > 0) {
-            throw BlueprintException("failed in blueprint validation : ${bluePrintRuntimeService.getBlueprintError().errors.joinToString("\n")}")
+        bluePrintRuntimeService.getBlueprintError().allErrors().ifNotEmpty {
+            throw BlueprintException("failed in blueprint validation : ${this.joinToString("\n")}")
         }
+
         return true
     }
 

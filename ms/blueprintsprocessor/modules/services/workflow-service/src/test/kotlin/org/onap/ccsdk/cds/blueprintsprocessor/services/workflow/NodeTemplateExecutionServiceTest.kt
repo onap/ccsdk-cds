@@ -72,10 +72,12 @@ class NodeTemplateExecutionServiceTest {
             val input = executionServiceInput.payload.get("resource-assignment-request")
             bluePrintRuntimeService.assignWorkflowInputs("resource-assignment", input)
 
+            val stepName = bluePrintRuntimeService.bluePrintContext()
+                .workflowSteps("resource-assignment").keys.first()
             val nodeTemplate = "resource-assignment"
             val nodeTemplateExecutionService = NodeTemplateExecutionService(bluePrintClusterService)
             val executionServiceOutput = nodeTemplateExecutionService
-                .executeNodeTemplate(bluePrintRuntimeService, nodeTemplate, executionServiceInput)
+                .executeNodeTemplate(bluePrintRuntimeService, stepName, nodeTemplate, executionServiceInput)
 
             assertNotNull(executionServiceOutput, "failed to get response")
             assertEquals(

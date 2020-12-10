@@ -76,7 +76,8 @@ open class BlueprintWorkflowValidatorImpl(private val bluePrintTypeValidatorServ
                         .addError(
                             "Failed to validate Workflow($workflowName)'s step($stepName)'s " +
                                 "definition",
-                            paths.joinToString(BlueprintConstants.PATH_DIVIDER), e.message!!
+                            paths.joinToString(BlueprintConstants.PATH_DIVIDER), e.message!!,
+                            "BlueprintWorkflowValidatorImpl"
                         )
                 }
             }

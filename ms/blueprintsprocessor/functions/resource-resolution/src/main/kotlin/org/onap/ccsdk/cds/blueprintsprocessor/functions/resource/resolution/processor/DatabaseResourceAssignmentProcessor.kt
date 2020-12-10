@@ -183,6 +183,6 @@ open class DatabaseResourceAssignmentProcessor(
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-        raRuntimeService.getBlueprintError().addError(runtimeException.message!!)
+        addError(runtimeException.message!!)
     }
 }

@@ -247,7 +247,7 @@ class ComponentConfigSnapshotsExecutorTest {
             }
 
             // then; we should get error in our output properties
-            assertTrue(bluePrintRuntimeService.getBlueprintError().errors.size == 1)
+            assertTrue(bluePrintRuntimeService.getBlueprintError().allErrors().size == 1)
             assertEquals(
                 ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_ERROR.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
@@ -328,7 +328,7 @@ class ComponentConfigSnapshotsExecutorTest {
             }
 
             // then; we should get success
-            assertTrue(bluePrintRuntimeService.getBlueprintError().errors.size == 0)
+            assertTrue(bluePrintRuntimeService.getBlueprintError().allErrors().size == 0)
             assertEquals(
                 ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
@@ -377,7 +377,7 @@ class ComponentConfigSnapshotsExecutorTest {
             }
 
             // then; we should get success
-            assertTrue(bluePrintRuntimeService.getBlueprintError().errors.size == 0)
+            assertTrue(bluePrintRuntimeService.getBlueprintError().allErrors().size == 0)
             assertEquals(
                 ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(

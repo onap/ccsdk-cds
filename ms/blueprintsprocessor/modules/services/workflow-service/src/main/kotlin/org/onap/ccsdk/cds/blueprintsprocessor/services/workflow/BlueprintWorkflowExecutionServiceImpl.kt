@@ -97,7 +97,7 @@ open class BlueprintWorkflowExecutionServiceImpl(
             workflowOutputs = bluePrintRuntimeService.resolveWorkflowOutputs(workflowName)
         } catch (e: RuntimeException) {
             log.error("Failed to resolve outputs for workflow: $workflowName", e)
-            e.message?.let { bluePrintRuntimeService.getBlueprintError().errors.add(it) }
+            e.message?.let { bluePrintRuntimeService.getBlueprintError().addError(it, "workflow") }
         }
 
         // Set the Response Payload

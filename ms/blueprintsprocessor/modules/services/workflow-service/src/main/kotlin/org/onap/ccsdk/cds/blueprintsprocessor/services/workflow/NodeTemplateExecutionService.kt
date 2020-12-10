@@ -37,6 +37,7 @@ open class NodeTemplateExecutionService(private val bluePrintClusterService: Blu
 
     suspend fun executeNodeTemplate(
         bluePrintRuntimeService: BlueprintRuntimeService<*>,
+        stepName: String,
         nodeTemplateName: String,
         executionServiceInput: ExecutionServiceInput
     ): ExecutionServiceOutput {
@@ -66,7 +67,8 @@ open class NodeTemplateExecutionService(private val bluePrintClusterService: Blu
         // Set the Blueprint Services
         plugin.bluePrintRuntimeService = bluePrintRuntimeService
         plugin.bluePrintClusterService = bluePrintClusterService
-        plugin.stepName = nodeTemplateName
+        plugin.stepName = stepName
+        plugin.nodeTemplateName = nodeTemplateName
 
         // Parent request shouldn't tamper, so need to clone the request and send to the actual component.
         val clonedExecutionServiceInput = ExecutionServiceInput().apply {
@@ -81,7 +83,7 @@ open class NodeTemplateExecutionService(private val bluePrintClusterService: Blu
         stepInputs[BlueprintConstants.PROPERTY_CURRENT_INTERFACE] = interfaceName.asJsonPrimitive()
         stepInputs[BlueprintConstants.PROPERTY_CURRENT_OPERATION] = operationName.asJsonPrimitive()
         val stepInputData = StepData().apply {
-            name = nodeTemplateName
+            name = stepName
             properties = stepInputs
         }
         clonedExecutionServiceInput.stepData = stepInputData

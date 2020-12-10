@@ -178,7 +178,7 @@ class BlueprintWorkflowExecutionServiceImplTest {
             val output = bluePrintWorkflowExecutionServiceImpl.executeBlueprintWorkflow(
                 bluePrintRuntimeService, executionServiceInput, mutableMapOf()
             )
-            assertEquals("failed to resolve property...", blueprintError.errors[0])
+            assertEquals("failed to resolve property...", blueprintError.allErrors()[0])
             assertEquals("""{"config-assign-response":{}}""".asJsonType(), output.payload)
         }
     }

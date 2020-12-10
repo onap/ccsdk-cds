@@ -169,9 +169,7 @@ class KafkaPublishAuditService(
                 val blueprintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(requestId, basePath.toString())
                 val blueprintContext = blueprintRuntimeService.bluePrintContext()
 
-                val workflowSteps = blueprintContext.workflowByName(workflowName).steps
-                checkNotNull(workflowSteps) { "Failed to get step(s) for workflow($workflowName)" }
-                workflowSteps.forEach { step ->
+                blueprintContext.workflowSteps(workflowName).forEach { step ->
                     val nodeTemplateName = step.value.target
                     checkNotNull(nodeTemplateName) { "Failed to get node template target for workflow($workflowName), step($step)" }
                     val nodeTemplate = blueprintContext.nodeTemplateByName(nodeTemplateName)
