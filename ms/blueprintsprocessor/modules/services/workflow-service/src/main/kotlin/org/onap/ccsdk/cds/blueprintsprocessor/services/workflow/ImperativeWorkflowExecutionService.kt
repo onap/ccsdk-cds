@@ -17,12 +17,14 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.coroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.asGraph
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
@@ -35,6 +37,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.NodeExecuteMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.service.NodeSkipMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.service.WorkflowExecuteMessage
 import org.springframework.stereotype.Service
+import kotlin.coroutines.CoroutineContext
 
 @Service("imperativeWorkflowExecutionService")
 class ImperativeWorkflowExecutionService(
@@ -54,13 +57,20 @@ class ImperativeWorkflowExecutionService(
 
         val graph = bluePrintContext.workflowByName(workflowName).asGraph()
 
-        return ImperativeBluePrintWorkflowService(nodeTemplateExecutionService)
-            .executeWorkflow(graph, bluePrintRuntimeService, executionServiceInput)
+        return coroutineScope {
+            ImperativeBluePrintWorkflowService(
+                nodeTemplateExecutionService,
+                this.coroutineContext[MDCContext]
+            )
+        }.let { it.executeWorkflow(graph, bluePrintRuntimeService, executionServiceInput) }
     }
 }
 
-open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionService: NodeTemplateExecutionService) :
+open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionService: NodeTemplateExecutionService, private val mdcContext: CoroutineContext?) :
     AbstractBluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>() {
+
+    final override val coroutineContext: CoroutineContext
+        get() = mdcContext?.let { super.coroutineContext + it } ?: super.coroutineContext
 
     val log = logger(ImperativeBluePrintWorkflowService::class)
 
