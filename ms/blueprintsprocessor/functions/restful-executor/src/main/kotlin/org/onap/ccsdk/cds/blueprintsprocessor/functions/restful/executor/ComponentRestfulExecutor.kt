@@ -66,7 +66,6 @@ open class ComponentRestfulExecutor(private var componentFunctionScriptingServic
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBlueprintError()
-            .addError("Failed in ComponentRestfulExecutor : ${runtimeException.message}")
+        addError("Failed in ComponentRestfulExecutor : ${runtimeException.message}")
     }
 }

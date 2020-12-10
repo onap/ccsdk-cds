@@ -101,7 +101,6 @@ open class ComponentRemoteScriptExecutor(
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBlueprintError()
-            .addError("Failed in ComponentRemoteScriptExecutor : ${runtimeException.message}")
+        addError("Failed in ComponentRemoteScriptExecutor : ${runtimeException.message}")
     }
 }

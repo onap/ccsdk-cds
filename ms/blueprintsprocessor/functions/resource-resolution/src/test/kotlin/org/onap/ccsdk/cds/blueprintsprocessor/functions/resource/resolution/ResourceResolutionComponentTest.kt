@@ -145,7 +145,8 @@ class ResourceResolutionComponentTest {
                 any(),
                 any(),
                 any<List<String>>(),
-                any<MutableMap<String, Any>>()
+                any<MutableMap<String, Any>>(),
+                "step"
             )
         } returns ResourceResolutionResult(mutableMapOf(), mutableMapOf())
 
@@ -168,7 +169,7 @@ class ResourceResolutionComponentTest {
             every { bluePrintRuntimeService.getBlueprintError() } returns blueprintError
             resourceResolutionComponent.recoverNB(exception, executionRequest)
 
-            assertEquals(1, blueprintError.errors.size)
+            assertEquals(1, blueprintError.allErrors().size)
         }
     }
 }

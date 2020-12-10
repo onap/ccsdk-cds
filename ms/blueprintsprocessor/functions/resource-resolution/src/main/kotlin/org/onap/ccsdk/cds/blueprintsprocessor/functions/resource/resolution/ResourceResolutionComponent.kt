@@ -115,7 +115,8 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
                 bluePrintRuntimeService,
                 nodeTemplateName,
                 artifactPrefixNames,
-                properties
+                properties,
+                stepName
             )
 
             // provide indexed result in output if we have multiple resolution
@@ -140,6 +141,6 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBlueprintError().addError(runtimeException.message!!)
+        addError(runtimeException.message!!)
     }
 }

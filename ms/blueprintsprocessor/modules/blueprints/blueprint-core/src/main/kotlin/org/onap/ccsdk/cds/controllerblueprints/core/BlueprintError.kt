@@ -18,13 +18,21 @@ package org.onap.ccsdk.cds.controllerblueprints.core
 
 class BlueprintError {
 
-    var errors: MutableList<String> = arrayListOf()
+    private val errors: MutableMap<String, MutableList<String>> = mutableMapOf()
 
-    fun addError(type: String, name: String, error: String) {
-        this.errors.add("$type : $name : $error")
+    fun addError(type: String, name: String, error: String, stepName: String) {
+        addError("$type : $name : $error", stepName)
     }
 
-    fun addError(error: String) {
-        this.errors.add(error)
+    fun addError(error: String, stepName: String) {
+        errors.getOrPut(stepName, { mutableListOf() }).add(error)
     }
+
+    fun addErrors(stepName: String, errorList: List<String>) {
+        errors.getOrPut(stepName, { mutableListOf() }).addAll(errorList)
+    }
+
+    fun allErrors(): List<String> = errors.values.flatten()
+
+    fun stepErrors(stepName: String): MutableList<String>? = errors[stepName]
 }

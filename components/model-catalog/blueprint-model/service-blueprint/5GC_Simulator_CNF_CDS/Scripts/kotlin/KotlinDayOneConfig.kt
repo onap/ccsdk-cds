@@ -221,7 +221,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
     }
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         log.info("Executing Recovery")
-        bluePrintRuntimeService.getBlueprintError().addError("${runtimeException.message}")
+        addError("${runtimeException.message}")
     }
 
     fun modifyTemplate(configmapName: String, typOfVfmodule: String): String {

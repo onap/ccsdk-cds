@@ -41,6 +41,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractCompone
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintError
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
@@ -90,6 +91,8 @@ class AbstractComponentFunctionTest {
                 any(), any(), any()
             )
         } returns Implementation()
+
+        every { bluePrintRuntimeService.getBlueprintError() } returns BlueprintError()
     }
 
     @Test

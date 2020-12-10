@@ -313,11 +313,11 @@ open class ComponentRemotePythonExecutor(
         }
     }
 
-    private fun noBlueprintErrors() = bluePrintRuntimeService.getBlueprintError().errors.isEmpty()
+    private fun noBlueprintErrors() =
+        bluePrintRuntimeService.getBlueprintError().stepErrors(stepName).isNullOrEmpty()
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBlueprintError()
-            .addError("Failed in ComponentRemotePythonExecutor : ${runtimeException.message}")
+        addError("Failed in ComponentRemotePythonExecutor : ${runtimeException.message}")
     }
 
     private fun formatNestedJsonNode(node: JsonNode): String {
