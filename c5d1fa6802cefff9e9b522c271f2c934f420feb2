@@ -22,6 +22,30 @@
       "revId": "c5d1fa6802cefff9e9b522c271f2c934f420feb2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1b22b70_6235faaa",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 7260
+      },
+      "writtenOn": "2020-12-11T00:48:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "664db314_3d923b6f",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 85
+      },
+      "revId": "c5d1fa6802cefff9e9b522c271f2c934f420feb2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
