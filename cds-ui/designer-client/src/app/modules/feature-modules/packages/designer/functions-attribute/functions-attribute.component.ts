@@ -22,6 +22,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     cbaPackage: CBAPackage;
     templateAndMappingMap = new Map<string, TemplateAndMapping>();
     selectedTemplates = new Map<string, TemplateAndMapping>();
+    finalTemplates = new Map<string, TemplateAndMapping>();
     fileToDelete: string;
     requiredInputs = new Map<string, {}>();
     requiredOutputs = new Map<string, {}>();
@@ -108,6 +109,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                 console.log(filename);
                 if (this.templateAndMappingMap.has(filename)) {
                     this.selectedTemplates.set(filename, this.templateAndMappingMap.get(filename));
+                    this.finalTemplates.set(filename, this.templateAndMappingMap.get(filename));
                 }
             });
 
@@ -153,7 +155,12 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         this.ngUnsubscribe.complete();
     }
 
-    addTemplates() { }
+    addTemplates() {
+        this.finalTemplates = this.selectedTemplates;
+    }
+    cancel() {
+        this.selectedTemplates = new Map<string, TemplateAndMapping>();
+    }
 
     saveFunctionData() {
         this.nodeTemplates = new NodeTemplate('');
