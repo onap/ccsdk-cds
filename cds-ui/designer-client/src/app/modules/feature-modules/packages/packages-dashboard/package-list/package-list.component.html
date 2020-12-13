@@ -33,6 +33,8 @@
                             <p class="packageName" tooltip="{{bluePrint.artifactName}}" placement="bottom">
                                 {{bluePrint.artifactName}}</p>
                             <span class="package-version">v{{bluePrint.artifactVersion}}</span>
+                            <button *ngIf="bluePrint.published.includes('Y')" type="button"
+                                    class="dot"><i class="glyphicon glyphicon-ok"></i></button>
                         </a>
 
                     </div>
