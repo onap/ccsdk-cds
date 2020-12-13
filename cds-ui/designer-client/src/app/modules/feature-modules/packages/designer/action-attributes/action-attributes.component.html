@@ -171,20 +171,24 @@
                             <label class="col-form-label col-sm-3 pt-0">Type <span>*</span></label>
                             <div class="col-sm-9">
                                 <div class="list-group list-group-horizontal">
-                                    <button type="button" class="list-group-item list-group-item-action"
-                                        (click)="setInputType('string')">
+                                    <button type="button" [class.active]="this.inputActionAttribute.type === 'string'"
+                                        class="list-group-item list-group-item-action" (click)="setInputType('string')">
                                         String
                                     </button>
-                                    <button type="button" class="list-group-item list-group-item-action"
+                                    <button type="button" [class.active]="this.inputActionAttribute.type === 'integer'"
+                                        class="list-group-item list-group-item-action"
                                         (click)="setInputType('integer')">Integer
                                     </button>
-                                    <button type="button" class="list-group-item list-group-item-action"
+                                    <button type="button" [class.active]="this.inputActionAttribute.type === 'boolean'"
+                                        class="list-group-item list-group-item-action"
                                         (click)="setInputType('boolean')">Boolean
                                     </button>
-                                    <button type="button" class="list-group-item list-group-item-action"
+                                    <button type="button" [class.active]="this.inputActionAttribute.type === 'list'"
+                                        class="list-group-item list-group-item-action"
                                         (click)="setInputType('list')">List
                                     </button>
-                                    <button type="button" class="list-group-item list-group-item-action"
+                                    <button type="button" [class.active]="this.inputActionAttribute.type === 'Other'"
+                                        class="list-group-item list-group-item-action"
                                         (click)="setInputType('Other')">Other
                                     </button>
                                 </div>
@@ -478,15 +482,13 @@
                                     <div class="scrollWrapper">
                                         <a [class]="steps.indexOf(step) === 0?
                                         'list-group-item list-group-item-action active':
-                                        'list-group-item list-group-item-action'" [id]="step"
-                                            data-toggle="list" href="#list-home" role="tab" aria-controls="home"
-                                           *ngFor="let step of steps" >
+                                        'list-group-item list-group-item-action'" [id]="step" data-toggle="list"
+                                            href="#list-home" role="tab" aria-controls="home"
+                                            *ngFor="let step of steps">
 
-                                            <i class="icon-resource_resolution mr-1" aria-hidden="true"
-                                               (click)="setInputAndOutputs(
+                                            <i class="icon-resource_resolution mr-1" aria-hidden="true" (click)="setInputAndOutputs(
                                             this.designerState.template.workflows[actionName]['steps'][step]['target']
-                                            )"
-                                        ></i>
+                                            )"></i>
                                             {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="setInputAndOutputs(
                                             this.designerState.template.workflows[actionName]['steps'][step]['target']
                                             )"></i></a>
@@ -543,12 +545,12 @@
                                     <input type="text" class="form-control input-search-controller"
                                         placeholder="Functions">
                                     <div class="scrollWrapper" *ngFor="let step of steps">
-                                        <a  [class]="steps.indexOf(step) === 0?
+                                        <a [class]="steps.indexOf(step) === 0?
                                         'list-group-item list-group-item-action active':
                                         'list-group-item list-group-item-action'" [id]="step"
-                                            *ngFor="let step of steps"
-                                            data-toggle="list" href="#list-home" role="tab" aria-controls="home"><i
-                                                class="icon-resource_resolution mr-1" aria-hidden="true"></i>
+                                            *ngFor="let step of steps" data-toggle="list" href="#list-home" role="tab"
+                                            aria-controls="home"><i class="icon-resource_resolution mr-1"
+                                                aria-hidden="true"></i>
                                             {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="setInputAndOutputs(
                                             this.designerState.template.workflows[actionName]['steps'][step]['target']
                                             )"></i></a>
