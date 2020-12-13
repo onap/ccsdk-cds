@@ -728,9 +728,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-sm mb-2 btn-enrich" data-toggle="modal"
-                                    data-target="#enrichModal">
-                                <i class="icon-enrich" aria-hidden="true"></i> Manual Enrich
+                            <button type="button" class="btn btn-sm mb-2 btn-enrich"
+                                    (click)="enrichBluePrint()">
+                                   <!-- data-toggle="modal" data-target="#enrichModal"-->
+
+                                <i class="icon-enrich" aria-hidden="true"></i> Enrich
                             </button>
 
 
@@ -758,6 +760,9 @@
                             <a class="nav-item nav-link" id="nav-authentication-tab" data-toggle="tab"
                                href="#nav-authentication" role="tab" aria-controls="nav-authentication"
                                aria-selected="false">EXTERNAL SYSTEM AUTHENTICATION PROPERTIES</a>
+                            <a class="nav-item nav-link" id="nav-topologytemplate-tab" data-toggle="tab"
+                               href="#nav-topologytemplate" role="tab" aria-controls="nav-authentication"
+                               aria-selected="false">Topology Template</a>
                         </div>
                     </div>
 
@@ -787,6 +792,14 @@
                                 <div class="card creat-card">
                                     <div class="editor-container">
                                         <app-dsl-definitions-tab></app-dsl-definitions-tab>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-topologytemplate" role="tabpanel"
+                                 aria-labelledby="nav-authentication-tab">
+                                <div class="card creat-card">
+                                    <div class="editor-container">
+                                        <app-topology-template></app-topology-template>
                                     </div>
                                 </div>
                             </div>
