@@ -36,6 +36,8 @@ import { ImportPackageComponent } from './packages-dashboard/import-package/impo
 import { FunctionsAttributeComponent } from './designer/functions-attribute/functions-attribute.component';
 import { ActionAttributesComponent } from './designer/action-attributes/action-attributes.component';
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
+import { TopologyTemplateComponent } from './package-creation/topology-template/topology-template.component';
+import {CollapseModule} from 'ngx-bootstrap/collapse';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -61,6 +63,7 @@ import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortMo
         ImportPackageComponent,
         FunctionsAttributeComponent,
         ActionAttributesComponent,
+        TopologyTemplateComponent,
 
     ],
     imports: [
@@ -80,7 +83,8 @@ import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortMo
         MatTableModule,
         MatPaginatorModule,
         MatSortModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        CollapseModule
     ],
     providers: [ApiService, JsonPipe, ComponentCanDeactivateGuard],
     bootstrap: []
