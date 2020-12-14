@@ -103,7 +103,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
 
     var exceptions: MutableList<Exception> = arrayListOf()
 
-    final override val coroutineContext: CoroutineContext
+    override val coroutineContext: CoroutineContext
         get() = job + CoroutineName("Wf")
 
     fun cancel() {
