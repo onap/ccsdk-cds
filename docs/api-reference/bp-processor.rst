@@ -23,9 +23,8 @@ Download
 
 Here is the automatically created swagger file for CDS Blueprint Processor API:
 :download:`cds-bp-processor-api-swagger.json <media/cds-bp-processor-api-swagger.json>`
-:download:`cds-bp-processor-api-swagger.yaml <media/cds-bp-processor-api-swagger.yaml>`
 
-You can find a postman collection including sample requests for all endpoints here: 
+You can find a postman collection including sample requests for all endpoints here:
 :download:`bp-processor.postman_collection.json <media/bp-processor.postman_collection.json>`.
 Please keep the Postman Collection up-to-date for new endpoints.
 
