@@ -59,8 +59,7 @@
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" id="functionRadioInline" name="functionRadioInline"
                                                 [checked]="!currentFuncion['inputs']['artifact-prefix-names']?.get_input"
-                                                (click)="setArtifact(true)"
-                                                class="custom-control-input">
+                                                (click)="setArtifact(true)" class="custom-control-input">
                                             <label class="custom-control-label" for="functionRadioInline">Pre-defined
                                                 Template</label>
                                         </div>
@@ -177,7 +176,7 @@
             </div>
         </div>
         <!--ARTIFACTS-->
-        <div class="card" [hidden]="selectedTemplates.size == 0" class="accordion" id="accordionExample1">
+        <div class="card" [hidden]="finalTemplates.size == 0" class="accordion" id="accordionExample1">
             <div class="card-header" id="headingTwo">
                 <h2 class="mb-0">
                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo"
@@ -189,7 +188,7 @@
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-12" *ngFor="let file of  getKeys(selectedTemplates)">
+                        <div class="col-12" *ngFor="let file of  getKeys(finalTemplates)">
                             <a class="template-mapping-list">
                                 <p>{{file}}</p>
                                 <span *ngIf="getValue(file,templateAndMappingMap).isMapping">Mapping</span>
@@ -223,7 +222,7 @@
             </div>
             <div class="modal-body createAttributeTabs">
                 <div class="col-4" *ngFor="let file of  getKeys(templateAndMappingMap)">
-                    <a class="template-mapping-list float" [ngClass]="{'active':selectedTemplates.has(file)}">
+                    <a class="template-mapping-list float" [class.active]="selectedTemplates.has(file)">
                         <p (click)="setTemplate(file)">{{file}}</p>
                         <span *ngIf="getValue(file,templateAndMappingMap).isMapping">Mapping</span>
                         <span *ngIf="getValue(file,templateAndMappingMap).isTemplate">Template</span>
@@ -233,7 +232,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" (click)="cancel()" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addTemplates()">Add
                     Templates</button>
             </div>
@@ -254,7 +253,8 @@
             </div>
             <div class="modal-body">
                 <p>Are you sure you want to delete Template file
-                    <span>{{fileToDelete}}</span>?</p>
+                    <span>{{fileToDelete}}</span>?
+                </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
