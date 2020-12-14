@@ -64,7 +64,7 @@
           "200" : {
             "description" : "OK",
             "schema" : {
-              "type" : "object"
+              "$ref" : "#/definitions/BlueprintModelSearch"
             }
           },
           "500" : {
@@ -129,7 +129,7 @@
           "200" : {
             "description" : "OK",
             "schema" : {
-              "type" : "object"
+              "$ref" : "#/definitions/BlueprintModelSearch"
             }
           },
           "404" : {
@@ -249,7 +249,7 @@
           "200" : {
             "description" : "OK",
             "schema" : {
-              "type" : "object"
+              "$ref" : "#/definitions/BlueprintModelSearch"
             }
           },
           "503" : {
@@ -277,7 +277,10 @@
           "200" : {
             "description" : "successful operation",
             "schema" : {
-              "type" : "object"
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/BlueprintModelSearch"
+              }
             }
           }
         }
@@ -440,7 +443,7 @@
           "200" : {
             "description" : "successful operation",
             "schema" : {
-              "type" : "object"
+              "$ref" : "#/definitions/BlueprintModelSearch"
             }
           }
         }
@@ -465,7 +468,10 @@
           "200" : {
             "description" : "successful operation",
             "schema" : {
-              "type" : "object"
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/BlueprintModelSearch"
+              }
             }
           }
         }
@@ -482,7 +488,8 @@
         "parameters" : [ {
           "in" : "body",
           "name" : "body",
-          "required" : false,
+          "description" : "Blueprint and workflow identification",
+          "required" : true,
           "schema" : {
             "$ref" : "#/definitions/WorkFlowSpecRequest"
           }
@@ -548,7 +555,7 @@
           "200" : {
             "description" : "OK",
             "schema" : {
-              "type" : "object"
+              "$ref" : "#/definitions/BlueprintModelSearch"
             }
           },
           "404" : {
