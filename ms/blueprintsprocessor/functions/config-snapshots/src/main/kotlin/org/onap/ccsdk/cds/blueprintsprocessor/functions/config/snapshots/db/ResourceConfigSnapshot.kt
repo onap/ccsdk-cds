@@ -50,7 +50,7 @@ class ResourceConfigSnapshot : Serializable {
     @Column(name = "resource_type", nullable = false)
     var resourceType: String? = null
 
-    @get:ApiModelProperty(value = "ID associated with the resource type in the inventory system.", required = true)
+    @get:ApiModelProperty(value = "ID associated with the resource type in the inventory system.", required = true, example = "\"1\"")
     @Column(name = "resource_id", nullable = false)
     var resourceId: String? = null
 
@@ -58,7 +58,7 @@ class ResourceConfigSnapshot : Serializable {
     @Column(name = "status", nullable = false)
     var status: Status? = null
 
-    @get:ApiModelProperty(value = "Snapshot of the resource as retrieved from resource.", required = true)
+    @get:ApiModelProperty(value = "Snapshot of the resource as retrieved from resource.", required = true, example = "\"config_snapshot\"")
     @Lob
     @Column(name = "config_snapshot", nullable = false)
     var config_snapshot: String? = null
