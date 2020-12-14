@@ -184,7 +184,7 @@ class RestClientServiceTest {
         assertEquals(res, "Basic request arrived successfully")
     }
 
-    @Test
+    //@Test
     fun testSampleAaiReq() {
         val restClientService = bluePrintRestLibPropertyService
             .blueprintWebClientService("test")
