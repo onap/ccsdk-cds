@@ -28,8 +28,25 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
 import org.onap.ccsdk.cds.controllerblueprints.core.removeNullNode
 import java.io.StringWriter
+import java.util.Properties
 
 object BluePrintVelocityTemplateService {
+
+    // TODO Externalize to file
+    private val properties = Properties().apply {
+        this.putAll(
+            mutableMapOf(
+                "introspector.conversion_handler.class" to "none",
+                "parser.space_gobbling" to "bc",
+                "directive.if.empty_check" to "false",
+                "parser.allow_hyphen_in_identifiers" to "true",
+                "velocimacro.enable_bc_mode" to "true",
+                "event_handler.invalid_references.quiet" to "true",
+                "event_handler.invalid_references.null" to "true",
+                "event_handler.invalid_references.tested" to "true"
+            )
+        )
+    }
 
     /**
      * Generate Content from Velocity Template and JSON Content with injected API
@@ -73,7 +90,7 @@ object BluePrintVelocityTemplateService {
         /*
          *  initialize the engine
          */
-        velocity.init()
+        velocity.init(properties)
 
         val velocityContext = VelocityContext()
         velocityContext.put("StringUtils", StringUtils::class.java)
