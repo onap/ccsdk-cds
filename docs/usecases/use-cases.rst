@@ -6,8 +6,12 @@ Use Cases
 =========
 
 .. toctree::
-   :caption: Table of Contents
    :maxdepth: 1
 
    wordpress-cnf-poc
    pnf-simulator
+
+
+**Use Cases from other projects:**
+
+* :ref:`vFirewall CNF Use Case<onap-integration:docs_vFW_CNF_CDS>`
