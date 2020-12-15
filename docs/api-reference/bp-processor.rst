@@ -13,10 +13,10 @@ which is automatically created during CDS build process by Swagger Maven Plugin.
 also included. Endpoints can also be described using this template
 :download:`api-doc-template.rst <api-doc-template.rst>` but this is not the prefered way to describe the CDS API.
 
-Authentification
+Authorization
 -----------------
 
-Use Basic athentification with `ccsdkapps` as a username and password, in Header ``Authorization: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==``.
+Use Basic authorization with `ccsdkapps` as a username and password, in Header ``Authorization: Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==``.
 
 Download
 ------------
