@@ -72,9 +72,10 @@
                                                 Template</label>
                                         </div>
                                         <br />
-                                        <button type="button" data-toggle="modal" data-target="#templateModal"
-                                            class="btn btn-select-template m-auto"><i class="icon-add-circle"
-                                                type="button" aria-hidden="true"></i> Select Template</button>
+                                        <button (click)="init()" type="button" data-toggle="modal"
+                                            data-target="#templateModal" class="btn btn-select-template m-auto"><i
+                                                class="icon-add-circle" type="button" aria-hidden="true"></i> Select
+                                            Template</button>
                                     </div>
 
                                     <div class="attribute-wrap"
@@ -233,8 +234,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" (click)="cancel()" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="addTemplates()">Add
-                    Templates</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    (click)="addTemplates()">Save</button>
             </div>
         </div>
     </div>

@@ -64,7 +64,7 @@ export class PackageCreationService {
     }
 
     private enrichandpublish(body: any | null, options?: any): Observable<any> {
-        return this.api.post(BlueprintURLs.enrichandpublish, body, {responseType: 'blob'});
+        return this.api.post(BlueprintURLs.enrichandpublish, body, {responseType: 'text'});
     }
 
     private deployBluePrint(body: any | null, options?: any): Observable<any> {
