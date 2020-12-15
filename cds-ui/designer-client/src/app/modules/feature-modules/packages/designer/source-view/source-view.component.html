@@ -126,24 +126,23 @@
             </li>
 
             <li class="nav-item">
-                <div class="btn-group viewBtns" role="group">
+                <div class="btn-group viewBtns source-view-bar" role="group">
                     <button (click)="convertAndOpenInDesingerView(viewedPackage.id)" type="button"
-                        class="btn btn-secondary topologySource">Designer</button>
-                    <button type="button" class="btn btn-secondary topologyView active">Scripting</button>
+                        class="btn btn-secondary topologySource"><i class="icon-topologyView-active" aria-hidden="true"></i> Designer</button>
+                    <button type="button" class="btn btn-secondary topologyView active"><i class="icon-topologySource" aria-hidden="true"></i>Scripting</button>
                 </div>
             </li>
         </ul>
-
     </div>
 </nav>
 
 <ng-sidebar-container class="sidebar-container">
-    <!-- Controller SideBar -->
+    
     <ng-sidebar [(opened)]="controllerSideBar" [sidebarClass]="'demo-sidebar controllerSidebar container-fluid'"
         [mode]="'push'" #sidebarLeft>
         <div class="row">
             <div class="col">
-                <input type="text" class="form-control input-search-controller" placeholder="Search Functions">
+                <input type="text" class="form-control input-search-controller" placeholder="Search">
             </div>
         </div>
 
@@ -158,3 +157,4 @@
         </ace-editor>
 
     </div>
+    </ng-sidebar-container> 

@@ -137,6 +137,7 @@ header{
   height: 16px; */
   text-align: center;
   font-size: 14px;
+  color: #fff;
 }
 .topology-actions .dropdown-text,
 .dropdown-toggle:hover ~ .dropdown-text, 
@@ -174,7 +175,7 @@ header{
   box-shadow: 0 2px 6px rgba(47, 83, 151, .15)
 }
 .topology-actions .dropdown-content a{
-  padding: 0 20px 0 15px;
+  padding: 0 12px;
   color: #1B3E6F;
   font-size: 13px;
 }
@@ -445,7 +446,7 @@ p.compType-4{
 } */
 .functionsList .joint-paper{
   width: 100% !important;
-  height: 72vh !important;
+  height: 100% !important; /*72vh*/
   margin: 0 !important;
 }
 .actionBtns .btn{
@@ -611,12 +612,6 @@ p.compType-4{
   padding: 0 10px !important;
   background-color: #1B3E6F !important;
   color: #fff;
-}
-.viewBtns .topologySource{
-  background-image: url(src/assets/img/icon-topologyView-active.svg);
-}
-.viewBtns .topologyView{
-  background-image: url(src/assets/img/icon-topologySource.svg);
 }
 .card.actionContainer{
   margin: 20px 20px 40px 60px;
@@ -889,7 +884,7 @@ p.compType-4{
 .action-attributes .form-group{
   display: inline-block;
   width: 100%;
-  padding-left: 12px;
+  /* padding-left: 12px; */
   /* line-height: 30px; */
 }
 .action-attributes .form-group:hover{
@@ -1094,14 +1089,20 @@ p.compType-4{
 }
 
 .viewBtns .btn{
-  margin-top: 14px;
-  padding-left: 30px!important;
+  margin-top: 16px;
+  padding: 0 12px !important;
   border: 0;
   font-size: 11px;
+  line-height: 32px;
   color: #1B3E6F !important;
   background-color: #fff !important;
-  background-repeat: no-repeat;
-  background-position: 10px center;
+  /* background-repeat: no-repeat; */
+  /* background-position: 10px center; */
+}
+.viewBtns .btn i{
+  margin-right: 5px;
+  font-size: 16px;
+  vertical-align: text-bottom;
 }
 .viewBtns .btn.active{
   background-color: #1B3E6F !important;
@@ -1143,7 +1144,7 @@ ul.editor{
   box-shadow: none;
 }
 .ace_editor{
-  top: 5.4vh;
+  top: 45px;
   height: 92vh !important;
 }
 .dsl-editor {
@@ -1300,7 +1301,8 @@ ul.editor{
   border: 0;
 }
 .container{
-  min-height: 66px;
+  min-height: 33px;
+  margin-bottom: 15px;
   border-bottom: solid 1px #EFEFF4;
   line-height: 24px;
 }

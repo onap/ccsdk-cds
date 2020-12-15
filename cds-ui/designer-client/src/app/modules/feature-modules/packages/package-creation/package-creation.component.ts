@@ -135,12 +135,12 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
                     bluePrintDetailModels => {
                         if (bluePrintDetailModels) {
                             const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
-                            this.toastService.info('package updated successfully ');
+                            this.toastService.success('Package Updated Successfully ');
                             this.isSaveEnabled = false;
                             this.router.navigate(['/packages/package/' + id]);
                         }
                     }, error => {
-                        // this.toastService.error('error happened when editing ' + error.message);
+                        // this.toastService.error('Error occure during editng process ' + error.message);
                         console.log('Error -' + error.message);
                     }, () => {
                         this.ngxService.stop();

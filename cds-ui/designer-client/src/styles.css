@@ -147,6 +147,14 @@ button:focus{
   vertical-align: middle;
 }
 /*Components*/
+.copyright{
+  margin-right: 6px;
+  padding: 9px 6px 0px;
+  font-size: 10px;
+  color: #8D96A3;
+  background: #F4F9FE;
+  border-radius: 3px;
+}
 /* Menu Styles */
 .primary-nav{
   /* left: 0; */
@@ -178,6 +186,14 @@ button:focus{
   top: 0;
   z-index: 1000;
   cursor: pointer;
+}
+.app_version{
+  color: #1B3E6F;
+  position: absolute;
+  top: 46px;
+  z-index: 100000;
+  font-size: 8px;
+  left: 14px;
 }
 .primary-nav .menu li{
   position: relative;
@@ -592,6 +608,7 @@ height: 40px;
 }
 .packages-card p.package-desc{
   margin-top: 6px;
+  margin-bottom: 6px;
   font-size: 13px;
   text-align: left;
   display: -webkit-box;  
@@ -604,7 +621,15 @@ height: 40px;
   color: #1B3E6F !important;
   text-decoration: underline;
 }
-
+.packageTag{
+  margin-bottom: 9px;
+  margin-right: 3px;
+  padding: 3px 7px;
+  font-size: 12px;
+  background: #F4F9FE;
+  border-radius: 12px;
+  color: #2A81ED;
+}
 .packages-card [data-tooltip]::before,
 .packages-card .tooltip::before{
   border: 0 !important;
@@ -626,7 +651,7 @@ height: 40px;
   box-shadow: 0 2px 6px 0 rgba(47, 83, 151, 0.18) !important;
 }
 .addPaackage-card .card-body img{
-  width: 30%;
+  width: 35%;
   vertical-align: text-top;
 }
 .addPaackage-card a{
@@ -855,7 +880,7 @@ height: 40px;
 .dropdown-content{
   position: absolute;
   top: 32px;
-  width: 160px;
+  width: 140px;
   margin: 0;
   padding: 0;
   opacity: 0;
@@ -1234,6 +1259,9 @@ height: 40px;
   font-weight: bold;
   border-radius: 4px;
 }
+.fillteredTags:empty{
+  visibility: hidden;
+}
 /**Packages Sort**/
 .sort-packages{
   font-size: 12px;
@@ -1459,6 +1487,7 @@ height: 40px;
 
 /***Contributers***/
 ul.package-contributers{
+  margin-top: 12px;
   margin-bottom: 9px !important;
   padding-left: 0 !important;
 }
