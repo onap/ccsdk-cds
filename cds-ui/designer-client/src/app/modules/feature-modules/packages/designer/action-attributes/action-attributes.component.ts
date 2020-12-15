@@ -434,7 +434,6 @@ export class ActionAttributesComponent implements OnInit {
                 if (currentFunction.definition['attributes']) {
                     Object.keys(currentFunction.definition['attributes']).forEach(attribute => {
                         this.suggestedAttributes.push(attribute);
-                        this.suggestedAttributes.push('assignment-map');
                     });
                 }
                 console.log(this.suggestedAttributes);
