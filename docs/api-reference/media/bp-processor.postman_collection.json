@@ -2780,6 +2780,883 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Resource configuration",
+			"item": [
+				{
+					"name": "Retrieve a resource configuration snapshot.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/configs",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"configs"
+							]
+						},
+						"description": "Retrieve a config snapshot, identified by its Resource Id and Type. An extra 'format' parameter can be passed to tell what content-type is expected."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve all resource configuration snapshots identified by a given resource_id",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/configs/allByID",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"configs",
+								"allByID"
+							]
+						},
+						"description": "Retrieve all config snapshots, identified by its Resource Id, ordered by most recently created/modified date."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve all resource configuration snapshots for a given resource type.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/configs/allByType",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"configs",
+								"allByType"
+							]
+						},
+						"description": "Retrieve all config snapshots matching a specified Resource Type, ordered by most recently created/modified date."
+					},
+					"response": []
+				},
+				{
+					"name": "Store a resource configuration snapshot identified by resourceId, resourceType, status.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/configs/PNF/1/RUNNING",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"configs",
+								"PNF",
+								"1",
+								"RUNNING"
+							]
+						},
+						"description": "Store a resource configuration snapshot, identified by its resourceId and resourceType, and optionally its status, either RUNNING or CANDIDATE."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Resource dictionary",
+			"item": [
+				{
+					"name": "Saves a resource dictionary.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test-source\",\r\n    \"dataType\": \"string\",\r\n    \"entrySchema\": null,\r\n    \"resourceDictionaryGroup\": \"default\",\r\n    \"definition\": {\r\n        \"tags\": \"oam-local-ipv4-address\",\r\n        \"name\": \"test-source\",\r\n        \"property\": {\r\n            \"description\": \"test\",\r\n            \"required\": null,\r\n            \"type\": \"string\",\r\n            \"status\": null,\r\n            \"constraints\": null,\r\n            \"metadata\": null,\r\n            \"value\": null,\r\n            \"input-param\": null,\r\n            \"default\": null,\r\n            \"entry_schema\": null,\r\n            \"external-schema\": null\r\n        },\r\n        \"group\": \"default\",\r\n        \"updated-by\": \"sample@onap.com\",\r\n        \"sources\": {\r\n            \"sdnc\": {\r\n                \"description\": null,\r\n                \"type\": \"source-rest\",\r\n                \"metadata\": null,\r\n                \"directives\": null,\r\n                \"properties\": {\r\n                    \"type\": \"JSON\",\r\n                    \"endpoint-selector\": \"\",\r\n                    \"url-path\": \"test\",\r\n                    \"path\": \"/v4-assigned-ip-list/0/v4-ip-prefix\",\r\n                    \"input-key-mapping\": {\r\n                        \"service-instance-id\": \"service-instance-id\",\r\n                        \"network-role\": \"network-role\",\r\n                        \"v4-ip-type\": \"v4-ip-type\",\r\n                        \"vm-type\": \"vm-type\"\r\n                    },\r\n                    \"output-key-mapping\": {\r\n                        \"oam-local-ipv4-address\": \"v4-ip-prefix\"\r\n                    },\r\n                    \"key-dependencies\": [\r\n                        \"service-instance-id\",\r\n                        \"network-role\",\r\n                        \"v4-ip-type\",\r\n                        \"vm-type\"\r\n                    ]\r\n                },\r\n                \"attributes\": null,\r\n                \"capabilities\": null,\r\n                \"requirements\": null,\r\n                \"interfaces\": null,\r\n                \"artifacts\": null,\r\n                \"copy\": null,\r\n                \"node_filter\": null\r\n            }\r\n        }\r\n    },\r\n    \"description\": \"test\",\r\n    \"tags\": \"oam-local-ipv4-address\",\r\n    \"updatedBy\": \"sample@onap.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/dictionary",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"dictionary"
+							]
+						},
+						"description": "Saves a resource dictionary by dictionary provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Searches for a resource dictionary.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  \"pub_key\",\r\n  \"hostname\"\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/dictionary/by-names",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"dictionary",
+								"by-names"
+							]
+						},
+						"description": "Searches for a resource dictionary by names provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Saves a resource dictionary.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tags\": \"v4-ip-type, tosca.datatypes.Root, data_type\",\r\n  \"name\": \"test-source\",\r\n  \"group\":\"test\",\r\n  \"property\" :{\r\n    \"description\": \"test\",\r\n    \"type\": \"string\"\r\n  },\r\n  \"updated-by\": \"sample@onap.com\",\r\n  \"sources\": {\r\n    \"default\": {\r\n      \"type\": \"source-default\",\r\n      \"properties\": {\r\n      }\r\n    }\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/dictionary/api/v1/dictionary/definition",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"dictionary",
+								"api",
+								"v1",
+								"dictionary",
+								"definition"
+							]
+						},
+						"description": "Saves a resource dictionary by dictionary provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve all resource dictionary groups.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/dictionary/resource_dictionary_group",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"dictionary",
+								"resource_dictionary_group"
+							]
+						},
+						"description": "Retrieve all config snapshots matching a specified Resource Type, ordered by most recently created/modified date."
+					},
+					"response": []
+				},
+				{
+					"name": "Searches for a resource dictionary.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/dictionary/search/hostname",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"dictionary",
+								"search",
+								"hostname"
+							]
+						},
+						"description": "Retrieve all config snapshots matching a specified Resource Type, ordered by most recently created/modified date."
+					},
+					"response": []
+				},
+				{
+					"name": "Searches for a source mapping.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/dictionary/search/hostname",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"dictionary",
+								"search",
+								"hostname"
+							]
+						},
+						"description": "Searches for a source mapping."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve a resource dictionary.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/dictionary/active-streams",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"dictionary",
+								"active-streams"
+							]
+						},
+						"description": "Retrieve a resource dictionary by name provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Removes a resource dictionary.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/dictionary/active-streams",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"dictionary",
+								"active-streams"
+							]
+						},
+						"description": "Removes a resource dictionary by name provided."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Resource template",
+			"item": [
+				{
+					"name": "Store a resolved template w/ resolution-key",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "PAYLOAD DATA",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/template/baseconfiguration/1.0.0/activate/7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"template",
+								"baseconfiguration",
+								"1.0.0",
+								"activate",
+								"7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08"
+							]
+						},
+						"description": "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, artifact name and resolution key."
+					},
+					"response": []
+				},
+				{
+					"name": "Store a resolved template w/ resourceId and resourceType",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "PAYLOAD DATA",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/template/baseconfiguration/1.0.0/activate/test/1",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"template",
+								"baseconfiguration",
+								"1.0.0",
+								"activate",
+								"test",
+								"1"
+							]
+						},
+						"description": "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, artifact name, resourceId and resourceType."
+					},
+					"response": []
+				}
+			],
+			"description": "Interaction with resolved template.",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Resources",
+			"item": [
+				{
+					"name": "Get all resolved resources using the resolution key.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/resources?bpVersion=1.0.0&artifactName=activate&bpName=baseconfiguration&resolutionKey=7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"resources"
+							],
+							"query": [
+								{
+									"key": "bpVersion",
+									"value": "1.0.0"
+								},
+								{
+									"key": "artifactName",
+									"value": "activate"
+								},
+								{
+									"key": "bpName",
+									"value": "baseconfiguration"
+								},
+								{
+									"key": "resolutionKey",
+									"value": "7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08"
+								}
+							]
+						},
+						"description": "Retrieve all config snapshots matching a specified Resource Type, ordered by most recently created/modified date."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve all resource dictionary groups. Copy 2",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/resources?bpVersion=1.0.0&artifactName=activate&bpName=baseconfiguration&resolutionKey=7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"resources"
+							],
+							"query": [
+								{
+									"key": "bpVersion",
+									"value": "1.0.0"
+								},
+								{
+									"key": "artifactName",
+									"value": "activate"
+								},
+								{
+									"key": "bpName",
+									"value": "baseconfiguration"
+								},
+								{
+									"key": "resolutionKey",
+									"value": "7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08"
+								}
+							]
+						},
+						"description": "Retrieve all config snapshots matching a specified Resource Type, ordered by most recently created/modified date."
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch a resource value using resolution key.",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/resources/api/v1/resources/resource?bpVersion=1.0.0&artifactName=activate&bpName=baseconfiguration&resolutionKey=7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08&name=test",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"resources",
+								"api",
+								"v1",
+								"resources",
+								"resource"
+							],
+							"query": [
+								{
+									"key": "bpVersion",
+									"value": "1.0.0"
+								},
+								{
+									"key": "artifactName",
+									"value": "activate"
+								},
+								{
+									"key": "bpName",
+									"value": "baseconfiguration"
+								},
+								{
+									"key": "resolutionKey",
+									"value": "7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08"
+								},
+								{
+									"key": "name",
+									"value": "test"
+								}
+							]
+						},
+						"description": "Retrieve a stored resource value using the blueprint metadata, artifact name, resolution-key along with the name of the resource value to retrieve."
+					},
+					"response": []
+				}
+			],
+			"description": "Interaction with resolved resources.",
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "List all endpoints",
 			"request": {
 				"auth": {

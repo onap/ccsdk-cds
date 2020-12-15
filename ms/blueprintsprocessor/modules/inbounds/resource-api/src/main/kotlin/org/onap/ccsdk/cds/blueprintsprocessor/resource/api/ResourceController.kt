@@ -55,7 +55,6 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
     }
 
     @RequestMapping(
-        path = [""],
         method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
@@ -111,7 +110,6 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         }
 
     @RequestMapping(
-        path = [""],
         method = [RequestMethod.DELETE], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
