@@ -17,14 +17,26 @@
   },
   "host" : "localhost:8080",
   "tags" : [ {
-    "name" : "Blueprint Model Catalog API",
+    "name" : "Blueprint Model Catalog",
     "description" : "Manages all blueprint models which are available in CDS"
+  }, {
+    "name" : "Resource configuration",
+    "description" : "Interaction with stored configurations"
+  }, {
+    "name" : "Resource dictionary",
+    "description" : "Interaction with stored dictionaries"
+  }, {
+    "name" : "Resource template",
+    "description" : "Interaction with resolved templates"
+  }, {
+    "name" : "Resources",
+    "description" : "Interaction with resolved resources"
   } ],
   "schemes" : [ "http" ],
   "paths" : {
     "/api/v1/blueprint-model" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "List all Blueprint Models",
         "description" : "Lists all meta-data of blueprint models which are saved in CDS.",
         "operationId" : "BlueprintModelController_allBlueprintModel_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -45,7 +57,7 @@
         }
       },
       "post" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Save a Blueprint Model",
         "description" : "Saves a blueprint model by the given CBA zip file input. There is no validation of the attached CBA happening when this API is called.",
         "operationId" : "BlueprintModelController_saveBlueprint_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -75,7 +87,7 @@
     },
     "/api/v1/blueprint-model/bootstrap" : {
       "post" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Bootstrap CDS",
         "description" : "Loads all Model Types, Resource Dictionaries and Blueprint Models which are included in CDS by default. Before starting to work with CDS, bootstrap should be called to load all the basic models that each orginization might support. Parameter values can be set as `false`  to skip loading e.g. the Resource Dictionaries but this is not recommended.",
         "operationId" : "BlueprintModelController_bootstrap_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -105,7 +117,7 @@
     },
     "/api/v1/blueprint-model/by-name/{name}/version/{version}" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Get a Blueprint Model by Name and Version",
         "description" : "Get Meta-Data of a Blueprint Model by its name and version.",
         "operationId" : "BlueprintModelController_getBlueprintByNameAndVersion_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -140,7 +152,7 @@
     },
     "/api/v1/blueprint-model/download/by-name/{name}/version/{version}" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Download a Blueprint Model",
         "description" : "Gets the CBA of a blueprint model by its name and version. Response can be saved to a file to download the CBA.",
         "operationId" : "BlueprintModelController_downloadBlueprintByNameAndVersion_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -175,7 +187,7 @@
     },
     "/api/v1/blueprint-model/download/{id}" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Download a Blueprint Model by ID",
         "description" : "Gets the CBA of a blueprint model by its ID. Response can be saved to a file to download the CBA.",
         "operationId" : "BlueprintModelController_downloadBluePrint_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -203,7 +215,7 @@
     },
     "/api/v1/blueprint-model/enrich" : {
       "post" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Enrich a Blueprint Model",
         "description" : "Enriches the attached CBA and returns the enriched CBA zip file in the response. The enrichment process will complete the package by providing all the definition of types used.",
         "operationId" : "BlueprintModelController_enrichBlueprint_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -230,7 +242,7 @@
     },
     "/api/v1/blueprint-model/enrichandpublish" : {
       "post" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Enrich and publish a Blueprint Model",
         "description" : "Enriches the attached CBA, validates it and saves it in CDS if validation was successful.",
         "operationId" : "BlueprintModelController_enrichAndPubishlueprint_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -260,7 +272,7 @@
     },
     "/api/v1/blueprint-model/meta-data/{keyword}" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Search for Blueprints by a Keyword",
         "description" : "Lists all blueprint models by a matching keyword in any of the meta-data of the blueprint models. Blueprint models are just returned if a whole keyword is matching, not just parts of it. Not case-sensitive. Used by CDS UI.",
         "operationId" : "BlueprintModelController_allBlueprintModelMetaData_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -288,7 +300,7 @@
     },
     "/api/v1/blueprint-model/name/{name}/version/{version}" : {
       "delete" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Delete a Blueprint Model by Name",
         "description" : "Deletes a blueprint model identified by its name and version from CDS.",
         "operationId" : "BlueprintModelController_deleteBlueprintByName_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -319,7 +331,7 @@
     },
     "/api/v1/blueprint-model/paged" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Get Blueprints ordered",
         "description" : "Lists all blueprint models which are saved in CDS in an ordered mode.",
         "operationId" : "BlueprintModelController_allBlueprintModelPaged_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -368,7 +380,7 @@
     },
     "/api/v1/blueprint-model/paged/meta-data/{keyword}" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Search for Blueprints by a Keyword in an ordered mode",
         "description" : "Lists all blueprint models by a matching keyword in any of the meta-data of the blueprint models in an ordered mode. Blueprint models are just returned if a whole keyword is matching, not just parts of it. Not case-sensitive. Used by CDS UI.",
         "operationId" : "BlueprintModelController_allBlueprintModelMetaDataPaged_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -424,7 +436,7 @@
     },
     "/api/v1/blueprint-model/publish" : {
       "post" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Publish a Blueprint Model",
         "description" : "Validates the attached CBA file and saves it in CDS if validation was successful. CBA needs to be already enriched.",
         "operationId" : "BlueprintModelController_publishBlueprint_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -451,7 +463,7 @@
     },
     "/api/v1/blueprint-model/search/{tags}" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Search for a Blueprint by Tag",
         "description" : "Searches for all blueprint models which contain the specified input parameter in their tags. Blueprint models which contain just parts of the searched word in their tags are also returned.",
         "operationId" : "BlueprintModelController_searchBlueprintModels_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -479,7 +491,7 @@
     },
     "/api/v1/blueprint-model/workflow-spec" : {
       "post" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Get Workflow Specification",
         "description" : "Get the workflow of a blueprint identified by Blueprint and workflow name. Inputs, outputs and data types of workflow is returned.",
         "operationId" : "BlueprintModelController_workflowSpec_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -506,7 +518,7 @@
     },
     "/api/v1/blueprint-model/workflows/blueprint-name/{name}/version/{version}" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Get Workflows of a Blueprint",
         "description" : "Get all available workflows of a Blueprint identified by its name and version.",
         "operationId" : "BlueprintModelController_getWorkflowList_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -538,7 +550,7 @@
     },
     "/api/v1/blueprint-model/{id}" : {
       "get" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Get a Blueprint Model by ID",
         "description" : "Get meta-data of a blueprint model by its internally created ID.",
         "operationId" : "BlueprintModelController_getBlueprintModel_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -564,7 +576,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "Blueprint Model Catalog API" ],
+        "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Delete a Blueprint Model by ID",
         "description" : "Delete a blueprint model by its ID. ID is the internally created ID of blueprint, not the name of blueprint.",
         "operationId" : "BlueprintModelController_deleteBlueprint_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -588,6 +600,618 @@
           }
         }
       }
+    },
+    "/api/v1/configs" : {
+      "get" : {
+        "tags" : [ "Resource configuration" ],
+        "summary" : "Retrieve a resource configuration snapshot",
+        "description" : "Retrieve a config snapshot, identified by its Resource Id and Type. An extra 'format' parameter can be passed to tell what content-type is expected.",
+        "operationId" : "ResourceConfigSnapshotController_get_GET.org.onap.ccsdk.cds.blueprintsprocessor.configs.api",
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "resourceType",
+          "in" : "query",
+          "description" : "Resource Type associated of the resource configuration snapshot",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "\"PNF\""
+        }, {
+          "name" : "resourceId",
+          "in" : "query",
+          "description" : "Resource Id associated of the resource configuration snapshot",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "\"1\""
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Status of the snapshot being retrieved",
+          "required" : false,
+          "type" : "string",
+          "default" : "RUNNING"
+        }, {
+          "name" : "format",
+          "in" : "query",
+          "description" : "Expected format of the snapshot being retrieved",
+          "required" : false,
+          "type" : "string",
+          "default" : "text/plain"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/configs/allByID" : {
+      "get" : {
+        "tags" : [ "Resource configuration" ],
+        "summary" : "Retrieve all resource configuration snapshots identified by a given resource_id",
+        "description" : "Retrieve all config snapshots, identified by its Resource Id, ordered by most recently created/modified date. ",
+        "operationId" : "ResourceConfigSnapshotController_getAllByID_GET.org.onap.ccsdk.cds.blueprintsprocessor.configs.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "resourceId",
+          "in" : "query",
+          "description" : "Resource Id associated of the resource configuration snapshots",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "\"1\""
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Status of the snapshot being retrieved",
+          "required" : false,
+          "type" : "string",
+          "default" : "ANY"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceConfigSnapshot"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/configs/allByType" : {
+      "get" : {
+        "tags" : [ "Resource configuration" ],
+        "summary" : "Retrieve all resource configuration snapshots for a given resource type",
+        "description" : "Retrieve all config snapshots matching a specified Resource Type, ordered by most recently created/modified date. ",
+        "operationId" : "ResourceConfigSnapshotController_getAllByType_GET.org.onap.ccsdk.cds.blueprintsprocessor.configs.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "resourceType",
+          "in" : "query",
+          "description" : "Resource Type associated of the resource configuration snapshot",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "\"PNF\""
+        }, {
+          "name" : "status",
+          "in" : "query",
+          "description" : "Status of the snapshot being retrieved",
+          "required" : false,
+          "type" : "string",
+          "default" : "ANY"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceConfigSnapshot"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/configs/{resourceType}/{resourceId}/{status}" : {
+      "post" : {
+        "tags" : [ "Resource configuration" ],
+        "summary" : "Store a resource configuration snapshot identified by resourceId, resourceType, status",
+        "description" : "Store a resource configuration snapshot, identified by its resourceId and resourceType, and optionally its status, either RUNNING or CANDIDATE.",
+        "operationId" : "ResourceConfigSnapshotController_postWithResourceIdAndResourceType_POST.org.onap.ccsdk.cds.blueprintsprocessor.configs.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "resourceType",
+          "in" : "path",
+          "description" : "Resource Type associated with the resolution",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "\"PNF\""
+        }, {
+          "name" : "resourceId",
+          "in" : "path",
+          "description" : "Resource Id associated with the resolution",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "\"1\""
+        }, {
+          "name" : "status",
+          "in" : "path",
+          "description" : "Status of the snapshot being retrieved",
+          "required" : true,
+          "type" : "string",
+          "default" : "RUNNING"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Config snapshot to store",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ResourceConfigSnapshot"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dictionary" : {
+      "post" : {
+        "tags" : [ "Resource dictionary" ],
+        "summary" : "Save a resource dictionary",
+        "description" : "Save a resource dictionary by dictionary provided.",
+        "operationId" : "ResourceDictionaryController_saveResourceDictionary_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Resource dictionary to store",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ResourceDictionary"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ResourceDictionary"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dictionary/by-names" : {
+      "post" : {
+        "tags" : [ "Resource dictionary" ],
+        "summary" : "Search for a resource dictionary",
+        "description" : "Search for a resource dictionary by names provided.",
+        "operationId" : "ResourceDictionaryController_searchResourceDictionaryByNames_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "List of names",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceDictionary"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dictionary/definition" : {
+      "post" : {
+        "tags" : [ "Resource dictionary" ],
+        "summary" : "Save a resource dictionary",
+        "description" : "Save a resource dictionary by resource definition provided.",
+        "operationId" : "ResourceDictionaryController_saveResourceDictionary_1_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Resource definition to generate",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ResourceDefinition"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ResourceDefinition"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dictionary/resource_dictionary_group" : {
+      "get" : {
+        "tags" : [ "Resource dictionary" ],
+        "summary" : "Retrieve all resource dictionary groups",
+        "description" : "Retrieve all resource dictionary groups.",
+        "operationId" : "ResourceDictionaryController_getResourceDictionaryDistinct_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dictionary/search/{tags}" : {
+      "get" : {
+        "tags" : [ "Resource dictionary" ],
+        "summary" : "Search for a resource dictionary",
+        "description" : "Search for a resource dictionary by tags provided.",
+        "operationId" : "ResourceDictionaryController_searchResourceDictionaryByTags_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "tags",
+          "in" : "path",
+          "description" : "Tags list",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "\"status\""
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceDictionary"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dictionary/source-mapping" : {
+      "get" : {
+        "tags" : [ "Resource dictionary" ],
+        "summary" : "Search for a source mapping",
+        "description" : "Search for a source mapping.",
+        "operationId" : "ResourceDictionaryController_getResourceSourceMapping_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ResourceSourceMapping"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dictionary/{name}" : {
+      "get" : {
+        "tags" : [ "Resource dictionary" ],
+        "summary" : "Retrieve a resource dictionary",
+        "description" : "Retrieve a resource dictionary by name provided.",
+        "operationId" : "ResourceDictionaryController_getResourceDictionaryByName_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "description" : "Name of the resource",
+          "required" : true,
+          "type" : "string",
+          "x-example" : "\"hostname\""
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ResourceDictionary"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Resource dictionary" ],
+        "summary" : "Remove a resource dictionary",
+        "description" : "Remove a resource dictionary by name provided.",
+        "operationId" : "ResourceDictionaryController_deleteResourceDictionaryByName_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "description" : "Name of the resource",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/resources" : {
+      "get" : {
+        "tags" : [ "Resources" ],
+        "summary" : "Get all resolved resources using the resolution key",
+        "description" : "Retrieve all stored resolved resources using the blueprint name, blueprint version, artifact name and the resolution-key.",
+        "operationId" : "ResourceController_getAllFromResolutionKeyOrFromResourceTypeAndId_GET.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bpName",
+          "in" : "query",
+          "description" : "Name of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bpVersion",
+          "in" : "query",
+          "description" : "Version of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "artifactName",
+          "in" : "query",
+          "description" : "Artifact name for which to retrieve a resolved resource",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resolutionKey",
+          "in" : "query",
+          "description" : "Resolution Key associated with the resolution",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "resourceType",
+          "in" : "query",
+          "description" : "Resource Type associated with the resolution",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "resourceId",
+          "in" : "query",
+          "description" : "Resource Id associated with the resolution",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceResolution"
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Resources" ],
+        "summary" : "Delete resources using resolution key",
+        "description" : "Delete all the resources associated to a resolution-key using blueprint metadata, artifact name and the resolution-key.",
+        "operationId" : "ResourceController_deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bpName",
+          "in" : "query",
+          "description" : "Name of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bpVersion",
+          "in" : "query",
+          "description" : "Version of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "artifactName",
+          "in" : "query",
+          "description" : "Artifact name for which to retrieve a resolved resource",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resolutionKey",
+          "in" : "query",
+          "description" : "Resolution Key associated with the resolution",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Unit"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/resources/resource" : {
+      "get" : {
+        "tags" : [ "Resources" ],
+        "summary" : "Fetch a resource value using resolution key",
+        "description" : "Retrieve a stored resource value using the blueprint metadata, artifact name, resolution-key along with the name of the resource value to retrieve.",
+        "operationId" : "ResourceController_getOneFromResolutionKey_GET.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bpName",
+          "in" : "query",
+          "description" : "Name of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bpVersion",
+          "in" : "query",
+          "description" : "Version of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "artifactName",
+          "in" : "query",
+          "description" : "Artifact name for which to retrieve a resolved resource",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resolutionKey",
+          "in" : "query",
+          "description" : "Resolution Key associated with the resolution",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "name",
+          "in" : "query",
+          "description" : "Name of the resource to retrieve",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ResourceResolution"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/template/{bpName}/{bpVersion}/{artifactName}/{resolutionKey}" : {
+      "post" : {
+        "tags" : [ "Resource template" ],
+        "summary" : "Store a resolved template w/ resolution-key",
+        "description" : "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, artifact name and resolution key.",
+        "operationId" : "TemplateController_postWithResolutionKey_POST.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bpName",
+          "in" : "path",
+          "description" : "Name of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bpVersion",
+          "in" : "path",
+          "description" : "Version of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "artifactName",
+          "in" : "path",
+          "description" : "Artifact name for which to retrieve a resolved resource",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resolutionKey",
+          "in" : "path",
+          "description" : "Resolution Key associated with the resolution",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Template to store",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/TemplateResolution"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/template/{bpName}/{bpVersion}/{artifactName}/{resourceType}/{resourceId}" : {
+      "post" : {
+        "tags" : [ "Resource template" ],
+        "summary" : "Store a resolved template w/ resourceId and resourceType",
+        "description" : "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, artifact name, resourceId and resourceType.",
+        "operationId" : "TemplateController_postWithResourceIdAndResourceType_POST.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bpName",
+          "in" : "path",
+          "description" : "Name of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bpVersion",
+          "in" : "path",
+          "description" : "Version of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "artifactName",
+          "in" : "path",
+          "description" : "Artifact name for which to retrieve a resolved resource",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resourceType",
+          "in" : "path",
+          "description" : "Resource Type associated with the resolution",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resourceId",
+          "in" : "path",
+          "description" : "Resource Id associated with the resolution",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Template to store",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/TemplateResolution"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions" : {
@@ -596,6 +1220,32 @@
     }
   },
   "definitions" : {
+    "ArtifactDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "file" : {
+          "type" : "string"
+        },
+        "repository" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "deploy_Path" : {
+          "type" : "string"
+        }
+      }
+    },
     "BlueprintModelSearch" : {
       "type" : "object",
       "required" : [ "artifactName", "artifactVersion", "createdDate", "id", "published", "tags", "updatedBy" ],
@@ -680,8 +1330,312 @@
         }
       }
     },
+    "CapabilityAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "attributes" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        }
+      }
+    },
+    "ConstraintClause" : {
+      "type" : "object",
+      "properties" : {
+        "equal" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "length" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "pattern" : {
+          "type" : "string"
+        },
+        "schema" : {
+          "type" : "string"
+        },
+        "greater_than" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "greater_or_equal" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "less_than" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "less_or_equal" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "in_range" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "valid_values" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "min_length" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "max_length" : {
+          "$ref" : "#/definitions/JsonNode"
+        }
+      }
+    },
+    "EntrySchema" : {
+      "type" : "object",
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "constraints" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ConstraintClause"
+          }
+        }
+      }
+    },
     "FilePart" : {
       "type" : "object"
+    },
+    "Implementation" : {
+      "type" : "object",
+      "properties" : {
+        "primary" : {
+          "type" : "string"
+        },
+        "dependencies" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "timeout" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "lock" : {
+          "$ref" : "#/definitions/LockAssignment"
+        },
+        "operation_host" : {
+          "type" : "string"
+        }
+      }
+    },
+    "InterfaceAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "operations" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/OperationAssignment"
+          }
+        },
+        "inputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        }
+      }
+    },
+    "JsonNode" : {
+      "type" : "object",
+      "properties" : {
+        "valueNode" : {
+          "type" : "boolean"
+        },
+        "containerNode" : {
+          "type" : "boolean"
+        },
+        "missingNode" : {
+          "type" : "boolean"
+        },
+        "array" : {
+          "type" : "boolean"
+        },
+        "object" : {
+          "type" : "boolean"
+        },
+        "nodeType" : {
+          "type" : "string",
+          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
+        },
+        "pojo" : {
+          "type" : "boolean"
+        },
+        "number" : {
+          "type" : "boolean"
+        },
+        "integralNumber" : {
+          "type" : "boolean"
+        },
+        "floatingPointNumber" : {
+          "type" : "boolean"
+        },
+        "short" : {
+          "type" : "boolean"
+        },
+        "int" : {
+          "type" : "boolean"
+        },
+        "long" : {
+          "type" : "boolean"
+        },
+        "float" : {
+          "type" : "boolean"
+        },
+        "double" : {
+          "type" : "boolean"
+        },
+        "bigDecimal" : {
+          "type" : "boolean"
+        },
+        "bigInteger" : {
+          "type" : "boolean"
+        },
+        "textual" : {
+          "type" : "boolean"
+        },
+        "boolean" : {
+          "type" : "boolean"
+        },
+        "null" : {
+          "type" : "boolean"
+        },
+        "binary" : {
+          "type" : "boolean"
+        }
+      }
+    },
+    "LockAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "key" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "acquireTimeout" : {
+          "$ref" : "#/definitions/JsonNode"
+        }
+      }
+    },
+    "NodeFilterDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/PropertyDefinition"
+          }
+        },
+        "capabilities" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "NodeTemplate" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "directives" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "attributes" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "capabilities" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CapabilityAssignment"
+          }
+        },
+        "requirements" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/RequirementAssignment"
+          }
+        },
+        "interfaces" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/InterfaceAssignment"
+          }
+        },
+        "artifacts" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/ArtifactDefinition"
+          }
+        },
+        "copy" : {
+          "type" : "string"
+        },
+        "node_filter" : {
+          "$ref" : "#/definitions/NodeFilterDefinition"
+        }
+      }
+    },
+    "OperationAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "implementation" : {
+          "$ref" : "#/definitions/Implementation"
+        },
+        "inputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        },
+        "outputs" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/JsonNode"
+          }
+        }
+      }
     },
     "Page" : {
       "type" : "object",
@@ -694,7 +1648,15 @@
           "type" : "integer",
           "format" : "int64"
         },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "size" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
         },
@@ -704,25 +1666,17 @@
             "type" : "object"
           }
         },
-        "number" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "sort" : {
           "$ref" : "#/definitions/Sort"
+        },
+        "first" : {
+          "type" : "boolean"
         },
         "last" : {
           "type" : "boolean"
         },
-        "numberOfElements" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
-        },
-        "first" : {
-          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -740,7 +1694,15 @@
           "type" : "integer",
           "format" : "int64"
         },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "size" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
         },
@@ -750,25 +1712,17 @@
             "$ref" : "#/definitions/BlueprintModelSearch"
           }
         },
-        "number" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "sort" : {
           "$ref" : "#/definitions/Sort"
+        },
+        "first" : {
+          "type" : "boolean"
         },
         "last" : {
           "type" : "boolean"
         },
-        "numberOfElements" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
-        },
-        "first" : {
-          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -778,13 +1732,6 @@
     "Pageable" : {
       "type" : "object",
       "properties" : {
-        "offset" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
-        },
         "paged" : {
           "type" : "boolean"
         },
@@ -798,22 +1745,337 @@
         "pageSize" : {
           "type" : "integer",
           "format" : "int32"
+        },
+        "offset" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        }
+      }
+    },
+    "PropertyDefinition" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "required" : {
+          "type" : "boolean"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "status" : {
+          "type" : "string"
+        },
+        "constraints" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/ConstraintClause"
+          }
+        },
+        "metadata" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "value" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "input-param" : {
+          "type" : "boolean"
+        },
+        "default" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "entry_schema" : {
+          "$ref" : "#/definitions/EntrySchema"
+        },
+        "external-schema" : {
+          "type" : "string"
+        }
+      }
+    },
+    "RequirementAssignment" : {
+      "type" : "object",
+      "properties" : {
+        "capability" : {
+          "type" : "string"
+        },
+        "node" : {
+          "type" : "string"
+        },
+        "relationship" : {
+          "type" : "string"
+        }
+      }
+    },
+    "ResourceConfigSnapshot" : {
+      "type" : "object",
+      "required" : [ "config_snapshot", "createdDate", "resourceId", "resourceType", "status" ],
+      "properties" : {
+        "resourceType" : {
+          "type" : "string",
+          "example" : "ServiceInstance",
+          "description" : "Resource type."
+        },
+        "resourceId" : {
+          "type" : "string",
+          "example" : "1",
+          "description" : "ID associated with the resource type in the inventory system."
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Status of the snapshot, either running or candidate.",
+          "enum" : [ "RUNNING", "CANDIDATE" ]
+        },
+        "config_snapshot" : {
+          "type" : "string",
+          "example" : "config_snapshot",
+          "description" : "Snapshot of the resource as retrieved from resource."
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "createdDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Creation date of the snapshot."
+        }
+      }
+    },
+    "ResourceDefinition" : {
+      "type" : "object",
+      "required" : [ "group", "name", "property", "sources", "updated-by" ],
+      "properties" : {
+        "tags" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string",
+          "example" : "default-source",
+          "description" : "Name"
+        },
+        "property" : {
+          "description" : "Property",
+          "$ref" : "#/definitions/PropertyDefinition"
+        },
+        "group" : {
+          "type" : "string",
+          "example" : "default",
+          "description" : "Group"
+        },
+        "updated-by" : {
+          "type" : "string",
+          "example" : "example@onap.com",
+          "description" : "Updated by"
+        },
+        "sources" : {
+          "type" : "object",
+          "example" : "sources",
+          "description" : "Sources",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/NodeTemplate"
+          }
+        }
+      }
+    },
+    "ResourceDictionary" : {
+      "type" : "object",
+      "required" : [ "dataType", "definition", "description", "entrySchema", "name", "resourceDictionaryGroup", "tags", "updatedBy" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "sample-db-source",
+          "description" : "Name"
+        },
+        "dataType" : {
+          "type" : "string",
+          "example" : "string",
+          "description" : "Data type"
+        },
+        "entrySchema" : {
+          "type" : "string",
+          "example" : "dt-license-key",
+          "description" : "Entry schema"
+        },
+        "resourceDictionaryGroup" : {
+          "type" : "string",
+          "example" : "default",
+          "description" : "Resource dictionary group"
+        },
+        "definition" : {
+          "description" : "Definition",
+          "$ref" : "#/definitions/ResourceDefinition"
+        },
+        "description" : {
+          "type" : "string",
+          "example" : "demo_artifacts_version",
+          "description" : "Description"
+        },
+        "tags" : {
+          "type" : "string",
+          "example" : "hostname",
+          "description" : "Tags"
+        },
+        "creationDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "updatedBy" : {
+          "type" : "string",
+          "example" : "username",
+          "description" : "Updated by"
+        }
+      }
+    },
+    "ResourceResolution" : {
+      "type" : "object",
+      "required" : [ "artifactName", "blueprintName", "blueprintVersion", "createdDate", "dictionaryName", "dictionarySource", "dictionaryVersion", "name", "occurrence", "resolutionKey", "resourceId", "resourceType", "status", "value" ],
+      "properties" : {
+        "blueprintName" : {
+          "type" : "string",
+          "description" : "Name of the CBA."
+        },
+        "blueprintVersion" : {
+          "type" : "string",
+          "description" : "Version of the CBA."
+        },
+        "artifactName" : {
+          "type" : "string",
+          "description" : "Artifact name for which to retrieve a resolved resource."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Name of the resource."
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "Value of the resolution."
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "Whether success of failure."
+        },
+        "resolutionKey" : {
+          "type" : "string",
+          "description" : "Resolution Key uniquely identifying the resolution of a given artifact within a CBA."
+        },
+        "resourceType" : {
+          "type" : "string",
+          "example" : "ServiceInstance",
+          "description" : "Resolution type."
+        },
+        "resourceId" : {
+          "type" : "string",
+          "description" : "ID associated with the resolution type in the inventory system."
+        },
+        "occurrence" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "If resolution occurred multiple time, this field provides the index."
+        },
+        "dictionaryName" : {
+          "type" : "string",
+          "description" : "Name of the data dictionary used for the resolution."
+        },
+        "dictionarySource" : {
+          "type" : "string",
+          "description" : "Source associated with the data dictionary used for the resolution."
+        },
+        "dictionaryVersion" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Version of the data dictionary used for the resolution."
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "createdDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Creation date of the resolution."
+        }
+      }
+    },
+    "ResourceSourceMapping" : {
+      "type" : "object",
+      "properties" : {
+        "resourceSourceMappings" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
         }
       }
     },
     "Sort" : {
       "type" : "object",
       "properties" : {
-        "unsorted" : {
+        "sorted" : {
           "type" : "boolean"
         },
-        "sorted" : {
+        "unsorted" : {
           "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
         }
       }
+    },
+    "TemplateResolution" : {
+      "type" : "object",
+      "required" : [ "artifactName", "blueprintName", "blueprintVersion", "createdDate", "occurrence", "resolutionKey", "resourceId", "resourceType", "result" ],
+      "properties" : {
+        "blueprintName" : {
+          "type" : "string",
+          "description" : "Name of the CBA."
+        },
+        "blueprintVersion" : {
+          "type" : "string",
+          "description" : "Version of the CBA."
+        },
+        "artifactName" : {
+          "type" : "string",
+          "description" : "Artifact name for which to retrieve a resolved resource."
+        },
+        "result" : {
+          "type" : "string",
+          "description" : "Rendered template."
+        },
+        "resolutionKey" : {
+          "type" : "string",
+          "description" : "Resolution Key uniquely identifying the resolution of a given artifact within a CBA."
+        },
+        "resourceType" : {
+          "type" : "string",
+          "example" : "ServiceInstance",
+          "description" : "Resolution type."
+        },
+        "resourceId" : {
+          "type" : "string",
+          "description" : "ID associated with the resolution type in the inventory system."
+        },
+        "occurrence" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "If resolution occurred multiple time, this field provides the index."
+        },
+        "id" : {
+          "type" : "string"
+        },
+        "createdDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Creation date of the resolution."
+        }
+      }
+    },
+    "Unit" : {
+      "type" : "object"
     },
     "WorkFlowSpecRequest" : {
       "type" : "object",

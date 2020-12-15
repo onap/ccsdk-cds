@@ -59,7 +59,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/blueprint-model")
 @Api(
-    value = "Blueprint Model Catalog API",
+    value = "Blueprint Model Catalog",
     description = "Manages all blueprint models which are available in CDS"
 )
 open class BlueprintModelController(private val bluePrintModelHandler: BluePrintModelHandler) {

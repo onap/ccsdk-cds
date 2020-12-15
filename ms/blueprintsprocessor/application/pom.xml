@@ -335,6 +335,7 @@
                             <springmvc>true</springmvc>
                             <locations>
                                 <location>org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BlueprintModelController</location>
+                                <location>org.onap.ccsdk.cds.blueprintsprocessor.designer.api.ResourceDictionaryController</location>
                                 <location>org.onap.ccsdk.cds.blueprintsprocessor.resource.api</location>
                                 <location>org.onap.ccsdk.cds.blueprintsprocessor.configs.api</location>
                                 <!-- This location is not implemented yet
