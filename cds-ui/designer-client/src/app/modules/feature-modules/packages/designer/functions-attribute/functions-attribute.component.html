@@ -59,8 +59,7 @@
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" id="functionRadioInline" name="functionRadioInline"
                                                 [checked]="!currentFuncion['inputs']['artifact-prefix-names']?.get_input"
-                                                (click)="setArtifact(true)"
-                                                class="custom-control-input">
+                                                (click)="setArtifact(true)" class="custom-control-input">
                                             <label class="custom-control-label" for="functionRadioInline">Pre-defined
                                                 Template</label>
                                         </div>
@@ -82,7 +81,7 @@
                                     <div class="attribute-wrap"
                                         *ngFor="let requiredInput of getKeys(requiredInputs); let i=index">
                                         <!--string-->
-                                        <div *ngIf="getValue(requiredInput,requiredInputs).type=='string' || getValue(requiredInput,requiredInputs).type=='json'"
+                                        <div *ngIf="getValue(requiredInput,requiredInputs).type=='string'"
                                             class="form-group">
                                             <label for="exampleInputEmail1">{{ requiredInput }}<i
                                                     class="icon-required-star" type="button"
@@ -90,6 +89,17 @@
                                                     aria-hidden="true"></i></label>
                                             <input [(ngModel)]="currentFuncion['inputs'][requiredInput]" type="text"
                                                 class="form-control">
+                                        </div>
+                                        <!--JSON-->
+                                        <div *ngIf="getValue(requiredInput,requiredInputs).type=='json'"
+                                            class="form-group">
+                                            <label for="exampleInputEmail1">{{ requiredInput }}<i
+                                                    class="icon-required-star"
+                                                    [ngClass]="{'optional-attribute' : getValue(requiredInput,requiredInputs).required==false}"
+                                                    aria-hidden="true"></i></label>
+                                            <textarea style="height: 120px;" (change)="bind(requiredInput,$event)"
+                                                [value]="currentFuncion['inputs'][requiredInput]"
+                                                class="form-control"></textarea>
                                         </div>
                                         <!-- Integer -->
                                         <div class="form-group"
@@ -207,7 +217,7 @@
             </div>
         </div>
     </div>
-    <br/>
+    <br />
     <button class="btn btn-select-template m-auto" (click)="saveFunctionData()">Save</button>
 </div>
 
@@ -225,13 +235,13 @@
             </div>
             <div class="modal-body createAttributeTabs">
                 <div class="row">
-                <div class="col-6" *ngFor="let file of  getKeys(templateAndMappingMap)">
-                    <a class="template-mapping-list float" [class.active]="selectedTemplates.has(file)">
-                        <p (click)="setTemplate(file)">{{file}}</p>
-                        <span *ngIf="getValue(file,templateAndMappingMap).isMapping">Mapping</span>
-                        <span *ngIf="getValue(file,templateAndMappingMap).isTemplate">Template</span>
-                    </a>
-                </div>
+                    <div class="col-6" *ngFor="let file of  getKeys(templateAndMappingMap)">
+                        <a class="template-mapping-list float" [class.active]="selectedTemplates.has(file)">
+                            <p (click)="setTemplate(file)">{{file}}</p>
+                            <span *ngIf="getValue(file,templateAndMappingMap).isMapping">Mapping</span>
+                            <span *ngIf="getValue(file,templateAndMappingMap).isTemplate">Template</span>
+                        </a>
+                    </div>
                 </div>
 
             </div>
