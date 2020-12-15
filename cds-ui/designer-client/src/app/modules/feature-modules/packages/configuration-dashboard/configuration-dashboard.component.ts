@@ -252,8 +252,6 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         this.packageCreationStore.addTopologyTemplate(this.cbaPackage.templateTopology);
         this.formTreeData();
         this.enrichPackage();
-        this.designerStore.clear();
-        this.packageCreationStore.clear();
     }
 
 
