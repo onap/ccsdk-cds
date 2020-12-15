@@ -139,7 +139,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
             if (inputs) {
                 for (const [key, value] of Object.entries(inputs)) {
                     console.log(key + ' - ' + value);
-                    if (typeof value === 'object') {
+                    if (this.isValidJson(value)) {
                         this.currentFuncion.inputs[key] = JSON.stringify(value);
                     } else {
                         this.currentFuncion.inputs[key] = value;
@@ -153,6 +153,25 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    isValidJson(val) {
+        try {
+            JSON.parse(val);
+            return true;
+        } catch (e) { }
+        return false;
+    }
+
+    jsonToStr(json) {
+        return JSON.stringify(json);
+    }
+
+    bind(key, e) {
+        const val = JSON.parse(e.target.value);
+        this.currentFuncion.inputs[key] = {
+            ...val
+        };
     }
     ngOnDestroy() {
         this.ngUnsubscribe.next();
