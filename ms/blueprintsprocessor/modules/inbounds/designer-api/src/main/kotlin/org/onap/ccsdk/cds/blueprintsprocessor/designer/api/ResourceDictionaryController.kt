@@ -39,20 +39,20 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping(value = ["/api/v1/dictionary"])
 @Api(
     value = "Resource dictionary",
-    description = "Interaction with stored dictionaries."
+    description = "Interaction with stored dictionaries"
 )
 open class ResourceDictionaryController(private val resourceDictionaryHandler: ResourceDictionaryHandler) {
 
     @GetMapping(path = ["/{name}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(
-        value = "Retrieve a resource dictionary.",
+        value = "Retrieve a resource dictionary",
         notes = "Retrieve a resource dictionary by name provided.",
         response = ResourceDictionary::class
     )
     @ResponseBody
     @Throws(BluePrintException::class)
     suspend fun getResourceDictionaryByName(
-        @ApiParam(value = "Name of the resource.", required = true, example = "\"hostname\"")
+        @ApiParam(value = "Name of the resource", required = true, example = "\"hostname\"")
         @PathVariable(value = "name") name: String
     ): ResourceDictionary =
         mdcWebCoroutineScope {
@@ -64,14 +64,14 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
-        value = "Saves a resource dictionary.",
-        notes = "Saves a resource dictionary by dictionary provided.",
+        value = "Save a resource dictionary",
+        notes = "Save a resource dictionary by dictionary provided.",
         response = ResourceDictionary::class
     )
     @ResponseBody
     @Throws(BluePrintException::class)
     suspend fun saveResourceDictionary(
-        @ApiParam(value = "Resource dictionary to store.", required = true)
+        @ApiParam(value = "Resource dictionary to store", required = true)
         @RequestBody dataDictionary: ResourceDictionary
     ): ResourceDictionary =
         mdcWebCoroutineScope {
@@ -84,15 +84,15 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
-        value = "Saves a resource dictionary.",
-        notes = "Saves a resource dictionary by resource definition provided.",
+        value = "Save a resource dictionary",
+        notes = "Save a resource dictionary by resource definition provided.",
         nickname = "ResourceDictionaryController_saveResourceDictionary_1_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
         response = ResourceDefinition::class
     )
     @ResponseBody
     @Throws(BluePrintException::class)
     suspend fun saveResourceDictionary(
-        @ApiParam(value = "Resource definition to generate.", required = true)
+        @ApiParam(value = "Resource definition to generate", required = true)
         @RequestBody resourceDefinition: ResourceDefinition
     ): ResourceDefinition =
         mdcWebCoroutineScope {
@@ -101,11 +101,11 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
 
     @DeleteMapping(path = ["/{name}"])
     @ApiOperation(
-        value = "Removes a resource dictionary.",
-        notes = "Removes a resource dictionary by name provided."
+        value = "Remove a resource dictionary",
+        notes = "Remove a resource dictionary by name provided."
     )
     suspend fun deleteResourceDictionaryByName(
-        @ApiParam(value = "Name of the resource.", required = true)
+        @ApiParam(value = "Name of the resource", required = true)
         @PathVariable(value = "name") name: String
     ) = mdcWebCoroutineScope {
         resourceDictionaryHandler.deleteResourceDictionary(name)
@@ -117,14 +117,14 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
-        value = "Searches for a resource dictionary.",
-        notes = "Searches for a resource dictionary by names provided.",
+        value = "Search for a resource dictionary",
+        notes = "Search for a resource dictionary by names provided.",
         responseContainer = "List",
         response = ResourceDictionary::class
     )
     @ResponseBody
     suspend fun searchResourceDictionaryByNames(
-        @ApiParam(value = "List of names.", required = true)
+        @ApiParam(value = "List of names", required = true)
         @RequestBody names: List<String>
     ): List<ResourceDictionary> =
         mdcWebCoroutineScope {
@@ -133,14 +133,14 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
 
     @GetMapping(path = ["/search/{tags}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(
-        value = "Searches for a resource dictionary.",
-        notes = "Searches for a resource dictionary by tags provided.",
+        value = "Search for a resource dictionary",
+        notes = "Search for a resource dictionary by tags provided.",
         responseContainer = "List",
         response = ResourceDictionary::class
     )
     @ResponseBody
     suspend fun searchResourceDictionaryByTags(
-        @ApiParam(value = "Tags list.", required = true, example = "\"status\"")
+        @ApiParam(value = "Tags list", required = true, example = "\"status\"")
         @PathVariable(value = "tags") tags: String
     ): List<ResourceDictionary> =
         mdcWebCoroutineScope {
@@ -149,8 +149,8 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
 
     @GetMapping(path = ["/source-mapping"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(
-        value = "Searches for a source mapping.",
-        notes = "Searches for a source mapping.",
+        value = "Search for a source mapping",
+        notes = "Search for a source mapping.",
         response = ResourceSourceMapping::class
     )
     @ResponseBody
@@ -160,7 +160,7 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
 
     @GetMapping(path = ["/resource_dictionary_group"], produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation(
-        value = "Retrieve all resource dictionary groups.",
+        value = "Retrieve all resource dictionary groups",
         notes = "Retrieve all resource dictionary groups.",
         responseContainer = "List",
         response = String::class
