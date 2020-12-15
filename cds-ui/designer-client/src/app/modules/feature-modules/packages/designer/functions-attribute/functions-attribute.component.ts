@@ -99,7 +99,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
 
     onInitMapping() {
         // selectedTemplates , templateAndMappingMap
-        this.selectedTemplates = new Map<string, TemplateAndMapping>();
+        // this.selectedTemplates = new Map<string, TemplateAndMapping>();
         try {
             const functionMap = this.designerState.template.node_templates[this.functionName].artifacts;
             console.log(this.templateAndMappingMap);
@@ -115,6 +115,10 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
 
 
         } catch (e) { }
+    }
+
+    init() {
+        this.selectedTemplates = new Map(this.finalTemplates);
     }
 
     toNodeProcess(nodeTemplate, functionName) {
@@ -156,7 +160,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     }
 
     addTemplates() {
-        this.finalTemplates = this.selectedTemplates;
+        this.finalTemplates = new Map(this.selectedTemplates);
     }
     cancel() {
         this.selectedTemplates = new Map<string, TemplateAndMapping>();
