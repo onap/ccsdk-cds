@@ -8,8 +8,61 @@
                                                                                              data-toggle="modal"
                                                                                              (click)="resetTheUploadedFiles()"
                                                                                              href="#"><b>Import File</b></a></span>
-
+        <span>
+   <div class="card creat-card"></div>
+   <div class="single-line-model">
+      <label class="label-name">File Name
+      <span _ngcontent-uew-c3="">*</span>
+      </label>
+      <div class="label-input">
+         <input type="input" [(ngModel)]="currentFileName"
+                placeholder="script name" name="scriptName" autofocus [autofocus]="true">
+      </div>
+      <div class="single-line">
+         <label class="label-name">Script Type</label>
+         <div class="label-input" (change)="changeExtension()">
+            <label name="trst" id="kt">
+            <input class="form-check-input" [(ngModel)]="scriptExtension" type="radio"
+                   name="exampleRadios1" id="kt" value=kotlin>
+            <span>
+            Kotlin
+            </span>
+            </label>
+            <label name="trst" id="py">
+            <input class="form-check-input" [(ngModel)]="scriptExtension" type="radio"
+                   name="exampleRadios2" id="py" value=python>
+            <span>
+            Jython
+            </span>
+            </label>
+            <label id="ansible">
+            <input class="form-check-input" [(ngModel)]="scriptExtension" type="radio"
+                   name="exampleRadios3" id="ansible" value=ansible>
+            <span>
+            Ansible
+            </span>
+            </label>
+         </div>
+      </div>
+   </div>
+   <div id="id-script" class="collapse show">
+      <div class="card-body">
+         <ace-editor [(text)]="currentFileContent"
+                     [mode]="currentExtension"
+                     [autoUpdateContent]="true" [durationBeforeCallback]="3000" [theme]="'eclipse'"
+                     #editor
+                     style="height:300px;">
+         </ace-editor>
+      </div>
+   </div>
+</span>
+        <button tourAnchor="tm-templateFinish" (click)="textCurrentChanges()" [disabled]="currentFileName?.length == 0 ||
+this.currentFileContent?.length == 0
+"
+                title="Submit template and close" class="btn btn-primary">Save
+        </button>
     </div>
+
 
     <div class="accordion">
         <!-- <div class="card creat-card">
