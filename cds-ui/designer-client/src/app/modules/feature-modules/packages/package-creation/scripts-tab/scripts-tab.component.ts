@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
-import { PackageCreationStore } from '../package-creation.store';
+import {Component, OnInit} from '@angular/core';
+import {FileSystemFileEntry, NgxFileDropEntry} from 'ngx-file-drop';
+import {PackageCreationStore} from '../package-creation.store';
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/webpack-resolver';
+import {ToastrService} from 'ngx-toastr';
+
 declare var $: any;
 
 @Component({
@@ -20,7 +22,9 @@ export class ScriptsTabComponent implements OnInit {
 
     constructor(
         private packageCreationStore: PackageCreationStore,
-    ) { }
+        private toastService: ToastrService
+    ) {
+    }
 
 
     ngOnInit() {
@@ -53,6 +57,7 @@ export class ScriptsTabComponent implements OnInit {
     initDelete(file) {
         this.fileToDelete = file;
     }
+
     removeFile(filePath: string, FileIndex: number) {
         const filename = filePath.split('/')[2] || '';
         //  const filename = 'Scripts/' + this.getFileType(this.uploadedFiles[fileIndex].name) + '/' + this.uploadedFiles[fileIndex].name;
@@ -107,6 +112,7 @@ export class ScriptsTabComponent implements OnInit {
 
     textChanges(code: any, key: string) {
         this.packageCreationStore.addScripts(key, code);
+        this.toastService.success(key + ' is updated successfully');
     }
 
     changeDivShow(mapIndex: number) {

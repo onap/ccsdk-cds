@@ -5,7 +5,9 @@
             <a class="enter-link" href="#"><i class="icon-enter-link"></i></a>
         </div>
         <span tourAnchor="st-scriptsImport" class="import-container-span">Or you can also <a data-target="#scriptsModal"
-                data-toggle="modal" (click)="resetTheUploadedFiles()" href="#"><b>Import File</b></a></span>
+                                                                                             data-toggle="modal"
+                                                                                             (click)="resetTheUploadedFiles()"
+                                                                                             href="#"><b>Import File</b></a></span>
 
     </div>
 
@@ -21,22 +23,22 @@
                 <div [id]="'head-script-'+mapIndex" class="card-header">
                     <h5 class="mb-0 d-flex justify-content-between">
                         <button (click)="changeDivShow(mapIndex)" aria-expanded="false" class="btn btn-link collapsed"
-                            data-toggle="collapse">
+                                data-toggle="collapse">
                             <i class="icon-file-code"></i> {{file.key}}
                         </button>
                         <a data-toggle="modal" (click)="initDelete(file)" data-target="#exampleModal"
-                            class="accordion-delete"><i class="icon-delete-sm"></i></a>
+                           class="accordion-delete"><i class="icon-delete-sm"></i></a>
                         <!-- <a (click)="removeFile(file.key,mapIndex)" data-toggle="modal" data-target="#exampleModal" class="accordion-delete"><i
                                     class="icon-delete-sm"></i></a> -->
                         <!-- Delete Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Delete Script</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <img src="assets/img/icon-close.svg" />
+                                            <img src="assets/img/icon-close.svg"/>
                                         </button>
                                     </div>
                                     <div class="modal-body">
@@ -45,9 +47,11 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Cancel</button>
+                                                data-dismiss="modal">Cancel
+                                        </button>
                                         <button type="button" (click)="removeFile(fileToDelete?.key,0)"
-                                            data-dismiss="modal" class="btn btn-danger">Delete</button>
+                                                data-dismiss="modal" class="btn btn-danger">Delete
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -57,11 +61,12 @@
                     </h5>
                 </div>
                 <div [attr.aria-labelledby]="'head-script-'+mapIndex" [id]="'id-script-'+mapIndex" class="collapse"
-                    data-parent="#accordion-script">
+                     data-parent="#accordion-script">
                     <div class="card-body">
                         <ace-editor [(text)]="file.value" (textChange)="textChanges($event,file.key)" [mode]="'kotlin'"
-                            [autoUpdateContent]="true" [durationBeforeCallback]="1000" [theme]="'eclipse'" #editor
-                            style="height:300px;">
+                                    [autoUpdateContent]="true" [durationBeforeCallback]="5000" [theme]="'eclipse'"
+                                    #editor
+                                    style="height:300px;">
                         </ace-editor>
                     </div>
                 </div>
@@ -73,21 +78,21 @@
 </div>
 
 <div aria-hidden="true" aria-labelledby="scriptsModalLabel" class="modal fade" id="scriptsModal" role="dialog"
-    tabindex="-1">
+     tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="scriptsModalLabel">Import File</h5>
                 <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                    <img src="assets/img/icon-close.svg" />
+                    <img src="assets/img/icon-close.svg"/>
                 </button>
             </div>
             <div class="modal-body">
                 <ngx-file-drop accept=".kt,.py" (onFileDrop)="dropped($event)" (onFileLeave)="fileLeave($event)"
-                    (onFileOver)="fileOver($event)" dropZoneLabel="Drop files here">
+                               (onFileOver)="fileOver($event)" dropZoneLabel="Drop files here">
                     <ng-template let-openFileSelector="openFileSelector" ngx-file-drop-content-tmp>
                         <div class="folder-upload">
-                            <img src="assets/img/folder-upload.svg" />
+                            <img src="assets/img/folder-upload.svg"/>
                         </div>
                         <div class="folder-upload-text">
                             Drag & Drop file
@@ -103,22 +108,22 @@
                 <div class="upload-table">
                     <table class="table">
                         <thead>
-                            <tr *ngFor="let item of uploadedFiles; let i=index">
-                                <th width="40"><img src="assets/img/icon-file-code.svg" /></th>
-                                <th>{{ item.name }}</th>
-                                <th (click)="removeInitFile(i)" width="40" class="text-right"><img
-                                        src="assets/img/icon-remove-file.svg" /></th>
-                            </tr>
+                        <tr *ngFor="let item of uploadedFiles; let i=index">
+                            <th width="40"><img src="assets/img/icon-file-code.svg"/></th>
+                            <th>{{ item.name }}</th>
+                            <th (click)="removeInitFile(i)" width="40" class="text-right"><img
+                                    src="assets/img/icon-remove-file.svg"/></th>
+                        </tr>
                         </thead>
                     </table>
                 </div>
             </div>
             <div class="modal-footer">
                 <button (click)="resetTheUploadedFiles()" class="btn btn-sm btn-secondary" data-dismiss="modal"
-                    type="button">Cancel
+                        type="button">Cancel
                 </button>
                 <button (click)="setFilesToStore()" class="btn btn-sm btn-primary" [disabled]="uploadedFiles?.length<=0"
-                    data-dismiss="modal" type="button">
+                        data-dismiss="modal" type="button">
                     Import
                 </button>
             </div>
