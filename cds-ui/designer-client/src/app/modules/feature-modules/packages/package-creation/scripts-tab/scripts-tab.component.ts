@@ -19,6 +19,10 @@ export class ScriptsTabComponent implements OnInit {
     public files: NgxFileDropEntry[] = [];
     private fileNames: Set<string> = new Set();
     fileToDelete: any = {};
+    currentFileName: any;
+    scriptExtension: any;
+    currentFileContent = '';
+    currentExtension = '';
 
     constructor(
         private packageCreationStore: PackageCreationStore,
@@ -122,5 +126,29 @@ export class ScriptsTabComponent implements OnInit {
         } else {
             divElement.setAttribute('class', 'collapse show');
         }
+    }
+
+    textCurrentChanges() {
+        console.log(this.currentFileName);
+        console.log(this.currentFileContent);
+        if (this.currentFileName) {
+            let fileExtension = 'kt';
+            if (this.currentExtension.includes('python')) {
+                fileExtension = 'py';
+            } else if (this.currentExtension.includes('ansible')) {
+                fileExtension = 'yaml';
+            }
+            this.packageCreationStore.addScripts('Scripts/' + this.currentExtension + '/' + this.currentFileName + '.' + fileExtension
+                , this.currentFileContent);
+            this.toastService.success('the ' + this.currentFileName + ' has been added');
+            this.currentFileName = '';
+            this.currentExtension = '';
+            this.currentFileContent = '';
+        }
+    }
+
+    changeExtension() {
+        this.currentExtension = this.scriptExtension;
+        console.log(this.scriptExtension);
     }
 }
