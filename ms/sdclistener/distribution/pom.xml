@@ -31,12 +31,8 @@
     <name>MS SDC Listener - Distribution</name>
 
     <properties>
-        <assembly.id>maven</assembly.id>
-        <name.space>org.onap.ccsdk.cds</name.space>
         <serviceArtifactName>sdclistener</serviceArtifactName>
         <image.name>onap/ccsdk-sdclistener</image.name>
-        <!--disabled for now to mirror #85964 https://gerrit.onap.org/r/#/c/85964/2/ms/command-executor/pom.xml-->
-        <!--<docker.buildArg.https_proxy>${https_proxy}</docker.buildArg.https_proxy>-->
     </properties>
 
     <dependencies>

@@ -55,8 +55,7 @@ limitations under the License.
         <!--Only include java and kt files to the scan-->
         <sonar.inclusions>**/*.java,**/*.kt</sonar.inclusions>
         <!--Specify path to load jacoco XLM report, as Sonar can't load Kotlin coverage from binary report-->
-        <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml
-        </sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <jacoco.version>0.8.3</jacoco.version>
 
         <!-- Properties for POM Format -->
@@ -67,8 +66,10 @@ limitations under the License.
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
 
         <!-- docker related properties -->
+        <assembly.id>maven</assembly.id>
         <docker.verbose>true</docker.verbose>
         <docker.skip.push>false</docker.skip.push>
+        <name.space>org.onap.ccsdk.cds</name.space>
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
 

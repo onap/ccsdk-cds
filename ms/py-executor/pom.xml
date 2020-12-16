@@ -30,7 +30,6 @@
     <description>Micro-service providing python environment with gRPC binding for python script execution</description>
 
     <properties>
-        <assembly.id>maven</assembly.id>
         <image.name>onap/ccsdk-py-executor</image.name>
         <sonar.skip>true</sonar.skip>
     </properties>
