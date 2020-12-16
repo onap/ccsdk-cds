@@ -34,8 +34,6 @@
     <name>MS Blueprints Processor Application</name>
 
     <properties>
-        <assembly.id>maven</assembly.id>
-        <name.space>org.onap.ccsdk.cds</name.space>
         <serviceArtifactName>blueprintsprocessor</serviceArtifactName>
         <image.name>onap/ccsdk-blueprintsprocessor</image.name>
     </properties>
