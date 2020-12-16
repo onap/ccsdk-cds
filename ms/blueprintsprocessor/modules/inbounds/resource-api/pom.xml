@@ -28,7 +28,7 @@
     <artifactId>resource-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>MS Blueprints Processor Modules - Inbound - Resource API</name>
+    <name>MS Blueprints Processor Modules - Inbounds - Resource API</name>
 
     <dependencies>
         <dependency>

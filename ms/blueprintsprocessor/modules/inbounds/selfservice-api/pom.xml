@@ -31,7 +31,7 @@
     <artifactId>selfservice-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>MS Blueprints Processor Modules - Inbound - Self Service API</name>
+    <name>MS Blueprints Processor Modules - Inbounds - Self Service API</name>
 
     <dependencies>
         <dependency>

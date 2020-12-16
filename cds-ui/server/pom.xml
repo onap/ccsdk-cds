@@ -32,7 +32,7 @@ limitations under the License.
     <artifactId>cds-ui-server</artifactId>
     <packaging>pom</packaging>
 
-    <name>UI Server</name>
+    <name>CDS UI - Server</name>
 
     <properties>
         <image.name>onap/ccsdk-cds-ui-server</image.name>
@@ -87,33 +87,26 @@ limitations under the License.
                         </goals>
                         <phase>generate-resources</phase>
                     </execution>
-
                     <execution>
                         <id>npm install</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-
                         <phase>generate-resources</phase>
-
                         <configuration>
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
-
                     <execution>
                         <id>npm build</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-
                         <phase>generate-resources</phase>
-
                         <configuration>
                             <arguments>run build</arguments>
                         </configuration>
                     </execution>
-
                 </executions>
             </plugin>
             <plugin>
@@ -176,6 +169,5 @@ limitations under the License.
                 </plugins>
             </build>
         </profile>
-
     </profiles>
 </project>

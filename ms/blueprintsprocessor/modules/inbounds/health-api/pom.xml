@@ -29,7 +29,7 @@
     <artifactId>health-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>MS Blueprints Processor Modules - Inbound - Health API</name>
+    <name>MS Blueprints Processor Modules - Inbounds - Health API</name>
 
     <dependencies>
         <dependency>

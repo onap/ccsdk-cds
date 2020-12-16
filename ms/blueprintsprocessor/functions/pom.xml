@@ -40,7 +40,7 @@
         <module>restconf-executor</module>
         <module>cli-executor</module>
         <module>config-snapshots</module>
-        <module>message-prioritizaion</module>
+        <module>message-prioritization</module>
         <module>k8s-profile-upload</module>
     </modules>
 
