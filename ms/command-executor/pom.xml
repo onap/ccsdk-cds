@@ -32,7 +32,6 @@
     <description>Micro-service providing python environment with gRPC binding for command execution</description>
 
     <properties>
-        <assembly.id>maven</assembly.id>
         <image.name>onap/ccsdk-commandexecutor</image.name>
     </properties>
 

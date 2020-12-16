@@ -1,4 +1,4 @@
-FROM python:3.7-slim
+FROM python:3-slim
 
 USER root
 RUN mkdir -p /opt/app/onap/logs/ && touch /opt/app/onap/logs/application.log
