@@ -32,7 +32,7 @@ limitations under the License.
     <artifactId>cds-ui</artifactId>
     <packaging>pom</packaging>
 
-    <name>UI Parent</name>
+    <name>CDS UI (Root)</name>
     <description>Creates Controller Design Studio UI Docker container</description>
 
     <modules>

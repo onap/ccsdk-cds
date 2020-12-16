@@ -29,7 +29,7 @@
     <artifactId>error-catalog</artifactId>
     <packaging>pom</packaging>
 
-    <name>MS Error Catalog Lib</name>
+    <name>MS Error Catalog (Root)</name>
     <description>Error Catalog Lib for ONAP Components</description>
 
     <modules>
