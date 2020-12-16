@@ -1,4 +1,4 @@
-FROM onap/ccsdk-alpine-j11-image:1.0.1
+FROM onap/ccsdk-alpine-j11-image:1.1.0
 
 USER root
 # add entrypoint
