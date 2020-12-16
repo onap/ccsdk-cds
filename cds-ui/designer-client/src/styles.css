@@ -1590,6 +1590,10 @@ ul.package-contributers{
 .packages-card .card-footer i{
   margin-right: 6px;
 }
+.icon-deployed{
+  margin-right: 6px;
+  width: 14px;
+}
 .icon-deployed-active,
 .icon-deploy-inactive{
   margin-right: 9px;

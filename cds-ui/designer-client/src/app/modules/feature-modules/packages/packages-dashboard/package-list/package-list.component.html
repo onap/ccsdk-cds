@@ -29,12 +29,12 @@
                     <div class="col-10 pr-0">
                         <a class="card-title" [routerLink]="['/packages/package', bluePrint.id]"
                            (click)="testDispatch(bluePrint)">
+                           <img *ngIf="bluePrint.published.includes('Y')" class="icon-deployed" src="/assets/img/icon-deploy.svg">
                             <!-- <img class="icon-deployed" src="/assets/img/icon-deploy.svg"> -->
                             <p class="packageName" tooltip="{{bluePrint.artifactName}}" placement="bottom">
                                 {{bluePrint.artifactName}}</p>
                             <span class="package-version">v{{bluePrint.artifactVersion}}</span>
-                            <button *ngIf="bluePrint.published.includes('Y')" type="button"
-                                    class="dot"><i class="glyphicon glyphicon-ok"></i></button>
+                            
                         </a>
 
                     </div>
