@@ -442,7 +442,7 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
-                <artifactId>message-prioritizaion</artifactId>
+                <artifactId>message-prioritization</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>
