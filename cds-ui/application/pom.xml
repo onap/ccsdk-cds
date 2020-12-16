@@ -32,7 +32,7 @@ limitations under the License.
     <artifactId>cds-ui-application</artifactId>
     <packaging>pom</packaging>
 
-    <name>UI Application</name>
+    <name>CDS UI - Application</name>
 
     <properties>
         <image.name>onap/ccsdk-cds-ui</image.name>

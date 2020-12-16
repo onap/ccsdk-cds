@@ -28,7 +28,7 @@
     <artifactId>configs-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>MS Blueprints Processor Modules - Inbound - Configurations API</name>
+    <name>MS Blueprints Processor Modules - Inbounds - Configurations API</name>
 
     <dependencies>
         <dependency>

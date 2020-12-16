@@ -32,7 +32,7 @@ limitations under the License.
     <artifactId>cds-ui-client</artifactId>
     <packaging>pom</packaging>
 
-    <name>UI Client</name>
+    <name>CDS UI - Client</name>
 
     <build>
         <plugins>
