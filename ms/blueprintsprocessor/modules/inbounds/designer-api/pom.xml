@@ -28,7 +28,7 @@
     <artifactId>designer-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>MS Blueprints Processor Modules - Inbound - Designer API</name>
+    <name>MS Blueprints Processor Modules - Inbounds - Designer API</name>
 
     <dependencies>
         <dependency>
