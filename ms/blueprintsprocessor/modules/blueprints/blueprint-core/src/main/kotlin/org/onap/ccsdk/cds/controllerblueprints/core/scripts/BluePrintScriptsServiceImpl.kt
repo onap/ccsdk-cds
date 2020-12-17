@@ -79,11 +79,4 @@ open class BluePrintScriptsServiceImpl : BluePrintScriptsService {
         return Thread.currentThread().contextClassLoader.loadClass(scriptClassName).constructors
             .single().newInstance(*args.toArray()) as T
     }
-
-    override suspend fun cleanupInstance(blueprintBasePath: String) {
-        if (!BluePrintConstants.USE_SCRIPT_COMPILE_CACHE) {
-            log.info("Invalidating compile cache for blueprint ($blueprintBasePath)")
-            BluePrintCompileCache.cleanClassLoader(blueprintBasePath)
-        }
-    }
 }

@@ -36,6 +36,4 @@ interface BluePrintScriptsService {
     suspend fun <T> scriptInstance(cacheKey: String, scriptClassName: String): T
 
     suspend fun <T> scriptInstance(scriptClassName: String): T
-
-    suspend fun cleanupInstance(blueprintBasePath: String)
 }

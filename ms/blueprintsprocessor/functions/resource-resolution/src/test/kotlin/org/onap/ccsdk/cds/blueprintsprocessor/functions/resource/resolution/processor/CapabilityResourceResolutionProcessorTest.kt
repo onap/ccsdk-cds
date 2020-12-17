@@ -52,10 +52,6 @@ class CapabilityResourceResolutionProcessorTest {
                     .scriptInstance<ResourceAssignmentProcessor>(any(), any(), any())
             } returns MockCapabilityScriptRA()
 
-            coEvery {
-                componentFunctionScriptingService.cleanupInstance(any(), any())
-            } returns mockk()
-
             val raRuntimeService = mockk<ResourceAssignmentRuntimeService>()
             every { raRuntimeService.bluePrintContext() } returns mockk<BluePrintContext>()
             every { raRuntimeService.getInputValue("test-property") } returns NullNode.getInstance()
@@ -99,10 +95,6 @@ class CapabilityResourceResolutionProcessorTest {
                 componentFunctionScriptingService
                     .scriptInstance<ResourceAssignmentProcessor>(any(), BluePrintConstants.SCRIPT_JYTHON, any())
             } returns MockCapabilityScriptRA()
-
-            coEvery {
-                componentFunctionScriptingService.cleanupInstance(any(), any())
-            } returns mockk()
 
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
 

@@ -101,10 +101,4 @@ class ComponentFunctionScriptingService(
         }
         return scriptComponent
     }
-
-    suspend fun cleanupInstance(bluePrintContext: BluePrintContext, scriptType: String) {
-        if (scriptType == BluePrintConstants.SCRIPT_KOTLIN) {
-            BluePrintScriptsServiceImpl().cleanupInstance(bluePrintContext.rootPath)
-        }
-    }
 }
