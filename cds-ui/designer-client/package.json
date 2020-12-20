@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "npm run lint && ng serve --proxy-config proxy.conf.json && ng build --prod --aot ",
     "build": "npm run lint && ng build --prod --aot ",
+    "build:local": "ng build --prod --aot",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

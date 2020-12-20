@@ -250,22 +250,22 @@
                             <label class="col-form-label col-sm-3 pt-0">Type <span>*</span></label>
                             <div class="col-sm-9">
                                 <div class="list-group list-group-horizontal">
-                                    <button type="button" class="list-group-item list-group-item-action"
+                                    <button type="button" class="list-group-item list-group-item-action" [class.active]="this.outputActionAttribute.type === 'string'"
                                         (click)="setOutputType('string')">String
                                     </button>
-                                    <button type="button" class="list-group-item list-group-item-action"
+                                    <button type="button" class="list-group-item list-group-item-action" [class.active]="this.outputActionAttribute.type === 'integer'"
                                         (click)="setOutputType('integer')">
                                         Integer
                                     </button>
-                                    <button type="button" class="list-group-item list-group-item-action"
+                                    <button type="button" class="list-group-item list-group-item-action" [class.active]="this.outputActionAttribute.type === 'boolean'"
                                         (click)="setOutputType('boolean')">
                                         Boolean
                                     </button>
-                                    <button type="button" class="list-group-item list-group-item-action"
+                                    <button type="button" class="list-group-item list-group-item-action" [class.active]="this.outputActionAttribute.type === 'list'"
                                         (click)="setOutputType('list')">
                                         List
                                     </button>
-                                    <button type="button" class="list-group-item list-group-item-action"
+                                    <button type="button" class="list-group-item list-group-item-action" [class.active]="this.outputActionAttribute.type === 'Other'"
                                         (click)="setOutputType('Other')">
                                         Other
                                     </button>
