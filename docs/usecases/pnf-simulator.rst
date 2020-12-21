@@ -3,6 +3,8 @@
 .. International License. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2020 Deutsche Telekom AG.
 
+.. _pnf_simulator_use_case:
+
 PNF Simulator Day-N config-assign/deploy
 ========================================
 
@@ -326,6 +328,8 @@ here but they are not tested by the author of this guide.
 
          docker ps -a | grep netopeer
 
+
+.. _pnf_simulator_use_case_config_assign_deploy:
 
 Config-assign and config-deploy in CDS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

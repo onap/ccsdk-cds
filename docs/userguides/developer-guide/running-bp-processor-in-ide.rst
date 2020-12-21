@@ -3,6 +3,8 @@
 .. International License. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2020 Deutsche Telekom AG.
 
+.. _running_bp_processor_in_ide:
+
 Running Blueprints Processor Microservice in an IDE
 ====================================================
 
