@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0175f488-96af-4253-ad35-d2a670330091",
+		"_postman_id": "835c7d3a-d5c4-4f5b-a80f-b2870da7850c",
 		"name": "CDS PNF Simulator Use Case",
 		"description": "This collection contains all API calls to do the \"PNF Simulator Day-N config-assign and config-deploy use case\" in CDS. ",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -42,10 +42,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"loadModelType\" : true,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : true\r\n}",
-					"options": {
-						"raw": {}
-					}
+					"raw": "{\r\n\"loadModelType\" : true,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : true\r\n}"
 				},
 				"url": {
 					"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/bootstrap",
@@ -81,10 +78,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
-							"options": {
-								"raw": {}
-							}
+							"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
@@ -207,10 +201,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"loadModelType\" : true,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
-					"options": {
-						"raw": {}
-					}
+					"raw": "{\r\n\"loadModelType\" : true,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}"
 				},
 				"url": {
 					"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model",
@@ -245,10 +236,167 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
-							"options": {
-								"raw": {}
+							"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"blueprint-model",
+								"bootstrap"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-ONAP-RequestID",
+							"value": "b73253b6-d2be-4701-bdb2-31fa66b79a01"
+						},
+						{
+							"key": "X-ONAP-InvocationID",
+							"value": "b1a59296-fcf2-4435-b8de-9a2e9b9f4077"
+						},
+						{
+							"key": "X-ONAP-PartnerName",
+							"value": "cds-controller"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, no-store, max-age=0, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Expires",
+							"value": "0"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "DENY"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1 ; mode=block"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Delete Blueprint Model loaded in Bootstrap",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "ccsdkapps",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "ccsdkapps",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"type": "text",
+						"value": "",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/name/pnf_netconf/version/1.0.0",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"v1",
+						"blueprint-model",
+						"name",
+						"pnf_netconf",
+						"version",
+						"1.0.0"
+					]
+				},
+				"description": "Delete a blueprint model identified by its name and version from CDS."
+			},
+			"response": [
+				{
+					"name": "CDS Bootstrap",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
 							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
@@ -341,7 +489,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "697ce54a-7333-4b86-9d51-9591f741ad7d",
 						"exec": [
 							"var allDD = pm.environment.get(\"allDD\");\r",
 							"\r",
@@ -517,7 +664,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "ba9ff38c-cfb4-4e76-a58c-11c28b62a394",
 						"exec": [
 							"var allDD = pm.environment.get(\"allDD\");\r",
 							"\r",
@@ -631,12 +777,9 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/home/jakob/CDS_Use_Cases/PNF-DEMO-ENRICHED_WORKING/pnf-demo.zip"
+							"src": "/home/jakob/Downloads/workflow-tutorial-cba.zip"
 						}
-					],
-					"options": {
-						"formdata": {}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model/enrich",
@@ -692,12 +835,9 @@
 						{
 							"key": "file",
 							"type": "file",
-							"src": "/home/jakob/CDS_Use_Cases/PNF-DEMO-ENRICHED_WORKING/pnf-demo.zip"
+							"src": "/home/jakob/Downloads/workflow-tutorial-cba-enriched.zip"
 						}
-					],
-					"options": {
-						"formdata": {}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://{{host}}:{{port}}/api/v1/blueprint-model",
@@ -732,10 +872,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}",
-							"options": {
-								"raw": {}
-							}
+							"raw": "{\r\n\"loadModelType\" : false,\r\n\"loadResourceDictionary\" : true,\r\n\"loadCBA\" : false\r\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8081/api/v1/blueprint-model/bootstrap",
@@ -876,7 +1013,6 @@
 					"mode": "raw",
 					"raw": "{\n\n    \"actionIdentifiers\": {\n        \"mode\": \"sync\",\n        \"blueprintName\": \"pnf_netconf\",\n        \"blueprintVersion\": \"1.0.0\",\n        \"actionName\": \"config-assign\"\n    },\n    \"payload\": {\n        \"config-assign-request\": {\n            \"resolution-key\": \"day-1\",\n            \"config-assign-properties\": {\n                \"stream-count\": 5\n            }\n        }\n    },\n    \"commonHeader\": {\n        \"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n        \"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n        \"originatorId\": \"SDNC_DG\"\n    }\n}",
 					"options": {
-						"formdata": {},
 						"raw": {
 							"language": "json"
 						}
@@ -953,7 +1089,6 @@
 					"mode": "raw",
 					"raw": "{\n    \"actionIdentifiers\": {\n        \"mode\": \"sync\",\n        \"blueprintName\": \"pnf_netconf\",\n        \"blueprintVersion\": \"1.0.0\",\n        \"actionName\": \"config-assign\"\n    },\n    \"payload\": {\n        \"config-assign-request\": {\n            \"resolution-key\": \"day-2\",\n            \"config-assign-properties\": {\n                \"stream-count\": 10\n            }\n        }\n    },\n    \"commonHeader\": {\n        \"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n        \"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n        \"originatorId\": \"SDNC_DG\"\n    }\n}",
 					"options": {
-						"formdata": {},
 						"raw": {
 							"language": "json"
 						}
@@ -1030,7 +1165,6 @@
 					"mode": "raw",
 					"raw": "{\n\t\"actionIdentifiers\": {\n\t\t\"mode\": \"sync\",\n\t\t\"blueprintName\": \"pnf_netconf\",\n\t\t\"blueprintVersion\": \"1.0.0\",\n\t\t\"actionName\": \"config-deploy\"\n\t},\n\t\"payload\": {\n\t\t\"config-deploy-request\": {\n\t\t\t\"resolution-key\": \"day-1\",\n\t\t\t\t\"pnf-ipv4-address\": \"{{pnf-ipv4-address}}\",\n                \"netconf-username\": \"{{netconf-username}}\",\n\t\t\t\t\"netconf-password\": \"{{netconf-password}}\"\n\t\t}\n\t},\n\t\"commonHeader\": {\n\t\t\"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n\t\t\"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n\t\t\"originatorId\": \"SDNC_DG\"\n\t}\n}",
 					"options": {
-						"formdata": {},
 						"raw": {
 							"language": "json"
 						}
@@ -1107,7 +1241,6 @@
 					"mode": "raw",
 					"raw": "{\n\t\"actionIdentifiers\": {\n\t\t\"mode\": \"sync\",\n\t\t\"blueprintName\": \"pnf_netconf\",\n\t\t\"blueprintVersion\": \"1.0.0\",\n\t\t\"actionName\": \"config-deploy\"\n\t},\n\t\"payload\": {\n\t\t\"config-deploy-request\": {\n\t\t\t\"resolution-key\": \"day-2\",\n\t\t\t\t\"pnf-ipv4-address\": \"{{pnf-ipv4-address}}\",\n                \"netconf-username\": \"{{netconf-username}}\",\n\t\t\t\t\"netconf-password\": \"{{netconf-password}}\"\n\t\t}\n\t},\n\t\"commonHeader\": {\n\t\t\"subRequestId\": \"143748f9-3cd5-4910-81c9-a4601ff2ea58\",\n\t\t\"requestId\": \"e5eb1f1e-3386-435d-b290-d49d8af8db4c\",\n\t\t\"originatorId\": \"SDNC_DG\"\n\t}\n}",
 					"options": {
-						"formdata": {},
 						"raw": {
 							"language": "json"
 						}
@@ -1135,7 +1268,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "b3476f00-24ef-4484-af58-525137927dc5",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1145,7 +1277,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "4715993f-2476-4d02-a1e3-7f72b9dafeba",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1155,30 +1286,24 @@
 	],
 	"variable": [
 		{
-			"id": "a1d2b48e-7c0f-4c95-a476-430be6228e95",
 			"key": "host",
 			"value": "localhost"
 		},
 		{
-			"id": "9202dd75-6852-44fd-b7b0-b8ad0714e8c7",
 			"key": "port",
 			"value": "8081"
 		},
 		{
-			"id": "0087a55c-64f3-44c6-9b56-6300c4b4362e",
 			"key": "pnf-ipv4-address",
 			"value": "127.17.0.2"
 		},
 		{
-			"id": "fd1a7cfe-9526-4261-beb4-61935e8d4ab0",
 			"key": "netconf-username",
 			"value": "netconf"
 		},
 		{
-			"id": "8b004a49-14a3-415e-9646-5c82033bf0ea",
 			"key": "netconf-password",
 			"value": "netconf"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
