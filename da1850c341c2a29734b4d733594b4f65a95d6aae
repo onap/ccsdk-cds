@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bf6c284_7cac0a6b",
+        "filename": "docs/ui/HelloWorld_package.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-12-21T01:05:42Z",
+      "side": 1,
+      "message": "It should be called \u0027CBA Package\u0027 instead CDS Package.\nRectify same at other places (if any)",
+      "revId": "da1850c341c2a29734b4d733594b4f65a95d6aae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
