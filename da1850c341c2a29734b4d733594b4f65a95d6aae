@@ -16,6 +16,52 @@
       "revId": "da1850c341c2a29734b4d733594b4f65a95d6aae",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ef715bb_76efede5",
+        "filename": "docs/ui/HelloWorld_package.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-12-21T01:17:56Z",
+      "side": 1,
+      "message": "it would be better to have same as code-block",
+      "range": {
+        "startLine": 266,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 72
+      },
+      "revId": "da1850c341c2a29734b4d733594b4f65a95d6aae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab84371c_7fe9f580",
+        "filename": "docs/ui/HelloWorld_package.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2020-12-21T01:17:56Z",
+      "side": 1,
+      "message": "it would be better to have same as code-block",
+      "range": {
+        "startLine": 320,
+        "startChar": 0,
+        "endLine": 382,
+        "endChar": 70
+      },
+      "revId": "da1850c341c2a29734b4d733594b4f65a95d6aae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
