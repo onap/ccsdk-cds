@@ -75,7 +75,6 @@ export class ActionAttributesComponent implements OnInit {
                     this.suggestedOutputs = [];
                     this.suggestedInputs = [];
                 }
-
                 this.inputs = [];
                 if (action.inputs) {
                     const namesOfInput = Object.keys(action.inputs);
@@ -392,6 +391,12 @@ export class ActionAttributesComponent implements OnInit {
             this.designerState.template.workflows[this.actionName][attributeType] =
                 this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
                     + newAttributes + '}');
+        }
+        const action = this.designerState.template.workflows[this.actionName] as Action;
+        this.inputs = [];
+        if (action.inputs) {
+            const namesOfInput = Object.keys(action.inputs);
+            this.inputs = this.extractFields(namesOfInput, action.inputs);
         }
         /* console.log(originalAttributes.substr(0, originalAttributes.length - 1) + ',' + newAttributes + '}');
          this.designerState.template.workflows[this.actionName][attributeType] =
