@@ -9,62 +9,9 @@
 
     </div>
     <!--Create Script File-->
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col">
-                    <h6 class="create-title mb-3">Create Script File</h6>
-                </div>
-            </div>
-            <div class="single-line-model">
-                <label class="label-name">File Name
-                    <span _ngcontent-uew-c3="">*</span>
-                </label>
-                <div class="label-input">
-                    <input type="input" [(ngModel)]="currentFileName" placeholder="script name" name="scriptName"
-                        autofocus [autofocus]="true">
-                </div>
-                <div class="single-line-model">
-                    <label class="label-name">Script Type</label>
-                    <div class="label-input" (change)="changeExtension()">
-                        <label name="trst" id="kt" class="pl-0">
-                            <input class="form-check-input" [(ngModel)]="scriptExtension" type="radio"
-                                name="exampleRadios1" id="kt" value=kotlin>
-                            <span>
-                                Kotlin
-                            </span>
-                        </label>
-                        <label name="trst" id="py">
-                            <input class="form-check-input" [(ngModel)]="scriptExtension" type="radio"
-                                name="exampleRadios2" id="py" value=python>
-                            <span>
-                                Jython
-                            </span>
-                        </label>
-                        <label id="ansible">
-                            <input class="form-check-input" [(ngModel)]="scriptExtension" type="radio"
-                                name="exampleRadios3" id="ansible" value=ansible>
-                            <span>
-                                Ansible
-                            </span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div id="id-script">
-                <ace-editor [(text)]="currentFileContent" [mode]="currentExtension" [autoUpdateContent]="true"
-                    [durationBeforeCallback]="3000" [theme]="'eclipse'" #editor style="height:300px;">
-                </ace-editor>
-            </div>
-            <div class="row template-mapping-action mb-0">
-                <div class="col text-right">
-                    <button tourAnchor="tm-templateFinish" (click)="textCurrentChanges()" [disabled]="currentFileName?.length == 0 ||
-                    this.currentFileContent?.length == 0" title="Save script file" class="btn btn-primary mt-4">Save
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <button type="button" data-target="#createScriptsModal" data-toggle="modal" class="btn btn-info mb-2">Create
+    </button>
+
     <!---->
     <div class="accordion">
         <!-- <div class="card creat-card">
@@ -98,7 +45,8 @@
                                     </div>
                                     <div class="modal-body">
                                         <p>Are you sure you want to delete script file
-                                            <span>{{fileToDelete?.key?.split('/')[2]}}</span>?</p>
+                                            <span>{{fileToDelete?.key?.split('/')[2]}}</span>?
+                                        </p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel
@@ -178,6 +126,91 @@
                 <button (click)="setFilesToStore()" class="btn btn-sm btn-primary" [disabled]="uploadedFiles?.length<=0"
                     data-dismiss="modal" type="button">
                     Import
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- create script modal -->
+<div aria-hidden="true" aria-labelledby="createScriptsModalLabel" class="modal fade" id="createScriptsModal"
+    role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createScriptsModalLabel">Create Script File</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <img src="assets/img/icon-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="single-line-model">
+                    <label class="label-name">File Name
+                        <span _ngcontent-uew-c3="">*</span>
+                    </label>
+                    <div class="label-input">
+                        <input type="input" [(ngModel)]="currentFileName" placeholder="script name" name="scriptName"
+                            autofocus [autofocus]="true">
+                    </div>
+                    <div class="single-line-model">
+                        <label class="label-name">Script Type</label>
+                        <div class="label-input" (change)="changeExtension()">
+                            <label name="trst" id="kt" class="pl-0">
+                                <input class="form-check-input" [(ngModel)]="scriptExtension" type="radio"
+                                    name="exampleRadios1" id="kt" value=kotlin>
+                                <span>
+                                    Kotlin
+                                </span>
+                            </label>
+                            <label name="trst" id="py">
+                                <input class="form-check-input" [(ngModel)]="scriptExtension" type="radio"
+                                    name="exampleRadios2" id="py" value=python>
+                                <span>
+                                    Jython
+                                </span>
+                            </label>
+                            <label id="ansible">
+                                <input class="form-check-input" [(ngModel)]="scriptExtension" type="radio"
+                                    name="exampleRadios3" id="ansible" value=ansible>
+                                <span>
+                                    Ansible
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div id="id-script">
+                    <ace-editor [(text)]="currentFileContent" [mode]="currentExtension" [autoUpdateContent]="true"
+                        [durationBeforeCallback]="500" [theme]="'eclipse'" #editor style="height:300px;">
+                    </ace-editor>
+                </div>
+                <div class="row template-mapping-action mb-0">
+                    <div class="col text-right">
+
+                    </div>
+                </div>
+                <!-- </div>
+                </div> -->
+                <!-- <div class="upload-table">
+                    <table class="table">
+                        <thead>
+                            <tr *ngFor="let item of uploadedFiles; let i=index">
+                                <th width="40"><img src="assets/img/icon-file-code.svg" /></th>
+                                <th>{{ item.name }}</th>
+                                <th (click)="removeInitFile(i)" width="40" class="text-right"><img
+                                        src="assets/img/icon-remove-file.svg" /></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div> -->
+            </div>
+            <div class="modal-footer">
+                <button (click)="resetTheUploadedFiles()" class="btn btn-sm btn-secondary" data-dismiss="modal"
+                    type="button">Cancel
+                </button>
+                <button (click)="textCurrentChanges()" data-dismiss="modal" [disabled]="currentFileName?.length == 0 ||
+                                this.currentFileContent?.length == 0" title="Save script file"
+                    class="btn btn-sm btn-primary">Save
                 </button>
             </div>
         </div>

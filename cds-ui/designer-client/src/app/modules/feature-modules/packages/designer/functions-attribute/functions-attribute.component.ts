@@ -139,7 +139,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
             if (inputs) {
                 for (const [key, value] of Object.entries(inputs)) {
                     console.log(key + ' - ' + value);
-                    if (this.isValidJson(value)) {
+                    if (typeof value === 'object' || this.isValidJson(value)) {
                         this.currentFuncion.inputs[key] = JSON.stringify(value);
                     } else {
                         this.currentFuncion.inputs[key] = value;
@@ -156,10 +156,13 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
     }
 
     isValidJson(val) {
+        console.log(val);
         try {
-            JSON.parse(val);
+            JSON.parse(val + '');
             return true;
-        } catch (e) { }
+        } catch (e) {
+            console.log(e);
+        }
         return false;
     }
 
