@@ -17,7 +17,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
 
 VOLUME /opt/app/onap/blueprints/deploy/
 
-RUN python -m pip install --upgrade pip setuptools
+RUN python -m pip install --no-cache-dir --upgrade pip setuptools
 RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements/docker.txt
 
 RUN groupadd -r -g 1000 onap && useradd -r -u 1000 -g onap onap

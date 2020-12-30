@@ -17,9 +17,9 @@ RUN tar -xzf /source.tar.gz -C /tmp \
 
 VOLUME /opt/app/onap/blueprints/deploy/
 
-RUN python -m pip install --upgrade pip setuptools
-RUN pip install grpcio==1.20.0 grpcio-tools==1.20.0
-RUN pip install virtualenv==16.7.9
+RUN python -m pip install --no-cache-dir --upgrade pip setuptools
+RUN pip install --no-cache-dir grpcio==1.20.0 grpcio-tools==1.20.0
+RUN pip install --no-cache-dir virtualenv==16.7.9
 
 RUN groupadd -r -g 1000 onap && useradd -r -u 1000 -g onap onap
 RUN chown onap:onap /opt -R
