@@ -37,7 +37,7 @@ import { FunctionsAttributeComponent } from './designer/functions-attribute/func
 import { ActionAttributesComponent } from './designer/action-attributes/action-attributes.component';
 import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatSortModule, MatTableModule } from '@angular/material';
 import { TopologyTemplateComponent } from './package-creation/topology-template/topology-template.component';
-import {CollapseModule} from 'ngx-bootstrap/collapse';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 @NgModule({
     declarations: [PackagesDashboardComponent,
@@ -77,7 +77,35 @@ import {CollapseModule} from 'ngx-bootstrap/collapse';
         AceEditorModule,
         DataTablesModule,
         // Import NgxUiLoaderModule
-        NgxUiLoaderModule,
+        NgxUiLoaderModule.forRoot({
+            bgsColor: 'red',
+            bgsOpacity: 0.5,
+            bgsPosition: 'bottom-right',
+            bgsSize: 60,
+            bgsType: 'ball-spin-clockwise',
+            blur: 5,
+            delay: 0,
+            fgsColor: '#63bdba',
+            fgsPosition: 'center-center',
+            fgsSize: 60,
+            fgsType: 'rectangle-bounce',
+            gap: 24,
+            logoPosition: 'center-center',
+            logoSize: 120,
+            logoUrl: 'assets/img/logo-icon.svg',
+            masterLoaderId: 'master',
+            overlayBorderRadius: '0',
+            overlayColor: 'rgba(40, 40, 40, 0.8)',
+            pbColor: 'red',
+            pbDirection: 'ltr',
+            pbThickness: 3,
+            hasProgressBar: true,
+            text: '',
+            textColor: '#FFFFFF',
+            textPosition: 'center-center',
+            maxTime: -1,
+            minTime: 300
+        }),
         TourMatMenuModule.forRoot(),
         MatInputModule,
         MatTableModule,
