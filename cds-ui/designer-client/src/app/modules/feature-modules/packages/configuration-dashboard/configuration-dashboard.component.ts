@@ -120,7 +120,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     this.downloadCBAPackage(bluePrintDetailModels);
                     this.packageCreationStore.clear();
                 }
-            }, err => { },
+                this.ngxService.stop();
+            }, err => {
+                this.ngxService.stop();
+            },
             () => {
                 //  this.ngxService.stop();
             });
@@ -132,7 +135,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                 const blob = new Blob([response], { type: 'application/octet-stream' });
                 this.currentBlob = blob;
                 this.packageCreationExtractionService.extractBlobToStore(blob);
-            }, err => { },
+            }, err => {
+                console.log(err);
+                this.ngxService.stop();
+            },
                 () => {
                     this.ngxService.stop();
                 });

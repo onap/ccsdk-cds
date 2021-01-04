@@ -73,6 +73,18 @@ limitations under the License.
                         <phase>generate-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
+                            <skip>${npm.skipBuild}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm build local</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build:local</arguments>
+                            <skip>${npm.skipBuildLocal}</skip>
                         </configuration>
                     </execution>
                 </executions>

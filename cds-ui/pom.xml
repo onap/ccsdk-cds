@@ -44,5 +44,24 @@ limitations under the License.
 
     <properties>
         <npm.executable>npm</npm.executable>
+        <!-- Properties for CDS-GUI to npm run build:local -->
+        <npm.skipBuild>false</npm.skipBuild>
+        <npm.skipBuildLocal>true</npm.skipBuildLocal>
     </properties>
+
+    <profiles>
+        <!-- Profile to either run npm build or npm build:local -->
+        <profile>
+            <id>npmLocal</id>
+            <activation>
+                <property>
+                    <name>npmLocal</name>
+                </property>
+            </activation>
+            <properties>
+                <npm.skipBuild>true</npm.skipBuild>
+                <npm.skipBuildLocal>false</npm.skipBuildLocal>
+            </properties>
+        </profile>
+    </profiles>
 </project>

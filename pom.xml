@@ -61,6 +61,7 @@ limitations under the License.
         <!-- Properties for POM Format -->
         <format.skipValidate>false</format.skipValidate>
         <format.skipExecute>true</format.skipExecute>
+
         <java.version>11</java.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
