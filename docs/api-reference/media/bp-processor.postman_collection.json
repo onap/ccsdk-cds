@@ -3659,6 +3659,239 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Model Type Catalog",
+			"item": [
+				{
+					"name": "Save a model type",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"modelName\": \"test\",\r\n  \"derivedFrom\": \"test\",\r\n  \"definitionType\": \"data_type\",\r\n  \"definition\": {},\r\n  \"description\": \"Some test\",\r\n  \"version\": \"1.0\",\r\n  \"tags\": \"test\",\r\n  \"updatedBy\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/model-type/",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"model-type",
+								""
+							]
+						},
+						"description": "Save a model type by model type definition provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve a list of model types",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/model-type/by-definition/data_type",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"model-type",
+								"by-definition",
+								"data_type"
+							]
+						},
+						"description": "Retrieve a list of model types by definition type provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve a list of model types",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/model-type/search/test",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"model-type",
+								"search",
+								"test"
+							]
+						},
+						"description": "Retrieve a list of model types by tags provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve a model type",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/model-type/test",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"model-type",
+								"test"
+							]
+						},
+						"description": "Retrieve a model type by name provided."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove a model type",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "ccsdkapps",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/api/v1/model-type/test",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"api",
+								"v1",
+								"model-type",
+								"test"
+							]
+						},
+						"description": "Remove a model type by name provided."
+					},
+					"response": []
+				}
+			],
+			"description": "Manages data types in CDS",
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "List all endpoints",
 			"request": {
 				"auth": {

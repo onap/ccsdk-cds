@@ -20,6 +20,9 @@
     "name" : "Blueprint Model Catalog",
     "description" : "Manages all blueprint models which are available in CDS"
   }, {
+    "name" : "Model Type Catalog",
+    "description" : "Manages data types in CDS"
+  }, {
     "name" : "Resource configuration",
     "description" : "Interaction with stored configurations"
   }, {
@@ -962,6 +965,127 @@
         }
       }
     },
+    "/api/v1/model-type/" : {
+      "post" : {
+        "tags" : [ "Model Type Catalog" ],
+        "summary" : "Save a model type",
+        "description" : "Save a model type by model type definition provided.",
+        "operationId" : "ModelTypeController_saveModelType_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ModelType"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ModelType"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/model-type/by-definition/{definitionType}" : {
+      "get" : {
+        "tags" : [ "Model Type Catalog" ],
+        "summary" : "Retrieve a list of model types",
+        "description" : "Retrieve a list of model types by definition type provided.",
+        "operationId" : "ModelTypeController_getModelTypeByDefinitionType_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "definitionType",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ModelType"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/model-type/search/{tags}" : {
+      "get" : {
+        "tags" : [ "Model Type Catalog" ],
+        "summary" : "Retrieve a list of model types",
+        "description" : "Retrieve a list of model types by tags provided.",
+        "operationId" : "ModelTypeController_searchModelTypes_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "tags",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ModelType"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/model-type/{name}" : {
+      "get" : {
+        "tags" : [ "Model Type Catalog" ],
+        "summary" : "Retrieve a model type",
+        "description" : "Retrieve a model type by name provided.",
+        "operationId" : "ModelTypeController_getModelTypeByName_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ModelType"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Model Type Catalog" ],
+        "summary" : "Remove a model type",
+        "description" : "Remove a model type by name provided.",
+        "operationId" : "ModelTypeController_deleteModelTypeByName_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ModelType"
+            }
+          }
+        }
+      }
+    },
     "/api/v1/resources" : {
       "get" : {
         "tags" : [ "Resources" ],
@@ -1529,6 +1653,40 @@
         },
         "acquireTimeout" : {
           "$ref" : "#/definitions/JsonNode"
+        }
+      }
+    },
+    "ModelType" : {
+      "type" : "object",
+      "required" : [ "definition", "definitionType", "derivedFrom", "description", "modelName", "tags", "updatedBy", "version" ],
+      "properties" : {
+        "modelName" : {
+          "type" : "string"
+        },
+        "derivedFrom" : {
+          "type" : "string"
+        },
+        "definitionType" : {
+          "type" : "string"
+        },
+        "definition" : {
+          "$ref" : "#/definitions/JsonNode"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "tags" : {
+          "type" : "string"
+        },
+        "creationDate" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "updatedBy" : {
+          "type" : "string"
         }
       }
     },
