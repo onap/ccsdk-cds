@@ -139,11 +139,11 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
             if (inputs) {
                 for (const [key, value] of Object.entries(inputs)) {
                     console.log(key + ' - ' + value);
-                    if (this.isValidJson(value)) {
-                        this.currentFuncion.inputs[key] = JSON.stringify(value);
-                    } else {
-                        this.currentFuncion.inputs[key] = value;
-                    }
+                    // if (this.isValidJson(value)) {
+                    //     this.currentFuncion.inputs[key] = JSON.stringify(value);
+                    // } else {
+                    this.currentFuncion.inputs[key] = value;
+                    // }
                 }
             }
             if (outputs) {
