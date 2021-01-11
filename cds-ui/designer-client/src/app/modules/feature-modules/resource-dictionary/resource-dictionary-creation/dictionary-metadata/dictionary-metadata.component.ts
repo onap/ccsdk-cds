@@ -73,6 +73,7 @@ export class DictionaryMetadataComponent implements OnInit {
     }
 
     saveMetaDataToStore() {
-        this.dictionaryCreationStore.changeMetaData(this.metaDataTab);
+        console.log(this.metaDataTab);
+     //   this.dictionaryCreationStore.changeMetaData(this.metaDataTab);
     }
 }

@@ -3014,7 +3014,7 @@ animation: glowing 1500ms infinite;
 /* -------- ace editor style -------- */
 .editor-container{
   height: 55vh !important;
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 .ace_print-margin{
   left: 100% !important;

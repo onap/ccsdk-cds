@@ -29,11 +29,14 @@ import { SourcesStore } from './sources-template/sources.store';
     providedIn: 'root'
 })
 export class DictionaryCreationStore extends Store<ResourceDictionary> {
-    constructor(private dictionaryCreationService: DictionaryCreationService, private sourcesStore: SourcesStore) {
+    constructor(
+        private dictionaryCreationService: DictionaryCreationService,
+        private sourcesStore: SourcesStore
+    ) {
         super(new ResourceDictionary());
     }
-
-    changeMetaData(metaDataObject: MetaData) {
+    // changeMetaData(metaDataObject: MetaData) {
+    changeMetaData(metaDataObject: any) {
         console.log(metaDataObject);
         this.setState({
             ...this.state,
@@ -43,7 +46,7 @@ export class DictionaryCreationStore extends Store<ResourceDictionary> {
 
     getSources() {
         this.sourcesStore.state$.subscribe(data => {
-        console.log(data);
+            console.log(data);
         });
     }
 

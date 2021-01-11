@@ -18,6 +18,8 @@
 * ============LICENSE_END=========================================================
 */
 import { Component, OnInit } from '@angular/core';
+import { DictionaryCreationService } from '../dictionary-creation.service';
+import { DictionaryCreationStore } from '../dictionary-creation.store';
 
 @Component({
   selector: 'app-dictionary-editor',
@@ -26,14 +28,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DictionaryEditorComponent implements OnInit {
   text = '';
-  constructor() {
+  constructor(
+    private dictionaryStore: DictionaryCreationStore,
+    private dictionaryService: DictionaryCreationService
+  ) {
   }
 
   ngOnInit() {
   }
 
   textChanged(event) {
-    console.log(event);
+    console.log(JSON.parse(event));
+    this.dictionaryStore.changeMetaData(JSON.parse(event));
   }
 }
 

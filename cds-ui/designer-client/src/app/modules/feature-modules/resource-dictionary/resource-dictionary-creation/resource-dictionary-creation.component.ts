@@ -24,6 +24,7 @@ import { DictionaryModel } from '../model/dictionary.model';
 import { Definition } from '../model/definition.model';
 import { DictionaryMetadataComponent } from './dictionary-metadata/dictionary-metadata.component';
 import { SourcesTemplateComponent } from './sources-template/sources-template.component';
+import { DictionaryCreationService } from './dictionary-creation.service';
 
 @Component({
   selector: 'app-resource-dictionary-creation',
@@ -32,7 +33,11 @@ import { SourcesTemplateComponent } from './sources-template/sources-template.co
 })
 export class ResourceDictionaryCreationComponent implements OnInit {
 
-  constructor(private router: Router, private dictionaryCreationStore: DictionaryCreationStore) {
+  constructor(
+    private router: Router,
+    private dictionaryCreationStore: DictionaryCreationStore,
+    private dictionaryService: DictionaryCreationService
+  ) {
   }
 
   modes: object[] = [
@@ -59,15 +64,26 @@ export class ResourceDictionaryCreationComponent implements OnInit {
   }
 
   saveDictionaryToStore() {
-    this.dictionaryCreationStore.getSources();
-    this.dictionaryCreationStore.state$.subscribe(dd => {
-      console.log(dd);
-    });
+    // console.log('00000000000');
+    // this.dictionaryCreationStore.getSources();
+    // this.dictionaryCreationStore.state$.subscribe(dd => {
+    //   console.log(dd);
+    // });
   }
 
-  test() {
+  createDictionary() {
+    console.log('-----');
     this.metadataTabComponent.saveMetaDataToStore();
-    this.sourcesTemplateComponent.saveSorcesDataToStore();
+    this.dictionaryCreationStore.state$.subscribe(res => {
+      console.log('---------------------------------------');
+      console.log(res);
+      this.dictionaryService.save(res.metaData).subscribe(data => {
+
+      }, err => {
+
+      });
+    });
+    // this.sourcesTemplateComponent.saveSorcesDataToStore();
   }
 
   goBackToDashBorad() {

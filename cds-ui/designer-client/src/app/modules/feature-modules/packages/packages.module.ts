@@ -96,7 +96,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
             masterLoaderId: 'master',
             overlayBorderRadius: '0',
             overlayColor: 'rgba(40, 40, 40, 0.8)',
-            pbColor: 'red',
+            pbColor: '#63bdba',
             pbDirection: 'ltr',
             pbThickness: 3,
             hasProgressBar: true,

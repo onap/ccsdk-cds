@@ -20,13 +20,14 @@
 
 export class MetaData {
     public name: string;
-    public tags: string;
     public dataType: string;
     public description: string;
     public entrySchema: string;
     public updatedBy: string;
+    public tags: string;
+    public required: string;
+
     public createdDate: string;
     public libraryInstance: string;
-    public required: string;
     public derivedFrom: string;
 }
