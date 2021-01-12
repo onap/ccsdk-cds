@@ -3243,19 +3243,23 @@ padding: 0 10px 0 0;
   padding-bottom: 5px !important;
   overflow: auto;
 }
-.create-template-mapping-button{
-  background: #C3CDDB;
-  border-radius: 50px;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 10px 20px;
+.create-template-mapping-button,
+.create-script-button{
+  background: #C3CDDB !important;
+  border-radius: 50px !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  padding: 10px 20px !important; 
   margin-bottom: 20px;
-    display: inline-block;
-    cursor: pointer;
+  display: inline-block;
+  cursor: pointer;
+  color: #1B3E6F !important;
 }
-.create-template-mapping-button i{
-margin-right: 5px;
-  }
+.create-template-mapping-button i,
+.create-script-button i{
+  margin-right: 5px;
+  
+}
 .view-package-container{
   padding: 20px 56px;
 }
@@ -3390,6 +3394,9 @@ margin-right: 5px;
 }
 .mat-table{
   border-top: solid 1px #ECEDF2;
+}
+.mat-row:last-child td {
+  border-bottom: 0 !important;
 }
 .mat-paginator{
   /* display: inline-block; */

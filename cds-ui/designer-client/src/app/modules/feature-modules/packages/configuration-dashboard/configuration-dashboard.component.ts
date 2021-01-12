@@ -175,7 +175,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                     bluePrintDetailModels => {
                         if (bluePrintDetailModels) {
                             const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
-                            this.toastService.info('Package Updated Successfully ');
+                            this.toastService.success('Package Updated Successfully ');
                             this.isSaveEnabled = false;
                             this.router.navigate(['/packages/package/' + id]);
                             this.refreshCurrentPackage(id);

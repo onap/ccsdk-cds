@@ -1,16 +1,11 @@
 <div class="import-container-all">
-    <div class="import-container">
-        <div class="import-container-input">
-            <input class="ng-pristine ng-valid ng-touched" placeholder="Enter file URL then ENTER" type="input">
-            <a class="enter-link" href="#"><i class="icon-enter-link"></i></a>
-        </div>
+    <div class="mb-4">
+        <!--Create Script File-->
+    <button type="button" data-target="#createScriptsModal" data-toggle="modal" class="btn mb-2 mr-2 create-script-button"><i class="fa fa-plus"></i> <span></span>Create Script
+    </button>
         <span tourAnchor="st-scriptsImport" class="import-container-span">Or you can also <a data-target="#scriptsModal"
                 data-toggle="modal" (click)="resetTheUploadedFiles()" href="#"><b>Import File</b></a></span>
-
     </div>
-    <!--Create Script File-->
-    <button type="button" data-target="#createScriptsModal" data-toggle="modal" class="btn btn-info mb-2">Create
-    </button>
 
     <!---->
     <div class="accordion">
@@ -135,7 +130,7 @@
 <!-- create script modal -->
 <div aria-hidden="true" aria-labelledby="createScriptsModalLabel" class="modal fade" id="createScriptsModal"
     role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog" style="max-width: 60%" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createScriptsModalLabel">Create Script File</h5>
@@ -210,7 +205,7 @@
                 </button>
                 <button (click)="textCurrentChanges()" data-dismiss="modal" [disabled]="currentFileName?.length == 0 ||
                                 this.currentFileContent?.length == 0" title="Save script file"
-                    class="btn btn-sm btn-primary">Save
+                    class="btn btn-sm btn-primary">Create Script
                 </button>
             </div>
         </div>

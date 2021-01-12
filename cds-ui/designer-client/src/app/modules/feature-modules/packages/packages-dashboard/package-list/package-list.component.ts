@@ -68,7 +68,7 @@ export class PackageListComponent implements OnInit {
             this.router.navigate(['/packages']);
             this.packagesStore.getAll();
         }, err => {
-            this.toastService.error('Error occured during deleting package ' + err.message);
+            this.toastService.error('Error has occured during deleting package ' + err.message);
         });
 
     }

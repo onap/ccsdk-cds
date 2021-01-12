@@ -535,12 +535,12 @@ export class DesignerComponent implements OnInit, OnDestroy {
             .then(blob => {
                 this.packageCreationService.savePackage(blob).subscribe(
                     bluePrintDetailModels => {
-                        this.toastService.info('success updating the package');
+                        this.toastService.success('Package is updated successfully');
                         const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
                         this.router.navigate(['/packages/designer/' + id]);
                         console.log('success');
                     }, error => {
-                        this.toastService.error('error happened when editing ' + error.message);
+                        this.toastService.error('Error Occured during editing process' + error.message);
                         console.log('Error -' + error.message);
                     }, () => {
                         this.ngxService.stop();
@@ -591,11 +591,11 @@ export class DesignerComponent implements OnInit, OnDestroy {
                 saveAs(blob, this.viewedPackage.artifactName + '-' + this.viewedPackage.artifactVersion + '-CBA.zip');
 
             }, err => {
-                this.toastService.error('package ' + this.viewedPackage.artifactName + 'has error when downloading' +
+                this.toastService.error('Package ' + this.viewedPackage.artifactName + 'has error when downloading' +
                     err.message);
                 this.ngxService.stop();
             }, () => {
-                this.toastService.success('package ' + this.viewedPackage.artifactName + 'downloaded successfully');
+                this.toastService.success('Package ' + this.viewedPackage.artifactName + 'downloaded successfully');
                 this.ngxService.stop();
             });
     }
