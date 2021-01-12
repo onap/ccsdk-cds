@@ -132,7 +132,7 @@ CDS Designer UI
 .. toctree::
    :maxdepth: 2
 
-   ui/designer
+   ui/CDS_Designer_Guide
 
 
 Offered APIs
