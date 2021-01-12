@@ -965,7 +965,6 @@ listed in the other section.
             .. code-block:: json
                :caption: **vnf-netconf-device**
 
-
                {
                  "description": "This is VNF Device with Netconf  Capability",
                  "version": "1.0.0",

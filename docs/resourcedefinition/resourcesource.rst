@@ -390,32 +390,32 @@ To tell the resolution framework what is of interest in the response, the output
 
 .. code-block:: json
 
-  {
-    "tags" : "oam-local-ipv4-address",
-    "name" : "create_netbox_ip",
-    "property" : {
-      "description" : "netbox ip",
-      "type" : "dt-netbox-ip"
-    },
-    "updated-by" : "adetalhouet",
-    "sources" : {
-      "config-data" : {
-        "type" : "source-rest",
-        "properties" : {
-          "type" : "JSON",
-          "verb" : "POST",
-          "endpoint-selector" : "ipam-1",
-          "url-path" : "/api/ipam/prefixes/$prefixId/available-ips/",
-          "path" : "",
-          "input-key-mapping" : {
-            "prefixId" : "prefix-id"
-          },
-          "output-key-mapping" : {
-            "address" : "address",
-            "id" : "id"
-          },
-          "key-dependencies" : [ "prefix-id" ]
-        }
-      }
-    }
-  }
+     {
+       "tags" : "oam-local-ipv4-address",
+       "name" : "create_netbox_ip",
+       "property" : {
+         "description" : "netbox ip",
+         "type" : "dt-netbox-ip"
+       },
+       "updated-by" : "adetalhouet",
+       "sources" : {
+         "config-data" : {
+           "type" : "source-rest",
+           "properties" : {
+             "type" : "JSON",
+             "verb" : "POST",
+             "endpoint-selector" : "ipam-1",
+             "url-path" : "/api/ipam/prefixes/$prefixId/available-ips/",
+             "path" : "",
+             "input-key-mapping" : {
+               "prefixId" : "prefix-id"
+             },
+             "output-key-mapping" : {
+               "address" : "address",
+               "id" : "id"
+             },
+             "key-dependencies" : [ "prefix-id" ]
+           }
+         }
+       }
+     }

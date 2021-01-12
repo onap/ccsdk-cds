@@ -41,7 +41,7 @@ Users can **create** as many **data type** as needed.
    To create a custom data-type you can use a POST call to CDS endpoint:
    "<cds-ip>:<cds-port>/api/v1/model-type"
 
-   .. code-block:: python
+   .. code-block:: json
       :caption: **Payload:**
 
       {
@@ -51,7 +51,7 @@ Users can **create** as many **data type** as needed.
         "definition": {
           "description": "<description>",
           "version": "<version-number: eg 1.0.0>",
-          "properties": {<add properties of your custom data type in JSON format>},
+          "properties": "{<add properties of your custom data type in JSON format>}",
           "derived_from": "tosca.datatypes.Root"
         },
         "description": "<description",
@@ -111,44 +111,44 @@ List of existing data type:
       .. code-block:: json
          :caption: **datatype-resource-assignment**
 
-        {
-          "version": "1.0.0",
-          "description": "This is Resource Assignment Data Type",
-          "properties": {
-            "property": {
-              "required": true,
-              "type": "datatype-property"
-            },
-            "input-param": {
-              "required": true,
-              "type": "boolean"
-            },
-            "dictionary-name": {
-              "required": false,
-              "type": "string"
-            },
-            "dictionary-source": {
-              "required": false,
-              "type": "string"
-            },
-            "dependencies": {
-              "required": true,
-              "type": "list",
-              "entry_schema": {
-                "type": "string"
-              }
-            },
-            "updated-date": {
-              "required": false,
-              "type": "string"
-            },
-            "updated-by": {
-              "required": false,
-              "type": "string"
-            }
-          },
-          "derived_from": "tosca.datatypes.Root"
-        }
+         {
+           "version": "1.0.0",
+           "description": "This is Resource Assignment Data Type",
+           "properties": {
+             "property": {
+               "required": true,
+               "type": "datatype-property"
+             },
+             "input-param": {
+               "required": true,
+               "type": "boolean"
+             },
+             "dictionary-name": {
+               "required": false,
+               "type": "string"
+             },
+             "dictionary-source": {
+               "required": false,
+               "type": "string"
+             },
+             "dependencies": {
+               "required": true,
+               "type": "list",
+               "entry_schema": {
+                 "type": "string"
+               }
+             },
+             "updated-date": {
+               "required": false,
+               "type": "string"
+             },
+             "updated-by": {
+               "required": false,
+               "type": "string"
+             }
+           },
+           "derived_from": "tosca.datatypes.Root"
+         }
 
    .. tab:: property
 
