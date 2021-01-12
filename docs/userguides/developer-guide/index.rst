@@ -16,7 +16,8 @@ This microservice is used to deploy Controller Blueprint Archive file in Run tim
    :caption: Guide how to run Blueprint Processor in an IDE:
    :maxdepth: 1
 
-   running-bp-processor-in-ide
+    running-bp-processor-in-ide
+    running-cds-ui-locally
 
 Architecture
 ~~~~~~~~~~~~~
