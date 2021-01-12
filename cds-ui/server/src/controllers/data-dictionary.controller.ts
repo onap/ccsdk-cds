@@ -64,13 +64,28 @@ export class DataDictionaryController {
       }
     },
   })
+  async saveDefinition(@requestBody({
+    content: { 'application/json': { schema: { 'x-ts-type': JSON } } },
+    accepts: { 'application/json': { schema: { 'x-ts-type': JSON } } }
+  }) resourceDictionary: JSON): Promise<any> {
+    return await this.rdservice.saveDefinition(resourceDictionary);
+  }
+
+  @post('/resourcedictionary/definition', {
+    responses: {
+      '200': {
+        content: { 'application/json': {} }
+      }
+    },
+  })
   async save(@requestBody({
     content: { 'application/json': { schema: { 'x-ts-type': JSON } } },
     accepts: { 'application/json': { schema: { 'x-ts-type': JSON } } }
   }) resourceDictionary: JSON): Promise<any> {
-    return await this.rdservice.save(resourceDictionary);
+    return await this.rdservice.saveDefinition(resourceDictionary);
   }
-  
+
+
   @post('/resourcedictionary/search/by-names', {
     responses: {
       '200': {
@@ -114,7 +129,7 @@ export class DataDictionaryController {
   @get('/resourcedictionary/model-type/by-definition/{type}', {
     responses: {
       '200': {
-        content: {'application/json': {}},
+        content: { 'application/json': {} },
       },
     },
   })

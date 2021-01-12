@@ -35,6 +35,6 @@ export class DictionaryCreationService {
   }
 
   save(metadata) {
-    return this.api.post(ResourceDictionaryURLs.saveResourceDictionary, { ...metadata });
+    return this.api.post(ResourceDictionaryURLs.saveDictionary, { ...metadata });
   }
 }

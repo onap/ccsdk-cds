@@ -25,6 +25,7 @@ import { Definition } from '../model/definition.model';
 import { DictionaryMetadataComponent } from './dictionary-metadata/dictionary-metadata.component';
 import { SourcesTemplateComponent } from './sources-template/sources-template.component';
 import { DictionaryCreationService } from './dictionary-creation.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-resource-dictionary-creation',
@@ -36,7 +37,8 @@ export class ResourceDictionaryCreationComponent implements OnInit {
   constructor(
     private router: Router,
     private dictionaryCreationStore: DictionaryCreationStore,
-    private dictionaryService: DictionaryCreationService
+    private dictionaryService: DictionaryCreationService,
+    private toaster: ToastrService
   ) {
   }
 
@@ -72,17 +74,20 @@ export class ResourceDictionaryCreationComponent implements OnInit {
   }
 
   createDictionary() {
+
     console.log('-----');
     this.metadataTabComponent.saveMetaDataToStore();
     this.dictionaryCreationStore.state$.subscribe(res => {
       console.log('---------------------------------------');
       console.log(res);
       this.dictionaryService.save(res.metaData).subscribe(data => {
-
+        this.toaster.success('Dictionary Resource created');
       }, err => {
+        this.toaster.error('An error happened ...');
+      }, () => {
 
       });
-    });
+    }).unsubscribe();
     // this.sourcesTemplateComponent.saveSorcesDataToStore();
   }
 
