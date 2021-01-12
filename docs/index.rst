@@ -116,7 +116,6 @@ User Guides
    userguides/developer-guide/index
    userguides/installation
    userguides/design-time-guide/designtime
-   userguides/resourceassignment
 
 Use Cases
 ---------
@@ -132,7 +131,7 @@ CDS Designer UI
 .. toctree::
    :maxdepth: 2
 
-   ui/designer
+   ui/designer-guide
 
 
 Offered APIs
