@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d593dd2c_7dac8470",
+        "filename": "docs/ui/How_to_create_a_Hello_World_Package_with_CDS_Designer_UI_The_Resource_Resolution_Type.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-01-12T14:32:50Z",
+      "side": 1,
+      "message": "it should be CBA, and update it elsewhere",
+      "revId": "f699e236faa71afe065040367af98fa2d6436fe6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
