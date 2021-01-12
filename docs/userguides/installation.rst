@@ -78,6 +78,8 @@ Result
 Running CDS UI:
 ---------------
 
+:ref:`running_cds_ui_locally`
+
 Client:
 ~~~~~~~
 Install Node.js and angularCLI. Refer https://angular.io/guide/quickstart
@@ -89,3 +91,4 @@ Loopback Server:
 
 npm install in the directory cds/cds-ui/server
 npm start should bring you the CDS UI page in your local machine with the link https://127.0.0.1:3000/
+

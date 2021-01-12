@@ -84,28 +84,28 @@ Here is how input-key-mapping, output-key-mapping and key-dependencies can be us
    * - vf-module-label data dictionary
    * - .. code-block:: json
 
-        {
-          "name" : "vf-module-label",
-          "tags" : "vf-module-label",
-          "updated-by" : "adetalhouet",
-          "property" : {
-            "description" : "vf-module-label",
-            "type" : "string"
-          },
-          "sources" : {
-            "primary-db" : {
-              "type" : "source-primary-db",
-              "properties" : {
-                "type" : "SQL",
-                "query" : "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
-                "input-key-mapping" : {
-                  "customizationid" : "vf-module-model-customization-uuid"
-                },
-                "output-key-mapping" : {
-                  "vf-module-label" : "vf_module_label"
-                },
-                "key-dependencies" : [ "vf-module-model-customization-uuid" ]
+            {
+              "name" : "vf-module-label",
+              "tags" : "vf-module-label",
+              "updated-by" : "adetalhouet",
+              "property" : {
+                "description" : "vf-module-label",
+                "type" : "string"
+              },
+              "sources" : {
+                "primary-db" : {
+                  "type" : "source-primary-db",
+                  "properties" : {
+                    "type" : "SQL",
+                    "query" : "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
+                    "input-key-mapping" : {
+                      "customizationid" : "vf-module-model-customization-uuid"
+                    },
+                    "output-key-mapping" : {
+                      "vf-module-label" : "vf_module_label"
+                    },
+                    "key-dependencies" : [ "vf-module-model-customization-uuid" ]
+                  }
+                }
               }
             }
-          }
-        }

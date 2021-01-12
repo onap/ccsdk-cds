@@ -2,7 +2,6 @@
 .. International License. http://creativecommons.org/licenses/by/4.0
 .. Copyright (C) 2020 Deutsche Telekom AG.
 
-
 .. This is a template to document new APIs for CDS blueprint processor
 
 .. make use of tabs whenever it fits
@@ -27,7 +26,7 @@ Method 1 Endpoint 1 description
 Request
 ...........
 
-.. code-block:: curl
+.. code-block:: bash
    :caption: **(sample) request**
 
    request command

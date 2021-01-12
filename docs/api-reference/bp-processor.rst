@@ -9,9 +9,9 @@ Introduction
 --------------
 
 This section shows all resources and endpoints which CDS BP processor currently provides through a swagger file
-which is automatically created during CDS build process by Swagger Maven Plugin. A corresponding Postman collection is 
+which is automatically created during CDS build process by Swagger Maven Plugin. A corresponding Postman collection is
 also included. Endpoints can also be described using this template
-:download:`api-doc-template.rst <api-doc-template.rst>` but this is not the prefered way to describe the CDS API.
+:download:`api-doc-template.rst <api-doc-template.rst>` but this is not the preferred way to describe the CDS API.
 
 You can find a sample workflow tutorial :ref:`below <workflow-tutorial>` which will show how to use the endpoints
 in the right order. This will give you a better understanding of the CDS Blueprint Processor API.
@@ -19,7 +19,7 @@ in the right order. This will give you a better understanding of the CDS Bluepri
 Getting Started
 -----------------
 
-If you cant access a running CDS Blueprint Processor yet, you can choose one of the below options to run it. 
+If you cant access a running CDS Blueprint Processor yet, you can choose one of the below options to run it.
 Afterwards you can start trying out the API.
 
 * CDS in Microk8s: https://wiki.onap.org/display/DW/Running+CDS+on+Microk8s (RDT link to be added)
@@ -62,7 +62,7 @@ GET ``http://{{host}}:{{port}}/actuator/mappings``
 
 Lists all endpoints from blueprints processor.
 
-.. code-block:: curl
+.. code-block:: bash
    :caption: **request**
 
    curl --location --request GET 'http://localhost:8081/actuator/mappings' \

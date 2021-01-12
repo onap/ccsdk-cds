@@ -250,9 +250,10 @@ Properties of a workflow
                 :caption: **dynamic input**
 
                 "resource-assignment-properties": {
-                "required": true,
-                "type": "dt-resource-assignment-properties"
+                  "required": true,
+                  "type": "dt-resource-assignment-properties"
                 }
+
    * - outputs
      - | Defines the outputs of the execution; there can be as many output as needed.
        | Depending on the Component (see :ref:`node_type` -> Component) of use, some attribute might be retrievable.
