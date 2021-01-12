@@ -29,11 +29,6 @@ meetings:
       time: '13:00 UTC'
 committers:
     - <<: *onap_releng_ptl
-    - name: 'Jack Lucas'
-      email: 'jflucas@research.att.com'
-      company: 'ATT'
-      id: 'jackl'
-      timezone: 'America/New_York'
     - name: 'Jun (Nicolas) Hu'
       email: 'jh245g@att.com'
       company: 'ATT'
@@ -84,3 +79,6 @@ tsc:
         - type: 'Addition'
           name: 'Kapil Singal'
           link: 'https://lists.onap.org/g/onap-tsc/message/5635'
+        - type: 'Deletion'
+          name: 'Jack Ryan'
+          link: 'https://lists.onap.org/g/onap-tsc/message/7411'
