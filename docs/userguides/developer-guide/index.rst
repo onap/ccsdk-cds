@@ -13,10 +13,10 @@ Micro service to Manage Controller Blueprint Models, such as Resource Dictionary
 This microservice is used to deploy Controller Blueprint Archive file in Run time database. This also helps to test the Valid CBA.
 
 .. toctree::
-   :caption: Guide how to run Blueprint Processor in an IDE:
    :maxdepth: 1
 
    running-bp-processor-in-ide
+   running-cds-ui-locally
 
 Architecture
 ~~~~~~~~~~~~~

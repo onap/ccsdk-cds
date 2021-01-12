@@ -456,7 +456,7 @@ For creating day-2 configuration call the same endpoint and use the following pa
 Now we will make the CDS REST API calls to push the day-1 and day-2 configuration changes to the PNF simulator.
 Call the same endpoint `process` with the following payload:
 
-.. code-block::  JSON
+.. code-block:: JSON
 
    {
       "actionIdentifiers": {

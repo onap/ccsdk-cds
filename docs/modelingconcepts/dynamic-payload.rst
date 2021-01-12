@@ -23,45 +23,45 @@ Here is how the a **generic request** and **response** look like.
      - response
    * - .. code-block:: json
 
-        {
-          "commonHeader": {
-            "originatorId": "",
-            "requestId": "",
-            "subRequestId": ""
-          },
-          "actionIdentifiers": {
-            "blueprintName": "",
-            "blueprintVersion": "",
-            "actionName": "",
-            "mode": ""
-          },
-          "payload": {
-            "$actionName-request": {
-              "$actionName-properties": {
+            {
+              "commonHeader": {
+                "originatorId": "",
+                "requestId": "",
+                "subRequestId": ""
+              },
+              "actionIdentifiers": {
+                "blueprintName": "",
+                "blueprintVersion": "",
+                "actionName": "",
+                "mode": ""
+              },
+              "payload": {
+                "$actionName-request": {
+                  "$actionName-properties": {
+                  }
+                }
               }
             }
-          }
-        }
 
      - .. code-block:: json
 
-        {
-          "commonHeader": {
-            "originatorId": "",
-            "requestId": "",
-            "subRequestId": ""
-          },
-          "actionIdentifiers": {
-            "blueprintName": "",
-            "blueprintVersion": "",
-            "actionName": "",
-            "mode": ""
-          },
-          "payload": {
-            "$actionName-response": {
+            {
+              "commonHeader": {
+                "originatorId": "",
+                "requestId": "",
+                "subRequestId": ""
+              },
+              "actionIdentifiers": {
+                "blueprintName": "",
+                "blueprintVersion": "",
+                "actionName": "",
+                "mode": ""
+              },
+              "payload": {
+                "$actionName-response": {
+                }
+              }
             }
-          }
-        }
 
 The ``actionName``, under the ``actionIdentifiers`` refers to the name of a
 Workflow (see :ref:`workflow`)
