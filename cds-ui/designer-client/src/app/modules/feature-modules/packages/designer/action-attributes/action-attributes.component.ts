@@ -120,7 +120,9 @@ export class ActionAttributesComponent implements OnInit {
         console.log(input);
         if (input && input.type && input.name) {
             const insertedInputActionAttribute = Object.assign({}, input);
-            this.newInputs.push(insertedInputActionAttribute);
+            if (!this.newInputs.includes(insertedInputActionAttribute)) {
+                this.newInputs.push(insertedInputActionAttribute);
+            }
         }
     }
 
@@ -166,7 +168,7 @@ export class ActionAttributesComponent implements OnInit {
         this.storeOutputs(this.newOutputs);
         this.storeInputs((this.newInputs));
         this.newInputs.forEach(input => {
-            if (!this.inputs.includes(input)) {
+            if (!this.inputs.includes(input.name)) {
                 this.inputs.push(input);
             }
         });
@@ -392,16 +394,7 @@ export class ActionAttributesComponent implements OnInit {
                 this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
                     + newAttributes + '}');
         }
-        const action = this.designerState.template.workflows[this.actionName] as Action;
-        this.inputs = [];
-        if (action.inputs) {
-            const namesOfInput = Object.keys(action.inputs);
-            this.inputs = this.extractFields(namesOfInput, action.inputs);
-        }
-        /* console.log(originalAttributes.substr(0, originalAttributes.length - 1) + ',' + newAttributes + '}');
-         this.designerState.template.workflows[this.actionName][attributeType] =
-             this.convertToObject(originalAttributes.substr(0, originalAttributes.length - 1)
-                 + ',' + newAttributes + '}');*/
+
     }
 
     private removeTheLastComma(newInputs: string): string {
