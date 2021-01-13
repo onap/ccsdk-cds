@@ -20,6 +20,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SourcesStore } from './sources.store';
+import { DictionaryCreationService } from '../dictionary-creation.service';
 
 @Component({
   selector: 'app-sources-template',
@@ -29,7 +30,7 @@ import { SourcesStore } from './sources.store';
 export class SourcesTemplateComponent implements OnInit {
   private searchQuery = '';
   lang = 'json';
-  sources = [];
+  sources = {};
   option = [];
   sourcesOptions = [];
   textValue: any;
@@ -39,20 +40,32 @@ export class SourcesTemplateComponent implements OnInit {
   searchText = '';
   text = '';
   selectedArray = [];
-  constructor(private sourcesStore: SourcesStore) {
-    this.sourcesStore.state$.subscribe(sources => {
-      this.sources = sources.sources;
-      for (const key in this.sources) {
-        if (key) {
-          const sourceObj = { name: key, value: JSON.stringify(this.sources[key]) };
-          this.option.push(sourceObj);
-        }
-      }
-    });
+  constructor(
+    private sourcesStore: SourcesStore,
+    private dictionaryCreationService: DictionaryCreationService
+  ) {
+
   }
 
   ngOnInit() {
-    this.sourcesStore.getAllSources();
+    //  this.sourcesStore.getAllSources();
+    this.dictionaryCreationService.getSources().subscribe(sources => {
+      // console.log(sources);
+      this.sources = sources[0];
+      // this.sources = {
+      //   "input": "source-input", "rest": "source-rest", "default":"source-default", "capability": "source-capability",
+      // "sdnc": "source-rest", "vault-data": "source-rest", "processor-db": "source-db", "aai-data": "source-rest",
+      // "script": "source-capability"
+      // };
+      for (const key in this.sources) {
+        if (key) {
+          console.log(key + ' - ' + this.sources[key]);
+          const sourceObj = { name: key, value: this.sources[key] };
+          this.option.push(sourceObj);
+        }
+      }
+
+    });
   }
 
   saveSorcesDataToStore() {
@@ -60,6 +73,8 @@ export class SourcesTemplateComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
+    console.log('-------------');
+    console.log(event);
     this.ddSource = [];
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -74,7 +89,8 @@ export class SourcesTemplateComponent implements OnInit {
       if (key2) {
         const originalSources = this.sourcesOptions;
         for (const key of originalSources) {
-          if (key.name === key2) {
+          /* tslint:disable:no-string-literal */
+          if (key.name === key2['name']) {
             const obj = `{${key.name}: ${key.value}}`;
             this.ddSource.push(obj);
           }

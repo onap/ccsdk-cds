@@ -17,6 +17,7 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
+import { JsonPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DictionaryCreationService } from '../dictionary-creation.service';
 import { DictionaryCreationStore } from '../dictionary-creation.store';
@@ -30,11 +31,17 @@ export class DictionaryEditorComponent implements OnInit {
   text = '';
   constructor(
     private dictionaryStore: DictionaryCreationStore,
-    private dictionaryService: DictionaryCreationService
+    private dictionaryService: DictionaryCreationService,
+    private pipe: JsonPipe
   ) {
   }
 
   ngOnInit() {
+    this.dictionaryStore.state$.subscribe(element => {
+      if (element && element.metaData) {
+        this.text = this.pipe.transform(element.metaData);
+      }
+    });
   }
 
   textChanged(event) {
