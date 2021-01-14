@@ -44,36 +44,47 @@ export class DictionaryMetadataComponent implements OnInit {
 
     ngOnInit() {
         this.dictionaryCreationStore.state$.subscribe(element => {
+            console.log(this.metaDataTab);
             if (element && element.metaData) {
-                this.metaDataTab.name = element.metaData.name;
-                this.metaDataTab.description = element.metaData.description;
-                this.metaDataTab.dataType = element.metaData.dataType;
-                this.metaDataTab.tags = element.metaData.tags;
-                this.metaDataTab.entrySchema = element.metaData.entrySchema;
-                this.metaDataTab.required = element.metaData.required;
-                this.metaDataTab.libraryInstance = element.metaData.libraryInstance;
-                this.metaDataTab.derivedFrom = element.metaData.derivedFrom;
-                console.log(element);
+                this.metaDataTab = element.metaData;
+                this.metaDataTab.property.entry_schema = element.metaData.property.entry_schema;
+                this.tags = new Set(element.metaData.tags.split(','));
+                this.tags.delete('');
+                this.tags.delete(' ');
+
+                //  console.log(element);
+                // console.log(element.metaData.property['entry_schema']);
             }
         });
-        console.log(this.metaDataTab.name);
+
     }
+
+    // getSources() {
+    //     this.dictionaryCreationService.getSources().subscribe(res => {
+    //         console.log(res);
+    //     });
+    // }
 
     removeTag(value) {
         this.tags.delete(value);
     }
 
+
     addTag(event) {
         const value = event.target.value;
         console.log(value);
         if (value && value.trim().length > 0) {
+            let tag = '';
             event.target.value = '';
             this.tags.add(value);
+            this.tags.forEach(val => {
+                tag += val + ', ';
+            });
         }
     }
 
     saveMetaDataToStore() {
         console.log(this.metaDataTab);
-     //   this.dictionaryCreationStore.changeMetaData(this.metaDataTab);
+        this.dictionaryCreationStore.changeMetaData(this.metaDataTab);
     }
 }

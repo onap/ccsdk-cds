@@ -1,3 +1,5 @@
+import { JsonObject, JsonProperty } from 'json2typescript';
+
 /*
 * ============LICENSE_START=======================================================
 * ONAP : CDS
@@ -17,17 +19,46 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-
+@JsonObject()
 export class MetaData {
+    @JsonProperty('name')
     public name: string;
-    public dataType: string;
-    public description: string;
-    public entrySchema: string;
-    public updatedBy: string;
     public tags: string;
-    public required: string;
+    @JsonProperty('updated-by')
+    public updatedBy: string;
+    public property: Property;
 
-    public createdDate: string;
-    public libraryInstance: string;
-    public derivedFrom: string;
+    constructor() {
+        this.name = '';
+        this.tags = '';
+        this.updatedBy = '';
+        this.property = new Property();
+    }
+}
+
+@JsonObject()
+export class Property {
+    public description: string;
+    type: string;
+    required: boolean;
+    @JsonProperty('entry_schema')
+    // tslint:disable-next-line: variable-name
+    entry_schema: EntrySchema = new EntrySchema();
+
+    constructor() {
+        this.description = '';
+        this.type = '';
+        this.entry_schema = new EntrySchema();
+        this.required = false;
+    }
+
+}
+@JsonObject()
+export class EntrySchema {
+    type: string;
+    constraints: [];
+    constructor() {
+        this.type = '';
+        this.constraints = [];
+    }
 }

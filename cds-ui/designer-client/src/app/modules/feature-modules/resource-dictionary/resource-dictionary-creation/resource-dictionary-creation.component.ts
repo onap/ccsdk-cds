@@ -66,6 +66,7 @@ export class ResourceDictionaryCreationComponent implements OnInit {
   }
 
   saveDictionaryToStore() {
+    this.metadataTabComponent.saveMetaDataToStore();
     // console.log('00000000000');
     // this.dictionaryCreationStore.getSources();
     // this.dictionaryCreationStore.state$.subscribe(dd => {

@@ -21,10 +21,9 @@
     <div class="single-line-model">
         <label class="label-name">Name</label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.name"
-                placeholder="Topology name.vLB.CDS">
+            <input type="input" [(ngModel)]="metaDataTab.name" placeholder="Topology name.vLB.CDS">
         </div>
-         <!-- <div class="model-note-container error-message">
+        <!-- <div class="model-note-container error-message">
             Package name already exists with this version. Please enter a different name or enter different version
             number.
         </div>  -->
@@ -41,39 +40,40 @@
     <div class="single-line-model">
         <label class="label-name">Entry Schema</label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.entrySchema" placeholder="Entry Schema">
+            <input type="input" [(ngModel)]="metaDataTab.property.entry_schema.type" placeholder="Entry Schema">
         </div>
     </div>
     <div class="single-line-model">
         <label class="label-name">Data Type</label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.dataType" placeholder="Data Type">
+            <input type="input" [(ngModel)]="metaDataTab.property.type" placeholder="Data Type">
         </div>
     </div>
     <div class="single-line-model">
         <label class="label-name">Description</label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.description" placeholder="Descripe the package">
+            <input type="input" [(ngModel)]="metaDataTab.property.description" placeholder="Descripe the package">
         </div>
     </div>
     <div class="single-line-model">
         <label class="label-name">Required</label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.updatedBy" placeholder="required">
+            <input type="checkbox" [checked]="metaDataTab.property.required" style="width: auto;"
+                (change)="metaDataTab.property.required = !metaDataTab.property.required" placeholder="required">
         </div>
     </div>
-    <div class="single-line-model">
+    <!-- <div class="single-line-model">
         <label class="label-name">Library Instance</label>
         <div class="label-input">
             <input type="input" [(ngModel)]="metaDataTab.libraryInstance" placeholder="Library Instance">
         </div>
-    </div>
-    <div class="single-line-model">
+    </div> -->
+    <!-- <div class="single-line-model">
         <label class="label-name">Derived From</label>
         <div class="label-input">
             <input type="input" [(ngModel)]="metaDataTab.derivedFrom" placeholder="Derived From">
         </div>
-    </div>
+    </div> -->
 
     <div class="single-line-model">
         <label class="label-name">Tags</label>
@@ -88,4 +88,4 @@
                     class="fa fa-times-circle"></i></span>
         </div>
     </div>
-</div> 
+</div>
