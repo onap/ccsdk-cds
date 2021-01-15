@@ -27,8 +27,16 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
 
+    def uploadBlueprint(self, request, context):
+        # handler for 'uploadBluleprint' call - extracts compressed cbaData to a  bpname/bpver/bpuuid dir.
+        blueprint_name_version_uuid = utils.blueprint_name_version_uuid(request)
+        extra = utils.getExtraLogData(request)
+        self.logger.info("{} - Received uploadBlueprint request".format(blueprint_name_version_uuid), extra=extra)
+        handler = CommandExecutorHandler(request)
+        return handler.uploadBlueprint(request)
+        
     def prepareEnv(self, request, context):
-        blueprint_id = utils.get_blueprint_id(request)
+        blueprint_id = utils.blueprint_name_version_uuid(request)
         extra = utils.getExtraLogData(request)
         self.logger.info("{} - Received prepareEnv request".format(blueprint_id), extra=extra)
         self.logger.info(request, extra=extra)
@@ -43,7 +51,7 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         return utils.build_grpc_response(request.requestId, prepare_env_response)
 
     def executeCommand(self, request, context):
-        blueprint_id = utils.get_blueprint_id(request)
+        blueprint_id = utils.blueprint_name_version_uuid(request)
         extra = utils.getExtraLogData(request)
         self.logger.info("{} - Received executeCommand request".format(blueprint_id), extra=extra)
         if os.environ.get('CE_DEBUG','false') == "true":
