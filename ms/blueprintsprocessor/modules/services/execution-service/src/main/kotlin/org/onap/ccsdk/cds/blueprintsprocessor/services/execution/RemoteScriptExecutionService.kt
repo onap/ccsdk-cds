@@ -7,7 +7,8 @@
  *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ package org.onap.ccsdk.cds.controllerblueprints.command.api;
+*
  *  Unless required by applicable law or agreed to in writing, software
  *  distributed under the License is distributed on an "AS IS" BASIS,
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,8 +25,10 @@ import com.google.protobuf.util.JsonFormat
 import io.grpc.ManagedChannel
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteIdentifier
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptUploadBlueprintInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptUploadBlueprintOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcLibPropertyService
@@ -35,6 +38,8 @@ import org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutput
 import org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers
 import org.onap.ccsdk.cds.controllerblueprints.command.api.Packages
 import org.onap.ccsdk.cds.controllerblueprints.command.api.PrepareEnvInput
+import org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput
+import org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintOutput
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
@@ -47,6 +52,7 @@ import java.util.concurrent.TimeUnit
 interface RemoteScriptExecutionService {
 
     suspend fun init(selector: Any)
+    suspend fun uploadBlueprint(uploadBpInput: RemoteScriptUploadBlueprintInput): RemoteScriptUploadBlueprintOutput
     suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput
     suspend fun executeCommand(remoteExecutionInput: RemoteScriptExecutionInput): RemoteScriptExecutionOutput
     suspend fun close()
@@ -84,6 +90,19 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         }
     }
 
+    override suspend fun uploadBlueprint(uploadBPInput: RemoteScriptUploadBlueprintInput): RemoteScriptUploadBlueprintOutput {
+        val logPart = "requestId(${uploadBPInput.requestId}) subRequestId(${uploadBPInput.subRequestId}) blueprintName(${uploadBPInput.remoteIdentifier?.blueprintName}) blueprintVersion(${uploadBPInput.remoteIdentifier?.blueprintVersion}) blueprintUUID(${uploadBPInput.remoteIdentifier?.blueprintUUID})"
+        val grpcResponse = commandExecutorServiceGrpc
+            .withDeadlineAfter(uploadBPInput.timeOut * 1000, TimeUnit.MILLISECONDS)
+            .uploadBlueprint(uploadBPInput.asGrpcData())
+        checkNotNull(grpcResponse.status) {
+            "failed to get GRPC upload CBA response status for $logPart"
+        }
+        val uploadBlueprinOutput = grpcResponse.asJavaData()
+        log.info("Received Upload CBA response status(${uploadBlueprinOutput.status}) for $logPart payload(${uploadBlueprinOutput.payload})")
+        return uploadBlueprinOutput
+    }
+
     override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput {
         val grpResponse = commandExecutorServiceGrpc
             .withDeadlineAfter(prepareEnvInput.timeOut * 1000, TimeUnit.MILLISECONDS)
@@ -115,6 +134,21 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
 
     override suspend fun close() {
         channel?.shutdownNow()
+    }
+
+    fun RemoteScriptUploadBlueprintInput.asGrpcData(): UploadBlueprintInput {
+        val correlationId = this.correlationId ?: this.requestId
+        return UploadBlueprintInput.newBuilder()
+            .setIdentifiers(this.remoteIdentifier!!.asGrpcData())
+            .setRequestId(this.requestId)
+            .setSubRequestId(this.subRequestId)
+            .setOriginatorId(this.originatorId)
+            .setCorrelationId(correlationId)
+            .setTimestamp(Timestamp.getDefaultInstance())
+            .setBinData(this.binData)
+            .setArchiveType(this.archiveType)
+            .setTimeOut(this.timeOut.toInt())
+            .build()
     }
 
     fun PrepareRemoteEnvInput.asGrpcData(): PrepareEnvInput {
@@ -159,6 +193,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         return Identifiers.newBuilder()
             .setBlueprintName(this.blueprintName)
             .setBlueprintVersion(this.blueprintVersion)
+            .setBlueprintUUID(this.blueprintUUID)
             .build()
     }
 
@@ -172,6 +207,15 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
         return RemoteScriptExecutionOutput(
             requestId = this.requestId,
             response = this.responseList,
+            status = StatusType.valueOf(this.status.name),
+            payload = payload.jsonAsJsonType()
+        )
+    }
+
+    fun UploadBlueprintOutput.asJavaData(): RemoteScriptUploadBlueprintOutput {
+        return RemoteScriptUploadBlueprintOutput(
+            requestId = this.requestId,
+            subRequestId = this.subRequestId,
             status = StatusType.valueOf(this.status.name),
             payload = payload.jsonAsJsonType()
         )

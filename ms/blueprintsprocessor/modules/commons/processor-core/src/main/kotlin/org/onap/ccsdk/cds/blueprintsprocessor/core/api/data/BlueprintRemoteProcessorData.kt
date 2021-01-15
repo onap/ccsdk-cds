@@ -18,15 +18,39 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.api.data
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.google.protobuf.ByteString
 import java.util.Date
 
 enum class StatusType {
     SUCCESS, FAILURE
 }
 
+/* TODO: Group fields into another struct containing originatorId, requestId, subRequestId, correlationId generally go together */
+// timeOuts are in seconds
+
 data class RemoteIdentifier(
     var blueprintName: String,
-    var blueprintVersion: String
+    var blueprintVersion: String,
+    var blueprintUUID: String
+)
+
+data class RemoteScriptUploadBlueprintInput(
+    val remoteIdentifier: RemoteIdentifier? = null,
+    val requestId: String,
+    val subRequestId: String,
+    val originatorId: String,
+    val correlationId: String? = null,
+    val timeOut: Long = 30,
+    val archiveType: String = "CBA_ZIP",
+    val binData: ByteString
+)
+
+data class RemoteScriptUploadBlueprintOutput(
+    val requestId: String,
+    val subRequestId: String,
+    val status: StatusType = StatusType.SUCCESS,
+    val timestamp: Date = Date(),
+    val payload: JsonNode
 )
 
 data class RemoteScriptExecutionInput(

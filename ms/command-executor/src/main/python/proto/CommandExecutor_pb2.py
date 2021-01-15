@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='org.onap.ccsdk.cds.controllerblueprints.command.api',
   syntax='proto3',
   serialized_options=_b('P\001'),
-  serialized_pb=_b('\n\x15\x43ommandExecutor.proto\x12\x33org.onap.ccsdk.cds.controllerblueprints.command.api\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbb\x02\n\x0e\x45xecutionInput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x15\n\rcorrelationId\x18\x02 \x01(\t\x12U\n\x0bidentifiers\x18\x03 \x01(\x0b\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers\x12\x0f\n\x07\x63ommand\x18\x04 \x01(\t\x12\x0f\n\x07timeOut\x18\x05 \x01(\x05\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\ttimestamp\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0csubRequestId\x18\x08 \x01(\t\x12\x14\n\x0coriginatorId\x18\t \x01(\t\"\xfc\x02\n\x0fPrepareEnvInput\x12U\n\x0bidentifiers\x18\x01 \x01(\x0b\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers\x12\x11\n\trequestId\x18\x02 \x01(\t\x12\x15\n\rcorrelationId\x18\x03 \x01(\t\x12O\n\x08packages\x18\x04 \x03(\x0b\x32=.org.onap.ccsdk.cds.controllerblueprints.command.api.Packages\x12\x0f\n\x07timeOut\x18\x05 \x01(\x05\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\ttimestamp\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0csubRequestId\x18\x08 \x01(\t\x12\x14\n\x0coriginatorId\x18\t \x01(\t\">\n\x0bIdentifiers\x12\x15\n\rblueprintName\x18\x01 \x01(\t\x12\x18\n\x10\x62lueprintVersion\x18\x02 \x01(\t\"\xcb\x01\n\x0f\x45xecutionOutput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x10\n\x08response\x18\x02 \x03(\t\x12S\n\x06status\x18\x03 \x01(\x0e\x32\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ResponseStatus\x12-\n\ttimestamp\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07payload\x18\x05 \x01(\t\"k\n\x08Packages\x12N\n\x04type\x18\x01 \x01(\x0e\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.PackageType\x12\x0f\n\x07package\x18\x02 \x03(\t**\n\x0eResponseStatus\x12\x0b\n\x07SUCCESS\x10\x00\x12\x0b\n\x07\x46\x41ILURE\x10\x01*9\n\x0bPackageType\x12\x07\n\x03pip\x10\x00\x12\x12\n\x0e\x61nsible_galaxy\x10\x01\x12\r\n\tutilities\x10\x02\x32\xd1\x02\n\x16\x43ommandExecutorService\x12\x98\x01\n\nprepareEnv\x12\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.PrepareEnvInput\x1a\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutput\x12\x9b\x01\n\x0e\x65xecuteCommand\x12\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionInput\x1a\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutputB\x02P\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x15\x43ommandExecutor.proto\x12\x33org.onap.ccsdk.cds.controllerblueprints.command.api\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbb\x02\n\x0e\x45xecutionInput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x15\n\rcorrelationId\x18\x02 \x01(\t\x12U\n\x0bidentifiers\x18\x03 \x01(\x0b\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers\x12\x0f\n\x07\x63ommand\x18\x04 \x01(\t\x12\x0f\n\x07timeOut\x18\x05 \x01(\x05\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\ttimestamp\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0csubRequestId\x18\x08 \x01(\t\x12\x14\n\x0coriginatorId\x18\t \x01(\t\"\xd9\x01\n\x19\x42lueprintValidationOutput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x14\n\x0csubRequestId\x18\x02 \x01(\t\x12S\n\x06status\x18\x03 \x01(\x0e\x32\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ResponseStatus\x12-\n\ttimestamp\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07\x63\x62\x61UUID\x18\x05 \x01(\t\"\xa9\x02\n\x14UploadBlueprintInput\x12U\n\x0bidentifiers\x18\x01 \x01(\x0b\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers\x12\x11\n\trequestId\x18\x02 \x01(\t\x12\x14\n\x0csubRequestId\x18\x03 \x01(\t\x12\x14\n\x0coriginatorId\x18\x04 \x01(\t\x12\x15\n\rcorrelationId\x18\x05 \x01(\t\x12\x0f\n\x07timeOut\x18\x06 \x01(\x05\x12\x13\n\x0b\x61rchiveType\x18\x07 \x01(\t\x12-\n\ttimestamp\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07\x62inData\x18\t \x01(\x0c\"\xd5\x01\n\x15UploadBlueprintOutput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x14\n\x0csubRequestId\x18\x02 \x01(\t\x12S\n\x06status\x18\x03 \x01(\x0e\x32\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ResponseStatus\x12-\n\ttimestamp\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07payload\x18\x05 \x01(\t\"\xfc\x02\n\x0fPrepareEnvInput\x12U\n\x0bidentifiers\x18\x01 \x01(\x0b\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers\x12\x11\n\trequestId\x18\x02 \x01(\t\x12\x15\n\rcorrelationId\x18\x03 \x01(\t\x12O\n\x08packages\x18\x04 \x03(\x0b\x32=.org.onap.ccsdk.cds.controllerblueprints.command.api.Packages\x12\x0f\n\x07timeOut\x18\x05 \x01(\x05\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x12-\n\ttimestamp\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x14\n\x0csubRequestId\x18\x08 \x01(\t\x12\x14\n\x0coriginatorId\x18\t \x01(\t\"U\n\x0bIdentifiers\x12\x15\n\rblueprintName\x18\x01 \x01(\t\x12\x18\n\x10\x62lueprintVersion\x18\x02 \x01(\t\x12\x15\n\rblueprintUUID\x18\x03 \x01(\t\"\xcb\x01\n\x0f\x45xecutionOutput\x12\x11\n\trequestId\x18\x01 \x01(\t\x12\x10\n\x08response\x18\x02 \x03(\t\x12S\n\x06status\x18\x03 \x01(\x0e\x32\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ResponseStatus\x12-\n\ttimestamp\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0f\n\x07payload\x18\x05 \x01(\t\"k\n\x08Packages\x12N\n\x04type\x18\x01 \x01(\x0e\x32@.org.onap.ccsdk.cds.controllerblueprints.command.api.PackageType\x12\x0f\n\x07package\x18\x02 \x03(\t**\n\x0eResponseStatus\x12\x0b\n\x07SUCCESS\x10\x00\x12\x0b\n\x07\x46\x41ILURE\x10\x01*9\n\x0bPackageType\x12\x07\n\x03pip\x10\x00\x12\x12\n\x0e\x61nsible_galaxy\x10\x01\x12\r\n\tutilities\x10\x02\x32\xfc\x03\n\x16\x43ommandExecutorService\x12\xa8\x01\n\x0fuploadBlueprint\x12I.org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput\x1aJ.org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintOutput\x12\x98\x01\n\nprepareEnv\x12\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.PrepareEnvInput\x1a\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutput\x12\x9b\x01\n\x0e\x65xecuteCommand\x12\x43.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionInput\x1a\x44.org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutputB\x02P\x01\x62\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -44,8 +44,8 @@ _RESPONSESTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1221,
-  serialized_end=1263,
+  serialized_start=1980,
+  serialized_end=2022,
 )
 _sym_db.RegisterEnumDescriptor(_RESPONSESTATUS)
 
@@ -71,8 +71,8 @@ _PACKAGETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1265,
-  serialized_end=1322,
+  serialized_start=2024,
+  serialized_end=2081,
 )
 _sym_db.RegisterEnumDescriptor(_PACKAGETYPE)
 
@@ -172,6 +172,211 @@ _EXECUTIONINPUT = _descriptor.Descriptor(
 )
 
 
+_BLUEPRINTVALIDATIONOUTPUT = _descriptor.Descriptor(
+  name='BlueprintValidationOutput',
+  full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.BlueprintValidationOutput',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='requestId', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.BlueprintValidationOutput.requestId', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='subRequestId', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.BlueprintValidationOutput.subRequestId', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.BlueprintValidationOutput.status', index=2,
+      number=3, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.BlueprintValidationOutput.timestamp', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='cbaUUID', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.BlueprintValidationOutput.cbaUUID', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=460,
+  serialized_end=677,
+)
+
+
+_UPLOADBLUEPRINTINPUT = _descriptor.Descriptor(
+  name='UploadBlueprintInput',
+  full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='identifiers', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput.identifiers', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='requestId', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput.requestId', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='subRequestId', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput.subRequestId', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='originatorId', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput.originatorId', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='correlationId', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput.correlationId', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timeOut', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput.timeOut', index=5,
+      number=6, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='archiveType', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput.archiveType', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput.timestamp', index=7,
+      number=8, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='binData', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput.binData', index=8,
+      number=9, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b(""),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=680,
+  serialized_end=977,
+)
+
+
+_UPLOADBLUEPRINTOUTPUT = _descriptor.Descriptor(
+  name='UploadBlueprintOutput',
+  full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintOutput',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='requestId', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintOutput.requestId', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='subRequestId', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintOutput.subRequestId', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintOutput.status', index=2,
+      number=3, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintOutput.timestamp', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='payload', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintOutput.payload', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=980,
+  serialized_end=1193,
+)
+
+
 _PREPAREENVINPUT = _descriptor.Descriptor(
   name='PrepareEnvInput',
   full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.PrepareEnvInput',
@@ -254,8 +459,8 @@ _PREPAREENVINPUT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=460,
-  serialized_end=840,
+  serialized_start=1196,
+  serialized_end=1576,
 )
 
 
@@ -280,6 +485,13 @@ _IDENTIFIERS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='blueprintUUID', full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.Identifiers.blueprintUUID', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -292,8 +504,8 @@ _IDENTIFIERS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=842,
-  serialized_end=904,
+  serialized_start=1578,
+  serialized_end=1663,
 )
 
 
@@ -351,8 +563,8 @@ _EXECUTIONOUTPUT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=907,
-  serialized_end=1110,
+  serialized_start=1666,
+  serialized_end=1869,
 )
 
 
@@ -389,13 +601,19 @@ _PACKAGES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1112,
-  serialized_end=1219,
+  serialized_start=1871,
+  serialized_end=1978,
 )
 
 _EXECUTIONINPUT.fields_by_name['identifiers'].message_type = _IDENTIFIERS
 _EXECUTIONINPUT.fields_by_name['properties'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _EXECUTIONINPUT.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_BLUEPRINTVALIDATIONOUTPUT.fields_by_name['status'].enum_type = _RESPONSESTATUS
+_BLUEPRINTVALIDATIONOUTPUT.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_UPLOADBLUEPRINTINPUT.fields_by_name['identifiers'].message_type = _IDENTIFIERS
+_UPLOADBLUEPRINTINPUT.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
+_UPLOADBLUEPRINTOUTPUT.fields_by_name['status'].enum_type = _RESPONSESTATUS
+_UPLOADBLUEPRINTOUTPUT.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _PREPAREENVINPUT.fields_by_name['identifiers'].message_type = _IDENTIFIERS
 _PREPAREENVINPUT.fields_by_name['packages'].message_type = _PACKAGES
 _PREPAREENVINPUT.fields_by_name['properties'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
@@ -404,6 +622,9 @@ _EXECUTIONOUTPUT.fields_by_name['status'].enum_type = _RESPONSESTATUS
 _EXECUTIONOUTPUT.fields_by_name['timestamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _PACKAGES.fields_by_name['type'].enum_type = _PACKAGETYPE
 DESCRIPTOR.message_types_by_name['ExecutionInput'] = _EXECUTIONINPUT
+DESCRIPTOR.message_types_by_name['BlueprintValidationOutput'] = _BLUEPRINTVALIDATIONOUTPUT
+DESCRIPTOR.message_types_by_name['UploadBlueprintInput'] = _UPLOADBLUEPRINTINPUT
+DESCRIPTOR.message_types_by_name['UploadBlueprintOutput'] = _UPLOADBLUEPRINTOUTPUT
 DESCRIPTOR.message_types_by_name['PrepareEnvInput'] = _PREPAREENVINPUT
 DESCRIPTOR.message_types_by_name['Identifiers'] = _IDENTIFIERS
 DESCRIPTOR.message_types_by_name['ExecutionOutput'] = _EXECUTIONOUTPUT
@@ -418,6 +639,27 @@ ExecutionInput = _reflection.GeneratedProtocolMessageType('ExecutionInput', (_me
   # @@protoc_insertion_point(class_scope:org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionInput)
   ))
 _sym_db.RegisterMessage(ExecutionInput)
+
+BlueprintValidationOutput = _reflection.GeneratedProtocolMessageType('BlueprintValidationOutput', (_message.Message,), dict(
+  DESCRIPTOR = _BLUEPRINTVALIDATIONOUTPUT,
+  __module__ = 'CommandExecutor_pb2'
+  # @@protoc_insertion_point(class_scope:org.onap.ccsdk.cds.controllerblueprints.command.api.BlueprintValidationOutput)
+  ))
+_sym_db.RegisterMessage(BlueprintValidationOutput)
+
+UploadBlueprintInput = _reflection.GeneratedProtocolMessageType('UploadBlueprintInput', (_message.Message,), dict(
+  DESCRIPTOR = _UPLOADBLUEPRINTINPUT,
+  __module__ = 'CommandExecutor_pb2'
+  # @@protoc_insertion_point(class_scope:org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintInput)
+  ))
+_sym_db.RegisterMessage(UploadBlueprintInput)
+
+UploadBlueprintOutput = _reflection.GeneratedProtocolMessageType('UploadBlueprintOutput', (_message.Message,), dict(
+  DESCRIPTOR = _UPLOADBLUEPRINTOUTPUT,
+  __module__ = 'CommandExecutor_pb2'
+  # @@protoc_insertion_point(class_scope:org.onap.ccsdk.cds.controllerblueprints.command.api.UploadBlueprintOutput)
+  ))
+_sym_db.RegisterMessage(UploadBlueprintOutput)
 
 PrepareEnvInput = _reflection.GeneratedProtocolMessageType('PrepareEnvInput', (_message.Message,), dict(
   DESCRIPTOR = _PREPAREENVINPUT,
@@ -456,13 +698,22 @@ _COMMANDEXECUTORSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1325,
-  serialized_end=1662,
+  serialized_start=2084,
+  serialized_end=2592,
   methods=[
+  _descriptor.MethodDescriptor(
+    name='uploadBlueprint',
+    full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.CommandExecutorService.uploadBlueprint',
+    index=0,
+    containing_service=None,
+    input_type=_UPLOADBLUEPRINTINPUT,
+    output_type=_UPLOADBLUEPRINTOUTPUT,
+    serialized_options=None,
+  ),
   _descriptor.MethodDescriptor(
     name='prepareEnv',
     full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.CommandExecutorService.prepareEnv',
-    index=0,
+    index=1,
     containing_service=None,
     input_type=_PREPAREENVINPUT,
     output_type=_EXECUTIONOUTPUT,
@@ -471,7 +722,7 @@ _COMMANDEXECUTORSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='executeCommand',
     full_name='org.onap.ccsdk.cds.controllerblueprints.command.api.CommandExecutorService.executeCommand',
-    index=1,
+    index=2,
     containing_service=None,
     input_type=_EXECUTIONINPUT,
     output_type=_EXECUTIONOUTPUT,
