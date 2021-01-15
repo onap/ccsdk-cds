@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.google.protobuf.ByteString
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
@@ -27,12 +28,16 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteIdentifier
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptUploadBlueprintInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotBlank
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
@@ -51,7 +56,8 @@ import org.springframework.stereotype.Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentRemotePythonExecutor(
     private val remoteScriptExecutionService: RemoteScriptExecutionService,
-    private var bluePrintPropertiesService: BlueprintPropertiesService
+    private val bluePrintPropertiesService: BlueprintPropertiesService,
+    private val blueprintModelRepository: BlueprintModelRepository
 ) : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentRemotePythonExecutor::class.java)!!
@@ -78,6 +84,7 @@ open class ComponentRemotePythonExecutor(
         const val DEFAULT_ENV_PREPARE_TIMEOUT_IN_SEC = 120
         const val DEFAULT_EXECUTE_TIMEOUT_IN_SEC = 180
         const val TIMEOUT_DELTA = 100L
+        const val DEFAULT_CBA_UPLOAD_TIMEOUT_IN_SEC = 30
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
@@ -89,6 +96,16 @@ open class ComponentRemotePythonExecutor(
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val blueprintName = bluePrintContext.name()
         val blueprintVersion = bluePrintContext.version()
+
+        // fetch the template (plus cba bindata) from repository
+        val cbaModel = blueprintModelRepository.findByArtifactNameAndArtifactVersion(blueprintName, blueprintVersion)
+        val blueprintUUID = cbaModel?.id!!
+        val cbaBinData = ByteString.copyFrom(cbaModel?.blueprintModelContent?.content)
+        val archiveType = cbaModel?.blueprintModelContent?.contentType // TODO: should be enum
+        val remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion, blueprintUUID = blueprintUUID)
+        val originatorId = executionServiceInput.commonHeader.originatorId
+        val subRequestId = executionServiceInput.commonHeader.subRequestId
+        val requestId = processId
 
         val operationAssignment: OperationAssignment = bluePrintContext
             .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
@@ -116,6 +133,7 @@ open class ComponentRemotePythonExecutor(
             ?.rootFieldsToMap()?.toSortedMap()?.values?.joinToString(" ") { formatNestedJsonNode(it) }
 
         val command = getOperationInput(INPUT_COMMAND).asText()
+        val cbaNameVerUuid = "blueprintName($blueprintName) blueprintVersion($blueprintVersion) blueprintUUID($blueprintUUID)"
 
         /**
          * Timeouts that are specific to the command executor.
@@ -129,7 +147,7 @@ open class ComponentRemotePythonExecutor(
         // component level timeout should be => env_prep_timeout + execution_timeout
         val timeout = implementation.timeout
 
-        var scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
+        var scriptCommand = command.replace(pythonScript.name, artifactDefinition.file)
         if (args != null && args.isNotEmpty()) {
             scriptCommand = scriptCommand.plus(" ").plus(args)
         }
@@ -150,13 +168,9 @@ open class ComponentRemotePythonExecutor(
                     originatorId = executionServiceInput.commonHeader.originatorId,
                     requestId = processId,
                     subRequestId = executionServiceInput.commonHeader.subRequestId,
-                    remoteIdentifier = RemoteIdentifier(
-                        blueprintName = blueprintName,
-                        blueprintVersion = blueprintVersion
-                    ),
+                    remoteIdentifier = remoteIdentifier,
                     packages = packages,
                     timeOut = envPrepTimeout.toLong()
-
                 )
                 val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
                 log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
@@ -171,11 +185,15 @@ open class ComponentRemotePythonExecutor(
                     setNodeOutputProperties(prepareEnvOutput.status, STEP_PREPARE_ENV, logs, prepareEnvOutput.payload, isLogResponseEnabled)
                 }
             } else {
-                // set env preparation log to empty...
-                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, "".asJsonPrimitive())
+                if (packages == null) {
+                    // set env preparation log to empty...
+                    setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, "".asJsonPrimitive())
+                } else {
+                    prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled)
+                }
+                // in cases where the exception is caught in BP side due to timeout, we do not have `err_msg` returned by cmd-exec (inside `payload`),
+                // hence `artifact` field will be empty
             }
-            // in cases where the exception is caught in BP side due to timeout, we do not have `err_msg` returned by cmd-exec (inside `payload`),
-            // hence `artifact` field will be empty
         } catch (grpcEx: io.grpc.StatusRuntimeException) {
             val componentLevelWarningMsg =
                 if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
@@ -197,7 +215,7 @@ open class ComponentRemotePythonExecutor(
             log.error(catchallErrMsg, e)
         }
         // if Env preparation was successful, then proceed with command execution in this Env
-        if (bluePrintRuntimeService.getBlueprintError().errors.isEmpty()) {
+        if (noBlueprintErrors()) {
             try {
                 // Populate command execution properties and pass it to the remote server
                 val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
@@ -206,7 +224,7 @@ open class ComponentRemotePythonExecutor(
                     originatorId = executionServiceInput.commonHeader.originatorId,
                     requestId = processId,
                     subRequestId = executionServiceInput.commonHeader.subRequestId,
-                    remoteIdentifier = RemoteIdentifier(blueprintName = blueprintName, blueprintVersion = blueprintVersion),
+                    remoteIdentifier = remoteIdentifier,
                     command = scriptCommand,
                     properties = properties,
                     timeOut = executionTimeout.toLong()
@@ -238,19 +256,19 @@ open class ComponentRemotePythonExecutor(
                     if (timeout < executionTimeout) "Note: component-level timeout ($timeout) is shorter than execution timeout ($executionTimeout). " else ""
                 val timeoutErrMsg =
                     "Command executor execution timeout. DetailedMessage: (${timeoutEx.message}) requestId ($processId). $componentLevelWarningMsg"
-                setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonPrimitive(), logging = isLogResponseEnabled)
+                setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonType(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, timeoutErrMsg)
                 log.error(timeoutErrMsg, timeoutEx)
             } catch (grpcEx: io.grpc.StatusRuntimeException) {
                 val timeoutErrMsg =
                     "Command executor timed out executing after $executionTimeout seconds requestId ($processId) grpcErr: ${grpcEx.status}"
-                setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonPrimitive(), logging = isLogResponseEnabled)
+                setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonType(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, timeoutErrMsg)
                 log.error(timeoutErrMsg, grpcEx)
             } catch (e: Exception) {
                 val catchAllErrMsg =
                     "Command executor failed during process catch-all case requestId ($processId) timeout($envPrepTimeout) exception msg: ${e.message}"
-                setNodeOutputErrors(STEP_PREPARE_ENV, listOf(catchAllErrMsg).asJsonPrimitive(), logging = isLogResponseEnabled)
+                setNodeOutputErrors(STEP_PREPARE_ENV, listOf(catchAllErrMsg).asJsonType(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, catchAllErrMsg)
                 log.error(catchAllErrMsg, e)
             }
@@ -258,6 +276,70 @@ open class ComponentRemotePythonExecutor(
         log.debug("Trying to close GRPC channel. request ($processId)")
         remoteScriptExecutionService.close()
     }
+
+    // wrapper for call to prepare_env step on cmd-exec - reupload CBA and call prepare env again if cmd-exec reported CBA uuid mismatch
+    private suspend fun prepareEnv(originatorId: String, requestId: String, subRequestId: String, remoteIdentifier: RemoteIdentifier, packages: JsonNode, envPrepTimeout: Int, cbaNameVerUuid: String, archiveType: String?, cbaBinData: ByteString?, isLogResponseEnabled: Boolean, innerCall: Boolean = false) {
+        val prepareEnvInput = PrepareRemoteEnvInput(
+            originatorId = originatorId,
+            requestId = requestId,
+            subRequestId = subRequestId,
+            remoteIdentifier = remoteIdentifier,
+            packages = packages,
+            timeOut = envPrepTimeout.toLong()
+        )
+        val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
+        log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
+        val logs = JacksonUtils.jsonNodeFromObject(prepareEnvOutput.response)
+        setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, logs)
+
+        // there are no artifacts for env. prepare, but we reuse it for err_log...
+        if (prepareEnvOutput.status != StatusType.SUCCESS) {
+            // Check for the flag that blueprint is mismatched first, if so, reupload the blueprint
+            if (prepareEnvOutput.payload.has("reupload_cba")) {
+                log.info("Cmd-exec is missing the CBA $cbaNameVerUuid, it will be reuploaded.")
+                uploadCba(remoteIdentifier, requestId, subRequestId, originatorId, archiveType, cbaBinData, cbaNameVerUuid, prepareEnvOutput, isLogResponseEnabled, logs)
+                // call prepare_env again.
+                if (!innerCall) {
+                    log.info("Calling prepare environment again")
+                    prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled)
+                } else {
+                    val errMsg = "Something is wrong: prepare_env step attempted to call itself too many times after upload CBA step!"
+                    log.error(errMsg)
+                    setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
+                    addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, errMsg)
+                }
+            } else {
+                setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
+                addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, logs.toString())
+            }
+        } else {
+            setNodeOutputProperties(prepareEnvOutput.status, STEP_PREPARE_ENV, logs, prepareEnvOutput.payload, isLogResponseEnabled)
+        }
+    }
+
+    private suspend fun uploadCba(remoteIdentifier: RemoteIdentifier, requestId: String, subRequestId: String, originatorId: String, archiveType: String?, cbaBinData: ByteString?, cbaNameVerUuid: String, prepareEnvOutput: RemoteScriptExecutionOutput, isLogResponseEnabled: Boolean, logs: JsonNode) {
+
+        val uploadCbaInput = RemoteScriptUploadBlueprintInput(
+            remoteIdentifier = remoteIdentifier,
+            requestId = requestId,
+            subRequestId = subRequestId,
+            originatorId = originatorId,
+            timeOut = DEFAULT_CBA_UPLOAD_TIMEOUT_IN_SEC.toLong(),
+            archiveType = archiveType!!,
+            binData = cbaBinData!!
+        )
+
+        val cbaUploadOutput = remoteScriptExecutionService.uploadBlueprint(uploadCbaInput)
+        if (cbaUploadOutput.status != StatusType.SUCCESS) {
+            log.error("Error uploading CBA $cbaNameVerUuid error(${cbaUploadOutput.payload})")
+            setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
+            addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, logs.toString())
+        } else {
+            log.info("Finished uploading CBA $cbaNameVerUuid")
+        }
+    }
+
+    private fun noBlueprintErrors() = bluePrintRuntimeService.getBlueprintError().errors.isEmpty()
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBlueprintError()

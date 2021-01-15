@@ -20,6 +20,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 import org.jetbrains.annotations.NotNull
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import java.util.Optional
 import javax.transaction.Transactional
@@ -46,6 +48,16 @@ interface BlueprintModelRepository : JpaRepository<BlueprintModel, String> {
      * @return T?
      */
     fun findByArtifactNameAndArtifactVersion(artifactName: String, artifactVersion: String): BlueprintModel?
+
+    /**
+     *  Find the Blueprint UUID (blueprint_model_id) for a given artifactName/Version
+     *
+     * @param artifactName artifactName
+     * @param artifactVersion artifactVersion
+     * @return String?
+     */
+    @Query("SELECT m.id FROM BlueprintModel m WHERE m.artifactName = :artifactName AND m.artifactVersion = :artifactVersion")
+    fun findIdByArtifactNameAndArtifactVersion(@Param("artifactName") artifactName: String, @Param("artifactVersion") artifactVersion: String): String?
 
     /**
      * This is a findTopByArtifactNameOrderByArtifactIdDesc method

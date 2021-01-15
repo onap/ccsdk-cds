@@ -27,8 +27,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptUploadBlueprintInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptUploadBlueprintOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintError
@@ -50,7 +53,8 @@ class ComponentRemotePythonExecutorTest {
 
             val componentRemotePythonExecutor = ComponentRemotePythonExecutor(
                 remoteScriptExecutionService,
-                mockk<BlueprintPropertiesService>()
+                mockk<BlueprintPropertiesService>(),
+                mockk<BlueprintModelRepository>()
             )
 
             val executionServiceInput =
@@ -94,7 +98,8 @@ class ComponentRemotePythonExecutorTest {
             val remoteScriptExecutionService = MockRemoteScriptExecutionService()
             val componentRemotePythonExecutor = ComponentRemotePythonExecutor(
                 remoteScriptExecutionService,
-                mockk<BlueprintPropertiesService>()
+                mockk<BlueprintPropertiesService>(),
+                mockk<BlueprintModelRepository>()
             )
             val bluePrintRuntime = mockk<DefaultBlueprintRuntimeService>("123456-1000")
 
@@ -221,6 +226,15 @@ class ComponentRemotePythonExecutorTest {
 class MockRemoteScriptExecutionService : RemoteScriptExecutionService {
 
     override suspend fun init(selector: Any) {
+    }
+
+    override suspend fun uploadBlueprint(uploadBpInput: RemoteScriptUploadBlueprintInput): RemoteScriptUploadBlueprintOutput {
+        val uploadBpOutput = mockk<RemoteScriptUploadBlueprintOutput>()
+        every { uploadBpOutput.payload } returns "[]".asJsonPrimitive()
+        every { uploadBpOutput.status } returns StatusType.SUCCESS
+        every { uploadBpOutput.requestId } returns "123456-1000"
+        every { uploadBpOutput.subRequestId } returns "1234"
+        return uploadBpOutput
     }
 
     override suspend fun prepareEnv(prepareEnvInput: PrepareRemoteEnvInput): RemoteScriptExecutionOutput {

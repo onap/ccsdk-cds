@@ -21,6 +21,29 @@ message ExecutionInput {
     string originatorId = 9;
 }
 
+// If a new version of blueprint (new UUID in DB) needs to be uploaded, then pass in the raw bytes data
+// properties should specify 'file_format' as either 'gzip' or 'zip'
+// TODO: archiveTYPE: should be enum {"CBA_ZIP", "CBA_GZIP"}
+message UploadBlueprintInput {
+    Identifiers identifiers = 1;
+    string requestId = 2;
+    string subRequestId = 3;
+    string originatorId = 4;
+    string correlationId = 5;
+    int32 timeOut = 6;
+    string archiveType = 7;
+    google.protobuf.Timestamp timestamp = 8;
+    bytes binData = 9;
+}
+
+message UploadBlueprintOutput {
+   string requestId = 1;
+   string subRequestId = 2;
+   ResponseStatus status = 3;
+   google.protobuf.Timestamp timestamp = 4;
+   string payload = 5;
+}
+
 message PrepareEnvInput {
     Identifiers identifiers = 1;
     string requestId = 2;
@@ -37,8 +60,12 @@ message PrepareEnvInput {
 message Identifiers {
     string blueprintName = 1;
     string blueprintVersion = 2;
+    string blueprintUUID = 3;
 }
 
+// TODO: need to rething whether we want to include subrequest/correlationID/etc to be consistent
+// or drop requestId as it would be returned back to the context where these values are already known.
+// and we may just be concerned with the response/status
 message ExecutionOutput {
     string requestId = 1;
     repeated string response = 2;
@@ -64,6 +91,10 @@ enum PackageType {
 }
 
 service CommandExecutorService {
+    // rpc to upload the CBA
+    rpc uploadBlueprint (UploadBlueprintInput) returns (UploadBlueprintOutput);
+    // prepare Python environment
     rpc prepareEnv (PrepareEnvInput) returns (ExecutionOutput);
+    // execute the actual command.
     rpc executeCommand (ExecutionInput) returns (ExecutionOutput);
 }

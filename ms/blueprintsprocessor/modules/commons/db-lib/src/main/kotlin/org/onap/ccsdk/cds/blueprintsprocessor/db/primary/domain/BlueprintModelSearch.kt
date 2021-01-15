@@ -104,6 +104,6 @@ class BlueprintModelSearch : Serializable {
 
     companion object {
 
-        const val serialversionuid = 1L
+        const val serialVersionUID = 1L
     }
 }
