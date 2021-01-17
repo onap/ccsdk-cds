@@ -87,8 +87,8 @@
                                                     class="icon-required-star" type="button"
                                                     [ngClass]="{'optional-attribute' : getValue(requiredInput,requiredInputs).required==false}"
                                                     aria-hidden="true"></i></label>
-                                            <input [(ngModel)]="currentFuncion['inputs'][requiredInput]" type="text"
-                                                class="form-control">
+                                            <input [(ngModel)]="currentFuncion['inputs'][requiredInput]"
+                                                (focusout)="saveFunctionData()" type="text" class="form-control">
                                         </div>
                                         <!--JSON
                                         <div *ngIf="getValue(requiredInput,requiredInputs).type=='json'"
@@ -109,7 +109,7 @@
                                                     [ngClass]="{'optional-attribute' : getValue(requiredInput,requiredInputs).required==false}"
                                                     aria-hidden="true"></i></label>
                                             <input [(ngModel)]="currentFuncion['inputs'][requiredInput]" type="number"
-                                                class="form-control" placeholder="">
+                                                (focusout)="saveFunctionData()" class="form-control" placeholder="">
                                         </div>
                                         <!--boolean-->
                                         <!-- <div *ngIf="getValue(requiredInput,requiredInputs).type=='boolean'"> -->
@@ -123,7 +123,7 @@
                                             <div class="custom-control custom-radio custom-control-inline">
                                                 <input [value]="true"
                                                     [(ngModel)]="currentFuncion['inputs'][requiredInput]" type="radio"
-                                                    id="{{'functionRadioInline' + i}}"
+                                                    id="{{'functionRadioInline' + i}}" (focusout)="saveFunctionData()"
                                                     name="{{'functionRadioInline' + i}}" class="custom-control-input">
                                                 <label class="custom-control-label"
                                                     for="{{'functionRadioInline' + i}}">True</label>
@@ -132,7 +132,8 @@
                                                 <input [value]="false"
                                                     [(ngModel)]="currentFuncion['inputs'][requiredInput]" type="radio"
                                                     id="{{'functionRadioInline' + i+'-a'}}"
-                                                    name="{{'functionRadioInline' + i}}" class="custom-control-input">
+                                                    (focusout)="saveFunctionData()" name="{{'functionRadioInline' + i}}"
+                                                    class="custom-control-input">
                                                 <label class="custom-control-label"
                                                     for="{{'functionRadioInline' + i+'-a'}}">False</label>
                                             </div>
@@ -179,7 +180,7 @@
                                     <label for="exampleInputEmail1">{{ requiredOutput }} <i class="icon-required-star"
                                             type="button" aria-hidden="true"></i></label>
                                     <input [(ngModel)]="currentFuncion['outputs'][requiredOutput]" type=" text"
-                                        class="form-control">
+                                        (focusout)="saveFunctionData()" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -218,7 +219,7 @@
         </div>
     </div>
     <br />
-    <button class="btn btn-select-template m-auto" (click)="saveFunctionData()">Save</button>
+    <!-- <button class="btn btn-select-template m-auto" (click)="saveFunctionData()">Save</button> -->
 </div>
 
 <!--function - Select Template - Modal-->
