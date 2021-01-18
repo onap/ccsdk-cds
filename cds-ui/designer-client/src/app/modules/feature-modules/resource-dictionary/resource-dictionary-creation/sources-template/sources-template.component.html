@@ -18,68 +18,59 @@
 * ============LICENSE_END=========================================================
 */-->
 <div class="col-11">
-   <div class= "row ">
-       <div class="card creat-card source1">
-           <h5 class="label-name"> Sources Options</h5>
-           <div class="searchBox row"><i class="searchButton1 col-1" aria-hidden="true"></i>
-            <input class="searchText col-8" [(ngModel)]="searchText" type="input" placeholder="filter sources">
-          </div>
-           
-       <div class="example-container">
-        <div
-          cdkDropList
-          #todoList="cdkDropList"
-          [cdkDropListData]="option"
-          [cdkDropListConnectedTo]="[doneList]"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)">
+  <div class="row ">
+    <div class="card creat-card source1">
+      <h5 class="label-name"> Sources Options</h5>
+      <div class="searchBox row"><i class="searchButton1 col-1" aria-hidden="true"></i>
+        <input class="searchText col-8" [(ngModel)]="searchText" type="input" placeholder="filter sources">
+      </div>
+
+      <div class="example-container">
+        <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="option" [cdkDropListConnectedTo]="[doneList]"
+          class="example-list" (cdkDropListDropped)="drop($event)">
           <div class="example-box card creat-card" *ngFor="let item of option| search :searchText" cdkDrag>
-            <input type="checkbox" class="checkbox" [(ngModel)]="checked" (change)="onChange(item, $event.target.checked)">
+            <input type="checkbox" class="checkbox" [(ngModel)]="checked"
+              (change)="onChange(item, $event.target.checked)">
             {{item.name}}
           </div>
-          
+
         </div>
-       
+
       </div>
       <div class="footer row">
         <a class="select-button col-sm-05">Select all</a>
-        <button  class="action-button1 col-sm-04" >Add to list</button>
+        <button class="action-button1 col-sm-04">Add to list</button>
       </div>
-   </div>
-    
-      <div class="card creat-card source">
-        <h5 class="label-name">Sources List</h5>
-        <div class="example-container2 card creat-card"> 
-            <div
-              cdkDropList
-              #doneList="cdkDropList"
-              [cdkDropListData]="sourcesOptions"
-              [cdkDropListConnectedTo]="[todoList]"
-              class="example-list1"
-              (cdkDropListDropped)="drop($event)">
-              
-              <div class="example-box1" *ngFor="let item of sourcesOptions" cdkDrag>
-                <input type="checkbox" value="item.name">
-                <mat-expansion-panel class="expansion-panel">
-                    <mat-expansion-panel-header [collapsedHeight]="'23px'" [expandedHeight]="'23px'">
-                      <mat-panel-title>  
-                    {{item.name}}
-                      </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <br>
-                      <ace-editor [(text)]=item.value [mode]="'javascript'" [autoUpdateContent]="true"
-                        [durationBeforeCallback]="1000" (textChanged)="textChanged($event,item)" [theme]="'tomorrow_night_bright'" #editor style="height:300px;">
-                      </ace-editor>
-                  </mat-expansion-panel> 
-              </div>
-              
-            </div>
-            
-          </div>
-          <div>
-            <a type="submit" class="delete">Delete</a>
-          </div>
-      </div>     
-</div>
-</div>
+    </div>
 
+    <div class="card creat-card source">
+      <h5 class="label-name">Sources List</h5>
+      <div class="example-container2 card creat-card">
+        <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="sourcesOptions"
+          [cdkDropListConnectedTo]="[todoList]" class="example-list1" (cdkDropListDropped)="drop($event)">
+
+          <div class="example-box1" *ngFor="let item of sourcesOptions" cdkDrag>
+            <input type="checkbox" value="item.name">
+            <mat-expansion-panel class="expansion-panel">
+              <mat-expansion-panel-header [collapsedHeight]="'23px'" [expandedHeight]="'23px'">
+                <mat-panel-title>
+                  {{item.name}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <br>
+              <ace-editor  [mode]="'json'" [autoUpdateContent]="true" [durationBeforeCallback]="1000"
+                (textChanged)="textChanged($event,item)" [theme]="'tomorrow_night_bright'" #editor
+                style="height:300px;">
+              </ace-editor>
+            </mat-expansion-panel>
+          </div>
+
+        </div>
+
+      </div>
+      <div>
+        <a type="submit" class="delete">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -37,8 +37,6 @@ export class DictionaryMetadataComponent implements OnInit {
     errorMessage: string;
 
     constructor(
-        private route: ActivatedRoute,
-        private dictionaryCreationService: DictionaryCreationService,
         private dictionaryCreationStore: DictionaryCreationStore
     ) { }
 
@@ -67,6 +65,7 @@ export class DictionaryMetadataComponent implements OnInit {
 
     removeTag(value) {
         this.tags.delete(value);
+        this.mergeTags();
     }
 
 
@@ -74,13 +73,20 @@ export class DictionaryMetadataComponent implements OnInit {
         const value = event.target.value;
         console.log(value);
         if (value && value.trim().length > 0) {
-            let tag = '';
             event.target.value = '';
             this.tags.add(value);
-            this.tags.forEach(val => {
-                tag += val + ', ';
-            });
+            // merge
+            this.mergeTags();
         }
+    }
+
+    mergeTags() {
+        let tag = '';
+        this.tags.forEach((val, index) => {
+            tag += val + ', ';
+        });
+        this.metaDataTab.tags = tag.trim();
+        this.saveMetaDataToStore();
     }
 
     saveMetaDataToStore() {

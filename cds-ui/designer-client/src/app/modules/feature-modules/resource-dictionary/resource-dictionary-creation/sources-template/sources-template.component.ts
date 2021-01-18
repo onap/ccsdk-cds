@@ -21,6 +21,8 @@ import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SourcesStore } from './sources.store';
 import { DictionaryCreationService } from '../dictionary-creation.service';
+import { DictionaryCreationStore } from '../dictionary-creation.store';
+import { MetaData } from '../../model/metaData.model';
 
 @Component({
   selector: 'app-sources-template',
@@ -40,9 +42,12 @@ export class SourcesTemplateComponent implements OnInit {
   searchText = '';
   text = '';
   selectedArray = [];
+  metaDataTab: MetaData = new MetaData();
+
   constructor(
     private sourcesStore: SourcesStore,
-    private dictionaryCreationService: DictionaryCreationService
+    private dictionaryCreationService: DictionaryCreationService,
+    private dictionaryCreationStore: DictionaryCreationStore
   ) {
 
   }
@@ -66,16 +71,44 @@ export class SourcesTemplateComponent implements OnInit {
       }
 
     });
+
+    this.dictionaryCreationStore.state$.subscribe(element => {
+      console.log('################');
+      console.log(this.metaDataTab);
+      if (element && element.metaData) {
+        this.metaDataTab = element.metaData;
+        this.addSourcesInUI();
+      }
+    });
+  }
+
+  addSourcesInUI() {
+    // add sources from json to UI
+    const originalSources = this.sourcesOptions;
+    // for (const key of this.sourcesOptions) {
+    // this.sourcesOptions;
+    for (const source in this.metaDataTab.sources) {
+      if (source) {
+        console.log(source);
+      }
+    }
   }
 
   saveSorcesDataToStore() {
-    this.sourcesStore.saveSources(this.ddSource);
+    console.log(this.ddSource);
+    this.metaDataTab.sources = {};
+    for (const obj of this.ddSource) {
+      this.metaDataTab.sources = { ...this.metaDataTab.sources, ...obj };
+    }
+    //  this.metaDataTab.sources = { ...this.ddSource }
+    console.log(this.metaDataTab.sources);
+    this.dictionaryCreationStore.changeMetaData(this.metaDataTab);
   }
 
   drop(event: CdkDragDrop<string[]>) {
     console.log('-------------');
-    console.log(event);
-    this.ddSource = [];
+    // console.log(event);
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -85,18 +118,24 @@ export class SourcesTemplateComponent implements OnInit {
         event.currentIndex);
     }
 
-    for (const key2 in this.sources) {
-      if (key2) {
-        const originalSources = this.sourcesOptions;
-        for (const key of originalSources) {
-          /* tslint:disable:no-string-literal */
-          if (key.name === key2['name']) {
-            const obj = `{${key.name}: ${key.value}}`;
-            this.ddSource.push(obj);
-          }
+    console.log(this.sourcesOptions);
+    console.log(this.sources);
+
+    this.ddSource = [];
+
+    const originalSources = this.sourcesOptions;
+    for (const key of originalSources) {
+      /* tslint:disable:no-string-literal */
+      this.ddSource.push({
+        [key.name]: {
+          type: key.value,
+          properties: {}
         }
-      }
+      });
+
     }
+
+    this.saveSorcesDataToStore();
   }
 
   searchDictionary(event: any) {
@@ -113,15 +152,20 @@ export class SourcesTemplateComponent implements OnInit {
   }
 
   textChanged(event, item) {
-    const editedData = JSON.parse(event);
-    const originalSources = this.sources;
-    for (const key in originalSources) {
-      if (key === item.name) {
-        this.sources[key] = editedData;
-      }
-    }
-    this.option = [];
-    this.sourcesStore.changeSources(this.sources);
+    // const editedData = JSON.parse(event);
+    // const originalSources = this.sources;
+    // for (const key in originalSources) {
+    //   if (key === item.name) {
+    //     this.sources[key] = editedData;
+    //   }
+    // }
+    // this.option = [];
+    // this.sourcesStore.changeSources(this.sources);
+
+    console.log(item);
+    console.log(event);
+
+    // this.metaDataTab.sources[item.name].properties = editedData;
   }
 
 }

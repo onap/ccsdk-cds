@@ -27,12 +27,14 @@ export class MetaData {
     @JsonProperty('updated-by')
     public updatedBy: string;
     public property: Property;
+    public sources: any;
 
     constructor() {
         this.name = '';
         this.tags = '';
         this.updatedBy = '';
         this.property = new Property();
+        this.sources = {};
     }
 }
 
