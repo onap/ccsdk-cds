@@ -97,6 +97,8 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
 
     }
 
+
+
     onInitMapping() {
         // selectedTemplates , templateAndMappingMap
         // this.selectedTemplates = new Map<string, TemplateAndMapping>();
@@ -121,6 +123,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         this.selectedTemplates = new Map(this.finalTemplates);
     }
 
+
     toNodeProcess(nodeTemplate, functionName) {
         console.log(nodeTemplate);
         this.currentFuncion['instance-name'] = functionName;
@@ -139,11 +142,11 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
             if (inputs) {
                 for (const [key, value] of Object.entries(inputs)) {
                     console.log(key + ' - ' + value);
-                   /* if (typeof value === 'object' || this.isValidJson(value)) {
-                        this.currentFuncion.inputs[key] = JSON.stringify(value);
-                    } else {*/
+                    /* if (typeof value === 'object' || this.isValidJson(value)) {
+                         this.currentFuncion.inputs[key] = JSON.stringify(value);
+                     } else {*/
                     this.currentFuncion.inputs[key] = value;
-                   // }
+                    // }
                 }
             }
             if (outputs) {
@@ -183,9 +186,23 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
 
     addTemplates() {
         this.finalTemplates = new Map(this.selectedTemplates);
+        this.saveFunctionData();
     }
     cancel() {
         this.selectedTemplates = new Map<string, TemplateAndMapping>();
+    }
+
+    setProcessAttr(isInput, key, e) {
+        console.log(e.target.value);
+        // tslint:disable-next-line: no-string-literal
+        if (isInput) {
+            this.currentFuncion['inputs'][key] = e.target.value;
+        } else {
+            this.currentFuncion['outputs'][key] = e.target.value;
+        }
+
+
+        this.saveFunctionData();
     }
 
     saveFunctionData() {
@@ -196,6 +213,8 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         // tslint:disable-next-line: no-string-literal
         const type = finalFunctionData['type'];
         const instanceName = finalFunctionData['instance-name'];
+        finalFunctionData.inputs['artifact-prefix-names'] = [];
+
         // insert selected templates in nodeTemplates.artifacts
         this.selectedTemplates.forEach((value, key) => {
             console.log(key);
@@ -226,7 +245,6 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
             }
         });
         // instantiate the final node_template object to save
-
         this.nodeTemplates.type = type;
         delete this.nodeTemplates.properties;
         node_templates[finalFunctionData['instance-name']] = this.nodeTemplates;
@@ -254,7 +272,7 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
         // tslint:disable-next-line: no-unused-expression
         this.designerStore.addNodeTemplate(instanceName, type, node_templates[instanceName]);
         // create a new package
-        this.saveEvent.emit('save');
+        //  this.saveEvent.emit('save');
     }
     // Template logic
     private setIsMappingOrTemplate(key: string, templateAndMapping: TemplateAndMapping, isFromTemplate: boolean) {
@@ -286,7 +304,10 @@ export class FunctionsAttributeComponent implements OnInit, OnDestroy {
 
     setTemplate(file: string) {
         if (this.selectedTemplates.has(file)) {
+            console.log('Not exist');
             this.selectedTemplates.delete(file);
+            this.finalTemplates.delete(file);
+
         } else {
             this.selectedTemplates.set(file, this.templateAndMappingMap.get(file));
         }
