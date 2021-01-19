@@ -17,3 +17,9 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
+.ace-tomorrow-night-bright .ace_marker-layer .ace_active-line{
+    background: #C3CDDB !important;
+}
+.ace-tomorrow-night-bright .ace_marker-layer .ace_bracket{
+    border: 1px solid #fff;
+}

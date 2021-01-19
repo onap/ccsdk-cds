@@ -33,91 +33,110 @@
             </div>
         </header>
         <div class="container-fluid body-container">
-            <div class="container card creat-card col-11">
-                <div class="single-line-model customKeyTitle">
-                    <h5 class="label-name w-100 ">
-                        Dictionary Name
-                    </h5>
-                    <!-- <label class="label-name"></label> -->
-                    <span>Last modified {{createDate}} by me</span>
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid body-container">
             <div class="container">
+                <!--Right Side - Action Buttons-->
                 <div class="creat-action-container">
-                    <a class="action-button" (click)="createDictionary()">
+                    <button class="action-button save" (click)="createDictionary()">
                         <i class="icon-save-sm" aria-hidden="true"></i>
                         <span>Save</span>
-                    </a>
-                    <a href="#" class="action-button" (click)="goBackToDashBorad()">
+                    </button>
+                    <button class="action-button" (click)="goBackToDashBorad()">
                         <i class="icon-discard-sm" aria-hidden="true"></i>
                         <span>Discard Changes</span>
-                    </a>
-                    <a href="#" class="action-button">
+                    </button>
+                    <hr>
+                    <button class="action-button">
                         <i class="icon-clone-sm" aria-hidden="true"></i>
                         <span>Clone</span>
+                    </button>
+
+                    <a class="action-button">
+                        <i class="icon-download" aria-hidden="true"></i>
+                        <span>Download</span>
                     </a>
-                    <a href="#" class="action-button delete">
+
+                    <a class="action-button delete">
                         <i class="icon-delete-sm" aria-hidden="true"></i>
                         <span>Delete</span>
                     </a>
                 </div>
+                <div class="card creat-card view-package-container">
+                    <div class="row mb-4">
+                        <div class="col-12 package-name deployed">
+                            Dictionary Name
+                        </div>
+                        <div class="col-12 package-description">
+                            Last modified {{createDate}} By Me
+                        </div>
+                    </div>
+                    <div class="row package-auth-info">
+                        <div class="col-3">
+                            <p><b>Author Name</b></p>
+                            <span>Abdelmuhaimen Seaudi</span>
+                        </div>
+                        <div class="col-3">
+                            <p><b>Author Email</b></p>
+                            <span>abdelmuhaimen.seaudi@orange.com</span>
+                        </div>
+                        <div class="col-6">
+                            <p><b>Contributions</b></p>
+                            <ul class="package-contributers">
+                                <li>
+                                    <button type="button" class="border-fade" data-toggle="tooltip"
+                                        data-placement="bottom" title="User name">
+                                        <img src="/assets/img/img-user1.jpeg">
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                        title="User name">
+                                        <img src="/assets/img/img-user2.jpg">
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" data-toggle="tooltip" data-placement="bottom"
+                                        title="User name">
+                                        <img src="/assets/img/img-user3.jpg">
+                                    </button>
+                                </li>
+                                <li>
+                                    <a href="">5 contributors</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <nav class="row">
                     <!--Nav Tabs-->
                     <div class="col">
-                        <div class="nav nav-tabs ed" id="nav-tab" role="tablist">
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
                             <a class="nav-item nav-link active" id="nav-metadata-tab" data-toggle="tab"
                                 href="#nav-metadata" role="tab" aria-controls="nav-metadata" aria-selected="false"
                                 autofocus #nameit (focusout)="saveDictionaryToStore()">METADATA</a>
-                            <a class="edit-button" id="nav-editor-tab" data-toggle="tab" href="#nav-editor" role="tab"
-                                aria-controls="nav-editor" aria-selected="false">EDITOR MODE</a>
-
+                            <a class="nav-item nav-link" id="nav-source-tab" data-toggle="tab" href="#nav-source"
+                                role="tab" aria-controls="nav-source" aria-selected="false">SOURCES</a>
+                            <a class="nav-item nav-link edit-button" id="nav-editor-tab" data-toggle="tab"
+                                href="#nav-editor" role="tab" aria-controls="nav-editor" aria-selected="false">EDITOR
+                                MODE</a>
                         </div>
-                    </div>
-                </nav>
-                <div>
-                    <div class="row mt-4">
-                        <div class="col">
-                            <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
-                                    aria-labelledby="nav-metadata-tab">
-                                    <app-dictionary-metadata></app-dictionary-metadata>
-                                    <nav class="row">
-                                        <!--Nav Tabs-->
-                                        <div class="col">
-                                            <div class="nav nav-tabs " id="nav-tab" role="tablist">
-                                                <a class="nav-item nav-link active" id="nav-source-tab"
-                                                    data-toggle="tab" href="#nav-source" role="tab"
-                                                    aria-controls="nav-source" aria-selected="false">SOURCES</a>
-                                            </div>
-                                        </div>
-                                    </nav>
-                                    <div class="row mt-4">
-                                        <div class="col">
-                                            <div class="tab-content" id="nav-tabContent">
-                                                <div class="tab-pane fade show active" id="nav-source" role="tabpanel"
-                                                    aria-labelledby="nav-source-tab">
-                                                    <app-sources-template></app-sources-template>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade col-11" id="nav-editor" role="tabpanel"
-                                    aria-labelledby="nav-editor-tab">
-                                    <div class="card creat-card">
-                                        <div class="editor-container">
-                                            <app-dictionary-editor></app-dictionary-editor>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="tab-content" id="nav-tabContent">
+                            <!--MetaData-->
+                            <div class="tab-pane fade show active" id="nav-metadata" role="tabpanel"
+                                aria-labelledby="nav-metadata-tab">
+                                <app-dictionary-metadata></app-dictionary-metadata>
+                            </div>
+                            <div class="tab-pane fade" id="nav-source" role="tabpanel"
+                                aria-labelledby="nav-source-tab">
+                                <app-sources-template></app-sources-template>
+                            </div>
+                            <div class="tab-pane fade" id="nav-editor" role="tabpanel"
+                                aria-labelledby="nav-editor-tab">
+                                <app-dictionary-editor></app-dictionary-editor>
                             </div>
                         </div>
                     </div>
-
-
-                </div>
+                </nav>
             </div>
         </div>
     </div>
+</div>

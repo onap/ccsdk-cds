@@ -17,59 +17,132 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */-->
-<div class="col-11">
-  <div class="row ">
-    <div class="card creat-card source1">
-      <h5 class="label-name"> Sources Options</h5>
-      <div class="searchBox row"><i class="searchButton1 col-1" aria-hidden="true"></i>
-        <input class="searchText col-8" [(ngModel)]="searchText" type="input" placeholder="filter sources">
+<div class="row">
+  <!--Sources Options-->
+  <div class="col-3">
+    <div class="card sourceOptions">
+      <h5>Sources Options</h5>
+      <div class="searchBox">
+        <input class="searchText" [(ngModel)]="searchText" type="input" placeholder="Search">
       </div>
-
-      <div class="example-container">
-        <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="option" [cdkDropListConnectedTo]="[doneList]"
-          class="example-list" (cdkDropListDropped)="drop($event)">
-          <div class="example-box card creat-card" *ngFor="let item of option| search :searchText" cdkDrag>
-            <input type="checkbox" class="checkbox" [(ngModel)]="checked"
+      <div class="row sourceOtionsScroll">
+        <div class="col">
+          <div class="sourceOption" *ngFor="let item of option| search :searchText">
+            <!-- <input type="checkbox" class="checkbox" [(ngModel)]="checked"
               (change)="onChange(item, $event.target.checked)">
-            {{item.name}}
+            {{item.name}} -->
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="customControlValidation1" required>
+              <label class="custom-control-label" for="customControlValidation1">{{item.name}}</label>
+            </div>
           </div>
-
         </div>
-
       </div>
-      <div class="footer row">
-        <a class="select-button col-sm-05">Select all</a>
-        <button class="action-button1 col-sm-04">Add to list</button>
+      <div class="row sourceOptionActions">
+        <div class="col">
+          <a>Select all</a>
+        </div>
+        <div class="col">
+          <button class="btn">Add to list</button>
+        </div>
       </div>
     </div>
+  </div>
+  <!--Sources List-->
+  <div class="col-9">
+    <div class="card sourceList">
+      <h5>Sources List</h5>
 
-    <div class="card creat-card source">
-      <h5 class="label-name">Sources List</h5>
-      <div class="example-container2 card creat-card">
-        <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="sourcesOptions"
-          [cdkDropListConnectedTo]="[todoList]" class="example-list1" (cdkDropListDropped)="drop($event)">
-
-          <div class="example-box1" *ngFor="let item of sourcesOptions" cdkDrag>
-            <input type="checkbox" value="item.name">
-            <mat-expansion-panel class="expansion-panel">
-              <mat-expansion-panel-header [collapsedHeight]="'23px'" [expandedHeight]="'23px'">
-                <mat-panel-title>
-                  {{item.name}}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <br>
-              <ace-editor  [mode]="'json'" [autoUpdateContent]="true" [durationBeforeCallback]="1000"
-                (textChanged)="textChanged($event,item)" [theme]="'tomorrow_night_bright'" #editor
-                style="height:300px;">
-              </ace-editor>
-            </mat-expansion-panel>
+      <div class="accordion sourceListItems" id="accordionExample">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="customControlValidation1" required>
+                  <label class="custom-control-label" for="customControlValidation1"></label>
+                </div>
+                Collapsible Group Item #1
+              </button>
+            </h2>
           </div>
 
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
+              moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
+              Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
+              shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea
+              proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+              aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+          </div>
         </div>
-
+        <div class="card">
+          <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                aria-expanded="false" aria-controls="collapseTwo">
+                Collapsible Group Item #2
+              </button>
+            </h2>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
+              moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
+              Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
+              shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea
+              proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+              aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree"
+                aria-expanded="false" aria-controls="collapseThree">
+                Collapsible Group Item #3
+              </button>
+            </h2>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
+              moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
+              Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
+              shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea
+              proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim
+              aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        <a type="submit" class="delete">Delete</a>
+
+      <!-- <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="sourcesOptions" [cdkDropListConnectedTo]="[todoList]"
+        class="example-list1 sourceListScroll" (cdkDropListDropped)="drop($event)">
+        <div class="example-box1" *ngFor="let item of sourcesOptions" cdkDrag>
+          <input type="checkbox" value="item.name">
+          <mat-expansion-panel class="expansion-panel">
+            <mat-expansion-panel-header [collapsedHeight]="'23px'" [expandedHeight]="'23px'">
+              <mat-panel-title>
+                {{item.name}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <br>
+            <ace-editor [(text)]=item.value [mode]="'javascript'" [autoUpdateContent]="true"
+              [durationBeforeCallback]="1000" (textChanged)="textChanged($event,item)" [theme]="'tomorrow_night_bright'"
+              #editor style="height:300px;">
+            </ace-editor>
+          </mat-expansion-panel>
+        </div>
+      </div> -->
+      <div class="row deleteSource">
+        <div class="col">
+          <a type="submit" class="">Delete Source</a>
+        </div>
       </div>
     </div>
   </div>
