@@ -17,7 +17,7 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */-->
-<div class="card creat-card col-11">
+<div class="card creat-card">
     <div class="single-line-model">
         <label class="label-name">Name</label>
         <div class="label-input">
@@ -58,9 +58,15 @@
     <div class="single-line-model">
         <label class="label-name">Required</label>
         <div class="label-input">
-            <input type="checkbox" [checked]="metaDataTab.property.required" style="width: auto;"
-                (change)="metaDataTab.property.required = !metaDataTab.property.required" placeholder="required">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customControlValidation1" required>
+                <label class="custom-control-label p-0" for="customControlValidation1">True</label>
+            </div>
         </div>
+        <!-- <div class="label-input">
+            <input type="checkbox" [checked]="metaDataTab.property.required" style="width: auto;"
+                (change)="metaDataTab.property.required = !metaDataTab.property.required" placeholder="required"> &nbsp;<span style="font-size: 14px;">True</span>
+        </div> -->
     </div>
     <!-- <div class="single-line-model">
         <label class="label-name">Library Instance</label>

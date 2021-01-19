@@ -17,21 +17,29 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-.edit-button{
-    color:white;
-    background:#1B3E6F;
-    margin-right: 60px;
-    border: none;
-    width: 80px;
-    height: 20px;
-    margin-top: 25px;
-    font-size: 10px;
-    padding-left:5px;
-    padding-top: 3px;
-  }
-  .ed{
-    justify-content: space-between;
-  }
-  .single-line-model{
-    margin:20px;
-  }
+.tab-pane{
+  padding-top: 20px;
+}
+.edit-button,
+.edit-button:hover,
+.edit-button.edit-button.active{
+  position: absolute;
+  right: 15px;
+  height: 38px;
+  margin-top: 12px;
+  padding: 0 15px !important;
+  color: #fff !important;
+  background:#1B3E6F;  
+  line-height: 38px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.edit-button.active{
+  background:#5DBDBA !important;
+}
+.edit-button::before{
+  content: '';
+}
+.single-line-model{
+  margin:20px;
+}
