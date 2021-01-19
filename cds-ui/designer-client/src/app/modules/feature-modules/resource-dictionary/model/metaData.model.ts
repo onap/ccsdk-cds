@@ -19,20 +19,20 @@ import { JsonObject, JsonProperty } from 'json2typescript';
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-@JsonObject()
+@JsonObject
 export class MetaData {
     @JsonProperty('name')
     public name: string;
     public tags: string;
     @JsonProperty('updated-by')
-    public updatedBy: string;
+    public ['updated-by'] = 'ahmed.eldeeb.ext@orange.com';
     public property: Property;
     public sources: any;
 
     constructor() {
         this.name = '';
         this.tags = '';
-        this.updatedBy = '';
+        // this.updatedBy = '';
         this.property = new Property();
         this.sources = {};
     }
