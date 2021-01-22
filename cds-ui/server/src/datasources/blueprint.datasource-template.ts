@@ -98,7 +98,7 @@ export default {
             "responsePath": "$",
         },
         "functions": {
-            "getPagedBueprints": ["limit", "offset", "sort", "sortType"],
+            "getPagedBlueprints": ["limit", "offset", "sort", "sortType"],
         }
     },
     {

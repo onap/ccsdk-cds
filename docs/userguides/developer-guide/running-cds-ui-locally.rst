@@ -128,7 +128,7 @@ Create **docker-compose.yaml** as below.
 
 **Note:**
 
--  Replace <ip> with host/port where controller & processor mS are running.
+-  Replace <ip> with host/port where blueprint processor mS is running.
 
 .. code-block:: bash
 
@@ -142,9 +142,7 @@ Create **docker-compose.yaml** as below.
             restart: always
             environment:
             - HOST=0.0.0.0
-            - API_BLUEPRINT_CONTROLLER_HTTP_BASE_URL=http://<ip>:8080/api/v1
-            - API_BLUEPRINT_CONTROLLER_HTTP_AUTH_TOKEN=Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
-            - API_BLUEPRINT_PROCESSOR_HTTP_BASE_URL=http://<ip>:8081/api/v1
+            - API_BLUEPRINT_PROCESSOR_HTTP_BASE_URL=http://<ip>:8080/api/v1
             - API_BLUEPRINT_PROCESSOR_HTTP_AUTH_TOKEN=Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==
             - API_BLUEPRINT_PROCESSOR_GRPC_HOST=<IP>
             - API_BLUEPRINT_PROCESSOR_GRPC_PORT=9111

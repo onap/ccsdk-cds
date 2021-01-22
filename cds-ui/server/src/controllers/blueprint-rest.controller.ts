@@ -88,7 +88,7 @@ export class BlueprintRestController {
     @param.query.number('offset') offset: number,
     @param.query.string('sort') sort: string,
     @param.query.string('sortType') sortType: string) {
-    return await this.bpservice.getPagedBueprints(limit, offset, sort, sortType);
+    return await this.bpservice.getPagedBlueprints(limit, offset, sort, sortType);
   }
 
   @get('/controllerblueprint/metadata/paged/{keyword}', {
