@@ -3,7 +3,7 @@ import { DesignerStore } from '../designer.store';
 import { PackageCreationUtils } from '../../package-creation/package-creation.utils';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { BluePrintDetailModel } from '../../model/BluePrint.detail.model';
+import { BlueprintDetailModel } from '../../model/Blueprint.detail.model';
 import { viewClassName } from '@angular/compiler';
 import { SourceViewService } from './source-view.service';
 
@@ -19,7 +19,7 @@ export class DesignerSourceViewComponent implements OnInit, OnDestroy {
     lang = 'json';
     controllerSideBar: boolean;
     ngUnsubscribe = new Subject();
-    viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
+    viewedPackage: BlueprintDetailModel = new BlueprintDetailModel();
     public customActionName = '';
     cl = 'editBar';
     packageId: string;

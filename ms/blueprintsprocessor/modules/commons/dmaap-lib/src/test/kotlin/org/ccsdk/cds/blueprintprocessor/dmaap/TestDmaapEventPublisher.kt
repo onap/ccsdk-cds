@@ -23,10 +23,10 @@ package org.ccsdk.apps.blueprintprocessor.dmaap
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.BluePrintDmaapLibConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.BluePrintDmaapLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.BlueprintDmaapLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.dmaap.BlueprintDmaapLibPropertyService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -51,8 +51,8 @@ import kotlin.test.assertNotNull
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(
     classes = [
-        BluePrintDmaapLibConfiguration::class, TestController::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+        BlueprintDmaapLibConfiguration::class, TestController::class,
+        BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class
     ]
 )
 @TestPropertySource(
@@ -69,7 +69,7 @@ import kotlin.test.assertNotNull
 class TestDmaapEventPublisher {
 
     @Autowired
-    lateinit var dmaapService: BluePrintDmaapLibPropertyService
+    lateinit var dmaapService: BlueprintDmaapLibPropertyService
 
     /**
      * Tests the event properties being set properly and sent as request.

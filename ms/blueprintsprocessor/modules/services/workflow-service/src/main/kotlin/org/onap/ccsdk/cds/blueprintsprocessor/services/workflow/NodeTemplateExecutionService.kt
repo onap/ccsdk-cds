@@ -20,23 +20,23 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-open class NodeTemplateExecutionService(private val bluePrintClusterService: BluePrintClusterService) {
+open class NodeTemplateExecutionService(private val bluePrintClusterService: BlueprintClusterService) {
 
     private val log = LoggerFactory.getLogger(NodeTemplateExecutionService::class.java)!!
 
     suspend fun executeNodeTemplate(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         nodeTemplateName: String,
         executionServiceInput: ExecutionServiceInput
     ): ExecutionServiceOutput {
@@ -62,7 +62,7 @@ open class NodeTemplateExecutionService(private val bluePrintClusterService: Blu
         )
 
         // Get the Component Instance
-        val plugin = BluePrintDependencyService.instance<AbstractComponentFunction>(componentName)
+        val plugin = BlueprintDependencyService.instance<AbstractComponentFunction>(componentName)
         // Set the Blueprint Services
         plugin.bluePrintRuntimeService = bluePrintRuntimeService
         plugin.bluePrintClusterService = bluePrintClusterService
@@ -77,9 +77,9 @@ open class NodeTemplateExecutionService(private val bluePrintClusterService: Blu
 
         // Populate Step Meta Data
         val stepInputs: MutableMap<String, JsonNode> = hashMapOf()
-        stepInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = nodeTemplateName.asJsonPrimitive()
-        stepInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = interfaceName.asJsonPrimitive()
-        stepInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = operationName.asJsonPrimitive()
+        stepInputs[BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = nodeTemplateName.asJsonPrimitive()
+        stepInputs[BlueprintConstants.PROPERTY_CURRENT_INTERFACE] = interfaceName.asJsonPrimitive()
+        stepInputs[BlueprintConstants.PROPERTY_CURRENT_OPERATION] = operationName.asJsonPrimitive()
         val stepInputData = StepData().apply {
             name = nodeTemplateName
             properties = stepInputs

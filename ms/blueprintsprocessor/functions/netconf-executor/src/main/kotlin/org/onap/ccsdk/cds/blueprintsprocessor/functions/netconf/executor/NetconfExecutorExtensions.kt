@@ -22,13 +22,13 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.Dev
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 /**
  * Register the Netconf module exposed dependency
  */
-fun BluePrintDependencyService.netconfClientService(): ResourceResolutionService =
+fun BlueprintDependencyService.netconfClientService(): ResourceResolutionService =
     instance(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
 fun AbstractComponentFunction.netconfDevice(requirementName: String): NetconfDevice {

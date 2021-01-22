@@ -113,7 +113,7 @@ fun <T : Any?> T.asJsonPrimitive(): JsonNode {
             is Double ->
                 this.asJsonPrimitive()
             else ->
-                throw BluePrintException("$this type is not supported")
+                throw BlueprintException("$this type is not supported")
         }
     }
 }
@@ -121,11 +121,11 @@ fun <T : Any?> T.asJsonPrimitive(): JsonNode {
 /** Based on Blueprint DataType Convert string value to JsonNode Type **/
 fun String.asJsonType(bpDataType: String): JsonNode {
     return when (bpDataType.toLowerCase()) {
-        BluePrintConstants.DATA_TYPE_STRING -> this.asJsonPrimitive()
-        BluePrintConstants.DATA_TYPE_BOOLEAN -> this.toBoolean().asJsonPrimitive()
-        BluePrintConstants.DATA_TYPE_INTEGER -> this.toInt().asJsonPrimitive()
-        BluePrintConstants.DATA_TYPE_FLOAT -> this.toFloat().asJsonPrimitive()
-        BluePrintConstants.DATA_TYPE_DOUBLE -> this.toDouble().asJsonPrimitive()
+        BlueprintConstants.DATA_TYPE_STRING -> this.asJsonPrimitive()
+        BlueprintConstants.DATA_TYPE_BOOLEAN -> this.toBoolean().asJsonPrimitive()
+        BlueprintConstants.DATA_TYPE_INTEGER -> this.toInt().asJsonPrimitive()
+        BlueprintConstants.DATA_TYPE_FLOAT -> this.toFloat().asJsonPrimitive()
+        BlueprintConstants.DATA_TYPE_DOUBLE -> this.toDouble().asJsonPrimitive()
         // For List, Map and Complex Types.
         else -> this.jsonAsJsonType()
     }
@@ -182,7 +182,7 @@ fun <T : Any> Map<String, *>.castValue(key: String, valueType: KClass<T>): T {
     if (containsKey(key)) {
         return get(key) as T
     } else {
-        throw BluePrintException("couldn't find the key $key")
+        throw BlueprintException("couldn't find the key $key")
     }
 }
 
@@ -197,7 +197,7 @@ fun JsonNode.asByteArray(): ByteArray {
 
 fun <T> JsonNode.asType(clazzType: Class<T>): T {
     return JacksonUtils.readValue(this, clazzType)
-        ?: throw BluePrintException("couldn't convert JsonNode of type $clazzType")
+        ?: throw BlueprintException("couldn't convert JsonNode of type $clazzType")
 }
 
 fun JsonNode.asListOfString(): List<String> {
@@ -226,7 +226,7 @@ fun JsonNode.rootFieldsToMap(): MutableMap<String, JsonNode> {
         }
         return propertyMap
     } else {
-        throw BluePrintException("json node should be Object Node Type")
+        throw BlueprintException("json node should be Object Node Type")
     }
 }
 
@@ -248,19 +248,19 @@ fun MutableMap<String, JsonNode>.putJsonElement(key: String, value: Any) {
 }
 
 fun Map<String, JsonNode>.getAsString(key: String): String {
-    return this[key]?.asText() ?: throw BluePrintException("couldn't find value for key($key)")
+    return this[key]?.asText() ?: throw BlueprintException("couldn't find value for key($key)")
 }
 
 fun Map<String, JsonNode>.getAsBoolean(key: String): Boolean {
-    return this[key]?.asBoolean() ?: throw BluePrintException("couldn't find value for key($key)")
+    return this[key]?.asBoolean() ?: throw BlueprintException("couldn't find value for key($key)")
 }
 
 fun Map<String, JsonNode>.getAsInt(key: String): Int {
-    return this[key]?.asInt() ?: throw BluePrintException("couldn't find value for key($key)")
+    return this[key]?.asInt() ?: throw BlueprintException("couldn't find value for key($key)")
 }
 
 fun Map<String, JsonNode>.getAsDouble(key: String): Double {
-    return this[key]?.asDouble() ?: throw BluePrintException("couldn't find value for key($key)")
+    return this[key]?.asDouble() ?: throw BlueprintException("couldn't find value for key($key)")
 }
 
 fun Map<String, JsonNode>.getOptionalAsString(key: String): String? {
@@ -285,7 +285,7 @@ inline fun checkEquals(value1: String?, value2: String?, lazyMessage: () -> Any)
     if (value1.equals(value2, ignoreCase = true)) {
         return true
     } else {
-        throw BluePrintException(lazyMessage().toString())
+        throw BlueprintException(lazyMessage().toString())
     }
 }
 

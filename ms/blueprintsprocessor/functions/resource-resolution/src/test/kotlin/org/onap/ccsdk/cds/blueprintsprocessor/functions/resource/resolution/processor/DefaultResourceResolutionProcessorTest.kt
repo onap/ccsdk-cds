@@ -20,7 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -39,7 +39,7 @@ class DefaultResourceResolutionProcessorTest {
     @Test
     fun `test default resource resolution`() {
         runBlocking {
-            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+            val bluePrintContext = BlueprintMetadataUtils.getBlueprintContext(
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
 

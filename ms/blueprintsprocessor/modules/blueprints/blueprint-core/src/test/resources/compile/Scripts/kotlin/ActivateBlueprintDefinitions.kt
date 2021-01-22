@@ -16,13 +16,13 @@
 
 package cba.scripts
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.dataType
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.AbstractBluePrintDefinitions
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.AbstractBlueprintDefinitions
 
-class ActivateBlueprintDefinitions : AbstractBluePrintDefinitions() {
+class ActivateBlueprintDefinitions : AbstractBlueprintDefinitions() {
 
     override fun serviceTemplate(): ServiceTemplate {
 
@@ -46,10 +46,10 @@ class ActivateBlueprintDefinitions : AbstractBluePrintDefinitions() {
         /** Sample Definitions */
         val customDataType = dataType(
             "custom-datatype", "1.0.0",
-            BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT, ""
+            BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT, ""
         ) {
-            property("name", BluePrintConstants.DATA_TYPE_STRING, true, "")
-            property("value", BluePrintConstants.DATA_TYPE_STRING, true, "")
+            property("name", BlueprintConstants.DATA_TYPE_STRING, true, "")
+            property("value", BlueprintConstants.DATA_TYPE_STRING, true, "")
         }
         /** Loading to definitions */
         addOtherDefinition("datatype-custom-datatype", customDataType)

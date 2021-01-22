@@ -16,7 +16,7 @@
 
 import logging
 from google.protobuf.json_format import MessageToJson
-from proto import BluePrintProcessing_pb2_grpc as BluePrintProcessing_pb2_grpc
+from proto import BlueprintProcessing_pb2_grpc as BlueprintProcessing_pb2_grpc
 from .script_executor_configuration import ScriptExecutorConfiguration
 from .executor_utils import instance_for_input
 
@@ -33,7 +33,7 @@ class AbstractScriptFunction:
         pass
 
 
-class BluePrintProcessingServer(BluePrintProcessing_pb2_grpc.BluePrintProcessingServiceServicer):
+class BlueprintProcessingServer(BlueprintProcessing_pb2_grpc.BlueprintProcessingServiceServicer):
 
     def __init__(self, configuration: ScriptExecutorConfiguration):
         self.logger = logging.getLogger(self.__class__.__name__)

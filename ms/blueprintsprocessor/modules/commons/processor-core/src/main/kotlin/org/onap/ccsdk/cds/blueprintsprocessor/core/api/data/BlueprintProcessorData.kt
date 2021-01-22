@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.swagger.annotations.ApiModelProperty
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import java.util.Date
 import java.util.UUID
 
@@ -154,7 +154,7 @@ open class Status {
     var errorMessage: String? = null
 
     @get:ApiModelProperty(required = true, value = "Message providing request status")
-    var message: String = BluePrintConstants.STATUS_SUCCESS
+    var message: String = BlueprintConstants.STATUS_SUCCESS
 }
 
 open class StepData {

@@ -19,14 +19,14 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDBLibGenericService
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BlueprintDBLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.TestDatabaseConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBlueprintProcessorCatalogServiceImpl
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -38,7 +38,7 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(
     classes = [
         TestDatabaseConfiguration::class,
-        PrimaryDBLibGenericService::class, BluePrintDBLibPropertyService::class,
+        PrimaryDBLibGenericService::class, BlueprintDBLibPropertyService::class,
         DatabaseResourceAssignmentProcessor::class, MockDBLibGenericService::class,
         MockBlueprintProcessorCatalogServiceImpl::class
     ]
@@ -52,7 +52,7 @@ class DatabaseResourceResolutionProcessorTest {
     @Test
     fun `test database resource resolution processor db`() {
         runBlocking {
-            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+            val bluePrintContext = BlueprintMetadataUtils.getBlueprintContext(
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
 

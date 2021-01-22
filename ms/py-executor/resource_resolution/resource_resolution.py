@@ -23,7 +23,7 @@ from typing import Any, Dict, Generator, Optional, Type
 
 from google.protobuf import json_format
 
-from proto.BluePrintProcessing_pb2 import ExecutionServiceInput, ExecutionServiceOutput
+from proto.BlueprintProcessing_pb2 import ExecutionServiceInput, ExecutionServiceOutput
 
 from .grpc import Client as GrpcClient
 from .http import Client as HttpClient
@@ -361,12 +361,12 @@ class ResourceResolution:
 
         It's possible to store/retrieve templates using pair of artifact name and resolution key OR
         resource type and resource id. This method checks if valid combination of parameters were used.
-        
+
         Args:
             resolution_key (str, optional): resolutionKey HTTP request parameter value. Defaults to None.
             resource_type (str, optional): resourceType HTTP request parameter value. Defaults to None.
             resource_id (str, optional): resourceId HTTP request parameter value. Defaults to None.
-        
+
         Raises:
             AttributeError: Invalid combination of parametes used
         """

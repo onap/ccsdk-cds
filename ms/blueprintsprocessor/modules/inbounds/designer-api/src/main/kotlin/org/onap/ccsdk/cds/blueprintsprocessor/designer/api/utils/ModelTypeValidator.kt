@@ -18,9 +18,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.CapabilityDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
@@ -41,25 +41,25 @@ class ModelTypeValidator {
         fun validateModelTypeDefinition(definitionType: String, definitionContent: JsonNode): Boolean {
 
             when (definitionType) {
-                BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE -> {
+                BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE -> {
                     JacksonUtils.readValue(definitionContent, DataType::class.java)
-                        ?: throw BluePrintException("Model type definition is not DataType valid content $definitionContent")
+                        ?: throw BlueprintException("Model type definition is not DataType valid content $definitionContent")
                 }
-                BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE -> {
+                BlueprintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE -> {
                     JacksonUtils.readValue(definitionContent, NodeType::class.java)
-                        ?: throw BluePrintException("Model type definition is not NodeType valid content $definitionContent")
+                        ?: throw BlueprintException("Model type definition is not NodeType valid content $definitionContent")
                 }
-                BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE -> {
+                BlueprintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE -> {
                     JacksonUtils.readValue(definitionContent, ArtifactType::class.java)
-                        ?: throw BluePrintException("Model type definition is not ArtifactType valid content $definitionContent")
+                        ?: throw BlueprintException("Model type definition is not ArtifactType valid content $definitionContent")
                 }
-                BluePrintConstants.MODEL_DEFINITION_TYPE_CAPABILITY_TYPE -> {
+                BlueprintConstants.MODEL_DEFINITION_TYPE_CAPABILITY_TYPE -> {
                     JacksonUtils.readValue(definitionContent, CapabilityDefinition::class.java)
-                        ?: throw BluePrintException("Model type definition is not CapabilityDefinition valid content $definitionContent")
+                        ?: throw BlueprintException("Model type definition is not CapabilityDefinition valid content $definitionContent")
                 }
-                BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE -> {
+                BlueprintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE -> {
                     JacksonUtils.readValue(definitionContent, RelationshipType::class.java)
-                        ?: throw BluePrintException("Model type definition is not RelationshipType valid content $definitionContent")
+                        ?: throw BlueprintException("Model type definition is not RelationshipType valid content $definitionContent")
                 }
             }
             return true
@@ -74,7 +74,7 @@ class ModelTypeValidator {
         fun validateModelType(modelType: ModelType?): Boolean {
             checkNotNull(modelType) { "Model Type Information is missing." }
 
-            val validRootTypes = BluePrintTypes.validModelTypes()
+            val validRootTypes = BlueprintTypes.validModelTypes()
 
             check(validRootTypes.contains(modelType.definitionType)) {
                 "Not Valid Model Root Type(${modelType.definitionType}), It should be $validRootTypes"

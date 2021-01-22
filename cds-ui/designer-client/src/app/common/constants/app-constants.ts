@@ -98,7 +98,7 @@ export const BlueprintURLs = {
     download: '/controllerblueprint/download-blueprint/',
     deploy: '/controllerblueprint/deploy-blueprint',
     getMetaDate: '/controllerblueprint/meta-data/',
-    countOfAllBluePrints: '/controllerblueprint/list/count',
+    countOfAllBlueprints: '/controllerblueprint/list/count',
     getMetaDatePageable: '/controllerblueprint/metadata/paged',
     getBlueprintByName: '/controllerblueprint/by-name/'
 };

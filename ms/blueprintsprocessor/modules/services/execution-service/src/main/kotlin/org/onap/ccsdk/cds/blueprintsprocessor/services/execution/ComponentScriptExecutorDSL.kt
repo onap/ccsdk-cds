@@ -17,8 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
@@ -32,53 +32,53 @@ import kotlin.reflect.KClass
 
 /** Component Extensions **/
 fun ServiceTemplateBuilder.nodeTypeComponentScriptExecutor() {
-    val nodeType = BluePrintTypes.nodeTypeComponentScriptExecutor()
+    val nodeType = BlueprintTypes.nodeTypeComponentScriptExecutor()
     if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
     this.nodeTypes!![nodeType.id!!] = nodeType
 }
 
-fun BluePrintTypes.nodeTypeComponentScriptExecutor(): NodeType {
+fun BlueprintTypes.nodeTypeComponentScriptExecutor(): NodeType {
     return nodeType(
-        id = "component-script-executor", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+        id = "component-script-executor", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_NODE_COMPONENT,
         description = "Generic Script Component Executor"
     ) {
-        attribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON, false)
-        attribute(ComponentScriptExecutor.ATTRIBUTE_STATUS, BluePrintConstants.DATA_TYPE_STRING, true)
+        attribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA, BlueprintConstants.DATA_TYPE_JSON, false)
+        attribute(ComponentScriptExecutor.ATTRIBUTE_STATUS, BlueprintConstants.DATA_TYPE_STRING, true)
 
         operation("ComponentScriptExecutor", "ComponentScriptExecutor Operation") {
             inputs {
                 property(
-                    ComponentScriptExecutor.INPUT_SCRIPT_TYPE, BluePrintConstants.DATA_TYPE_STRING,
+                    ComponentScriptExecutor.INPUT_SCRIPT_TYPE, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Script Type"
                 ) {
-                    defaultValue(BluePrintConstants.SCRIPT_INTERNAL)
+                    defaultValue(BlueprintConstants.SCRIPT_INTERNAL)
                     constrain {
                         validValues(
                             listOf(
-                                BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive(),
-                                BluePrintConstants.SCRIPT_JYTHON.asJsonPrimitive(),
-                                BluePrintConstants.SCRIPT_KOTLIN.asJsonPrimitive()
+                                BlueprintConstants.SCRIPT_INTERNAL.asJsonPrimitive(),
+                                BlueprintConstants.SCRIPT_JYTHON.asJsonPrimitive(),
+                                BlueprintConstants.SCRIPT_KOTLIN.asJsonPrimitive()
                             )
                         )
                     }
                 }
                 property(
-                    ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, BluePrintConstants.DATA_TYPE_STRING,
+                    ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Kotlin Script class name or jython script name."
                 )
                 property(
-                    ComponentScriptExecutor.INPUT_DYNAMIC_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON,
+                    ComponentScriptExecutor.INPUT_DYNAMIC_PROPERTIES, BlueprintConstants.DATA_TYPE_JSON,
                     false, "Dynamic Json Content or DSL Json reference."
                 )
             }
             outputs {
                 property(
-                    ComponentScriptExecutor.OUTPUT_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON,
+                    ComponentScriptExecutor.OUTPUT_RESPONSE_DATA, BlueprintConstants.DATA_TYPE_JSON,
                     false, "Output Response"
                 )
                 property(
-                    ComponentScriptExecutor.OUTPUT_STATUS, BluePrintConstants.DATA_TYPE_STRING,
+                    ComponentScriptExecutor.OUTPUT_STATUS, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Status of the Component Execution ( success or failure )"
                 )
             }
@@ -92,7 +92,7 @@ fun TopologyTemplateBuilder.nodeTemplateComponentScriptExecutor(
     description: String,
     block: ComponentScriptExecutorNodeTemplateBuilder.() -> Unit
 ) {
-    val nodeTemplate = BluePrintTypes.nodeTemplateComponentScriptExecutor(
+    val nodeTemplate = BlueprintTypes.nodeTemplateComponentScriptExecutor(
         id, description,
         block
     )
@@ -100,7 +100,7 @@ fun TopologyTemplateBuilder.nodeTemplateComponentScriptExecutor(
     nodeTemplates!![nodeTemplate.id!!] = nodeTemplate
 }
 
-fun BluePrintTypes.nodeTemplateComponentScriptExecutor(
+fun BlueprintTypes.nodeTemplateComponentScriptExecutor(
     id: String,
     description: String,
     block: ComponentScriptExecutorNodeTemplateBuilder.() -> Unit

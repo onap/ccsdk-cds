@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.LOG_PROTECT
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.LOG_PROTECT
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 
 class PropertyDefinitionUtils {

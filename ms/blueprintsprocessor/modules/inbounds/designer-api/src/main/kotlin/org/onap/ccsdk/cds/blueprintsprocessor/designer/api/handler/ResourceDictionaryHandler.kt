@@ -23,7 +23,7 @@ import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiDomains
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ResourceDictionaryRepository
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
@@ -40,9 +40,9 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      *
      * @param name name
      * @return DataDictionary
-     * @throws BluePrintException BluePrintException
+     * @throws BlueprintException BlueprintException
      */
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     suspend fun getResourceDictionaryByName(name: String): ResourceDictionary {
         Preconditions.checkArgument(StringUtils.isNotBlank(name), "Resource dictionary Name Information is missing.")
         val resourceDictionaryDb = resourceDictionaryRepository.findByName(name)
@@ -84,7 +84,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      * @param resourceDictionary resourceDictionary
      * @return DataDictionary
      */
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     suspend fun saveResourceDictionary(resourceDictionary: ResourceDictionary): ResourceDictionary {
         var resourceDictionary = resourceDictionary
 
@@ -133,7 +133,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      * @param resourceDefinition ResourceDefinition
      * @return ResourceDefinition
      */
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     suspend fun saveResourceDefinition(resourceDefinition: ResourceDefinition): ResourceDefinition {
         val resourceDictionary = ResourceDictionary()
         resourceDictionary.name = resourceDefinition.name

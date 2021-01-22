@@ -22,7 +22,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withTimeout
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteIdentifier
@@ -31,7 +31,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotBlank
@@ -51,7 +51,7 @@ import org.springframework.stereotype.Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentRemotePythonExecutor(
     private val remoteScriptExecutionService: RemoteScriptExecutionService,
-    private var bluePrintPropertiesService: BluePrintPropertiesService
+    private var bluePrintPropertiesService: BlueprintPropertiesService
 ) : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(ComponentRemotePythonExecutor::class.java)!!
@@ -94,7 +94,7 @@ open class ComponentRemotePythonExecutor(
             .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
 
         val artifactName: String = operationAssignment.implementation?.primary
-            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+            ?: throw BlueprintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
 
         val artifactDefinition =
             bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
@@ -197,7 +197,7 @@ open class ComponentRemotePythonExecutor(
             log.error(catchallErrMsg, e)
         }
         // if Env preparation was successful, then proceed with command execution in this Env
-        if (bluePrintRuntimeService.getBluePrintError().errors.isEmpty()) {
+        if (bluePrintRuntimeService.getBlueprintError().errors.isEmpty()) {
             try {
                 // Populate command execution properties and pass it to the remote server
                 val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
@@ -260,7 +260,7 @@ open class ComponentRemotePythonExecutor(
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBluePrintError()
+        bluePrintRuntimeService.getBlueprintError()
             .addError("Failed in ComponentRemotePythonExecutor : ${runtimeException.message}")
     }
 

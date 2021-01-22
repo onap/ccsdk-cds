@@ -16,14 +16,14 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibGenericService
+import org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.MariaDataSourceProperties
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.datasource.DriverManagerDataSource
 import javax.sql.DataSource
 
-class MariaDatabaseConfiguration(private val mariaDataSourceProperties: MariaDataSourceProperties) : BluePrintDBLibGenericService {
+class MariaDatabaseConfiguration(private val mariaDataSourceProperties: MariaDataSourceProperties) : BlueprintDBLibGenericService {
 
     val log = LoggerFactory.getLogger(MariaDatabaseConfiguration::class.java)!!
 

@@ -17,14 +17,14 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibGenericService
+import org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDBLibGenericService
-import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BlueprintDBLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.DatabaseResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceDomains
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
@@ -47,7 +47,7 @@ import java.util.HashMap
 @Service("${PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-db")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class DatabaseResourceAssignmentProcessor(
-    private val bluePrintDBLibPropertyService: BluePrintDBLibPropertyService,
+    private val bluePrintDBLibPropertyService: BlueprintDBLibPropertyService,
     private val primaryDBLibGenericService: PrimaryDBLibGenericService
 ) : ResourceAssignmentProcessor() {
 
@@ -66,7 +66,7 @@ open class DatabaseResourceAssignmentProcessor(
             }
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
-        } catch (e: BluePrintProcessorException) {
+        } catch (e: BlueprintProcessorException) {
             val errorMsg = "Failed to process Database resource resolution in template key ($resourceAssignment) assignments."
             throw e.updateErrorMessage(
                 ExecutionServiceDomains.RESOURCE_RESOLUTION, errorMsg,
@@ -74,7 +74,7 @@ open class DatabaseResourceAssignmentProcessor(
             )
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
-            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)
+            throw BlueprintProcessorException("Failed in template key ($resourceAssignment) assignments with: ${e.message}", e)
         }
     }
 
@@ -86,7 +86,7 @@ open class DatabaseResourceAssignmentProcessor(
         /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
         val resourceSource = resourceAssignment.dictionarySourceDefinition
             ?: resourceDefinition?.sources?.get(dSource)
-            ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+            ?: throw BlueprintProcessorException("couldn't get resource definition $dName source($dSource)")
         val resourceSourceProperties = checkNotNull(resourceSource.properties) {
             "failed to get source properties for $dName "
         }
@@ -119,7 +119,7 @@ open class DatabaseResourceAssignmentProcessor(
         }
     }
 
-    private fun blueprintDBLibService(sourceProperties: DatabaseResourceSource, selector: String): BluePrintDBLibGenericService {
+    private fun blueprintDBLibService(sourceProperties: DatabaseResourceSource, selector: String): BlueprintDBLibGenericService {
         return if (isNotEmpty(sourceProperties.endpointSelector)) {
             val dbPropertiesJson = raRuntimeService.resolveDSLExpression(sourceProperties.endpointSelector!!)
             bluePrintDBLibPropertyService.JdbcTemplate(dbPropertiesJson)
@@ -128,7 +128,7 @@ open class DatabaseResourceAssignmentProcessor(
         }
     }
 
-    @Throws(BluePrintProcessorException::class)
+    @Throws(BlueprintProcessorException::class)
     private fun validate(resourceAssignment: ResourceAssignment) {
         checkNotEmpty(resourceAssignment.name) { "resource assignment template key is not defined" }
         checkNotEmpty(resourceAssignment.dictionaryName) {
@@ -156,7 +156,7 @@ open class DatabaseResourceAssignmentProcessor(
         return namedParameters
     }
 
-    @Throws(BluePrintProcessorException::class)
+    @Throws(BlueprintProcessorException::class)
     private fun populateResource(
         resourceAssignment: ResourceAssignment,
         sourceProperties: DatabaseResourceSource,
@@ -183,6 +183,6 @@ open class DatabaseResourceAssignmentProcessor(
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-        raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
+        raRuntimeService.getBlueprintError().addError(runtimeException.message!!)
     }
 }

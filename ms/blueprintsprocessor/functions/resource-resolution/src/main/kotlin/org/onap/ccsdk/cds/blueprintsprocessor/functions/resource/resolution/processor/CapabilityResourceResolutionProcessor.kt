@@ -22,7 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Capa
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
@@ -53,7 +53,7 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
             /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
             val resourceSource = resourceAssignment.dictionarySourceDefinition
                 ?: resourceDefinition?.sources?.get(dSource)
-                ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+                ?: throw BlueprintProcessorException("couldn't get resource definition $dName source($dSource)")
 
             val resourceSourceProps =
                 checkNotNull(resourceSource.properties) { "failed to get $resourceSource properties" }
@@ -87,7 +87,7 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-        raRuntimeService.getBluePrintError()
+        raRuntimeService.getBlueprintError()
             .addError("Failed in CapabilityResourceResolutionProcessor : ${runtimeException.message}")
         ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, runtimeException.message)
     }

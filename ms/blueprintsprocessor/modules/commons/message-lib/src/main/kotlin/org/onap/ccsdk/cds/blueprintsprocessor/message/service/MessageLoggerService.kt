@@ -21,7 +21,7 @@ import org.apache.kafka.common.header.Headers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.message.addHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.message.toMap
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -46,9 +46,9 @@ class MessageLoggerService {
 
     fun messageConsuming(consumerRecord: ConsumerRecord<*, *>) {
         val headers = consumerRecord.headers().toMap()
-        val requestID = headers[BluePrintConstants.ONAP_REQUEST_ID].defaultToUUID()
-        val invocationID = headers[BluePrintConstants.ONAP_INVOCATION_ID].defaultToUUID()
-        val partnerName = headers[BluePrintConstants.ONAP_PARTNER_NAME] ?: "UNKNOWN"
+        val requestID = headers[BlueprintConstants.ONAP_REQUEST_ID].defaultToUUID()
+        val invocationID = headers[BlueprintConstants.ONAP_INVOCATION_ID].defaultToUUID()
+        val partnerName = headers[BlueprintConstants.ONAP_PARTNER_NAME] ?: "UNKNOWN"
         messageConsuming(requestID, invocationID, partnerName, consumerRecord)
     }
 
@@ -83,9 +83,9 @@ class MessageLoggerService {
      */
     fun messageProducing(requestHeader: Headers) {
         val localhost = InetAddress.getLocalHost()
-        requestHeader.addHeader(BluePrintConstants.ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID())
-        requestHeader.addHeader(BluePrintConstants.ONAP_INVOCATION_ID, UUID.randomUUID().toString())
-        requestHeader.addHeader(BluePrintConstants.ONAP_PARTNER_NAME, BluePrintConstants.APP_NAME)
+        requestHeader.addHeader(BlueprintConstants.ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID())
+        requestHeader.addHeader(BlueprintConstants.ONAP_INVOCATION_ID, UUID.randomUUID().toString())
+        requestHeader.addHeader(BlueprintConstants.ONAP_PARTNER_NAME, BlueprintConstants.APP_NAME)
         requestHeader.addHeader("ClientIPAddress", localhost.hostAddress)
     }
 

@@ -29,14 +29,14 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.proc
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceAssignments
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceDefinitions
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResolutionSummary
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -57,7 +57,7 @@ class IpAssignResolutionCapabilityTest {
     @Before
     fun setup() {
 
-        mockkObject(BluePrintDependencyService)
+        mockkObject(BlueprintDependencyService)
 
         val blueprintWebClientService = mockk<BlueprintWebClientService>()
         // Create mock Response
@@ -72,9 +72,9 @@ class IpAssignResolutionCapabilityTest {
         )
         every { blueprintWebClientService.exchangeResource(any(), any(), any()) } returns mockResponse
 
-        val restLibPropertyService = mockk<BluePrintRestLibPropertyService>()
+        val restLibPropertyService = mockk<BlueprintRestLibPropertyService>()
         every { restLibPropertyService.blueprintWebClientService("ipassign-ms") } returns blueprintWebClientService
-        every { BluePrintDependencyService.applicationContext.getBean(any()) } returns restLibPropertyService
+        every { BlueprintDependencyService.applicationContext.getBean(any()) } returns restLibPropertyService
     }
 
     @Test
@@ -152,7 +152,7 @@ class IpAssignResolutionCapabilityTest {
 
     /** Test dictionaries */
     private fun resourceDefinitions(): MutableMap<String, ResourceDefinition> {
-        return BluePrintTypes.resourceDefinitions {
+        return BlueprintTypes.resourceDefinitions {
             resourceDefinition("CloudRegionId", "Cloud Region Id Resource Definition") {
                 tags("CloudRegionId")
                 updatedBy("saurav.paira@att.com")
@@ -230,7 +230,7 @@ class IpAssignResolutionCapabilityTest {
     }
 
     private fun resourceAssignments(): MutableMap<String, ResourceAssignment> {
-        return BluePrintTypes.resourceAssignments {
+        return BlueprintTypes.resourceAssignments {
             resourceAssignment(
                 name = "CloudRegionId", dictionaryName = "CloudRegionId",
                 dictionarySource = "input"

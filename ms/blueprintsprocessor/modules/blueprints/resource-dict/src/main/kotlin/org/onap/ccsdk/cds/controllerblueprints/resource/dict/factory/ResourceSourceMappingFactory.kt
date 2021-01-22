@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.format
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
 
@@ -35,7 +35,7 @@ object ResourceSourceMappingFactory {
 
     fun getRegisterSourceMapping(sourceInstance: String): String {
         return resourceSourceMappings[sourceInstance]
-            ?: throw BluePrintException(format("failed to get source({}) mapping", sourceInstance))
+            ?: throw BlueprintException(format("failed to get source({}) mapping", sourceInstance))
     }
 
     fun getRegisterSourceMapping(): ResourceSourceMapping {

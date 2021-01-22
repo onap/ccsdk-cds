@@ -33,7 +33,7 @@ export default {
             "responsePath": "$.*"
         },
         "functions": {
-            "getOneBluePrint": ["id"]
+            "getOneBlueprint": ["id"]
 
         }
     },
@@ -49,7 +49,7 @@ export default {
             "responsePath": "$.*"
         },
         "functions": {
-            "deleteBluePrint": ["id"]
+            "deleteBlueprint": ["id"]
 
         }
     },

@@ -24,10 +24,10 @@ from pathlib import Path, PurePath
 
 import grpc
 from manager.servicer import ArtifactManagerServicer
-from proto.BluePrintManagement_pb2_grpc import add_BluePrintManagementServiceServicer_to_server
+from proto.BlueprintManagement_pb2_grpc import add_BlueprintManagementServiceServicer_to_server
 
-from blueprints_grpc import BluePrintProcessing_pb2_grpc, ScriptExecutorConfiguration
-from blueprints_grpc.blueprint_processing_server import BluePrintProcessingServer
+from blueprints_grpc import BlueprintProcessing_pb2_grpc, ScriptExecutorConfiguration
+from blueprints_grpc.blueprint_processing_server import BlueprintProcessingServer
 from blueprints_grpc.request_header_validator_interceptor import RequestHeaderValidatorInterceptor
 
 logger = logging.getLogger("Server")
@@ -56,10 +56,10 @@ def serve(configuration: ScriptExecutorConfiguration):
 
         # create server
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(maxWorkers)))
-        BluePrintProcessing_pb2_grpc.add_BluePrintProcessingServiceServicer_to_server(
-            BluePrintProcessingServer(configuration), server
+        BlueprintProcessing_pb2_grpc.add_BlueprintProcessingServiceServicer_to_server(
+            BlueprintProcessingServer(configuration), server
         )
-        add_BluePrintManagementServiceServicer_to_server(ArtifactManagerServicer(), server)
+        add_BlueprintManagementServiceServicer_to_server(ArtifactManagerServicer(), server)
 
         # add secure port using credentials
         server.add_secure_port('[::]:' + port, server_credentials)
@@ -73,10 +73,10 @@ def serve(configuration: ScriptExecutorConfiguration):
         # create server with token authentication interceptors
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(maxWorkers)),
                              interceptors=(header_validator,))
-        BluePrintProcessing_pb2_grpc.add_BluePrintProcessingServiceServicer_to_server(
-            BluePrintProcessingServer(configuration), server
+        BlueprintProcessing_pb2_grpc.add_BlueprintProcessingServiceServicer_to_server(
+            BlueprintProcessingServer(configuration), server
         )
-        add_BluePrintManagementServiceServicer_to_server(ArtifactManagerServicer(), server)
+        add_BlueprintManagementServiceServicer_to_server(ArtifactManagerServicer(), server)
 
         server.add_insecure_port('[::]:' + port)
         server.start()

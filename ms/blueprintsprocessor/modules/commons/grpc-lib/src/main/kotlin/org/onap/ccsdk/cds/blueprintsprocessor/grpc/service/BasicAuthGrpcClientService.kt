@@ -22,7 +22,7 @@ import io.grpc.netty.NettyChannelBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.BasicAuthGrpcClientProperties
 
 open class BasicAuthGrpcClientService(private val basicAuthGrpcClientProperties: BasicAuthGrpcClientProperties) :
-    BluePrintGrpcClientService {
+    BlueprintGrpcClientService {
 
     override suspend fun channel(): ManagedChannel {
         val managedChannel = NettyChannelBuilder

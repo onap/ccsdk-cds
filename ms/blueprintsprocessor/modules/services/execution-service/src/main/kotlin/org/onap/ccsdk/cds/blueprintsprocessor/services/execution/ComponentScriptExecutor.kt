@@ -64,7 +64,7 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBluePrintError()
+        bluePrintRuntimeService.getBlueprintError()
             .addError("Failed in ComponentScriptExecutor : ${runtimeException.message}")
     }
 

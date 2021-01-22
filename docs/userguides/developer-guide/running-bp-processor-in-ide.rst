@@ -207,7 +207,7 @@ Import the project into the IDE
             .. code-block:: java
                :caption: **Custom values for properties**
 
-               -DappName=ControllerBluePrints
+               -DappName=ControllerBlueprints
                -Dms_name=org.onap.ccsdk.apps.controllerblueprints
                -DappVersion=1.0.0
                -Dspring.config.location=opt/app/onap/config/

@@ -4,7 +4,7 @@ import {PackagesHeaderComponent} from './packages-header.component';
 import {PackagesStore} from '../../packages.store';
 import {BrowserDynamicTestingModule, platformBrowserDynamicTesting} from '@angular/platform-browser-dynamic/testing';
 import {PackagesDashboardState} from '../../model/packages-dashboard.state';
-import {getBluePrintPageMock} from '../../blueprint.page.mock';
+import {getBlueprintPageMock} from '../../blueprint.page.mock';
 import {of} from 'rxjs';
 import {By} from '@angular/platform-browser';
 

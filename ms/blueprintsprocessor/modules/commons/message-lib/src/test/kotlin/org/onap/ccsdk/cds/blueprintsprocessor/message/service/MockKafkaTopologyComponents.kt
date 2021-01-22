@@ -22,7 +22,7 @@ import org.apache.kafka.common.serialization.Serializer
 import org.apache.kafka.streams.processor.Processor
 import org.apache.kafka.streams.processor.ProcessorContext
 import org.apache.kafka.streams.state.KeyValueStore
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -48,7 +48,7 @@ open class PriorityMessageSerde : Serde<PriorityMessage> {
         return object : Deserializer<PriorityMessage> {
             override fun deserialize(topic: String, data: ByteArray): PriorityMessage {
                 return JacksonUtils.readValue(String(data), PriorityMessage::class.java)
-                    ?: throw BluePrintProcessorException("failed to convert")
+                    ?: throw BlueprintProcessorException("failed to convert")
             }
 
             override fun configure(configs: MutableMap<String, *>?, isKey: Boolean) {

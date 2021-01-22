@@ -29,7 +29,7 @@ import org.mockito.junit.MockitoRule;
 import org.onap.ccsdk.cds.sdclistener.SdcListenerConfiguration;
 import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
-import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
+import org.onap.ccsdk.cds.sdclistener.handler.BlueprintProcesssorHandler;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
 import org.onap.sdc.impl.mock.DistributionClientResultStubImpl;
@@ -50,7 +50,7 @@ import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.Notificati
 import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 
 @RunWith(SpringRunner.class)
-@EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class, BluePrintProcesssorHandler.class,
+@EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class, BlueprintProcesssorHandler.class,
         SdcListenerDto.class, ListenerServiceImpl.class, SdcListenerStatus.class, SdcListenerConfiguration.class})
 @SpringBootTest(classes = {ListenerServiceImplTest.class})
 public class ListenerServiceImplTest {
@@ -90,9 +90,9 @@ public class ListenerServiceImplTest {
     }
 
     @Test
-    public void extractBluePrintSuccessfully() throws IOException {
+    public void extractBlueprintSuccessfully() throws IOException {
         // Act
-        listenerService.extractBluePrint(CSAR_SAMPLE, tempDirectoryPath.toString());
+        listenerService.extractBlueprint(CSAR_SAMPLE, tempDirectoryPath.toString());
 
         // Verify.
         String result = checkFileExists(tempDirectoryPath);
@@ -100,7 +100,7 @@ public class ListenerServiceImplTest {
     }
 
     @Test
-    public void extractBluePrintFailure() {
+    public void extractBlueprintFailure() {
         // Arrange
         Mockito.when(listenerDto.getDistributionId()).thenReturn(DISTRIBUTION_ID);
         Mockito.when(listenerDto.getArtifactUrl()).thenReturn(URL);
@@ -108,7 +108,7 @@ public class ListenerServiceImplTest {
                 SDC_LISTENER_COMPONENT);
 
         // Act
-        listenerService.extractBluePrint(WRONG_CSAR_SAMPLE, tempDirectoryPath.toString());
+        listenerService.extractBlueprint(WRONG_CSAR_SAMPLE, tempDirectoryPath.toString());
 
         // Verify
         Mockito.verify(status).sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL,

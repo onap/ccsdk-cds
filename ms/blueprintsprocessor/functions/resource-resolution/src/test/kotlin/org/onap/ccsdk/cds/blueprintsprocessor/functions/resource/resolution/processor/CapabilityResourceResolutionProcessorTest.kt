@@ -27,13 +27,13 @@ import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
@@ -53,14 +53,14 @@ class CapabilityResourceResolutionProcessorTest {
             } returns MockCapabilityScriptRA()
 
             val raRuntimeService = mockk<ResourceAssignmentRuntimeService>()
-            every { raRuntimeService.bluePrintContext() } returns mockk<BluePrintContext>()
+            every { raRuntimeService.bluePrintContext() } returns mockk<BlueprintContext>()
             every { raRuntimeService.getInputValue("test-property") } returns NullNode.getInstance()
 
             val capabilityResourceResolutionProcessor =
                 CapabilityResourceResolutionProcessor(componentFunctionScriptingService)
             capabilityResourceResolutionProcessor.raRuntimeService = raRuntimeService
 
-            val resourceAssignment = BluePrintTypes.resourceAssignment(
+            val resourceAssignment = BlueprintTypes.resourceAssignment(
                 name = "test-property", dictionaryName = "ra-dict-name",
                 dictionarySource = "capability"
             ) {
@@ -86,14 +86,14 @@ class CapabilityResourceResolutionProcessorTest {
     fun `test jython capability`() {
         runBlocking {
 
-            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+            val bluePrintContext = BlueprintMetadataUtils.getBlueprintContext(
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/capability_python"
             )
 
             val componentFunctionScriptingService = mockk<ComponentFunctionScriptingService>()
             coEvery {
                 componentFunctionScriptingService
-                    .scriptInstance<ResourceAssignmentProcessor>(any(), BluePrintConstants.SCRIPT_JYTHON, any())
+                    .scriptInstance<ResourceAssignmentProcessor>(any(), BlueprintConstants.SCRIPT_JYTHON, any())
             } returns MockCapabilityScriptRA()
 
             val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)

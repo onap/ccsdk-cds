@@ -26,9 +26,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
@@ -39,8 +39,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.isNullOrMissing
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.rootFieldsToMap
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils.Companion.hasLogProtect
@@ -59,14 +59,14 @@ class ResourceAssignmentUtils {
 
         suspend fun resourceDefinitions(blueprintBasePath: String): MutableMap<String, ResourceDefinition> {
             val dictionaryFile = normalizedFile(
-                blueprintBasePath, BluePrintConstants.TOSCA_DEFINITIONS_DIR,
+                blueprintBasePath, BlueprintConstants.TOSCA_DEFINITIONS_DIR,
                 ResourceResolutionConstants.FILE_NAME_RESOURCE_DEFINITION_TYPES
             )
             checkFileExists(dictionaryFile) { "resource definition file(${dictionaryFile.absolutePath}) is missing" }
             return JacksonReactorUtils.getMapFromFile(dictionaryFile, ResourceDefinition::class.java)
         }
 
-        @Throws(BluePrintProcessorException::class)
+        @Throws(BlueprintProcessorException::class)
         fun setResourceDataValue(
             resourceAssignment: ResourceAssignment,
             raRuntimeService: ResourceAssignmentRuntimeService,
@@ -76,7 +76,7 @@ class ResourceAssignmentUtils {
             return setResourceDataValue(resourceAssignment, raRuntimeService, value.asJsonType())
         }
 
-        @Throws(BluePrintProcessorException::class)
+        @Throws(BlueprintProcessorException::class)
         fun setResourceDataValue(
             resourceAssignment: ResourceAssignment,
             raRuntimeService: ResourceAssignmentRuntimeService,
@@ -108,11 +108,11 @@ class ResourceAssignmentUtils {
                     )
                     setResourceValue(resourceAssignment, raRuntimeService, value)
                     resourceAssignment.updatedDate = Date()
-                    resourceAssignment.updatedBy = BluePrintConstants.USER_SYSTEM
-                    resourceAssignment.status = BluePrintConstants.STATUS_SUCCESS
+                    resourceAssignment.updatedBy = BlueprintConstants.USER_SYSTEM
+                    resourceAssignment.status = BlueprintConstants.STATUS_SUCCESS
                 }
             } catch (e: Exception) {
-                throw BluePrintProcessorException(
+                throw BlueprintProcessorException(
                     "Failed in setting value for template key " +
                         "(${resourceAssignment.name}) and dictionary key (${resourceAssignment.dictionaryName}) of " +
                         "type (${resourceProp.type}) with error message (${e.message})",
@@ -139,7 +139,7 @@ class ResourceAssignmentUtils {
                         .mapValues { e -> e.value.asText() } as MutableMap<String, Any>
                     val newValue: JsonNode
                     try {
-                        newValue = BluePrintVelocityTemplateService
+                        newValue = BlueprintVelocityTemplateService
                             .generateContent(template, null, true, resolutionStore)
                             .also {
                                 if (hasLogProtect(metadata))
@@ -149,7 +149,7 @@ class ResourceAssignmentUtils {
                             }
                             .let { v -> v.asJsonType() }
                     } catch (e: Exception) {
-                        throw BluePrintProcessorException(
+                        throw BlueprintProcessorException(
                             "transform-template failed: $template", e
                         )
                     }
@@ -164,24 +164,24 @@ class ResourceAssignmentUtils {
         fun setFailedResourceDataValue(resourceAssignment: ResourceAssignment, message: String?) {
             if (isNotEmpty(resourceAssignment.name)) {
                 resourceAssignment.updatedDate = Date()
-                resourceAssignment.updatedBy = BluePrintConstants.USER_SYSTEM
-                resourceAssignment.status = BluePrintConstants.STATUS_FAILURE
+                resourceAssignment.updatedBy = BlueprintConstants.USER_SYSTEM
+                resourceAssignment.status = BlueprintConstants.STATUS_FAILURE
                 resourceAssignment.message = message
             }
         }
 
-        @Throws(BluePrintProcessorException::class)
+        @Throws(BlueprintProcessorException::class)
         fun assertTemplateKeyValueNotNull(resourceAssignment: ResourceAssignment) {
             val resourceProp = checkNotNull(resourceAssignment.property) {
                 "Failed to populate mandatory resource resource mapping $resourceAssignment"
             }
             if (resourceProp.required != null && resourceProp.required!! && resourceProp.value.isNullOrMissing()) {
                 logger.error("failed to populate mandatory resource mapping ($resourceAssignment)")
-                throw BluePrintProcessorException("failed to populate mandatory resource mapping ($resourceAssignment)")
+                throw BlueprintProcessorException("failed to populate mandatory resource mapping ($resourceAssignment)")
             }
         }
 
-        @Throws(BluePrintProcessorException::class)
+        @Throws(BlueprintProcessorException::class)
         fun generateResourceDataForAssignments(assignments: List<ResourceAssignment>): String {
             val result: String
             try {
@@ -209,13 +209,13 @@ class ResourceAssignmentUtils {
                     logger.info("Generated Resource Param Data ($result)")
                 }
             } catch (e: Exception) {
-                throw BluePrintProcessorException("Resource Assignment is failed with $e.message", e)
+                throw BlueprintProcessorException("Resource Assignment is failed with $e.message", e)
             }
 
             return result
         }
 
-        @Throws(BluePrintProcessorException::class)
+        @Throws(BlueprintProcessorException::class)
         fun generateResourceForAssignments(assignments: List<ResourceAssignment>): MutableMap<String, JsonNode> {
             val data: MutableMap<String, JsonNode> = hashMapOf()
             assignments.forEach {
@@ -291,7 +291,7 @@ class ResourceAssignmentUtils {
         }
 
         fun transformToRARuntimeService(
-            blueprintRuntimeService: BluePrintRuntimeService<*>,
+            blueprintRuntimeService: BlueprintRuntimeService<*>,
             templateArtifactName: String
         ): ResourceAssignmentRuntimeService {
 
@@ -305,7 +305,7 @@ class ResourceAssignmentUtils {
             return resourceAssignmentRuntimeService
         }
 
-        @Throws(BluePrintProcessorException::class)
+        @Throws(BlueprintProcessorException::class)
         fun getPropertyType(
             raRuntimeService: ResourceAssignmentRuntimeService,
             dataTypeName: String,
@@ -321,12 +321,12 @@ class ResourceAssignmentUtils {
                 logger.trace("Data type({})'s property ({}) is ({})", dataTypeName, propertyName, type)
             } catch (e: Exception) {
                 logger.error("couldn't get data type($dataTypeName)'s property ($propertyName), error message $e")
-                throw BluePrintProcessorException("${e.message}", e)
+                throw BlueprintProcessorException("${e.message}", e)
             }
             return type
         }
 
-        @Throws(BluePrintProcessorException::class)
+        @Throws(BlueprintProcessorException::class)
         fun parseResponseNode(
             responseNode: JsonNode,
             resourceAssignment: ResourceAssignment,
@@ -336,18 +336,18 @@ class ResourceAssignmentUtils {
             val metadata = resourceAssignment.property!!.metadata
             try {
                 if ((resourceAssignment.property?.type).isNullOrEmpty()) {
-                    throw BluePrintProcessorException("Couldn't get data dictionary type for dictionary name (${resourceAssignment.name})")
+                    throw BlueprintProcessorException("Couldn't get data dictionary type for dictionary name (${resourceAssignment.name})")
                 }
                 val type = resourceAssignment.property!!.type
                 val valueToPrint = getValueToLog(metadata, responseNode)
 
                 logger.info("For template key (${resourceAssignment.name}) trying to get value from responseNode ($valueToPrint)")
                 return when (type) {
-                    in BluePrintTypes.validPrimitiveTypes() -> {
+                    in BlueprintTypes.validPrimitiveTypes() -> {
                         // Primitive Types
                         parseResponseNodeForPrimitiveTypes(responseNode, resourceAssignment, outputKeyMapping)
                     }
-                    in BluePrintTypes.validCollectionTypes() -> {
+                    in BlueprintTypes.validCollectionTypes() -> {
                         // Array Types
                         parseResponseNodeForCollection(responseNode, resourceAssignment, raRuntimeService, outputKeyMapping)
                     }
@@ -358,7 +358,7 @@ class ResourceAssignmentUtils {
                 }
             } catch (e: Exception) {
                 logger.error("Fail to parse response data, error message $e")
-                throw BluePrintProcessorException("${e.message}", e)
+                throw BlueprintProcessorException("${e.message}", e)
             }
         }
 
@@ -387,7 +387,7 @@ class ResourceAssignmentUtils {
             }
 
             if (returnNode.isNullOrMissing() || returnNode!!.isComplexType() && !returnNode.has(outputKeyMapping[outputKey])) {
-                throw BluePrintProcessorException("Fail to find output key mapping ($outputKey) in the responseNode.")
+                throw BlueprintProcessorException("Fail to find output key mapping ($outputKey) in the responseNode.")
             }
 
             val returnValue = if (returnNode.isComplexType()) {
@@ -411,7 +411,7 @@ class ResourceAssignmentUtils {
             val metadata = resourceAssignment.property!!.metadata
             var resultNode: JsonNode
             if ((resourceAssignment.property?.entrySchema?.type).isNullOrEmpty()) {
-                throw BluePrintProcessorException(
+                throw BlueprintProcessorException(
                     "Couldn't get data type for dictionary type " +
                         "(${resourceAssignment.property!!.type}) and dictionary name ($dName)"
                 )
@@ -441,7 +441,7 @@ class ResourceAssignmentUtils {
                             )
                     }
                     else -> {
-                        throw BluePrintProcessorException("Key-value response expected to match the responseNode.")
+                        throw BlueprintProcessorException("Key-value response expected to match the responseNode.")
                     }
                 }
             } else {
@@ -486,7 +486,7 @@ class ResourceAssignmentUtils {
         ): ObjectNode {
             val outputKeyMappingHasOnlyOneElement = checkIfOutputKeyMappingProvideOneElement(outputKeyMapping)
             when (entrySchemaType) {
-                in BluePrintTypes.validPrimitiveTypes() -> {
+                in BlueprintTypes.validPrimitiveTypes() -> {
                     if (outputKeyMappingHasOnlyOneElement) {
                         val outputKeyMap = outputKeyMapping.entries.first()
                         if (resourceAssignment.keyIdentifiers.none { it.name == outputKeyMap.key }) {
@@ -503,7 +503,7 @@ class ResourceAssignmentUtils {
                             metadata
                         )
                     } else {
-                        throw BluePrintProcessorException("Expect one entry in output-key-mapping")
+                        throw BlueprintProcessorException("Expect one entry in output-key-mapping")
                     }
                 }
                 else -> {
@@ -533,7 +533,7 @@ class ResourceAssignmentUtils {
                             )
                         }
                         else -> {
-                            throw BluePrintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
+                            throw BlueprintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
                         }
                     }
                 }
@@ -557,7 +557,7 @@ class ResourceAssignmentUtils {
                 resourceAssignment.keyIdentifiers.add(KeyIdentifier(outputKeyMap.key, returnValue))
                 return returnValue
             } else {
-                throw BluePrintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
+                throw BlueprintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
             }
         }
 
@@ -669,7 +669,7 @@ class ResourceAssignmentUtils {
                         )
                     }
                     else -> {
-                        throw BluePrintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
+                        throw BlueprintProcessorException("Output-key-mapping do not map the Data Type $entrySchemaType")
                     }
                 }
             } else {

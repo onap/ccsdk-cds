@@ -31,7 +31,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration.HealthChec
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthCheckStatus
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.EndPointExecution
-import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.health.BluePrintProcessorHealthCheck
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.health.BlueprintProcessorHealthCheck
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
@@ -52,12 +52,12 @@ class HealthCheckServiceTest {
     @InjectMocks
     private var endPointExecution: EndPointExecution? = null
 
-    private var bluePrintProcessorHealthCheck: BluePrintProcessorHealthCheck? = null
+    private var bluePrintProcessorHealthCheck: BlueprintProcessorHealthCheck? = null
 
     @Before
     fun setup() {
         endPointExecution = Mockito.spy(endPointExecution!!)
-        Mockito.`when`(healthCheckProperties!!.getBluePrintServiceInformation()).thenReturn(
+        Mockito.`when`(healthCheckProperties!!.getBlueprintServiceInformation()).thenReturn(
             Arrays.asList(
                 ServiceEndpoint("Execution service ", "http://cds-blueprints-processor-http:8080/api/v1/execution-service/health-check"),
                 ServiceEndpoint("Resources service", "http://cds-blueprints-processor-http:8080/api/v1/resources/health-check"),
@@ -65,7 +65,7 @@ class HealthCheckServiceTest {
             )
         )
 
-        bluePrintProcessorHealthCheck = BluePrintProcessorHealthCheck(endPointExecution!!, healthCheckProperties)
+        bluePrintProcessorHealthCheck = BlueprintProcessorHealthCheck(endPointExecution!!, healthCheckProperties)
     }
 
     @Test

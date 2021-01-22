@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.configs.api
 
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDataSourceProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.PrimaryDatabaseConfiguration
 import org.springframework.context.annotation.Bean
@@ -29,7 +29,7 @@ import org.springframework.transaction.PlatformTransactionManager
 import javax.sql.DataSource
 
 @Configuration
-@Import(BluePrintDBLibConfiguration::class)
+@Import(BlueprintDBLibConfiguration::class)
 @EnableJpaRepositories(
     basePackages = [
         "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution",

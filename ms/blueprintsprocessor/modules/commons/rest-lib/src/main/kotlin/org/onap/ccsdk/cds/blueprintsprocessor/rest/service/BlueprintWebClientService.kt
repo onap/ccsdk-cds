@@ -36,9 +36,9 @@ import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintRetryException
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintIOUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintRetryException
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintIOUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -59,7 +59,7 @@ interface BlueprintWebClientService {
             .build()
     }
 
-    /** High performance non blocking Retry function, If execution block [block] throws BluePrintRetryException
+    /** High performance non blocking Retry function, If execution block [block] throws BlueprintRetryException
      * exception then this will perform wait and retrigger accoring to times [times] with delay [delay]
      */
     suspend fun <T> retry(
@@ -69,11 +69,11 @@ interface BlueprintWebClientService {
         block: suspend (Int) -> T
     ): T {
         val exceptionBlock = { e: Exception ->
-            if (e !is BluePrintRetryException) {
+            if (e !is BlueprintRetryException) {
                 throw e
             }
         }
-        return BluePrintIOUtils.retry(times, initialDelay, delay, block, exceptionBlock)
+        return BlueprintIOUtils.retry(times, initialDelay, delay, block, exceptionBlock)
     }
 
     fun exchangeResource(methodType: String, path: String, request: String): WebClientResponse<String> {
@@ -98,7 +98,7 @@ interface BlueprintWebClientService {
             HttpMethod.POST -> post(path, request, convertedHeaders, String::class.java)
             HttpMethod.PUT -> put(path, request, convertedHeaders, String::class.java)
             HttpMethod.PATCH -> patch(path, request, convertedHeaders, String::class.java)
-            else -> throw BluePrintProcessorException(
+            else -> throw BlueprintProcessorException(
                 "Unsupported methodType($methodType) attempted on path($path)"
             )
         }
@@ -270,7 +270,7 @@ interface BlueprintWebClientService {
             HttpMethod.DELETE -> deleteNB(path, convertedHeaders, responseType)
             HttpMethod.PUT -> putNB(path, request, convertedHeaders, responseType)
             HttpMethod.PATCH -> patchNB(path, request, convertedHeaders, responseType)
-            else -> throw BluePrintProcessorException("Unsupported methodType($methodType)")
+            else -> throw BlueprintProcessorException("Unsupported methodType($methodType)")
         }
     }
 
@@ -323,7 +323,7 @@ interface BlueprintWebClientService {
                     " User-supplied \"additionalHeaders\" cannot contain AUTHORIZATION header with" +
                     " auth-type \"${RestLibConstants.TYPE_BASIC_AUTH}\""
                 WebClientUtils.log.error(errMsg)
-                throw BluePrintProcessorException(errMsg)
+                throw BlueprintProcessorException(errMsg)
             } else {
                 customHeaders.putAll(it)
             }

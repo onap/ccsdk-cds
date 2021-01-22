@@ -24,9 +24,9 @@ import org.apache.kafka.streams.processor.Punctuator
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 
 /** CDS Kafka Stream Processor abstract class to implement */
-abstract class AbstractBluePrintMessageProcessor<K, V> : Processor<K, V> {
+abstract class AbstractBlueprintMessageProcessor<K, V> : Processor<K, V> {
 
-    private val log = logger(AbstractBluePrintMessageProcessor::class)
+    private val log = logger(AbstractBlueprintMessageProcessor::class)
 
     lateinit var processorContext: ProcessorContext
 
@@ -51,7 +51,7 @@ abstract class AbstractBluePrintMessageProcessor<K, V> : Processor<K, V> {
 }
 
 /** CDS Kafka Stream Punctuator abstract class to implement */
-abstract class AbstractBluePrintMessagePunctuator : Punctuator {
+abstract class AbstractBlueprintMessagePunctuator : Punctuator {
 
     lateinit var processorContext: ProcessorContext
 

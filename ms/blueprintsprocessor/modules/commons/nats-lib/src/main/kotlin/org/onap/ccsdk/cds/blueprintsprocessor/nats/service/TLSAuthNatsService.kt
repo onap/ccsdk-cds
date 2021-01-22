@@ -25,7 +25,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.splitCommaAsList
 import javax.net.ssl.SSLContext
 
 open class TLSAuthNatsService(private val natsConnectionProperties: TLSAuthNatsConnectionProperties) :
-    BluePrintNatsService {
+    BlueprintNatsService {
 
     lateinit var streamingConnection: StreamingConnection
 

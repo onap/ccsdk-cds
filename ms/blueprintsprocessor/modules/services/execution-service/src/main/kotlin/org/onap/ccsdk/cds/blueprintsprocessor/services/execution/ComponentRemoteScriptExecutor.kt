@@ -22,8 +22,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.createActionIdentifiersProto
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.createCommonHeaderProto
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.createExecutionServiceInputProto
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -70,7 +70,7 @@ open class ComponentRemoteScriptExecutor(
         val txId = UUID.randomUUID().toString()
         val commonHeader = createCommonHeaderProto(
             executionRequest.commonHeader.subRequestId,
-            txId, BluePrintConstants.APP_NAME
+            txId, BlueprintConstants.APP_NAME
         )
         val actionIdentifier = createActionIdentifiersProto(blueprintName, blueprintVersion, blueprintAction)
 
@@ -92,16 +92,16 @@ open class ComponentRemoteScriptExecutor(
 
         /** set node template attribute */
         val statusMessage = executionServiceOutputProto.status.message
-        if (statusMessage == BluePrintConstants.STATUS_SUCCESS) {
-            setAttribute(ATTRIBUTE_STATUS, BluePrintConstants.STATUS_SUCCESS.asJsonPrimitive())
+        if (statusMessage == BlueprintConstants.STATUS_SUCCESS) {
+            setAttribute(ATTRIBUTE_STATUS, BlueprintConstants.STATUS_SUCCESS.asJsonPrimitive())
         } else {
             val errorMessage = executionServiceOutputProto.status.errorMessage ?: "failed in remote execution"
-            throw BluePrintProcessorException(errorMessage)
+            throw BlueprintProcessorException(errorMessage)
         }
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBluePrintError()
+        bluePrintRuntimeService.getBlueprintError()
             .addError("Failed in ComponentRemoteScriptExecutor : ${runtimeException.message}")
     }
 }

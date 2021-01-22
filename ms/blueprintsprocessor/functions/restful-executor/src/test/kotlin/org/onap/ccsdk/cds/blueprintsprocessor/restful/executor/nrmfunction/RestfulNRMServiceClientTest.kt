@@ -20,8 +20,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.BluePrintRestLibConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.BlueprintRestLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintRestLibPropertyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -44,7 +44,7 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(classes = [BluePrintRestLibConfiguration::class, NrmTestController::class])
+@ContextConfiguration(classes = [BlueprintRestLibConfiguration::class, NrmTestController::class])
 @TestPropertySource(
     properties = [
         "blueprintsprocessor.restclient.nrm.type=basic-auth",
@@ -59,7 +59,7 @@ class RestfulNRMServiceClientTest {
 
     @Autowired
     lateinit var restfulNRMServiceClient: RestfulNRMServiceClient
-    lateinit var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService
+    lateinit var bluePrintRestLibPropertyService: BlueprintRestLibPropertyService
 
     @Test
     fun testCreateMOI() {

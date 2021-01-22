@@ -36,7 +36,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EntrySchema
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
@@ -70,7 +70,7 @@ class ResourceAssignmentUtilsTest {
     fun setup() {
 
         val bluePrintContext = runBlocking {
-            BluePrintMetadataUtils.getBluePrintContext(
+            BlueprintMetadataUtils.getBlueprintContext(
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
         }

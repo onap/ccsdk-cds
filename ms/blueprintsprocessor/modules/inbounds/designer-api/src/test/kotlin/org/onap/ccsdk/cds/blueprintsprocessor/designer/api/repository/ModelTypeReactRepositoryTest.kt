@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiTestConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -59,15 +59,15 @@ class ModelTypeReactRepositoryTest {
         val content = normalizedFile("./src/test/resources/model_type/data_type/datatype-property.json")
             .readText(Charset.defaultCharset())
         val modelType = ModelType()
-        modelType.definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
-        modelType.derivedFrom = BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT
+        modelType.definitionType = BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+        modelType.derivedFrom = BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT
         modelType.description = "Definition for Sample Datatype "
         modelType.definition = JacksonUtils.jsonNode(content)
         modelType.modelName = modelName
         modelType.version = "1.0.0"
         modelType.tags = (
-            "test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
-                BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+            "test-datatype ," + BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
+                BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
             )
         modelType.updatedBy = "xxxxxx@xxx.com"
 
@@ -81,11 +81,11 @@ class ModelTypeReactRepositoryTest {
         Assert.assertNotNull("Failed to findByModelName ", dbFindByModelName)
 
         val dbFindByDefinitionType =
-            modelTypeReactRepository.findByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE).collectList().block()
+            modelTypeReactRepository.findByDefinitionType(BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE).collectList().block()
         Assert.assertNotNull("Failed to findByDefinitionType ", dbFindByDefinitionType)
         Assert.assertTrue("Failed to findByDefinitionType count", dbFindByDefinitionType!!.size > 0)
 
-        val dbFindByDerivedFrom = modelTypeReactRepository.findByDerivedFrom(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT).collectList().block()
+        val dbFindByDerivedFrom = modelTypeReactRepository.findByDerivedFrom(BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT).collectList().block()
         Assert.assertNotNull("Failed to find findByDerivedFrom", dbFindByDerivedFrom)
         Assert.assertTrue("Failed to find findByDerivedFrom by count", dbFindByDerivedFrom!!.size > 0)
 
@@ -94,12 +94,12 @@ class ModelTypeReactRepositoryTest {
         Assert.assertTrue("Failed to findByModelNameIn by count", dbFindByModelNameIn!!.size > 0)
 
         val dbFindByDefinitionTypeIn =
-            modelTypeReactRepository.findByDefinitionTypeIn(Arrays.asList(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)).collectList().block()
+            modelTypeReactRepository.findByDefinitionTypeIn(Arrays.asList(BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)).collectList().block()
         Assert.assertNotNull("Failed to findByDefinitionTypeIn", dbFindByDefinitionTypeIn)
         Assert.assertTrue("Failed to findByDefinitionTypeIn by count", dbFindByDefinitionTypeIn!!.size > 0)
 
         val dbFindByDerivedFromIn =
-            modelTypeReactRepository.findByDerivedFromIn(Arrays.asList(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT)).collectList().block()
+            modelTypeReactRepository.findByDerivedFromIn(Arrays.asList(BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT)).collectList().block()
         Assert.assertNotNull("Failed to find findByDerivedFromIn", dbFindByDerivedFromIn)
         Assert.assertTrue("Failed to find findByDerivedFromIn by count", dbFindByDerivedFromIn!!.size > 0)
     }

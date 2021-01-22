@@ -25,7 +25,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.splitCommaAsList
 
 open class TokenAuthNatsService(private val natsConnectionProperties: TokenAuthNatsConnectionProperties) :
-    BluePrintNatsService {
+    BlueprintNatsService {
 
     private val log = logger(TokenAuthNatsService::class)
 

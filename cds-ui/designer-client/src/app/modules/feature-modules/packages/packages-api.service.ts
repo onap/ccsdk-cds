@@ -23,7 +23,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ApiService} from '../../../common/core/services/api.typed.service';
 import {BlueprintURLs} from '../../../common/constants/app-constants';
-import {BlueprintModel, BluePrintPage} from './model/BluePrint.model';
+import {BlueprintModel, BlueprintPage} from './model/Blueprint.model';
 
 
 @Injectable({
@@ -33,10 +33,10 @@ export class PackagesApiService {
     packages: BlueprintModel[] = [];
     private numberOfPackages: number;
 
-    constructor(private api: ApiService<BluePrintPage>) {
+    constructor(private api: ApiService<BlueprintPage>) {
     }
 
-    getPagedPackages(pageNumber: number, pageSize: number, sortBy: string): Observable<BluePrintPage[]> {
+    getPagedPackages(pageNumber: number, pageSize: number, sortBy: string): Observable<BlueprintPage[]> {
         const sortType = sortBy.includes('DATE') ? 'DESC' : 'ASC';
         return this.api.get(BlueprintURLs.getPagedBlueprints, {
             offset: pageNumber,
@@ -46,7 +46,7 @@ export class PackagesApiService {
         });
     }
 
-    async checkBluePrintIfItExists(name: string, version: string): Promise<BluePrintPage[]> {
+    async checkBlueprintIfItExists(name: string, version: string): Promise<BlueprintPage[]> {
         return await this.api.get(BlueprintURLs.getBlueprintByName + '/' + name + '/version/' + version).toPromise();
     }
 

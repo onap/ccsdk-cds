@@ -39,7 +39,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class SearchTemplateComponent implements OnInit {
   file: File;
-  localBluePrintData: IBlueprint;
+  localBlueprintData: IBlueprint;
   fileText: object[];
   blueprintState: IBlueprintState;
   bpState: Observable<IBlueprintState>;
@@ -99,7 +99,7 @@ export class SearchTemplateComponent implements OnInit {
       entryDefinition: this.entryDefinition
     }
     this.store.dispatch(new SetBlueprintState(blueprintState))
-    
+
   }
 
   async buildFileViewData(zip) {

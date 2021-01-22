@@ -17,12 +17,12 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintScriptsService
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintScriptsService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BlueprintScriptsServiceImpl
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
@@ -74,29 +74,29 @@ class ComponentFunctionScriptingService(
     }
 
     suspend fun <T : BlueprintFunctionNode<*, *>> scriptInstance(
-        bluePrintContext: BluePrintContext,
+        bluePrintContext: BlueprintContext,
         scriptType: String,
         scriptClassReference: String
     ): T {
         var scriptComponent: T? = null
 
         when (scriptType) {
-            BluePrintConstants.SCRIPT_INTERNAL -> {
-                val bluePrintScriptsService: BluePrintScriptsService = BluePrintScriptsServiceImpl()
+            BlueprintConstants.SCRIPT_INTERNAL -> {
+                val bluePrintScriptsService: BlueprintScriptsService = BlueprintScriptsServiceImpl()
                 scriptComponent = bluePrintScriptsService.scriptInstance<T>(scriptClassReference)
             }
-            BluePrintConstants.SCRIPT_KOTLIN -> {
-                val bluePrintScriptsService: BluePrintScriptsService = BluePrintScriptsServiceImpl()
+            BlueprintConstants.SCRIPT_KOTLIN -> {
+                val bluePrintScriptsService: BlueprintScriptsService = BlueprintScriptsServiceImpl()
                 scriptComponent = bluePrintScriptsService.scriptInstance<T>(
                     bluePrintContext.rootPath,
                     bluePrintContext.name(), bluePrintContext.version(), scriptClassReference, false
                 )
             }
-            BluePrintConstants.SCRIPT_JYTHON -> {
+            BlueprintConstants.SCRIPT_JYTHON -> {
                 scriptComponent = blueprintJythonService.jythonComponentInstance(bluePrintContext, scriptClassReference) as T
             }
             else -> {
-                throw BluePrintProcessorException("script type($scriptType) is not supported")
+                throw BlueprintProcessorException("script type($scriptType) is not supported")
             }
         }
         return scriptComponent

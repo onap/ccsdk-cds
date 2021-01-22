@@ -18,15 +18,15 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 
 open class JythonComponentFunction : AbstractScriptComponentFunction() {
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        throw BluePrintException("Not Implemented required")
+        throw BlueprintException("Not Implemented required")
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        throw BluePrintException("Not Implemented required")
+        throw BlueprintException("Not Implemented required")
     }
 }

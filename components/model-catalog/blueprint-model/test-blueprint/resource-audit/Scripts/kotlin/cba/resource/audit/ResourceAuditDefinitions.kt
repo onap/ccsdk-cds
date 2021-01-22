@@ -19,16 +19,16 @@ package cba.resource.audit
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTemplateComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getAttribute
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getNodeTemplateAttribute
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeTypeComponent
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.AbstractBluePrintDefinitions
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.AbstractBlueprintDefinitions
 
-class ResourceAuditDefinitions : AbstractBluePrintDefinitions() {
+class ResourceAuditDefinitions : AbstractBlueprintDefinitions() {
 
     override fun serviceTemplate(): ServiceTemplate {
         return defaultServiceTemplate()
@@ -47,13 +47,13 @@ fun ResourceAuditDefinitions.defaultServiceTemplate() =
 
             workflow(id = "config-collect", description = "Collect the configuration for Device") {
                 inputs {
-                    property(id = "device-id", type = BluePrintConstants.DATA_TYPE_STRING, required = true, description = "")
-                    property(id = "sources", type = BluePrintConstants.DATA_TYPE_LIST, required = true, description = "") {
-                        entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+                    property(id = "device-id", type = BlueprintConstants.DATA_TYPE_STRING, required = true, description = "")
+                    property(id = "sources", type = BlueprintConstants.DATA_TYPE_LIST, required = true, description = "") {
+                        entrySchema(BlueprintConstants.DATA_TYPE_STRING)
                     }
                 }
                 outputs {
-                    property(id = "response-data", required = true, type = BluePrintConstants.DATA_TYPE_STRING, description = "") {
+                    property(id = "response-data", required = true, type = BlueprintConstants.DATA_TYPE_STRING, description = "") {
                         value(
                             getNodeTemplateAttribute(
                                 nodeTemplateId = "config-collector",
@@ -61,21 +61,21 @@ fun ResourceAuditDefinitions.defaultServiceTemplate() =
                             )
                         )
                     }
-                    property(id = "status", required = true, type = BluePrintConstants.DATA_TYPE_STRING, description = "") {
-                        value(BluePrintConstants.STATUS_SUCCESS)
+                    property(id = "status", required = true, type = BlueprintConstants.DATA_TYPE_STRING, description = "") {
+                        value(BlueprintConstants.STATUS_SUCCESS)
                     }
                 }
                 step(id = "config-collector", target = "config-collector", description = "Collect the Configuration")
             }
 
-            val configCollectorComponent = BluePrintTypes.nodeTemplateComponentScriptExecutor(
+            val configCollectorComponent = BlueprintTypes.nodeTemplateComponentScriptExecutor(
                 id = "config-collector",
                 description = "Config collector component"
             ) {
 
                 definedOperation(description = "Config Collector Operation") {
                     inputs {
-                        type(BluePrintConstants.SCRIPT_KOTLIN)
+                        type(BlueprintConstants.SCRIPT_KOTLIN)
                         scriptClassReference("cba.resource.audit.functions.ConfigCollector")
                     }
                     outputs {
@@ -87,6 +87,6 @@ fun ResourceAuditDefinitions.defaultServiceTemplate() =
             nodeTemplate(configCollectorComponent)
         }
 
-        nodeType(BluePrintTypes.nodeTypeComponent())
-        nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
+        nodeType(BlueprintTypes.nodeTypeComponent())
+        nodeType(BlueprintTypes.nodeTypeComponentScriptExecutor())
     }

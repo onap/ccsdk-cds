@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiParam
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ResourceDictionaryHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
 import org.springframework.http.MediaType
@@ -50,7 +50,7 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
         response = ResourceDictionary::class
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     suspend fun getResourceDictionaryByName(
         @ApiParam(value = "Name of the resource", required = true, example = "\"hostname\"")
         @PathVariable(value = "name") name: String
@@ -69,7 +69,7 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
         response = ResourceDictionary::class
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     suspend fun saveResourceDictionary(
         @ApiParam(value = "Resource dictionary to store", required = true)
         @RequestBody dataDictionary: ResourceDictionary
@@ -90,7 +90,7 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
         response = ResourceDefinition::class
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     suspend fun saveResourceDictionary(
         @ApiParam(value = "Resource definition to generate", required = true)
         @RequestBody resourceDefinition: ResourceDefinition

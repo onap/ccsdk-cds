@@ -25,9 +25,9 @@
 #  limitations under the License.
 
 import grpc
-from proto.BluePrintCommon_pb2 import ActionIdentifiers, CommonHeader
-from proto.BluePrintProcessing_pb2 import ExecutionServiceInput
-from proto.BluePrintProcessing_pb2_grpc import BluePrintProcessingServiceStub
+from proto.BlueprintCommon_pb2 import ActionIdentifiers, CommonHeader
+from proto.BlueprintProcessing_pb2 import ExecutionServiceInput
+from proto.BlueprintProcessing_pb2_grpc import BlueprintProcessingServiceStub
 
 
 def generate_messages():
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     with open('py-executor-chain.pem', 'rb') as f:
         creds = grpc.ssl_channel_credentials(f.read())
     channel = grpc.secure_channel('localhost:50052', creds)
-    stub = BluePrintProcessingServiceStub(channel)
+    stub = BlueprintProcessingServiceStub(channel)
 
     messages = generate_messages()
     responses = stub.process(messages)

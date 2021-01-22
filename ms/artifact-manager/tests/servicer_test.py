@@ -19,17 +19,17 @@ from unittest.mock import patch
 
 import manager.utils
 from manager.servicer import ArtifactManagerServicer
-from proto.BluePrintCommon_pb2 import ActionIdentifiers, CommonHeader
-from proto.BluePrintManagement_pb2 import (
-    BluePrintDownloadInput,
-    BluePrintManagementOutput,
-    BluePrintRemoveInput,
-    BluePrintUploadInput,
+from proto.BlueprintCommon_pb2 import ActionIdentifiers, CommonHeader
+from proto.BlueprintManagement_pb2 import (
+    BlueprintDownloadInput,
+    BlueprintManagementOutput,
+    BlueprintRemoveInput,
+    BlueprintUploadInput,
     FileChunk,
 )
-from proto.BluePrintManagement_pb2_grpc import (
-    BluePrintManagementServiceStub,
-    add_BluePrintManagementServiceServicer_to_server,
+from proto.BlueprintManagement_pb2_grpc import (
+    BlueprintManagementServiceStub,
+    add_BlueprintManagementServiceServicer_to_server,
 )
 from pytest import fixture
 
@@ -50,7 +50,7 @@ class MockZipFile(zipfile.ZipFile):
 @fixture(scope="module")
 def grpc_add_to_server():
     """pytest-grpcio required function."""
-    return add_BluePrintManagementServiceServicer_to_server
+    return add_BlueprintManagementServiceServicer_to_server
 
 
 @fixture(scope="module")
@@ -62,34 +62,34 @@ def grpc_servicer():
 @fixture(scope="module")  # noqa
 def grpc_stub_cls(grpc_channel):
     """pytest-grpcio required function."""
-    return BluePrintManagementServiceStub
+    return BlueprintManagementServiceStub
 
 
 def test_servicer_upload_handler_header_failure(grpc_stub):
     """Test servicer upload handler."""
-    request: BluePrintUploadInput = BluePrintUploadInput()
-    output: BluePrintManagementOutput = grpc_stub.uploadBlueprint(request)
+    request: BlueprintUploadInput = BlueprintUploadInput()
+    output: BlueprintManagementOutput = grpc_stub.uploadBlueprint(request)
     assert output.status.code == 500
     assert output.status.message == "failure"
-    assert output.status.errorMessage == "Request has to have set both BluePrint name and version"
+    assert output.status.errorMessage == "Request has to have set both Blueprint name and version"
 
 
 def test_servicer_download_handler_header_failure(grpc_stub):
     """Test servicer download handler."""
-    request: BluePrintDownloadInput = BluePrintDownloadInput()
-    output: BluePrintManagementOutput = grpc_stub.downloadBlueprint(request)
+    request: BlueprintDownloadInput = BlueprintDownloadInput()
+    output: BlueprintManagementOutput = grpc_stub.downloadBlueprint(request)
     assert output.status.code == 500
     assert output.status.message == "failure"
-    assert output.status.errorMessage == "Request has to have set both BluePrint name and version"
+    assert output.status.errorMessage == "Request has to have set both Blueprint name and version"
 
 
 def test_servicer_remove_handler_header_failure(grpc_stub):
     """Test servicer remove handler."""
-    request: BluePrintRemoveInput = BluePrintRemoveInput()
-    output: BluePrintManagementOutput = grpc_stub.removeBlueprint(request)
+    request: BlueprintRemoveInput = BlueprintRemoveInput()
+    output: BlueprintManagementOutput = grpc_stub.removeBlueprint(request)
     assert output.status.code == 500
     assert output.status.message == "failure"
-    assert output.status.errorMessage == "Request has to have set both BluePrint name and version"
+    assert output.status.errorMessage == "Request has to have set both Blueprint name and version"
 
 
 def test_servicer_upload_handler_failure(grpc_stub):
@@ -97,8 +97,8 @@ def test_servicer_upload_handler_failure(grpc_stub):
     action_identifiers: ActionIdentifiers = ActionIdentifiers()
     action_identifiers.blueprintName = "sample-cba"
     action_identifiers.blueprintVersion = "1.0.0"
-    request: BluePrintUploadInput = BluePrintUploadInput(actionIdentifiers=action_identifiers)
-    output: BluePrintManagementOutput = grpc_stub.uploadBlueprint(request)
+    request: BlueprintUploadInput = BlueprintUploadInput(actionIdentifiers=action_identifiers)
+    output: BlueprintManagementOutput = grpc_stub.uploadBlueprint(request)
     assert output.status.code == 500
     assert output.status.message == "failure"
     assert output.status.errorMessage == "Invalid request"
@@ -109,8 +109,8 @@ def test_servicer_download_handler_failure(grpc_stub):
     action_identifiers: ActionIdentifiers = ActionIdentifiers()
     action_identifiers.blueprintName = "sample-cba"
     action_identifiers.blueprintVersion = "2.0.0"
-    request: BluePrintDownloadInput = BluePrintDownloadInput(actionIdentifiers=action_identifiers)
-    output: BluePrintManagementOutput = grpc_stub.downloadBlueprint(request)
+    request: BlueprintDownloadInput = BlueprintDownloadInput(actionIdentifiers=action_identifiers)
+    output: BlueprintManagementOutput = grpc_stub.downloadBlueprint(request)
     assert output.status.code == 500
     assert output.status.message == "failure"
     assert output.status.errorMessage == "Artifact not found"
@@ -121,8 +121,8 @@ def test_servicer_remove_handler_failure(grpc_stub):
     action_identifiers: ActionIdentifiers = ActionIdentifiers()
     action_identifiers.blueprintName = "sample-cba"
     action_identifiers.blueprintVersion = "1.0.0"
-    request: BluePrintRemoveInput = BluePrintRemoveInput(actionIdentifiers=action_identifiers)
-    output: BluePrintManagementOutput = grpc_stub.removeBlueprint(request)
+    request: BlueprintRemoveInput = BlueprintRemoveInput(actionIdentifiers=action_identifiers)
+    output: BlueprintManagementOutput = grpc_stub.removeBlueprint(request)
     assert output.status.code == 500
     assert output.status.message == "failure"
     assert output.status.errorMessage == "Artifact not found"
@@ -146,10 +146,10 @@ def test_servicer_upload_handler_success(grpc_stub):
     # fmt: off
     with patch.object(os, "makedirs", return_value=None), \
             patch.object(manager.utils, 'ZipFile', return_value=MockZipFile()):
-        request: BluePrintUploadInput = BluePrintUploadInput(
+        request: BlueprintUploadInput = BlueprintUploadInput(
             commonHeader=header, fileChunk=file_chunk, actionIdentifiers=action_identifiers
         )
-        output: BluePrintManagementOutput = grpc_stub.uploadBlueprint(request)
+        output: BlueprintManagementOutput = grpc_stub.uploadBlueprint(request)
     # fmt: on
     assert output.status.code == 200
     assert output.status.message == "success"
@@ -168,10 +168,10 @@ def test_servicer_download_handler_success(grpc_stub):
     action_identifiers.actionName = "SampleScript"
 
     with patch.object(os.path, "exists", return_value=True):
-        request: BluePrintDownloadInput = BluePrintDownloadInput(
+        request: BlueprintDownloadInput = BlueprintDownloadInput(
             commonHeader=header, actionIdentifiers=action_identifiers
         )
-        output: BluePrintManagementOutput = grpc_stub.downloadBlueprint(request)
+        output: BlueprintManagementOutput = grpc_stub.downloadBlueprint(request)
     assert output.status.code == 200
     assert output.status.message == "success"
     assert output.fileChunk.chunk == ZIP_FILE_BINARY
@@ -190,7 +190,7 @@ def test_servicer_remove_handler_success(grpc_stub):
     action_identifiers.actionName = "SampleScript"
 
     with patch.object(shutil, "rmtree", return_value=None) as mock_rmtree:
-        request: BluePrintRemoveInput = BluePrintRemoveInput(commonHeader=header, actionIdentifiers=action_identifiers)
-        output: BluePrintManagementOutput = grpc_stub.removeBlueprint(request)
+        request: BlueprintRemoveInput = BlueprintRemoveInput(commonHeader=header, actionIdentifiers=action_identifiers)
+        output: BlueprintManagementOutput = grpc_stub.removeBlueprint(request)
     assert output.status.code == 200
     assert output.status.message == "success"

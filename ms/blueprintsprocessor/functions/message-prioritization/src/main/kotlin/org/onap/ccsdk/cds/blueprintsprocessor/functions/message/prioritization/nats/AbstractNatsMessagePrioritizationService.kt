@@ -22,7 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.d
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.ids
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.AbstractMessagePrioritizationService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils.MessageProcessorUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.nats.service.BluePrintNatsService
+import org.onap.ccsdk.cds.blueprintsprocessor.nats.service.BlueprintNatsService
 import org.onap.ccsdk.cds.blueprintsprocessor.nats.utils.NatsClusterUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.asByteArray
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
@@ -34,7 +34,7 @@ abstract class AbstractNatsMessagePrioritizationService(
 
     private val log = logger(AbstractNatsMessagePrioritizationService::class)
 
-    lateinit var bluePrintNatsService: BluePrintNatsService
+    lateinit var bluePrintNatsService: BlueprintNatsService
 
     override suspend fun output(messages: List<MessagePrioritization>) {
         log.info("$$$$$ received in output processor id(${messages.ids()})")

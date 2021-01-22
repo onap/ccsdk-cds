@@ -35,8 +35,8 @@ import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.GRPCLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcLibPropertyService
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.MockBluePrintProcessingServer
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BlueprintGrpcLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.MockBlueprintProcessingServer
 import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
@@ -67,11 +67,11 @@ class StreamingRemoteExecutionServiceTest {
     @ExperimentalCoroutinesApi
     @FlowPreview
     fun testStreamingChannel() {
-        grpcCleanup.register(serverBuilder.addService(MockBluePrintProcessingServer()).build().start())
+        grpcCleanup.register(serverBuilder.addService(MockBlueprintProcessingServer()).build().start())
         val channel = grpcCleanup.register(channelBuilder.maxInboundMessageSize(1024).build())
 
         runBlocking {
-            val bluePrintGrpcLibPropertyService = BluePrintGrpcLibPropertyService(mockk())
+            val bluePrintGrpcLibPropertyService = BlueprintGrpcLibPropertyService(mockk())
 
             val streamingRemoteExecutionService = StreamingRemoteExecutionServiceImpl(bluePrintGrpcLibPropertyService)
 

@@ -46,7 +46,7 @@ import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.mockito.Answers
 import org.mockito.verification.VerificationMode
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService.WebClientResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_MOCKITO
@@ -73,7 +73,7 @@ import java.util.concurrent.ConcurrentHashMap
 @Component
 class UatExecutor(
     private val environment: ConfigurableEnvironment,
-    private val restClientFactory: BluePrintRestLibPropertyService,
+    private val restClientFactory: BlueprintRestLibPropertyService,
     private val mapper: ObjectMapper
 ) {
 
@@ -297,7 +297,7 @@ class UatExecutor(
         return "Basic " + Base64Utils.encodeToString("$username:$plainPassword".toByteArray())
     }
 
-    private class MockPreInterceptor : BluePrintRestLibPropertyService.PreInterceptor {
+    private class MockPreInterceptor : BlueprintRestLibPropertyService.PreInterceptor {
 
         private val mocks = ConcurrentHashMap<String, BlueprintWebClientService>()
 
@@ -313,7 +313,7 @@ class UatExecutor(
         }
     }
 
-    private class SpyPostInterceptor(private val mapper: ObjectMapper) : BluePrintRestLibPropertyService.PostInterceptor {
+    private class SpyPostInterceptor(private val mapper: ObjectMapper) : BlueprintRestLibPropertyService.PostInterceptor {
 
         private val spies = ConcurrentHashMap<String, SpyService>()
 

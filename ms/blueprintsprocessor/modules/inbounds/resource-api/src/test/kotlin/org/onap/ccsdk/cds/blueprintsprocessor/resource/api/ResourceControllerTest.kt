@@ -22,7 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -242,7 +242,7 @@ class ResourceControllerTest {
         resourceAssignment.dictionaryName = "dd$prefix"
         resourceAssignment.dictionarySource = "source$prefix"
         resourceAssignment.version = 2
-        resourceAssignment.status = BluePrintConstants.STATUS_SUCCESS
+        resourceAssignment.status = BlueprintConstants.STATUS_SUCCESS
         resourceAssignment.property = property
         return resourceAssignment
     }

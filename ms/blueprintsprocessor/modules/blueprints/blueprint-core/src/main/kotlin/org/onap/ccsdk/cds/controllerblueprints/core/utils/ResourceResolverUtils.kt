@@ -17,7 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -56,7 +56,7 @@ object ResourceResolverUtils {
             // FIXME("Convert into reactive")
             return JacksonUtils.getContent(resolvedFileName)
         } catch (e: Exception) {
-            throw BluePrintException(e, "failed to file (%s), basePath (%s) ", filename, basePath)
+            throw BlueprintException(e, "failed to file (%s), basePath (%s) ", filename, basePath)
         }
     }
 }

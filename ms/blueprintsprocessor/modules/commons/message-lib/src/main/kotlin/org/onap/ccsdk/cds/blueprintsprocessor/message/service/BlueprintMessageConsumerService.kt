@@ -23,7 +23,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.streams.Topology
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 
 /** Consumer Function Interfaces */
 interface ConsumerFunction
@@ -47,7 +47,7 @@ interface BlueprintMessageConsumerService {
 
     /** Consume with [additionalConfig], so that we can execute dynamic function [consumerFunction] */
     suspend fun consume(additionalConfig: Map<String, Any>?, consumerFunction: ConsumerFunction) {
-        throw BluePrintProcessorException("Not Implemented")
+        throw BlueprintProcessorException("Not Implemented")
     }
 
     /** Consume the [topics] with [additionalConfig], so that we can execute dynamic function [consumerFunction] */
@@ -56,7 +56,7 @@ interface BlueprintMessageConsumerService {
         additionalConfig: Map<String, Any>?,
         consumerFunction: ConsumerFunction
     ) {
-        throw BluePrintProcessorException("Not Implemented")
+        throw BlueprintProcessorException("Not Implemented")
     }
 
     /** close the channel, consumer and other resources */

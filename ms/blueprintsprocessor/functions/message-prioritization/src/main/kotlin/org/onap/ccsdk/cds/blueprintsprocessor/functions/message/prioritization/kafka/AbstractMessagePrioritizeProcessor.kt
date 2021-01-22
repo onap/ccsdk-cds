@@ -17,10 +17,10 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka
 
 import org.apache.kafka.streams.processor.ProcessorContext
-import org.onap.ccsdk.cds.blueprintsprocessor.message.kafka.AbstractBluePrintMessageProcessor
+import org.onap.ccsdk.cds.blueprintsprocessor.message.kafka.AbstractBlueprintMessageProcessor
 
 /** CDS Message Prioritization Kafka Stream Processor abstract class to implement */
-abstract class AbstractMessagePrioritizeProcessor<K, V> : AbstractBluePrintMessageProcessor<K, V>() {
+abstract class AbstractMessagePrioritizeProcessor<K, V> : AbstractBlueprintMessageProcessor<K, V>() {
 
     override fun init(processorContext: ProcessorContext) {
         this.processorContext = processorContext

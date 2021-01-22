@@ -21,7 +21,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonPathParse
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -79,7 +79,7 @@ abstract class AbstractServiceFunction : BlueprintFunctionNode<ExecutionServiceI
             // Set the Default Step Status
             status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
         } catch (e: Exception) {
-            status.message = BluePrintConstants.STATUS_FAILURE
+            status.message = BlueprintConstants.STATUS_FAILURE
             status.eventType = EventType.EVENT_COMPONENT_FAILURE.name
         }
         executionServiceOutput.status = status

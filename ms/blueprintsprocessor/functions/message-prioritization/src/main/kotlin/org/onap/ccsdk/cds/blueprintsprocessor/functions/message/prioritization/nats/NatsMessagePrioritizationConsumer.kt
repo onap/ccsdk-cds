@@ -22,29 +22,29 @@ import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.MessagePrioritizationService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.nats.asJsonType
-import org.onap.ccsdk.cds.blueprintsprocessor.nats.service.BluePrintNatsLibPropertyService
-import org.onap.ccsdk.cds.blueprintsprocessor.nats.service.BluePrintNatsService
+import org.onap.ccsdk.cds.blueprintsprocessor.nats.service.BlueprintNatsLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.nats.service.BlueprintNatsService
 import org.onap.ccsdk.cds.blueprintsprocessor.nats.utils.NatsClusterUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.nats.utils.SubscriptionOptionsUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asType
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ClusterUtils
 
 open class NatsMessagePrioritizationConsumer(
-    private val bluePrintNatsLibPropertyService: BluePrintNatsLibPropertyService,
+    private val bluePrintNatsLibPropertyService: BlueprintNatsLibPropertyService,
     private val natsMessagePrioritizationService: MessagePrioritizationService
 ) {
 
     private val log = logger(NatsMessagePrioritizationConsumer::class)
 
-    lateinit var bluePrintNatsService: BluePrintNatsService
+    lateinit var bluePrintNatsService: BlueprintNatsService
     private lateinit var subscription: Subscription
 
     suspend fun startConsuming() {
         val prioritizationConfiguration = natsMessagePrioritizationService.getConfiguration()
         val natsConfiguration = prioritizationConfiguration.natsConfiguration
-            ?: throw BluePrintProcessorException("couldn't get NATS consumer configuration")
+            ?: throw BlueprintProcessorException("couldn't get NATS consumer configuration")
 
         check((natsMessagePrioritizationService is AbstractNatsMessagePrioritizationService)) {
             "messagePrioritizationService is not of type AbstractNatsMessagePrioritizationService."
@@ -73,7 +73,7 @@ open class NatsMessagePrioritizationConsumer(
         log.info("Nats prioritization consumer listener shutdown complete")
     }
 
-    private fun consumerService(selector: String): BluePrintNatsService {
+    private fun consumerService(selector: String): BlueprintNatsService {
         return bluePrintNatsLibPropertyService.bluePrintNatsService(selector)
     }
 

@@ -28,11 +28,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.context.ApplicationContext
 import kotlin.test.assertNotNull
@@ -59,25 +59,25 @@ class ComponentRestconfExecutorTest {
                 payload = JacksonUtils.jsonNode("{}") as ObjectNode
             }
 
-            val blueprintContext = mockk<BluePrintContext>()
+            val blueprintContext = mockk<BlueprintContext>()
             every {
                 blueprintContext.nodeTemplateOperationImplementation(
                     any(), any(), any()
                 )
             } returns Implementation()
 
-            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("1234")
+            val bluePrintRuntime = mockk<DefaultBlueprintRuntimeService>("1234")
             every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
 
             componentScriptExecutor.bluePrintRuntimeService = bluePrintRuntime
             componentScriptExecutor.stepName = "sample-step"
 
             val operationInputs = hashMapOf<String, JsonNode>()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "activate-restconf".asJsonPrimitive()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "activate-restconf".asJsonPrimitive()
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_TYPE] =
-                BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
+                BlueprintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE] =
                 "internal.scripts.TestRestconfConfigure".asJsonPrimitive()
 

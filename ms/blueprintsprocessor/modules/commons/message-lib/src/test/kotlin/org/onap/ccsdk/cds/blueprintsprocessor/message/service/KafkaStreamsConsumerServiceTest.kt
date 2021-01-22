@@ -26,9 +26,9 @@ import org.apache.kafka.streams.processor.ProcessorSupplier
 import org.apache.kafka.streams.state.Stores
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.message.BlueprintMessageLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaStreamsBasicAuthConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,8 +42,8 @@ import kotlin.test.assertNotNull
 @DirtiesContext
 @ContextConfiguration(
     classes = [
-        BluePrintMessageLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+        BlueprintMessageLibConfiguration::class,
+        BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class
     ]
 )
 @TestPropertySource(
@@ -72,7 +72,7 @@ import kotlin.test.assertNotNull
 class KafkaStreamsConsumerServiceTest {
 
     @Autowired
-    lateinit var bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
+    lateinit var bluePrintMessageLibPropertyService: BlueprintMessageLibPropertyService
 
     @Test
     fun testProperties() {

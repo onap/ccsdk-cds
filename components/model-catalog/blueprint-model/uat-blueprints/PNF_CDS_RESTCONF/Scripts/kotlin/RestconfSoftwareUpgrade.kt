@@ -28,10 +28,10 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.restco
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.restClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintRetryException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintRetryException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
@@ -77,12 +77,12 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
         ) {
             return SoftwareUpgradeModel(
                 getDynamicProperties("resolution-key").asText(),
-                BluePrintDependencyService.restClientService(RESTCONF_SERVER_IDENTIFIER),
+                BlueprintDependencyService.restClientService(RESTCONF_SERVER_IDENTIFIER),
                 properties.get("pnf-id").textValue(), properties.get("target-software-version").textValue(),
                 Action.getEnumFromActionName(executionRequest.actionIdentifiers.actionName)
             )
         } else {
-            throw BluePrintException("Invalid parameters sent to CDS. Request parameters pnf-id or target-software-version missing")
+            throw BlueprintException("Invalid parameters sent to CDS. Request parameters pnf-id or target-software-version missing")
         }
     }
 
@@ -140,7 +140,7 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
             // Poll PNF for Activate action's progress
             checkExecution(model)
         } else {
-            throw BluePrintRetryException("Software Download not completed for device(${model.deviceId}) to activate sw version: ${model.targetSwVersion}")
+            throw BlueprintRetryException("Software Download not completed for device(${model.deviceId}) to activate sw version: ${model.targetSwVersion}")
         }
     }
 
@@ -170,7 +170,7 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
                 log.info("${model.action.name} is complete")
                 result.body
             } else {
-                throw BluePrintRetryException("Waiting for device(${model.deviceId}) to activate sw version ${model.targetSwVersion}")
+                throw BlueprintRetryException("Waiting for device(${model.deviceId}) to activate sw version ${model.targetSwVersion}")
             }
         }
         model.client.retry<String>(10, 0, 1000, checkExecutionBlock)
@@ -210,7 +210,7 @@ enum class Action(val actionName: String, val completionStatus: String) {
             for (value in values()) {
                 if (value.actionName == name) return value
             }
-            throw BluePrintException("Invalid Action sent to CDS")
+            throw BlueprintException("Invalid Action sent to CDS")
         }
     }
 }

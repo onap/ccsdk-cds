@@ -22,7 +22,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod
 import java.nio.file.Path
@@ -60,7 +60,7 @@ class K8sPluginApi(
             return result.status in 200..299
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb definition")
-            throw BluePrintProcessorException("${e.message}")
+            throw BlueprintProcessorException("${e.message}")
         }
     }
 
@@ -75,7 +75,7 @@ class K8sPluginApi(
             return result.status in 200..299
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb profile")
-            throw BluePrintProcessorException("${e.message}")
+            throw BlueprintProcessorException("${e.message}")
         }
     }
 
@@ -93,7 +93,7 @@ class K8sPluginApi(
             }
         } catch (e: Exception) {
             log.error("Caught exception trying to create k8s rb profile ${profile.profileName}")
-            throw BluePrintProcessorException("${e.message}")
+            throw BlueprintProcessorException("${e.message}")
         }
     }
 
@@ -108,7 +108,7 @@ class K8sPluginApi(
             }
         } catch (e: Exception) {
             log.error("Caught exception trying to upload k8s rb profile ${profile.profileName}")
-            throw BluePrintProcessorException("${e.message}")
+            throw BlueprintProcessorException("${e.message}")
         }
     }
 }

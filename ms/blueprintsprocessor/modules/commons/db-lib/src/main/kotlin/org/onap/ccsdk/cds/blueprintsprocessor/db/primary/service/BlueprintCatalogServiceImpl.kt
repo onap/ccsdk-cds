@@ -18,16 +18,16 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BlueprintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.deCompress
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintArchiveUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Path
@@ -35,9 +35,9 @@ import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
 abstract class BlueprintCatalogServiceImpl(
-    private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
-    private val blueprintValidator: BluePrintValidatorService
-) : BluePrintCatalogService {
+    private val bluePrintLoadConfiguration: BlueprintLoadConfiguration,
+    private val blueprintValidator: BlueprintValidatorService
+) : BlueprintCatalogService {
 
     private val log = LoggerFactory.getLogger(BlueprintCatalogServiceImpl::class.java)!!
 
@@ -51,8 +51,8 @@ abstract class BlueprintCatalogServiceImpl(
             workingDir = blueprintFile.absolutePath
             archiveFile = normalizedFile(bluePrintLoadConfiguration.blueprintArchivePath, processingId, "cba.zip")
 
-            if (!BluePrintArchiveUtils.compress(blueprintFile, archiveFile)) {
-                throw BluePrintException("Fail to compress blueprint")
+            if (!BlueprintArchiveUtils.compress(blueprintFile, archiveFile)) {
+                throw BlueprintException("Fail to compress blueprint")
             }
         } else {
             // Compressed File
@@ -63,16 +63,16 @@ abstract class BlueprintCatalogServiceImpl(
             blueprintFile.deCompress(workingDir)
         }
 
-        var valid = BluePrintConstants.FLAG_N
+        var valid = BlueprintConstants.FLAG_N
         if (validate) {
-            blueprintValidator.validateBluePrints(workingDir!!)
-            valid = BluePrintConstants.FLAG_Y
+            blueprintValidator.validateBlueprints(workingDir!!)
+            valid = BlueprintConstants.FLAG_Y
         }
 
-        val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(processingId, workingDir!!)
+        val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(processingId, workingDir!!)
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
-        metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = processingId
-        metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID] = valid
+        metadata[BlueprintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = processingId
+        metadata[BlueprintConstants.PROPERTY_BLUEPRINT_VALID] = valid
 
         save(metadata, archiveFile)
 
@@ -83,7 +83,7 @@ abstract class BlueprintCatalogServiceImpl(
         name, version,
         extract
     )
-        ?: throw BluePrintException("Could not find blueprint $name:$version from database")
+        ?: throw BlueprintException("Could not find blueprint $name:$version from database")
 
     override suspend fun deleteFromDatabase(name: String, version: String) = delete(name, version)
 

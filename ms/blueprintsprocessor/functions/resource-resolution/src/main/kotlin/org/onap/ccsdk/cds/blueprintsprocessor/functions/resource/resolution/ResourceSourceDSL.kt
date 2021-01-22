@@ -18,8 +18,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
@@ -30,30 +30,30 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertiesAssignmentBuil
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
 import kotlin.reflect.KClass
 
-fun BluePrintTypes.nodeTypeSourceInput(): NodeType {
+fun BlueprintTypes.nodeTypeSourceInput(): NodeType {
     return nodeType(
-        id = "source-input", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
+        id = "source-input", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
         description = "This is Input Resource Source Node Type"
     ) {}
 }
 
-fun BluePrintTypes.nodeTypeSourceDefault(): NodeType {
+fun BlueprintTypes.nodeTypeSourceDefault(): NodeType {
     return nodeType(
-        id = "source-default", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
+        id = "source-default", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
         description = "This is Default Resource Source Node Type"
     ) {}
 }
 
-fun BluePrintTypes.nodeTypeSourceDb(): NodeType {
+fun BlueprintTypes.nodeTypeSourceDb(): NodeType {
     return nodeType(
-        id = "source-db", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
+        id = "source-db", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
         description = "This is Database Resource Source Node Type"
     ) {
         property(
-            "type", BluePrintConstants.DATA_TYPE_STRING,
+            "type", BlueprintConstants.DATA_TYPE_STRING,
             true, ""
         ) {
             defaultValue("SQL".asJsonPrimitive())
@@ -62,42 +62,42 @@ fun BluePrintTypes.nodeTypeSourceDb(): NodeType {
             }
         }
         property(
-            "endpoint-selector", BluePrintConstants.DATA_TYPE_STRING,
+            "endpoint-selector", BlueprintConstants.DATA_TYPE_STRING,
             false, ""
         )
         property(
-            "query", BluePrintConstants.DATA_TYPE_STRING,
+            "query", BlueprintConstants.DATA_TYPE_STRING,
             true, ""
         )
         property(
-            "input-key-mapping", BluePrintConstants.DATA_TYPE_MAP,
+            "input-key-mapping", BlueprintConstants.DATA_TYPE_MAP,
             true, ""
         ) {
-            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+            entrySchema(BlueprintConstants.DATA_TYPE_STRING)
         }
         property(
-            "output-key-mapping", BluePrintConstants.DATA_TYPE_MAP,
+            "output-key-mapping", BlueprintConstants.DATA_TYPE_MAP,
             false, ""
         ) {
-            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+            entrySchema(BlueprintConstants.DATA_TYPE_STRING)
         }
         property(
-            "key-dependencies", BluePrintConstants.DATA_TYPE_LIST,
+            "key-dependencies", BlueprintConstants.DATA_TYPE_LIST,
             true, "Resource Resolution dependency dictionary names."
         ) {
-            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+            entrySchema(BlueprintConstants.DATA_TYPE_STRING)
         }
     }
 }
 
-fun BluePrintTypes.nodeTypeSourceRest(): NodeType {
+fun BlueprintTypes.nodeTypeSourceRest(): NodeType {
     return nodeType(
-        id = "source-rest", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
+        id = "source-rest", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
         description = "This is Rest Resource Source Node Type"
     ) {
         property(
-            "type", BluePrintConstants.DATA_TYPE_STRING,
+            "type", BlueprintConstants.DATA_TYPE_STRING,
             true, ""
         ) {
             defaultValue("JSON".asJsonPrimitive())
@@ -106,7 +106,7 @@ fun BluePrintTypes.nodeTypeSourceRest(): NodeType {
             }
         }
         property(
-            "verb", BluePrintConstants.DATA_TYPE_STRING,
+            "verb", BlueprintConstants.DATA_TYPE_STRING,
             true, ""
         ) {
             defaultValue("GET".asJsonPrimitive())
@@ -120,25 +120,25 @@ fun BluePrintTypes.nodeTypeSourceRest(): NodeType {
             }
         }
         property(
-            "payload", BluePrintConstants.DATA_TYPE_STRING,
+            "payload", BlueprintConstants.DATA_TYPE_STRING,
             false, ""
         ) {
             defaultValue("".asJsonPrimitive())
         }
         property(
-            "endpoint-selector", BluePrintConstants.DATA_TYPE_STRING,
+            "endpoint-selector", BlueprintConstants.DATA_TYPE_STRING,
             false, ""
         )
         property(
-            "url-path", BluePrintConstants.DATA_TYPE_STRING,
+            "url-path", BlueprintConstants.DATA_TYPE_STRING,
             true, ""
         )
         property(
-            "path", BluePrintConstants.DATA_TYPE_STRING,
+            "path", BlueprintConstants.DATA_TYPE_STRING,
             true, ""
         )
         property(
-            "expression-type", BluePrintConstants.DATA_TYPE_STRING,
+            "expression-type", BlueprintConstants.DATA_TYPE_STRING,
             false, ""
         ) {
             defaultValue("JSON_PATH".asJsonPrimitive())
@@ -147,62 +147,62 @@ fun BluePrintTypes.nodeTypeSourceRest(): NodeType {
             }
         }
         property(
-            "input-key-mapping", BluePrintConstants.DATA_TYPE_MAP,
+            "input-key-mapping", BlueprintConstants.DATA_TYPE_MAP,
             true, ""
         ) {
-            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+            entrySchema(BlueprintConstants.DATA_TYPE_STRING)
         }
         property(
-            "output-key-mapping", BluePrintConstants.DATA_TYPE_MAP,
+            "output-key-mapping", BlueprintConstants.DATA_TYPE_MAP,
             false, ""
         ) {
-            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+            entrySchema(BlueprintConstants.DATA_TYPE_STRING)
         }
         property(
-            "key-dependencies", BluePrintConstants.DATA_TYPE_LIST,
+            "key-dependencies", BlueprintConstants.DATA_TYPE_LIST,
             true, "Resource Resolution dependency dictionary names."
         ) {
-            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+            entrySchema(BlueprintConstants.DATA_TYPE_STRING)
         }
     }
 }
 
-fun BluePrintTypes.nodeTypeSourceCapability(): NodeType {
+fun BlueprintTypes.nodeTypeSourceCapability(): NodeType {
     return nodeType(
-        id = "source-capability", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
+        id = "source-capability", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_NODE_RESOURCE_SOURCE,
         description = "This is Component Resource Source Node Type"
     ) {
         property(
-            ComponentScriptExecutor.INPUT_SCRIPT_TYPE, BluePrintConstants.DATA_TYPE_STRING,
+            ComponentScriptExecutor.INPUT_SCRIPT_TYPE, BlueprintConstants.DATA_TYPE_STRING,
             true, "Request Id, Unique Id for the request."
         ) {
-            defaultValue(BluePrintConstants.SCRIPT_KOTLIN)
+            defaultValue(BlueprintConstants.SCRIPT_KOTLIN)
             constrain {
                 validValues(
                     arrayListOf(
-                        BluePrintConstants.SCRIPT_KOTLIN.asJsonPrimitive(),
-                        BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive(),
-                        BluePrintConstants.SCRIPT_JYTHON.asJsonPrimitive()
+                        BlueprintConstants.SCRIPT_KOTLIN.asJsonPrimitive(),
+                        BlueprintConstants.SCRIPT_INTERNAL.asJsonPrimitive(),
+                        BlueprintConstants.SCRIPT_JYTHON.asJsonPrimitive()
                     )
                 )
             }
         }
         property(
-            ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, BluePrintConstants.DATA_TYPE_STRING,
+            ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE, BlueprintConstants.DATA_TYPE_STRING,
             true, "Kotlin Script class name or jython script name."
         )
         property(
-            "key-dependencies", BluePrintConstants.DATA_TYPE_LIST,
+            "key-dependencies", BlueprintConstants.DATA_TYPE_LIST,
             true, "Resource Resolution dependency dictionary names."
         ) {
-            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+            entrySchema(BlueprintConstants.DATA_TYPE_STRING)
         }
     }
 }
 
 /** Node Template Source Input **/
-fun BluePrintTypes.nodeTemplateSourceInput(
+fun BlueprintTypes.nodeTemplateSourceInput(
     id: String,
     description: String,
     block: SourceInputNodeTemplateBuilder.() -> Unit
@@ -217,7 +217,7 @@ class SourceInputNodeTemplateBuilder(id: String, description: String) :
     )
 
 /** Node Template Source Default **/
-fun BluePrintTypes.nodeTemplateSourceDefault(
+fun BlueprintTypes.nodeTemplateSourceDefault(
     id: String,
     description: String,
     block: SourceDefaultNodeTemplateBuilder.() -> Unit
@@ -232,7 +232,7 @@ class SourceDefaultNodeTemplateBuilder(id: String, description: String) :
     )
 
 /** Node Template Source DB **/
-fun BluePrintTypes.nodeTemplateSourceDb(
+fun BlueprintTypes.nodeTemplateSourceDb(
     id: String,
     description: String,
     block: SourceDbNodeTemplateBuilder.() -> Unit
@@ -299,7 +299,7 @@ class KeyMappingBuilder() {
 }
 
 /** Node Template Source Rest **/
-fun BluePrintTypes.nodeTemplateSourceRest(
+fun BlueprintTypes.nodeTemplateSourceRest(
     id: String,
     description: String,
     block: SourceRestNodeTemplateBuilder.() -> Unit
@@ -378,7 +378,7 @@ class SourceRestNodeTemplateBuilder(id: String, description: String) :
 }
 
 /** Node Template Source Rest **/
-fun BluePrintTypes.nodeTemplateSourceCapability(
+fun BlueprintTypes.nodeTemplateSourceCapability(
     id: String,
     description: String,
     block: SourceCapabilityNodeTemplateBuilder.() -> Unit

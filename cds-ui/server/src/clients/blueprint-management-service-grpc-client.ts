@@ -35,14 +35,14 @@ const packageDefinition: protoLoader.PackageDefinition = protoLoader.loadSync(
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 // The protoDescriptor object has the full package hierarchy
 
-const stub = new protoDescriptor.org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementService(
+const stub = new protoDescriptor.org.onap.ccsdk.cds.controllerblueprints.management.api.BlueprintManagementService(
     "" + processorApiConfig.grpc.host + ":" + processorApiConfig.grpc.port + "",
     grpc.credentials.createInsecure());
 
 const metadata = new grpc.Metadata();
 metadata.add('Authorization', processorApiConfig.grpc.authToken);
 
-class BluePrintManagementServiceGrpcClient {
+class BlueprintManagementServiceGrpcClient {
 
     async uploadBlueprint(filePath: string, actionName: string): Promise<any> {
 
@@ -115,5 +115,5 @@ class BluePrintManagementServiceGrpcClient {
     }
 }
 
-export const bluePrintManagementServiceGrpcClient = new BluePrintManagementServiceGrpcClient();
+export const bluePrintManagementServiceGrpcClient = new BlueprintManagementServiceGrpcClient();
 

@@ -20,11 +20,11 @@ limitations under the License.
 */
 
 
-import { BluePrintDetailModel } from './BluePrint.detail.model';
+import { BlueprintDetailModel } from './Blueprint.detail.model';
 import { Mapping, Scripts, Template } from '../package-creation/mapping-models/CBAPacakge.model';
 
 export class PackageDashboardState {
-    configuration: BluePrintDetailModel;
+    configuration: BlueprintDetailModel;
     public scripts: Scripts;
     public templates: Template;
     public mapping: Mapping;

@@ -3,7 +3,7 @@ from org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.proces
 from org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils import \
     ResourceAssignmentUtils
 from org.onap.ccsdk.cds.controllerblueprints.core import \
-    BluePrintProcessorException
+    BlueprintProcessorException
 
 
 class AbstractRAProcessor(ResourceAssignmentProcessor):
@@ -24,6 +24,6 @@ class AbstractRAProcessor(ResourceAssignmentProcessor):
             else:
                 ResourceAssignmentUtils.Companion.setFailedResourceDataValue(
                     resource_assignment, "Fail to resolve value")
-        except BluePrintProcessorException, err:
-            raise BluePrintProcessorException(
+        except BlueprintProcessorException, err:
+            raise BlueprintProcessorException(
                 "Error on resource assignment. Message = " + err.message)

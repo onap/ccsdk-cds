@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -31,19 +31,19 @@ fun controllerDate(): Date {
 
 fun currentTimestamp(): String {
     val localDateTime = LocalDateTime.now(ZoneId.systemDefault())
-    val formatter = DateTimeFormatter.ofPattern(BluePrintConstants.DATE_TIME_PATTERN)
+    val formatter = DateTimeFormatter.ofPattern(BlueprintConstants.DATE_TIME_PATTERN)
     return formatter.format(localDateTime)
 }
 
 /** Parse string date in CDS string format */
 fun String.toControllerDate(): Date {
-    val formatter = SimpleDateFormat(BluePrintConstants.DATE_TIME_PATTERN)
+    val formatter = SimpleDateFormat(BlueprintConstants.DATE_TIME_PATTERN)
     return formatter.parse(this)
 }
 
 /** Return date to CDS string format */
 fun Date.currentTimestamp(): String {
-    val formatter = SimpleDateFormat(BluePrintConstants.DATE_TIME_PATTERN)
+    val formatter = SimpleDateFormat(BlueprintConstants.DATE_TIME_PATTERN)
     return formatter.format(this)
 }
 

@@ -16,8 +16,8 @@
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.*
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.CapabilityResourceSource
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintScriptsService
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintScriptsService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 

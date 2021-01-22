@@ -23,22 +23,22 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BluePrintSshLibConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BlueprintSshLibConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BlueprintScriptsServiceImpl
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.annotation.DirtiesContext
@@ -52,8 +52,8 @@ import kotlin.test.assertNotNull
     classes = [
         CliExecutorConfiguration::class,
         ExecutionServiceConfiguration::class,
-        BluePrintSshLibConfiguration::class, BluePrintScriptsServiceImpl::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, BluePrintDependencyService::class
+        BlueprintSshLibConfiguration::class, BlueprintScriptsServiceImpl::class,
+        BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class, BlueprintDependencyService::class
     ]
 )
 @DirtiesContext
@@ -76,15 +76,15 @@ class ComponentCliExecutorTest {
                 }
                 payload = JacksonUtils.jsonNode("{}") as ObjectNode
             }
-            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("1234")
+            val bluePrintRuntime = mockk<DefaultBlueprintRuntimeService>("1234")
             componentScriptExecutor.bluePrintRuntimeService = bluePrintRuntime
             componentScriptExecutor.stepName = "sample-step"
 
             val operationInputs = hashMapOf<String, JsonNode>()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "activate-cli".asJsonPrimitive()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
-            operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_TYPE] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "activate-cli".asJsonPrimitive()
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
+            operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_TYPE] = BlueprintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs[ComponentScriptExecutor.INPUT_SCRIPT_CLASS_REFERENCE] =
                 "internal.scripts.TestCliScriptFunction".asJsonPrimitive()
 
@@ -94,7 +94,7 @@ class ComponentCliExecutorTest {
             }
             executionServiceInput.stepData = stepInputData
 
-            val blueprintContext = mockk<BluePrintContext>()
+            val blueprintContext = mockk<BlueprintContext>()
             every {
                 blueprintContext.nodeTemplateOperationImplementation(
                     any(), any(), any()

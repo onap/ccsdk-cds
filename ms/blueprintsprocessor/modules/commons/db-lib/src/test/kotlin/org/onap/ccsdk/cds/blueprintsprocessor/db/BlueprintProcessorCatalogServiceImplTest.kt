@@ -20,16 +20,16 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.mock.MockBlueprintProcessorCatalogServiceImpl
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service.BlueprintCatalogServiceImpl
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service.BlueprintProcessorCatalogServiceImpl
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.ComponentScan
@@ -46,7 +46,7 @@ import kotlin.test.assertTrue
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor"])
 @ContextConfiguration(
     classes = [
-        BlueprintProcessorCatalogServiceImpl::class, BluePrintCoreConfiguration::class,
+        BlueprintProcessorCatalogServiceImpl::class, BlueprintCoreConfiguration::class,
         MockBlueprintProcessorCatalogServiceImpl::class
     ]
 )
@@ -57,9 +57,9 @@ class BlueprintProcessorCatalogServiceImplTest {
     lateinit var blueprintsProcessorCatalogService: BlueprintCatalogServiceImpl
 
     @Autowired
-    lateinit var blueprintCoreConfiguration: BluePrintCoreConfiguration
+    lateinit var blueprintCoreConfiguration: BlueprintCoreConfiguration
 
-    private lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
+    private lateinit var bluePrintRuntimeService: BlueprintRuntimeService<*>
 
     private val blueprintId = "1234"
 
@@ -72,7 +72,7 @@ class BlueprintProcessorCatalogServiceImplTest {
         normalizedFile("./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
             .compress(normalizedFile("./target/blueprints/generated-cba.zip"))
 
-        bluePrintRuntimeService = BluePrintMetadataUtils.bluePrintRuntime(
+        bluePrintRuntimeService = BlueprintMetadataUtils.bluePrintRuntime(
             blueprintId,
             "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
         )
@@ -103,7 +103,7 @@ class BlueprintProcessorCatalogServiceImplTest {
             val file = normalizedFile("./target/blueprints/generated-cba.zip")
             assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
-            metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
+            metadata[BlueprintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
 
             blueprintsProcessorCatalogService.save(metadata, file)
         }
@@ -115,7 +115,7 @@ class BlueprintProcessorCatalogServiceImplTest {
             val file = normalizedFile("./target/blueprints/generated-cba.zip")
             assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
-            metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
+            metadata[BlueprintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
 
             blueprintsProcessorCatalogService.save(metadata, file)
             blueprintsProcessorCatalogService.get("baseconfiguration", "1.0.0", true)

@@ -5,8 +5,8 @@
 ### Insecure channel
 
 ```
-from proto.BluePrintCommon_pb2_grpc import ActionIdentifiers, CommonHeader
-from proto.BluePrintProcessing_pb2_grpc import ExecutionServiceInput
+from proto.BlueprintCommon_pb2_grpc import ActionIdentifiers, CommonHeader
+from proto.BlueprintProcessing_pb2_grpc import ExecutionServiceInput
 from resource_resolution.grpc.client import Client as ResourceResolutionClient
 
 
@@ -43,8 +43,8 @@ if __name__ == "__main__":
 ### Secure channel
 
 ```
-from proto.BluePrintCommon_pb2_grpc import ActionIdentifiers, CommonHeader
-from proto.BluePrintProcessing_pb2_grpc import ExecutionServiceInput
+from proto.BlueprintCommon_pb2_grpc import ActionIdentifiers, CommonHeader
+from proto.BlueprintProcessing_pb2_grpc import ExecutionServiceInput
 from resource_resolution.grpc.client import Client as ResourceResolutionClient
 
 
@@ -82,8 +82,8 @@ if __name__ == "__main__":
 ### Authorizarion header
 
 ```
-from proto.BluePrintCommon_pb2 import ActionIdentifiers, CommonHeader
-from proto.BluePrintProcessing_pb2 import ExecutionServiceInput
+from proto.BlueprintCommon_pb2 import ActionIdentifiers, CommonHeader
+from proto.BlueprintProcessing_pb2 import ExecutionServiceInput
 from resource_resolution.grpc.client import Client as ResourceResolutionClient
 
 

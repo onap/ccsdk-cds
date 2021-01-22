@@ -26,10 +26,10 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintError
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import kotlin.test.assertEquals
 import kotlin.test.fail
@@ -44,7 +44,7 @@ class ResourceResolutionComponentTest {
     private val resourceType = "ServiceInstance"
     private val occurrence = 1
     private val props = mutableMapOf<String, JsonNode>()
-    private val bluePrintRuntimeService = mockk<BluePrintRuntimeService<*>>()
+    private val bluePrintRuntimeService = mockk<BlueprintRuntimeService<*>>()
     private val artifactNames = listOf("template")
     private val nodeTemplateName = "nodeTemplateName"
 
@@ -79,7 +79,7 @@ class ResourceResolutionComponentTest {
         runBlocking {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 assertEquals(
                     "Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.",
                     e.message
@@ -98,7 +98,7 @@ class ResourceResolutionComponentTest {
         runBlocking {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 assertEquals(
                     "Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.",
                     e.message
@@ -118,7 +118,7 @@ class ResourceResolutionComponentTest {
         runBlocking {
             try {
                 resourceResolutionComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 assertEquals(
                     "Can't proceed with the resolution: can't persist resolution without a correlation key. " +
                         "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false.",
@@ -163,9 +163,9 @@ class ResourceResolutionComponentTest {
     @Test
     fun testRecover() {
         runBlocking {
-            val blueprintError = BluePrintError()
+            val blueprintError = BlueprintError()
             val exception = RuntimeException("message")
-            every { bluePrintRuntimeService.getBluePrintError() } returns blueprintError
+            every { bluePrintRuntimeService.getBlueprintError() } returns blueprintError
             resourceResolutionComponent.recoverNB(exception, executionRequest)
 
             assertEquals(1, blueprintError.errors.size)

@@ -31,7 +31,7 @@ class HttpNoAuthDmaapClientService(
     private val clientProps:
         HttpNoAuthDmaapClientProperties
 ) :
-    BluePrintDmaapClientService {
+    BlueprintDmaapClientService {
 
     /**
      * The constructed DMAAP client.

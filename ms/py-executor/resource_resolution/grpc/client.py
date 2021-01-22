@@ -23,8 +23,8 @@ from grpc import (
     secure_channel,
     ssl_channel_credentials,
 )
-from proto.BluePrintProcessing_pb2 import ExecutionServiceInput, ExecutionServiceOutput
-from proto.BluePrintProcessing_pb2_grpc import BluePrintProcessingServiceStub
+from proto.BlueprintProcessing_pb2 import ExecutionServiceInput, ExecutionServiceOutput
+from proto.BlueprintProcessing_pb2_grpc import BlueprintProcessingServiceStub
 
 from .authorization import AuthTokenInterceptor
 
@@ -69,7 +69,7 @@ class Client:
             self.logger.debug(f"Create insecure channel to connect to {server_address}")
         if use_header_auth:
             self.channel: Channel = intercept_channel(self.channel, AuthTokenInterceptor(header_auth_token))
-        self.stub: BluePrintProcessingServiceStub = BluePrintProcessingServiceStub(self.channel)
+        self.stub: BlueprintProcessingServiceStub = BlueprintProcessingServiceStub(self.channel)
 
     def close(self) -> None:
         """Close client session.

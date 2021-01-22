@@ -23,13 +23,13 @@ from manager.configuration import get_logger
 from manager.errors import ArtifactManagerError, InvalidRequestError
 from manager.utils import Repository, RepositoryStrategy
 from onaplogging.mdcContext import MDC
-from proto.BluePrintManagement_pb2 import (
-    BluePrintDownloadInput,
-    BluePrintManagementOutput,
-    BluePrintRemoveInput,
-    BluePrintUploadInput,
+from proto.BlueprintManagement_pb2 import (
+    BlueprintDownloadInput,
+    BlueprintManagementOutput,
+    BlueprintRemoveInput,
+    BlueprintUploadInput,
 )
-from proto.BluePrintManagement_pb2_grpc import BluePrintManagementServiceServicer
+from proto.BlueprintManagement_pb2_grpc import BlueprintManagementServiceServicer
 
 MDC_DATETIME_FORMAT = r"%Y-%m-%dT%H:%M:%S.%f%z"
 COMMON_HEADER_DATETIME_FORMAT = r"%Y-%m-%dT%H:%M:%S.%fZ"
@@ -47,13 +47,13 @@ def fill_common_header(func):
     @wraps(func)
     def _decorator(
         servicer: "ArtifactManagerServicer",
-        request: Union[BluePrintDownloadInput, BluePrintRemoveInput, BluePrintUploadInput],
+        request: Union[BlueprintDownloadInput, BlueprintRemoveInput, BlueprintUploadInput],
         context: ServicerContext,
-    ) -> BluePrintManagementOutput:
+    ) -> BlueprintManagementOutput:
 
         if not all([request.actionIdentifiers.blueprintName, request.actionIdentifiers.blueprintVersion]):
-            raise InvalidRequestError("Request has to have set both BluePrint name and version")
-        output: BluePrintManagementOutput = func(servicer, request, context)
+            raise InvalidRequestError("Request has to have set both Blueprint name and version")
+        output: BlueprintManagementOutput = func(servicer, request, context)
         # Set same values for every handler
         output.commonHeader.CopyFrom(request.commonHeader)
         output.commonHeader.timestamp = datetime.utcnow().strftime(COMMON_HEADER_DATETIME_FORMAT)
@@ -72,11 +72,11 @@ def translate_exception_to_response(func):
     @wraps(func)
     def _handler(
         servicer: "ArtifactManagerServicer",
-        request: Union[BluePrintDownloadInput, BluePrintRemoveInput, BluePrintUploadInput],
+        request: Union[BlueprintDownloadInput, BlueprintRemoveInput, BlueprintUploadInput],
         context: ServicerContext,
-    ) -> BluePrintManagementOutput:
+    ) -> BlueprintManagementOutput:
         try:
-            output: BluePrintManagementOutput = func(servicer, request, context)
+            output: BlueprintManagementOutput = func(servicer, request, context)
             output.status.code = 200
             output.status.message = "success"
         except ArtifactManagerError as error:
@@ -84,7 +84,7 @@ def translate_exception_to_response(func):
             # Every ArtifactManagerError based exception has status_code paramenter
             # which has to be set in output. Use also exception's message to
             # set errorMessage of the output.
-            output: BluePrintManagementOutput = BluePrintManagementOutput()
+            output: BlueprintManagementOutput = BlueprintManagementOutput()
             output.status.code = error.status_code
             output.status.message = "failure"
             output.status.errorMessage = str(error.message)
@@ -112,9 +112,9 @@ def prepare_logging_context(func):
     @wraps(func)
     def _decorator(
         servicer: "ArtifactManagerServicer",
-        request: Union[BluePrintDownloadInput, BluePrintRemoveInput, BluePrintUploadInput],
+        request: Union[BlueprintDownloadInput, BlueprintRemoveInput, BlueprintUploadInput],
         context: ServicerContext,
-    ) -> BluePrintManagementOutput:
+    ) -> BlueprintManagementOutput:
         MDC.put("RequestID", request.commonHeader.requestId)
         MDC.put("InvocationID", request.commonHeader.subRequestId)
         MDC.put("ServiceName", servicer.__class__.__name__)
@@ -129,14 +129,14 @@ def prepare_logging_context(func):
         MDC.put("TargetServiceName", func.__name__)
         MDC.put("Server", socket.getfqdn())
 
-        output: BluePrintManagementOutput = func(servicer, request, context)
+        output: BlueprintManagementOutput = func(servicer, request, context)
         MDC.clear()
         return output
 
     return _decorator
 
 
-class ArtifactManagerServicer(BluePrintManagementServiceServicer):
+class ArtifactManagerServicer(BlueprintManagementServiceServicer):
     """ArtifactManagerServer class.
 
     Implements methods defined in proto files to manage artifacts repository.
@@ -169,15 +169,15 @@ class ArtifactManagerServicer(BluePrintManagementServiceServicer):
     @prepare_logging_context
     @translate_exception_to_response
     @fill_common_header
-    def downloadBlueprint(self, request: BluePrintDownloadInput, context: ServicerContext) -> BluePrintManagementOutput:
+    def downloadBlueprint(self, request: BlueprintDownloadInput, context: ServicerContext) -> BlueprintManagementOutput:
         """Download blueprint file request method.
 
         Currently it only logs when is called and all base class method.
-        :param request: BluePrintDownloadInput
+        :param request: BlueprintDownloadInput
         :param context: ServicerContext
-        :return: BluePrintManagementOutput
+        :return: BlueprintManagementOutput
         """
-        output: BluePrintManagementOutput = BluePrintManagementOutput()
+        output: BlueprintManagementOutput = BlueprintManagementOutput()
         output.fileChunk.chunk = self.repository.download_blueprint(
             request.actionIdentifiers.blueprintName, request.actionIdentifiers.blueprintVersion
         )
@@ -193,13 +193,13 @@ class ArtifactManagerServicer(BluePrintManagementServiceServicer):
     @prepare_logging_context
     @translate_exception_to_response
     @fill_common_header
-    def uploadBlueprint(self, request: BluePrintUploadInput, context: ServicerContext) -> BluePrintManagementOutput:
+    def uploadBlueprint(self, request: BlueprintUploadInput, context: ServicerContext) -> BlueprintManagementOutput:
         """Upload blueprint file request method.
 
         Currently it only logs when is called and all base class method.
-        :param request: BluePrintUploadInput
+        :param request: BlueprintUploadInput
         :param context: ServicerContext
-        :return: BluePrintManagementOutput
+        :return: BlueprintManagementOutput
         """
         self.repository.upload_blueprint(
             request.fileChunk.chunk, request.actionIdentifiers.blueprintName, request.actionIdentifiers.blueprintVersion
@@ -211,18 +211,18 @@ class ArtifactManagerServicer(BluePrintManagementServiceServicer):
             ),
             extra={"mdc": MDC.result()},
         )
-        return BluePrintManagementOutput()
+        return BlueprintManagementOutput()
 
     @prepare_logging_context
     @translate_exception_to_response
     @fill_common_header
-    def removeBlueprint(self, request: BluePrintRemoveInput, context: ServicerContext) -> BluePrintManagementOutput:
+    def removeBlueprint(self, request: BlueprintRemoveInput, context: ServicerContext) -> BlueprintManagementOutput:
         """Remove blueprint file request method.
 
         Currently it only logs when is called and all base class method.
-        :param request: BluePrintRemoveInput
+        :param request: BlueprintRemoveInput
         :param context: ServicerContext
-        :return: BluePrintManagementOutput
+        :return: BlueprintManagementOutput
         """
         self.repository.remove_blueprint(
             request.actionIdentifiers.blueprintName, request.actionIdentifiers.blueprintVersion
@@ -234,4 +234,4 @@ class ArtifactManagerServicer(BluePrintManagementServiceServicer):
             ),
             extra={"mdc": MDC.result()},
         )
-        return BluePrintManagementOutput()
+        return BlueprintManagementOutput()

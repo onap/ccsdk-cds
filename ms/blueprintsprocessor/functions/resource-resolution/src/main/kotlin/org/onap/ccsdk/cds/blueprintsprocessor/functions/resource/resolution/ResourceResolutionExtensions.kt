@@ -20,22 +20,22 @@ import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 
 /**
  * Register the Resolution module exposed dependency
  */
-fun BluePrintDependencyService.resourceResolutionService(): ResourceResolutionService =
+fun BlueprintDependencyService.resourceResolutionService(): ResourceResolutionService =
     instance(ResourceResolutionConstants.SERVICE_RESOURCE_RESOLUTION)
 
-fun BluePrintDependencyService.resourceResolutionDBService(): ResourceResolutionDBService =
+fun BlueprintDependencyService.resourceResolutionDBService(): ResourceResolutionDBService =
     instance(ResourceResolutionDBService::class.java)
 
 suspend fun AbstractComponentFunction.storedContentFromResolvedArtifactNB(
     resolutionKey: String,
     artifactName: String
 ): String {
-    return BluePrintDependencyService.resourceResolutionService()
+    return BlueprintDependencyService.resourceResolutionService()
         .resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
 }
 
@@ -44,7 +44,7 @@ suspend fun AbstractComponentFunction.storedResourceResolutionsNB(
     artifactName: String,
     occurrence: Int = 1
 ): List<ResourceResolution> {
-    return BluePrintDependencyService.resourceResolutionDBService()
+    return BlueprintDependencyService.resourceResolutionDBService()
         .findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
             bluePrintRuntimeService,
             resolutionKey,
@@ -57,7 +57,7 @@ suspend fun AbstractComponentFunction.storedResourceResolutionsNB(
  * Return resolved and mashed artifact content for artifact prefix [artifactPrefix]
  */
 suspend fun AbstractComponentFunction.contentFromResolvedArtifactNB(artifactPrefix: String): String {
-    return BluePrintDependencyService.resourceResolutionService()
+    return BlueprintDependencyService.resourceResolutionService()
         .resolveResources(bluePrintRuntimeService, nodeTemplateName, artifactPrefix, mapOf())
         .first
 }

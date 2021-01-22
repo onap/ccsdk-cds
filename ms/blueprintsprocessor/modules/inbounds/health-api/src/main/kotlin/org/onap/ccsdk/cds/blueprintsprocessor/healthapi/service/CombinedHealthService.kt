@@ -23,7 +23,7 @@ import org.springframework.boot.actuate.health.Status
 import org.springframework.stereotype.Service
 
 /**
- *Service for combined health (BluePrintProcessor and CDSListener)
+ *Service for combined health (BlueprintProcessor and CDSListener)
  *
  * @author Shaaban Ebrahim
  * @version 1.0
@@ -36,7 +36,7 @@ open class CombinedHealthService(
 
     private fun setupServiceEndpoint(): List<ServiceEndpoint> {
         return listOf(
-            ServiceEndpoint("BluePrintProcessor Health Check ", healthCheckProperties.getBluePrintBaseURL() + "actuator/health"),
+            ServiceEndpoint("BlueprintProcessor Health Check ", healthCheckProperties.getBlueprintBaseURL() + "actuator/health"),
             ServiceEndpoint("CDSListener Health Check", healthCheckProperties.getCDSListenerBaseURL() + "actuator/health")
         )
     }

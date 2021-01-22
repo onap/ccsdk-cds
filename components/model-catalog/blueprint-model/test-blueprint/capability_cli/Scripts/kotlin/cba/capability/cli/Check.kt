@@ -19,10 +19,10 @@ package cba.capability.cli
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.sshClientService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 
 open class Check : AbstractScriptComponentFunction() {
 
@@ -36,7 +36,7 @@ open class Check : AbstractScriptComponentFunction() {
         log.info("Executing process : ${executionRequest.payload}")
 
         val data = requestPayloadActionProperty("data")?.first()
-            ?: throw BluePrintProcessorException("Failed to load payload data properties.")
+            ?: throw BlueprintProcessorException("Failed to load payload data properties.")
 
         log.info("Data : ${data.asJsonString()}")
 
@@ -50,7 +50,7 @@ open class Check : AbstractScriptComponentFunction() {
         log.info("Device Info :$deviceInformation")
 
         // Get the Client Service
-        val sshClientService = BluePrintDependencyService.sshClientService(deviceInformation)
+        val sshClientService = BlueprintDependencyService.sshClientService(deviceInformation)
 
         log.info("Client service is ready")
     }

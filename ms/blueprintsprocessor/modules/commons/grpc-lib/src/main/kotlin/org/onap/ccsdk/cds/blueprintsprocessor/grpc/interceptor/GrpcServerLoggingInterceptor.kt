@@ -23,11 +23,11 @@ import io.grpc.ServerCall
 import io.grpc.ServerCallHandler
 import io.grpc.ServerInterceptor
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.GrpcLoggerService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintDownloadInput
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintRemoveInput
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BlueprintDownloadInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BlueprintRemoveInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BlueprintUploadInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.slf4j.MDC
 
@@ -62,22 +62,22 @@ class GrpcServerLoggingInterceptor : ServerInterceptor {
                     when (message) {
                         is ExecutionServiceInput -> {
                             val commonHeader = message.commonHeader
-                                ?: throw BluePrintProcessorException("missing common header in request")
+                                ?: throw BlueprintProcessorException("missing common header in request")
                             loggingService.grpcRequesting(call, commonHeader, next)
                         }
-                        is BluePrintUploadInput -> {
+                        is BlueprintUploadInput -> {
                             val commonHeader = message.commonHeader
-                                ?: throw BluePrintProcessorException("missing common header in request")
+                                ?: throw BlueprintProcessorException("missing common header in request")
                             loggingService.grpcRequesting(call, commonHeader, next)
                         }
-                        is BluePrintDownloadInput -> {
+                        is BlueprintDownloadInput -> {
                             val commonHeader = message.commonHeader
-                                ?: throw BluePrintProcessorException("missing common header in request")
+                                ?: throw BlueprintProcessorException("missing common header in request")
                             loggingService.grpcRequesting(call, commonHeader, next)
                         }
-                        is BluePrintRemoveInput -> {
+                        is BlueprintRemoveInput -> {
                             val commonHeader = message.commonHeader
-                                ?: throw BluePrintProcessorException("missing common header in request")
+                                ?: throw BlueprintProcessorException("missing common header in request")
                             loggingService.grpcRequesting(call, commonHeader, next)
                         }
                         else -> {

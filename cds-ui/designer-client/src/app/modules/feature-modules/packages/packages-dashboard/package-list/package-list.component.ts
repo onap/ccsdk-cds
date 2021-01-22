@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BlueprintModel} from '../../model/BluePrint.model';
+import {BlueprintModel} from '../../model/Blueprint.model';
 import {PackagesStore} from '../../packages.store';
 import {Router} from '@angular/router';
 import {ConfigurationDashboardService} from '../../configuration-dashboard/configuration-dashboard.service';

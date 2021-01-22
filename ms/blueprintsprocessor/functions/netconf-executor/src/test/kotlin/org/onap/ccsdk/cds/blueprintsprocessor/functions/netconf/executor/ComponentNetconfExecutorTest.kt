@@ -31,10 +31,10 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.context.ApplicationContext
 
@@ -66,7 +66,7 @@ class ComponentNetconfExecutorTest {
                 ExecutionServiceInput::class.java
             )!!
 
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
                 "1234",
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -92,9 +92,9 @@ class ComponentNetconfExecutorTest {
 
             // TODO("Set Attribute properties")
             val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-netconf")
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentNetconfExecutor")
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+            stepMetaData.putJsonElement(BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "activate-netconf")
+            stepMetaData.putJsonElement(BlueprintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentNetconfExecutor")
+            stepMetaData.putJsonElement(BlueprintConstants.PROPERTY_CURRENT_OPERATION, "process")
             // Set Step Inputs in Blueprint Runtime Service
             componentNetconfExecutor.bluePrintRuntimeService = bluePrintRuntimeService
             val stepInputData = StepData().apply {

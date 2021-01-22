@@ -110,7 +110,7 @@ In the **Create Script File** modal:
 
         override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
                log.info("Executing Recovery")
-               bluePrintRuntimeService.getBluePrintError().addError("${runtimeException.message}")
+               bluePrintRuntimeService.getBlueprintError().addError("${runtimeException.message}")
          }
     }
 

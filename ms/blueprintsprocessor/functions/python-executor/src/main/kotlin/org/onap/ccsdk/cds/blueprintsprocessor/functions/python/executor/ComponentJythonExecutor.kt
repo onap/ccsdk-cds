@@ -24,8 +24,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.BlueprintJythonServiceImpl
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts.PythonExecutorConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
 import org.slf4j.LoggerFactory
@@ -56,7 +56,7 @@ open class ComponentJythonExecutor(
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBluePrintError()
+        bluePrintRuntimeService.getBlueprintError()
             .addError("Failed in ComponentJythonExecutor : ${runtimeException.message}")
     }
 
@@ -67,12 +67,12 @@ open class ComponentJythonExecutor(
             .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
 
         val artifactName: String = operationAssignment.implementation?.primary
-            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+            ?: throw BlueprintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
 
         val artifactDefinition = bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
 
         val pythonFileName = artifactDefinition.file
-            ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
+            ?: throw BlueprintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
 
         val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
 
@@ -81,7 +81,7 @@ open class ComponentJythonExecutor(
         checkNotEmpty(content) { "artifact ($artifactName) content is empty" }
 
         val instanceDependenciesNode: ArrayNode = operationInputs[PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES] as? ArrayNode
-            ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
+            ?: throw BlueprintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
 
         val jythonInstance: MutableMap<String, Any> = hashMapOf()
         jythonInstance["log"] = LoggerFactory.getLogger(pythonClassName)
@@ -100,6 +100,6 @@ open class ComponentJythonExecutor(
         componentFunction.operationName = operationName
         componentFunction.processId = processId
         componentFunction.workflowName = workflowName
-        componentFunction.scriptType = BluePrintConstants.SCRIPT_JYTHON
+        componentFunction.scriptType = BlueprintConstants.SCRIPT_JYTHON
     }
 }

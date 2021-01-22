@@ -17,8 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
@@ -30,25 +30,25 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
 /** Relationships Types DSL for Database Producer */
 fun ServiceTemplateBuilder.relationshipTypeConnectsToDb() {
-    val relationshipType = BluePrintTypes.relationshipTypeConnectsToDb()
+    val relationshipType = BlueprintTypes.relationshipTypeConnectsToDb()
     if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
     this.relationshipTypes!![relationshipType.id!!] = relationshipType
 }
 
-fun BluePrintTypes.relationshipTypeConnectsToDb(): RelationshipType {
+fun BlueprintTypes.relationshipTypeConnectsToDb(): RelationshipType {
     return relationshipType(
-        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB,
-        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        id = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB,
+        version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
         description = "Relationship connects to through Database."
     ) {
         property(
-            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
-            BluePrintConstants.DATA_TYPE_MAP,
+            BlueprintConstants.PROPERTY_CONNECTION_CONFIG,
+            BlueprintConstants.DATA_TYPE_MAP,
             true,
             "Connection Config details."
         )
-        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+        validTargetTypes(arrayListOf(BlueprintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
     }
 }
 
@@ -66,25 +66,25 @@ fun TopologyTemplateBuilder.relationshipTemplateDb(
 class DbRelationshipTemplateBuilder(name: String, description: String) :
     RelationshipTemplateBuilder(
         name,
-        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB, description
+        BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_DB, description
     ) {
 
     fun mariaDb(block: DbMariaDataSourcePropertiesAssignmentBuilder.() -> Unit) {
-        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.mariaDbProperties(block))
+        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.mariaDbProperties(block))
     }
 
     fun mySqlDb(block: DbMySqlDataSourcePropertiesAssignmentBuilder.() -> Unit) {
-        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.mySqlDbProperties(block))
+        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.mySqlDbProperties(block))
     }
 }
 
-fun BluePrintTypes.mariaDbProperties(block: DbMariaDataSourcePropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BlueprintTypes.mariaDbProperties(block: DbMariaDataSourcePropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = DbMariaDataSourcePropertiesAssignmentBuilder().apply(block).build()
     assignments[DBDataSourceProperties::type.name] = DBLibConstants.MARIA_DB.asJsonPrimitive()
     return assignments.asJsonNode()
 }
 
-fun BluePrintTypes.mySqlDbProperties(block: DbMySqlDataSourcePropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BlueprintTypes.mySqlDbProperties(block: DbMySqlDataSourcePropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = DbMySqlDataSourcePropertiesAssignmentBuilder().apply(block).build()
     assignments[DBDataSourceProperties::type.name] = DBLibConstants.MYSQL_DB.asJsonPrimitive()
     return assignments.asJsonNode()

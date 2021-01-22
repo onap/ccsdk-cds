@@ -28,7 +28,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.web.client.RestTemplate
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 
 open class HealthCheck : AbstractScriptComponentFunction() {
 
@@ -83,13 +83,13 @@ open class HealthCheck : AbstractScriptComponentFunction() {
             // print(resultOfGet)
         } catch (e: Exception) {
             log.info("Caught exception trying to connect to vLB!!")
-            throw BluePrintProcessorException("${e.message}")
+            throw BlueprintProcessorException("${e.message}")
         }
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         log.info("Executing Recovery")
-        bluePrintRuntimeService.getBluePrintError().addError("${runtimeException.message}")
+        bluePrintRuntimeService.getBlueprintError().addError("${runtimeException.message}")
     }
 }
 

@@ -30,7 +30,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TokenAuthGrpcClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcClientLoggingInterceptor
 
 class TokenAuthGrpcClientService(private val tokenAuthGrpcClientProperties: TokenAuthGrpcClientProperties) :
-    BluePrintGrpcClientService {
+    BlueprintGrpcClientService {
 
     override suspend fun channel(): ManagedChannel {
         val target =

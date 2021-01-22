@@ -16,9 +16,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
 import org.springframework.stereotype.Service
 
 // TODO("After Jython depreciation, this interface will be removed")
@@ -26,15 +26,15 @@ import org.springframework.stereotype.Service
 @Deprecated("CDS won's support Jython services")
 interface BlueprintJythonService {
 
-    fun jythonComponentInstance(bluePrintContext: BluePrintContext, scriptClassReference: String):
+    fun jythonComponentInstance(bluePrintContext: BlueprintContext, scriptClassReference: String):
         BlueprintFunctionNode<*, *>
 }
 
 @Service
 open class DeprecatedBlueprintJythonService : BlueprintJythonService {
 
-    override fun jythonComponentInstance(bluePrintContext: BluePrintContext, scriptClassReference: String):
+    override fun jythonComponentInstance(bluePrintContext: BlueprintContext, scriptClassReference: String):
         BlueprintFunctionNode<*, *> {
-            throw BluePrintProcessorException("Include python-executor module for Jython support")
+            throw BlueprintProcessorException("Include python-executor module for Jython support")
         }
 }

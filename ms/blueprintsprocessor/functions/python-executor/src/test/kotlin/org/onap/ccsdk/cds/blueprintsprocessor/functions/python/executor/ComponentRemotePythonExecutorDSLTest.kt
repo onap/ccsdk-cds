@@ -17,21 +17,21 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import kotlin.test.assertNotNull
 
 class ComponentRemotePythonExecutorDSLTest {
 
     @Test
     fun testNodeTypeComponentRemotePythonExecutor() {
-        val nodeType = BluePrintTypes.nodeTypeComponentRemotePythonExecutor()
+        val nodeType = BlueprintTypes.nodeTypeComponentRemotePythonExecutor()
         // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeComponentRemotePythonExecutor")
     }
 
     @Test
     fun testNodeTemplateComponentRemotePythonExecutor() {
-        val nodeTemplate = BluePrintTypes.nodeTemplateComponentRemotePythonExecutor(
+        val nodeTemplate = BlueprintTypes.nodeTemplateComponentRemotePythonExecutor(
             "test-nodetemplate",
             "test nodetemplate"
         ) {

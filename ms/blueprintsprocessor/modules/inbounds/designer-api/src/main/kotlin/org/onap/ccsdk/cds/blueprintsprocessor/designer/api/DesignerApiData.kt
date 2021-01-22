@@ -20,9 +20,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.DATA_TYPE_JSON
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.DEFAULT_VERSION_NUMBER
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.TOSCA_SPEC
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.DATA_TYPE_JSON
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.DEFAULT_VERSION_NUMBER
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.TOSCA_SPEC
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment

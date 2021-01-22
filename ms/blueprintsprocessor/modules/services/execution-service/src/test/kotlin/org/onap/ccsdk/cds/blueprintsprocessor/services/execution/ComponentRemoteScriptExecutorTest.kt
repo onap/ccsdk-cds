@@ -32,15 +32,15 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.createExecutionServiceOutputProto
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.createStatus
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.toProto
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
 import kotlin.test.assertNotNull
 
@@ -48,7 +48,7 @@ class ComponentRemoteScriptExecutorTest {
 
     @Test
     fun testNodeComponentRemoteScriptExecutorType() {
-        val nodeType = BluePrintTypes.nodeTypeComponentRemoteScriptExecutor()
+        val nodeType = BlueprintTypes.nodeTypeComponentRemoteScriptExecutor()
         assertNotNull(nodeType, "failed to generate nodeType Component Remote Script Executor")
     }
 
@@ -96,7 +96,7 @@ class ComponentRemoteScriptExecutorTest {
     fun testComponentRemoteScriptExecutor() {
         runBlocking {
             /** Mock blueprint context */
-            val blueprintContext = mockk<BluePrintContext>()
+            val blueprintContext = mockk<BlueprintContext>()
             every { blueprintContext.rootPath } returns normalizedPathName("target")
             every {
                 blueprintContext.nodeTemplateOperationImplementation(
@@ -104,7 +104,7 @@ class ComponentRemoteScriptExecutorTest {
                 )
             } returns Implementation()
 
-            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("1234")
+            val bluePrintRuntime = mockk<DefaultBlueprintRuntimeService>("1234")
             every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
 
             val mockExecutionServiceInput = mockExecutionServiceInput(bluePrintRuntime)
@@ -130,7 +130,7 @@ class ComponentRemoteScriptExecutorTest {
         }
     }
 
-    private fun mockExecutionServiceInput(bluePrintRuntime: DefaultBluePrintRuntimeService): ExecutionServiceInput {
+    private fun mockExecutionServiceInput(bluePrintRuntime: DefaultBlueprintRuntimeService): ExecutionServiceInput {
 
         val mapper = ObjectMapper()
         val requestNode = mapper.createObjectNode()
@@ -138,10 +138,10 @@ class ComponentRemoteScriptExecutorTest {
         requestNode.put("type", "grpc")
 
         val operationInputs = hashMapOf<String, JsonNode>()
-        operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "remote-execute".asJsonPrimitive()
-        operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] =
+        operationInputs[BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "remote-execute".asJsonPrimitive()
+        operationInputs[BlueprintConstants.PROPERTY_CURRENT_INTERFACE] =
             "ComponentRemoteScriptExecutor".asJsonPrimitive()
-        operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "process".asJsonPrimitive()
+        operationInputs[BlueprintConstants.PROPERTY_CURRENT_OPERATION] = "process".asJsonPrimitive()
 
         operationInputs[ComponentRemoteScriptExecutor.INPUT_SELECTOR] = "remote-script-executor".asJsonPrimitive()
         operationInputs[ComponentRemoteScriptExecutor.INPUT_BLUEPRINT_NAME] = "sample-blueprint".asJsonPrimitive()
@@ -205,7 +205,7 @@ class ComponentRemoteScriptExecutorTest {
         return createExecutionServiceOutputProto(
             executionServiceInput.commonHeader.toProto(),
             executionServiceInput.actionIdentifiers.toProto(),
-            createStatus(BluePrintConstants.STATUS_SUCCESS, 200),
+            createStatus(BlueprintConstants.STATUS_SUCCESS, 200),
             responsePayload
         )
     }

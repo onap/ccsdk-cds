@@ -19,8 +19,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.configs.api
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintCoreConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintCatalogService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
@@ -35,7 +35,7 @@ import org.springframework.web.reactive.function.BodyInserters
 @RunWith(SpringRunner::class)
 @WebFluxTest
 @ContextConfiguration(
-    classes = [BluePrintCoreConfiguration::class, BluePrintCatalogService::class, ErrorCatalogTestConfiguration::class]
+    classes = [BlueprintCoreConfiguration::class, BlueprintCatalogService::class, ErrorCatalogTestConfiguration::class]
 )
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])

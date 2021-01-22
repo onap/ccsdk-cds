@@ -27,13 +27,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService.WebClientResponse
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
@@ -94,7 +94,7 @@ class ComponentRemoteAnsibleExecutorTest {
             )
         } returns WebClientResponse(200, getReport())
         val selector = mapper.readTree(endpointSelector)
-        val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
+        val bluePrintRestLibPropertyService = mockk<BlueprintRestLibPropertyService>()
         every { bluePrintRestLibPropertyService.blueprintWebClientService(selector) } returns webClientService
         val awxRemoteExecutor = ComponentRemoteAnsibleExecutor(bluePrintRestLibPropertyService, mapper)
         awxRemoteExecutor.checkDelay = 1
@@ -112,7 +112,7 @@ class ComponentRemoteAnsibleExecutorTest {
         }
 
         // then
-        assertTrue(bluePrintRuntimeService.getBluePrintError().errors.isEmpty())
+        assertTrue(bluePrintRuntimeService.getBlueprintError().errors.isEmpty())
     }
 
     @Test
@@ -128,7 +128,7 @@ class ComponentRemoteAnsibleExecutorTest {
             webClientService.exchangeResource("GET", "/api/v2/inventories/?name=Demo+Inventory", "")
         } returns WebClientResponse(404, "")
         val selector = mapper.readTree(endpointSelector)
-        val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
+        val bluePrintRestLibPropertyService = mockk<BlueprintRestLibPropertyService>()
         every { bluePrintRestLibPropertyService.blueprintWebClientService(selector) } returns webClientService
         val awxRemoteExecutor = ComponentRemoteAnsibleExecutor(bluePrintRestLibPropertyService, mapper)
         awxRemoteExecutor.checkDelay = 1
@@ -146,7 +146,7 @@ class ComponentRemoteAnsibleExecutorTest {
         }
 
         // then
-        val errors = bluePrintRuntimeService.getBluePrintError().errors
+        val errors = bluePrintRuntimeService.getBlueprintError().errors
         assertEquals(1, errors.size)
     }
 
@@ -169,7 +169,7 @@ class ComponentRemoteAnsibleExecutorTest {
             )
         } returns WebClientResponse(500, "")
         val selector = mapper.readTree(endpointSelector)
-        val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
+        val bluePrintRestLibPropertyService = mockk<BlueprintRestLibPropertyService>()
         every { bluePrintRestLibPropertyService.blueprintWebClientService(selector) } returns webClientService
         val awxRemoteExecutor = ComponentRemoteAnsibleExecutor(bluePrintRestLibPropertyService, mapper)
         awxRemoteExecutor.checkDelay = 1
@@ -187,15 +187,15 @@ class ComponentRemoteAnsibleExecutorTest {
         }
 
         // then
-        val errors = bluePrintRuntimeService.getBluePrintError().errors
+        val errors = bluePrintRuntimeService.getBlueprintError().errors
         assertEquals(1, errors.size)
     }
 
     private fun createBlueprintRuntimeService(
         awxRemoteExecutor: ComponentRemoteAnsibleExecutor,
         executionServiceInput: ExecutionServiceInput
-    ): BluePrintRuntimeService<MutableMap<String, JsonNode>> {
-        val bluePrintRuntimeService = BluePrintMetadataUtils.bluePrintRuntime(
+    ): BlueprintRuntimeService<MutableMap<String, JsonNode>> {
+        val bluePrintRuntimeService = BlueprintMetadataUtils.bluePrintRuntime(
             "123456-1000",
             "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_ansible"
         )
@@ -208,9 +208,9 @@ class ComponentRemoteAnsibleExecutorTest {
         bluePrintRuntimeService.assignWorkflowInputs(workflowName, input)
 
         val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "execute-remote-ansible")
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentRemoteAnsibleExecutor")
-        stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+        stepMetaData.putJsonElement(BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "execute-remote-ansible")
+        stepMetaData.putJsonElement(BlueprintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentRemoteAnsibleExecutor")
+        stepMetaData.putJsonElement(BlueprintConstants.PROPERTY_CURRENT_OPERATION, "process")
 
         val stepInputData = StepData().apply {
             name = "execute-remote-ansible"
