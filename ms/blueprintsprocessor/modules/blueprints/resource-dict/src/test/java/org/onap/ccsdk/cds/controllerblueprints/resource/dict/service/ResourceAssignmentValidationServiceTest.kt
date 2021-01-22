@@ -19,7 +19,7 @@ package org.onap.ccsdk.cds.controllerblueprints.resource.dict.service
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDictionaryTestUtils
@@ -49,7 +49,7 @@ class ResourceAssignmentValidationServiceTest {
         Assert.assertTrue("Failed to Validate", result)
     }
 
-    @Test(expected = BluePrintException::class)
+    @Test(expected = BlueprintException::class)
     fun testValidateDuplicate() {
         log.info(" **************** testValidateDuplicate *****************")
         val assignments = JacksonUtils.getListFromClassPathFile("validation/duplicate.json", ResourceAssignment::class.java)
@@ -57,7 +57,7 @@ class ResourceAssignmentValidationServiceTest {
         resourceAssignmentValidator.validate(assignments!!)
     }
 
-    @Test(expected = BluePrintException::class)
+    @Test(expected = BlueprintException::class)
     fun testValidateCyclic() {
         log.info(" ****************  testValidateCyclic *****************")
         val assignments = JacksonUtils.getListFromClassPathFile("validation/cyclic.json", ResourceAssignment::class.java)

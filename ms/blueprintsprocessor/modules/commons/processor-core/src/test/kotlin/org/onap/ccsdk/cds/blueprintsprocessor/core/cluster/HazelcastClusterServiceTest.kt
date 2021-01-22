@@ -33,11 +33,11 @@ import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterMessage
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterMessage
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterMessageListener
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterInfo
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
@@ -61,8 +61,8 @@ class HazelcastClusterServiceTest {
 
     @Test
     fun testClientFileSystemYamlConfig() {
-        System.setProperty(BluePrintConstants.PROPERTY_CLUSTER_ID, "test-cluster")
-        System.setProperty(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID, "node-1234")
+        System.setProperty(BlueprintConstants.PROPERTY_CLUSTER_ID, "test-cluster")
+        System.setProperty(BlueprintConstants.PROPERTY_CLUSTER_NODE_ID, "node-1234")
         System.setProperty(
             "hazelcast.client.config",
             normalizedFile("./src/test/resources/hazelcast/hazelcast-client.yaml").absolutePath
@@ -75,8 +75,8 @@ class HazelcastClusterServiceTest {
 
     @Test
     fun testServerFileSystemYamlConfig() {
-        System.setProperty(BluePrintConstants.PROPERTY_CLUSTER_ID, "test-cluster")
-        System.setProperty(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID, "node-1234")
+        System.setProperty(BlueprintConstants.PROPERTY_CLUSTER_ID, "test-cluster")
+        System.setProperty(BlueprintConstants.PROPERTY_CLUSTER_NODE_ID, "node-1234")
         val configFile = normalizedFile("./src/test/resources/hazelcast/hazelcast.yaml")
         val config = FileSystemYamlConfig(configFile)
         assertNotNull(config)
@@ -105,7 +105,7 @@ class HazelcastClusterServiceTest {
         }
     }
 
-    private suspend fun testMessageReceived(bluePrintClusterServices: List<BluePrintClusterService>) {
+    private suspend fun testMessageReceived(bluePrintClusterServices: List<BlueprintClusterService>) {
         val sender = bluePrintClusterServices[0] as HazelcastClusterService
         val receiver = bluePrintClusterServices[1] as HazelcastClusterService
         val messageSent = "hello world"
@@ -113,7 +113,7 @@ class HazelcastClusterServiceTest {
         val uuid = receiver.addBlueprintClusterMessageListener(
             BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE,
             object : BlueprintClusterMessageListener<String> {
-                override fun onMessage(message: BluePrintClusterMessage<String>?) {
+                override fun onMessage(message: BlueprintClusterMessage<String>?) {
                     log.info("Message received - ${message?.payload}")
                     isMessageReceived = messageSent == message?.payload
                 }
@@ -132,7 +132,7 @@ class HazelcastClusterServiceTest {
     private suspend fun createCluster(
         ids: List<Int>,
         joinAsClient: Boolean? = false
-    ): List<BluePrintClusterService> {
+    ): List<BlueprintClusterService> {
 
         return withContext(Dispatchers.Default) {
             val deferred = ids.map { id ->
@@ -164,7 +164,7 @@ class HazelcastClusterServiceTest {
         }
     }
 
-    private suspend fun testDistributedStore(bluePrintClusterServices: List<BluePrintClusterService>) {
+    private suspend fun testDistributedStore(bluePrintClusterServices: List<BlueprintClusterService>) {
         /** Test Distributed store creation */
         repeat(2) { storeId ->
             val store = bluePrintClusterServices[0].clusterMapStore<JsonNode>(
@@ -187,7 +187,7 @@ class HazelcastClusterServiceTest {
         }
     }
 
-    private suspend fun testDistributedLock(bluePrintClusterServices: List<BluePrintClusterService>) {
+    private suspend fun testDistributedLock(bluePrintClusterServices: List<BlueprintClusterService>) {
         val lockName = "sample-lock"
         withContext(Dispatchers.IO) {
             val deferred = async {
@@ -218,7 +218,7 @@ class HazelcastClusterServiceTest {
     }
 
     private suspend fun executeLock(
-        bluePrintClusterService: BluePrintClusterService,
+        bluePrintClusterService: BlueprintClusterService,
         lockId: String,
         lockName: String
     ) {
@@ -237,7 +237,7 @@ class HazelcastClusterServiceTest {
         distributedLock.close()
     }
 
-    private suspend fun executeScheduler(bluePrintClusterService: BluePrintClusterService) {
+    private suspend fun executeScheduler(bluePrintClusterService: BlueprintClusterService) {
         log.info("initialising ...")
         val hazelcastClusterService = bluePrintClusterService as HazelcastClusterService
 
@@ -251,7 +251,7 @@ class HazelcastClusterServiceTest {
         // scheduler.scheduleOnAllMembersAtFixedRate(SampleSchedulerTask(), 0, 5, TimeUnit.SECONDS)
     }
 
-    private suspend fun printReachableMembers(bluePrintClusterServices: List<BluePrintClusterService>) {
+    private suspend fun printReachableMembers(bluePrintClusterServices: List<BlueprintClusterService>) {
         bluePrintClusterServices.forEach { bluePrintClusterService ->
             val hazelcastClusterService = bluePrintClusterService as HazelcastClusterService
             val hazelcast = hazelcastClusterService.hazelcast

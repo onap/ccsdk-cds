@@ -24,14 +24,14 @@ import time
 
 from google.protobuf import json_format, struct_pb2
 from google.protobuf.timestamp_pb2 import Timestamp
-from proto.BluePrintCommon_pb2 import (
+from proto.BlueprintCommon_pb2 import (
     EVENT_COMPONENT_EXECUTED,
     EVENT_COMPONENT_NOTIFICATION,
     EVENT_COMPONENT_PROCESSING,
     EVENT_COMPONENT_TRACE,
     Status
 )
-from proto.BluePrintProcessing_pb2 import (
+from proto.BlueprintProcessing_pb2 import (
     ExecutionServiceInput,
     ExecutionServiceOutput,
 )

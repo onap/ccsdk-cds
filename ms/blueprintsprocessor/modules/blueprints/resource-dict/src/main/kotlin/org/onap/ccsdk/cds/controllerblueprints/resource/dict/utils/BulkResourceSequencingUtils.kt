@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils
 
 import org.apache.commons.collections.CollectionUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asListOfString
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -60,7 +60,7 @@ object BulkResourceSequencingUtils {
             } else if (CollectionUtils.isNotEmpty(resourceAssignment.dependencies)) {
                 for (dependency in resourceAssignment.dependencies!!) {
                     val ra = resourceAssignmentMap[dependency]
-                        ?: throw BluePrintProcessorException(
+                        ?: throw BlueprintProcessorException(
                             "Couldn't get Resource Assignment dependency " +
                                 "Key($dependency)"
                         )

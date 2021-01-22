@@ -18,9 +18,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
@@ -34,7 +34,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
     private val log = LoggerFactory.getLogger(ResourceResolutionDBService::class.toString())
 
     suspend fun findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         key: String,
         occurrence: Int,
         artifactPrefix: String
@@ -42,8 +42,8 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         return try {
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+            val blueprintVersion = metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BlueprintConstants.METADATA_TEMPLATE_NAME]!!
 
             resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyAndOccurrence(
                 blueprintName,
@@ -58,7 +58,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
     }
 
     suspend fun findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         resourceId: String,
         resourceType: String,
         occurrence: Int,
@@ -68,8 +68,8 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
 
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+            val blueprintVersion = metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BlueprintConstants.METADATA_TEMPLATE_NAME]!!
 
             resourceResolutionRepository.findByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceIdAndResourceTypeAndOccurrence(
                 blueprintName,
@@ -134,15 +134,15 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
 
     suspend fun write(
         properties: Map<String, Any>,
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         artifactPrefix: String,
         resourceAssignment: ResourceAssignment
     ): ResourceResolution = withContext(Dispatchers.IO) {
 
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+        val blueprintVersion = metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION]!!
+        val blueprintName = metadata[BlueprintConstants.METADATA_TEMPLATE_NAME]!!
 
         val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
         val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
@@ -182,7 +182,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         resourceResolution.resourceType = resourceType
         resourceResolution.resourceId = resourceId
         resourceResolution.value = resourceAssignment.property?.value?.let {
-            if (BluePrintConstants.STATUS_SUCCESS == resourceAssignment.status)
+            if (BlueprintConstants.STATUS_SUCCESS == resourceAssignment.status)
                 JacksonUtils.getValue(it).toString()
             else ""
         } ?: ""
@@ -190,12 +190,12 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         resourceResolution.dictionaryName = resourceAssignment.dictionaryName
         resourceResolution.dictionaryVersion = resourceAssignment.version
         resourceResolution.dictionarySource = resourceAssignment.dictionarySource
-        resourceResolution.status = resourceAssignment.status ?: BluePrintConstants.STATUS_FAILURE
+        resourceResolution.status = resourceAssignment.status ?: BlueprintConstants.STATUS_FAILURE
 
         try {
             resourceResolutionRepository.saveAndFlush(resourceResolution)
         } catch (ex: Exception) {
-            throw BluePrintException("Failed to store resource resolution result.", ex)
+            throw BlueprintException("Failed to store resource resolution result.", ex)
         }
     }
 

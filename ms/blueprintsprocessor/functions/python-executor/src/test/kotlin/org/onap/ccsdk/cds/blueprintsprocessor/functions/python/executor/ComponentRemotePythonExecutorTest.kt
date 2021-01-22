@@ -22,7 +22,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionInput
@@ -30,13 +30,13 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutio
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintError
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.putJsonElement
-import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBlueprintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -50,7 +50,7 @@ class ComponentRemotePythonExecutorTest {
 
             val componentRemotePythonExecutor = ComponentRemotePythonExecutor(
                 remoteScriptExecutionService,
-                mockk<BluePrintPropertiesService>()
+                mockk<BlueprintPropertiesService>()
             )
 
             val executionServiceInput =
@@ -59,7 +59,7 @@ class ComponentRemotePythonExecutorTest {
                     ExecutionServiceInput::class.java
                 )!!
 
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
                 "123456-1000",
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_scripts"
             )
@@ -71,9 +71,9 @@ class ComponentRemotePythonExecutorTest {
             )
 
             val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "execute-remote-python")
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentRemotePythonExecutor")
-            stepMetaData.putJsonElement(BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process")
+            stepMetaData.putJsonElement(BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE, "execute-remote-python")
+            stepMetaData.putJsonElement(BlueprintConstants.PROPERTY_CURRENT_INTERFACE, "ComponentRemotePythonExecutor")
+            stepMetaData.putJsonElement(BlueprintConstants.PROPERTY_CURRENT_OPERATION, "process")
             componentRemotePythonExecutor.bluePrintRuntimeService = bluePrintRuntimeService
             val stepInputData = StepData().apply {
                 name = "execute-remote-python"
@@ -94,11 +94,11 @@ class ComponentRemotePythonExecutorTest {
             val remoteScriptExecutionService = MockRemoteScriptExecutionService()
             val componentRemotePythonExecutor = ComponentRemotePythonExecutor(
                 remoteScriptExecutionService,
-                mockk<BluePrintPropertiesService>()
+                mockk<BlueprintPropertiesService>()
             )
-            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("123456-1000")
+            val bluePrintRuntime = mockk<DefaultBlueprintRuntimeService>("123456-1000")
 
-            every { bluePrintRuntime.getBluePrintError() } answers { BluePrintError() } // successful case.
+            every { bluePrintRuntime.getBlueprintError() } answers { BlueprintError() } // successful case.
             every { bluePrintRuntime.setNodeTemplateAttributeValue(any(), any(), any()) } answers {}
 
             val input = getMockedOutput(bluePrintRuntime)
@@ -110,20 +110,20 @@ class ComponentRemotePythonExecutorTest {
     /**
      * Mocked input information for remote python executor.
      */
-    fun getMockedOutput(svc: DefaultBluePrintRuntimeService):
+    fun getMockedOutput(svc: DefaultBlueprintRuntimeService):
         ExecutionServiceInput {
             val stepMetaData: MutableMap<String, JsonNode> = hashMapOf()
 
             stepMetaData.putJsonElement(
-                BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
+                BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
                 "execute-remote-python"
             )
             stepMetaData.putJsonElement(
-                BluePrintConstants.PROPERTY_CURRENT_INTERFACE,
+                BlueprintConstants.PROPERTY_CURRENT_INTERFACE,
                 "ComponentRemotePythonExecutor"
             )
             stepMetaData.putJsonElement(
-                BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process"
+                BlueprintConstants.PROPERTY_CURRENT_OPERATION, "process"
             )
 
             val mapper = ObjectMapper()
@@ -133,15 +133,15 @@ class ComponentRemotePythonExecutorTest {
 
             val operationalInputs: MutableMap<String, JsonNode> = hashMapOf()
             operationalInputs.putJsonElement(
-                BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
+                BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE,
                 "execute-remote-python"
             )
             operationalInputs.putJsonElement(
-                BluePrintConstants.PROPERTY_CURRENT_INTERFACE,
+                BlueprintConstants.PROPERTY_CURRENT_INTERFACE,
                 "ComponentRemotePythonExecutor"
             )
             operationalInputs.putJsonElement(
-                BluePrintConstants.PROPERTY_CURRENT_OPERATION, "process"
+                BlueprintConstants.PROPERTY_CURRENT_OPERATION, "process"
             )
             operationalInputs.putJsonElement("endpoint-selector", "aai")
             operationalInputs.putJsonElement("dynamic-properties", rootNode)
@@ -174,7 +174,7 @@ class ComponentRemotePythonExecutorTest {
                     "ComponentRemotePythonExecutor", "process"
                 )
             } returns operationOutputs
-            val bluePrintRuntimeService = BluePrintMetadataUtils.bluePrintRuntime(
+            val bluePrintRuntimeService = BlueprintMetadataUtils.bluePrintRuntime(
                 "123456-1000",
                 "./../../../../components/model-" +
                     "catalog/blueprint-model/test-blueprint/" +

@@ -25,7 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.grpc.TLSAuthGrpcServerProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 
 class TLSAuthGrpcServerService(private val tlsAuthGrpcServerProperties: TLSAuthGrpcServerProperties) :
-    BluePrintGrpcServerService {
+    BlueprintGrpcServerService {
 
     override fun serverBuilder(): NettyServerBuilder {
         return NettyServerBuilder

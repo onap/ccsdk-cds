@@ -20,7 +20,7 @@ import cba.resource.audit.deviceResourceDefinitions
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -43,7 +43,7 @@ class ConfigCollector : AbstractScriptComponentFunction() {
         }
 
         // Set the Attributes
-        setAttribute(ComponentScriptExecutor.ATTRIBUTE_STATUS, BluePrintConstants.STATUS_SUCCESS.asJsonPrimitive())
+        setAttribute(ComponentScriptExecutor.ATTRIBUTE_STATUS, BlueprintConstants.STATUS_SUCCESS.asJsonPrimitive())
         setAttribute(
             ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA,
             """{

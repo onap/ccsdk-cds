@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
@@ -36,10 +36,10 @@ object WorkflowGraphUtils {
             }
         }
         graph.startNodes().forEach { rootNode ->
-            graph.addEdge(BluePrintConstants.GRAPH_START_NODE_NAME, rootNode.id, EdgeLabel.SUCCESS)
+            graph.addEdge(BlueprintConstants.GRAPH_START_NODE_NAME, rootNode.id, EdgeLabel.SUCCESS)
         }
         graph.endNodes().forEach { endNode ->
-            graph.addEdge(endNode.id, BluePrintConstants.GRAPH_END_NODE_NAME, EdgeLabel.SUCCESS)
+            graph.addEdge(endNode.id, BlueprintConstants.GRAPH_END_NODE_NAME, EdgeLabel.SUCCESS)
         }
         return graph
     }

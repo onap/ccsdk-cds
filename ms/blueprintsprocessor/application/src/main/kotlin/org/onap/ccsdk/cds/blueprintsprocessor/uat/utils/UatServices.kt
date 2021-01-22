@@ -24,7 +24,7 @@ import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_SERVICES
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.resetContextColor
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.setContextColor
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.UAT_SPECIFICATION_FILE
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.UAT_SPECIFICATION_FILE
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType

@@ -17,8 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
@@ -33,94 +33,94 @@ import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 
 /** Component Extensions **/
 fun ServiceTemplateBuilder.nodeTypeComponentResourceResolution() {
-    val nodeType = BluePrintTypes.nodeTypeComponentResourceResolution()
+    val nodeType = BlueprintTypes.nodeTypeComponentResourceResolution()
     if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
     this.nodeTypes!![nodeType.id!!] = nodeType
 }
 
-fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
+fun BlueprintTypes.nodeTypeComponentResourceResolution(): NodeType {
     return nodeType(
-        id = "component-resource-resolution", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+        id = "component-resource-resolution", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_NODE_COMPONENT,
         description = "Resource Assignment Component"
     ) {
 
         attribute(
-            ResourceResolutionComponent.ATTRIBUTE_ASSIGNMENT_PARAM, BluePrintConstants.DATA_TYPE_STRING,
+            ResourceResolutionComponent.ATTRIBUTE_ASSIGNMENT_PARAM, BlueprintConstants.DATA_TYPE_STRING,
             true
         )
         attribute(
-            ResourceResolutionComponent.ATTRIBUTE_STATUS, BluePrintConstants.DATA_TYPE_STRING,
+            ResourceResolutionComponent.ATTRIBUTE_STATUS, BlueprintConstants.DATA_TYPE_STRING,
             true
         )
 
         operation("ResourceResolutionComponent", "ResourceResolutionComponent Operation") {
             inputs {
                 property(
-                    ResourceResolutionComponent.INPUT_REQUEST_ID, BluePrintConstants.DATA_TYPE_STRING,
+                    ResourceResolutionComponent.INPUT_REQUEST_ID, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Request Id, Unique Id for the request."
                 )
 
                 property(
-                    ResourceResolutionComponent.INPUT_RESOURCE_ID, BluePrintConstants.DATA_TYPE_STRING,
+                    ResourceResolutionComponent.INPUT_RESOURCE_ID, BlueprintConstants.DATA_TYPE_STRING,
                     false, "Resource Id."
                 )
 
                 property(
-                    ResourceResolutionComponent.INPUT_ACTION_NAME, BluePrintConstants.DATA_TYPE_STRING,
+                    ResourceResolutionComponent.INPUT_ACTION_NAME, BlueprintConstants.DATA_TYPE_STRING,
                     false, "Action Name of the process"
                 )
 
                 property(
-                    ResourceResolutionComponent.INPUT_DYNAMIC_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON,
+                    ResourceResolutionComponent.INPUT_DYNAMIC_PROPERTIES, BlueprintConstants.DATA_TYPE_JSON,
                     false, "Dynamic Json Content or DSL Json reference."
                 )
 
                 property(
-                    ResourceResolutionComponent.INPUT_RESOLUTION_KEY, BluePrintConstants.DATA_TYPE_STRING,
+                    ResourceResolutionComponent.INPUT_RESOLUTION_KEY, BlueprintConstants.DATA_TYPE_STRING,
                     false, "Key for service instance related correlation."
                 )
 
                 property(
-                    ResourceResolutionComponent.INPUT_RESOLUTION_SUMMARY, BluePrintConstants.DATA_TYPE_BOOLEAN,
+                    ResourceResolutionComponent.INPUT_RESOLUTION_SUMMARY, BlueprintConstants.DATA_TYPE_BOOLEAN,
                     false, "Enables ResolutionSummary output"
                 )
 
                 property(
-                    ResourceResolutionComponent.INPUT_OCCURRENCE, BluePrintConstants.DATA_TYPE_INTEGER,
+                    ResourceResolutionComponent.INPUT_OCCURRENCE, BlueprintConstants.DATA_TYPE_INTEGER,
                     false, "Number of time to perform the resolution."
                 ) {
                     defaultValue(1)
                 }
 
                 property(
-                    ResourceResolutionComponent.INPUT_STORE_RESULT, BluePrintConstants.DATA_TYPE_BOOLEAN,
+                    ResourceResolutionComponent.INPUT_STORE_RESULT, BlueprintConstants.DATA_TYPE_BOOLEAN,
                     false, "Whether or not to store the output."
                 )
 
                 property(
-                    ResourceResolutionComponent.INPUT_RESOURCE_TYPE, BluePrintConstants.DATA_TYPE_STRING,
+                    ResourceResolutionComponent.INPUT_RESOURCE_TYPE, BlueprintConstants.DATA_TYPE_STRING,
                     false, "Request type."
                 )
 
                 property(
-                    ResourceResolutionComponent.INPUT_ARTIFACT_PREFIX_NAMES, BluePrintConstants.DATA_TYPE_LIST,
+                    ResourceResolutionComponent.INPUT_ARTIFACT_PREFIX_NAMES, BlueprintConstants.DATA_TYPE_LIST,
                     true, "Template , Resource Assignment Artifact Prefix names"
                 ) {
-                    entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+                    entrySchema(BlueprintConstants.DATA_TYPE_STRING)
                 }
             }
             outputs {
                 property(
-                    ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_PARAMS, BluePrintConstants.DATA_TYPE_STRING,
+                    ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_PARAMS, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Output Response"
                 )
                 property(
-                    ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_MAP, BluePrintConstants.DATA_TYPE_MAP,
+                    ResourceResolutionComponent.OUTPUT_RESOURCE_ASSIGNMENT_MAP, BlueprintConstants.DATA_TYPE_MAP,
                     true, "Output Resolved Values"
                 )
                 property(
-                    ResourceResolutionComponent.OUTPUT_STATUS, BluePrintConstants.DATA_TYPE_STRING,
+                    ResourceResolutionComponent.OUTPUT_STATUS, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Status of the Component Execution ( success or failure )"
                 )
             }
@@ -134,7 +134,7 @@ fun TopologyTemplateBuilder.nodeTemplateComponentResourceResolution(
     description: String,
     block: ComponentResourceResolutionNodeTemplateBuilder.() -> Unit
 ) {
-    val nodeTemplate = BluePrintTypes.nodeTemplateComponentResourceResolution(
+    val nodeTemplate = BlueprintTypes.nodeTemplateComponentResourceResolution(
         id, description,
         block
     )
@@ -142,7 +142,7 @@ fun TopologyTemplateBuilder.nodeTemplateComponentResourceResolution(
     nodeTemplates!![nodeTemplate.id!!] = nodeTemplate
 }
 
-fun BluePrintTypes.nodeTemplateComponentResourceResolution(
+fun BlueprintTypes.nodeTemplateComponentResourceResolution(
     id: String,
     description: String,
     block: ComponentResourceResolutionNodeTemplateBuilder.() -> Unit

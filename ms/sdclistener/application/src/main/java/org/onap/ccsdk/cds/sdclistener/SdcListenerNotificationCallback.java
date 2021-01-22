@@ -122,13 +122,13 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
             final String archivePath = cbaArchivePath.toString();
 
             // Extract CBA archive from CSAR package and store it into local disk
-            csarFiles.forEach(file -> listenerService.extractBluePrint(file.getAbsolutePath(), archivePath));
+            csarFiles.forEach(file -> listenerService.extractBlueprint(file.getAbsolutePath(), archivePath));
             csarFiles.forEach(file -> FileUtil.deleteFile(file, csarArchivePath.toString()));
         } else {
             LOGGER.error("Could not able to read CSAR files from this location {}", csarArchivePath);
         }
 
-        listenerService.saveBluePrintToCdsDatabase(cbaArchivePath, sdcListenerDto.getManagedChannelForGrpc());
+        listenerService.saveBlueprintToCdsDatabase(cbaArchivePath, sdcListenerDto.getManagedChannelForGrpc());
     }
 
 }

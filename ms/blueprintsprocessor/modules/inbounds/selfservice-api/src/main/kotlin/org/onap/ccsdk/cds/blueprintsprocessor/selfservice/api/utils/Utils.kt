@@ -19,7 +19,7 @@ import io.micrometer.core.instrument.Tag
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.SelfServiceMetricConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.springframework.http.HttpStatus
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.util.StringUtils
@@ -30,13 +30,13 @@ import java.util.UUID
 
 const val INTERNAL_SERVER_ERROR_HTTP_STATUS_CODE = 500
 
-@Throws(BluePrintException::class, IOException::class)
+@Throws(BlueprintException::class, IOException::class)
 fun saveCBAFile(filePart: FilePart, targetDirectory: Path): Path {
 
     val fileName = StringUtils.cleanPath(filePart.filename())
 
     if (StringUtils.getFilenameExtension(fileName) != "zip") {
-        throw BluePrintException("Invalid file extension required ZIP")
+        throw BlueprintException("Invalid file extension required ZIP")
     }
 
     val changedFileName = UUID.randomUUID().toString() + ".zip"

@@ -28,15 +28,15 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeCompone
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.MockComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.mockNodeTemplateComponentScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -48,8 +48,8 @@ class ImperativeWorkflowExecutionServiceTest {
 
     @Before
     fun init() {
-        mockkObject(BluePrintDependencyService)
-        every { BluePrintDependencyService.applicationContext.getBean(any()) } returns MockComponentFunction()
+        mockkObject(BlueprintDependencyService)
+        every { BlueprintDependencyService.applicationContext.getBean(any()) } returns MockComponentFunction()
     }
 
     @After
@@ -101,7 +101,7 @@ class ImperativeWorkflowExecutionServiceTest {
                     step("activate-licence", "activate-licence", "")
                 }
             }
-            nodeType(BluePrintTypes.nodeTypeComponentScriptExecutor())
+            nodeType(BlueprintTypes.nodeTypeComponentScriptExecutor())
         }
     }
 
@@ -109,10 +109,10 @@ class ImperativeWorkflowExecutionServiceTest {
     fun testImperativeExecutionService() {
         runBlocking {
             val serviceTemplate = mockServiceTemplate()
-            val bluePrintContext = BluePrintContext(serviceTemplate)
+            val bluePrintContext = BlueprintContext(serviceTemplate)
             bluePrintContext.rootPath = normalizedPathName(".")
             bluePrintContext.entryDefinition = "cba.imperative.test.ImperativeTestDefinitions.kt"
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime("12345", bluePrintContext)
+            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime("12345", bluePrintContext)
 
             val executionServiceInput = JacksonUtils
                 .readValueFromClassPathFile(
@@ -122,10 +122,10 @@ class ImperativeWorkflowExecutionServiceTest {
 
             val imperativeWorkflowExecutionService = ImperativeWorkflowExecutionService(NodeTemplateExecutionService(mockk()))
             val output = imperativeWorkflowExecutionService
-                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
+                .executeBlueprintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
             assertNotNull(output, "failed to get imperative workflow output")
             assertNotNull(output.status, "failed to get imperative workflow output status")
-            assertEquals(output.status.message, BluePrintConstants.STATUS_SUCCESS)
+            assertEquals(output.status.message, BlueprintConstants.STATUS_SUCCESS)
             assertEquals(output.status.eventType, EventType.EVENT_COMPONENT_EXECUTED.name)
         }
     }

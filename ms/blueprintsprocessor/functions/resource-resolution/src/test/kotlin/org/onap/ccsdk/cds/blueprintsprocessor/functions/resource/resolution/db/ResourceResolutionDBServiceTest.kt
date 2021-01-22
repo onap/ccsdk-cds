@@ -23,10 +23,10 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.dao.EmptyResultDataAccessException
 import kotlin.test.assertEquals
@@ -46,13 +46,13 @@ open class ResourceResolutionDBServiceTest {
     private val blueprintVersion = "1.0.0"
     private val metadata = hashMapOf<String, String>()
     private val props = hashMapOf<String, Any>()
-    private val bluePrintContext = mockk<BluePrintContext>()
-    private val bluePrintRuntimeService = mockk<DefaultBluePrintRuntimeService>()
+    private val bluePrintContext = mockk<BlueprintContext>()
+    private val bluePrintRuntimeService = mockk<DefaultBlueprintRuntimeService>()
 
     @Before
     fun setup() {
-        metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION] = blueprintVersion
-        metadata[BluePrintConstants.METADATA_TEMPLATE_NAME] = blueprintName
+        metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION] = blueprintVersion
+        metadata[BlueprintConstants.METADATA_TEMPLATE_NAME] = blueprintName
 
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = resolutionKey
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId
@@ -206,7 +206,7 @@ open class ResourceResolutionDBServiceTest {
     fun writeTest() {
         val resourceResolution = ResourceResolution()
         val resourceAssignment = ResourceAssignment()
-        resourceAssignment.property?.status = BluePrintConstants.STATUS_SUCCESS
+        resourceAssignment.property?.status = BlueprintConstants.STATUS_SUCCESS
         resourceAssignment.property?.value = "result".asJsonPrimitive()
         resourceAssignment.dictionarySource = "ddSource"
         resourceAssignment.dictionaryName = "ddName"
@@ -229,7 +229,7 @@ open class ResourceResolutionDBServiceTest {
     fun writeWithNullValue() {
         val slot = slot<ResourceResolution>()
         val resourceAssignment = ResourceAssignment()
-        resourceAssignment.status = BluePrintConstants.STATUS_SUCCESS
+        resourceAssignment.status = BlueprintConstants.STATUS_SUCCESS
         resourceAssignment.dictionarySource = "ddSource"
         resourceAssignment.dictionaryName = "ddName"
         resourceAssignment.version = 1

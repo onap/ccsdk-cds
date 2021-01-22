@@ -40,9 +40,9 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.message.BlueprintMessageLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageLibConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -60,8 +60,8 @@ import kotlin.test.assertTrue
 @DirtiesContext
 @ContextConfiguration(
     classes = [
-        BluePrintMessageLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+        BlueprintMessageLibConfiguration::class,
+        BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class
     ]
 )
 @TestPropertySource(
@@ -98,7 +98,7 @@ open class BlueprintMessageConsumerServiceTest {
     val log = logger(BlueprintMessageConsumerServiceTest::class)
 
     @Autowired
-    lateinit var bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
+    lateinit var bluePrintMessageLibPropertyService: BlueprintMessageLibPropertyService
 
     @Test
     fun testKafkaBasicAuthConsumerService() {

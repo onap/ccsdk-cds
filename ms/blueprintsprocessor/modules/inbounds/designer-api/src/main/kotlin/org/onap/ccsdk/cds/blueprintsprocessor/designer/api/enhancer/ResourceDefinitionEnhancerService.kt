@@ -21,12 +21,12 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.service.ResourceDefinitionRepoService
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BluePrintEnhancerUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BlueprintEnhancerUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTypeEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils.ResourceDictionaryUtils
@@ -34,10 +34,10 @@ import org.springframework.stereotype.Service
 
 interface ResourceDefinitionEnhancerService {
 
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     fun enhance(
-        bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
-        bluePrintRuntimeService: BluePrintRuntimeService<*>
+        bluePrintTypeEnhancerService: BlueprintTypeEnhancerService,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>
     ): List<ResourceDefinition>
 }
 
@@ -58,8 +58,8 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
     // 3. Collect the Resource Definition for Resource Assignment names from database.
     // 4. Create the Resource Definition under blueprint base path.
     override fun enhance(
-        bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,
-        bluePrintRuntimeService: BluePrintRuntimeService<*>
+        bluePrintTypeEnhancerService: BlueprintTypeEnhancerService,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>
     ): List<ResourceDefinition> {
 
         var resourceDefinitions: List<ResourceDefinition> = mutableListOf()
@@ -77,7 +77,7 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
     }
 
     // Get all the Mapping files from all node templates.
-    private fun getAllResourceMappingFiles(blueprintContext: BluePrintContext): List<String>? {
+    private fun getAllResourceMappingFiles(blueprintContext: BlueprintContext): List<String>? {
 
         return blueprintContext.nodeTemplates()?.mapNotNull { nodeTemplateMap ->
 
@@ -91,7 +91,7 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
     }
 
     // Convert file content to ResourceAssignments asynchronously
-    private fun getResourceDefinition(blueprintContext: BluePrintContext, files: List<String>) = runBlocking {
+    private fun getResourceDefinition(blueprintContext: BlueprintContext, files: List<String>) = runBlocking {
         val blueprintBasePath = blueprintContext.rootPath
         val deferredResourceAssignments = mutableListOf<Deferred<List<ResourceAssignment>>>()
         for (file in files) {
@@ -124,7 +124,7 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
         }
 
     private fun enrichResourceDefinitionSources(
-        bluePrintContext: BluePrintContext,
+        bluePrintContext: BlueprintContext,
         resourceDefinitions: List<ResourceDefinition>
     ) {
         val sources = resourceDefinitions
@@ -138,7 +138,7 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
             .flatten().distinct()
         log.info("Enriching Resource Definition sources Node Template: $sources")
         sources.forEach {
-            BluePrintEnhancerUtils.populateNodeType(bluePrintContext, resourceDefinitionRepoService, it)
+            BlueprintEnhancerUtils.populateNodeType(bluePrintContext, resourceDefinitionRepoService, it)
         }
     }
 

@@ -18,7 +18,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.slf4j.LoggerFactory
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -57,19 +57,19 @@ class JacksonUtilsTest {
         val rootJson = JacksonUtils.jsonNodeFromClassPathFile(filePath)
         assertNotNull(rootJson, "Failed to get all type data json node")
         val intValue = rootJson.get("intValue")
-        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_INTEGER, intValue), "Failed to get as int value")
+        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BlueprintConstants.DATA_TYPE_INTEGER, intValue), "Failed to get as int value")
         val floatValue = rootJson.get("floatValue")
-        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_FLOAT, floatValue), "Failed to get as float value")
+        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BlueprintConstants.DATA_TYPE_FLOAT, floatValue), "Failed to get as float value")
         val stringValue = rootJson.get("stringValue")
-        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_STRING, stringValue), "Failed to get as string value")
+        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BlueprintConstants.DATA_TYPE_STRING, stringValue), "Failed to get as string value")
         val booleanValue = rootJson.get("booleanValue")
-        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_BOOLEAN, booleanValue), "Failed to get as boolean value")
+        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BlueprintConstants.DATA_TYPE_BOOLEAN, booleanValue), "Failed to get as boolean value")
         val arrayStringValue = rootJson.get("arrayStringValue")
-        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_LIST, arrayStringValue), "Failed to get as List value")
+        assertTrue(JacksonUtils.checkJsonNodeValueOfType(BlueprintConstants.DATA_TYPE_LIST, arrayStringValue), "Failed to get as List value")
         // FIX needed for ("complex type JSON & MAP")
         // val mapValue = rootJson.get("mapValue")
-        // assertTrue(JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_MAP, mapValue), "Failed to get as Map value")
+        // assertTrue(JacksonUtils.checkJsonNodeValueOfType(BlueprintConstants.DATA_TYPE_MAP, mapValue), "Failed to get as Map value")
 
-        assertTrue(!JacksonUtils.checkJsonNodeValueOfType(BluePrintConstants.DATA_TYPE_LIST, stringValue), "Negative type failed")
+        assertTrue(!JacksonUtils.checkJsonNodeValueOfType(BlueprintConstants.DATA_TYPE_LIST, stringValue), "Negative type failed")
     }
 }

@@ -29,12 +29,12 @@ import kotlinx.coroutines.reactor.ReactorContext
 import kotlinx.coroutines.reactor.asCoroutineContext
 import kotlinx.coroutines.withContext
 import org.apache.http.message.BasicHeader
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVOCATION_ID
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_ORIGINATOR_ID
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_PARTNER_NAME
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_REQUEST_ID
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_SUBREQUEST_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.ONAP_INVOCATION_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.ONAP_ORIGINATOR_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.ONAP_PARTNER_NAME
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.ONAP_REQUEST_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.ONAP_SUBREQUEST_ID
 import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
@@ -65,7 +65,7 @@ class RestLoggerService {
         fun httpInvoking(headers: Array<BasicHeader>) {
             headers.plusElement(BasicHeader(ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID()))
             headers.plusElement(BasicHeader(ONAP_INVOCATION_ID, UUID.randomUUID().toString()))
-            headers.plusElement(BasicHeader(ONAP_PARTNER_NAME, BluePrintConstants.APP_NAME))
+            headers.plusElement(BasicHeader(ONAP_PARTNER_NAME, BlueprintConstants.APP_NAME))
         }
     }
 
@@ -98,7 +98,7 @@ class RestLoggerService {
             resHeaders[ONAP_SUBREQUEST_ID] = MDC.get("SubRequestID")
             resHeaders[ONAP_ORIGINATOR_ID] = MDC.get("OriginatorID")
             resHeaders[ONAP_INVOCATION_ID] = MDC.get("InvocationID")
-            resHeaders[ONAP_PARTNER_NAME] = BluePrintConstants.APP_NAME
+            resHeaders[ONAP_PARTNER_NAME] = BlueprintConstants.APP_NAME
         } catch (e: Exception) {
             log.warn("couldn't set response headers", e)
         } finally {

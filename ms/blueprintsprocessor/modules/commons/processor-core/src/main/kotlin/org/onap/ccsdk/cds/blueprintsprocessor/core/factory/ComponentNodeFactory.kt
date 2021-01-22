@@ -17,7 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.core.factory
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
@@ -29,16 +29,16 @@ import org.springframework.context.ApplicationContextAware
  */
 interface ComponentNode {
 
-    @Throws(BluePrintProcessorException::class)
+    @Throws(BlueprintProcessorException::class)
     fun validate(context: MutableMap<String, Any>, componentContext: MutableMap<String, Any?>)
 
-    @Throws(BluePrintProcessorException::class)
+    @Throws(BlueprintProcessorException::class)
     fun process(context: MutableMap<String, Any>, componentContext: MutableMap<String, Any?>)
 
-    @Throws(BluePrintProcessorException::class)
+    @Throws(BlueprintProcessorException::class)
     fun errorHandle(context: MutableMap<String, Any>, componentContext: MutableMap<String, Any?>)
 
-    @Throws(BluePrintProcessorException::class)
+    @Throws(BlueprintProcessorException::class)
     fun reTrigger(context: MutableMap<String, Any>, componentContext: MutableMap<String, Any?>)
 }
 

@@ -20,10 +20,10 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.restClientService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.KeyIdentifier
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -51,7 +51,7 @@ open class IpAssignResolutionCapability : ResourceAssignmentProcessor() {
                 /** Check Resource Assignment has the source definitions, If not get from Resource Definitions **/
                 val resourceSource = resourceAssignment.dictionarySourceDefinition
                     ?: resourceDefinition?.sources?.get(dSource)
-                    ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+                    ?: throw BlueprintProcessorException("couldn't get resource definition $dName source($dSource)")
 
                 val resourceSourceProperties =
                     checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
@@ -81,7 +81,7 @@ open class IpAssignResolutionCapability : ResourceAssignmentProcessor() {
                 resourceSourceProperties["resolved-payload"] = JacksonUtils.jsonNode(generatedPayload)
 
                 // Get the Rest Client service, selector will be included in application.properties
-                val restClientService = BluePrintDependencyService.restClientService(
+                val restClientService = BlueprintDependencyService.restClientService(
                     "ipassign-ms"
                 )
 
@@ -100,7 +100,7 @@ open class IpAssignResolutionCapability : ResourceAssignmentProcessor() {
                         "Failed to dictionary name ($dName), dictionary source($($dName) " +
                             "response_code: ($responseStatusCode)"
                     log.warn(errMsg)
-                    throw BluePrintProcessorException(errMsg)
+                    throw BlueprintProcessorException(errMsg)
                 }
                 // Parse the error Body and assign the property value
             }
@@ -108,7 +108,7 @@ open class IpAssignResolutionCapability : ResourceAssignmentProcessor() {
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
-            throw BluePrintProcessorException(
+            throw BlueprintProcessorException(
                 "Failed in template key ($resourceAssignment) assignments with: ${e.message}",
                 e
             )
@@ -116,7 +116,7 @@ open class IpAssignResolutionCapability : ResourceAssignmentProcessor() {
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
-        raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
+        raRuntimeService.getBlueprintError().addError(runtimeException.message!!)
     }
 
     /** Generates aggregated request payload for Ip Assign mS. Parses the resourceassignments of

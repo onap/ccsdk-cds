@@ -18,15 +18,15 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBlueprintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockRestResourceResolutionProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -38,15 +38,15 @@ import kotlin.test.assertNotNull
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
     classes = [
-        MockRestResourceResolutionProcessor::class, MockBluePrintRestLibPropertyService::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, RestClientProperties::class
+        MockRestResourceResolutionProcessor::class, MockBlueprintRestLibPropertyService::class,
+        BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class, RestClientProperties::class
     ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class RestResourceResolutionProcessorTest {
 
     @Autowired
-    lateinit var bluePrintRestLibPropertyService: MockBluePrintRestLibPropertyService
+    lateinit var bluePrintRestLibPropertyService: MockBlueprintRestLibPropertyService
 
     private lateinit var restResourceResolutionProcessor: MockRestResourceResolutionProcessor
 
@@ -58,7 +58,7 @@ class RestResourceResolutionProcessorTest {
     @Test
     fun `test rest resource resolution`() {
         runBlocking {
-            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+            val bluePrintContext = BlueprintMetadataUtils.getBlueprintContext(
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
 
@@ -92,7 +92,7 @@ class RestResourceResolutionProcessorTest {
     @Test
     fun `test rest aai get resource resolution`() {
         runBlocking {
-            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+            val bluePrintContext = BlueprintMetadataUtils.getBlueprintContext(
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
 
@@ -126,7 +126,7 @@ class RestResourceResolutionProcessorTest {
     @Test
     fun `test rest aai put resource resolution`() {
         runBlocking {
-            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+            val bluePrintContext = BlueprintMetadataUtils.getBlueprintContext(
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
 

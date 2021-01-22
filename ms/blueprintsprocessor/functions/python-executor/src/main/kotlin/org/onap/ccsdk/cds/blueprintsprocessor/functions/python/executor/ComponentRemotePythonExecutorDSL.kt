@@ -18,8 +18,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
@@ -32,53 +32,53 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 /** Component Extensions **/
-fun BluePrintTypes.nodeTypeComponentRemotePythonExecutor(): NodeType {
+fun BlueprintTypes.nodeTypeComponentRemotePythonExecutor(): NodeType {
     return nodeType(
-        id = "component-remote-python-executor", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+        id = "component-remote-python-executor", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_NODE_COMPONENT,
         description = "This is Remote Python Execution Component."
     ) {
 
         attribute(
-            ComponentRemotePythonExecutor.ATTRIBUTE_PREPARE_ENV_LOG, BluePrintConstants.DATA_TYPE_STRING,
+            ComponentRemotePythonExecutor.ATTRIBUTE_PREPARE_ENV_LOG, BlueprintConstants.DATA_TYPE_STRING,
             false
         )
         attribute(
-            ComponentRemotePythonExecutor.ATTRIBUTE_EXEC_CMD_LOG, BluePrintConstants.DATA_TYPE_LIST,
+            ComponentRemotePythonExecutor.ATTRIBUTE_EXEC_CMD_LOG, BlueprintConstants.DATA_TYPE_LIST,
             false
         ) {
-            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+            entrySchema(BlueprintConstants.DATA_TYPE_STRING)
         }
         attribute(
-            ComponentRemotePythonExecutor.ATTRIBUTE_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON,
+            ComponentRemotePythonExecutor.ATTRIBUTE_RESPONSE_DATA, BlueprintConstants.DATA_TYPE_JSON,
             false
         )
 
         operation("ComponentRemotePythonExecutor", "ComponentRemotePythonExecutor Operation") {
             inputs {
                 property(
-                    ComponentRemotePythonExecutor.INPUT_ENDPOINT_SELECTOR, BluePrintConstants.DATA_TYPE_STRING,
+                    ComponentRemotePythonExecutor.INPUT_ENDPOINT_SELECTOR, BlueprintConstants.DATA_TYPE_STRING,
                     false, "Remote Container or Server selector name."
                 ) {
                     defaultValue(ComponentRemotePythonExecutor.DEFAULT_SELECTOR)
                 }
                 property(
-                    ComponentRemotePythonExecutor.INPUT_DYNAMIC_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON,
+                    ComponentRemotePythonExecutor.INPUT_DYNAMIC_PROPERTIES, BlueprintConstants.DATA_TYPE_JSON,
                     false, "Dynamic Json Content or DSL Json reference."
                 )
 
                 property(
-                    ComponentRemotePythonExecutor.INPUT_ARGUMENT_PROPERTIES, BluePrintConstants.DATA_TYPE_JSON,
+                    ComponentRemotePythonExecutor.INPUT_ARGUMENT_PROPERTIES, BlueprintConstants.DATA_TYPE_JSON,
                     false, "Argument Json Content or DSL Json reference."
                 )
 
                 property(
-                    ComponentRemotePythonExecutor.INPUT_COMMAND, BluePrintConstants.DATA_TYPE_STRING,
+                    ComponentRemotePythonExecutor.INPUT_COMMAND, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Command to execute."
                 )
 
                 property(
-                    ComponentRemotePythonExecutor.INPUT_PACKAGES, BluePrintConstants.DATA_TYPE_LIST,
+                    ComponentRemotePythonExecutor.INPUT_PACKAGES, BlueprintConstants.DATA_TYPE_LIST,
                     false, "Packages to install based on type."
                 ) {
                     entrySchema("dt-system-packages")
@@ -88,26 +88,26 @@ fun BluePrintTypes.nodeTypeComponentRemotePythonExecutor(): NodeType {
     }
 }
 
-fun BluePrintTypes.dataTypeDtSystemPackages(): DataType {
+fun BlueprintTypes.dataTypeDtSystemPackages(): DataType {
     return dataType(
-        id = "dt-system-packages", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT,
+        id = "dt-system-packages", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT,
         description = "This represent System Package Data Type"
     ) {
-        property("type", BluePrintConstants.DATA_TYPE_LIST, true, "") {
+        property("type", BlueprintConstants.DATA_TYPE_LIST, true, "") {
             constrain {
-                entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+                entrySchema(BlueprintConstants.DATA_TYPE_STRING)
                 validValues(arrayListOf("ansible_galaxy".asJsonPrimitive(), "pip".asJsonPrimitive()))
             }
         }
-        property("package", BluePrintConstants.DATA_TYPE_LIST, true, "") {
-            entrySchema(BluePrintConstants.DATA_TYPE_STRING)
+        property("package", BlueprintConstants.DATA_TYPE_LIST, true, "") {
+            entrySchema(BlueprintConstants.DATA_TYPE_STRING)
         }
     }
 }
 
 /** Component Builder */
-fun BluePrintTypes.nodeTemplateComponentRemotePythonExecutor(
+fun BlueprintTypes.nodeTemplateComponentRemotePythonExecutor(
     id: String,
     description: String,
     block: ComponentRemotePythonExecutorNodeTemplateBuilder.() -> Unit

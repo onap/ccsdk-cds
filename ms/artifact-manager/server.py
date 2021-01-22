@@ -19,7 +19,7 @@ import click
 from grpc import server as grpc_server
 from manager.configuration import config
 from manager.servicer import ArtifactManagerServicer
-from proto.BluePrintManagement_pb2_grpc import add_BluePrintManagementServiceServicer_to_server
+from proto.BlueprintManagement_pb2_grpc import add_BlueprintManagementServiceServicer_to_server
 
 
 @click.command()
@@ -34,7 +34,7 @@ def run_server():
     max_workers: int = int(config["artifactManagerServer"]["maxWorkers"])
     server: grpc_server = grpc_server(ThreadPoolExecutor(max_workers=max_workers))
 
-    add_BluePrintManagementServiceServicer_to_server(ArtifactManagerServicer(), server)
+    add_BlueprintManagementServiceServicer_to_server(ArtifactManagerServicer(), server)
     port_number: int = int(config["artifactManagerServer"]["port"])
     server.add_insecure_port(f"[::]:{port_number}")
 

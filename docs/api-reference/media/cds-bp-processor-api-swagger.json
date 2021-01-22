@@ -193,7 +193,7 @@
         "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Download a Blueprint Model by ID",
         "description" : "Gets the CBA of a blueprint model by its ID. Response can be saved to a file to download the CBA.",
-        "operationId" : "BlueprintModelController_downloadBluePrint_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "operationId" : "BlueprintModelController_downloadBlueprint_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",

@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.asListOfString
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
@@ -48,7 +48,7 @@ object ResourceDefinitionUtils {
         MutableList<ResourceAssignment> {
             /** Check if resolve definition is defined in the resource definition Map */
             val resourceDefinition = resourceDefinitions[resolveDefinition]
-                ?: throw BluePrintProcessorException("failed to get resolve definition($resolveDefinition)")
+                ?: throw BlueprintProcessorException("failed to get resolve definition($resolveDefinition)")
 
             val resourceAssignments: MutableList<ResourceAssignment> = arrayListOf()
 
@@ -56,7 +56,7 @@ object ResourceDefinitionUtils {
             val definitionDependencies = definitionDependencies(resourceDefinition, sources)
             definitionDependencies.forEach { definitionDependencyName ->
                 val definitionDependency = resourceDefinitions[definitionDependencyName]
-                    ?: throw BluePrintProcessorException("failed to get dependency definition($definitionDependencyName)")
+                    ?: throw BlueprintProcessorException("failed to get dependency definition($definitionDependencyName)")
 
                 val resourceAssignment = ResourceAssignment().apply {
                     name = definitionDependency.name

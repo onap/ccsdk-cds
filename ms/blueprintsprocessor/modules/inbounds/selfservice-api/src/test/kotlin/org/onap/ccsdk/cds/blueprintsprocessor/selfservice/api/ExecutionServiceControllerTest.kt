@@ -21,11 +21,11 @@ import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -45,8 +45,8 @@ import kotlin.test.assertTrue
 @WebFluxTest
 @ContextConfiguration(
     classes = [
-        ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, SelfServiceApiTestConfiguration::class,
+        ExecutionServiceHandler::class, BlueprintCoreConfiguration::class,
+        BlueprintCatalogService::class, SelfServiceApiTestConfiguration::class,
         ErrorCatalogTestConfiguration::class, SimpleMeterRegistry::class
     ]
 )
@@ -54,7 +54,7 @@ import kotlin.test.assertTrue
 class ExecutionServiceControllerTest {
 
     @Autowired
-    lateinit var blueprintsProcessorCatalogService: BluePrintCatalogService
+    lateinit var blueprintsProcessorCatalogService: BlueprintCatalogService
 
     @Autowired
     lateinit var webTestClient: WebTestClient

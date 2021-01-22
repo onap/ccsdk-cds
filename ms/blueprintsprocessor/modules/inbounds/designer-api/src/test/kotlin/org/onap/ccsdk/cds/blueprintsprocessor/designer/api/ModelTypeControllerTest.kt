@@ -23,7 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -56,15 +56,15 @@ class ModelTypeControllerTest {
 
             val content = JacksonUtils.getClassPathFileContent("model_type/data_type/datatype-property.json")
             var modelType = ModelType()
-            modelType.definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
-            modelType.derivedFrom = BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT
+            modelType.definitionType = BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+            modelType.derivedFrom = BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT
             modelType.description = "Definition for Sample Datatype "
             modelType.definition = JacksonUtils.jsonNode(content)
             modelType.modelName = modelName
             modelType.version = "1.0.0"
             modelType.tags = (
-                "test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+                "test-datatype ," + BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
                 )
             modelType.updatedBy = "xxxxxx@xxx.com"
             modelType = modelTypeController.saveModelType(modelType)
@@ -108,7 +108,7 @@ class ModelTypeControllerTest {
             Assert.assertNotNull("Failed to get Id for api call  getModelByName ", dbModelType!!.modelName)
 
             val dbDatatypeModelTypes =
-                modelTypeController.getModelTypeByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
+                modelTypeController.getModelTypeByDefinitionType(BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
             Assert.assertNotNull("Failed to find getModelTypeByDefinitionType by tags", dbDatatypeModelTypes)
             Assert.assertTrue("Failed to find getModelTypeByDefinitionType by count", dbDatatypeModelTypes.isNotEmpty())
         }

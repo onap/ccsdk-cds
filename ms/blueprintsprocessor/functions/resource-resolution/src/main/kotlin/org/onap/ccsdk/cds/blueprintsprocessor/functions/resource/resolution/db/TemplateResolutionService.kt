@@ -18,9 +18,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
@@ -33,7 +33,7 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
     private val log = LoggerFactory.getLogger(TemplateResolutionService::class.toString())
 
     suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         artifactPrefix: String,
         resolutionKey: String
     ): String =
@@ -41,8 +41,8 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
 
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+            val blueprintVersion = metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BlueprintConstants.METADATA_TEMPLATE_NAME]!!
 
             findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
                 blueprintName,
@@ -93,14 +93,14 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
     suspend fun write(
         properties: Map<String, Any>,
         result: String,
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         artifactPrefix: String
     ): TemplateResolution = withContext(Dispatchers.IO) {
 
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+        val blueprintVersion = metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION]!!
+        val blueprintName = metadata[BlueprintConstants.METADATA_TEMPLATE_NAME]!!
         val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
         val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
         val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
@@ -187,7 +187,7 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                         " (resourceId: $resourceId resourceType: $resourceType) occurrence:$occurrence error: {}",
                     ex.message
                 )
-                throw BluePrintException("Failed to store resource api result.", ex)
+                throw BlueprintException("Failed to store resource api result.", ex)
             }
         }
 }

@@ -20,11 +20,11 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import org.apache.commons.io.FilenameUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.BlueprintJythonService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.OperationAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -42,7 +42,7 @@ class BlueprintJythonServiceImpl(
     val log: Logger = LoggerFactory.getLogger(BlueprintJythonService::class.java)
 
     inline fun <reified T> jythonInstance(
-        blueprintContext: BluePrintContext,
+        blueprintContext: BlueprintContext,
         pythonClassName: String,
         content: String,
         dependencyInstanceNames: MutableMap<String, Any>?
@@ -54,7 +54,7 @@ class BlueprintJythonServiceImpl(
         pythonPath.addAll(pythonExecutorProperty.modulePaths)
 
         val blueprintPythonConfigurations =
-            BluePrintPython(pythonExecutorProperty.executionPath, pythonPath, arrayListOf())
+            BlueprintPython(pythonExecutorProperty.executionPath, pythonPath, arrayListOf())
 
         val blueprintPythonHost = BlueprintPythonHost(blueprintPythonConfigurations)
         val pyObject = blueprintPythonHost.getPythonComponent(content, pythonClassName, dependencyInstanceNames)
@@ -64,7 +64,7 @@ class BlueprintJythonServiceImpl(
         return pyObject.__tojava__(T::class.java) as T
     }
 
-    override fun jythonComponentInstance(bluePrintContext: BluePrintContext, scriptClassReference: String):
+    override fun jythonComponentInstance(bluePrintContext: BlueprintContext, scriptClassReference: String):
         BlueprintFunctionNode<*, *> {
 
             val pythonFileName = bluePrintContext.rootPath
@@ -101,13 +101,13 @@ class BlueprintJythonServiceImpl(
         val blueprintBasePath: String = bluePrintContext.rootPath
 
         val artifactName: String = operationAssignment.implementation?.primary
-            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+            ?: throw BlueprintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
 
         val artifactDefinition =
             bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
 
         val pythonFileName = artifactDefinition.file
-            ?: throw BluePrintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
+            ?: throw BlueprintProcessorException("missing file name for node template ($nodeTemplateName)'s artifactName($artifactName)")
 
         val pythonClassName = FilenameUtils.getBaseName(pythonFileName)
         log.info("Getting Jython Script Class($pythonClassName)")
@@ -125,7 +125,7 @@ class BlueprintJythonServiceImpl(
 
         val instanceDependenciesNode: ArrayNode =
             operationInputs[PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES] as? ArrayNode
-                ?: throw BluePrintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
+                ?: throw BlueprintProcessorException("Failed to get property(${PythonExecutorConstants.INPUT_INSTANCE_DEPENDENCIES})")
 
         instanceDependenciesNode.forEach { instanceName ->
             jythonInstances[instanceName.textValue()] = applicationContext.getBean(instanceName.textValue())

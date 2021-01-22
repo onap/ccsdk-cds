@@ -23,11 +23,11 @@ import io.grpc.ServerCallHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.getStringKey
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.putStringKeyValue
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVOCATION_ID
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_PARTNER_NAME
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_REQUEST_ID
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.ONAP_INVOCATION_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.ONAP_PARTNER_NAME
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.ONAP_REQUEST_ID
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -75,7 +75,7 @@ class GrpcLoggerService {
         val localhost = InetAddress.getLocalHost()
 
         val clientSocketAddress = call.attributes.get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR) as? InetSocketAddress
-            ?: throw BluePrintProcessorException("failed to get client address")
+            ?: throw BlueprintProcessorException("failed to get client address")
         val serviceName = call.methodDescriptor.fullMethodName
 
         MDC.put("InvokeTimestamp", ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT))
@@ -94,7 +94,7 @@ class GrpcLoggerService {
     fun grpcInvoking(requestHeader: Metadata) {
         requestHeader.putStringKeyValue(ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID())
         requestHeader.putStringKeyValue(ONAP_INVOCATION_ID, UUID.randomUUID().toString())
-        requestHeader.putStringKeyValue(ONAP_PARTNER_NAME, BluePrintConstants.APP_NAME)
+        requestHeader.putStringKeyValue(ONAP_PARTNER_NAME, BlueprintConstants.APP_NAME)
     }
 
     /** Used when server returns response */

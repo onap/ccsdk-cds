@@ -21,10 +21,10 @@ import org.apache.kafka.streams.processor.ProcessorContext
 import org.apache.kafka.streams.processor.StateStore
 import org.apache.kafka.streams.state.StoreBuilder
 import org.apache.kafka.streams.state.StoreSupplier
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibGenericService
+import org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primaryDBLibGenericService
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 import java.util.*
 
 
@@ -32,7 +32,7 @@ class KafkaJDBCKeyStoreSupplier(private val name: String) : StoreSupplier<KafkaJ
 
     override fun get(): KafkaJDBCStore {
         // Get the DBLibGenericService Instance
-        val bluePrintDBLibGenericService = BluePrintDependencyService.primaryDBLibGenericService()
+        val bluePrintDBLibGenericService = BlueprintDependencyService.primaryDBLibGenericService()
         return KafkaJDBCStoreImpl(name, bluePrintDBLibGenericService)
     }
 
@@ -98,7 +98,7 @@ interface KafkaJDBCStore : StateStore {
 
 
 class KafkaJDBCStoreImpl(private val name: String,
-                         private val bluePrintDBLibGenericService: BluePrintDBLibGenericService)
+                         private val bluePrintDBLibGenericService: BlueprintDBLibGenericService)
     : KafkaJDBCStore {
 
     private val log = logger(KafkaJDBCStoreImpl::class)

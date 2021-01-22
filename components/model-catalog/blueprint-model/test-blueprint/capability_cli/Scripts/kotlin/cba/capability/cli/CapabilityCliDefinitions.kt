@@ -20,7 +20,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTemplateCom
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.relationshipTemplateSshClient
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.relationshipTypeConnectsToSshClient
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ServiceTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.artifactTypeTemplateVelocity
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getAttribute
@@ -28,9 +28,9 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.getInput
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeTypeComponent
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipTypeConnectsTo
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.serviceTemplate
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.AbstractBluePrintDefinitions
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.AbstractBlueprintDefinitions
 
-class CapabilityCliDefinitions : AbstractBluePrintDefinitions() {
+class CapabilityCliDefinitions : AbstractBlueprintDefinitions() {
 
     override fun serviceTemplate(): ServiceTemplate {
         return defaultServiceTemplate()
@@ -64,7 +64,7 @@ fun CapabilityCliDefinitions.defaultServiceTemplate() =
             nodeTemplateComponentScriptExecutor(id = "check", description = "") {
                 definedOperation(description = "") {
                     inputs {
-                        type(BluePrintConstants.SCRIPT_KOTLIN)
+                        type(BlueprintConstants.SCRIPT_KOTLIN)
                         scriptClassReference(Check::class)
                     }
                     outputs {

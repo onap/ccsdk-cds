@@ -20,10 +20,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
 import org.apache.commons.collections.MapUtils
 import org.apache.commons.lang3.StringUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintFileUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
@@ -75,7 +75,7 @@ object ResourceDictionaryUtils {
         data.fields().forEach { field ->
             val valueNode: JsonNode = data.at("/".plus(field.key)) ?: NullNode.getInstance()
 
-            val path = BluePrintConstants.PATH_INPUTS.plus(BluePrintConstants.PATH_DIVIDER).plus(field.key)
+            val path = BlueprintConstants.PATH_INPUTS.plus(BlueprintConstants.PATH_DIVIDER).plus(field.key)
             log.trace("setting path ({}), values ({})", path, valueNode)
             context[path] = valueNode
         }
@@ -83,7 +83,7 @@ object ResourceDictionaryUtils {
 
     fun getResourceAssignmentFromFile(filePath: String): List<ResourceAssignment> {
         return JacksonUtils.getListFromFile(filePath, ResourceAssignment::class.java)
-            ?: throw BluePrintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
+            ?: throw BlueprintProcessorException("couldn't get ResourceAssignment definitions for the file($filePath)")
     }
 
     fun writeResourceDefinitionTypes(basePath: String, resourceDefinitions: List<ResourceDefinition>) {
@@ -92,9 +92,9 @@ object ResourceDictionaryUtils {
     }
 
     fun writeResourceDefinitionTypes(basePath: String, resourceDefinitionMap: Map<String, ResourceDefinition>) {
-        val typePath = basePath.plus(File.separator).plus(BluePrintConstants.TOSCA_DEFINITIONS_DIR)
+        val typePath = basePath.plus(File.separator).plus(BlueprintConstants.TOSCA_DEFINITIONS_DIR)
             .plus(File.separator).plus("${ResourceDictionaryConstants.PATH_RESOURCE_DEFINITION_TYPE}.json")
         val resourceDefinitionContent = JacksonUtils.getJson(resourceDefinitionMap.toSortedMap(), true)
-        BluePrintFileUtils.writeDefinitionFile(typePath, resourceDefinitionContent)
+        BlueprintFileUtils.writeDefinitionFile(typePath, resourceDefinitionContent)
     }
 }

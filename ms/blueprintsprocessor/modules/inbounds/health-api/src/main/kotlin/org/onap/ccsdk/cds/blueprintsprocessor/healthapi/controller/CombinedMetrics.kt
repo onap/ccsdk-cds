@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * Exposes API for checking Metrics of BluePrint processor and CDSListener.
+ * Exposes API for checking Metrics of Blueprint processor and CDSListener.
  *
  * @author Shaaban Ebrahim
  * @version 1.0
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/v1/combinedMetrics")
 @Api(
     value = "/api/v1/combinedMetrics",
-    description = "gather all Metrics info from BluePrint and CDSListener"
+    description = "gather all Metrics info from Blueprint and CDSListener"
 )
 open class CombinedMetrics(private val combinedMetricsService: CombinedMetricsService) {
 

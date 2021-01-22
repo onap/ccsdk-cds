@@ -17,8 +17,8 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.dsl
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.asBluePrintsDataTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asBlueprintsDataTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.asPropertyDefinitionMap
@@ -51,10 +51,10 @@ class ServiceTemplateBuilder(
     var policyTypes: MutableMap<String, PolicyType>? = null
 
     private fun initMetaData() {
-        metadata[BluePrintConstants.METADATA_TEMPLATE_NAME] = name
-        metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION] = version
-        metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR] = author
-        metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS] = tags
+        metadata[BlueprintConstants.METADATA_TEMPLATE_NAME] = name
+        metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION] = version
+        metadata[BlueprintConstants.METADATA_TEMPLATE_AUTHOR] = author
+        metadata[BlueprintConstants.METADATA_TEMPLATE_TAGS] = tags
     }
 
     fun metadata(id: String, value: String) {
@@ -73,7 +73,7 @@ class ServiceTemplateBuilder(
     }
 
     fun dataType(dataType: KClass<*>) {
-        dataType(dataType.asBluePrintsDataTypes())
+        dataType(dataType.asBlueprintsDataTypes())
     }
 
     fun dsl(id: String, content: Any) {

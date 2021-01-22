@@ -7,7 +7,7 @@ import * as JSZip from 'jszip';
 import {PackageCreationUtils} from './package-creation.utils';
 import {MetadataTabComponent} from './metadata-tab/metadata-tab.component';
 import {DesignerStore} from '../designer/designer.store';
-import {BluePrintDetailModel} from '../model/BluePrint.detail.model';
+import {BlueprintDetailModel} from '../model/Blueprint.detail.model';
 
 @Injectable({
     providedIn: 'root'
@@ -140,7 +140,7 @@ export class PackageCreationExtractionService {
         this.packageCreationStore.changeMetaData(metaDataObject);
     }
 
-    public setMetaDataWithObject(metaDataObject: MetaDataTabModel, bluePrintDetailModel: BluePrintDetailModel) {
+    public setMetaDataWithObject(metaDataObject: MetaDataTabModel, bluePrintDetailModel: BlueprintDetailModel) {
         metaDataObject.description = bluePrintDetailModel.artifactDescription;
         this.packageCreationStore.changeMetaData(metaDataObject);
 

@@ -20,7 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.pro
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.DatabaseResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.isNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -52,13 +52,13 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
             }
             // Check the value has populated for mandatory case
             ResourceAssignmentUtils.assertTemplateKeyValueNotNull(resourceAssignment)
-        } catch (e: BluePrintProcessorException) {
+        } catch (e: BlueprintProcessorException) {
             val errorMsg = "Failed to process input resource resolution in template key ($resourceAssignment) assignments."
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
             logger.error(errorMsg)
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, e.message)
-            throw BluePrintProcessorException("Failed in template key ($resourceAssignment) assignments with : (${e.message})", e)
+            throw BlueprintProcessorException("Failed in template key ($resourceAssignment) assignments with : (${e.message})", e)
         }
     }
 
@@ -71,7 +71,7 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
         /** Check Resource Assignment has the source definitions, If not get from Resource Definition **/
         val resourceSource = resourceAssignment.dictionarySourceDefinition
             ?: resourceDefinition?.sources?.get(dSource)
-            ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
+            ?: throw BlueprintProcessorException("couldn't get resource definition $dName source($dSource)")
         try {
 
             val resourceSourceProperties = checkNotNull(resourceSource.properties) {
@@ -86,11 +86,11 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
             // keyDependency = service-instance.service-instance-id
             setFromInputKeyDependencies(keyDependency, resourceAssignment); // New API which picks attribute from Input
         } catch (e: IllegalStateException) {
-            throw BluePrintProcessorException(e)
+            throw BlueprintProcessorException(e)
         }
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-        raRuntimeService.getBluePrintError().addError(runtimeException.message!!)
+        raRuntimeService.getBlueprintError().addError(runtimeException.message!!)
     }
 }

@@ -95,13 +95,13 @@ class CustomFunctionsTest {
         val returnValueBool: JsonNode = false.asJsonType()
         assertFalse(returnValueBool.asBoolean())
 
-        val returnValue: JsonNode = BluePrintError().asJsonType()
+        val returnValue: JsonNode = BlueprintError().asJsonType()
         assertEquals(JsonNodeType.OBJECT, returnValue.getNodeType())
     }
 
     @Test
     fun testMapAsObjectNode() {
-        val returnValue: ObjectNode = hashMapOf("test" to BluePrintError()).asObjectNode()
+        val returnValue: ObjectNode = hashMapOf("test" to BlueprintError()).asObjectNode()
         assertNotNull(returnValue.get("test"))
     }
 
@@ -121,7 +121,7 @@ class CustomFunctionsTest {
         assertNull(returnValueString)
     }
 
-    @Test(expected = BluePrintException::class)
+    @Test(expected = BlueprintException::class)
     fun testCastValue() {
         val initMap: Map<String, Double> = hashMapOf("test" to 1.1)
         val returnValue = initMap.castValue("test", Number::class)
@@ -178,7 +178,7 @@ class CustomFunctionsTest {
         assertTrue("[{\"key\": \"value\"},{\"key\": \"value\"}]".asJsonType().isComplexType())
     }
 
-    @Test(expected = BluePrintException::class)
+    @Test(expected = BlueprintException::class)
     fun testRootFieldsToMap() {
         1.asJsonType().rootFieldsToMap()
     }
@@ -192,7 +192,7 @@ class CustomFunctionsTest {
         assertEquals(3, mutMap["hello"]?.asInt())
     }
 
-    @Test(expected = BluePrintException::class)
+    @Test(expected = BlueprintException::class)
     fun testMapGetAsString() {
         val initMap = hashMapOf("test" to "hello".asJsonType())
 
@@ -201,7 +201,7 @@ class CustomFunctionsTest {
         initMap.getAsString("test2")
     }
 
-    @Test(expected = BluePrintException::class)
+    @Test(expected = BlueprintException::class)
     fun testMapGetAsBoolean() {
         val initMap = hashMapOf("test" to true.asJsonType())
 
@@ -210,7 +210,7 @@ class CustomFunctionsTest {
         initMap.getAsBoolean("test2")
     }
 
-    @Test(expected = BluePrintException::class)
+    @Test(expected = BlueprintException::class)
     fun testMapGetAsInt() {
         val initMap = hashMapOf("test" to 1.asJsonType())
 
@@ -219,7 +219,7 @@ class CustomFunctionsTest {
         initMap.getAsInt("test2")
     }
 
-    @Test(expected = BluePrintException::class)
+    @Test(expected = BlueprintException::class)
     fun testCheckEquals() {
         assertTrue(checkEquals("hello", "hello", { -> "error" }))
 

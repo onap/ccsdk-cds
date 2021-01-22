@@ -23,21 +23,21 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.optionalClusterServic
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BlueprintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
 import org.onap.ccsdk.cds.controllerblueprints.core.deCompress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.reCreateNBDirs
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintFileUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BlueprintCompileCache
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintFileUtils
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
@@ -51,8 +51,8 @@ import java.util.UUID
  */
 @Service("blueprintsProcessorCatalogService")
 class BlueprintProcessorCatalogServiceImpl(
-    bluePrintRuntimeValidatorService: BluePrintValidatorService,
-    private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+    bluePrintRuntimeValidatorService: BlueprintValidatorService,
+    private val bluePrintLoadConfiguration: BlueprintLoadConfiguration,
     private val blueprintModelRepository: BlueprintModelRepository
 ) :
     BlueprintCatalogServiceImpl(bluePrintLoadConfiguration, bluePrintRuntimeValidatorService) {
@@ -61,7 +61,7 @@ class BlueprintProcessorCatalogServiceImpl(
 
     override suspend fun delete(name: String, version: String) {
         // Clean blueprint script cache
-        val cacheKey = BluePrintFileUtils
+        val cacheKey = BlueprintFileUtils
             .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, name, version))
         cleanClassLoader(cacheKey)
         log.info("removed cba file name($name), version($version) from cache")
@@ -100,11 +100,11 @@ class BlueprintProcessorCatalogServiceImpl(
                 }
 
                 check(deployFile.exists() && deployFile.list().isNotEmpty()) {
-                    throw BluePrintProcessorException("file check failed")
+                    throw BlueprintProcessorException("file check failed")
                 }
             } catch (e: Exception) {
                 deleteNBDir(deployFile.absolutePath)
-                throw BluePrintProcessorException(
+                throw BlueprintProcessorException(
                     "failed to get  get cba file name($name), version($version) from db" +
                         " : ${e.message}"
                 )
@@ -121,11 +121,11 @@ class BlueprintProcessorCatalogServiceImpl(
     }
 
     override suspend fun save(metadata: MutableMap<String, String>, archiveFile: File) {
-        val artifactName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]
-        val artifactVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]
+        val artifactName = metadata[BlueprintConstants.METADATA_TEMPLATE_NAME]
+        val artifactVersion = metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION]
 
         check(archiveFile.isFile && !archiveFile.isDirectory) {
-            throw BluePrintException("Not a valid Archive file(${archiveFile.absolutePath})")
+            throw BlueprintException("Not a valid Archive file(${archiveFile.absolutePath})")
         }
 
         blueprintModelRepository.findByArtifactNameAndArtifactVersion(artifactName!!, artifactVersion!!)?.let {
@@ -134,7 +134,7 @@ class BlueprintProcessorCatalogServiceImpl(
             val deployFile =
                 normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, artifactName, artifactVersion)
 
-            val cacheKey = BluePrintFileUtils.compileCacheKey(deployFile)
+            val cacheKey = BlueprintFileUtils.compileCacheKey(deployFile)
             cleanClassLoader(cacheKey)
 
             deleteNBDir(deployFile).let {
@@ -144,20 +144,20 @@ class BlueprintProcessorCatalogServiceImpl(
         }
 
         val blueprintModel = BlueprintModel()
-        blueprintModel.id = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]
+        blueprintModel.id = metadata[BlueprintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]
         blueprintModel.artifactType = ApplicationConstants.ASDC_ARTIFACT_TYPE_SDNC_MODEL
-        blueprintModel.published = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID]
-            ?: BluePrintConstants.FLAG_N
+        blueprintModel.published = metadata[BlueprintConstants.PROPERTY_BLUEPRINT_VALID]
+            ?: BlueprintConstants.FLAG_N
         blueprintModel.artifactName = artifactName
         blueprintModel.artifactVersion = artifactVersion
-        blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!
-        blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]!!
+        blueprintModel.updatedBy = metadata[BlueprintConstants.METADATA_TEMPLATE_AUTHOR]!!
+        blueprintModel.tags = metadata[BlueprintConstants.METADATA_TEMPLATE_TAGS]!!
         val description =
-            if (null != metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION]) metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION] else ""
+            if (null != metadata[BlueprintConstants.METADATA_TEMPLATE_DESCRIPTION]) metadata[BlueprintConstants.METADATA_TEMPLATE_DESCRIPTION] else ""
         blueprintModel.artifactDescription = description
 
         val blueprintModelContent = BlueprintModelContent()
-        blueprintModelContent.id = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]
+        blueprintModelContent.id = metadata[BlueprintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]
         blueprintModelContent.contentType = "CBA_ZIP"
         blueprintModelContent.name = "$artifactName:$artifactVersion"
         blueprintModelContent.description = "$artifactName:$artifactVersion CBA Zip Content"
@@ -169,7 +169,7 @@ class BlueprintProcessorCatalogServiceImpl(
         try {
             blueprintModelRepository.saveAndFlush(blueprintModel)
         } catch (ex: DataIntegrityViolationException) {
-            throw BluePrintException(
+            throw BlueprintException(
                 ErrorCode.CONFLICT_ADDING_RESOURCE.value,
                 "The blueprint entry " +
                     "is already exist in database: ${ex.message}",
@@ -179,9 +179,9 @@ class BlueprintProcessorCatalogServiceImpl(
     }
 
     private suspend fun cleanClassLoader(cacheKey: String) {
-        val clusterService = BluePrintDependencyService.optionalClusterService()
+        val clusterService = BlueprintDependencyService.optionalClusterService()
         if (null == clusterService)
-            BluePrintCompileCache.cleanClassLoader(cacheKey)
+            BlueprintCompileCache.cleanClassLoader(cacheKey)
         else {
             log.info("Sending ClusterMessage: Clean Classloader Cache")
             clusterService.sendMessage(BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE, cacheKey)

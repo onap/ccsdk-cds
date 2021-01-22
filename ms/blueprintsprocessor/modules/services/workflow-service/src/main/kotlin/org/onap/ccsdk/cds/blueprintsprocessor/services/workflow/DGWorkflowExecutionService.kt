@@ -20,20 +20,20 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.utils.SvcGraphUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintWorkflowExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service("dgWorkflowExecutionService")
 open class DGWorkflowExecutionService(private val blueprintSvcLogicService: BlueprintSvcLogicService) :
-    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
+    BlueprintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
     private val log = LoggerFactory.getLogger(DGWorkflowExecutionService::class.java)
 
-    override suspend fun executeBluePrintWorkflow(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+    override suspend fun executeBlueprintWorkflow(
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         executionServiceInput: ExecutionServiceInput,
         properties: MutableMap<String, Any>
     ): ExecutionServiceOutput {

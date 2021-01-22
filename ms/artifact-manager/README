@@ -38,9 +38,9 @@ Upload `CBA.zip` file for storage in artifact manager. File needs to be sent as 
 #### Example
 
 ```
-stub: BluePrintManagementServiceStub = BluePrintManagementServiceStub(channel)
+stub: BlueprintManagementServiceStub = BlueprintManagementServiceStub(channel)
 with  open(file_path, "rb") as cba_file:
-    msg: BluePrintUploadInput = BluePrintUploadInput()
+    msg: BlueprintUploadInput = BlueprintUploadInput()
     msg.actionIdentifiers.blueprintName =  "Test"
     msg.actionIdentifiers.blueprintVersion =  "0.0.1"
     msg.fileChunk.chunk = cba_file.read()
@@ -54,8 +54,8 @@ Download existing `CBA.zip` file.
 #### Example
 
 ```
-stub: BluePrintManagementServiceStub = BluePrintManagementServiceStub(channel)
-msg: BluePrintDownloadInput = BluePrintDownloadInput()
+stub: BlueprintManagementServiceStub = BlueprintManagementServiceStub(channel)
+msg: BlueprintDownloadInput = BlueprintDownloadInput()
 msg.actionIdentifiers.blueprintName =  "Test"
 msg.actionIdentifiers.blueprintVersion =  "0.0.1"
 return  stub.downloadBlueprint(msg)
@@ -67,8 +67,8 @@ Delete existing `CBA.zip` file.
 #### Example
 
 ```
-stub: BluePrintManagementServiceStub = BluePrintManagementServiceStub(channel)
-msg: BluePrintRemoveInput = BluePrintRemoveInput()
+stub: BlueprintManagementServiceStub = BlueprintManagementServiceStub(channel)
+msg: BlueprintRemoveInput = BlueprintRemoveInput()
 msg.actionIdentifiers.blueprintName =  "Test"
 msg.actionIdentifiers.blueprintVersion =  "0.0.1"
 return  stub.removeBlueprint(msg)
@@ -88,13 +88,13 @@ import zipfile
 
 from grpc import Channel, ChannelCredentials, insecure_channel, secure_channel, ssl_channel_credentials
 
-from proto.BluePrintManagement_pb2 import (
-    BluePrintDownloadInput,
-    BluePrintRemoveInput,
-    BluePrintUploadInput,
-    BluePrintManagementOutput,
+from proto.BlueprintManagement_pb2 import (
+    BlueprintDownloadInput,
+    BlueprintRemoveInput,
+    BlueprintUploadInput,
+    BlueprintManagementOutput,
 )
-from proto.BluePrintManagement_pb2_grpc import BluePrintManagementServiceStub
+from proto.BlueprintManagement_pb2_grpc import BlueprintManagementServiceStub
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -139,31 +139,31 @@ class Client:
         :param config: ConfigParser object with "client" section
         """
         self.channel: Channel = channel
-        self.stub: BluePrintManagementServiceStub = BluePrintManagementServiceStub(self.channel)
+        self.stub: BlueprintManagementServiceStub = BlueprintManagementServiceStub(self.channel)
         self.config = config
 
-    def upload(self) -> BluePrintManagementOutput:
+    def upload(self) -> BlueprintManagementOutput:
         """Prepare upload message and send it to server."""
         logging.info("Call upload client method")
         with open(self.config.get("client", "cba_file"), "rb") as cba_file:
-            msg: BluePrintUploadInput = BluePrintUploadInput()
+            msg: BlueprintUploadInput = BlueprintUploadInput()
             msg.actionIdentifiers.blueprintName = "Test"
             msg.actionIdentifiers.blueprintVersion = "0.0.1"
             msg.fileChunk.chunk = cba_file.read()
         return self.stub.uploadBlueprint(msg)
 
-    def download(self) -> BluePrintManagementOutput:
+    def download(self) -> BlueprintManagementOutput:
         """Prepare download message and send it to server."""
         logging.info("Call download client method")
-        msg: BluePrintDownloadInput = BluePrintDownloadInput()
+        msg: BlueprintDownloadInput = BlueprintDownloadInput()
         msg.actionIdentifiers.blueprintName = "Test"
         msg.actionIdentifiers.blueprintVersion = "0.0.1"
         return self.stub.downloadBlueprint(msg)
 
-    def remove(self) -> BluePrintManagementOutput:
+    def remove(self) -> BlueprintManagementOutput:
         """Prepare remove message and send it to server."""
         logging.info("Call remove client method")
-        msg: BluePrintRemoveInput = BluePrintRemoveInput()
+        msg: BlueprintRemoveInput = BlueprintRemoveInput()
         msg.actionIdentifiers.blueprintName = "Test"
         msg.actionIdentifiers.blueprintVersion = "0.0.1"
         return self.stub.removeBlueprint(msg)

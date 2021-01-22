@@ -28,7 +28,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
 import org.onap.ccsdk.cds.controllerblueprints.core.compress
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BlueprintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
@@ -79,7 +79,7 @@ class BlueprintModelControllerTest {
     @Autowired
     lateinit var webTestClient: WebTestClient
 
-    private var bluePrintLoadConfiguration: BluePrintLoadConfiguration? = null
+    private var bluePrintLoadConfiguration: BlueprintLoadConfiguration? = null
 
     private val blueprintDir = "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
     private var zipBlueprintFileName: String? = null
@@ -90,7 +90,7 @@ class BlueprintModelControllerTest {
     fun setUp() {
         assertNotNull(webTestClient, " Failed to create WebTestClient")
 
-        bluePrintLoadConfiguration = BluePrintLoadConfiguration().apply {
+        bluePrintLoadConfiguration = BlueprintLoadConfiguration().apply {
             blueprintArchivePath = "./target/blueprints/archive"
             blueprintWorkingPath = "./target/blueprints/work"
             blueprintDeployPath = "./target/blueprints/deploy"
@@ -113,7 +113,7 @@ class BlueprintModelControllerTest {
     }
 
     @Test
-    fun test01_saveBluePrint() {
+    fun test01_saveBlueprint() {
         bp = runBlocking {
             val body = MultipartBodyBuilder().apply {
                 part(
@@ -146,7 +146,7 @@ class BlueprintModelControllerTest {
 
     @Test
     @Throws(JSONException::class)
-    fun test02_getBluePrintByNameAndVersion() {
+    fun test02_getBlueprintByNameAndVersion() {
         webTestClient(
             HttpMethod.GET, null,
             "/api/v1/blueprint-model/by-name/${bp!!.artifactName}/version/${bp!!.artifactVersion}",
@@ -172,7 +172,7 @@ class BlueprintModelControllerTest {
 
     @Test
     @Throws(JSONException::class)
-    fun test05_downloadBluePrint() {
+    fun test05_downloadBlueprint() {
         webTestClient(
             HttpMethod.GET, null,
             "/api/v1/blueprint-model/download/${bp!!.id}",
@@ -237,7 +237,7 @@ class BlueprintModelControllerTest {
     }
 
     @Test
-    fun test10_deleteBluePrint() {
+    fun test10_deleteBlueprint() {
         //        webTestClient.delete().uri("/api/v1/blueprint-model/${bp!!.id}")
         //                .header("Authorization", "Basic " + Base64Utils
         //                        .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8)))

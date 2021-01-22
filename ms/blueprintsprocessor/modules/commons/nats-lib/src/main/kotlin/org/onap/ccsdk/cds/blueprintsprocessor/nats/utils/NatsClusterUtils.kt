@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.nats.utils
 
 import org.onap.ccsdk.cds.blueprintsprocessor.nats.NatsLibConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ClusterUtils
 
 object NatsClusterUtils {
@@ -32,7 +32,7 @@ object NatsClusterUtils {
     }
 
     fun currentApplicationSubject(subject: String): String {
-        return "${BluePrintConstants.APP_NAME}.$subject"
+        return "${BlueprintConstants.APP_NAME}.$subject"
     }
 
     fun currentNodeDurable(subject: String): String {
@@ -40,6 +40,6 @@ object NatsClusterUtils {
     }
 
     fun applicationLoadBalanceGroup(): String {
-        return "${BluePrintConstants.APP_NAME}"
+        return "${BlueprintConstants.APP_NAME}"
     }
 }

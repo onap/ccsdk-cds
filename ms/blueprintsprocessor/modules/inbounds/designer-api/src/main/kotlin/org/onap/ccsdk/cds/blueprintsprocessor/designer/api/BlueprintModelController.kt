@@ -25,10 +25,10 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.jetbrains.annotations.NotNull
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelSearch
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BluePrintModelHandler
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.BlueprintModelHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.BlueprintSortByOption
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
@@ -62,7 +62,7 @@ import org.springframework.web.bind.annotation.RestController
     value = "Blueprint Model Catalog",
     description = "Manages all blueprint models which are available in CDS"
 )
-open class BlueprintModelController(private val bluePrintModelHandler: BluePrintModelHandler) {
+open class BlueprintModelController(private val bluePrintModelHandler: BlueprintModelHandler) {
 
     @PostMapping(
         path = arrayOf("/bootstrap"), produces = arrayOf(MediaType.APPLICATION_JSON_VALUE),
@@ -79,7 +79,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         ApiResponse(code = 500, message = "Internal Server Error")
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun bootstrap(
         @ApiParam(required = true, value = "Specifies which elements to load")
@@ -100,7 +100,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         ApiResponse(code = 500, message = "Internal Server Error")
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun saveBlueprint(
         @ApiParam(name = "file", value = "CBA file to be uploaded (example: cba.zip)", required = true)
@@ -162,7 +162,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         @PathVariable(value = "keyword") keyWord: String
     ): List<BlueprintModelSearch> =
         mdcWebCoroutineScope {
-            bluePrintModelHandler.searchBluePrintModelsByKeyWord(keyWord)
+            bluePrintModelHandler.searchBlueprintModelsByKeyWord(keyWord)
         }
 
     @GetMapping("/paged/meta-data/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -186,7 +186,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
             offset, limit,
             Sort.Direction.fromString(sortType), sort.columnName
         )
-        return this.bluePrintModelHandler.searchBluePrintModelsByKeyWordPaged(keyWord, pageRequest)
+        return this.bluePrintModelHandler.searchBlueprintModelsByKeyWordPaged(keyWord, pageRequest)
     }
 
     @DeleteMapping("/{id}")
@@ -198,7 +198,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         ApiResponse(code = 200, message = "OK"),
         ApiResponse(code = 404, message = "RESOURCE_NOT_FOUND")
     )
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun deleteBlueprint(
         @ApiParam(value = "ID of the blueprint model to delete", required = true, example = "67ec1f96-ab55-4b81-aff9-23ee0ed1d7a4")
@@ -218,7 +218,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         ApiResponse(code = 404, message = "Not Found")
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun getBlueprintByNameAndVersion(
         @ApiParam(value = "Name of the blueprint model", required = true, example = "pnf_netconf") @PathVariable(value = "name") name: String,
@@ -242,7 +242,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         ApiResponse(code = 404, message = "Not Found")
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun downloadBlueprintByNameAndVersion(
         @ApiParam(value = "Name of the blueprint model", required = true, example = "pnf_netconf") @PathVariable(value = "name") name: String,
@@ -262,7 +262,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         ApiResponse(code = 404, message = "Not Found")
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun getBlueprintModel(
         @ApiParam(value = "ID of the blueprint model to search for", required = true, example = "67ec1f96-ab55-4b81-aff9-23ee0ed1d7a4")
@@ -281,9 +281,9 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         ApiResponse(code = 404, message = "Not Found")
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
-    suspend fun downloadBluePrint(
+    suspend fun downloadBlueprint(
         @ApiParam(value = "ID of the blueprint model to download", required = true, example = "67ec1f96-ab55-4b81-aff9-23ee0ed1d7a4")
         @PathVariable(value = "id") id: String
     ): ResponseEntity<Resource> =
@@ -304,7 +304,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
             "The enrichment process will complete the package by providing all the definition of types used."
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun enrichBlueprint(
         @ApiParam(name = "file", value = "CBA zip file to be uploaded (example: cba_unenriched.zip)", required = true)
@@ -330,7 +330,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         ApiResponse(code = 503, message = "Service Unavailable")
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun enrichAndPubishlueprint(
         @ApiParam(name = "file", value = "Unenriched CBA zip file to be uploaded (example: cba_unenriched.zip)", required = true)
@@ -346,7 +346,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         response = BlueprintModelSearch::class
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun publishBlueprint(
         @ApiParam(name = "file", value = "Enriched CBA zip file to be uploaded (example: cba_enriched.zip)", required = true)
@@ -405,7 +405,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
             "Inputs, outputs and data types of workflow is returned."
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun workflowSpec(
         @ApiParam(required = true, value = "Blueprint and workflow identification")
@@ -428,7 +428,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         notes = "Get all available workflows of a Blueprint identified by its name and version."
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     @PreAuthorize("hasRole('USER')")
     suspend fun getWorkflowList(
         @ApiParam(value = "Name of the blueprint model", example = "pnf_netconf", required = true)

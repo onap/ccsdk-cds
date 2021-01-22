@@ -26,7 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcClientLogging
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 
 class TLSAuthGrpcClientService(private val tlsAuthGrpcClientProperties: TLSAuthGrpcClientProperties) :
-    BluePrintGrpcClientService {
+    BlueprintGrpcClientService {
 
     override suspend fun channel(): ManagedChannel {
 

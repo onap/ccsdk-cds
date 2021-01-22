@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PackageListComponent } from './package-list.component';
 import { PackagesStore } from '../../packages.store';
-import { getBluePrintPageMock } from '../../blueprint.page.mock';
+import { getBlueprintPageMock } from '../../blueprint.page.mock';
 import { of } from 'rxjs';
 import {PackagesDashboardState} from '../../model/packages-dashboard.state';
 
@@ -14,7 +14,7 @@ describe('PackageListComponent', () => {
   beforeEach(async(() => {
 
     const dashBoard = new PackagesDashboardState();
-    dashBoard.page = getBluePrintPageMock();
+    dashBoard.page = getBlueprintPageMock();
     store = { state$: of(dashBoard) };
 
     TestBed.configureTestingModule({

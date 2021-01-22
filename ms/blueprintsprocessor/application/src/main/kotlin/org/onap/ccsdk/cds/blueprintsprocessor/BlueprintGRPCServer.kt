@@ -17,10 +17,10 @@
 package org.onap.ccsdk.cds.blueprintsprocessor
 
 import io.grpc.ServerBuilder
-import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BluePrintManagementGRPCHandler
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BlueprintManagementGRPCHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.interceptor.GrpcServerLoggingInterceptor
 import org.onap.ccsdk.cds.blueprintsprocessor.security.BasicAuthServerInterceptor
-import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.BluePrintProcessingGRPCHandler
+import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.BlueprintProcessingGRPCHandler
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -31,8 +31,8 @@ import org.springframework.stereotype.Component
 @ConditionalOnProperty(name = ["blueprintsprocessor.grpcEnable"], havingValue = "true")
 @Component
 open class BlueprintGRPCServer(
-    private val bluePrintProcessingGRPCHandler: BluePrintProcessingGRPCHandler,
-    private val bluePrintManagementGRPCHandler: BluePrintManagementGRPCHandler,
+    private val bluePrintProcessingGRPCHandler: BlueprintProcessingGRPCHandler,
+    private val bluePrintManagementGRPCHandler: BlueprintManagementGRPCHandler,
     private val authInterceptor: BasicAuthServerInterceptor
 ) :
     ApplicationListener<ContextRefreshedEvent> {

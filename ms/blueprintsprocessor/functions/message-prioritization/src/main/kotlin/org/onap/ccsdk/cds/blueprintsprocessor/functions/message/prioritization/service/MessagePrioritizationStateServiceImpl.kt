@@ -21,7 +21,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.M
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.PrioritizationMessageRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.toFormatedCorrelation
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.addDate
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.controllerDate
@@ -48,7 +48,7 @@ open class MessagePrioritizationStateServiceImpl(
 
     override suspend fun getMessage(id: String): MessagePrioritization {
         return prioritizationMessageRepository.findById(id).orElseGet(null)
-            ?: throw BluePrintProcessorException("couldn't find message for id($id)")
+            ?: throw BlueprintProcessorException("couldn't find message for id($id)")
     }
 
     override suspend fun getMessages(ids: List<String>): List<MessagePrioritization>? {

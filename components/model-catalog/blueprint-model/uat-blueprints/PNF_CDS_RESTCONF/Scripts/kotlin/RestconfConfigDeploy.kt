@@ -27,7 +27,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.restco
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.restconfDeviceConfig
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.restconfClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService.WebClientResponse
@@ -79,7 +79,7 @@ class RestconfConfigDeploy : AbstractScriptComponentFunction() {
                 // Un mount device
                 restconfUnMountDevice(webclientService, deviceID, "")
             }
-        } catch (bpe: BluePrintProcessorException) {
+        } catch (bpe: BlueprintProcessorException) {
             log.error("Error looking up server identifier ", bpe)
         }
     }

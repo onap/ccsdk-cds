@@ -23,12 +23,12 @@ import org.apache.commons.io.IOUtils;
 import org.onap.ccsdk.cds.controllerblueprints.common.api.ActionIdentifiers;
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader;
 import org.onap.ccsdk.cds.controllerblueprints.common.api.Status;
-import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput;
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BlueprintUploadInput;
 import org.onap.ccsdk.cds.controllerblueprints.management.api.FileChunk;
 import org.onap.ccsdk.cds.controllerblueprints.management.api.UploadAction;
 import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
-import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
+import org.onap.ccsdk.cds.sdclistener.handler.BlueprintProcesssorHandler;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
 import org.onap.ccsdk.cds.sdclistener.util.FileUtil;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
@@ -64,7 +64,7 @@ import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 public class ListenerServiceImpl implements ListenerService {
 
     @Autowired
-    private BluePrintProcesssorHandler bluePrintProcesssorHandler;
+    private BlueprintProcesssorHandler bluePrintProcesssorHandler;
 
     @Autowired
     private SdcListenerAuthClientInterceptor sdcListenerAuthClientInterceptor;
@@ -87,7 +87,7 @@ public class ListenerServiceImpl implements ListenerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ListenerServiceImpl.class);
 
     @Override
-    public void extractBluePrint(String csarArchivePath, String cbaArchivePath) {
+    public void extractBlueprint(String csarArchivePath, String cbaArchivePath) {
         int validPathCount = 0;
         final String distributionId = getDistributionId();
         final String artifactUrl = getArtifactUrl();
@@ -101,7 +101,7 @@ public class ListenerServiceImpl implements ListenerService {
                     validPathCount++;
                     final String cbaArchiveName = Paths.get(fileName).getFileName().toString();
                     LOGGER.info("Storing the CBA archive {}", cbaArchiveName);
-                    storeBluePrint(zipFile, cbaArchiveName, cbaStorageDir, entry);
+                    storeBlueprint(zipFile, cbaArchiveName, cbaStorageDir, entry);
                 }
             }
 
@@ -121,7 +121,7 @@ public class ListenerServiceImpl implements ListenerService {
         }
     }
 
-    private void storeBluePrint(ZipFile zipFile, String fileName, Path cbaArchivePath, ZipEntry entry) {
+    private void storeBlueprint(ZipFile zipFile, String fileName, Path cbaArchivePath, ZipEntry entry) {
         Path targetLocation = cbaArchivePath.resolve(fileName);
         LOGGER.info("The target location for zip file is {}", targetLocation);
         File targetZipFile = new File(targetLocation.toString());
@@ -144,7 +144,7 @@ public class ListenerServiceImpl implements ListenerService {
     }
 
     @Override
-    public void saveBluePrintToCdsDatabase(Path cbaArchivePath, ManagedChannel channel) {
+    public void saveBlueprintToCdsDatabase(Path cbaArchivePath, ManagedChannel channel) {
         List<File> zipFiles = FileUtil.getFilesFromDisk(cbaArchivePath);
         if (!zipFiles.isEmpty()) {
             prepareRequestForCdsBackend(zipFiles, channel, cbaArchivePath.toString());
@@ -193,7 +193,7 @@ public class ListenerServiceImpl implements ListenerService {
 
         files.forEach(zipFile -> {
             try {
-                final BluePrintUploadInput request = generateBluePrintUploadInputBuilder(zipFile, path);
+                final BlueprintUploadInput request = generateBlueprintUploadInputBuilder(zipFile, path);
 
                 // Send request to CDS Backend.
                 final Status responseStatus = bluePrintProcesssorHandler.sendRequest(request, managedChannel);
@@ -219,11 +219,11 @@ public class ListenerServiceImpl implements ListenerService {
         });
     }
 
-    private BluePrintUploadInput generateBluePrintUploadInputBuilder(File file, String path) throws IOException {
+    private BlueprintUploadInput generateBlueprintUploadInputBuilder(File file, String path) throws IOException {
         byte[] bytes = FileUtils.readFileToByteArray(file);
         FileChunk fileChunk = FileChunk.newBuilder().setChunk(ByteString.copyFrom(bytes)).build();
         FileUtil.deleteFile(file, path);
-        return BluePrintUploadInput.newBuilder()
+        return BlueprintUploadInput.newBuilder()
                 .setCommonHeader(CommonHeader.newBuilder().setRequestId(UUID.randomUUID().toString())
                         .setSubRequestId(UUID.randomUUID().toString()).setOriginatorId("SDC-LISTENER").build())
                 .setActionIdentifiers(

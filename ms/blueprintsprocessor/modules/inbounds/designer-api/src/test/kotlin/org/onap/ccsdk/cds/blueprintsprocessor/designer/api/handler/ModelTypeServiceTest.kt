@@ -24,7 +24,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiTestConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -57,15 +57,15 @@ class ModelTypeServiceTest {
 
             val content = JacksonUtils.getClassPathFileContent("model_type/data_type/datatype-property.json")
             var modelType = ModelType()
-            modelType.definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
-            modelType.derivedFrom = BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT
+            modelType.definitionType = BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+            modelType.derivedFrom = BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT
             modelType.description = "Definition for Sample Datatype "
             modelType.definition = JacksonUtils.jsonNode(content)
             modelType.modelName = modelName
             modelType.version = "1.0.0"
             modelType.tags = (
-                "test-datatype ," + BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+                "test-datatype ," + BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT + "," +
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
                 )
             modelType.updatedBy = "xxxxxx@xxx.com"
             modelType = modelTypeHandler!!.saveModel(modelType)
@@ -110,11 +110,11 @@ class ModelTypeServiceTest {
             Assert.assertNotNull("Failed to get response for api call getModelByName ", dbModelType)
             Assert.assertNotNull("Failed to get Id for api call  getModelByName ", dbModelType!!.modelName)
 
-            val dbDatatypeModelTypes = modelTypeHandler.getModelTypeByDefinitionType(BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
+            val dbDatatypeModelTypes = modelTypeHandler.getModelTypeByDefinitionType(BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE)
             Assert.assertNotNull("Failed to find getModelTypeByDefinitionType by tags", dbDatatypeModelTypes)
             Assert.assertTrue("Failed to find getModelTypeByDefinitionType by count", dbDatatypeModelTypes.size > 0)
 
-            val dbModelTypeByDerivedFroms = modelTypeHandler.getModelTypeByDerivedFrom(BluePrintConstants.MODEL_TYPE_DATATYPES_ROOT)
+            val dbModelTypeByDerivedFroms = modelTypeHandler.getModelTypeByDerivedFrom(BlueprintConstants.MODEL_TYPE_DATATYPES_ROOT)
             Assert.assertNotNull("Failed to find getModelTypeByDerivedFrom by tags", dbModelTypeByDerivedFroms)
             Assert.assertTrue("Failed to find getModelTypeByDerivedFrom by count", dbModelTypeByDerivedFroms.size > 0)
         }

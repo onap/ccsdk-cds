@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -25,7 +25,7 @@ class ResourceDefinitionDSLTest {
 
     @Test
     fun testResourceDefinitionDSL() {
-        val testResourceDefinition = BluePrintTypes.resourceDefinition(
+        val testResourceDefinition = BlueprintTypes.resourceDefinition(
             "service-instance-id",
             "VFW Service Instance Name"
         ) {
@@ -79,7 +79,7 @@ class ResourceDefinitionDSLTest {
         // println(resourceDefinition.asJsonString(true))
         assertNotNull(testResourceDefinition, "failed to generate testResourceDefinition")
 
-        val testResourceDefinitions = BluePrintTypes.resourceDefinitions {
+        val testResourceDefinitions = BlueprintTypes.resourceDefinitions {
             resourceDefinition(testResourceDefinition)
         }
         assertNotNull(testResourceDefinitions, "failed to generate testResourceDefinitions")
@@ -88,7 +88,7 @@ class ResourceDefinitionDSLTest {
 
     @Test
     fun testResourceAssignment() {
-        val testResourceAssignment = BluePrintTypes.resourceAssignment(
+        val testResourceAssignment = BlueprintTypes.resourceAssignment(
             "instance-name",
             "service-instance-name", "odl-mdsal"
         ) {
@@ -99,7 +99,7 @@ class ResourceDefinitionDSLTest {
         // println(resourceAssignment.asJsonString(true))
         assertNotNull(testResourceAssignment, "failed to generate resourceAssignment")
 
-        val testResourceAssignments = BluePrintTypes.resourceAssignments {
+        val testResourceAssignments = BlueprintTypes.resourceAssignments {
             resourceAssignment(testResourceAssignment)
             resourceAssignment(
                 "instance-name1",

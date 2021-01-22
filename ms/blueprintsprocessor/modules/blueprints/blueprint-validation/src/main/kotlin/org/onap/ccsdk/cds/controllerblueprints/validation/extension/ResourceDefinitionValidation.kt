@@ -16,25 +16,25 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.validation.extension
 
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidator
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTypeValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
-interface ResourceDefinitionValidator : BluePrintValidator<ResourceDefinition>
+interface ResourceDefinitionValidator : BlueprintValidator<ResourceDefinition>
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-open class ResourceDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) : ResourceDefinitionValidator {
+open class ResourceDefinitionValidatorImpl(private val bluePrintTypeValidatorService: BlueprintTypeValidatorService) : ResourceDefinitionValidator {
 
     private val log = LoggerFactory.getLogger(ResourceDefinitionValidatorImpl::class.java)
 
     override fun validate(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         name: String,
         resourceDefinition: ResourceDefinition
     ) {

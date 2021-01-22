@@ -17,8 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.grpc
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
@@ -30,48 +30,48 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
 /** Relationships Types DSL for GRPC Server Producer */
 fun ServiceTemplateBuilder.relationshipTypeConnectsToGrpcServer() {
-    val relationshipType = BluePrintTypes.relationshipTypeConnectsToGrpcServer()
+    val relationshipType = BlueprintTypes.relationshipTypeConnectsToGrpcServer()
     if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
     this.relationshipTypes!![relationshipType.id!!] = relationshipType
 }
 
-fun BluePrintTypes.relationshipTypeConnectsToGrpcServer(): RelationshipType {
+fun BlueprintTypes.relationshipTypeConnectsToGrpcServer(): RelationshipType {
     return relationshipType(
-        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER,
-        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        id = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER,
+        version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
         description = "Relationship connects to through GRPC Server."
     ) {
         property(
-            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
-            BluePrintConstants.DATA_TYPE_MAP,
+            BlueprintConstants.PROPERTY_CONNECTION_CONFIG,
+            BlueprintConstants.DATA_TYPE_MAP,
             true,
             "Connection Config details."
         )
-        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+        validTargetTypes(arrayListOf(BlueprintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
     }
 }
 
 fun ServiceTemplateBuilder.relationshipTypeConnectsToGrpcClient() {
-    val relationshipType = BluePrintTypes.relationshipTypeConnectsToGrpcClient()
+    val relationshipType = BlueprintTypes.relationshipTypeConnectsToGrpcClient()
     if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
     this.relationshipTypes!![relationshipType.id!!] = relationshipType
 }
 
-fun BluePrintTypes.relationshipTypeConnectsToGrpcClient(): RelationshipType {
+fun BlueprintTypes.relationshipTypeConnectsToGrpcClient(): RelationshipType {
     return relationshipType(
-        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_CLIENT,
-        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        id = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_CLIENT,
+        version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
         description = "Relationship connects to through GRPC Client."
     ) {
         property(
-            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
-            BluePrintConstants.DATA_TYPE_MAP,
+            BlueprintConstants.PROPERTY_CONNECTION_CONFIG,
+            BlueprintConstants.DATA_TYPE_MAP,
             true,
             "Connection Config details."
         )
-        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+        validTargetTypes(arrayListOf(BlueprintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
     }
 }
 
@@ -89,25 +89,25 @@ fun TopologyTemplateBuilder.relationshipTemplateGrpcServer(
 class GrpcServerRelationshipTemplateBuilder(name: String, description: String) :
     RelationshipTemplateBuilder(
         name,
-        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER, description
+        BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_SERVER, description
     ) {
 
     fun tokenAuth(block: GrpcServerTokenAuthPropertiesAssignmentBuilder.() -> Unit) {
-        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tokenAuthGrpcServerProperties(block))
+        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.tokenAuthGrpcServerProperties(block))
     }
 
     fun tlsAuth(block: GrpcServerTLSAuthPropertiesAssignmentBuilder.() -> Unit) {
-        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tlsAuthGrpcServerProperties(block))
+        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.tlsAuthGrpcServerProperties(block))
     }
 }
 
-fun BluePrintTypes.tokenAuthGrpcServerProperties(block: GrpcServerTokenAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BlueprintTypes.tokenAuthGrpcServerProperties(block: GrpcServerTokenAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = GrpcServerTokenAuthPropertiesAssignmentBuilder().apply(block).build()
     assignments[GrpcServerProperties::type.name] = GRPCLibConstants.TYPE_TOKEN_AUTH.asJsonPrimitive()
     return assignments.asJsonNode()
 }
 
-fun BluePrintTypes.tlsAuthGrpcServerProperties(block: GrpcServerTLSAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BlueprintTypes.tlsAuthGrpcServerProperties(block: GrpcServerTLSAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = GrpcServerTLSAuthPropertiesAssignmentBuilder().apply(block).build()
     assignments[GrpcServerProperties::type.name] = GRPCLibConstants.TYPE_TLS_AUTH.asJsonPrimitive()
     return assignments.asJsonNode()
@@ -158,35 +158,35 @@ fun TopologyTemplateBuilder.relationshipTemplateGrpcClient(
 class GrpcClientRelationshipTemplateBuilder(name: String, description: String) :
     RelationshipTemplateBuilder(
         name,
-        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_CLIENT, description
+        BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_GRPC_CLIENT, description
     ) {
 
     fun basicAuth(block: GrpcClientBasicAuthPropertiesAssignmentBuilder.() -> Unit) {
-        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.basicAuthGrpcClientProperties(block))
+        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.basicAuthGrpcClientProperties(block))
     }
 
     fun tokenAuth(block: GrpcClientTokenAuthPropertiesAssignmentBuilder.() -> Unit) {
-        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tokenAuthGrpcClientProperties(block))
+        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.tokenAuthGrpcClientProperties(block))
     }
 
     fun tlsAuth(block: GrpcClientTLSAuthPropertiesAssignmentBuilder.() -> Unit) {
-        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tlsAuthGrpcClientProperties(block))
+        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.tlsAuthGrpcClientProperties(block))
     }
 }
 
-fun BluePrintTypes.basicAuthGrpcClientProperties(block: GrpcClientBasicAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BlueprintTypes.basicAuthGrpcClientProperties(block: GrpcClientBasicAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = GrpcClientBasicAuthPropertiesAssignmentBuilder().apply(block).build()
     assignments[GrpcClientProperties::type.name] = GRPCLibConstants.TYPE_BASIC_AUTH.asJsonPrimitive()
     return assignments.asJsonNode()
 }
 
-fun BluePrintTypes.tokenAuthGrpcClientProperties(block: GrpcClientTokenAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BlueprintTypes.tokenAuthGrpcClientProperties(block: GrpcClientTokenAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = GrpcClientTokenAuthPropertiesAssignmentBuilder().apply(block).build()
     assignments[GrpcClientProperties::type.name] = GRPCLibConstants.TYPE_TOKEN_AUTH.asJsonPrimitive()
     return assignments.asJsonNode()
 }
 
-fun BluePrintTypes.tlsAuthGrpcClientProperties(block: GrpcClientTLSAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BlueprintTypes.tlsAuthGrpcClientProperties(block: GrpcClientTLSAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = GrpcClientTLSAuthPropertiesAssignmentBuilder().apply(block).build()
     assignments[GrpcClientProperties::type.name] = GRPCLibConstants.TYPE_TLS_AUTH.asJsonPrimitive()
     return assignments.asJsonNode()

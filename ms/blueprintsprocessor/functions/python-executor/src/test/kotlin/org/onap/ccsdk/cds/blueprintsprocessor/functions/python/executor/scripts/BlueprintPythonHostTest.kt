@@ -26,7 +26,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BluePrintPython::class, PythonExecutorProperty::class, String::class])
+@ContextConfiguration(classes = [BlueprintPython::class, PythonExecutorProperty::class, String::class])
 @TestPropertySource(
     properties =
         [
@@ -48,7 +48,7 @@ class BlueprintPythonHostTest {
         pythonPath.add(blueprintBasePath)
         pythonPath.addAll(pythonExecutorProperty.modulePaths)
 
-        blueprintPythonHost = BlueprintPythonHost(BluePrintPython(pythonExecutorProperty.executionPath, pythonPath, arrayListOf()))
+        blueprintPythonHost = BlueprintPythonHost(BlueprintPython(pythonExecutorProperty.executionPath, pythonPath, arrayListOf()))
     }
 
     @Test

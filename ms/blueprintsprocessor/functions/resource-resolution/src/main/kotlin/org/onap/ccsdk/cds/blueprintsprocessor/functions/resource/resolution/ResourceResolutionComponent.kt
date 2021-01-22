@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asObjectNode
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
@@ -94,11 +94,11 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         // validate inputs if we need to store the resource and template resolution.
         if (storeResult) {
             if (resolutionKey.isNotEmpty() && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
-                throw BluePrintProcessorException("Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.")
+                throw BlueprintProcessorException("Can't proceed with the resolution: either provide resolution-key OR combination of resource-id and resource-type.")
             } else if ((resourceType.isNotEmpty() && resourceId.isEmpty()) || (resourceType.isEmpty() && resourceId.isNotEmpty())) {
-                throw BluePrintProcessorException("Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.")
+                throw BlueprintProcessorException("Can't proceed with the resolution: both resource-id and resource-type should be provided, one of them is missing.")
             } else if (resourceType.isEmpty() && resourceId.isEmpty() && resolutionKey.isEmpty()) {
-                throw BluePrintProcessorException(
+                throw BlueprintProcessorException(
                     "Can't proceed with the resolution: can't persist resolution without a correlation key. " +
                         "Either provide a resolution-key OR combination of resource-id and resource-type OR set `storeResult` to false."
                 )
@@ -140,6 +140,6 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBluePrintError().addError(runtimeException.message!!)
+        bluePrintRuntimeService.getBlueprintError().addError(runtimeException.message!!)
     }
 }

@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import java.net.InetAddress
 
 object ClusterUtils {
@@ -28,19 +28,19 @@ object ClusterUtils {
     }
 
     fun applicationName(): String {
-        return BluePrintConstants.APP_NAME
+        return BlueprintConstants.APP_NAME
     }
 
     fun clusterId(): String {
-        return System.getenv(BluePrintConstants.PROPERTY_CLUSTER_ID) ?: "cds-cluster"
+        return System.getenv(BlueprintConstants.PROPERTY_CLUSTER_ID) ?: "cds-cluster"
     }
 
     fun clusterNodeId(): String {
-        return System.getenv(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID) ?: "cds-controller-0"
+        return System.getenv(BlueprintConstants.PROPERTY_CLUSTER_NODE_ID) ?: "cds-controller-0"
     }
 
     fun clusterNodeAddress(): String {
-        return System.getenv(BluePrintConstants.PROPERTY_CLUSTER_NODE_ADDRESS)
+        return System.getenv(BlueprintConstants.PROPERTY_CLUSTER_NODE_ADDRESS)
             ?: clusterNodeId()
     }
 }

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
+import { BlueprintDetailModel } from '../model/Blueprint.detail.model';
 import { PackageCreationStore } from '../package-creation/package-creation.store';
 import { FilesContent, FolderNodeElement } from '../package-creation/mapping-models/metadata/MetaDataTab.model';
 import { MetadataTabComponent } from '../package-creation/metadata-tab/metadata-tab.component';
@@ -28,7 +28,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
     styleUrls: ['./configuration-dashboard.component.css'],
 })
 export class ConfigurationDashboardComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
-    viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
+    viewedPackage: BlueprintDetailModel = new BlueprintDetailModel();
     @ViewChild(MetadataTabComponent, { static: false })
     metadataTabComponent: MetadataTabComponent;
     public customActionName = '';
@@ -129,7 +129,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
             });
     }
 
-    private downloadCBAPackage(bluePrintDetailModels: BluePrintDetailModel) {
+    private downloadCBAPackage(bluePrintDetailModels: BlueprintDetailModel) {
         this.configurationDashboardService.downloadResource(
             this.viewedPackage.artifactName + '/' + this.viewedPackage.artifactVersion).subscribe(response => {
                 const blob = new Blob([response], { type: 'application/octet-stream' });
@@ -144,11 +144,11 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
                 });
     }
 
-    editBluePrint() {
+    editBlueprint() {
         this.ngxService.start();
         this.configurationDashboardService.deletePackage(this.packageId).subscribe(res => {
             this.formTreeData();
-            this.saveBluePrintToDataBase();
+            this.saveBlueprintToDataBase();
 
         });
     }
@@ -167,7 +167,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         this.metadataTabComponent.saveMetaDataToStore();
     }
 
-    saveBluePrintToDataBase() {
+    saveBlueprintToDataBase() {
         this.create();
         this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
@@ -253,7 +253,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         this.cbaPackage.templateTopology.content = this.vlbDefinition.topology_template.content;
     }
 
-    enrichBluePrint() {
+    enrichBlueprint() {
         this.ngxService.start();
         this.packageCreationStore.addTopologyTemplate(this.cbaPackage.templateTopology);
         this.formTreeData();

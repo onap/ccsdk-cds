@@ -7,9 +7,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBlueprintRuntimeService
 import org.springframework.dao.EmptyResultDataAccessException
 import kotlin.test.assertEquals
 
@@ -29,13 +29,13 @@ class TemplateResolutionServiceTest {
     private val result = "result"
     private val metadata = hashMapOf<String, String>()
     private val props = hashMapOf<String, Any>()
-    private val bluePrintContext = mockk<BluePrintContext>()
-    private val bluePrintRuntimeService = mockk<DefaultBluePrintRuntimeService>()
+    private val bluePrintContext = mockk<BlueprintContext>()
+    private val bluePrintRuntimeService = mockk<DefaultBlueprintRuntimeService>()
 
     @Before
     fun setup() {
-        metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION] = blueprintVersion
-        metadata[BluePrintConstants.METADATA_TEMPLATE_NAME] = blueprintName
+        metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION] = blueprintVersion
+        metadata[BlueprintConstants.METADATA_TEMPLATE_NAME] = blueprintName
 
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = resolutionKey
         props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId

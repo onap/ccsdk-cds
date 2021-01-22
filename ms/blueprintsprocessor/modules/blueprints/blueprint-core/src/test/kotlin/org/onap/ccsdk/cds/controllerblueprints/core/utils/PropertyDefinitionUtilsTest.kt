@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.utils
 
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.LOG_PROTECT
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.LOG_PROTECT
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils.Companion.hasLogProtect
 import kotlin.test.assertFalse

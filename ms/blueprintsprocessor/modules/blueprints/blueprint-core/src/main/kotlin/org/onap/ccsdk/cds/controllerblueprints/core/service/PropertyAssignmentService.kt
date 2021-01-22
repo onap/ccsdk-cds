@@ -19,8 +19,8 @@ package org.onap.ccsdk.cds.controllerblueprints.core.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactExpression
@@ -40,11 +40,11 @@ import org.slf4j.LoggerFactory
  *
  * @author Brinda Santh
  */
-open class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>) {
+open class PropertyAssignmentService(var bluePrintRuntimeService: BlueprintRuntimeService<MutableMap<String, JsonNode>>) {
 
     private val log = LoggerFactory.getLogger(this::class.toString())
 
-    private var bluePrintContext: BluePrintContext = bluePrintRuntimeService.bluePrintContext()
+    private var bluePrintContext: BlueprintContext = bluePrintRuntimeService.bluePrintContext()
 
     /*
 
@@ -60,7 +60,7 @@ open class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRunti
         assignment: JsonNode
     ): JsonNode {
         log.trace("Assignment ({})", assignment)
-        val expressionData = BluePrintExpressionService.getExpressionData(assignment)
+        val expressionData = BlueprintExpressionService.getExpressionData(assignment)
 
         return if (expressionData.isExpression) {
             resolveExpression(definitionType, definitionName, assignmentName, expressionData)
@@ -82,32 +82,32 @@ open class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRunti
             val command = expressionData.command!!
 
             when (command) {
-                BluePrintConstants.EXPRESSION_GET_INPUT -> {
+                BlueprintConstants.EXPRESSION_GET_INPUT -> {
                     valueNode = bluePrintRuntimeService.getInputValue(expressionData.inputExpression?.propertyName!!)
                 }
-                BluePrintConstants.EXPRESSION_GET_ATTRIBUTE -> {
+                BlueprintConstants.EXPRESSION_GET_ATTRIBUTE -> {
                     valueNode =
                         resolveAttributeExpression(definitionType, definitionName, expressionData.attributeExpression!!)
                 }
-                BluePrintConstants.EXPRESSION_GET_PROPERTY -> {
+                BlueprintConstants.EXPRESSION_GET_PROPERTY -> {
                     valueNode =
                         resolvePropertyExpression(definitionType, definitionName, expressionData.propertyExpression!!)
                 }
-                BluePrintConstants.EXPRESSION_GET_OPERATION_OUTPUT -> {
+                BlueprintConstants.EXPRESSION_GET_OPERATION_OUTPUT -> {
                     valueNode =
                         resolveOperationOutputExpression(definitionName, expressionData.operationOutputExpression!!)
                 }
-                BluePrintConstants.EXPRESSION_GET_ARTIFACT -> {
+                BlueprintConstants.EXPRESSION_GET_ARTIFACT -> {
                     valueNode = resolveArtifactExpression(definitionName, expressionData.artifactExpression!!)
                 }
-                BluePrintConstants.EXPRESSION_DSL_REFERENCE -> {
+                BlueprintConstants.EXPRESSION_DSL_REFERENCE -> {
                     valueNode =
                         bluePrintRuntimeService.resolveDSLExpression(expressionData.dslExpression!!.propertyName)
                 }
-                BluePrintConstants.EXPRESSION_GET_NODE_OF_TYPE -> {
+                BlueprintConstants.EXPRESSION_GET_NODE_OF_TYPE -> {
                 }
                 else -> {
-                    throw BluePrintException(
+                    throw BlueprintException(
                         "for $definitionType($definitionName) property ($propName), " +
                             "command ($command) is not supported "
                     )
@@ -140,53 +140,53 @@ open class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRunti
          * SELF : Current Node Template properties.
          */
         when (attributeExpression.modelableEntityName) {
-            BluePrintConstants.PROPERTY_ENV -> {
+            BlueprintConstants.PROPERTY_ENV -> {
                 val environmentValue = System.getenv(attributeName)
                 valueNode = environmentValue.asJsonPrimitive()
             }
-            BluePrintConstants.PROPERTY_APP -> {
+            BlueprintConstants.PROPERTY_APP -> {
                 val environmentValue = System.getProperty(attributeName)
                 valueNode = environmentValue.asJsonPrimitive()
             }
-            BluePrintConstants.PROPERTY_BPP -> {
+            BlueprintConstants.PROPERTY_BPP -> {
                 valueNode = bluePrintRuntimeService.getNodeTemplateAttributeValue(
-                    BluePrintConstants.PROPERTY_BPP,
+                    BlueprintConstants.PROPERTY_BPP,
                     attributeName
-                ) ?: throw BluePrintException("failed to get env attribute name ($attributeName) ")
+                ) ?: throw BlueprintException("failed to get env attribute name ($attributeName) ")
             }
             else -> {
-                if (!attributeExpression.modelableEntityName.equals(BluePrintConstants.PROPERTY_SELF, true)) {
+                if (!attributeExpression.modelableEntityName.equals(BlueprintConstants.PROPERTY_SELF, true)) {
                     attributeDefinitionName = attributeExpression.modelableEntityName
                 }
 
                 /** This block is to Validate, if Attribute definition is present */
                 when (definitionType) {
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_DSL ->
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_DSL ->
                         bluePrintContext.nodeTemplateNodeType(attributeDefinitionName).attributes
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
                         bluePrintContext.relationshipTemplateRelationshipType(attributeDefinitionName).attributes
-                    else -> throw BluePrintException("failed to understand template type($definitionType), it is not supported")
+                    else -> throw BlueprintException("failed to understand template type($definitionType), it is not supported")
                 }?.get(attributeName)
-                    ?: throw BluePrintException(
+                    ?: throw BlueprintException(
                         "failed to get attribute definitions for " +
                             "$definitionType ($attributeDefinitionName)'s attribute name ($attributeName) "
                     )
 
                 valueNode = when (definitionType) {
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_DSL ->
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_DSL ->
                         bluePrintRuntimeService.getNodeTemplateAttributeValue(attributeDefinitionName, attributeName)
-                    BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
+                    BlueprintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
                         bluePrintRuntimeService.getRelationshipTemplateAttributeValue(
                             attributeDefinitionName,
                             attributeName
                         )
-                    else -> throw BluePrintException("failed to understand template type($definitionType), it is not supported")
+                    else -> throw BlueprintException("failed to understand template type($definitionType), it is not supported")
                 }
-                    ?: throw BluePrintException("failed to get node template ($attributeDefinitionName)'s attribute name ($attributeName) ")
+                    ?: throw BlueprintException("failed to get node template ($attributeDefinitionName)'s attribute name ($attributeName) ")
             }
         }
         if (subAttributeName != null) {
@@ -212,32 +212,32 @@ open class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRunti
 
         var propertyDefinitionName = definitionName
 
-        if (!propertyExpression.modelableEntityName.equals(BluePrintConstants.PROPERTY_SELF, true)) {
+        if (!propertyExpression.modelableEntityName.equals(BlueprintConstants.PROPERTY_SELF, true)) {
             propertyDefinitionName = propertyExpression.modelableEntityName
         }
 
         val nodeTemplatePropertyExpression = when (definitionType) {
-            BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
-            BluePrintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
-            BluePrintConstants.MODEL_DEFINITION_TYPE_DSL ->
+            BlueprintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+            BlueprintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
+            BlueprintConstants.MODEL_DEFINITION_TYPE_DSL ->
                 bluePrintContext.nodeTemplateByName(propertyDefinitionName).properties
-            BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
+            BlueprintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
                 bluePrintContext.relationshipTemplateByName(propertyDefinitionName).properties
-            else -> throw BluePrintException("failed to understand template type($definitionType), it is not supported")
+            else -> throw BlueprintException("failed to understand template type($definitionType), it is not supported")
         }?.get(propertyName)
-            ?: throw BluePrintException("failed to get property assignment for node template ($definitionName)'s property name ($propertyName).")
+            ?: throw BlueprintException("failed to get property assignment for node template ($definitionName)'s property name ($propertyName).")
 
         /** This block is to Validate, if Property definition is present */
         when (definitionType) {
-            BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
-            BluePrintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
-            BluePrintConstants.MODEL_DEFINITION_TYPE_DSL ->
+            BlueprintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+            BlueprintConstants.MODEL_DEFINITION_TYPE_WORKFLOW,
+            BlueprintConstants.MODEL_DEFINITION_TYPE_DSL ->
                 bluePrintContext.nodeTemplateNodeType(propertyDefinitionName).properties
-            BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
+            BlueprintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TEMPLATE ->
                 bluePrintContext.relationshipTemplateRelationshipType(propertyDefinitionName).properties
-            else -> throw BluePrintException("failed to understand template type($definitionType), it is not supported")
+            else -> throw BlueprintException("failed to understand template type($definitionType), it is not supported")
         }?.get(propertyName)
-            ?: throw BluePrintException("failed to get property definition for node template ($definitionName)'s property name ($propertyName).")
+            ?: throw BlueprintException("failed to get property definition for node template ($definitionName)'s property name ($propertyName).")
 
         log.info(
             "$definitionType($propertyDefinitionName), property($propertyName) resolved value ($nodeTemplatePropertyExpression)"
@@ -295,7 +295,7 @@ open class PropertyAssignmentService(var bluePrintRuntimeService: BluePrintRunti
         }
         val artifactDefinition: ArtifactDefinition = bluePrintContext.nodeTemplateByName(artifactNodeTemplateName)
             .artifacts?.get(artifactExpression.artifactName)
-            ?: throw BluePrintException(
+            ?: throw BlueprintException(
                 format(
                     "failed to get artifact definitions for node template ({})'s " +
                         "artifact name ({}) ",

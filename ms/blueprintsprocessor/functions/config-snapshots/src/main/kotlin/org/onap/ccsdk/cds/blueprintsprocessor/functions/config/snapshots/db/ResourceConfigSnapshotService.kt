@@ -19,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.util.Strings
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot.Status.RUNNING
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
@@ -111,7 +111,7 @@ open class ResourceConfigSnapshotService(private val resourceConfigSnapshotRepos
                         "dated=(${storedSnapshot.createdDate})"
                 )
             } catch (ex: DataIntegrityViolationException) {
-                throw BluePrintException("Failed to store configuration snapshot entry.", ex)
+                throw BlueprintException("Failed to store configuration snapshot entry.", ex)
             }
             storedSnapshot
         }

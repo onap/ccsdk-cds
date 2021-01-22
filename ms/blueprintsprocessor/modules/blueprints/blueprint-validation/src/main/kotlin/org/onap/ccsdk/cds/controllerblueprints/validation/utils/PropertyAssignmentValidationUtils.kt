@@ -18,15 +18,15 @@
 package org.onap.ccsdk.cds.controllerblueprints.validation.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.format
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintExpressionService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintExpressionService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
-open class PropertyAssignmentValidationUtils(private val bluePrintContext: BluePrintContext) {
+open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueprintContext) {
 
     // Property Definition holds both Definitons and Expression in same construct
     open fun validatePropertyDefinitionNAssignments(propertyDefinitions: MutableMap<String, PropertyDefinition>) {
@@ -39,10 +39,10 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
     open fun validatePropertyDefinitionNAssignment(propertyName: String, propertyDefinition: PropertyDefinition) {
         // Check and Validate if Expression Node
         checkNotNull(propertyDefinition.value) {
-            throw BluePrintException("couldn't get 'value' property from PropertyDefinition($propertyName)")
+            throw BlueprintException("couldn't get 'value' property from PropertyDefinition($propertyName)")
         }
         val propertyAssignment = propertyDefinition.value!!
-        val expressionData = BluePrintExpressionService.getExpressionData(propertyAssignment)
+        val expressionData = BlueprintExpressionService.getExpressionData(propertyAssignment)
         if (!expressionData.isExpression) {
             checkPropertyValue(propertyName, propertyDefinition, propertyAssignment)
         }
@@ -54,7 +54,7 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
     ) {
         properties.forEach { propertyName, propertyAssignment ->
             val propertyDefinition: PropertyDefinition = nodeTypeProperties[propertyName]
-                ?: throw BluePrintException("validatePropertyAssignments failed to get definition for the property ($propertyName)")
+                ?: throw BlueprintException("validatePropertyAssignments failed to get definition for the property ($propertyName)")
 
             validatePropertyAssignment(propertyName, propertyDefinition, propertyAssignment)
         }
@@ -66,7 +66,7 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
         propertyAssignment: JsonNode
     ) {
         // Check and Validate if Expression Node
-        val expressionData = BluePrintExpressionService.getExpressionData(propertyAssignment)
+        val expressionData = BlueprintExpressionService.getExpressionData(propertyAssignment)
         if (!expressionData.isExpression) {
             checkPropertyValue(propertyName, propertyDefinition, propertyAssignment)
         }
@@ -76,16 +76,16 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
         val propertyType = propertyDefinition.type
         val isValid: Boolean
 
-        if (BluePrintTypes.validPrimitiveTypes().contains(propertyType)) {
+        if (BlueprintTypes.validPrimitiveTypes().contains(propertyType)) {
             isValid = JacksonUtils.checkJsonNodeValueOfPrimitiveType(propertyType, propertyAssignment)
-        } else if (BluePrintTypes.validComplexTypes().contains(propertyType)) {
+        } else if (BlueprintTypes.validComplexTypes().contains(propertyType)) {
             isValid = true
-        } else if (BluePrintTypes.validCollectionTypes().contains(propertyType)) {
+        } else if (BlueprintTypes.validCollectionTypes().contains(propertyType)) {
 
             val entrySchemaType = propertyDefinition.entrySchema?.type
-                ?: throw BluePrintException(format("Failed to get EntrySchema type for the collection property ({})", propertyName))
+                ?: throw BlueprintException(format("Failed to get EntrySchema type for the collection property ({})", propertyName))
 
-            if (!BluePrintTypes.validPropertyTypes().contains(entrySchemaType)) {
+            if (!BlueprintTypes.validPropertyTypes().contains(entrySchemaType)) {
                 checkPropertyDataType(entrySchemaType, propertyName)
             }
             isValid = JacksonUtils.checkJsonNodeValueOfCollectionType(propertyType, propertyAssignment)
@@ -95,21 +95,21 @@ open class PropertyAssignmentValidationUtils(private val bluePrintContext: BlueP
         }
 
         check(isValid) {
-            throw BluePrintException("property($propertyName) defined of type($propertyType) is not compatible with the value ($propertyAssignment)")
+            throw BlueprintException("property($propertyName) defined of type($propertyType) is not compatible with the value ($propertyAssignment)")
         }
     }
 
     open fun checkPropertyDataType(dataTypeName: String, propertyName: String) {
 
         val dataType = bluePrintContext.serviceTemplate.dataTypes?.get(dataTypeName)
-            ?: throw BluePrintException("DataType ($dataTypeName) for the property ($propertyName) not found")
+            ?: throw BlueprintException("DataType ($dataTypeName) for the property ($propertyName) not found")
 
         checkValidDataTypeDerivedFrom(propertyName, dataType.derivedFrom)
     }
 
     open fun checkValidDataTypeDerivedFrom(dataTypeName: String, derivedFrom: String) {
-        check(BluePrintTypes.validDataTypeDerivedFroms.contains(derivedFrom)) {
-            throw BluePrintException("Failed to get DataType($dataTypeName)'s  derivedFrom($derivedFrom) definition ")
+        check(BlueprintTypes.validDataTypeDerivedFroms.contains(derivedFrom)) {
+            throw BlueprintException("Failed to get DataType($dataTypeName)'s  derivedFrom($derivedFrom) definition ")
         }
     }
 }

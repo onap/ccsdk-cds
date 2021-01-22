@@ -49,8 +49,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.MarkedSlf4jNotifier
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.ServiceDefinition
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.TestSecuritySettings
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.UatDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.UAT_SPECIFICATION_FILE
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils.Companion.compressToBytes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.UAT_SPECIFICATION_FILE
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintArchiveUtils.Companion.compressToBytes
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import org.springframework.beans.factory.annotation.Autowired

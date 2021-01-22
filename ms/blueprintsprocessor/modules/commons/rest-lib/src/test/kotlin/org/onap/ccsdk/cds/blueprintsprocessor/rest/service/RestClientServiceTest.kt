@@ -27,9 +27,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.BluePrintRestLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.BlueprintRestLibConfiguration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -66,9 +66,9 @@ import kotlin.test.assertNotNull
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration(
     classes = [
-        BluePrintRestLibConfiguration::class, SampleController::class,
+        BlueprintRestLibConfiguration::class, SampleController::class,
         SecurityConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+        BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class
     ]
 )
 @TestPropertySource(
@@ -96,7 +96,7 @@ import kotlin.test.assertNotNull
 class RestClientServiceTest {
 
     @Autowired
-    lateinit var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService
+    lateinit var bluePrintRestLibPropertyService: BlueprintRestLibPropertyService
 
     @Autowired
     lateinit var httpHandler: HttpHandler

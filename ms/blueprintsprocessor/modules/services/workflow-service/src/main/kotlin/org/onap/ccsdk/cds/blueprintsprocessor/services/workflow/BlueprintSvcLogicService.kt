@@ -17,7 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.onap.ccsdk.sli.core.sli.ExitNodeException
 import org.onap.ccsdk.sli.core.sli.SvcLogicContext
 import org.onap.ccsdk.sli.core.sli.SvcLogicException
@@ -47,7 +47,7 @@ interface BlueprintSvcLogicService : SvcLogicServiceBase {
 
     fun unRegisterExecutors(name: String)
 
-    suspend fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BluePrintRuntimeService<*>, input: Any): Any
+    suspend fun execute(graph: SvcLogicGraph, bluePrintRuntimeService: BlueprintRuntimeService<*>, input: Any): Any
 
     override fun execute(module: String, rpc: String, version: String, mode: String, ctx: SvcLogicContext): SvcLogicContext {
         TODO("not implemented")
@@ -104,12 +104,12 @@ class DefaultBlueprintSvcLogicService : BlueprintSvcLogicService {
 
     override suspend fun execute(
         graph: SvcLogicGraph,
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         input: Any
     ): Any {
         // Initialise BlueprintSvcLogic Context with Blueprint Runtime Service and Input Request
         val blueprintSvcLogicContext = BlueprintSvcLogicContext()
-        blueprintSvcLogicContext.setBluePrintRuntimeService(bluePrintRuntimeService)
+        blueprintSvcLogicContext.setBlueprintRuntimeService(bluePrintRuntimeService)
         blueprintSvcLogicContext.setRequest(input)
         // Execute the Graph
         execute(graph, blueprintSvcLogicContext)

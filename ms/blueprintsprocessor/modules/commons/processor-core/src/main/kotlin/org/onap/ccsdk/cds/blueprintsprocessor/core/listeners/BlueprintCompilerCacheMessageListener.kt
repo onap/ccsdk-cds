@@ -17,19 +17,19 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.listeners
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.BlueprintClusterTopic
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterMessage
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterMessage
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterMessageListener
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterJoinedEvent
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BlueprintCompileCache
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
 @Component
 @ConditionalOnProperty("CLUSTER_ENABLED", havingValue = "true")
-open class BlueprintCompilerCacheMessageListener(private val clusterService: BluePrintClusterService) : BlueprintClusterMessageListener<String> {
+open class BlueprintCompilerCacheMessageListener(private val clusterService: BlueprintClusterService) : BlueprintClusterMessageListener<String> {
     private val log = logger(BlueprintCompilerCacheMessageListener::class)
 
     @EventListener(ClusterJoinedEvent::class)
@@ -38,10 +38,10 @@ open class BlueprintCompilerCacheMessageListener(private val clusterService: Blu
         clusterService.addBlueprintClusterMessageListener(BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE, this)
     }
 
-    override fun onMessage(message: BluePrintClusterMessage<String>?) {
+    override fun onMessage(message: BlueprintClusterMessage<String>?) {
         message?.let {
             log.info("Received ClusterMessage - Cleaning compile cache for blueprint (${it.payload})")
-            BluePrintCompileCache.cleanClassLoader(it.payload)
+            BlueprintCompileCache.cleanClassLoader(it.payload)
         }
     }
 }

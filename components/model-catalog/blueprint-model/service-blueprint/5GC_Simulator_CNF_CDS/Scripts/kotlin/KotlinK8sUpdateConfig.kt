@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import java.nio.file.Path
 import org.springframework.http.HttpMethod
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
@@ -150,7 +150,7 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
         }
         catch (e: Exception) {
             log.info("Caught exception trying to get the vnf Details!!")
-            throw BluePrintProcessorException("${e.message}")
+            throw BlueprintProcessorException("${e.message}")
         }
     }
 
@@ -289,7 +289,7 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
                 }
             } catch (e: Exception) {
                 log.info("Caught exception trying to create or update configuration ")
-                throw BluePrintProcessorException("${e.message}")
+                throw BlueprintProcessorException("${e.message}")
             }
         }
 

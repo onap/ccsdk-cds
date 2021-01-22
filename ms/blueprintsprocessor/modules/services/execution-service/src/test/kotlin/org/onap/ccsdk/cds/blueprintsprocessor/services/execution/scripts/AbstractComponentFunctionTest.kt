@@ -34,22 +34,22 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.CDS_LOCK_GROUP
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.nodeTypeComponentScriptExecutor
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
 import org.onap.ccsdk.cds.controllerblueprints.core.data.LockAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
-import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintScriptsServiceImpl
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BlueprintScriptsServiceImpl
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -65,14 +65,14 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(
     classes = [
         ComponentFunctionScriptingService::class,
-        BluePrintScriptsServiceImpl::class, DeprecatedBlueprintJythonService::class
+        BlueprintScriptsServiceImpl::class, DeprecatedBlueprintJythonService::class
     ]
 )
 class AbstractComponentFunctionTest {
 
-    lateinit var bluePrintRuntimeService: DefaultBluePrintRuntimeService
-    lateinit var blueprintContext: BluePrintContext
-    lateinit var blueprintClusterService: BluePrintClusterService
+    lateinit var bluePrintRuntimeService: DefaultBlueprintRuntimeService
+    lateinit var blueprintContext: BlueprintContext
+    lateinit var blueprintClusterService: BlueprintClusterService
 
     @Autowired
     lateinit var compSvc: ComponentFunctionScriptingService
@@ -149,7 +149,7 @@ class AbstractComponentFunctionTest {
 
     @Test
     fun testComponentScriptExecutorNodeType() {
-        val componentScriptExecutor = BluePrintTypes.nodeTypeComponentScriptExecutor()
+        val componentScriptExecutor = BlueprintTypes.nodeTypeComponentScriptExecutor()
         assertNotNull(componentScriptExecutor.interfaces, "failed to get interface operations")
     }
 
@@ -274,7 +274,7 @@ class AbstractComponentFunctionTest {
     /**
      * Mocked input for abstract function test.
      */
-    private fun getMockedInput(bluePrintRuntime: DefaultBluePrintRuntimeService):
+    private fun getMockedInput(bluePrintRuntime: DefaultBlueprintRuntimeService):
         ExecutionServiceInput {
 
             val mapper = ObjectMapper()
@@ -283,11 +283,11 @@ class AbstractComponentFunctionTest {
             rootNode.put("type", "rest")
 
             val operationInputs = hashMapOf<String, JsonNode>()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] =
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] =
                 "activate-restconf".asJsonPrimitive()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] =
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_INTERFACE] =
                 "interfaceName".asJsonPrimitive()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] =
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_OPERATION] =
                 "operationName".asJsonPrimitive()
             operationInputs["dynamic-properties"] = rootNode
 

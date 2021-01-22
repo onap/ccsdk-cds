@@ -3,14 +3,14 @@ import { PackagesStore } from './packages.store';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { PackagesApiService } from './packages-api.service';
 import { of } from 'rxjs';
-import { BluePrintPage } from './model/BluePrint.model';
-import { getBluePrintPageMock } from './blueprint.page.mock';
+import { BlueprintPage } from './model/Blueprint.model';
+import { getBlueprintPageMock } from './blueprint.page.mock';
 import { PackagesDashboardState } from './model/packages-dashboard.state';
 
 describe('PackagesStore', () => {
     //    store: PackagesStore;
 
-    const MOCK_BLUEPRINTS_PAGE: BluePrintPage = getBluePrintPageMock();
+    const MOCK_BLUEPRINTS_PAGE: BlueprintPage = getBlueprintPageMock();
 
 
     let httpMock: HttpTestingController;

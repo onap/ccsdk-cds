@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ModelTypeHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -86,7 +86,7 @@ open class ModelTypeController(private val modelTypeHandler: ModelTypeHandler) {
         response = ModelType::class
     )
     @ResponseBody
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     suspend fun saveModelType(@RequestBody modelType: ModelType): ModelType = mdcWebCoroutineScope {
         modelTypeHandler.saveModel(modelType)
     }

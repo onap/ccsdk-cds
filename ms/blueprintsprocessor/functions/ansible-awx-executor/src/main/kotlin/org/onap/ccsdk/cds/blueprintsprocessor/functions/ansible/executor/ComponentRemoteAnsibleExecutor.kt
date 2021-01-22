@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.TextNode
 import kotlinx.coroutines.delay
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
@@ -55,7 +55,7 @@ import java.util.NoSuchElementException
 @Component("component-remote-ansible-executor")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentRemoteAnsibleExecutor(
-    private val blueprintRestLibPropertyService: BluePrintRestLibPropertyService,
+    private val blueprintRestLibPropertyService: BlueprintRestLibPropertyService,
     private val mapper: ObjectMapper
 ) :
     AbstractComponentFunction() {

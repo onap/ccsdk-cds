@@ -17,9 +17,9 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
 
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintCoreConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -27,12 +27,12 @@ import org.springframework.context.annotation.Import
 
 @Configuration
 @Import(
-    BluePrintPropertyConfiguration::class,
-    BluePrintPropertiesService::class,
-    BluePrintCoreConfiguration::class
+    BlueprintPropertyConfiguration::class,
+    BlueprintPropertiesService::class,
+    BlueprintCoreConfiguration::class
 )
 @EnableConfigurationProperties
-open class K8sProfileUploadConfiguration(private var bluePrintPropertiesService: BluePrintPropertiesService) {
+open class K8sProfileUploadConfiguration(private var bluePrintPropertiesService: BlueprintPropertiesService) {
 
     @Bean("k8s-plugin-properties")
     open fun getProperties(): K8sProfileUploadProperties {

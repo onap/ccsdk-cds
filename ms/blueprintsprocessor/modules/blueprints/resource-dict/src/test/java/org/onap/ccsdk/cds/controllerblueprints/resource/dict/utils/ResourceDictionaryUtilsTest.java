@@ -20,7 +20,7 @@ package org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Assert;
 import org.junit.Test;
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants;
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants;
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate;
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils;
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment;
@@ -93,7 +93,7 @@ public class ResourceDictionaryUtilsTest {
         JsonNode data = JacksonUtils.Companion.jsonNodeFromClassPathFile("data/resource-assignment-input.json");
         Map<String, Object> context = new HashMap<>();
         ResourceDictionaryUtils.assignInputs(data, context);
-        String path = BluePrintConstants.PATH_INPUTS.concat(BluePrintConstants.PATH_DIVIDER).concat("mapValue");
+        String path = BlueprintConstants.PATH_INPUTS.concat(BlueprintConstants.PATH_DIVIDER).concat("mapValue");
         log.info("populated context {}", context);
         Assert.assertTrue(String.format("failed to get variable : %s", path), context.containsKey(path));
 

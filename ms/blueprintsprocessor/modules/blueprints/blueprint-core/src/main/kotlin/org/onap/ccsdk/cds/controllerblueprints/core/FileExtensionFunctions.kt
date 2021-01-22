@@ -19,7 +19,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.FileUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintArchiveUtils
 import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
@@ -39,7 +39,7 @@ fun File.reCreateDirs(): File {
     // this.mkdirs()
     FileUtils.forceMkdir(this)
     check(this.exists()) {
-        throw BluePrintException("failed to re create dir(${this.absolutePath})")
+        throw BlueprintException("failed to re create dir(${this.absolutePath})")
     }
     return this
 }
@@ -52,7 +52,7 @@ fun File.compress(targetZipFileName: String): File {
  * Compress the current Dir to the target zip file and return the target zip file
  */
 fun File.compress(targetZipFile: File): File {
-    BluePrintArchiveUtils.compress(this, targetZipFile)
+    BlueprintArchiveUtils.compress(this, targetZipFile)
     return targetZipFile
 }
 
@@ -64,7 +64,7 @@ fun File.deCompress(targetFileName: String): File {
  * De-Compress the current zip file to the target file and return the target file
  */
 fun File.deCompress(targetFile: File): File {
-    BluePrintArchiveUtils.deCompress(this, targetFile.path)
+    BlueprintArchiveUtils.deCompress(this, targetFile.path)
     return targetFile
 }
 

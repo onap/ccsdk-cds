@@ -22,13 +22,13 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.executor.ComponentExecuteNodeExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.PrototypeComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.SingletonComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonReactorUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -49,17 +49,17 @@ class BlueprintServiceLogicTest {
     lateinit var dgWorkflowExecutionService: DGWorkflowExecutionService
 
     @MockBean
-    lateinit var bluePrintClusterService: BluePrintClusterService
+    lateinit var bluePrintClusterService: BlueprintClusterService
 
     @Before
     fun init() {
-        BluePrintDependencyService.inject(applicationContext)
+        BlueprintDependencyService.inject(applicationContext)
     }
 
     @Test
     fun testExecuteGraphWithSingleComponent() {
         runBlocking {
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
                 "1234",
                 "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -72,10 +72,10 @@ class BlueprintServiceLogicTest {
             bluePrintRuntimeService.assignWorkflowInputs("resource-assignment", input)
 
             val executionServiceOutput = dgWorkflowExecutionService
-                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
+                .executeBlueprintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
             assertNotNull(executionServiceOutput, "failed to get response")
             assertEquals(
-                BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
+                BlueprintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
                 "failed to get successful response"
             )
         }
@@ -84,7 +84,7 @@ class BlueprintServiceLogicTest {
     @Test
     fun testExecuteGraphWithMultipleComponents() {
         runBlocking {
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
                 "1234",
                 "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -97,10 +97,10 @@ class BlueprintServiceLogicTest {
             bluePrintRuntimeService.assignWorkflowInputs("assign-activate", input)
 
             val executionServiceOutput = dgWorkflowExecutionService
-                .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
+                .executeBlueprintWorkflow(bluePrintRuntimeService, executionServiceInput, mutableMapOf())
             assertNotNull(executionServiceOutput, "failed to get response")
             assertEquals(
-                BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
+                BlueprintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
                 "failed to get successful response"
             )
         }

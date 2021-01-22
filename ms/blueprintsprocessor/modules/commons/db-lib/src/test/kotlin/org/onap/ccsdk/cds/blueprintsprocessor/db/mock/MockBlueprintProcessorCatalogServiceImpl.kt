@@ -17,8 +17,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.mock
 
 import io.mockk.coEvery
 import io.mockk.mockk
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -26,10 +26,10 @@ import org.springframework.context.annotation.Configuration
 open class MockBlueprintProcessorCatalogServiceImpl {
 
     @Bean(name = ["bluePrintRuntimeValidatorService"])
-    open fun bluePrintRuntimeValidatorService(): BluePrintValidatorService {
-        val bluePrintValidatorService = mockk<BluePrintValidatorService>()
-        coEvery { bluePrintValidatorService.validateBluePrints(any<String>()) } returns true
-        coEvery { bluePrintValidatorService.validateBluePrints(any<BluePrintRuntimeService<*>>()) } returns true
+    open fun bluePrintRuntimeValidatorService(): BlueprintValidatorService {
+        val bluePrintValidatorService = mockk<BlueprintValidatorService>()
+        coEvery { bluePrintValidatorService.validateBlueprints(any<String>()) } returns true
+        coEvery { bluePrintValidatorService.validateBlueprints(any<BlueprintRuntimeService<*>>()) } returns true
         return bluePrintValidatorService
     }
 }

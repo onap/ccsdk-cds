@@ -17,8 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
@@ -31,24 +31,24 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.nodeType
 
 /** Component Extensions **/
 fun ServiceTemplateBuilder.nodeTypeComponentRemoteScriptExecutor() {
-    val nodeType = BluePrintTypes.nodeTypeComponentRemoteScriptExecutor()
+    val nodeType = BlueprintTypes.nodeTypeComponentRemoteScriptExecutor()
     if (this.nodeTypes == null) this.nodeTypes = hashMapOf()
     this.nodeTypes!![nodeType.id!!] = nodeType
 }
 
-fun BluePrintTypes.nodeTypeComponentRemoteScriptExecutor(): NodeType {
+fun BlueprintTypes.nodeTypeComponentRemoteScriptExecutor(): NodeType {
     return nodeType(
-        id = "component-remote-script-executor", version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_NODE_COMPONENT,
+        id = "component-remote-script-executor", version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_NODE_COMPONENT,
         description = "Generic Remote Script Component Executor"
     ) {
         /** Attribute definitions */
         attribute(
-            ComponentRemoteScriptExecutor.ATTRIBUTE_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON, false,
+            ComponentRemoteScriptExecutor.ATTRIBUTE_RESPONSE_DATA, BlueprintConstants.DATA_TYPE_JSON, false,
             "Remote executed response data."
         )
         attribute(
-            ComponentRemoteScriptExecutor.ATTRIBUTE_STATUS, BluePrintConstants.DATA_TYPE_STRING, true,
+            ComponentRemoteScriptExecutor.ATTRIBUTE_STATUS, BlueprintConstants.DATA_TYPE_STRING, true,
             "Remote execution status."
         )
 
@@ -56,35 +56,35 @@ fun BluePrintTypes.nodeTypeComponentRemoteScriptExecutor(): NodeType {
         operation("ComponentRemoteScriptExecutor", "ComponentRemoteScriptExecutor Operation") {
             inputs {
                 property(
-                    ComponentRemoteScriptExecutor.INPUT_SELECTOR, BluePrintConstants.DATA_TYPE_JSON,
+                    ComponentRemoteScriptExecutor.INPUT_SELECTOR, BlueprintConstants.DATA_TYPE_JSON,
                     true, "Remote GRPC selector or DSL reference or GRPC Json config."
                 )
                 property(
-                    ComponentRemoteScriptExecutor.INPUT_BLUEPRINT_NAME, BluePrintConstants.DATA_TYPE_STRING,
+                    ComponentRemoteScriptExecutor.INPUT_BLUEPRINT_NAME, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Blueprint name."
                 )
                 property(
-                    ComponentRemoteScriptExecutor.INPUT_BLUEPRINT_VERSION, BluePrintConstants.DATA_TYPE_STRING,
+                    ComponentRemoteScriptExecutor.INPUT_BLUEPRINT_VERSION, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Blueprint version."
                 )
                 property(
-                    ComponentRemoteScriptExecutor.INPUT_BLUEPRINT_ACTION, BluePrintConstants.DATA_TYPE_STRING,
+                    ComponentRemoteScriptExecutor.INPUT_BLUEPRINT_ACTION, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Blueprint action name."
                 )
                 property(
-                    ComponentRemoteScriptExecutor.INPUT_TIMEOUT, BluePrintConstants.DATA_TYPE_INTEGER,
+                    ComponentRemoteScriptExecutor.INPUT_TIMEOUT, BlueprintConstants.DATA_TYPE_INTEGER,
                     true, "Remote execution timeout in sec."
                 ) {
                     defaultValue(180)
                 }
                 property(
-                    ComponentRemoteScriptExecutor.INPUT_REQUEST_DATA, BluePrintConstants.DATA_TYPE_JSON,
+                    ComponentRemoteScriptExecutor.INPUT_REQUEST_DATA, BlueprintConstants.DATA_TYPE_JSON,
                     false, "Dynamic Json Content or DSL Json reference."
                 )
             }
             outputs {
                 property(
-                    ComponentRemoteScriptExecutor.OUTPUT_STATUS, BluePrintConstants.DATA_TYPE_STRING,
+                    ComponentRemoteScriptExecutor.OUTPUT_STATUS, BlueprintConstants.DATA_TYPE_STRING,
                     true, "Status of the Component Execution ( success or failure )"
                 )
             }
@@ -98,7 +98,7 @@ fun TopologyTemplateBuilder.nodeTemplateComponentRemoteScriptExecutor(
     description: String,
     block: ComponentRemoteScriptExecutorNodeTemplateBuilder.() -> Unit
 ) {
-    val nodeTemplate = BluePrintTypes.nodeTemplateComponentRemoteScriptExecutor(
+    val nodeTemplate = BlueprintTypes.nodeTemplateComponentRemoteScriptExecutor(
         id, description,
         block
     )
@@ -106,7 +106,7 @@ fun TopologyTemplateBuilder.nodeTemplateComponentRemoteScriptExecutor(
     nodeTemplates!![nodeTemplate.id!!] = nodeTemplate
 }
 
-fun BluePrintTypes.nodeTemplateComponentRemoteScriptExecutor(
+fun BlueprintTypes.nodeTemplateComponentRemoteScriptExecutor(
     id: String,
     description: String,
     block: ComponentRemoteScriptExecutorNodeTemplateBuilder.() -> Unit

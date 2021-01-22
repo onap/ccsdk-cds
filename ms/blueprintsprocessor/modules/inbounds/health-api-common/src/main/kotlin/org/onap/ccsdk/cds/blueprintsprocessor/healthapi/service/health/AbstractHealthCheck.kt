@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory
  */
 abstract class AbstractHealthCheck(private val endPointExecution: EndPointExecution) {
 
-    private var logger = LoggerFactory.getLogger(BluePrintProcessorHealthCheck::class.java)
+    private var logger = LoggerFactory.getLogger(BlueprintProcessorHealthCheck::class.java)
 
     private fun retrieveSystemStatus(list: List<ServiceEndpoint>): HealthApiResponse {
         val healthApiResponse: HealthApiResponse

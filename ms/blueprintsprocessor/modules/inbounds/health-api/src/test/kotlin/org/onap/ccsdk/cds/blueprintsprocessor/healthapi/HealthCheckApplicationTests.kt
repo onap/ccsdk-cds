@@ -18,10 +18,10 @@ package org.onap.ccsdk.cds.blueprintsprocessor.healthapi
 /*
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.ComponentScan
@@ -41,8 +41,8 @@ import org.springframework.test.web.reactive.server.WebTestClient
 @RunWith(SpringRunner::class)
 @WebFluxTest
 @ContextConfiguration(
-    classes = [BluePrintRuntimeService::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, ComponentScriptExecutor::class]
+    classes = [BlueprintRuntimeService::class, BlueprintCoreConfiguration::class,
+        BlueprintCatalogService::class, ComponentScriptExecutor::class]
 )
 @ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
 @TestPropertySource(locations = ["classpath:application-test.properties"])

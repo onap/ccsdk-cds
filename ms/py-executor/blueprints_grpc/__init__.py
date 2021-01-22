@@ -12,8 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from proto.BluePrintCommon_pb2 import *
-from proto.BluePrintProcessing_pb2 import *
+from proto.BlueprintCommon_pb2 import *
+from proto.BlueprintProcessing_pb2 import *
 from .script_executor_configuration import *
 from .executor_utils import *
 from .blueprint_processing_server import *

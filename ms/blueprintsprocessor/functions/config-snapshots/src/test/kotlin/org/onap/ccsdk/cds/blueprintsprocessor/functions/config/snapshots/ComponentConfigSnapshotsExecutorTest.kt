@@ -31,9 +31,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.Compone
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.ComponentConfigSnapshotsExecutor.Companion.OPERATION_STORE
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshotService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.ComponentScan
@@ -55,7 +55,7 @@ class ComponentConfigSnapshotsExecutorTest {
     @Autowired
     lateinit var cfgSnapshotService: ResourceConfigSnapshotService
     lateinit var cfgSnapshotComponent: ComponentConfigSnapshotsExecutor
-    private var bluePrintRuntimeService = BluePrintMetadataUtils.bluePrintRuntime(
+    private var bluePrintRuntimeService = BlueprintMetadataUtils.bluePrintRuntime(
         "123456-1000",
         "./../../../../components/model-catalog/blueprint-model/test-blueprint/remote_scripts"
     )
@@ -99,7 +99,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 prepareRequestProperties(OPERATION_FETCH, resId, resType, ResourceConfigSnapshot.Status.RUNNING.name)
 
                 cfgSnapshotComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 kotlin.test.assertEquals(
                     "Can't proceed with the cfg snapshot lookup: provide resource-id and resource-type.",
                     e.message
@@ -138,7 +138,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 prepareRequestProperties(OPERATION_FETCH, resId, resType, ResourceConfigSnapshot.Status.CANDIDATE.name)
 
                 cfgSnapshotComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 kotlin.test.assertEquals(
                     "Can't proceed with the cfg snapshot lookup: provide resource-id and resource-type.",
                     e.message
@@ -176,7 +176,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 prepareRequestProperties(OPERATION_STORE, resId, resType, snapshotConfig)
 
                 cfgSnapshotComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 kotlin.test.assertEquals(
                     "Can't proceed with the cfg snapshot lookup: provide resource-id and resource-type.",
                     e.message
@@ -211,7 +211,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 prepareRequestProperties(OPERATION_FETCH, "asdasd", "PNF", ResourceConfigSnapshot.Status.RUNNING.name)
 
                 cfgSnapshotComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 kotlin.test.assertEquals(
                     "Can't proceed with the cfg snapshot lookup: provide resource-id and resource-type.",
                     e.message
@@ -238,7 +238,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 prepareRequestProperties("update", "asdasd", "PNF", ResourceConfigSnapshot.Status.RUNNING.name)
 
                 cfgSnapshotComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 kotlin.test.assertEquals(
                     "Can't proceed with the cfg snapshot lookup: provide resource-id and resource-type.",
                     e.message
@@ -247,7 +247,7 @@ class ComponentConfigSnapshotsExecutorTest {
             }
 
             // then; we should get error in our output properties
-            assertTrue(bluePrintRuntimeService.getBluePrintError().errors.size == 1)
+            assertTrue(bluePrintRuntimeService.getBlueprintError().errors.size == 1)
             assertEquals(
                 ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_ERROR.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
@@ -278,7 +278,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 prepareRequestProperties(OPERATION_DIFF, resId, resType, "YANG")
 
                 cfgSnapshotComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 kotlin.test.assertEquals(
                     "Can't proceed with the cfg snapshot lookup: provide resource-id and resource-type.",
                     e.message
@@ -319,7 +319,7 @@ class ComponentConfigSnapshotsExecutorTest {
 
                 prepareRequestProperties(OPERATION_DIFF, resId, resType, DIFF_JSON)
                 cfgSnapshotComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 kotlin.test.assertEquals(
                     "Can't proceed with the cfg snapshot diff: provide resource-id and resource-type.",
                     e.message
@@ -328,7 +328,7 @@ class ComponentConfigSnapshotsExecutorTest {
             }
 
             // then; we should get success
-            assertTrue(bluePrintRuntimeService.getBluePrintError().errors.size == 0)
+            assertTrue(bluePrintRuntimeService.getBlueprintError().errors.size == 0)
             assertEquals(
                 ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
@@ -368,7 +368,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 prepareRequestProperties(OPERATION_DIFF, resId, resType, DIFF_XML)
 
                 cfgSnapshotComponent.processNB(executionRequest)
-            } catch (e: BluePrintProcessorException) {
+            } catch (e: BlueprintProcessorException) {
                 kotlin.test.assertEquals(
                     "Can't proceed with the cfg snapshot diff: provide resource-id and resource-type.",
                     e.message
@@ -377,7 +377,7 @@ class ComponentConfigSnapshotsExecutorTest {
             }
 
             // then; we should get success
-            assertTrue(bluePrintRuntimeService.getBluePrintError().errors.size == 0)
+            assertTrue(bluePrintRuntimeService.getBlueprintError().errors.size == 0)
             assertEquals(
                 ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(

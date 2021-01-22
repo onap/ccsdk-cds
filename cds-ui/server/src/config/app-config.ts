@@ -39,7 +39,7 @@ export const processorApiConfig = Object.freeze({
         authToken: process.env.API_BLUEPRINT_PROCESSOR_GRPC_AUTH_TOKEN || "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==",
         bluePrintManagement: Object.freeze({
             //this path is relative to 'dist' folder
-            protoPath: __dirname + '../../../proto/BluePrintManagement.proto'
+            protoPath: __dirname + '../../../proto/BlueprintManagement.proto'
         })
     })
 });

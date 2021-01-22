@@ -22,7 +22,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ResourceDictionaryHandler
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.readNBText
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -75,7 +75,7 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
                 resourceDictionaryHandler.saveResourceDefinition(resourceDefinition)
                 log.trace("Resource dictionary(${file.name}) loaded successfully ")
             } else {
-                throw BluePrintException("couldn't get dictionary from content information")
+                throw BlueprintException("couldn't get dictionary from content information")
             }
         } catch (e: Exception) {
             errorBuilder.appendln("Couldn't load Resource dictionary (${file.name}: ${e.message})")

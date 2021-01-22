@@ -28,9 +28,9 @@ import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider
 import org.apache.sshd.server.session.ServerSession
 import org.apache.sshd.server.shell.ProcessShellCommandFactory
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BluePrintSshLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BlueprintSshLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.service.echoShell.EchoShellFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -47,8 +47,8 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
     classes = [
-        BluePrintSshLibConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
+        BlueprintSshLibConfiguration::class,
+        BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class
     ]
 )
 @TestPropertySource(
@@ -64,9 +64,9 @@ import kotlin.test.assertTrue
 class BlueprintSshClientServiceTest {
 
     @Autowired
-    lateinit var bluePrintSshLibPropertyService: BluePrintSshLibPropertyService
+    lateinit var bluePrintSshLibPropertyService: BlueprintSshLibPropertyService
 
-    lateinit var bluePrintSshLibPropertyServiceMock: BluePrintSshLibPropertyService
+    lateinit var bluePrintSshLibPropertyServiceMock: BlueprintSshLibPropertyService
 
     private lateinit var sshServer: SshServer
 

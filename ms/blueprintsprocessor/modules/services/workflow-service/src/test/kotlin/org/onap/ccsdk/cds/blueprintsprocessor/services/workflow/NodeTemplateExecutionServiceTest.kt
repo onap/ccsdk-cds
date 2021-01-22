@@ -24,11 +24,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.workflow.mock.MockComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
@@ -42,12 +42,12 @@ import kotlin.test.assertNotNull
 class NodeTemplateExecutionServiceTest {
 
     @MockBean
-    lateinit var bluePrintClusterService: BluePrintClusterService
+    lateinit var bluePrintClusterService: BlueprintClusterService
 
     @Before
     fun init() {
-        mockkObject(BluePrintDependencyService)
-        every { BluePrintDependencyService.applicationContext.getBean(any()) } returns MockComponentFunction()
+        mockkObject(BlueprintDependencyService)
+        every { BlueprintDependencyService.applicationContext.getBean(any()) } returns MockComponentFunction()
     }
 
     @After
@@ -58,7 +58,7 @@ class NodeTemplateExecutionServiceTest {
     @Test
     fun testExecuteNodeTemplate() {
         runBlocking {
-            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
                 "1234",
                 "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -79,7 +79,7 @@ class NodeTemplateExecutionServiceTest {
 
             assertNotNull(executionServiceOutput, "failed to get response")
             assertEquals(
-                BluePrintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
+                BlueprintConstants.STATUS_SUCCESS, executionServiceOutput.status.message,
                 "failed to get successful response"
             )
         }

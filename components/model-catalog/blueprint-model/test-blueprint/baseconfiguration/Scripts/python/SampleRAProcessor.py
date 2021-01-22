@@ -15,7 +15,7 @@ class SampleRAProcessor(AbstractRAProcessor):
             value = self.resolve_values_script(execution_request, self.value_to_resolve)
             self.set_resource_data_value(execution_request, value)
         else:
-            raise BluePrintProcessorException("Error on resource assignment. Message = " + self.error_message)
+            raise BlueprintProcessorException("Error on resource assignment. Message = " + self.error_message)
         return None
 
     def recover(self, runtime_exception, execution_request):

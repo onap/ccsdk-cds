@@ -20,7 +20,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.C
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.toFormatedCorrelation
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.toTypeNCorrelation
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 
 object MessageCorrelationUtils {
 
@@ -50,7 +50,7 @@ object MessageCorrelationUtils {
 
                 val unknownMessageTypes = collectedMessages.filter { !types.contains(it.type) }.map { it.id }
                 if (!unknownMessageTypes.isNullOrEmpty()) {
-                    throw BluePrintProcessorException("Messages($unknownMessageTypes) is not in type of($types)")
+                    throw BlueprintProcessorException("Messages($unknownMessageTypes) is not in type of($types)")
                 }
 
                 val copyTypes = types.toTypedArray().copyOf().toMutableList()

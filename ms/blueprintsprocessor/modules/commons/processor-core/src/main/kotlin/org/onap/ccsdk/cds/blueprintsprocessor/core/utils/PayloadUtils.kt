@@ -17,11 +17,11 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.utils
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 
 object PayloadUtils {
@@ -38,11 +38,11 @@ object PayloadUtils {
 
     fun getResponseDataFromPayload(workflowName: String, responsePayload: JsonNode): JsonNode {
         return responsePayload.get("$workflowName-response").returnNullIfMissing()
-            ?: throw BluePrintProcessorException("failed to get property($workflowName-response)")
+            ?: throw BlueprintProcessorException("failed to get property($workflowName-response)")
     }
 
     fun prepareInputsFromWorkflowPayload(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         payload: JsonNode,
         workflowName: String
     ) {
@@ -51,7 +51,7 @@ object PayloadUtils {
     }
 
     fun prepareDynamicInputsFromWorkflowPayload(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         payload: JsonNode,
         workflowName: String
     ) {
@@ -61,12 +61,12 @@ object PayloadUtils {
     }
 
     fun prepareDynamicInputsFromComponentPayload(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         payload: JsonNode
     ) {
         payload.fields().forEach { property ->
-            val path = StringBuilder(BluePrintConstants.PATH_INPUTS)
-                .append(BluePrintConstants.PATH_DIVIDER).append(property.key).toString()
+            val path = StringBuilder(BlueprintConstants.PATH_INPUTS)
+                .append(BlueprintConstants.PATH_DIVIDER).append(property.key).toString()
             bluePrintRuntimeService.put(path, property.value)
         }
     }

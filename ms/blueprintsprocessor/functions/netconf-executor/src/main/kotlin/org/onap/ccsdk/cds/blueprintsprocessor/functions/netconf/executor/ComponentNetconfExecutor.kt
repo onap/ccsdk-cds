@@ -69,7 +69,7 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBluePrintError()
+        bluePrintRuntimeService.getBlueprintError()
             .addError("Failed in ComponentNetconfExecutor : ${runtimeException.message}")
     }
 }

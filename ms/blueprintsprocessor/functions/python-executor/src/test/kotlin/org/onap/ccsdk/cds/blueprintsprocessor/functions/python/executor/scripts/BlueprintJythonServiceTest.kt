@@ -23,7 +23,7 @@ import io.mockk.mockk
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
@@ -39,13 +39,13 @@ import kotlin.test.assertNotNull
     "blueprints.processor.functions.python.executor.executionPath=./../../../../components/scripts/python/ccsdk_blueprints"])
 class BlueprintJythonServiceTest {
 
-    lateinit var blueprintContext: BluePrintContext
+    lateinit var blueprintContext: BlueprintContext
     @Autowired
     private lateinit var blueprintJythonService: BlueprintJythonServiceImpl
 
     @BeforeTest
     fun init() {
-        blueprintContext = mockk<BluePrintContext>()
+        blueprintContext = mockk<BlueprintContext>()
         every { blueprintContext.rootPath } returns normalizedPathName("target")
     }
 

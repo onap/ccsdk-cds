@@ -22,10 +22,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.nrmfunction.RestfulNRMServiceClient
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 
@@ -33,14 +33,14 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
 
     private val log = LoggerFactory.getLogger(RestfulCMComponentFunction::class.java)
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        throw BluePrintException("Not Implemented required")
+        throw BlueprintException("Not Implemented required")
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        throw BluePrintException("Not Implemented required")
+        throw BlueprintException("Not Implemented required")
     }
 
-    open fun bluePrintRestLibPropertyService(): BluePrintRestLibPropertyService =
+    open fun bluePrintRestLibPropertyService(): BlueprintRestLibPropertyService =
         functionDependencyInstanceAsType(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
 
     fun restClientService(clientInfo: JsonNode): BlueprintWebClientService {

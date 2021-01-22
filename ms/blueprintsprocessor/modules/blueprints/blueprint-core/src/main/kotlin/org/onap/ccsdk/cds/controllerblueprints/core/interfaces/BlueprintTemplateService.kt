@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 import com.fasterxml.jackson.core.io.CharTypes
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.TextNode
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 
 interface BlueprintTemplateService {
 
@@ -35,7 +35,7 @@ interface BlueprintTemplateService {
      *
      **/
     suspend fun generateContent(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
         nodeTemplateName: String,
         artifactName: String,
         jsonData: String = "",
@@ -47,14 +47,14 @@ interface BlueprintTemplateService {
 /**
  * Customise JsonNodeFactory and TextNode, Since it introduces quotes for string data.
  */
-open class BluePrintJsonNodeFactory : JsonNodeFactory() {
+open class BlueprintJsonNodeFactory : JsonNodeFactory() {
 
     override fun textNode(text: String): TextNode {
-        return BluePrintTextNode(text)
+        return BlueprintTextNode(text)
     }
 }
 
-open class BluePrintTextNode(v: String) : TextNode(v) {
+open class BlueprintTextNode(v: String) : TextNode(v) {
 
     override fun toString(): String {
         var len = this._value.length

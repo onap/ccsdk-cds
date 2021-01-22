@@ -19,8 +19,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.ssh
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
@@ -32,25 +32,25 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
 /** Relationships Types DSL for Message Producer */
 fun ServiceTemplateBuilder.relationshipTypeConnectsToSshClient() {
-    val relationshipType = BluePrintTypes.relationshipTypeConnectsToSshClient()
+    val relationshipType = BlueprintTypes.relationshipTypeConnectsToSshClient()
     if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
     this.relationshipTypes!![relationshipType.id!!] = relationshipType
 }
 
-fun BluePrintTypes.relationshipTypeConnectsToSshClient(): RelationshipType {
+fun BlueprintTypes.relationshipTypeConnectsToSshClient(): RelationshipType {
     return relationshipType(
-        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_SSH_CLIENT,
-        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        id = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_SSH_CLIENT,
+        version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
         description = "Relationship connects to through SSH Client."
     ) {
         property(
-            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
-            BluePrintConstants.DATA_TYPE_MAP,
+            BlueprintConstants.PROPERTY_CONNECTION_CONFIG,
+            BlueprintConstants.DATA_TYPE_MAP,
             true,
             "Connection Config details."
         )
-        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+        validTargetTypes(arrayListOf(BlueprintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
     }
 }
 
@@ -68,15 +68,15 @@ fun TopologyTemplateBuilder.relationshipTemplateSshClient(
 open class SshRelationshipTemplateBuilder(name: String, description: String) :
     RelationshipTemplateBuilder(
         name,
-        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_SSH_CLIENT, description
+        BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_SSH_CLIENT, description
     ) {
 
     fun basicAuth(block: BasicAuthSshClientPropertiesAssignmentBuilder.() -> Unit) {
-        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.basicAuthSshProperties(block))
+        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.basicAuthSshProperties(block))
     }
 }
 
-fun BluePrintTypes.basicAuthSshProperties(block: BasicAuthSshClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BlueprintTypes.basicAuthSshProperties(block: BasicAuthSshClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val sshProperties = BasicAuthSshClientPropertiesAssignmentBuilder().apply(block).build()
     sshProperties[SshClientProperties::type.name] = SshLibConstants.TYPE_BASIC_AUTH.asJsonPrimitive()
     return sshProperties.asJsonType()

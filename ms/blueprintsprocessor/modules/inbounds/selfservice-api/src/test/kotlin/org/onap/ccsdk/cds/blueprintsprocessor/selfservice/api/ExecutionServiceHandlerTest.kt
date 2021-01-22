@@ -32,7 +32,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationContext
@@ -62,7 +62,7 @@ class ExecutionServiceHandlerTest {
 
     @Before
     fun init() {
-        BluePrintDependencyService.inject(applicationContext)
+        BlueprintDependencyService.inject(applicationContext)
     }
 
     @Test

@@ -2,23 +2,23 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../../../../common/core/services/api.typed.service';
 import { BlueprintURLs } from '../../../../common/constants/app-constants';
 import { Observable } from 'rxjs';
-import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
+import { BlueprintDetailModel } from '../model/Blueprint.detail.model';
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class ConfigurationDashboardService {
-    constructor(private api: ApiService<BluePrintDetailModel>) {
+    constructor(private api: ApiService<BlueprintDetailModel>) {
 
     }
 
-    private getBluePrintModel(id: string): Observable<BluePrintDetailModel> {
+    private getBlueprintModel(id: string): Observable<BlueprintDetailModel> {
         return this.api.getOne(BlueprintURLs.getOneBlueprint + '/' + id);
     }
 
     getPagedPackages(id: string) {
-        return this.getBluePrintModel(id);
+        return this.getBlueprintModel(id);
     }
 
     public downloadResource(path: string) {

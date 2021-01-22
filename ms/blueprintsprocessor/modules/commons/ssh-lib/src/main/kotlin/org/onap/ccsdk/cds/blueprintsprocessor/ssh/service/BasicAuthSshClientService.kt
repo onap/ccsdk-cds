@@ -25,7 +25,7 @@ import org.apache.sshd.client.channel.ClientChannelEvent
 import org.apache.sshd.client.keyverifier.AcceptAllServerKeyVerifier
 import org.apache.sshd.client.session.ClientSession
 import org.onap.ccsdk.cds.blueprintsprocessor.ssh.BasicAuthSshClientProperties
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -76,7 +76,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
             channel!!.err = ByteArrayOutputStream()
             channel!!.open()
         } catch (e: Exception) {
-            throw BluePrintProcessorException("Failed to start Shell channel: ${e.message}")
+            throw BlueprintProcessorException("Failed to start Shell channel: ${e.message}")
         }
     }
 
@@ -97,7 +97,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
                 }
             }
         } catch (e: Exception) {
-            throw BluePrintProcessorException("Failed to execute commands, below the error message : ${e.message}")
+            throw BlueprintProcessorException("Failed to execute commands, below the error message : ${e.message}")
         }
         return response
     }
@@ -111,7 +111,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
             teeOutput!!.flush()
             deviceOutput = waitForPrompt(timeOut)
         } catch (e: IOException) {
-            throw BluePrintProcessorException("Exception during command execution:  ${e.message}", e)
+            throw BlueprintProcessorException("Exception during command execution:  ${e.message}", e)
         }
 
         if (detectFailure(deviceOutput)) {
@@ -130,7 +130,7 @@ open class BasicAuthSshClientService(private val basicAuthSshClientProperties: B
             Collections.unmodifiableSet(EnumSet.of(ClientChannelEvent.CLOSED)), timeOut
         )
         if (channel!!.out.toString().indexOfAny(arrayListOf("$", ">", "#")) <= 0 && waitMask.contains(ClientChannelEvent.TIMEOUT)) {
-            throw BluePrintProcessorException("Timeout: Failed to retrieve commands result in $timeOut ms")
+            throw BlueprintProcessorException("Timeout: Failed to retrieve commands result in $timeOut ms")
         }
         val outputResult = channel!!.out.toString()
         channel!!.out.flush()

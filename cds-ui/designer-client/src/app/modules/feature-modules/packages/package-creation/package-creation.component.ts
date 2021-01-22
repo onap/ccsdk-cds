@@ -109,7 +109,7 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
         // this.tourService.goto(step);
     }
 
-    saveBluePrint() {
+    saveBlueprint() {
         this.ngxService.start();
         console.log(this.cbaPackage);
         FilesContent.clear();
@@ -121,13 +121,13 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
         // this.cbaPackage.templateTopology.content = this.designerStore.state.sourceContent;
         packageCreationModes.execute(this.cbaPackage, this.packageCreationUtils);
         this.filesData.push(this.folder.TREE_DATA);
-        this.saveBluePrintToDataBase();
+        this.saveBlueprintToDataBase();
 
 
     }
 
 
-    saveBluePrintToDataBase() {
+    saveBlueprintToDataBase() {
         this.create();
         this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {

@@ -22,16 +22,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
-import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageProducerService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.PropertyAssignmentService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.PropertyDefinitionUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -57,8 +57,8 @@ import javax.annotation.PostConstruct
 )
 @Service
 class KafkaPublishAuditService(
-    private val bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService,
-    private val blueprintsProcessorCatalogService: BluePrintCatalogService
+    private val bluePrintMessageLibPropertyService: BlueprintMessageLibPropertyService,
+    private val blueprintsProcessorCatalogService: BlueprintCatalogService
 ) : PublishAuditService {
 
     private var inputInstance: BlueprintMessageProducerService? = null
@@ -172,7 +172,7 @@ class KafkaPublishAuditService(
 
                 val basePath = blueprintsProcessorCatalogService.getFromDatabase(blueprintName, blueprintVersion)
 
-                val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
+                val blueprintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(requestId, basePath.toString())
                 val blueprintContext = blueprintRuntimeService.bluePrintContext()
 
                 val workflowSteps = blueprintContext.workflowByName(workflowName).steps
@@ -183,9 +183,9 @@ class KafkaPublishAuditService(
                     val nodeTemplate = blueprintContext.nodeTemplateByName(nodeTemplateName)
 
                     /** We need to check in his Node Template Dependencies is case of a Node Template DG */
-                    if (nodeTemplate.type == BluePrintConstants.NODE_TEMPLATE_TYPE_DG) {
+                    if (nodeTemplate.type == BlueprintConstants.NODE_TEMPLATE_TYPE_DG) {
                         val dependencyNodeTemplate =
-                            nodeTemplate.properties?.get(BluePrintConstants.PROPERTY_DG_DEPENDENCY_NODE_TEMPLATE) as ArrayNode
+                            nodeTemplate.properties?.get(BlueprintConstants.PROPERTY_DG_DEPENDENCY_NODE_TEMPLATE) as ArrayNode
                         dependencyNodeTemplate.forEach { dependencyNodeTemplateName ->
                             clonedExecutionServiceInput = hideSensitiveDataFromResourceResolution(
                                 blueprintRuntimeService,
@@ -228,15 +228,15 @@ class KafkaPublishAuditService(
      * @return [executionServiceInput] with sensitive inputs replaced by a generic string
      */
     private suspend fun hideSensitiveDataFromResourceResolution(
-        blueprintRuntimeService: BluePrintRuntimeService<MutableMap<String, JsonNode>>,
-        blueprintContext: BluePrintContext,
+        blueprintRuntimeService: BlueprintRuntimeService<MutableMap<String, JsonNode>>,
+        blueprintContext: BlueprintContext,
         executionServiceInput: ExecutionServiceInput,
         workflowName: String,
         nodeTemplateName: String
     ): ExecutionServiceInput {
 
         val nodeTemplate = blueprintContext.nodeTemplateByName(nodeTemplateName)
-        if (nodeTemplate.type == BluePrintConstants.NODE_TEMPLATE_TYPE_COMPONENT_RESOURCE_RESOLUTION) {
+        if (nodeTemplate.type == BlueprintConstants.NODE_TEMPLATE_TYPE_COMPONENT_RESOURCE_RESOLUTION) {
             val interfaceName = blueprintContext.nodeTemplateFirstInterfaceName(nodeTemplateName)
             val operationName = blueprintContext.nodeTemplateFirstInterfaceFirstOperationName(nodeTemplateName)
 
@@ -250,7 +250,7 @@ class KafkaPublishAuditService(
             val artifactPrefixNamesNode = propertyAssignments[ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES]
             val propertyAssignmentService = PropertyAssignmentService(blueprintRuntimeService)
             val artifactPrefixNamesNodeValue = propertyAssignmentService.resolveAssignmentExpression(
-                BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+                BlueprintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
                 nodeTemplateName,
                 ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES,
                 artifactPrefixNamesNode!!

@@ -1,12 +1,12 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBlueprintRuntimeService
 
-class ResourceAssignmentRuntimeService(private var id: String, private var bluePrintContext: BluePrintContext) :
-    DefaultBluePrintRuntimeService(id, bluePrintContext) {
+class ResourceAssignmentRuntimeService(private var id: String, private var bluePrintContext: BlueprintContext) :
+    DefaultBlueprintRuntimeService(id, bluePrintContext) {
 
     private lateinit var resolutionId: String
     private var resourceStore: MutableMap<String, JsonNode> = hashMapOf()
@@ -29,7 +29,7 @@ class ResourceAssignmentRuntimeService(private var id: String, private var blueP
 
     fun getResolutionStore(key: String): JsonNode {
         return resourceStore[key]
-            ?: throw BluePrintProcessorException("failed to get execution property ($key)")
+            ?: throw BlueprintProcessorException("failed to get execution property ($key)")
     }
 
     fun checkResolutionStore(key: String): Boolean {
@@ -62,7 +62,7 @@ class ResourceAssignmentRuntimeService(private var id: String, private var blueP
 
     fun getDictionaryStore(key: String): JsonNode {
         return resourceStore["dictionary-$key"]
-            ?: throw BluePrintProcessorException("failed to get execution property (dictionary-$key)")
+            ?: throw BlueprintProcessorException("failed to get execution property (dictionary-$key)")
     }
 
     fun checkDictionaryStore(key: String): Boolean {

@@ -26,7 +26,7 @@ import { Observable } from 'rxjs';
 import { ApiService } from '../../../../common/core/services/api.typed.service';
 import { ResourceDictionaryURLs, BlueprintURLs } from '../../../../common/constants/app-constants';
 import { ModelType } from './model/ModelType.model';
-import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
+import { BlueprintDetailModel } from '../model/Blueprint.detail.model';
 
 
 @Injectable({
@@ -36,7 +36,7 @@ export class DesignerService {
 
     constructor(
         private api: ApiService<ModelType>,
-        private api2: ApiService<BluePrintDetailModel>
+        private api2: ApiService<BlueprintDetailModel>
     ) {
     }
 
@@ -44,12 +44,12 @@ export class DesignerService {
         return this.api.get(ResourceDictionaryURLs.getResourceDictionary + '/' + modelDefinitionType);
     }
 
-    private getBluePrintModel(id: string): Observable<BluePrintDetailModel> {
+    private getBlueprintModel(id: string): Observable<BlueprintDetailModel> {
         return this.api2.getOne(BlueprintURLs.getOneBlueprint + '/' + id);
     }
 
     getPagedPackages(id: string) {
-        return this.getBluePrintModel(id);
+        return this.getBlueprintModel(id);
     }
 
     publishBlueprint(body: any | null, options?: any): Observable<any> {

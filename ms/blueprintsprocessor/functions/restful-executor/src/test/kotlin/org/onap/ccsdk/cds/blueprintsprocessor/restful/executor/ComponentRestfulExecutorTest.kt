@@ -27,11 +27,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Implementation
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBlueprintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.context.ApplicationContext
 
@@ -58,24 +58,24 @@ class ComponentRestfulExecutorTest {
                 payload = JacksonUtils.jsonNode("{}") as ObjectNode
             }
 
-            val blueprintContext = mockk<BluePrintContext>()
+            val blueprintContext = mockk<BlueprintContext>()
             every {
                 blueprintContext.nodeTemplateOperationImplementation(
                     any(), any(), any()
                 )
             } returns Implementation()
 
-            val bluePrintRuntime = mockk<DefaultBluePrintRuntimeService>("1234")
+            val bluePrintRuntime = mockk<DefaultBlueprintRuntimeService>("1234")
             every { bluePrintRuntime.bluePrintContext() } returns blueprintContext
 
             componentRestfulExecutor.bluePrintRuntimeService = bluePrintRuntime
             componentRestfulExecutor.stepName = "sample-step"
 
             val operationInputs = hashMapOf<String, JsonNode>()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "config-deploy-process".asJsonPrimitive()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
-            operationInputs[BluePrintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
-            operationInputs["script-type"] = BluePrintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE] = "config-deploy-process".asJsonPrimitive()
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_INTERFACE] = "interfaceName".asJsonPrimitive()
+            operationInputs[BlueprintConstants.PROPERTY_CURRENT_OPERATION] = "operationName".asJsonPrimitive()
+            operationInputs["script-type"] = BlueprintConstants.SCRIPT_INTERNAL.asJsonPrimitive()
             operationInputs["script-class-reference"] = "internal.scripts.TestRestfulConfigure".asJsonPrimitive()
 
             val stepInputData = StepData().apply {

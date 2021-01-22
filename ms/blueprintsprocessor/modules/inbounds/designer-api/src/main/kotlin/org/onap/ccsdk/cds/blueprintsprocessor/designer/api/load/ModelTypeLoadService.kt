@@ -24,8 +24,8 @@ import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang3.text.StrBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ModelTypeHandler
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EntityType
@@ -118,19 +118,19 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
             val definitionType: String?
             when (T::class) {
                 DataType::class -> {
-                    definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
+                    definitionType = BlueprintConstants.MODEL_DEFINITION_TYPE_DATA_TYPE
                 }
                 RelationshipType::class -> {
-                    definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE
+                    definitionType = BlueprintConstants.MODEL_DEFINITION_TYPE_RELATIONSHIP_TYPE
                 }
                 ArtifactType::class -> {
-                    definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE
+                    definitionType = BlueprintConstants.MODEL_DEFINITION_TYPE_ARTIFACT_TYPE
                 }
                 NodeType::class -> {
-                    definitionType = BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE
+                    definitionType = BlueprintConstants.MODEL_DEFINITION_TYPE_NODE_TYPE
                 }
                 else -> {
-                    throw BluePrintException("couldn't process model type($classType) definition")
+                    throw BlueprintException("couldn't process model type($classType) definition")
                 }
             }
             modelType.definitionType = definitionType

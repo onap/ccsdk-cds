@@ -21,7 +21,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiDomains
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ModelTypeRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.ModelTypeValidator
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
 import org.slf4j.LoggerFactory
@@ -68,9 +68,9 @@ open class ModelTypeHandler(private val modelTypeRepository: ModelTypeRepository
      *
      * @param modelType modelType
      * @return ModelType
-     * @throws BluePrintException BluePrintException
+     * @throws BlueprintException BlueprintException
      */
-    @Throws(BluePrintException::class)
+    @Throws(BlueprintException::class)
     open suspend fun saveModel(modelType: ModelType): ModelType {
         lateinit var dbModel: ModelType
         ModelTypeValidator.validateModelType(modelType)

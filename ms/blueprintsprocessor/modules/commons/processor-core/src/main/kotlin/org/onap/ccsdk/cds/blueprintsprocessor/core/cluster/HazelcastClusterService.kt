@@ -33,15 +33,15 @@ import com.hazelcast.scheduledexecutor.IScheduledExecutorService
 import com.hazelcast.topic.Message
 import com.hazelcast.topic.MessageListener
 import kotlinx.coroutines.delay
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterMessage
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterMessage
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterMessageListener
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterJoinedEvent
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterMember
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ClusterUtils
@@ -53,7 +53,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 @Service
-open class HazelcastClusterService(private val applicationEventPublisher: ApplicationEventPublisher) : BluePrintClusterService {
+open class HazelcastClusterService(private val applicationEventPublisher: ApplicationEventPublisher) : BlueprintClusterService {
 
     private val log = logger(HazelcastClusterService::class)
     lateinit var hazelcast: HazelcastInstance
@@ -78,12 +78,12 @@ open class HazelcastClusterService(private val applicationEventPublisher: Applic
                 }
                 is ClusterInfo -> {
 
-                    System.setProperty(BluePrintConstants.PROPERTY_CLUSTER_ID, configuration.id)
-                    System.setProperty(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID, configuration.nodeId)
+                    System.setProperty(BlueprintConstants.PROPERTY_CLUSTER_ID, configuration.id)
+                    System.setProperty(BlueprintConstants.PROPERTY_CLUSTER_NODE_ID, configuration.nodeId)
 
                     val memberAttributeConfig = MemberAttributeConfig()
                     memberAttributeConfig.setAttribute(
-                        BluePrintConstants.PROPERTY_CLUSTER_NODE_ID,
+                        BlueprintConstants.PROPERTY_CLUSTER_NODE_ID,
                         configuration.nodeId
                     )
 
@@ -122,7 +122,7 @@ open class HazelcastClusterService(private val applicationEventPublisher: Applic
                     }
                 }
                 else -> {
-                    throw BluePrintProcessorException("couldn't understand the cluster configuration")
+                    throw BlueprintProcessorException("couldn't understand the cluster configuration")
                 }
             }
 
@@ -179,7 +179,7 @@ open class HazelcastClusterService(private val applicationEventPublisher: Applic
         return ClusterLockImpl(hazelcast, name)
     }
 
-    /** Return interface may change and it will be included in BluePrintClusterService */
+    /** Return interface may change and it will be included in BlueprintClusterService */
     @UseExperimental
     suspend fun clusterScheduler(name: String): IScheduledExecutorService {
         check(::hazelcast.isInitialized) { "failed to start and join cluster" }
@@ -225,7 +225,7 @@ open class HazelcastClusterService(private val applicationEventPublisher: Applic
         check(::hazelcast.isInitialized) { "failed to start and join cluster" }
         val applicationMembers: MutableMap<String, Member> = hashMapOf()
         hazelcast.cluster.members.map { member ->
-            val memberName: String = member.getAttribute(BluePrintConstants.PROPERTY_CLUSTER_NODE_ID)
+            val memberName: String = member.getAttribute(BlueprintConstants.PROPERTY_CLUSTER_NODE_ID)
             if (memberName.startsWith(appName, true)) {
                 applicationMembers[memberName] = member
             }
@@ -300,7 +300,7 @@ open class ClusterLockImpl(private val hazelcast: HazelcastInstance, private val
 
 class HazelcastMessageListenerAdapter<E>(val listener: BlueprintClusterMessageListener<E>) : MessageListener<E> {
     override fun onMessage(message: Message<E>?) = message?.let {
-        BluePrintClusterMessage<E>(
+        BlueprintClusterMessage<E>(
             BlueprintClusterTopic.valueOf(it.source as String),
             it.messageObject,
             it.publishTime,
