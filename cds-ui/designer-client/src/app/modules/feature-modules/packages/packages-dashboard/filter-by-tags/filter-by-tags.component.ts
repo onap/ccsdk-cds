@@ -96,7 +96,7 @@ export class TagsFilteringComponent implements OnInit {
             this.checkBoxTages = this.checkBoxTages.replace(event.target.id + ',', '')
                 .replace(event.target.id, '');
         } else {
-            this.checkBoxTages += event.target.id.trim() + ', ';
+            this.checkBoxTages += event.target.id.trim() + ',';
         }
         const tagsSelected = this.checkBoxTages.split(',').filter(item => {
             if (item) {
