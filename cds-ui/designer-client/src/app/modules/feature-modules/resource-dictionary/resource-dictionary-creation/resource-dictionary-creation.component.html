@@ -115,7 +115,7 @@
                                 autofocus #nameit (focusout)="saveDictionaryToStore()">METADATA</a>
                             <a class="nav-item nav-link" id="nav-source-tab" data-toggle="tab" href="#nav-source"
                                 role="tab" aria-controls="nav-source" aria-selected="false">SOURCES</a>
-                            <a class="nav-item nav-link edit-button" id="nav-editor-tab" data-toggle="tab"
+                            <a class="nav-item nav-link edit-button" (click)="saveDictionaryToStore()" id="nav-editor-tab" data-toggle="tab"
                                 href="#nav-editor" role="tab" aria-controls="nav-editor" aria-selected="false">EDITOR
                                 MODE</a>
                         </div>

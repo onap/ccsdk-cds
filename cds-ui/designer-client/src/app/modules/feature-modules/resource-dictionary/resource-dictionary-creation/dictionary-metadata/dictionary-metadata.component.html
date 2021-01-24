@@ -21,7 +21,7 @@
     <div class="single-line-model">
         <label class="label-name">Name</label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.name" placeholder="Topology name.vLB.CDS">
+            <input type="input" [(ngModel)]="metaDataTab.name" placeholder="Dictionary Name">
         </div>
         <!-- <div class="model-note-container error-message">
             Package name already exists with this version. Please enter a different name or enter different version
@@ -74,18 +74,17 @@
             <input type="input" [(ngModel)]="metaDataTab.libraryInstance" placeholder="Library Instance">
         </div>
     </div> -->
-    <!-- <div class="single-line-model">
-        <label class="label-name">Derived From</label>
+    <div class="single-line-model">
+        <label class="label-name">Updated By</label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.derivedFrom" placeholder="Derived From">
+            <input type="input" [(ngModel)]="metaDataTab['updated-by']" placeholder="Updated By">
         </div>
-    </div> -->
+    </div>
 
     <div class="single-line-model">
         <label class="label-name">Tags</label>
         <div class="label-input">
-            <input type="input" (keyup.enter)="addTag($event)"
-                placeholder="Ex., vDNS-CDS">
+            <input type="input" (keyup.enter)="addTag($event)" placeholder="Ex., vDNS-CDS">
 
         </div>
         <div class="model-note-container tag-notes">Seprate tags with comma or space</div>

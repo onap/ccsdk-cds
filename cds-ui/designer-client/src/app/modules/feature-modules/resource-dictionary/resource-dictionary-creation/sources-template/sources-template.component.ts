@@ -34,15 +34,18 @@ export class SourcesTemplateComponent implements OnInit {
   lang = 'json';
   sources = {};
   option = [];
-  sourcesOptions = [];
   textValue: any;
   selectItem: boolean;
-  ddSource = [];
+  // ddSource = [];
   checked: boolean;
   searchText = '';
   text = '';
   selectedArray = [];
   metaDataTab: MetaData = new MetaData();
+
+  tempSources = new Map();
+  toDeleteSource = new Map<string, any>();
+  sourcesOptions = new Map<string, any>();
 
   constructor(
     private sourcesStore: SourcesStore,
@@ -58,9 +61,9 @@ export class SourcesTemplateComponent implements OnInit {
       // console.log(sources);
       this.sources = sources[0];
       // this.sources = {
-      //   "input": "source-input", "rest": "source-rest", "default":"source-default", "capability": "source-capability",
-      // "sdnc": "source-rest", "vault-data": "source-rest", "processor-db": "source-db", "aai-data": "source-rest",
-      // "script": "source-capability"
+      //   "input": "source-input", "rest": "source-rest", "default": "source-default", "capability": "source-capability",
+      //   "sdnc": "source-rest", "vault-data": "source-rest", "processor-db": "source-db", "aai-data": "source-rest",
+      //   "script": "source-capability"
       // };
       for (const key in this.sources) {
         if (key) {
@@ -95,9 +98,13 @@ export class SourcesTemplateComponent implements OnInit {
   }
 
   saveSorcesDataToStore() {
-    console.log(this.ddSource);
+    const ddSource = [];
+    for (const key of this.sourcesOptions.keys()) {
+      ddSource.push(this.sourcesOptions.get(key));
+    }
+    console.log(ddSource);
     this.metaDataTab.sources = {};
-    for (const obj of this.ddSource) {
+    for (const obj of ddSource) {
       this.metaDataTab.sources = { ...this.metaDataTab.sources, ...obj };
     }
     //  this.metaDataTab.sources = { ...this.ddSource }
@@ -105,37 +112,102 @@ export class SourcesTemplateComponent implements OnInit {
     this.dictionaryCreationStore.changeMetaData(this.metaDataTab);
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    console.log('-------------');
-    // console.log(event);
-
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  setTempSources(event, item) {
+    console.log(event.target.checked);
+    if (event.target.checked) {
+      this.tempSources.set(item.name, item);
     } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+      this.tempSources.delete(item.name);
+    }
+    console.log(this.tempSources);
+  }
+
+  selectAll() {
+    if (this.tempSources.size === 0) {
+      for (const option of this.option) {
+        if (!this.sourcesOptions.has(option.name)) {
+          this.tempSources.set(option.name, option);
+        }
+      }
+    } else {
+      this.tempSources = new Map<string, any>();
+    }
+  }
+
+  setToDeleteSources(event, item) {
+    console.log(event.target.checked);
+    if (event.target.checked) {
+      this.toDeleteSource.set(item.key, item);
+    } else {
+      this.toDeleteSource.delete(item.key);
     }
 
-    console.log(this.sourcesOptions);
-    console.log(this.sources);
+  }
 
-    this.ddSource = [];
-
-    const originalSources = this.sourcesOptions;
-    for (const key of originalSources) {
+  addSources() {
+    //  this.tempSources
+    const originalSources = this.tempSources;
+    for (const key of originalSources.keys()) {
       /* tslint:disable:no-string-literal */
-      this.ddSource.push({
-        [key.name]: {
-          type: key.value,
+      this.sourcesOptions.set(key, {
+        [key]: {
+          type: originalSources.get(key).value,
           properties: {}
         }
       });
 
     }
 
+    console.log(this.sourcesOptions);
+    this.tempSources.clear();
     this.saveSorcesDataToStore();
+  }
+
+  deleteSource() {
+    console.log(this.toDeleteSource);
+    for (const key of this.toDeleteSource.keys()) {
+      console.log(key);
+      this.sourcesOptions.delete(key);
+    }
+    this.toDeleteSource = new Map<string, any>();
+    this.saveSorcesDataToStore();
+  }
+
+  // drop(event: CdkDragDrop<string[]>) {
+  //   console.log('-------------');
+  //   // console.log(event);
+
+  //   if (event.previousContainer === event.container) {
+  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  //   } else {
+  //     transferArrayItem(event.previousContainer.data,
+  //       event.container.data,
+  //       event.previousIndex,
+  //       event.currentIndex);
+  //   }
+
+  //   console.log(this.sourcesOptions);
+  //   console.log(this.sources);
+
+  //   this.ddSource = [];
+
+  //   const originalSources = this.sourcesOptions;
+  //   for (const key of originalSources) {
+  //     /* tslint:disable:no-string-literal */
+  //     this.ddSource.push({
+  //       [key.name]: {
+  //         type: key.value,
+  //         properties: {}
+  //       }
+  //     });
+
+  //   }
+
+  //   this.saveSorcesDataToStore();
+  // }
+
+  getMapKey(map) {
+    return Object.assign({}, map.keys());
   }
 
   searchDictionary(event: any) {
