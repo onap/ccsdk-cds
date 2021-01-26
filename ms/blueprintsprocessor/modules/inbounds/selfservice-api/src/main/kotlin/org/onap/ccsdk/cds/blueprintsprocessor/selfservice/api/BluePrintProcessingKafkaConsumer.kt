@@ -104,7 +104,12 @@ open class BluePrintProcessingKafkaConsumer(
                             ph.register()
                             val key = message.key() ?: UUID.randomUUID().toString()
                             val value = String(message.value(), Charset.defaultCharset())
-                            log.trace("Consumed Message : key($key) value($value)")
+                            log.info("Consumed Message : topic(${message.topic()}) " +
+                                    "partition(${message.partition()}) " +
+                                    "leaderEpoch(${message.leaderEpoch().get()}) " +
+                                    "offset(${message.offset()}) " +
+                                    "key(${message.key()}) " +
+                                    "CBA(${executionServiceInput.actionIdentifiers.blueprintName}/${executionServiceInput.actionIdentifiers.blueprintVersion}/${executionServiceInput.actionIdentifiers.actionName})")
                             val executionServiceInput = value.jsonAsType<ExecutionServiceInput>()
                             val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
                             blueprintMessageProducerService.sendMessage(key, executionServiceOutput)

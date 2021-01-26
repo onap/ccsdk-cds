@@ -77,16 +77,12 @@ class KafkaMessageProducerService(
         }
         val callback = Callback { metadata, exception ->
             if (exception != null)
-                log.error("ERROR : ${exception.message}")
+                log.error("Couldn't publish ${message::class.simpleName} ${getMessageLogData(message)}.", exception)
             else {
-                var logMessage = when (clonedMessage) {
-                    is ExecutionServiceInput ->
-                        "Request published to ${metadata.topic()} for CBA: ${clonedMessage.actionIdentifiers.blueprintName} version: ${clonedMessage.actionIdentifiers.blueprintVersion}"
-                    is ExecutionServiceOutput ->
-                        "Response published to ${metadata.topic()} for CBA: ${clonedMessage.actionIdentifiers.blueprintName} version: ${clonedMessage.actionIdentifiers.blueprintVersion}"
-                    else -> "Message published to(${metadata.topic()}), offset(${metadata.offset()}), headers :$headers"
-                }
-                log.info(logMessage)
+                val message = "${message::class.simpleName} published : topic(${metadata.topic()}) " +
+                        "partition(${metadata.partition()}) " +
+                        "offset(${metadata.offset()}) ${getMessageLogData(message)}."
+                log.info(message)
             }
         }
         messageTemplate().send(record, callback)
@@ -114,7 +110,7 @@ class KafkaMessageProducerService(
         /** Truncation of error messages */
         var truncErrMsg = executionServiceOutput.status.errorMessage
         if (truncErrMsg != null && truncErrMsg.length > MAX_ERR_MSG_LEN) {
-            truncErrMsg = "${truncErrMsg.substring(0, MAX_ERR_MSG_LEN)}" +
+            truncErrMsg = truncErrMsg.substring(0, MAX_ERR_MSG_LEN) +
                 " [...]. Check Blueprint Processor logs for more information."
         }
         /** Truncation for Command Executor responses */
@@ -137,6 +133,20 @@ class KafkaMessageProducerService(
             }
             payload = truncPayload
             stepData = executionServiceOutput.stepData
+        }
+    }
+
+    private fun getMessageLogData(message: Any): String {
+        return when (message) {
+            is ExecutionServiceInput -> {
+                val actionIdentifiers = message.actionIdentifiers
+                "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
+            }
+            is ExecutionServiceOutput -> {
+                val actionIdentifiers = message.actionIdentifiers
+                "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
+            }
+            else -> "message($message)"
         }
     }
 }
