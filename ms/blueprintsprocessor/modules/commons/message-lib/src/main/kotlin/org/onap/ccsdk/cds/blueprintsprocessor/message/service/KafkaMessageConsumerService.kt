@@ -81,6 +81,13 @@ open class KafkaMessageConsumerService(
                                 /** execute the command block */
                                 if (!channel.isClosedForSend) {
                                     channel.send(consumerRecord)
+                                    log.info(
+                                        "Channel sent Consumer Record : topic(${consumerRecord.topic()}) " +
+                                            "partition(${consumerRecord.partition()}) " +
+                                            "leaderEpoch(${consumerRecord.leaderEpoch().get()}) " +
+                                            "offset(${consumerRecord.offset()}) " +
+                                            "key(${consumerRecord.key()})"
+                                    )
                                 } else {
                                     log.error("Channel is closed to receive message")
                                 }
