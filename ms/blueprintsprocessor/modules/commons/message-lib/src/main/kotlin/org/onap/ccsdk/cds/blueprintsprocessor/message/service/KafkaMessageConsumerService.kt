@@ -1,6 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
- *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018-2021 AT&T, Bell Canada Intellectual Property.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -81,6 +81,13 @@ open class KafkaMessageConsumerService(
                                 /** execute the command block */
                                 if (!channel.isClosedForSend) {
                                     channel.send(consumerRecord)
+                                    log.info(
+                                        "Channel sent Consumer Record : topic(${consumerRecord.topic()}) " +
+                                            "partition(${consumerRecord.partition()}) " +
+                                            "leaderEpoch(${consumerRecord.leaderEpoch().get()}) " +
+                                            "offset(${consumerRecord.offset()}) " +
+                                            "key(${consumerRecord.key()})"
+                                    )
                                 } else {
                                     log.error("Channel is closed to receive message")
                                 }

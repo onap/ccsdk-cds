@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2021 Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -104,8 +105,15 @@ open class BlueprintProcessingKafkaConsumer(
                             ph.register()
                             val key = message.key() ?: UUID.randomUUID().toString()
                             val value = String(message.value(), Charset.defaultCharset())
-                            log.trace("Consumed Message : key($key) value($value)")
                             val executionServiceInput = value.jsonAsType<ExecutionServiceInput>()
+                            log.info(
+                                "Consumed Message : topic(${message.topic()}) " +
+                                    "partition(${message.partition()}) " +
+                                    "leaderEpoch(${message.leaderEpoch().get()}) " +
+                                    "offset(${message.offset()}) " +
+                                    "key(${message.key()}) " +
+                                    "CBA(${executionServiceInput.actionIdentifiers.blueprintName}/${executionServiceInput.actionIdentifiers.blueprintVersion}/${executionServiceInput.actionIdentifiers.actionName})"
+                            )
                             val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
                             blueprintMessageProducerService.sendMessage(key, executionServiceOutput)
                         } catch (e: Exception) {

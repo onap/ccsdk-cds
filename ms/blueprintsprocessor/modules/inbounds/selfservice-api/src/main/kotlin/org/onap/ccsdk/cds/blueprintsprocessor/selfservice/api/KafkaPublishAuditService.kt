@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020 Bell Canada
+ * Copyright © 2021 Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,11 +88,8 @@ class KafkaPublishAuditService(
         try {
             this.inputInstance = this.getInputInstance(INPUT_SELECTOR)
             this.inputInstance!!.sendMessage(key, secureExecutionServiceInput)
-        } catch (e: Exception) {
-            var errMsg =
-                if (e.message != null) "ERROR : ${e.message}"
-                else "ERROR : Failed to send execution request to Kafka."
-            log.error(errMsg)
+        } catch (ex: Exception) {
+            log.error("Failed to publish execution request to Kafka.", ex)
         }
     }
 
@@ -109,11 +106,8 @@ class KafkaPublishAuditService(
         try {
             this.outputInstance = this.getOutputInstance(OUTPUT_SELECTOR)
             this.outputInstance!!.sendMessage(key, executionServiceOutput)
-        } catch (e: Exception) {
-            var errMsg =
-                if (e.message != null) "ERROR : $e"
-                else "ERROR : Failed to send execution request to Kafka."
-            log.error(errMsg)
+        } catch (ex: Exception) {
+            log.error("Failed to publish execution response to Kafka.", ex)
         }
     }
 
@@ -206,12 +200,12 @@ class KafkaPublishAuditService(
                     }
                 }
             }
-        } catch (e: Exception) {
-            val errMsg = "ERROR : Couldn't hide sensitive data in the execution request."
-            log.error(errMsg, e)
+        } catch (ex: Exception) {
+            val errMsg = "Couldn't hide sensitive data in the execution request."
+            log.error(errMsg, ex)
             clonedExecutionServiceInput.payload.replace(
                 "$workflowName-request",
-                "$errMsg $e".asJsonPrimitive()
+                "$errMsg $ex".asJsonPrimitive()
             )
         }
         return clonedExecutionServiceInput
