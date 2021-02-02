@@ -59,7 +59,8 @@
         <label class="label-name">Required</label>
         <div class="label-input">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customControlValidation1" required>
+                <input type="checkbox" [(ngModel)]="metaDataTab.property.required" [ngModelOptions]="{standalone: true}"
+                    class="custom-control-input" id="customControlValidation1" required>
                 <label class="custom-control-label p-0" for="customControlValidation1">True</label>
             </div>
         </div>

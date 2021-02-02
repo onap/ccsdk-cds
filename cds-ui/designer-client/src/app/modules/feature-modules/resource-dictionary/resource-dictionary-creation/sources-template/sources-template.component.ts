@@ -134,6 +134,23 @@ export class SourcesTemplateComponent implements OnInit {
     }
   }
 
+  addProperties(item, text) {
+    console.log(text);
+    console.log(item);
+    if (text && text.trim()) {
+      // Get source Object
+      const sourceObj = this.sourcesOptions.get(item.key);
+      sourceObj[item.key]['properties'] = { ...JSON.parse(text) };
+
+      console.log(sourceObj);
+
+      this.sourcesOptions.set(item.key, sourceObj);
+      this.saveSorcesDataToStore();
+
+      console.log(this.sourcesOptions);
+    }
+  }
+
   setToDeleteSources(event, item) {
     console.log(event.target.checked);
     if (event.target.checked) {
@@ -144,18 +161,25 @@ export class SourcesTemplateComponent implements OnInit {
 
   }
 
+
+  identify(index, item) {
+    return item.key;
+  }
+
+
   addSources() {
     //  this.tempSources
     const originalSources = this.tempSources;
     for (const key of originalSources.keys()) {
-      /* tslint:disable:no-string-literal */
-      this.sourcesOptions.set(key, {
-        [key]: {
-          type: originalSources.get(key).value,
-          properties: {}
-        }
-      });
-
+      if (!this.sourcesOptions.has(key)) {
+        /* tslint:disable:no-string-literal */
+        this.sourcesOptions.set(key, {
+          [key]: {
+            type: originalSources.get(key).value,
+            properties: {}
+          }
+        });
+      }
     }
 
     console.log(this.sourcesOptions);
