@@ -120,7 +120,7 @@ export class ActionAttributesComponent implements OnInit {
         console.log(input);
         if (input && input.type && input.name) {
             const insertedInputActionAttribute = Object.assign({}, input);
-            if (!this.newInputs.includes(insertedInputActionAttribute)) {
+            if (!this.newInputs.some(obj => obj.name === input.name)) {
                 this.newInputs.push(insertedInputActionAttribute);
             }
         }
@@ -178,6 +178,8 @@ export class ActionAttributesComponent implements OnInit {
                 this.outputs.push(output);
             }
         });
+        this.newInputs = [];
+        this.newOutputs = [];
     }
 
     private getValue() {

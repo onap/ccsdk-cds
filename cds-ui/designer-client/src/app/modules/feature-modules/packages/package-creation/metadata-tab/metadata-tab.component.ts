@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PackageCreationService} from '../package-creation.service';
 import {MetaDataTabModel} from '../mapping-models/metadata/MetaDataTab.model';
 import {PackageCreationStore} from '../package-creation.store';
 import {ActivatedRoute} from '@angular/router';
+import {Subject} from 'rxjs';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 
 @Component({
@@ -10,7 +12,7 @@ import {ActivatedRoute} from '@angular/router';
     templateUrl: './metadata-tab.component.html',
     styleUrls: ['./metadata-tab.component.css']
 })
-export class MetadataTabComponent implements OnInit {
+export class MetadataTabComponent implements OnInit , OnDestroy {
 
     counter = 0;
     tags = new Set<string>();
@@ -24,7 +26,7 @@ export class MetadataTabComponent implements OnInit {
     errorMessage: string;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     isNameEditable = false;
-
+    ngUnsubscribe = new Subject();
     constructor(
         private route: ActivatedRoute,
         private packageCreationService: PackageCreationService,
@@ -38,7 +40,11 @@ export class MetadataTabComponent implements OnInit {
         this.metaDataTab.mapOfCustomKey = this.customKeysMap;
         this.metaDataTab.mode = this.modeType;
         this.isNameEditable = this.route.snapshot.paramMap.get('id') == null;
-        this.packageCreationStore.state$.subscribe(element => {
+        this.packageCreationStore.state$
+            .pipe(
+                distinctUntilChanged((a: any, b: any) => JSON.stringify(a) === JSON.stringify(b)),
+                takeUntil(this.ngUnsubscribe))
+            .subscribe(element => {
 
             if (element && element.metaData) {
 
@@ -133,5 +139,10 @@ export class MetadataTabComponent implements OnInit {
         this.packageCreationStore.changeMetaData(newMetaData);
     }
 
+    ngOnDestroy() {
 
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
+        this.ngUnsubscribe.unsubscribe();
+    }
 }
