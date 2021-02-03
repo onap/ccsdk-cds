@@ -447,7 +447,7 @@
             </dependency>
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
-                <artifactId>k8s-profile-upload</artifactId>
+                <artifactId>k8s-connection-plugin</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>

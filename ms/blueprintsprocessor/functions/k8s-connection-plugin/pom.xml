@@ -27,7 +27,7 @@
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
-    <artifactId>k8s-profile-upload</artifactId>
+    <artifactId>k8s-connection-plugin</artifactId>
 
     <name>MS Blueprints Processor Functions - K8s Profile Upload</name>
     <description>Blueprints Processor Function - K8s Profile Upload</description>
