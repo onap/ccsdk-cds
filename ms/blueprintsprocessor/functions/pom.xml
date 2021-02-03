@@ -41,7 +41,7 @@
         <module>cli-executor</module>
         <module>config-snapshots</module>
         <module>message-prioritization</module>
-        <module>k8s-profile-upload</module>
+        <module>k8s-connection-plugin</module>
     </modules>
 
     <dependencies>

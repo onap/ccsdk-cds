@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload.K8sProfile
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException

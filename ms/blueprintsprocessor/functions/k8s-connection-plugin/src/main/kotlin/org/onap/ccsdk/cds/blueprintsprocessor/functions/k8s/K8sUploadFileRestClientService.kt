@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
 
 import org.apache.commons.io.IOUtils
 import org.apache.http.client.ClientProtocolException
