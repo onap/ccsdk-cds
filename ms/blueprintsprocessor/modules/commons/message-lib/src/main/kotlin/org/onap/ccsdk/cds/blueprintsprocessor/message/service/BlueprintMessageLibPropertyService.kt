@@ -1,6 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
- *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
+ *  Modifications Copyright © 2018-2021 AT&T, Bell Canada Intellectual Property
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import com.fasterxml.jackson.databind.JsonNode
+import io.micrometer.core.instrument.MeterRegistry
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageProducerProperties
@@ -36,17 +37,20 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
 
 @Service(MessageLibConstants.SERVICE_BLUEPRINT_MESSAGE_LIB_PROPERTY)
-open class BlueprintMessageLibPropertyService(private var bluePrintPropertiesService: BlueprintPropertiesService) {
+open class BlueprintMessageLibPropertyService(
+    private var bluePrintPropertiesService: BlueprintPropertiesService,
+    private val meterRegistry: MeterRegistry
+) {
 
     fun blueprintMessageProducerService(jsonNode: JsonNode): BlueprintMessageProducerService {
         val messageClientProperties = messageProducerProperties(jsonNode)
-        return KafkaMessageProducerService(messageClientProperties)
+        return KafkaMessageProducerService(messageClientProperties, meterRegistry)
     }
 
     fun blueprintMessageProducerService(selector: String): BlueprintMessageProducerService {
         val prefix = "${MessageLibConstants.PROPERTY_MESSAGE_PRODUCER_PREFIX}$selector"
         val messageClientProperties = messageProducerProperties(prefix)
-        return KafkaMessageProducerService(messageClientProperties)
+        return KafkaMessageProducerService(messageClientProperties, meterRegistry)
     }
 
     fun messageProducerProperties(prefix: String): MessageProducerProperties {
@@ -184,17 +188,20 @@ open class BlueprintMessageLibPropertyService(private var bluePrintPropertiesSer
                 /** Message Consumer */
                 MessageLibConstants.TYPE_KAFKA_BASIC_AUTH -> {
                     return KafkaMessageConsumerService(
-                        messageConsumerProperties as KafkaBasicAuthMessageConsumerProperties
+                        messageConsumerProperties as KafkaBasicAuthMessageConsumerProperties,
+                        meterRegistry
                     )
                 }
                 MessageLibConstants.TYPE_KAFKA_SSL_AUTH -> {
                     return KafkaMessageConsumerService(
-                        messageConsumerProperties as KafkaSslAuthMessageConsumerProperties
+                        messageConsumerProperties as KafkaSslAuthMessageConsumerProperties,
+                        meterRegistry
                     )
                 }
                 MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH -> {
                     return KafkaMessageConsumerService(
-                        messageConsumerProperties as KafkaScramSslAuthMessageConsumerProperties
+                        messageConsumerProperties as KafkaScramSslAuthMessageConsumerProperties,
+                        meterRegistry
                     )
                 }
                 /** Stream Consumer */

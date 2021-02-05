@@ -1,5 +1,6 @@
 /*
  * Copyright © 2018-2019 AT&T Intellectual Property.
+ * Modifications Copyright © 2021 Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 
+import io.micrometer.core.instrument.MeterRegistry
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -49,6 +51,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationContext
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
@@ -119,6 +122,9 @@ open class MessagePrioritizationConsumerTest {
 
     @Autowired
     lateinit var messagePrioritizationStateService: MessagePrioritizationStateService
+
+    @MockBean
+    lateinit var meterRegistry: MeterRegistry
 
     @Before
     fun setup() {

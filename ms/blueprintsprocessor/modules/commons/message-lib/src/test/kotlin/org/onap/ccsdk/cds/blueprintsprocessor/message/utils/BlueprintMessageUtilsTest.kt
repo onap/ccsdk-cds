@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
+package org.onap.ccsdk.cds.blueprintsprocessor.message.utils
 
-object SelfServiceMetricConstants {
+import io.micrometer.core.instrument.Tag
+import org.junit.Test
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import kotlin.test.assertEquals
 
-    private const val METRICS_PREFIX = "cds.cba"
+class BlueprintMessageUtilsTest {
 
-    private const val PROCESS_PREFIX = "$METRICS_PREFIX.process"
+    @Test
+    fun testKafkaMetricTag() {
+        val expected = mutableListOf<Tag>(
+            Tag.of(BlueprintConstants.METRIC_TAG_TOPIC, "my-topic")
+        )
+        val tags = BlueprintMessageUtils.kafkaMetricTag("my-topic")
 
-    // COUNTERS
-    const val COUNTER_PROCESS = "$PROCESS_PREFIX.counter"
-
-    // TIMERS
-    const val TIMER_PROCESS = "$PROCESS_PREFIX.timer"
+        assertEquals(expected, tags)
+    }
 }

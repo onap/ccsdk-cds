@@ -17,13 +17,16 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.message.BlueprintMessageMetricConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageConsumerService
+import org.onap.ccsdk.cds.blueprintsprocessor.message.utils.BlueprintMessageUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsType
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -43,8 +46,9 @@ import javax.annotation.PreDestroy
 )
 @Service
 open class BlueprintProcessingKafkaConsumer(
-    private val bluePrintMessageLibPropertyService: BlueprintMessageLibPropertyService,
-    private val executionServiceHandler: ExecutionServiceHandler
+    private val blueprintMessageLibPropertyService: BlueprintMessageLibPropertyService,
+    private val executionServiceHandler: ExecutionServiceHandler,
+    private val meterRegistry: MeterRegistry
 ) {
 
     val log = logger(BlueprintProcessingKafkaConsumer::class)
@@ -69,7 +73,7 @@ open class BlueprintProcessingKafkaConsumer(
 
             /** Get the Message Consumer Service **/
             blueprintMessageConsumerService = try {
-                bluePrintMessageLibPropertyService
+                blueprintMessageLibPropertyService
                     .blueprintMessageConsumerService(CONSUMER_SELECTOR)
             } catch (e: BlueprintProcessorException) {
                 val errorMsg = "Failed creating Kafka consumer message service."
@@ -83,7 +87,7 @@ open class BlueprintProcessingKafkaConsumer(
 
             /** Get the Message Producer Service **/
             val blueprintMessageProducerService = try {
-                bluePrintMessageLibPropertyService
+                blueprintMessageLibPropertyService
                     .blueprintMessageProducerService(PRODUCER_SELECTOR)
             } catch (e: BlueprintProcessorException) {
                 val errorMsg = "Failed creating Kafka producer message service."
@@ -117,6 +121,10 @@ open class BlueprintProcessingKafkaConsumer(
                             val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
                             blueprintMessageProducerService.sendMessage(key, executionServiceOutput)
                         } catch (e: Exception) {
+                            meterRegistry.counter(
+                                BlueprintMessageMetricConstants.KAFKA_CONSUMED_MESSAGES_ERROR_COUNTER,
+                                BlueprintMessageUtils.kafkaMetricTag(message.topic())
+                            ).increment()
                             log.error("failed in processing the consumed message : $message", e)
                         } finally {
                             ph.arriveAndDeregister()

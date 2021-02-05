@@ -1,5 +1,6 @@
 /*
  * Copyright © 2018-2019 AT&T Intellectual Property.
+ * Modifications Copyright © 2021 Bell Canada.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
+import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -32,6 +34,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.message.BlueprintMessageLibConfigu
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaStreamsBasicAuthConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageConsumerProperties
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -73,6 +76,9 @@ class KafkaStreamsConsumerServiceTest {
 
     @Autowired
     lateinit var bluePrintMessageLibPropertyService: BlueprintMessageLibPropertyService
+
+    @MockBean
+    lateinit var meterRegistry: MeterRegistry
 
     @Test
     fun testProperties() {

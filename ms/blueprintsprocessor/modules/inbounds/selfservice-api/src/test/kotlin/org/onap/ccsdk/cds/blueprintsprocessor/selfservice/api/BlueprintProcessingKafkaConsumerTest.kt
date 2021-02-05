@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2021 Bell Canada.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -65,7 +66,8 @@ class BlueprintProcessingKafkaConsumerTest {
 
             val bluePrintProcessingKafkaConsumer = BlueprintProcessingKafkaConsumer(
                 bluePrintMessageLibPropertyService,
-                executionServiceHandle
+                executionServiceHandle,
+                meterRegistry
             )
 
             launch {

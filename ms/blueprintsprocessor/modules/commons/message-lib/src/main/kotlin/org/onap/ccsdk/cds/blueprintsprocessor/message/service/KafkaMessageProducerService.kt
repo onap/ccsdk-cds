@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import com.fasterxml.jackson.databind.node.ObjectNode
+import io.micrometer.core.instrument.MeterRegistry
 import org.apache.commons.lang.builder.ToStringBuilder
 import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.KafkaProducer
@@ -26,14 +27,17 @@ import org.apache.kafka.common.header.internals.RecordHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
+import org.onap.ccsdk.cds.blueprintsprocessor.message.BlueprintMessageMetricConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageProducerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.message.utils.BlueprintMessageUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.slf4j.LoggerFactory
 import java.nio.charset.Charset
 
 class KafkaMessageProducerService(
-    private val messageProducerProperties: MessageProducerProperties
+    private val messageProducerProperties: MessageProducerProperties,
+    private val meterRegistry: MeterRegistry
 ) :
     BlueprintMessageProducerService {
 
@@ -76,9 +80,17 @@ class KafkaMessageProducerService(
             headers.forEach { (key, value) -> recordHeaders.add(RecordHeader(key, value.toByteArray())) }
         }
         val callback = Callback { metadata, exception ->
-            if (exception != null)
+            meterRegistry.counter(
+                BlueprintMessageMetricConstants.KAFKA_PRODUCED_MESSAGES_COUNTER,
+                BlueprintMessageUtils.kafkaMetricTag(topic)
+            ).increment()
+            if (exception != null) {
+                meterRegistry.counter(
+                    BlueprintMessageMetricConstants.KAFKA_PRODUCED_MESSAGES_ERROR_COUNTER,
+                    BlueprintMessageUtils.kafkaMetricTag(topic)
+                ).increment()
                 log.error("Couldn't publish ${clonedMessage::class.simpleName} ${getMessageLogData(clonedMessage)}.", exception)
-            else {
+            } else {
                 val message = "${clonedMessage::class.simpleName} published : topic(${metadata.topic()}) " +
                     "partition(${metadata.partition()}) " +
                     "offset(${metadata.offset()}) ${getMessageLogData(clonedMessage)}."

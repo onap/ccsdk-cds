@@ -248,4 +248,12 @@ object BlueprintConstants {
     const val NODE_TEMPLATE_TYPE_COMPONENT_RESOURCE_RESOLUTION = "component-resource-resolution"
     const val NODE_TEMPLATE_TYPE_DG = "dg-generic"
     const val PROPERTY_DG_DEPENDENCY_NODE_TEMPLATE = "dependency-node-templates"
+
+    // TAGS
+    const val METRIC_TAG_BP_NAME = "blueprint_name"
+    const val METRIC_TAG_BP_VERSION = "blueprint_version"
+    const val METRIC_TAG_BP_ACTION = "blueprint_action"
+    const val METRIC_TAG_BP_STATUS = "status"
+    const val METRIC_TAG_BP_OUTCOME = "outcome"
+    const val METRIC_TAG_TOPIC = "topic"
 }
