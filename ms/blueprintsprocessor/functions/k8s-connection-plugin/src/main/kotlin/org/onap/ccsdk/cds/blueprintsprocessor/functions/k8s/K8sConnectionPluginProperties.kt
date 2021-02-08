@@ -15,11 +15,11 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
 
-open class K8sProfileUploadProperties {
+open class K8sConnectionPluginProperties {
 
-    var type: String = K8sProfileUploadConstants.PREFIX_K8S_PLUGIN
+    var type: String = K8sConnectionPluginConstants.PREFIX_K8S_PLUGIN
     lateinit var url: String
     lateinit var username: String
     lateinit var password: String

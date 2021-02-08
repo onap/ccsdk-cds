@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
@@ -32,18 +32,18 @@ import org.springframework.context.annotation.Import
     BlueprintCoreConfiguration::class
 )
 @EnableConfigurationProperties
-open class K8sProfileUploadConfiguration(private var bluePrintPropertiesService: BlueprintPropertiesService) {
+open class K8sConnectionPluginConfiguration(private var bluePrintPropertiesService: BlueprintPropertiesService) {
 
     @Bean("k8s-plugin-properties")
-    open fun getProperties(): K8sProfileUploadProperties {
+    open fun getProperties(): K8sConnectionPluginProperties {
         return bluePrintPropertiesService.propertyBeanType(
-            K8sProfileUploadConstants.PREFIX_K8S_PLUGIN,
-            K8sProfileUploadProperties::class.java
+            K8sConnectionPluginConstants.PREFIX_K8S_PLUGIN,
+            K8sConnectionPluginProperties::class.java
         )
     }
 }
 
-class K8sProfileUploadConstants {
+class K8sConnectionPluginConstants {
     companion object {
 
         const val PREFIX_K8S_PLUGIN: String = "blueprintprocessor.k8s.plugin"

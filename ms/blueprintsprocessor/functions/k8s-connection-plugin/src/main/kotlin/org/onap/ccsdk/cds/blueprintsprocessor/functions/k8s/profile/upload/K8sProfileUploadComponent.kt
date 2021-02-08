@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sPluginApi
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
@@ -121,7 +122,7 @@ open class K8sProfileUploadComponent(
             val definitionName: String? = prefixInputParamsMap[INPUT_K8S_DEFINITION_NAME]?.returnNullIfMissing()?.asText()
             val definitionVersion: String? = prefixInputParamsMap[INPUT_K8S_DEFINITION_VERSION]?.returnNullIfMissing()?.asText()
 
-            val k8sProfileUploadConfiguration = K8sProfileUploadConfiguration(bluePrintPropertiesService)
+            val k8sProfileUploadConfiguration = K8sConnectionPluginConfiguration(bluePrintPropertiesService)
 
             // Creating API connector
             var api = K8sPluginApi(
