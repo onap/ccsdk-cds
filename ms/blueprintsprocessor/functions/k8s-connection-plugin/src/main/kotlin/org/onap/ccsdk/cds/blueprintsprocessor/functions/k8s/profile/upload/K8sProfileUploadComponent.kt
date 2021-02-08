@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sPluginApi
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
@@ -121,24 +122,22 @@ open class K8sProfileUploadComponent(
             val definitionName: String? = prefixInputParamsMap[INPUT_K8S_DEFINITION_NAME]?.returnNullIfMissing()?.asText()
             val definitionVersion: String? = prefixInputParamsMap[INPUT_K8S_DEFINITION_VERSION]?.returnNullIfMissing()?.asText()
 
-            val k8sProfileUploadConfiguration = K8sProfileUploadConfiguration(bluePrintPropertiesService)
+            val k8sProfileUploadConfiguration = K8sConnectionPluginConfiguration(bluePrintPropertiesService)
 
             // Creating API connector
             var api = K8sPluginApi(
                 k8sProfileUploadConfiguration.getProperties().username,
                 k8sProfileUploadConfiguration.getProperties().password,
-                k8sProfileUploadConfiguration.getProperties().url,
-                definitionName,
-                definitionVersion
+                k8sProfileUploadConfiguration.getProperties().url
             )
 
             if ((profileName == null) || (definitionName == null) || (definitionVersion == null)) {
                 log.warn("Prefix $prefix does not have required data for us to continue.")
-            } else if (!api.hasDefinition()) {
+            } else if (!api.hasDefinition(definitionName, definitionVersion)) {
                 log.warn("K8s RB Definition ($definitionName/$definitionVersion) not found ")
             } else if (profileName == "") {
                 log.warn("K8s rb profile name is empty! Either define profile name to use or choose default")
-            } else if (api.hasProfile(profileName)) {
+            } else if (api.hasProfile(definitionName, definitionVersion, profileName)) {
                 log.info("Profile Already Existing - skipping upload")
             } else {
                 log.info("Uploading K8s Profile..")
@@ -164,8 +163,8 @@ open class K8sProfileUploadComponent(
                 profile.rbVersion = definitionVersion
                 profile.namespace = profileNamespace
                 val profileFilePath: Path = prepareProfileFile(profileName, profileSource, artifact.file)
-                api.createProfile(profile)
-                api.uploadProfileContent(profile, profileFilePath)
+                api.createProfile(definitionName, definitionVersion, profile)
+                api.uploadProfileContent(definitionName, definitionVersion, profile, profileFilePath)
 
                 log.info("K8s Profile Upload Completed")
                 outputPrefixStatuses.put(prefix, OUTPUT_UPLOADED)
