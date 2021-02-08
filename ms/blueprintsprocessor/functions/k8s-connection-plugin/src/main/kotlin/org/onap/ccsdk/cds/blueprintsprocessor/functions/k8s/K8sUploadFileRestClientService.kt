@@ -25,62 +25,20 @@ import org.apache.http.client.entity.EntityBuilder
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.message.BasicHeader
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
-import org.springframework.http.HttpHeaders
-import org.springframework.http.MediaType
 import java.io.IOException
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.Base64
 
 class K8sUploadFileRestClientService(
-    private val restClientProperties:
-        BasicAuthRestClientProperties
-) : BlueprintWebClientService {
-
-    override fun defaultHeaders(): Map<String, String> {
-
-        val encodedCredentials = setBasicAuth(
-            restClientProperties.username,
-            restClientProperties.password
-        )
-        return mapOf(
-            HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-            HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
-            HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials"
-        )
-    }
-
-    override fun host(uri: String): String {
-        return restClientProperties.url + uri
-    }
-
-    override fun convertToBasicHeaders(headers: Map<String, String>):
-        Array<BasicHeader> {
-            val customHeaders: MutableMap<String, String> = headers.toMutableMap()
-            // inject additionalHeaders
-            customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
-
-            if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
-                val encodedCredentials = setBasicAuth(
-                    restClientProperties.username,
-                    restClientProperties.password
-                )
-                customHeaders[HttpHeaders.AUTHORIZATION] =
-                    "Basic $encodedCredentials"
-            }
-            return super.convertToBasicHeaders(customHeaders)
-        }
-
-    private fun setBasicAuth(username: String, password: String): String {
-        val credentialsString = "$username:$password"
-        return Base64.getEncoder().encodeToString(
-            credentialsString.toByteArray(Charset.defaultCharset())
-        )
-    }
+    username: String,
+    password: String,
+    baseUrl: String,
+    definition: String,
+    definitionVersion: String
+) : K8sDefinitionRestClient(username, password, baseUrl, definition, definitionVersion) {
 
     @Throws(IOException::class, ClientProtocolException::class)
     private fun performHttpCall(httpUriRequest: HttpUriRequest): BlueprintWebClientService.WebClientResponse<String> {
