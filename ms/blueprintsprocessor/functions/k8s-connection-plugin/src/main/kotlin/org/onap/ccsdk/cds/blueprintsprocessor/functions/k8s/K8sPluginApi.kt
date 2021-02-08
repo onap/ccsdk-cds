@@ -20,6 +20,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.configuration.template.K8sTemplate
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload.K8sProfile
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
@@ -38,6 +40,7 @@ class K8sPluginApi(
 
     private val service: K8sUploadFileRestClientService // BasicAuthRestClientService
     private val log = LoggerFactory.getLogger(K8sPluginApi::class.java)!!
+    val objectMapper = ObjectMapper()
 
     init {
         var mapOfHeaders = hashMapOf<String, String>()
@@ -81,7 +84,6 @@ class K8sPluginApi(
     }
 
     fun createProfile(profile: K8sProfile) {
-        val objectMapper = ObjectMapper()
         val profileJsonString: String = objectMapper.writeValueAsString(profile)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
@@ -112,4 +114,65 @@ class K8sPluginApi(
             throw BlueprintProcessorException("${e.message}")
         }
     }
+
+    fun createTemplate(template: K8sTemplate): Boolean {
+        val templateJsonString: String = objectMapper.writeValueAsString(template)
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = service?.exchangeResource(
+                    HttpMethod.POST.name,
+                    "/config-template",
+                    templateJsonString
+            )!!
+            log.debug(result.toString())
+            return result.status in 200..299
+        } catch (e: Exception) {
+            log.error("Caught exception during create template")
+            throw BlueprintProcessorException("${e.message}")
+        }
+    }
+
+    fun uploadTemplate(template: K8sTemplate, filePath: Path) {
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = service.uploadBinaryFile(
+                    "/config-template/${template.templateName}/content",
+                    filePath
+            )
+            if (result.status !in 200..299) {
+                throw Exception(result.body)
+            }
+        } catch (e: Exception) {
+            log.error("Caught exception trying to upload k8s rb template ${template.templateName}")
+            throw BlueprintProcessorException("${e.message}")
+        }
+    }
+
+    fun getTemplate(templateName: String): K8sTemplate {
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
+                    HttpMethod.GET.name,
+                    "/config-template/${templateName}",
+                    ""
+            )
+            log.debug(result.toString())
+            return objectMapper.readValue(result.body)
+        } catch (e: Exception) {
+            log.error("Caught exception during get template")
+            throw BlueprintProcessorException("${e.message}")
+        }
+    }
+
+    fun deleteTemplate(templateName: String) {
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
+                    HttpMethod.DELETE.name,
+                    "/config-template/${templateName}",
+                    ""
+            )
+            log.debug(result.toString())
+        } catch (e: Exception) {
+            log.error("Caught exception during get template")
+            throw BlueprintProcessorException("${e.message}")
+        }
+    }
+
 }
