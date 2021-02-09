@@ -37,6 +37,14 @@
               "required": true,
               "type": "string"
             },
+            "instance-dependencies": {
+              "required": true,
+              "description": "Instance names to inject to Jython or Kotlin Script.",
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
+            },
             "dynamic-properties": {
               "description": "Dynamic Json Content or DSL Json reference.",
               "required": false,
