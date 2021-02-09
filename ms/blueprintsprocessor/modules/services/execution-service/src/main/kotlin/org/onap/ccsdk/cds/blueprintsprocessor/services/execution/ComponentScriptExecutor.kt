@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Copyright © 2021 Orange.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
+import com.fasterxml.jackson.databind.node.ArrayNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -36,6 +38,7 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
         const val INPUT_SCRIPT_TYPE = "script-type"
         const val INPUT_SCRIPT_CLASS_REFERENCE = "script-class-reference"
         const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"
+        const val INPUT_INSTANCE_DEPENDENCIES = "instance-dependencies"
 
         const val ATTRIBUTE_RESPONSE_DATA = "response-data"
         const val ATTRIBUTE_STATUS = "status"
@@ -69,6 +72,9 @@ open class ComponentScriptExecutor(private var componentFunctionScriptingService
     }
 
     open fun populateScriptDependencies(scriptDependencies: MutableList<String>) {
-        /** Place holder for Child to add extra dependencies */
+        val instanceDependenciesNode = operationInputs.get(INPUT_INSTANCE_DEPENDENCIES) as? ArrayNode
+        instanceDependenciesNode?.forEach { instanceName ->
+            scriptDependencies.add(instanceName.textValue())
+        }
     }
 }
