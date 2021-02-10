@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {DslDefinition} from '../mapping-models/CBAPacakge.model';
 import {PackageCreationStore} from '../package-creation.store';
 
@@ -10,6 +10,7 @@ import {PackageCreationStore} from '../package-creation.store';
 export class DslDefinitionsTabComponent implements OnInit {
 
     dslDefinition: DslDefinition = new DslDefinition();
+    @Output() changeEvent = new EventEmitter<string>();
     lang = 'json';
 
     constructor(private packageCreationStore: PackageCreationStore) {
@@ -26,5 +27,13 @@ export class DslDefinitionsTabComponent implements OnInit {
 
     textChanged(event) {
         this.packageCreationStore.changeDslDefinition(this.dslDefinition);
+    }
+
+    callParent(): void {
+        this.changeEvent.next('some changes to enable save ');
+    }
+
+    onPaste($event: ClipboardEvent) {
+        this.callParent();
     }
 }
