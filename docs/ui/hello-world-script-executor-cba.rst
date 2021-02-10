@@ -247,10 +247,6 @@ Now, you need to add the values of **Inputs** required attributes in **the Inter
 
 |image27|
 
-Click on the **Save** button to update the package with the function attributes.
-
-|image28|
-
 From the page header and inside **the Save** **menu**, click on the **Save** button to save all the changes.
 
 |image29|
@@ -391,17 +387,17 @@ Screenshot from POSTMAN showing how to run the **Hello_world-package-kotlin** pa
    :width: 300pt
 .. |image25| image:: https://wiki.onap.org/download/attachments/93006316/24.png?version=2&modificationDate=1610392939000&api=v2
    :width: 300pt
-.. |image26| image:: https://wiki.onap.org/download/attachments/93006316/25.png?version=3&modificationDate=1610393699000&api=v2
+.. |image26| image:: https://wiki.onap.org/download/attachments/93006316/25.png?version=4&modificationDate=1612796837000&api=v2
    :width: 378pt
-.. |image27| image:: https://wiki.onap.org/download/attachments/93006316/26.png?version=4&modificationDate=1610393629000&api=v2
+.. |image27| image:: https://wiki.onap.org/download/attachments/93006316/26.png?version=5&modificationDate=1612796934000&api=v2
    :width: 300pt
 .. |image28| image:: https://wiki.onap.org/download/attachments/93006316/26.png?version=4&modificationDate=1610393629000&api=v2
    :width: 200pt
-.. |image29| image:: https://wiki.onap.org/download/attachments/93006316/28.png?version=4&modificationDate=1610394025000&api=v2
+.. |image29| image:: https://wiki.onap.org/download/attachments/93006316/28.png?version=5&modificationDate=1612797010000&api=v2
    :width: 1000pt
-.. |image30| image:: https://wiki.onap.org/download/attachments/93006316/29.png?version=3&modificationDate=1610394097000&api=v2
+.. |image30| image:: https://wiki.onap.org/download/attachments/93006316/29.png?version=5&modificationDate=1612797073000&api=v2
    :width: 1000pt
-.. |image31| image:: https://wiki.onap.org/download/attachments/93006316/29.png?version=3&modificationDate=1610394097000&api=v2
+.. |image31| image:: https://wiki.onap.org/download/attachments/93006316/30.png?version=2&modificationDate=1612797108000&api=v2
    :width: 1000pt
 .. |image32| image:: https://wiki.onap.org/download/attachments/93006316/31.png?version=1&modificationDate=1610459101000&api=v2
    :width: 1000pt

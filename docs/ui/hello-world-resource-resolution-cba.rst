@@ -186,10 +186,6 @@ Now, the **hello_world_template** template is listed inside the **Artifacts sect
 
 |image28|
 
-Click on the **"Save"** button to save the added template.
-
-|image29|
-
 From the page header and inside **the Save** **menu**, click on the **Save** button to save all the changes.
 
 |image30|
@@ -337,7 +333,7 @@ Next:
    :width: 300pt
 .. |image24| image:: https://wiki.onap.org/download/attachments/93003036/24.png?version=2&modificationDate=1607548321000&api=v2
    :width: 300pt
-.. |image25| image:: https://wiki.onap.org/download/attachments/93003036/25.png?version=2&modificationDate=1607550168000&api=v2
+.. |image25| image:: https://wiki.onap.org/download/attachments/93003036/25.png?version=3&modificationDate=1612796664000&api=v2
    :width: 300pt
 .. |image26| image:: https://wiki.onap.org/download/attachments/93003036/26.png?version=2&modificationDate=1607551324000&api=v2
    :width: 340pt
@@ -349,7 +345,7 @@ Next:
    :width: 300pt
 .. |image30| image:: https://wiki.onap.org/download/attachments/93003036/30.png?version=2&modificationDate=1607552712000&api=v2
    :width: 1000pt
-.. |image31| image:: https://wiki.onap.org/download/attachments/93003036/32.png?version=3&modificationDate=1607554129000&api=v2
+.. |image31| image:: https://wiki.onap.org/download/attachments/93003036/32.png?version=4&modificationDate=1612796710000&api=v2
    :width: 1000pt
 .. |image32| image:: https://wiki.onap.org/download/attachments/93003036/33.png?version=1&modificationDate=1607554073000&api=v2
    :width: 1000pt
