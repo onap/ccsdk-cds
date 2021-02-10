@@ -1,7 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 IBM.
- * Modifications Copyright © 2020 Orange.
+ * Modifications Copyright © 2021 Orange.
  * Modifications Copyright © 2020 Deutsche Telekom AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,15 +17,16 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition
+
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sAbstractRestClientService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 
 open class K8sDefinitionRestClient(
-    username: String,
-    password: String,
-    private val baseUrl: String,
+    k8sConfiguration: K8sConnectionPluginConfiguration,
     private val definition: String,
     private val definitionVersion: String
-) : K8sAbstractRestClientService(username, password) {
+) : K8sAbstractRestClientService(k8sConfiguration) {
 
     override fun apiUrl(): String {
         return "$baseUrl/v1/rb/definition/$definition/$definitionVersion"

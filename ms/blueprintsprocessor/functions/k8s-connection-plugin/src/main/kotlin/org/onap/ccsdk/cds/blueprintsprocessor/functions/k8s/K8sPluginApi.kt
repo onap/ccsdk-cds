@@ -20,7 +20,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload.K8sProfile
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sDefinitionRestClient
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sUploadFileRestClientService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.profile.K8sProfile
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.slf4j.LoggerFactory
@@ -29,15 +31,17 @@ import org.springframework.http.HttpMethod.POST
 import java.nio.file.Path
 
 class K8sPluginApi(
-    private val username: String,
-    private val password: String,
-    private val baseUrl: String
+    private val k8sConfiguration: K8sConnectionPluginConfiguration
 ) {
     private val log = LoggerFactory.getLogger(K8sPluginApi::class.java)!!
     private val objectMapper = ObjectMapper()
 
     fun hasDefinition(definition: String, definitionVersion: String): Boolean {
-        val rbDefinitionService = K8sDefinitionRestClient(username, password, baseUrl, definition, definitionVersion)
+        val rbDefinitionService = K8sDefinitionRestClient(
+            k8sConfiguration,
+            definition,
+            definitionVersion
+        )
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 GET.name,
@@ -53,7 +57,11 @@ class K8sPluginApi(
     }
 
     fun hasProfile(definition: String, definitionVersion: String, profileName: String): Boolean {
-        val rbDefinitionService = K8sDefinitionRestClient(username, password, baseUrl, definition, definitionVersion)
+        val rbDefinitionService = K8sDefinitionRestClient(
+            k8sConfiguration,
+            definition,
+            definitionVersion
+        )
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 GET.name,
@@ -69,7 +77,11 @@ class K8sPluginApi(
     }
 
     fun createProfile(definition: String, definitionVersion: String, profile: K8sProfile) {
-        val rbDefinitionService = K8sDefinitionRestClient(username, password, baseUrl, definition, definitionVersion)
+        val rbDefinitionService = K8sDefinitionRestClient(
+            k8sConfiguration,
+            definition,
+            definitionVersion
+        )
         val profileJsonString: String = objectMapper.writeValueAsString(profile)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
@@ -87,7 +99,11 @@ class K8sPluginApi(
     }
 
     fun uploadProfileContent(definition: String, definitionVersion: String, profile: K8sProfile, filePath: Path) {
-        val fileUploadService = K8sUploadFileRestClientService(username, password, baseUrl, definition, definitionVersion)
+        val fileUploadService = K8sUploadFileRestClientService(
+            k8sConfiguration,
+            definition,
+            definitionVersion
+        )
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = fileUploadService.uploadBinaryFile(
                 "/profile/${profile.profileName}/content",

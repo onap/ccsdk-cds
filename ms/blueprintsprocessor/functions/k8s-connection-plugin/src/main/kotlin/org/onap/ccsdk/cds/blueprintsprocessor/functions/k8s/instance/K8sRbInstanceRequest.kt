@@ -17,11 +17,23 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class K8sProfile {
+class K8sRbInstanceRequest {
+
+    @get:JsonProperty("labels")
+    var labels: Map<String, String>? = null
+
+    @get:JsonProperty("cloud-region")
+    var cloudRegion: String? = null
+
+    @get:JsonProperty("override-values")
+    var overrideValues: Map<String, String>? = null
+
+    @get:JsonProperty("release-name")
+    var releaseName: String? = null
 
     @get:JsonProperty("rb-name")
     var rbName: String? = null
@@ -31,13 +43,6 @@ class K8sProfile {
 
     @get:JsonProperty("profile-name")
     var profileName: String? = null
-
-    @get:JsonProperty("namespace")
-    var namespace: String? = "default"
-
-    override fun toString(): String {
-        return "$rbName:$rbVersion:$profileName"
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

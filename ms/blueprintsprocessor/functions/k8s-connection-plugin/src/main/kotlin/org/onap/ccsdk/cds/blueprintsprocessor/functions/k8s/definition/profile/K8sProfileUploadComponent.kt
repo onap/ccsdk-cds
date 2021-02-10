@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.profile.upload
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.profile
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
@@ -125,11 +125,7 @@ open class K8sProfileUploadComponent(
             val k8sProfileUploadConfiguration = K8sConnectionPluginConfiguration(bluePrintPropertiesService)
 
             // Creating API connector
-            var api = K8sPluginApi(
-                k8sProfileUploadConfiguration.getProperties().username,
-                k8sProfileUploadConfiguration.getProperties().password,
-                k8sProfileUploadConfiguration.getProperties().url
-            )
+            var api = K8sPluginApi(k8sProfileUploadConfiguration)
 
             if ((profileName == null) || (definitionName == null) || (definitionVersion == null)) {
                 log.warn("Prefix $prefix does not have required data for us to continue.")
