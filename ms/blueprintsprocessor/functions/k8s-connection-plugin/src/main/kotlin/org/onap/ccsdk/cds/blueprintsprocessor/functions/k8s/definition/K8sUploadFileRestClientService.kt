@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition
 
 import org.apache.commons.io.IOUtils
 import org.apache.http.client.ClientProtocolException
@@ -25,6 +25,7 @@ import org.apache.http.client.entity.EntityBuilder
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.message.BasicHeader
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
 import java.io.IOException
@@ -33,12 +34,10 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class K8sUploadFileRestClientService(
-    username: String,
-    password: String,
-    baseUrl: String,
+    k8sConfiguration: K8sConnectionPluginConfiguration,
     definition: String,
     definitionVersion: String
-) : K8sDefinitionRestClient(username, password, baseUrl, definition, definitionVersion) {
+) : K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion) {
 
     @Throws(IOException::class, ClientProtocolException::class)
     private fun performHttpCall(httpUriRequest: HttpUriRequest): BlueprintWebClientService.WebClientResponse<String> {

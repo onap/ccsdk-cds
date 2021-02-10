@@ -1,7 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 IBM.
- * Modifications Copyright © 2020 Orange.
+ * Modifications Copyright © 2021 Orange.
  * Modifications Copyright © 2020 Deutsche Telekom AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,17 +29,25 @@ import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import java.nio.charset.Charset
 import java.util.Base64
 
-abstract class K8sAbstractRestClientService(val username: String, val password: String) : BlueprintWebClientService {
+abstract class K8sAbstractRestClientService(
+    private val k8sConfiguration: K8sConnectionPluginConfiguration
+) : BlueprintWebClientService {
 
-    private val restClientProperties: BasicAuthRestClientProperties = getBasicAuthRestClientProperties()
+    protected val baseUrl: String = k8sConfiguration.getProperties().url
+    private var restClientProperties: BasicAuthRestClientProperties? = null
 
     private fun getBasicAuthRestClientProperties(): BasicAuthRestClientProperties {
-        val basicAuthRestClientProperties = BasicAuthRestClientProperties()
-        basicAuthRestClientProperties.username = username
-        basicAuthRestClientProperties.password = password
-        basicAuthRestClientProperties.url = apiUrl()
-        basicAuthRestClientProperties.additionalHeaders = getHeaders()
-        return basicAuthRestClientProperties
+        return if (restClientProperties != null)
+            restClientProperties!!
+        else {
+            val basicAuthRestClientProperties = BasicAuthRestClientProperties()
+            basicAuthRestClientProperties.username = k8sConfiguration.getProperties().username
+            basicAuthRestClientProperties.password = k8sConfiguration.getProperties().password
+            basicAuthRestClientProperties.url = apiUrl()
+            basicAuthRestClientProperties.additionalHeaders = getHeaders()
+            restClientProperties = basicAuthRestClientProperties
+            return basicAuthRestClientProperties
+        }
     }
 
     private fun getHeaders(): HashMap<String, String> {
@@ -58,8 +66,8 @@ abstract class K8sAbstractRestClientService(val username: String, val password: 
 
     override fun defaultHeaders(): Map<String, String> {
         val encodedCredentials = setBasicAuth(
-            restClientProperties.username,
-            restClientProperties.password
+            getBasicAuthRestClientProperties().username,
+            getBasicAuthRestClientProperties().password
         )
         return mapOf(
             CONTENT_TYPE to APPLICATION_JSON_VALUE,
@@ -69,18 +77,18 @@ abstract class K8sAbstractRestClientService(val username: String, val password: 
     }
 
     override fun host(uri: String): String {
-        return restClientProperties.url + uri
+        return getBasicAuthRestClientProperties().url + uri
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
         val customHeaders: MutableMap<String, String> = headers.toMutableMap()
         // inject additionalHeaders
-        customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
+        customHeaders.putAll(verifyAdditionalHeaders(getBasicAuthRestClientProperties()))
 
         if (!headers.containsKey(AUTHORIZATION)) {
             val encodedCredentials = setBasicAuth(
-                restClientProperties.username,
-                restClientProperties.password
+                getBasicAuthRestClientProperties().username,
+                getBasicAuthRestClientProperties().password
             )
             customHeaders[AUTHORIZATION] = "Basic $encodedCredentials"
         }
