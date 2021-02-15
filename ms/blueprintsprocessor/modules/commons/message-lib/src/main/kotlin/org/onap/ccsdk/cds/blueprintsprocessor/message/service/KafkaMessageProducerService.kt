@@ -24,7 +24,6 @@ import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.header.internals.RecordHeader
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.message.BlueprintMessageMetricConstants
@@ -89,12 +88,13 @@ class KafkaMessageProducerService(
                     BlueprintMessageMetricConstants.KAFKA_PRODUCED_MESSAGES_ERROR_COUNTER,
                     BlueprintMessageUtils.kafkaMetricTag(topic)
                 ).increment()
-                log.error("Couldn't publish ${clonedMessage::class.simpleName} ${getMessageLogData(clonedMessage)}.", exception)
+                log.error("Couldn't publish ${clonedMessage::class.simpleName} ${BlueprintMessageUtils.getMessageLogData(clonedMessage)}.", exception)
             } else {
-                val message = "${clonedMessage::class.simpleName} published : topic(${metadata.topic()}) " +
-                    "partition(${metadata.partition()}) " +
-                    "offset(${metadata.offset()}) ${getMessageLogData(clonedMessage)}."
-                log.info(message)
+                log.info(
+                    "${clonedMessage::class.simpleName} published : topic(${metadata.topic()}) " +
+                        "partition(${metadata.partition()}) " +
+                        "offset(${metadata.offset()}) ${BlueprintMessageUtils.getMessageLogData(clonedMessage)}."
+                )
             }
         }
         messageTemplate().send(record, callback)
@@ -104,7 +104,6 @@ class KafkaMessageProducerService(
     fun messageTemplate(additionalConfig: Map<String, ByteArray>? = null): KafkaProducer<String, ByteArray> {
         log.trace("Producer client properties : ${ToStringBuilder.reflectionToString(messageProducerProperties)}")
         val configProps = messageProducerProperties.getConfig()
-
         /** Add additional Properties */
         if (additionalConfig != null)
             configProps.putAll(additionalConfig)
@@ -145,20 +144,6 @@ class KafkaMessageProducerService(
             }
             payload = truncPayload
             stepData = executionServiceOutput.stepData
-        }
-    }
-
-    private fun getMessageLogData(message: Any): String {
-        return when (message) {
-            is ExecutionServiceInput -> {
-                val actionIdentifiers = message.actionIdentifiers
-                "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
-            }
-            is ExecutionServiceOutput -> {
-                val actionIdentifiers = message.actionIdentifiers
-                "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
-            }
-            else -> "message($message)"
         }
     }
 }
