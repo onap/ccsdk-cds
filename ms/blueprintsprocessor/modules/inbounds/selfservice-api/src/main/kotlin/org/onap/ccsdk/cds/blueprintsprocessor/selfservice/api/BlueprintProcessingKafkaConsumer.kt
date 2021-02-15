@@ -116,7 +116,7 @@ open class BlueprintProcessingKafkaConsumer(
                                     "leaderEpoch(${message.leaderEpoch().get()}) " +
                                     "offset(${message.offset()}) " +
                                     "key(${message.key()}) " +
-                                    "CBA(${executionServiceInput.actionIdentifiers.blueprintName}/${executionServiceInput.actionIdentifiers.blueprintVersion}/${executionServiceInput.actionIdentifiers.actionName})"
+                                    BlueprintMessageUtils.getMessageLogData(executionServiceInput)
                             )
                             val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
                             blueprintMessageProducerService.sendMessage(key, executionServiceOutput)
