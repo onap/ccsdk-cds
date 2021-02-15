@@ -17,7 +17,11 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.message.utils
 
 import io.micrometer.core.instrument.Tag
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
+import kotlin.math.max
 
 class BlueprintMessageUtils {
     companion object {
@@ -25,5 +29,27 @@ class BlueprintMessageUtils {
             mutableListOf(
                 Tag.of(BlueprintConstants.METRIC_TAG_TOPIC, topic)
             )
+
+        /**
+         * get OS hostname's last 5 characters
+         * Used to generate unique client ID.
+         */
+        fun getHostnameSuffix(): String =
+            System.getenv("HOSTNAME").defaultToUUID().let {
+                it.substring(max(0, it.length - 5))
+            }
+
+        fun getMessageLogData(message: Any): String =
+            when (message) {
+                is ExecutionServiceInput -> {
+                    val actionIdentifiers = message.actionIdentifiers
+                    "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
+                }
+                is ExecutionServiceOutput -> {
+                    val actionIdentifiers = message.actionIdentifiers
+                    "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
+                }
+                else -> "message($message)"
+            }
     }
 }

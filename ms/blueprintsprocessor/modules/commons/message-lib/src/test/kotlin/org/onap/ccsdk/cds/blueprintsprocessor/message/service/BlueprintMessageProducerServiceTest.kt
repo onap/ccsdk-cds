@@ -112,7 +112,6 @@ open class BlueprintMessageProducerServiceTest {
             ProducerConfig.MAX_BLOCK_MS_CONFIG to 250,
             ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG to 60 * 60 * 1000,
             ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG to true,
-            ConsumerConfig.CLIENT_ID_CONFIG to "default-client-id",
             CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to SecurityProtocol.SASL_SSL.toString(),
             SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG to "JKS",
             SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG to "/path/to/truststore.jks",
@@ -141,6 +140,15 @@ open class BlueprintMessageProducerServiceTest {
             messageProducerProperties.type,
             "kafka-scram-ssl-auth",
             "Authentication type doesn't match the expected value"
+        )
+
+        assertTrue(
+            configProps.containsKey(ConsumerConfig.CLIENT_ID_CONFIG),
+            "Missing expected kafka config key : ${ConsumerConfig.CLIENT_ID_CONFIG}"
+        )
+        assertTrue(
+            configProps[ConsumerConfig.CLIENT_ID_CONFIG].toString().startsWith("default-client-id"),
+            "Invalid prefix for ${ConsumerConfig.CLIENT_ID_CONFIG} : ${configProps[ConsumerConfig.CLIENT_ID_CONFIG]} is supposed to start with default-client-id"
         )
 
         expectedConfig.forEach {
