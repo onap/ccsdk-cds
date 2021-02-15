@@ -29,6 +29,7 @@ import org.apache.kafka.common.serialization.ByteArraySerializer
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.apache.kafka.streams.StreamsConfig
+import org.onap.ccsdk.cds.blueprintsprocessor.message.utils.BlueprintMessageUtils
 
 /** Common Properties **/
 abstract class CommonProperties {
@@ -51,7 +52,7 @@ abstract class MessageProducerProperties : CommonProperties()
 /** Basic Auth */
 open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties() {
 
-    var clientId: String? = null
+    lateinit var clientId: String
     var acks: String = "all" // strongest producing guarantee
     var maxBlockMs: Int = 250 // max blocking time in ms to send a message
     var reconnectBackOffMs: Int = 60 * 60 * 1000 // time in ms before retrying connection (1 hour)
@@ -65,9 +66,7 @@ open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties()
         configProps[ProducerConfig.MAX_BLOCK_MS_CONFIG] = maxBlockMs
         configProps[ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG] = reconnectBackOffMs
         configProps[ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG] = enableIdempotence
-        if (clientId != null) {
-            configProps[ProducerConfig.CLIENT_ID_CONFIG] = clientId!!
-        }
+        configProps[ProducerConfig.CLIENT_ID_CONFIG] = "$clientId-${BlueprintMessageUtils.getHostnameSuffix()}"
         return configProps
     }
 }
@@ -87,8 +86,8 @@ open class KafkaSslAuthMessageProducerProperties : KafkaBasicAuthMessageProducer
         val configProps = super.getConfig()
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SSL.toString()
         configProps[SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG] = truststoreType
-        configProps[SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG] = truststore!!
-        configProps[SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG] = truststorePassword!!
+        configProps[SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG] = truststore
+        configProps[SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG] = truststorePassword
         if (keystore != null) {
             configProps[SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG] = keystore!!
             configProps[SslConfigs.SSL_KEYSTORE_TYPE_CONFIG] = keystoreType
@@ -132,7 +131,9 @@ open class KafkaStreamsBasicAuthConsumerProperties : MessageConsumerProperties()
 
     override fun getConfig(): HashMap<String, Any> {
         val configProperties = super.getConfig()
-        configProperties[StreamsConfig.APPLICATION_ID_CONFIG] = applicationId
+        // adjust the worker name with the hostname suffix because we'll have several workers, running in
+        // different pods, using the same worker name otherwise.
+        configProperties[StreamsConfig.APPLICATION_ID_CONFIG] = "$applicationId-${BlueprintMessageUtils.getHostnameSuffix()}"
         configProperties[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = autoOffsetReset
         configProperties[StreamsConfig.PROCESSING_GUARANTEE_CONFIG] = processingGuarantee
         return configProperties
@@ -154,8 +155,8 @@ open class KafkaStreamsSslAuthConsumerProperties : KafkaStreamsBasicAuthConsumer
         val configProps = super.getConfig()
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SSL.toString()
         configProps[SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG] = truststoreType
-        configProps[SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG] = truststore!!
-        configProps[SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG] = truststorePassword!!
+        configProps[SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG] = truststore
+        configProps[SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG] = truststorePassword
         if (keystore != null) {
             configProps[SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG] = keystore!!
             configProps[SslConfigs.SSL_KEYSTORE_TYPE_CONFIG] = keystoreType
@@ -207,7 +208,9 @@ open class KafkaBasicAuthMessageConsumerProperties : MessageConsumerProperties()
         configProperties[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = autoOffsetReset
         configProperties[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         configProperties[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = ByteArrayDeserializer::class.java
-        configProperties[ConsumerConfig.CLIENT_ID_CONFIG] = clientId
+        // adjust the worker name with the hostname suffix because we'll have several workers, running in
+        // different pods, using the same worker name otherwise.
+        configProperties[ConsumerConfig.CLIENT_ID_CONFIG] = "$clientId-${BlueprintMessageUtils.getHostnameSuffix()}"
 
         /** To handle Back pressure, Get only configured record for processing */
         if (pollRecords > 0) {
@@ -233,8 +236,8 @@ open class KafkaSslAuthMessageConsumerProperties : KafkaBasicAuthMessageConsumer
         val configProps = super.getConfig()
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SSL.toString()
         configProps[SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG] = truststoreType
-        configProps[SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG] = truststore!!
-        configProps[SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG] = truststorePassword!!
+        configProps[SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG] = truststore
+        configProps[SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG] = truststorePassword
         if (keystore != null) {
             configProps[SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG] = keystore!!
             configProps[SslConfigs.SSL_KEYSTORE_TYPE_CONFIG] = keystoreType
