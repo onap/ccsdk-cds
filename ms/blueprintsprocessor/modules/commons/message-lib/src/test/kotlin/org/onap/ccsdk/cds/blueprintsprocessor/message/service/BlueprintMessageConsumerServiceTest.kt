@@ -212,7 +212,6 @@ open class BlueprintMessageConsumerServiceTest {
 
     @Test
     fun testKafkaScramSslAuthConfig() {
-
         val expectedConfig = mapOf<String, Any>(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to "127.0.0.1:9092",
             ConsumerConfig.GROUP_ID_CONFIG to "sample-group",
@@ -220,7 +219,6 @@ open class BlueprintMessageConsumerServiceTest {
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "latest",
             ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
             ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to ByteArrayDeserializer::class.java,
-            ConsumerConfig.CLIENT_ID_CONFIG to "default-client-id",
             CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to SecurityProtocol.SASL_SSL.toString(),
             SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG to "JKS",
             SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG to "/path/to/truststore.jks",
@@ -249,6 +247,15 @@ open class BlueprintMessageConsumerServiceTest {
             messageConsumerProperties.type,
             "kafka-scram-ssl-auth",
             "Authentication type doesn't match the expected value"
+        )
+
+        assertTrue(
+            configProps.containsKey(ConsumerConfig.CLIENT_ID_CONFIG),
+            "Missing expected kafka config key : ${ConsumerConfig.CLIENT_ID_CONFIG}"
+        )
+        assertTrue(
+            configProps[ConsumerConfig.CLIENT_ID_CONFIG].toString().startsWith("default-client-id"),
+            "Invalid prefix for ${ConsumerConfig.CLIENT_ID_CONFIG} : ${configProps[ConsumerConfig.CLIENT_ID_CONFIG]} is supposed to start with default-client-id"
         )
 
         expectedConfig.forEach {
