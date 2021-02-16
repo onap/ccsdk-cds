@@ -75,7 +75,7 @@ open class K8sConfigTemplateComponent(
     private val log = LoggerFactory.getLogger(K8sConfigTemplateComponent::class.java)!!
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        log.info("Triggering K8s Profile Upload component logic.")
+        log.info("Triggering K8s Config Upload component logic.")
 
         val inputParameterNames = arrayOf(
             INPUT_K8S_TEMPLATE_NAME,
@@ -153,7 +153,7 @@ open class K8sConfigTemplateComponent(
                 api.createTemplate(definitionName, definitionVersion, template)
                 api.uploadTemplate(definitionName, definitionVersion, template, templateFilePath)
 
-                log.info("K8s Profile Upload Completed")
+                log.info("K8s Config Upload Completed")
                 outputPrefixStatuses[prefix] = OUTPUT_UPLOADED
             }
         }
@@ -183,17 +183,17 @@ open class K8sConfigTemplateComponent(
         return result
     }
 
-    private suspend fun prepareTemplateFile(k8sRbTemplateName: String, ks8ProfileSource: String, ks8ProfileLocation: String): Path {
+    private suspend fun prepareTemplateFile(k8sRbTemplateName: String, ks8ConfigSource: String, k8sConfigLocation: String): Path {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val bluePrintBasePath: String = bluePrintContext.rootPath
-        val profileSourceFileFolderPath: Path = Paths.get(
-            bluePrintBasePath.plus(File.separator).plus(ks8ProfileLocation)
+        val configeSourceFileFolderPath: Path = Paths.get(
+            bluePrintBasePath.plus(File.separator).plus(k8sConfigLocation)
         )
 
-        if (profileSourceFileFolderPath.toFile().exists() && !profileSourceFileFolderPath.toFile().isDirectory)
-            return profileSourceFileFolderPath
-        else if (profileSourceFileFolderPath.toFile().exists()) {
-            log.info("Profile building started from source $ks8ProfileSource")
+        if (configeSourceFileFolderPath.toFile().exists() && !configeSourceFileFolderPath.toFile().isDirectory)
+            return configeSourceFileFolderPath
+        else if (configeSourceFileFolderPath.toFile().exists()) {
+            log.info("Config building started from source $ks8ConfigSource")
             val properties: MutableMap<String, Any> = mutableMapOf()
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = false
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = ""
@@ -204,28 +204,28 @@ open class K8sConfigTemplateComponent(
             val resolutionResult: Pair<String, MutableList<ResourceAssignment>> = resourceResolutionService.resolveResources(
                 bluePrintRuntimeService,
                 nodeTemplateName,
-                ks8ProfileSource,
+                ks8ConfigSource,
                 properties
             )
             val tempMainPath: File = createTempDir("k8s-profile-", "")
-            val tempProfilePath: File = createTempDir("content-", "", tempMainPath)
+            val tempPath: File = createTempDir("content-", "", tempMainPath)
 
             val resolvedJsonContent = resolutionResult.second
                 .associateBy({ it.name }, { it.property?.value })
                 .asJsonNode()
 
             try {
-                templateLocation(profileSourceFileFolderPath.toFile(), resolvedJsonContent, tempProfilePath)
-                // Preparation of the final profile content
+                templateLocation(configeSourceFileFolderPath.toFile(), resolvedJsonContent, tempPath)
+                // Preparation of the final config content
                 val finalTemplateFilePath = Paths.get(
                     tempMainPath.toString().plus(File.separator).plus(
                         "$k8sRbTemplateName.tar.gz"
                     )
                 )
-                if (!BlueprintArchiveUtils.compress(tempProfilePath, finalTemplateFilePath.toFile(), ArchiveType.TarGz)) {
-                    throw BlueprintProcessorException("Profile compression has failed")
+                if (!BlueprintArchiveUtils.compress(tempPath, finalTemplateFilePath.toFile(), ArchiveType.TarGz)) {
+                    throw BlueprintProcessorException("Config template compression has failed")
                 }
-                FileUtils.deleteDirectory(tempProfilePath)
+                FileUtils.deleteDirectory(tempPath)
 
                 return finalTemplateFilePath
             } catch (t: Throwable) {
@@ -233,7 +233,7 @@ open class K8sConfigTemplateComponent(
                 throw t
             }
         } else
-            throw BlueprintProcessorException("Profile source $ks8ProfileLocation is missing in CBA folder")
+            throw BlueprintProcessorException("Config source $k8sConfigLocation is missing in CBA folder")
     }
 
     private fun templateLocation(location: File, params: JsonNode, destinationFolder: File) {
