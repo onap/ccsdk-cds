@@ -685,7 +685,9 @@ class ResourceAssignmentUtils {
             raRuntimeService: ResourceAssignmentRuntimeService
         ): Boolean {
             val dataTypeProps = raRuntimeService.bluePrintContext().dataTypeByName(dataTypeName)?.properties
-            val result = outputKeyMapping.filterKeys { !dataTypeProps!!.containsKey(it) }.keys.firstOrNull()
+            var result: String? = null
+            if (dataTypeProps != null)
+                result = outputKeyMapping.filterKeys { !dataTypeProps.containsKey(it) }.keys.firstOrNull()
             return result == null
         }
 
