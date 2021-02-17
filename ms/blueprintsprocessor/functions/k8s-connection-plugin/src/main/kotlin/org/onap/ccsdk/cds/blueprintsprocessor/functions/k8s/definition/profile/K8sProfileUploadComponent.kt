@@ -26,7 +26,7 @@ import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sPluginApi
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sPluginDefinitionApi
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
@@ -125,7 +125,7 @@ open class K8sProfileUploadComponent(
             val k8sProfileUploadConfiguration = K8sConnectionPluginConfiguration(bluePrintPropertiesService)
 
             // Creating API connector
-            var api = K8sPluginApi(k8sProfileUploadConfiguration)
+            var api = K8sPluginDefinitionApi(k8sProfileUploadConfiguration)
 
             if ((profileName == null) || (definitionName == null) || (definitionVersion == null)) {
                 log.warn("Prefix $prefix does not have required data for us to continue.")

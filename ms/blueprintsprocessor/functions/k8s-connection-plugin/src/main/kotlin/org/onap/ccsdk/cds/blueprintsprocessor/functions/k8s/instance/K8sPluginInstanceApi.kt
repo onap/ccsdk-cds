@@ -19,20 +19,24 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance
 
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck.K8sRbInstanceHealthCheck
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpMethod.DELETE
 import org.springframework.http.HttpMethod.GET
+import org.springframework.http.HttpMethod.POST
 
 class K8sPluginInstanceApi(
     private val k8sConfiguration: K8sConnectionPluginConfiguration
 ) {
     private val log = LoggerFactory.getLogger(K8sPluginInstanceApi::class.java)!!
 
-    fun getAllInstances(): List<K8sRbInstance>? {
+    fun getInstanceList(): List<K8sRbInstance>? {
         val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
@@ -42,7 +46,8 @@ class K8sPluginInstanceApi(
             )
             log.debug(result.toString())
             return if (result.status in 200..299) {
-                val parsedObject: List<K8sRbInstance> = JacksonUtils.readValue(result.body)
+                val objectMapper = jacksonObjectMapper()
+                val parsedObject: ArrayList<K8sRbInstance>? = objectMapper.readValue(result.body)
                 parsedObject
             } else if (result.status == 500 && result.body.contains("Did not find any objects with tag"))
                 null
@@ -64,7 +69,6 @@ class K8sPluginInstanceApi(
             )
             log.debug(result.toString())
             return if (result.status in 200..299) {
-                val instance: JsonNode = JacksonUtils.jsonNode(result.body)
                 val parsedObject: K8sRbInstance? = JacksonUtils.readValue(result.body, K8sRbInstance::class.java)
                 parsedObject
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
@@ -82,32 +86,14 @@ class K8sPluginInstanceApi(
         rbDefinitionVersion: String,
         rbProfileName: String
     ): K8sRbInstance? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration)
-        try {
-            val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
-                "",
-                ""
+        val instances: List<K8sRbInstance>? = this.getInstanceList()
+        instances?.forEach {
+            if (it.request?.rbName == rbDefinitionName && it.request?.rbVersion == rbDefinitionVersion &&
+                it.request?.profileName == rbProfileName
             )
-            log.debug(result.toString())
-            return if (result.status in 200..299) {
-                val parsedObject: List<K8sRbInstance> = JacksonUtils.readValue(result.body)
-                var instance: K8sRbInstance? = null
-                parsedObject.forEach {
-                    if (it.request?.rbName == rbDefinitionName && it.request?.rbVersion == rbDefinitionVersion &&
-                        it.request?.profileName == rbProfileName
-                    )
-                        instance = it
-                }
-                instance
-            } else if (result.status == 500 && result.body.contains("Did not find any objects with tag"))
-                null
-            else
-                throw BlueprintProcessorException(result.body)
-        } catch (e: Exception) {
-            log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+                return it
         }
+        return null
     }
 
     fun getInstanceStatus(instanceId: String): K8sRbInstanceStatus? {
@@ -127,6 +113,96 @@ class K8sPluginInstanceApi(
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
                 null
             else
+                throw BlueprintProcessorException(result.body)
+        } catch (e: Exception) {
+            log.error("Caught exception trying to get k8s rb instance")
+            throw BlueprintProcessorException("${e.message}")
+        }
+    }
+
+    fun getInstanceHealthCheckList(instanceId: String): List<K8sRbInstanceHealthCheck>? {
+        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
+                GET.name,
+                "/healthcheck",
+                ""
+            )
+            log.debug(result.toString())
+            return if (result.status in 200..299) {
+                val objectMapper = jacksonObjectMapper()
+                val parsedObject: ArrayList<K8sRbInstanceHealthCheck>? = objectMapper.readValue(result.body)
+                parsedObject
+            } else if (result.status == 500 && result.body.contains("Error finding master table"))
+                null
+            else
+                throw BlueprintProcessorException(result.body)
+        } catch (e: Exception) {
+            log.error("Caught exception trying to get k8s rb instance")
+            throw BlueprintProcessorException("${e.message}")
+        }
+    }
+
+    fun getInstanceHealthCheck(instanceId: String, healthCheckId: String): K8sRbInstanceHealthCheck? {
+        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
+                GET.name,
+                "/healthcheck/$healthCheckId",
+                ""
+            )
+            log.debug(result.toString())
+            return if (result.status in 200..299) {
+                val parsedObject: K8sRbInstanceHealthCheck? = JacksonUtils.readValue(
+                    result.body,
+                    K8sRbInstanceHealthCheck::class.java
+                )
+                parsedObject
+            } else if (result.status == 500 && result.body.contains("Error finding master table"))
+                null
+            else
+                throw BlueprintProcessorException(result.body)
+        } catch (e: Exception) {
+            log.error("Caught exception trying to get k8s rb instance")
+            throw BlueprintProcessorException("${e.message}")
+        }
+    }
+
+    fun startInstanceHealthCheck(instanceId: String): K8sRbInstanceHealthCheck? {
+        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
+                POST.name,
+                "/healthcheck",
+                ""
+            )
+            log.debug(result.toString())
+            return if (result.status in 200..299) {
+                val parsedObject: K8sRbInstanceHealthCheck? = JacksonUtils.readValue(
+                    result.body,
+                    K8sRbInstanceHealthCheck::class.java
+                )
+                parsedObject
+            } else if (result.status == 500 && result.body.contains("Error finding master table"))
+                null
+            else
+                throw BlueprintProcessorException(result.body)
+        } catch (e: Exception) {
+            log.error("Caught exception trying to get k8s rb instance")
+            throw BlueprintProcessorException("${e.message}")
+        }
+    }
+
+    fun deleteInstanceHealthCheck(instanceId: String, healthCheckId: String) {
+        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
+                DELETE.name,
+                "/healthcheck/$healthCheckId",
+                ""
+            )
+            log.debug(result.toString())
+            if (result.status !in 200..299)
                 throw BlueprintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")

@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sDefinitionRestClient
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sUploadFileRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.profile.K8sProfile
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.template.K8sTemplate
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
@@ -33,10 +32,10 @@ import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpMethod.POST
 import java.nio.file.Path
 
-class K8sPluginApi(
+class K8sPluginDefinitionApi(
     private val k8sConfiguration: K8sConnectionPluginConfiguration
 ) {
-    private val log = LoggerFactory.getLogger(K8sPluginApi::class.java)!!
+    private val log = LoggerFactory.getLogger(K8sPluginDefinitionApi::class.java)!!
     private val objectMapper = ObjectMapper()
 
     fun hasDefinition(definition: String, definitionVersion: String): Boolean {
