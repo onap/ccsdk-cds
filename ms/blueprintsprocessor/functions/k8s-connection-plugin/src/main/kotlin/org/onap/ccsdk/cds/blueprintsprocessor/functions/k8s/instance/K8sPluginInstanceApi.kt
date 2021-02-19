@@ -120,6 +120,35 @@ class K8sPluginInstanceApi(
         }
     }
 
+    fun queryInstanceStatus(instanceId: String, kind: String, apiVersion: String, name: String?, labels: String?): K8sRbInstanceStatus? {
+        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        try {
+            var path: String = "/query?ApiVersion=$apiVersion&Kind=$kind"
+            if (name != null)
+                path = path.plus("&Name=$name")
+            if (labels != null)
+                path = path.plus("&Labels=$labels")
+            val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
+                GET.name,
+                path,
+                ""
+            )
+            log.debug(result.toString())
+            return if (result.status in 200..299) {
+                val parsedObject: K8sRbInstanceStatus? = JacksonUtils.readValue(
+                    result.body, K8sRbInstanceStatus::class.java
+                )
+                parsedObject
+            } else if (result.status == 500 && result.body.contains("Error finding master table"))
+                null
+            else
+                throw BlueprintProcessorException(result.body)
+        } catch (e: Exception) {
+            log.error("Caught exception trying to get k8s rb instance")
+            throw BlueprintProcessorException("${e.message}")
+        }
+    }
+
     fun getInstanceHealthCheckList(instanceId: String): List<K8sRbInstanceHealthCheck>? {
         val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
