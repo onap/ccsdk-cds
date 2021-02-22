@@ -1,0 +1,65 @@
+{
+  "description": "This component is sending the k8s config value to the multicloud plugin.",
+  "version": "1.0.0",
+  "attributes": {
+    "statuses": {
+      "required": true,
+      "type": "json"
+    }
+  },
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "interfaces": {
+    "K8sConfigValueComponent": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "k8s-template-name": {
+                "description": "K8s template name",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-config-name": {
+                "description": "K8s config name",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-instance-id": {
+                "description": "K8s instance id",
+                "required": false,
+                "type": "string"
+            },
+            "k8s-rb-template-value-source": {
+                "description": "Location of value source in CBA",
+                "required": false,
+                "type": "string"
+            },
+            "artifact-prefix-names": {
+              "description": "Resource Assignment Artifact Prefix names",
+              "required": false,
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
+            },
+            "resource-assignment-map": {
+                "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+                "required": false,
+                "type": "json"
+            }
+          },
+          "outputs": {
+            "statuses": {
+                "required": true,
+                "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}
