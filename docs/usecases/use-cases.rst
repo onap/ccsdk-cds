@@ -10,8 +10,4 @@ Use Cases
 
    wordpress-cnf-poc
    pnf-simulator
-
-
-**Use Cases from other projects:**
-
-* :ref:`vFirewall CNF Use Case<onap-integration:docs_vFW_CNF_CDS>`
+   vfw-cnf-use-case
