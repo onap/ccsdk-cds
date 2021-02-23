@@ -40,6 +40,7 @@ open class K8sConfigValueComponent(
         const val INPUT_K8S_CONFIG_NAME = "k8s-config-name"
         const val INPUT_K8S_INSTANCE_ID = "k8s-instance-id"
         const val INPUT_K8S_TEMPLATE_VALUE_SOURCE = "k8s-rb-template-value-source"
+        const val INPUT_K8S_OPERATION_TYPE = "k8s-operation-type"
 
         const val OUTPUT_STATUSES = "statuses"
         const val OUTPUT_SKIPPED = "skipped"
@@ -53,6 +54,7 @@ open class K8sConfigValueComponent(
             INPUT_K8S_TEMPLATE_NAME,
             INPUT_K8S_CONFIG_NAME,
             INPUT_K8S_INSTANCE_ID,
+            INPUT_K8S_OPERATION_TYPE,
             INPUT_K8S_TEMPLATE_VALUE_SOURCE,
             INPUT_ARTIFACT_PREFIX_NAMES
         )
@@ -84,28 +86,83 @@ open class K8sConfigValueComponent(
             val configName: String? = prefixInputParamsMap[INPUT_K8S_CONFIG_NAME]?.returnNullIfMissing()?.asText()
             val instanceId: String? = prefixInputParamsMap[INPUT_K8S_INSTANCE_ID]?.returnNullIfMissing()?.asText()
             val valueSource: String? = prefixInputParamsMap[INPUT_K8S_TEMPLATE_VALUE_SOURCE]?.returnNullIfMissing()?.asText()
-            if (templateName == null || instanceId == null || valueSource == null) {
-                log.warn("$INPUT_K8S_TEMPLATE_NAME or $INPUT_K8S_TEMPLATE_NAME or $INPUT_K8S_TEMPLATE_VALUE_SOURCE or $INPUT_K8S_CONFIG_NAME is null")
-            } else if (templateName.isEmpty()) {
-                log.warn("$INPUT_K8S_TEMPLATE_NAME is empty")
-            } else {
-                log.info("Uploading K8s template value..")
-                outputPrefixStatuses[prefix] = OUTPUT_ERROR
-                val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
-                val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, valueSource)
-                if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE)
-                    throw BlueprintProcessorException(
-                        "Unexpected profile artifact type for profile source $valueSource. Expecting: $artifact.type"
-                    )
-                // Creating API connector
-                val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
+            val operationType = prefixInputParamsMap[INPUT_K8S_TEMPLATE_VALUE_SOURCE]?.returnNullIfMissing()?.asText()?.toUpperCase()
+
+            if (operationType == null || operationType == OperationType.CREATE.toString())
+                createOperation(templateName, instanceId, valueSource, outputPrefixStatuses, prefix, configName)
+            else if (operationType == OperationType.UPDATE.toString())
+                updateOperation(templateName, instanceId, valueSource, outputPrefixStatuses, prefix, configName)
+            else if (operationType == OperationType.ROLLBACK.toString())
+                rollbackOperation(instanceId)
+            else
+                throw BlueprintProcessorException("Unknown operation type: $operationType")
+        }
+    }
+
+    private fun createOperation(templateName: String?, instanceId: String?, valueSource: String?, outputPrefixStatuses: MutableMap<String, String>, prefix: String, configName: String?) {
+        if (templateName == null || configName == null || instanceId == null || valueSource == null) {
+            log.warn("$INPUT_K8S_TEMPLATE_NAME or $INPUT_K8S_INSTANCE_ID or $INPUT_K8S_TEMPLATE_VALUE_SOURCE or $INPUT_K8S_CONFIG_NAME is null")
+        } else if (templateName.isEmpty()) {
+            log.warn("$INPUT_K8S_TEMPLATE_NAME is empty")
+        } else if (configName.isEmpty()) {
+            log.warn("$INPUT_K8S_CONFIG_NAME is empty")
+        } else {
+            log.info("Uploading K8s template value..")
+            outputPrefixStatuses[prefix] = OUTPUT_ERROR
+            val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
+            val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, valueSource)
+            if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE)
+                throw BlueprintProcessorException(
+                    "Unexpected profile artifact type for profile source $valueSource. Expecting: $artifact.type"
+                )
+            // Creating API connector
+            val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
+            val configValueRequest = K8sConfigValueRequest()
+            configValueRequest.templateName = templateName
+            configValueRequest.configName = configName
+            configValueRequest.description = valueSource
+            configValueRequest.values = parseResult(valueSource)
+            api.createConfigurationValues(configValueRequest, instanceId)
+        }
+    }
+
+    private fun updateOperation(templateName: String?, instanceId: String?, valueSource: String?, outputPrefixStatuses: MutableMap<String, String>, prefix: String, configName: String?) {
+        if (templateName == null || configName == null || instanceId == null || valueSource == null) {
+            log.warn("$INPUT_K8S_TEMPLATE_NAME or $INPUT_K8S_INSTANCE_ID or $INPUT_K8S_TEMPLATE_VALUE_SOURCE or $INPUT_K8S_CONFIG_NAME is null")
+        } else if (templateName.isEmpty()) {
+            log.warn("$INPUT_K8S_TEMPLATE_NAME is empty")
+        } else if (configName.isEmpty()) {
+            log.warn("$INPUT_K8S_CONFIG_NAME is empty")
+        } else {
+            log.info("Uploading K8s template value..")
+            outputPrefixStatuses[prefix] = OUTPUT_ERROR
+            val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
+            val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, valueSource)
+            if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE)
+                throw BlueprintProcessorException(
+                    "Unexpected profile artifact type for profile source $valueSource. Expecting: $artifact.type"
+                )
+            // Creating API connector
+            val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
+            if (api.hasConfigurationValues(instanceId, configName)) {
                 val configValueRequest = K8sConfigValueRequest()
                 configValueRequest.templateName = templateName
                 configValueRequest.configName = configName
                 configValueRequest.description = valueSource
                 configValueRequest.values = parseResult(valueSource)
-                api.createConfigurationValues(configValueRequest, instanceId)
+                api.editConfigurationValues(configValueRequest, instanceId, configName)
+            } else {
+                throw BlueprintProcessorException("Error while getting configuration value")
             }
+        }
+    }
+
+    private fun rollbackOperation(instanceId: String?) {
+        if (instanceId != null) {
+            val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
+            api.rollbackConfigurationValues(instanceId)
+        } else {
+            throw BlueprintProcessorException("$INPUT_K8S_INSTANCE_ID is null")
         }
     }
 
@@ -145,5 +202,9 @@ open class K8sConfigValueComponent(
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         bluePrintRuntimeService.getBlueprintError().addError(runtimeException.message!!)
+    }
+
+    private enum class OperationType {
+        CREATE, UPDATE, ROLLBACK
     }
 }
