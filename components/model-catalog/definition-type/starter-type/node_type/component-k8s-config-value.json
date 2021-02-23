@@ -37,13 +37,21 @@
                 "required": false,
                 "type": "string"
             },
+            "k8s-operation-type" : {
+                "required" : false,
+                "type" : "string",
+                "constraints" : [{
+                   "valid_values" : [ "create", "update", "rollback" ]
+                }],
+                "default" : "create"
+            },
             "artifact-prefix-names": {
-              "description": "Resource Assignment Artifact Prefix names",
-              "required": false,
-              "type": "list",
-              "entry_schema": {
-                "type": "string"
-              }
+                "description": "Resource Assignment Artifact Prefix names",
+                "required": false,
+                "type": "list",
+                "entry_schema": {
+                  "type": "string"
+                }
             },
             "resource-assignment-map": {
                 "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
