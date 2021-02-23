@@ -267,7 +267,7 @@ class K8sPluginInstanceApi(
         }
     }
 
-    fun getConfigurationValues(instanceId: String, configName: String): K8sConfigValueResponse? {
+    fun hasConfigurationValues(instanceId: String, configName: String): Boolean {
         val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
@@ -276,31 +276,7 @@ class K8sPluginInstanceApi(
                 ""
             )
             log.debug(result.toString())
-            return if (result.status in 200..299) {
-                val parsedObject: K8sConfigValueResponse? = JacksonUtils.readValue(
-                    result.body, K8sConfigValueResponse::class.java
-                )
-                parsedObject
-            } else
-                throw BlueprintProcessorException(result.body)
-        } catch (e: Exception) {
-            log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
-        }
-    }
-
-    fun deleteConfigurationValues(instanceId: String, configName: String) {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
-        try {
-            val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                DELETE.name,
-                "/config/$configName",
-                ""
-            )
-            log.debug(result.toString())
-            if (result.status !in 200..299) {
-                throw BlueprintProcessorException(result.body)
-            }
+            return result.status in 200..299
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
             throw BlueprintProcessorException("${e.message}")
