@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 Bell Canada
+ * Copyright © 2021 Bell Canada
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiParam
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshot
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db.ResourceConfigSnapshotService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
@@ -30,6 +31,7 @@ import org.onap.ccsdk.cds.error.catalog.core.utils.errorCauseOrDefault
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
+import java.util.Optional
 
 /**
  * Exposes Resource Configuration Snapshot API to store and retrieve stored resource configurations.
@@ -163,6 +166,57 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
             )
 
         ResponseEntity.ok().body(resultStored)
+    }
+
+    @DeleteMapping(
+        "/{resourceType}/{resourceId}/{status}",
+        "/{resourceType}/{resourceId}"
+    )
+    @ApiOperation(
+        value = "Delete a resource configuration snapshot identified by resourceId, resourceType, status.",
+        notes = "Delete a resource configuration snapshot, identified by its resourceId and resourceType, " +
+            "and optionally its status, either RUNNING or CANDIDATE."
+    )
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    suspend fun deleteWithResourceIdAndResourceType(
+        @ApiParam(value = "Resource Type associated with the resolution.", required = true)
+        @PathVariable(value = "resourceType", required = true) resourceType: String,
+        @ApiParam(value = "Resource Id associated with the resolution.", required = true)
+        @PathVariable(value = "resourceId", required = true) resourceId: String,
+        @ApiParam(value = "Status of the snapshot being deleted.", required = false)
+        @PathVariable(value = "status", required = false) status: Optional<String>
+    ) = mdcWebCoroutineScope {
+
+        if (resourceId.isBlank() || resourceType.isBlank())
+            throw httpProcessorException(
+                ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                "You must specify path variables resource-id and resource-type."
+            )
+
+        try {
+            if (status.isPresent)
+                resourceConfigSnapshotService.deleteByResourceIdAndResourceTypeAndStatus(
+                    resourceId, resourceType,
+                    ResourceConfigSnapshot.Status.valueOf(status.get().toUpperCase())
+                )
+            else {
+                resourceConfigSnapshotService.deleteByResourceIdAndResourceTypeAndStatus(
+                    resourceId, resourceType,
+                    ResourceConfigSnapshot.Status.RUNNING
+                )
+                resourceConfigSnapshotService.deleteByResourceIdAndResourceTypeAndStatus(
+                    resourceId, resourceType,
+                    ResourceConfigSnapshot.Status.CANDIDATE
+                )
+            }
+        } catch (ex: Exception) {
+            throw httpProcessorException(
+                ErrorCatalogCodes.INVALID_REQUEST_FORMAT, ConfigsApiDomains.CONFIGS_API,
+                "Could not delete configuration snapshot entry for type $resourceType and Id $resourceId",
+                ex.errorCauseOrDefault()
+            )
+        }
     }
 
     @RequestMapping(

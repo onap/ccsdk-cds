@@ -115,4 +115,16 @@ open class ResourceConfigSnapshotService(private val resourceConfigSnapshotRepos
             }
             storedSnapshot
         }
+
+    suspend fun deleteByResourceIdAndResourceTypeAndStatus(
+        resourceId: String,
+        resourceType: String,
+        status: ResourceConfigSnapshot.Status
+    ) {
+        resourceConfigSnapshotRepository.deleteByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, status)
+        log.info(
+            "Deleted configuration snapshot for resourceId=($resourceId), " +
+                "resourceType=($resourceType), status=($status)"
+        )
+    }
 }

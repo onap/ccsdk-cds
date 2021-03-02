@@ -78,4 +78,17 @@ class ResourceConfigSnapshotServiceTest {
             assertEquals(tr, res)
         }
     }
+
+    @Test
+    fun deleteResourceConfigSnapshot() {
+        runBlocking {
+            every {
+                cfgRepository.deleteByResourceIdAndResourceTypeAndStatus(any(), any(), any())
+            } returns Unit
+            cfgService.deleteByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, resourceStatus)
+            verify {
+                cfgRepository.deleteByResourceIdAndResourceTypeAndStatus(eq(resourceId), eq(resourceType), eq(resourceStatus))
+            }
+        }
+    }
 }
