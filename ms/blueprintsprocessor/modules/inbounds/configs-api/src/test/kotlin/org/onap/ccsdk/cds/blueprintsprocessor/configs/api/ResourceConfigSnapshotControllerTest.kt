@@ -246,6 +246,50 @@ class ResourceConfigSnapshotControllerTest {
         }
     }
 
+    @Test
+    fun `deleteWithResourceIdAndResourceType returns 200 if valid path`() {
+        webTestClient
+            .delete()
+            .uri("/api/v1/configs/$resourceType/$resourceId/running")
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .expectBody()
+        webTestClient
+            .delete()
+            .uri("/api/v1/configs/$resourceType/$resourceId/candidate")
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .expectBody()
+        webTestClient
+            .delete()
+            .uri("/api/v1/configs/$resourceType/$resourceId")
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .expectBody()
+    }
+
+    @Test
+    fun `deleteWithResourceIdAndResourceType returns 400 if invalid path`() {
+        webTestClient
+            .delete()
+            .uri("/api/v1/configs/ /$resourceId/running")
+            .exchange()
+            .expectStatus().is4xxClientError
+            .expectBody()
+        webTestClient
+            .delete()
+            .uri("/api/v1/configs/$resourceType/ /running")
+            .exchange()
+            .expectStatus().is4xxClientError
+            .expectBody()
+        webTestClient
+            .delete()
+            .uri("/api/v1/configs/$resourceType/$resourceId/qwerty")
+            .exchange()
+            .expectStatus().is4xxClientError
+            .expectBody()
+    }
+
     private fun post(resourceType: String, resourceId: String, status: String) {
         webTestClient
             .post()
