@@ -1,0 +1,246 @@
+{
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "cds-dev",
+    "author-email" : "test@bell.ca",
+    "template_name" : "uat-imperative-workflow",
+    "template_version" : "1.0.0",
+    "template_tags" : "UAT, CBA, test",
+    "template_type" : "DEFAULT"
+  },
+  "imports" : [ {
+    "file" : "Definitions/data_types.json"
+  }, {
+    "file" : "Definitions/relationship_types.json"
+  }, {
+    "file" : "Definitions/artifact_types.json"
+  }, {
+    "file" : "Definitions/node_types.json"
+  }, {
+    "file" : "Definitions/policy_types.json"
+  } ],
+  "dsl_definitions" : { },
+  "topology_template" : {
+    "workflows" : {
+      "uat-wf" : {
+        "steps" : {
+          "assign" : {
+            "target" : "resource-resolution",
+            "on_success" : [ "deploy" ],
+            "on_failure" : [ "assign-recover" ]
+          },
+          "assign-recover" : {
+            "target" : "execute-script-1",
+            "on_success" : [ "deploy" ],
+            "on_failure" : [ "collect" ]
+          },
+          "deploy" : {
+            "target" : "execute-script-2",
+            "on_success" : [ "collect" ],
+            "on_failure" : [ "deploy-recover" ]
+          },
+          "deploy-recover" : {
+            "target" : "execute-script-3",
+            "on_success" : [ "collect" ],
+            "on_failure" : [ "collect" ]
+          },
+          "collect" : {
+            "target" : "collect-results"
+          }
+        },
+        "inputs" : {
+          "service-instance-id" : {
+            "type" : "string"
+          },
+          "failing-steps" : {
+            "type" : "json"
+          },
+          "uat-wf-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(uat-wf).",
+            "required" : true,
+            "type" : "dt-uat-wf-properties"
+          }
+        },
+        "outputs" : {
+          "results" : {
+            "type" : "string",
+            "value" : {
+              "get_attribute" : [ "collect-results", "response-data" ]
+            }
+          }
+        }
+      },
+      "uat-wf-parallel" : {
+        "steps" : {
+          "execute-A" : {
+            "target" : "execute-script-1",
+            "on_success" : [ "finalize" ],
+            "on_failure" : [ "clean-up" ]
+          },
+          "execute-B" : {
+            "target" : "execute-script-2",
+            "on_success" : [ "finalize" ],
+            "on_failure" : [ "clean-up" ]
+          },
+          "finalize" : {
+            "target" : "execute-script-3",
+            "on_success" : [ "clean-up" ],
+            "on_failure" : [ "clean-up" ]
+          },
+          "clean-up" : {
+            "target" : "execute-script-4",
+            "on_success" : [ "collect" ],
+            "on_failure" : [ "collect" ]
+          },
+          "collect" : {
+            "target" : "collect-results"
+          }
+        },
+        "inputs" : {
+          "service-instance-id" : {
+            "type" : "string"
+          },
+          "failing-steps" : {
+            "type" : "json"
+          }
+        },
+        "outputs" : {
+          "results" : {
+            "type" : "string",
+            "value" : {
+              "get_attribute" : [ "collect-results", "response-data" ]
+            }
+          }
+        }
+      }
+    },
+    "node_templates" : {
+      "resource-resolution" : {
+        "type" : "component-resource-resolution",
+        "interfaces" : {
+          "ResourceResolutionComponent" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "artifact-prefix-names" : [ "assign" ],
+                  "store-result" : false
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "assign-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/assign-mapping.json"
+          }
+        }
+      },
+      "execute-script-1" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.cds.uat.TestScript"
+                },
+                "outputs" : { }
+              }
+            }
+          }
+        }
+      },
+      "execute-script-2" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.cds.uat.TestScript"
+                },
+                "outputs" : { }
+              }
+            }
+          }
+        }
+      },
+      "execute-script-3" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.cds.uat.TestScript"
+                },
+                "outputs" : { }
+              }
+            }
+          }
+        }
+      },
+      "execute-script-4" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.cds.uat.TestScript"
+                },
+                "outputs" : { }
+              }
+            }
+          }
+        }
+      },
+      "collect-results" : {
+        "type" : "component-script-executor",
+        "interfaces" : {
+          "ComponentScriptExecutor" : {
+            "operations" : {
+              "process" : {
+                "implementation" : {
+                  "primary" : "component-script",
+                  "timeout" : 180,
+                  "operation_host" : "SELF"
+                },
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.cds.uat.CollectorScript"
+                },
+                "outputs" : { }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
