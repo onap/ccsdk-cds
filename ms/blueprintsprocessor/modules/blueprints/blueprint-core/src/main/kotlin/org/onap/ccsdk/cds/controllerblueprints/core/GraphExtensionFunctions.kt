@@ -33,7 +33,7 @@ fun String.toGraph(): Graph {
     if (!startsWith('[') || !endsWith(']')) {
         throw IllegalArgumentException("Expected string starting '[' and ending with ']' but it was '$")
     }
-    val tokens = substring(1, length - 1).split(", ").map { it.split(graphTokenSeparators) }
+    val tokens = substring(1, length - 1).replace("\n", "").split(", ").map { it.trim().split(graphTokenSeparators) }
     val nodes = tokens.flatMap { it.take(2) }.toCollection(LinkedHashSet())
     val edges = tokens.filter { it.size == 3 }.map { Graph.TermForm.Term(it[0], it[1], EdgeLabel.valueOf(it[2])) }
     return Graph.labeledDirectedTerms(Graph.TermForm(nodes, edges))
@@ -41,7 +41,7 @@ fun String.toGraph(): Graph {
 
 fun Graph.toAdjacencyList(): Graph.AdjacencyList<String, EdgeLabel> {
     val entries = nodes.values.map { node ->
-        val links = node.edges.map { Graph.AdjacencyList.Link(it.target(node).id, it.label) }
+        val links = node.edges.map { Graph.AdjacencyList.Link(it.target.id, it.label) }
         Graph.AdjacencyList.Entry(node = node.id, links = links)
     }
     return Graph.AdjacencyList(entries)
@@ -54,14 +54,33 @@ fun Graph.findAllPaths(from: String, to: String, path: List<String> = emptyList(
         .flatMap { findAllPaths(it.id, to, path + from) }
 }
 
-fun Graph.findCycles(node: String): List<List<String>> {
-    fun findCycles(path: List<String>): List<List<String>> {
-        if (path.size > 3 && path.first() == path.last()) return listOf(path)
-        return nodes[path.last()]!!.neighbors()
-            .filterNot { path.tail().contains(it.id) }
-            .flatMap { findCycles(path + it.id) }
+fun Graph.isAcyclic(): Boolean {
+    val startNodes = startNodes()
+    if (startNodes.isEmpty())
+        return false
+
+    val adj: Map<String, Set<String>> = toAdjacencyList().entries
+        .associate { it.node to it.links }
+        .mapValues { it.value.map { x -> x.node }.toSet() }
+
+    fun hasCycle(node: String, visited: MutableSet<String> = mutableSetOf()): Boolean {
+        if (visited.contains(node))
+            return true
+        visited.add(node)
+
+        if (adj[node]!!.isEmpty()) {
+            visited.remove(node)
+            return false
+        }
+
+        if (adj[node]!!.any { hasCycle(it, visited) })
+            return true
+
+        visited.remove(node)
+        return false
     }
-    return findCycles(listOf(node))
+
+    return startNodes.none { n -> hasCycle(n.id) }
 }
 
 fun Graph.startNodes() = this.nodes.values.filter {
