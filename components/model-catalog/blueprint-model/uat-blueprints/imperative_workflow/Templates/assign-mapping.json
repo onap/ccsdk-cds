@@ -1,0 +1,13 @@
+[
+  {
+    "name": "service-instance-id",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "required": true
+    },
+    "dictionary-name": "input-source",
+    "dictionary-source": "input",
+    "dependencies": []
+  }
+]
