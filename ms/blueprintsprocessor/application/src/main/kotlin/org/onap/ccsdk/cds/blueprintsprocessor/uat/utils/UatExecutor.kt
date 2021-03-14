@@ -135,7 +135,7 @@ class UatExecutor(
                     log.info("Executing process '${process.name}'")
                     val responseNormalizer = JsonNormalizer.getNormalizer(mapper, process.responseNormalizerSpec)
                     val actualResponse = processBlueprint(
-                        client, process.request,
+                        client, process,
                         process.expectedResponse, responseNormalizer
                     )
                     ProcessDefinition(
@@ -231,24 +231,24 @@ class UatExecutor(
     @Throws(AssertionError::class)
     private fun processBlueprint(
         client: HttpClient,
-        requestBody: JsonNode,
+        process: ProcessDefinition,
         expectedResponse: JsonNode?,
         responseNormalizer: (String) -> String
     ): JsonNode {
-        val stringEntity = StringEntity(mapper.writeValueAsString(requestBody), ContentType.APPLICATION_JSON)
+        val stringEntity = StringEntity(mapper.writeValueAsString(process.request), ContentType.APPLICATION_JSON)
         val request = HttpPost("$baseUrl/api/v1/execution-service/process").apply {
             entity = stringEntity
         }
         val response = client.execute(request) { response ->
             val statusLine = response.statusLine
-            assertThat(statusLine.statusCode, equalTo(HttpStatus.SC_OK))
+            assertThat("${process.name}", statusLine.statusCode, equalTo(HttpStatus.SC_OK))
             val entity = response.entity
-            assertThat("Response contains no content", entity, notNullValue())
+            assertThat("${process.name} Response contains no content", entity, notNullValue())
             entity.content.bufferedReader().use { it.readText() }
         }
         val actualResponse = responseNormalizer(response)
         if (expectedResponse != null) {
-            assertJsonEquals(expectedResponse, actualResponse)
+            assertJsonEquals(expectedResponse, actualResponse, process.name)
         }
         return mapper.readTree(actualResponse)!!
     }
@@ -268,13 +268,13 @@ class UatExecutor(
     }
 
     @Throws(AssertionError::class)
-    private fun assertJsonEquals(expected: JsonNode?, actual: String): Boolean {
+    private fun assertJsonEquals(expected: JsonNode?, actual: String, msg: String = ""): Boolean {
         // special case
         if ((expected == null) && actual.isBlank()) {
             return true
         }
         // general case
-        JSONAssert.assertEquals(expected?.toString(), actual, JSONCompareMode.LENIENT)
+        JSONAssert.assertEquals(msg, expected?.toString(), actual, JSONCompareMode.LENIENT)
         // assertEquals throws an exception whenever match fails
         return true
     }
