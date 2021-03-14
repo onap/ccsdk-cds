@@ -1,0 +1,15 @@
+{
+  "data_types" : {
+    "dt-uat-wf-properties" : {
+      "description" : "Dynamic DataType definition for workflow(uat-wf).",
+      "version" : "1.0.0",
+      "properties" : {
+        "service-instance-id" : {
+          "required" : true,
+          "type" : "string"
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    }
+  }
+}
