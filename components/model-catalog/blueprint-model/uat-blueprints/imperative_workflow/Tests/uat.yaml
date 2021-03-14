@@ -1,0 +1,308 @@
+%YAML 1.1
+---
+#  Imperative workflow UAT
+#
+#  The CBA has 4 node-templates: execute-script-N(1..4), which all execute TestScript.kt
+#  The kotlin script will either succeed or fail depending on request input values
+#  example input:
+#    "uat-wf-request": {
+#        "service-instance-id": {},
+#        "failing-steps": {
+#           "assign": true
+#           "deploy-recover": true
+#        }
+#    }
+#  The kotlin script will look for failing-steps[stepName], if value is present and true
+#  an exception will be thrown, causing the step to fail.
+#
+#  All workflows end with running CollectorScripts.kt which will produce the final
+#  response payload with the execution results.
+#
+#    "uat-wf-response": {
+#            "results": {
+#                "execute-script-1": null,  (script was not executed)
+#                "execute-script-2": "SUCCEEDED",
+#                "execute-script-3": null,
+#                "execute-script-4": "FAILED"
+#            }
+#        }
+#
+#  CBA WORKFLOWS
+#   uat-wf
+#     steps: step (target node-template) : outgoing edges
+#       assign (resource-resolution) : success -> deploy, failure -> assign-recover
+#       assign-recover (execute-script-1) : success -> deploy, failure -> collect
+#       deploy (execute-script-2) : success -> collect, failure -> deploy-recover
+#       deploy-recover (execute-script-3) : success -> collect, failure -> collect
+#       collect (collect-results)
+#
+#   uat-wf-parallel - 2 parallel start nodes
+#     steps: step (target node-template) : outgoing edges
+#       execute-A (execute-script-1) : success -> finalize, failure -> clean-up
+#       execute-B (execute-script-2) : success -> finalize, failure -> clean-up
+#       finalize (execute-script-3) : success -> clean-up, failure -> clean-up
+#       clean-up (execute-script-4) : success -> collect, failure -> collect
+#       collect (collect-results)
+
+processes:
+# Test cases for uat-wf
+  - name: uat-wf-happy-case
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: uat-imperative-workflow
+        blueprintVersion: "1.0.0"
+        actionName: uat-wf
+        mode: sync
+      payload:
+        uat-wf-request:
+          service-instance-id: test-123
+    #Expected flow: assign -> deploy -> collect
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        uat-wf-response:
+          results:
+            execute-script-1: null
+            execute-script-2: SUCCEEDED
+            execute-script-3: null
+            execute-script-4: null
+
+  - name: uat-wf-assign-fails
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: uat-imperative-workflow
+        blueprintVersion: "1.0.0"
+        actionName: uat-wf
+        mode: sync
+      payload:
+        uat-wf-request:
+          #service-instance-id: assign will fail when this is removed
+    #Expected flow: assign(fail) -> assign-recover -> deploy -> collect
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        uat-wf-response:
+          results:
+            execute-script-1: SUCCEEDED
+            execute-script-2: SUCCEEDED
+            execute-script-3: null
+            execute-script-4: null
+
+  - name: uat-wf-assign-recover-fails
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: uat-imperative-workflow
+        blueprintVersion: "1.0.0"
+        actionName: uat-wf
+        mode: sync
+      payload:
+        uat-wf-request:
+          #service-instance-id: assign will fail when this is removed
+          failing-steps:
+            assign-recover: true
+    # Expected flow: assign(fail) -> assign-recover(fail) -> collect
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        uat-wf-response:
+          results:
+            execute-script-1: FAILED
+            execute-script-2: null
+            execute-script-3: null
+            execute-script-4: null
+
+  - name: uat-wf-deploy-fail
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: uat-imperative-workflow
+        blueprintVersion: "1.0.0"
+        actionName: uat-wf
+        mode: sync
+      payload:
+        uat-wf-request:
+          service-instance-id: test-123
+          failing-steps:
+            deploy: true
+    #Expected flow: assign -> deploy(fail) -> deploy-recover -> collect
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        uat-wf-response:
+          results:
+            execute-script-1: null
+            execute-script-2: FAILED
+            execute-script-3: SUCCEEDED
+            execute-script-4: null
+
+  - name: uat-wf-assign-fail-and-deploy-fail
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: uat-imperative-workflow
+        blueprintVersion: "1.0.0"
+        actionName: uat-wf
+        mode: sync
+      payload:
+        uat-wf-request:
+          #service-instance-id: assign will fail when this is removed
+          failing-steps:
+            deploy: true
+    #Expected flow: assign(fail) -> assign-recover -> deploy(fail) -> deploy-recover -> collect
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        uat-wf-response:
+          results:
+            execute-script-1: SUCCEEDED
+            execute-script-2: FAILED
+            execute-script-3: SUCCEEDED
+            execute-script-4: null
+
+# Test cases for uat-wf-parallel
+  - name: uat-wf-parallel-happy-case
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: uat-imperative-workflow
+        blueprintVersion: "1.0.0"
+        actionName: uat-wf-parallel
+        mode: sync
+      payload:
+        uat-wf-parallel-request:
+    #Expected flow: execute-A, execute-B -> finalize -> clean-up -> collect
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        uat-wf-parallel-response:
+          results:
+            execute-script-1: SUCCEEDED
+            execute-script-2: SUCCEEDED
+            execute-script-3: SUCCEEDED
+            execute-script-4: SUCCEEDED
+
+  - name: uat-wf-execute-script-1-fail
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: uat-imperative-workflow
+        blueprintVersion: "1.0.0"
+        actionName: uat-wf-parallel
+        mode: sync
+      payload:
+        uat-wf-parallel-request:
+          failing-steps:
+            execute-A: true
+    #Expected flow: execute-A (fail) ------>
+    #                                        clean-up -> collect
+    #               execute-B -> finalize ->
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        uat-wf-parallel-response:
+          results:
+            execute-script-1: FAILED
+            execute-script-2: SUCCEEDED
+            execute-script-3: SUCCEEDED
+            execute-script-4: SUCCEEDED
+
+  - name: uat-wf-both-execute-scrips-fail
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: uat-imperative-workflow
+        blueprintVersion: "1.0.0"
+        actionName: uat-wf-parallel
+        mode: sync
+      payload:
+        uat-wf-parallel-request:
+          failing-steps:
+            execute-A: true
+            execute-B: true
+    #Expected flow: execute-A (fail) ->
+    #                                   clean-up -> collect
+    #               execute-B (fail) ->
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 200
+        eventType: EVENT_COMPONENT_EXECUTED
+        errorMessage: null
+        message: success
+      payload:
+        uat-wf-parallel-response:
+          results:
+            execute-script-1: FAILED
+            execute-script-2: FAILED
+            execute-script-3: null
+            execute-script-4: SUCCEEDED

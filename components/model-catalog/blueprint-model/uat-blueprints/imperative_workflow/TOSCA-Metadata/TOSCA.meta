@@ -1,0 +1,8 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: cds-dev
+Entry-Definitions: Definitions/uat-imperative-workflow.json
+Template-Tags: UAT, CBA, test
+Template-Name: uat-imperative-workflow
+Template-Version: 1.0.0
+Template-Type: DEFAULT
