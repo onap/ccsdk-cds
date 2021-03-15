@@ -1,0 +1,37 @@
+{
+    "tags": "vnf, vf-modules-list",
+    "name": "vf-modules-list",
+    "group": "default",
+    "property": {
+        "description": "List of vf-modules associated with vnf",
+        "type": "json"
+    },
+    "updated-by": "Lukasz Rajewski <lukasz.rajewski@orange.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        },
+        "aai-data": {
+            "type": "source-rest",
+            "properties": {
+                "verb": "GET",
+                "type": "JSON",
+                "url-path": "/aai/v19/network/generic-vnfs/generic-vnf/${vnf-id}?depth=1",
+                "path": "/vf-modules",
+                "input-key-mapping": {
+                    "vnf-id": "vnf-id"
+                },
+                "output-key-mapping": {
+                    "vf-modules": "vf-module"
+                },
+                "key-dependencies": [
+                    "vnf-id"
+                ]
+            }
+        }
+    }
+}
