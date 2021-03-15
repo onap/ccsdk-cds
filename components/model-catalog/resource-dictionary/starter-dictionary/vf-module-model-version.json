@@ -1,0 +1,35 @@
+{
+    "tags": "vnf, vf-module, vf-module-model-version",
+    "name": "vf-module-model-version",
+    "group": "default",
+    "property": {
+        "description": "vf-module-model-version",
+        "type": "string"
+    },
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        },
+        "processor-db": {
+            "type": "source-db",
+            "properties": {
+                "type": "SQL",
+                "query": "select sdnctl.VF_MODULE_MODEL.uuid as vf_module_model_version from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
+                "input-key-mapping": {
+                    "customizationid": "vf-module-model-customization-uuid"
+                },
+                "output-key-mapping": {
+                    "vf-module-model-version": "vf_module_model_version"
+                },
+                "key-dependencies": [
+                    "vf-module-model-customization-uuid"
+                ]
+            }
+        }
+    }
+}

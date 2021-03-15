@@ -1,0 +1,19 @@
+{
+    "tags": "k8s, cnf, k8s-rb-profile-source",
+    "name": "k8s-rb-profile-source",
+    "group": "default",
+    "property": {
+        "description": "The source folder or file relative to 'Templates/k8s-profiles' folder",
+        "type": "string"
+    },
+    "updated-by": "Lukasz Rajewski <lukasz.rajewski@orange.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        }
+    }
+}
