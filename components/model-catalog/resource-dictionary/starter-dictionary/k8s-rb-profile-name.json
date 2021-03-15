@@ -1,0 +1,19 @@
+{
+    "tags": "k8s, cnf, k8s-rb-profile-name",
+    "name": "k8s-rb-profile-name",
+    "group": "default",
+    "property": {
+        "description": "Profile name used in multicloud/k8s plugin to identify Helm chart(s) where this mapping is providing override values.",
+        "type": "string"
+    },
+    "updated-by": "Lukasz Rajewski <lukasz.rajewski@orange.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        }
+    }
+}

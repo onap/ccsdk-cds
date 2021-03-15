@@ -1,0 +1,19 @@
+{
+    "tags": "k8s, cnf, vpg-management-port",
+    "name": "vpg-management-port",
+    "group": "default",
+    "property": {
+        "description": "Ssh port number in k8s nodeport to associate with vpg",
+        "type": "string"
+    },
+    "updated-by": "Lukasz Rajewski <lukasz.rajewski@orange.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        }
+    }
+}
