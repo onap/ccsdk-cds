@@ -124,9 +124,7 @@ open class ComponentRemotePythonExecutor(
 
         val endPointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
         val dynamicProperties = getOptionalOperationInput(INPUT_DYNAMIC_PROPERTIES)
-        val packages = getOptionalOperationInput(INPUT_PACKAGES)?.returnNullIfMissing()
-
-        val argsNode = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
+        var packages = getOptionalOperationInput(INPUT_PACKAGES)?.returnNullIfMissing()
 
         // This prevents unescaping values, as well as quoting the each parameter, in order to allow for spaces in values
         val args = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
@@ -163,37 +161,14 @@ open class ComponentRemotePythonExecutor(
             }
 
             // If packages are defined, then install in remote server
-            if (packages != null) {
-                val prepareEnvInput = PrepareRemoteEnvInput(
-                    originatorId = executionServiceInput.commonHeader.originatorId,
-                    requestId = processId,
-                    subRequestId = executionServiceInput.commonHeader.subRequestId,
-                    remoteIdentifier = remoteIdentifier,
-                    packages = packages,
-                    timeOut = envPrepTimeout.toLong()
-                )
-                val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
-                log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
-                val logs = JacksonUtils.jsonNodeFromObject(prepareEnvOutput.response)
-                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, logs)
-
-                // there are no artifacts for env. prepare, but we reuse it for err_log...
-                if (prepareEnvOutput.status != StatusType.SUCCESS) {
-                    setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
-                    addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, logs.toString())
-                } else {
-                    setNodeOutputProperties(prepareEnvOutput.status, STEP_PREPARE_ENV, logs, prepareEnvOutput.payload, isLogResponseEnabled)
-                }
-            } else {
-                if (packages == null) {
-                    // set env preparation log to empty...
-                    setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, "".asJsonPrimitive())
-                } else {
-                    prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled)
-                }
-                // in cases where the exception is caught in BP side due to timeout, we do not have `err_msg` returned by cmd-exec (inside `payload`),
-                // hence `artifact` field will be empty
+            if (packages == null) {
+                // set env preparation log to empty...
+                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, "".asJsonPrimitive())
+                packages = mutableListOf<Object>().asJsonType()
             }
+            prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled)
+            // in cases where the exception is caught in BP side due to timeout, we do not have `err_msg` returned by cmd-exec (inside `payload`),
+            // hence `artifact` field will be empty
         } catch (grpcEx: io.grpc.StatusRuntimeException) {
             val componentLevelWarningMsg =
                 if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
@@ -278,7 +253,7 @@ open class ComponentRemotePythonExecutor(
     }
 
     // wrapper for call to prepare_env step on cmd-exec - reupload CBA and call prepare env again if cmd-exec reported CBA uuid mismatch
-    private suspend fun prepareEnv(originatorId: String, requestId: String, subRequestId: String, remoteIdentifier: RemoteIdentifier, packages: JsonNode, envPrepTimeout: Int, cbaNameVerUuid: String, archiveType: String?, cbaBinData: ByteString?, isLogResponseEnabled: Boolean, innerCall: Boolean = false) {
+    private suspend fun prepareEnv(originatorId: String, requestId: String, subRequestId: String, remoteIdentifier: RemoteIdentifier, packages: JsonNode, envPrepTimeout: Int, cbaNameVerUuid: String, archiveType: String?, cbaBinData: ByteString?, isLogResponseEnabled: Boolean, retries: Int = 3) {
         val prepareEnvInput = PrepareRemoteEnvInput(
             originatorId = originatorId,
             requestId = requestId,
@@ -299,9 +274,9 @@ open class ComponentRemotePythonExecutor(
                 log.info("Cmd-exec is missing the CBA $cbaNameVerUuid, it will be reuploaded.")
                 uploadCba(remoteIdentifier, requestId, subRequestId, originatorId, archiveType, cbaBinData, cbaNameVerUuid, prepareEnvOutput, isLogResponseEnabled, logs)
                 // call prepare_env again.
-                if (!innerCall) {
+                if (retries > 0) {
                     log.info("Calling prepare environment again")
-                    prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled)
+                    prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled, retries - 1)
                 } else {
                     val errMsg = "Something is wrong: prepare_env step attempted to call itself too many times after upload CBA step!"
                     log.error(errMsg)
@@ -318,7 +293,6 @@ open class ComponentRemotePythonExecutor(
     }
 
     private suspend fun uploadCba(remoteIdentifier: RemoteIdentifier, requestId: String, subRequestId: String, originatorId: String, archiveType: String?, cbaBinData: ByteString?, cbaNameVerUuid: String, prepareEnvOutput: RemoteScriptExecutionOutput, isLogResponseEnabled: Boolean, logs: JsonNode) {
-
         val uploadCbaInput = RemoteScriptUploadBlueprintInput(
             remoteIdentifier = remoteIdentifier,
             requestId = requestId,
