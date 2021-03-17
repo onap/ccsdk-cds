@@ -126,8 +126,6 @@ open class ComponentRemotePythonExecutor(
         val dynamicProperties = getOptionalOperationInput(INPUT_DYNAMIC_PROPERTIES)
         val packages = getOptionalOperationInput(INPUT_PACKAGES)?.returnNullIfMissing()
 
-        val argsNode = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
-
         // This prevents unescaping values, as well as quoting the each parameter, in order to allow for spaces in values
         val args = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
             ?.rootFieldsToMap()?.toSortedMap()?.values?.joinToString(" ") { formatNestedJsonNode(it) }
@@ -163,37 +161,14 @@ open class ComponentRemotePythonExecutor(
             }
 
             // If packages are defined, then install in remote server
-            if (packages != null) {
-                val prepareEnvInput = PrepareRemoteEnvInput(
-                    originatorId = executionServiceInput.commonHeader.originatorId,
-                    requestId = processId,
-                    subRequestId = executionServiceInput.commonHeader.subRequestId,
-                    remoteIdentifier = remoteIdentifier,
-                    packages = packages,
-                    timeOut = envPrepTimeout.toLong()
-                )
-                val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
-                log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
-                val logs = JacksonUtils.jsonNodeFromObject(prepareEnvOutput.response)
-                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, logs)
-
-                // there are no artifacts for env. prepare, but we reuse it for err_log...
-                if (prepareEnvOutput.status != StatusType.SUCCESS) {
-                    setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
-                    addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, logs.toString())
-                } else {
-                    setNodeOutputProperties(prepareEnvOutput.status, STEP_PREPARE_ENV, logs, prepareEnvOutput.payload, isLogResponseEnabled)
-                }
+            if (packages == null) {
+                // set env preparation log to empty...
+                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, "".asJsonPrimitive())
             } else {
-                if (packages == null) {
-                    // set env preparation log to empty...
-                    setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, "".asJsonPrimitive())
-                } else {
-                    prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled)
-                }
-                // in cases where the exception is caught in BP side due to timeout, we do not have `err_msg` returned by cmd-exec (inside `payload`),
-                // hence `artifact` field will be empty
+                prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled)
             }
+            // in cases where the exception is caught in BP side due to timeout, we do not have `err_msg` returned by cmd-exec (inside `payload`),
+            // hence `artifact` field will be empty
         } catch (grpcEx: io.grpc.StatusRuntimeException) {
             val componentLevelWarningMsg =
                 if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
@@ -318,7 +293,6 @@ open class ComponentRemotePythonExecutor(
     }
 
     private suspend fun uploadCba(remoteIdentifier: RemoteIdentifier, requestId: String, subRequestId: String, originatorId: String, archiveType: String?, cbaBinData: ByteString?, cbaNameVerUuid: String, prepareEnvOutput: RemoteScriptExecutionOutput, isLogResponseEnabled: Boolean, logs: JsonNode) {
-
         val uploadCbaInput = RemoteScriptUploadBlueprintInput(
             remoteIdentifier = remoteIdentifier,
             requestId = requestId,
