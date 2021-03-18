@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d505342_814eea9e",
+        "filename": "ms/blueprintsprocessor/functions/python-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/python/executor/ComponentRemotePythonExecutor.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2021-03-18T02:19:59Z",
+      "side": 1,
+      "message": "If packages is null, prepareEnv will not run, and the CBA will not be uploaded to the executor.\nLet\u0027s fix this edge case. If packages is null we can re-assign it to an empty list and always run prepareEnv\n\n            if (packages \u003d\u003d null) {\n                // set env preparation log to empty...\n                setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, \"\".asJsonPrimitive())\n                packages \u003d mutableListOf\u003cObject\u003e().asJsonType()\n            }\n            prepareEnv(....)",
+      "revId": "39836ed975c62f6b77a101e35d85336cdc474659",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
