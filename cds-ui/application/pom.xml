@@ -75,6 +75,7 @@ limitations under the License.
                                     <name>${image.name}</name>
                                     <build>
                                         <cleanup>try</cleanup>
+                                        <noCache>true</noCache>
                                         <tags>
                                             <tag>${project.docker.latestminortag.version}</tag>
                                             <tag>${project.docker.latestfulltag.version}</tag>

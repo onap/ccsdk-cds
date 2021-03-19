@@ -406,6 +406,7 @@
                                     <name>${image.name}</name>
                                     <build>
                                         <cleanup>try</cleanup>
+                                        <noCache>true</noCache>
                                         <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
                                         <tags>
                                             <tag>${project.docker.latestminortag.version}</tag>
