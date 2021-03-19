@@ -174,7 +174,7 @@ open class K8sProfileUploadComponent(
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBlueprintError().addError(runtimeException.message!!)
+        addError(runtimeException.message!!)
     }
 
     private fun getTemplatePrefixList(node: JsonNode?): ArrayList<String> {

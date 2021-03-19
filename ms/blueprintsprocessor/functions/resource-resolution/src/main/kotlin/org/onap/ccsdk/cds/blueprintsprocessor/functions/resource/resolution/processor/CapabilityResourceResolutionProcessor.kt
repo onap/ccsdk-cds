@@ -87,8 +87,7 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-        raRuntimeService.getBlueprintError()
-            .addError("Failed in CapabilityResourceResolutionProcessor : ${runtimeException.message}")
+        addError("Failed in CapabilityResourceResolutionProcessor : ${runtimeException.message}")
         ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, runtimeException.message)
     }
 
