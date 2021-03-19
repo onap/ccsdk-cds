@@ -1,26 +1,24 @@
 FROM python:3.7-slim
-
 USER root
-RUN mkdir -p /opt/app/onap/logs/ && touch /opt/app/onap/logs/application.log
 
 # add entrypoint
-COPY start.sh /opt/app/onap/command-executor/start.sh
+COPY *.sh /opt/app/onap/command-executor/
+
 # add application
 COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
 
 RUN tar -xzf /source.tar.gz -C /tmp \
- && cp -rf /tmp/@project.build.finalName@/opt / \
- && rm -rf /source.tar.gz \
- && rm -rf /tmp/@project.build.finalName@ \
- && mkdir -p /opt/app/onap/blueprints/deploy \
- && chmod 755 /opt/app/onap/command-executor/start.sh
-
-VOLUME /opt/app/onap/blueprints/deploy/
+    && cp -rf /tmp/@project.build.finalName@/opt / \
+    && rm -rf /source.tar.gz \
+    && rm -rf /tmp/@project.build.finalName@ \
+    && groupadd -r -g 1000 onap && useradd -r -u 1000 -g onap onap \
+    && mkdir -p /opt/app/onap/blueprints/deploy /opt/app/onap/logs \
+    && touch /opt/app/onap/logs/application.log \
+    && chown -R onap:onap /opt \
+    && chmod -R 777 /opt
 
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools
 RUN pip install --no-cache-dir grpcio==1.20.0 grpcio-tools==1.20.0 virtualenv==16.7.9
 
-RUN groupadd -r -g 1000 onap && useradd -r -u 1000 -g onap onap
-RUN chown onap:onap /opt -R
 USER onap
 ENTRYPOINT /opt/app/onap/command-executor/start.sh
