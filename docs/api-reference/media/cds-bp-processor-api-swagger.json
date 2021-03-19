@@ -765,6 +765,39 @@
             }
           }
         }
+      },
+      "delete" : {
+        "tags" : [ "Resource configuration" ],
+        "summary" : "Delete a resource configuration snapshot identified by resourceId, resourceType, status.",
+        "description" : "Delete a resource configuration snapshot, identified by its resourceId and resourceType, and optionally its status, either RUNNING or CANDIDATE.",
+        "operationId" : "ResourceConfigSnapshotController_deleteWithResourceIdAndResourceType_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.configs.api",
+        "parameters" : [ {
+          "name" : "resourceType",
+          "in" : "path",
+          "description" : "Resource Type associated with the resolution.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resourceId",
+          "in" : "path",
+          "description" : "Resource Id associated with the resolution.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "status",
+          "in" : "path",
+          "description" : "Status of the snapshot being deleted.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
       }
     },
     "/api/v1/dictionary" : {
@@ -1579,6 +1612,9 @@
     "JsonNode" : {
       "type" : "object",
       "properties" : {
+        "floatingPointNumber" : {
+          "type" : "boolean"
+        },
         "valueNode" : {
           "type" : "boolean"
         },
@@ -1588,59 +1624,56 @@
         "missingNode" : {
           "type" : "boolean"
         },
-        "array" : {
+        "pojo" : {
+          "type" : "boolean"
+        },
+        "integralNumber" : {
+          "type" : "boolean"
+        },
+        "textual" : {
+          "type" : "boolean"
+        },
+        "binary" : {
           "type" : "boolean"
         },
         "object" : {
+          "type" : "boolean"
+        },
+        "array" : {
+          "type" : "boolean"
+        },
+        "null" : {
+          "type" : "boolean"
+        },
+        "short" : {
           "type" : "boolean"
         },
         "nodeType" : {
           "type" : "string",
           "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
         },
-        "pojo" : {
+        "float" : {
           "type" : "boolean"
         },
         "number" : {
           "type" : "boolean"
         },
-        "integralNumber" : {
-          "type" : "boolean"
-        },
-        "floatingPointNumber" : {
-          "type" : "boolean"
-        },
-        "short" : {
+        "boolean" : {
           "type" : "boolean"
         },
         "int" : {
           "type" : "boolean"
         },
-        "long" : {
-          "type" : "boolean"
-        },
-        "float" : {
-          "type" : "boolean"
-        },
         "double" : {
+          "type" : "boolean"
+        },
+        "long" : {
           "type" : "boolean"
         },
         "bigDecimal" : {
           "type" : "boolean"
         },
         "bigInteger" : {
-          "type" : "boolean"
-        },
-        "textual" : {
-          "type" : "boolean"
-        },
-        "boolean" : {
-          "type" : "boolean"
-        },
-        "null" : {
-          "type" : "boolean"
-        },
-        "binary" : {
           "type" : "boolean"
         }
       }
@@ -1798,23 +1831,19 @@
     "Page" : {
       "type" : "object",
       "properties" : {
-        "totalPages" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "totalElements" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "number" : {
           "type" : "integer",
           "format" : "int32"
         },
         "size" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
         },
@@ -1827,14 +1856,18 @@
         "sort" : {
           "$ref" : "#/definitions/Sort"
         },
-        "first" : {
-          "type" : "boolean"
+        "numberOfElements" : {
+          "type" : "integer",
+          "format" : "int32"
         },
-        "last" : {
+        "first" : {
           "type" : "boolean"
         },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
+        },
+        "last" : {
+          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -1844,23 +1877,19 @@
     "PageBlueprintModelSearch" : {
       "type" : "object",
       "properties" : {
-        "totalPages" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "totalElements" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "number" : {
           "type" : "integer",
           "format" : "int32"
         },
         "size" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
         },
@@ -1873,14 +1902,18 @@
         "sort" : {
           "$ref" : "#/definitions/Sort"
         },
-        "first" : {
-          "type" : "boolean"
+        "numberOfElements" : {
+          "type" : "integer",
+          "format" : "int32"
         },
-        "last" : {
+        "first" : {
           "type" : "boolean"
         },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
+        },
+        "last" : {
+          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -1893,12 +1926,12 @@
         "paged" : {
           "type" : "boolean"
         },
-        "unpaged" : {
-          "type" : "boolean"
-        },
         "pageNumber" : {
           "type" : "integer",
           "format" : "int32"
+        },
+        "unpaged" : {
+          "type" : "boolean"
         },
         "pageSize" : {
           "type" : "integer",
@@ -2173,10 +2206,10 @@
     "Sort" : {
       "type" : "object",
       "properties" : {
-        "sorted" : {
+        "unsorted" : {
           "type" : "boolean"
         },
-        "unsorted" : {
+        "sorted" : {
           "type" : "boolean"
         },
         "empty" : {

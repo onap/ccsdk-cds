@@ -26,7 +26,7 @@
 
     <artifactId>py-executor</artifactId>
 
-    <name>MS Python Script Executor</name>
+    <name>MS Python Executor</name>
     <description>Micro-service providing python environment with gRPC binding for python script execution</description>
 
     <properties>
@@ -117,6 +117,7 @@
                                     <name>${image.name}</name>
                                     <build>
                                         <cleanup>try</cleanup>
+                                        <noCache>true</noCache>
                                         <dockerFileDir>${basedir}/target/docker-stage</dockerFileDir>
                                         <tags>
                                             <tag>${project.docker.latestminortag.version}</tag>
