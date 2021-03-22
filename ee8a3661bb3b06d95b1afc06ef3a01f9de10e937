@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a67b30dc_b000ef43",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2021-03-22T12:06:01Z",
+      "side": 1,
+      "message": "I noticed that this directory will still be owned by root in this image. Is this the issue you are trying to address? If so i think this VOLUME instruction is the problem. The docs says\n\n\"if any build steps change the data within the volume after it has been declared, those changes will be discarded.\"\nhttps://docs.docker.com/engine/reference/builder/#volume\n\nThat means chown in line 25 will have no on that directory.\n\nThink we can remove this line, volume bindings will still work without it.",
+      "revId": "ee8a3661bb3b06d95b1afc06ef3a01f9de10e937",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
