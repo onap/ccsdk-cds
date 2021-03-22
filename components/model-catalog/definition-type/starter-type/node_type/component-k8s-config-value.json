@@ -17,12 +17,12 @@
       "operations": {
         "process": {
           "inputs": {
-            "k8s-template-name": {
+            "k8s-rb-config-template-name": {
                 "description": "K8s template name",
                 "required": false,
                 "type": "string"
             },
-            "k8s-config-name": {
+            "k8s-rb-config-name": {
                 "description": "K8s config name",
                 "required": false,
                 "type": "string"
@@ -32,18 +32,24 @@
                 "required": false,
                 "type": "string"
             },
-            "k8s-rb-template-value-source": {
+            "k8s-rb-config-value-source": {
                 "description": "Location of value source in CBA",
                 "required": false,
                 "type": "string"
             },
-            "k8s-operation-type" : {
-                "required" : false,
-                "type" : "string",
-                "constraints" : [{
-                   "valid_values" : [ "create", "update", "rollback" ]
-                }],
-                "default" : "create"
+            "k8s-config-operation-type": {
+                "required": false,
+                "type": "string",
+                "constraints": [
+                  {
+                    "valid_values": [
+                      "create",
+                      "update",
+                      "delete"
+                    ]
+                  }
+              ],
+              "default": "create"
             },
             "artifact-prefix-names": {
                 "description": "Resource Assignment Artifact Prefix names",

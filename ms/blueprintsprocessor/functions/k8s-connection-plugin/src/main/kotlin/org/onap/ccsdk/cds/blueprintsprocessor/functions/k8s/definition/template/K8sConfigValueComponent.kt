@@ -11,12 +11,17 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sConfigValueRequest
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sPluginInstanceApi
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -28,7 +33,8 @@ import java.nio.file.Paths
 @Component("component-k8s-config-value")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class K8sConfigValueComponent(
-    private var bluePrintPropertiesService: BlueprintPropertiesService
+    private var bluePrintPropertiesService: BlueprintPropertiesService,
+    private val resourceResolutionService: ResourceResolutionService
 ) : AbstractComponentFunction() {
 
     private val log = LoggerFactory.getLogger(K8sConfigValueComponent::class.java)!!
@@ -36,11 +42,11 @@ open class K8sConfigValueComponent(
     companion object {
         const val INPUT_RESOURCE_ASSIGNMENT_MAP = "resource-assignment-map"
         const val INPUT_ARTIFACT_PREFIX_NAMES = "artifact-prefix-names"
-        const val INPUT_K8S_TEMPLATE_NAME = "k8s-template-name"
-        const val INPUT_K8S_CONFIG_NAME = "k8s-config-name"
+        const val INPUT_K8S_RB_CONFIG_TEMPLATE_NAME = "k8s-rb-config-template-name"
+        const val INPUT_K8S_RB_CONFIG_NAME = "k8s-rb-config-name"
         const val INPUT_K8S_INSTANCE_ID = "k8s-instance-id"
-        const val INPUT_K8S_TEMPLATE_VALUE_SOURCE = "k8s-rb-template-value-source"
-        const val INPUT_K8S_OPERATION_TYPE = "k8s-operation-type"
+        const val INPUT_K8S_CONFIG_VALUE_SOURCE = "k8s-rb-config-value-source"
+        const val INPUT_K8S_CONFIG_OPERATION_TYPE = "k8s-config-operation-type"
 
         const val OUTPUT_STATUSES = "statuses"
         const val OUTPUT_SKIPPED = "skipped"
@@ -51,11 +57,11 @@ open class K8sConfigValueComponent(
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         log.info("Triggering K8s Config Value component logic.")
         val inputParameterNames = arrayOf(
-            INPUT_K8S_TEMPLATE_NAME,
-            INPUT_K8S_CONFIG_NAME,
+            INPUT_K8S_RB_CONFIG_TEMPLATE_NAME,
+            INPUT_K8S_RB_CONFIG_NAME,
             INPUT_K8S_INSTANCE_ID,
-            INPUT_K8S_OPERATION_TYPE,
-            INPUT_K8S_TEMPLATE_VALUE_SOURCE,
+            INPUT_K8S_CONFIG_OPERATION_TYPE,
+            INPUT_K8S_CONFIG_VALUE_SOURCE,
             INPUT_ARTIFACT_PREFIX_NAMES
         )
         val outputPrefixStatuses = mutableMapOf<String, String>()
@@ -82,74 +88,81 @@ open class K8sConfigValueComponent(
                 }
             }
 
-            val templateName: String? = prefixInputParamsMap[INPUT_K8S_TEMPLATE_NAME]?.returnNullIfMissing()?.asText()
-            val configName: String? = prefixInputParamsMap[INPUT_K8S_CONFIG_NAME]?.returnNullIfMissing()?.asText()
+            val templateName: String? = prefixInputParamsMap[INPUT_K8S_RB_CONFIG_TEMPLATE_NAME]?.returnNullIfMissing()?.asText()
+            val configName: String? = prefixInputParamsMap[INPUT_K8S_RB_CONFIG_NAME]?.returnNullIfMissing()?.asText()
             val instanceId: String? = prefixInputParamsMap[INPUT_K8S_INSTANCE_ID]?.returnNullIfMissing()?.asText()
-            val valueSource: String? = prefixInputParamsMap[INPUT_K8S_TEMPLATE_VALUE_SOURCE]?.returnNullIfMissing()?.asText()
-            val operationType = prefixInputParamsMap[INPUT_K8S_TEMPLATE_VALUE_SOURCE]?.returnNullIfMissing()?.asText()?.toUpperCase()
+            var valueSource: String? = prefixInputParamsMap[INPUT_K8S_CONFIG_VALUE_SOURCE]?.returnNullIfMissing()?.asText()
+            val operationType = prefixInputParamsMap[INPUT_K8S_CONFIG_OPERATION_TYPE]?.returnNullIfMissing()?.asText()?.toUpperCase()
 
+            if (valueSource == null) {
+                valueSource = configName
+                log.info("Config name used instead of value source")
+            }
             if (operationType == null || operationType == OperationType.CREATE.toString())
                 createOperation(templateName, instanceId, valueSource, outputPrefixStatuses, prefix, configName)
             else if (operationType == OperationType.UPDATE.toString())
                 updateOperation(templateName, instanceId, valueSource, outputPrefixStatuses, prefix, configName)
-            else if (operationType == OperationType.ROLLBACK.toString())
-                rollbackOperation(instanceId)
+            else if (operationType == OperationType.DELETE.toString())
+                deleteOperation(instanceId, configName)
             else
                 throw BlueprintProcessorException("Unknown operation type: $operationType")
         }
     }
 
-    private fun createOperation(templateName: String?, instanceId: String?, valueSource: String?, outputPrefixStatuses: MutableMap<String, String>, prefix: String, configName: String?) {
+    private suspend fun createOperation(templateName: String?, instanceId: String?, valueSource: String?, outputPrefixStatuses: MutableMap<String, String>, prefix: String, configName: String?) {
+        val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
         if (templateName == null || configName == null || instanceId == null || valueSource == null) {
-            log.warn("$INPUT_K8S_TEMPLATE_NAME or $INPUT_K8S_INSTANCE_ID or $INPUT_K8S_TEMPLATE_VALUE_SOURCE or $INPUT_K8S_CONFIG_NAME is null")
+            log.warn("$INPUT_K8S_RB_CONFIG_TEMPLATE_NAME or $INPUT_K8S_INSTANCE_ID or $INPUT_K8S_CONFIG_VALUE_SOURCE or $INPUT_K8S_RB_CONFIG_NAME is null - skipping create")
         } else if (templateName.isEmpty()) {
-            log.warn("$INPUT_K8S_TEMPLATE_NAME is empty")
+            log.warn("$INPUT_K8S_RB_CONFIG_TEMPLATE_NAME is empty - skipping create")
         } else if (configName.isEmpty()) {
-            log.warn("$INPUT_K8S_CONFIG_NAME is empty")
+            log.warn("$INPUT_K8S_RB_CONFIG_NAME is empty - skipping create")
+        } else if (api.hasConfigurationValues(instanceId, configName)) {
+            log.info("Configuration already exists - skipping create")
         } else {
-            log.info("Uploading K8s template value..")
+            log.info("Uploading K8s config..")
             outputPrefixStatuses[prefix] = OUTPUT_ERROR
             val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
             val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, valueSource)
-            if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE)
+            if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
                 throw BlueprintProcessorException(
-                    "Unexpected profile artifact type for profile source $valueSource. Expecting: $artifact.type"
+                    "Unexpected config artifact type for config value source $valueSource. Expecting: $artifact.type"
                 )
-            // Creating API connector
-            val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
             val configValueRequest = K8sConfigValueRequest()
             configValueRequest.templateName = templateName
             configValueRequest.configName = configName
             configValueRequest.description = valueSource
-            configValueRequest.values = parseResult(valueSource)
+            configValueRequest.values = parseResult(valueSource, artifact.file)
             api.createConfigurationValues(configValueRequest, instanceId)
         }
     }
 
-    private fun updateOperation(templateName: String?, instanceId: String?, valueSource: String?, outputPrefixStatuses: MutableMap<String, String>, prefix: String, configName: String?) {
+    private suspend fun updateOperation(templateName: String?, instanceId: String?, valueSource: String?, outputPrefixStatuses: MutableMap<String, String>, prefix: String, configName: String?) {
+        val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
         if (templateName == null || configName == null || instanceId == null || valueSource == null) {
-            log.warn("$INPUT_K8S_TEMPLATE_NAME or $INPUT_K8S_INSTANCE_ID or $INPUT_K8S_TEMPLATE_VALUE_SOURCE or $INPUT_K8S_CONFIG_NAME is null")
+            log.warn("$INPUT_K8S_RB_CONFIG_TEMPLATE_NAME or $INPUT_K8S_INSTANCE_ID or $INPUT_K8S_CONFIG_VALUE_SOURCE or $INPUT_K8S_RB_CONFIG_NAME is null - skipping update")
         } else if (templateName.isEmpty()) {
-            log.warn("$INPUT_K8S_TEMPLATE_NAME is empty")
+            log.warn("$INPUT_K8S_RB_CONFIG_TEMPLATE_NAME is empty - skipping update")
         } else if (configName.isEmpty()) {
-            log.warn("$INPUT_K8S_CONFIG_NAME is empty")
+            log.warn("$INPUT_K8S_RB_CONFIG_NAME is empty - skipping update")
+        } else if (!api.hasConfigurationValues(instanceId, configName)) {
+            log.info("Configuration does not exist - doing create instead")
+            createOperation(templateName, instanceId, valueSource, outputPrefixStatuses, prefix, configName)
         } else {
-            log.info("Uploading K8s template value..")
+            log.info("Updating K8s config..")
             outputPrefixStatuses[prefix] = OUTPUT_ERROR
             val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
             val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, valueSource)
-            if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE)
+            if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
                 throw BlueprintProcessorException(
-                    "Unexpected profile artifact type for profile source $valueSource. Expecting: $artifact.type"
+                    "Unexpected config artifact type for config value source $valueSource. Expecting: $artifact.type"
                 )
-            // Creating API connector
-            val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
             if (api.hasConfigurationValues(instanceId, configName)) {
                 val configValueRequest = K8sConfigValueRequest()
                 configValueRequest.templateName = templateName
                 configValueRequest.configName = configName
                 configValueRequest.description = valueSource
-                configValueRequest.values = parseResult(valueSource)
+                configValueRequest.values = parseResult(valueSource, artifact.file)
                 api.editConfigurationValues(configValueRequest, instanceId, configName)
             } else {
                 throw BlueprintProcessorException("Error while getting configuration value")
@@ -157,22 +170,65 @@ open class K8sConfigValueComponent(
         }
     }
 
-    private fun rollbackOperation(instanceId: String?) {
-        if (instanceId != null) {
-            val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
-            api.rollbackConfigurationValues(instanceId)
+    private fun deleteOperation(instanceId: String?, configName: String?) {
+        val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
+        if (instanceId == null || configName == null) {
+            log.warn("$INPUT_K8S_INSTANCE_ID or $INPUT_K8S_RB_CONFIG_NAME is null - skipping delete")
+        } else if (api.hasConfigurationValues(instanceId, configName)) {
+            log.info("Configuration does not exists - skipping delete")
         } else {
-            throw BlueprintProcessorException("$INPUT_K8S_INSTANCE_ID is null")
+            api.deleteConfigurationValues(instanceId, configName)
         }
     }
 
-    private fun parseResult(templateValueSource: String): Any {
-        val ymlSourceFile = getYmlSourceFile(templateValueSource)
-        val yamlReader = ObjectMapper(YAMLFactory())
-        val obj: Any = yamlReader.readValue(ymlSourceFile, Any::class.java)
+    private suspend fun parseResult(templateValueSource: String, k8sConfigLocation: String): Any {
+        val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
+        val bluePrintBasePath: String = bluePrintContext.rootPath
+        val configeValueSourceFilePath: Path = Paths.get(
+            bluePrintBasePath.plus(File.separator).plus(k8sConfigLocation)
+        )
 
+        if (!configeValueSourceFilePath.toFile().exists() || configeValueSourceFilePath.toFile().isDirectory)
+            throw BlueprintProcessorException("Specified config value source $k8sConfigLocation is not a file")
+
+        var obj: Any? = null
+        val yamlReader = ObjectMapper(YAMLFactory())
+        if (configeValueSourceFilePath.toFile().extension.toLowerCase() == "vtl") {
+            log.info("Config building started from source $templateValueSource")
+            val properties: MutableMap<String, Any> = mutableMapOf()
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = false
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = ""
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = ""
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = ""
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = 1
+            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY] = false
+            val resolutionResult: Pair<String, MutableList<ResourceAssignment>> = resourceResolutionService.resolveResources(
+                bluePrintRuntimeService,
+                nodeTemplateName,
+                templateValueSource,
+                properties
+            )
+
+            val resolvedJsonContent = resolutionResult.second
+                .associateBy({ it.name }, { it.property?.value })
+                .asJsonNode()
+
+            val newContent: String = templateValues(configeValueSourceFilePath.toFile(), resolvedJsonContent)
+            obj = yamlReader.readValue(newContent, Any::class.java)
+        } else {
+            val ymlSourceFile = getYmlSourceFile(k8sConfigLocation)
+            obj = yamlReader.readValue(ymlSourceFile, Any::class.java)
+        }
         val jsonWriter = ObjectMapper()
         return jsonWriter.convertValue(obj)
+    }
+
+    private fun templateValues(templateFile: File, params: JsonNode): String {
+        val fileContent = templateFile.bufferedReader().readText()
+        return BlueprintVelocityTemplateService.generateContent(
+            fileContent,
+            params, true
+        )
     }
 
     private fun getYmlSourceFile(templateValueSource: String): File {
@@ -205,6 +261,6 @@ open class K8sConfigValueComponent(
     }
 
     private enum class OperationType {
-        CREATE, UPDATE, ROLLBACK
+        CREATE, UPDATE, DELETE
     }
 }

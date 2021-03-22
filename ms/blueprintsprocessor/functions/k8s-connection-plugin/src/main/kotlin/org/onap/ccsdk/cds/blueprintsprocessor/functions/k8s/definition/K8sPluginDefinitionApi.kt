@@ -111,16 +111,18 @@ class K8sPluginDefinitionApi(
                 "/profile/${profile.profileName}/content",
                 filePath
             )
+            log.debug(result.toString())
             if (result.status !in 200..299) {
                 throw Exception(result.body)
             }
+            log.debug("Profile uploaded properly")
         } catch (e: Exception) {
             log.error("Caught exception trying to upload k8s rb profile ${profile.profileName}")
             throw BlueprintProcessorException("${e.message}")
         }
     }
 
-    fun createTemplate(definition: String, definitionVersion: String, template: K8sTemplate): Boolean {
+    fun createTemplate(definition: String, definitionVersion: String, template: K8sTemplate) {
         val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion)
         val templateJsonString: String = objectMapper.writeValueAsString(template)
         try {
@@ -130,20 +132,23 @@ class K8sPluginDefinitionApi(
                 templateJsonString
             )
             log.debug(result.toString())
-            return result.status in 200..299
+            if (result.status !in 200..299) {
+                throw Exception(result.body)
+            }
         } catch (e: Exception) {
             log.error("Caught exception during create template")
             throw BlueprintProcessorException("${e.message}")
         }
     }
 
-    fun uploadTemplate(definition: String, definitionVersion: String, template: K8sTemplate, filePath: Path) {
+    fun uploadConfigTemplateContent(definition: String, definitionVersion: String, template: K8sTemplate, filePath: Path) {
         val fileUploadService = K8sUploadFileRestClientService(k8sConfiguration, definition, definitionVersion)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = fileUploadService.uploadBinaryFile(
                 "/config-template/${template.templateName}/content",
                 filePath
             )
+            log.debug(result.toString())
             if (result.status !in 200..299) {
                 throw Exception(result.body)
             }
@@ -162,6 +167,9 @@ class K8sPluginDefinitionApi(
                 ""
             )
             log.debug(result.toString())
+            if (result.status !in 200..299) {
+                throw Exception(result.body)
+            }
         } catch (e: Exception) {
             log.error("Caught exception during get template")
             throw BlueprintProcessorException("${e.message}")

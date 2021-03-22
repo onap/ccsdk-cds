@@ -111,6 +111,7 @@ class BlueprintDSLTest {
             artifactTypeMappingResource()
             artifactTypeComponentJar()
             artifactTypeK8sProfileFolder()
+            artifactTypeK8sConfigFolder()
 
             relationshipTypeConnectsTo()
             relationshipTypeDependsOn()

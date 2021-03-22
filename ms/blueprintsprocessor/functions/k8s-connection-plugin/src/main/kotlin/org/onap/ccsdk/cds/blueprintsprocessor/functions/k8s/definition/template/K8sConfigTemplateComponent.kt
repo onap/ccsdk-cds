@@ -141,7 +141,7 @@ open class K8sConfigTemplateComponent(
                 }
                 val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
                 val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, templateSource)
-                if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE)
+                if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
                     throw BlueprintProcessorException(
                         "Unexpected template artifact type for template source $templateSource. Expecting: $artifact.type"
                     )
@@ -151,7 +151,7 @@ open class K8sConfigTemplateComponent(
 
                 val templateFilePath: Path = prepareTemplateFile(templateName, templateSource, artifact.file)
                 api.createTemplate(definitionName, definitionVersion, template)
-                api.uploadTemplate(definitionName, definitionVersion, template, templateFilePath)
+                api.uploadConfigTemplateContent(definitionName, definitionVersion, template, templateFilePath)
 
                 log.info("K8s Config Upload Completed")
                 outputPrefixStatuses[prefix] = OUTPUT_UPLOADED
