@@ -232,6 +232,7 @@ object BlueprintConstants {
     const val MODEL_TYPE_ARTIFACT_DIRECTED_GRAPH = "artifact-directed-graph"
     const val MODEL_TYPE_ARTIFACT_COMPONENT_JAR = "artifact-component-jar"
     const val MODEL_TYPE_ARTIFACT_K8S_PROFILE = "artifact-k8sprofile-content"
+    const val MODEL_TYPE_ARTIFACT_K8S_CONFIG = "artifact-k8sconfig-content"
 
     const val TOSCA_SPEC = "TOSCA"
 

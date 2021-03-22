@@ -1,0 +1,5 @@
+{
+  "description": "K8s Config Folder Artifact",
+  "version": "1.0.0",
+  "derived_from": "tosca.artifacts.Implementation"
+}
