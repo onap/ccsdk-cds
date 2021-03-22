@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e8f4d39f_bb6de72d",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-03-22T12:54:53Z",
+      "side": 1,
+      "message": "Exactly same I was trying to solve.. got java.io.IOException while uploading a CBA as /opt was owned by root user with permission 755\n\nI couldn\u0027t find a proper solution, so added chmod statement !",
+      "parentUuid": "a67b30dc_b000ef43",
+      "revId": "ee8a3661bb3b06d95b1afc06ef3a01f9de10e937",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e6c816f_534f136d",
         "filename": "ms/py-executor/docker/Dockerfile",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2021-03-22T12:31:38Z",
       "side": 1,
       "message": "Another thing that can cause issues is if the UID and GID don\u0027t match between BP and executor. \n\nHere it is set explicitly to 1000:1000\n\ni checked onap/ccsdk-alpine-j11-image:1.1.0\nthe UID for onap is 1000 but GID is 101\n\n/etc/passwd\n...\nonap:x:1000:101:Linux User,,,:/home/onap:/bin/ash",
+      "revId": "ee8a3661bb3b06d95b1afc06ef3a01f9de10e937",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0502191c_21e4d80a",
+        "filename": "ms/py-executor/docker/Dockerfile",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-03-22T12:54:53Z",
+      "side": 1,
+      "message": "I just moved this line to combine with exisitng RUN statement, didn\u0027t realize exsting had issue !",
+      "parentUuid": "2e6c816f_534f136d",
       "revId": "ee8a3661bb3b06d95b1afc06ef3a01f9de10e937",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
