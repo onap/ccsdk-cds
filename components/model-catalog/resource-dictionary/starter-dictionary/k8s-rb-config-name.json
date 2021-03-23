@@ -1,0 +1,19 @@
+{
+    "tags": "k8s, cnf, config, k8s-rb-config-name",
+    "name": "k8s-rb-config-name",
+    "property": {
+        "description": "The source of configuration values for config-deploy operation",
+        "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Rajewski, Lukasz <lukasz.rajewski@orange.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        }
+    }
+}

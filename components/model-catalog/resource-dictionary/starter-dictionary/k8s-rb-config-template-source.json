@@ -1,0 +1,19 @@
+{
+    "tags": "k8s, cnf, config, k8s-rb-config-template-source",
+    "name": "k8s-rb-config-template-source",
+    "property": {
+        "description": "The source of configuration template for config-assign operation",
+        "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Rajewski, Lukasz <lukasz.rajewski@orange.com>",
+    "sources": {
+        "input": {
+            "type": "source-input"
+        },
+        "default": {
+            "type": "source-default",
+            "properties": {}
+        }
+    }
+}

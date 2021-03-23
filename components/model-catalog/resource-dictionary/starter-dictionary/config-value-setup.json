@@ -1,0 +1,20 @@
+{
+    "tags": "k8s, cnf, config-deploy-setup",
+    "name": "config-deploy-setup",
+    "group": "default",
+    "property": {
+        "description": "Configuration for CNF config deployment",
+        "type": "json"
+    },
+    "updated-by": "Lukasz Rajewski <lukasz.rajewski@orange.com>",
+    "sources": {
+        "capability": {
+            "type": "source-capability",
+            "properties": {
+                "script-type": "kotlin",
+                "script-class-reference": "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.ConfigDeploySetup",
+                "instance-dependencies": []
+            }
+        }
+    }
+}
