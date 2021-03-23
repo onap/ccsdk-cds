@@ -16,8 +16,15 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
+import org.apache.http.conn.ssl.NoopHostnameVerifier
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory
+import org.apache.http.conn.ssl.TrustAllStrategy
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicHeader
+import org.apache.http.ssl.SSLContextBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import java.net.URI
@@ -26,7 +33,7 @@ import java.util.Base64
 
 class BasicAuthRestClientService(
     private val restClientProperties:
-        BasicAuthRestClientProperties
+    BasicAuthRestClientProperties
 ) :
     BlueprintWebClientService {
 
@@ -48,22 +55,33 @@ class BasicAuthRestClientService(
         return uri.resolve(uri).toString()
     }
 
-    override fun convertToBasicHeaders(headers: Map<String, String>):
-        Array<BasicHeader> {
-            val customHeaders: MutableMap<String, String> = headers.toMutableMap()
-            // inject additionalHeaders
-            customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
+    override fun httpClient(): CloseableHttpClient {
+        val sslContext = SSLContextBuilder.create()
 
-            if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
-                val encodedCredentials = setBasicAuth(
-                    restClientProperties.username,
-                    restClientProperties.password
-                )
-                customHeaders[HttpHeaders.AUTHORIZATION] =
-                    "Basic $encodedCredentials"
-            }
-            return super.convertToBasicHeaders(customHeaders)
+        sslContext.loadTrustMaterial(TrustAllStrategy.INSTANCE)
+        val csf = SSLConnectionSocketFactory(sslContext.build(), NoopHostnameVerifier())
+        return HttpClients.custom()
+            .addInterceptorFirst(WebClientUtils.logRequest())
+            .addInterceptorLast(WebClientUtils.logResponse())
+            .setSSLSocketFactory(csf).build()
+    }
+
+    override fun convertToBasicHeaders(headers: Map<String, String>):
+            Array<BasicHeader> {
+        val customHeaders: MutableMap<String, String> = headers.toMutableMap()
+        // inject additionalHeaders
+        customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
+
+        if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
+            val encodedCredentials = setBasicAuth(
+                restClientProperties.username,
+                restClientProperties.password
+            )
+            customHeaders[HttpHeaders.AUTHORIZATION] =
+                "Basic $encodedCredentials"
         }
+        return super.convertToBasicHeaders(customHeaders)
+    }
 
     private fun setBasicAuth(username: String, password: String): String {
         val credentialsString = "$username:$password"
