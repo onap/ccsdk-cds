@@ -327,6 +327,22 @@ fun BlueprintTypes.artifactTypeK8sProfileFolder(): ArtifactType {
     }
 }
 
+fun ServiceTemplateBuilder.artifactTypeK8sConfigFolder() {
+    val artifactType = BlueprintTypes.artifactTypeK8sConfigFolder()
+    if (this.artifactTypes == null) this.artifactTypes = hashMapOf()
+    this.artifactTypes!![artifactType.id!!] = artifactType
+}
+
+fun BlueprintTypes.artifactTypeK8sConfigFolder(): ArtifactType {
+    return artifactType(
+        id = BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG,
+        version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BlueprintConstants.MODEL_TYPE_ARTIFACT_TYPE_IMPLEMENTATION,
+        description = "K8s Config Folder Artifact"
+    ) {
+    }
+}
+
 @Deprecated("CDS won't support, use implerative workflow definitions.")
 fun BlueprintTypes.artifactTypeDirectedGraph(): ArtifactType {
     return artifactType(
