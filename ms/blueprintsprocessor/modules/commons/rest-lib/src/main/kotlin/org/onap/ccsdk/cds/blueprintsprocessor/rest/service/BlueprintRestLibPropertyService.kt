@@ -171,7 +171,8 @@ open class BlueprintRestLibPropertyService(private var bluePrintPropertiesServic
                 bluePrintPropertiesService.propertyBeanType(
                     prefix, BasicAuthRestClientProperties::class.java
                 )
-            sslProps.basicAuth = basicProps
+            sslProps.username = basicProps.username
+            sslProps.password = basicProps.password
             return sslProps
         }
 
