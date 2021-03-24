@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c18131d_2aeca5c5",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/BlueprintRestLibData.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-03-24T13:37:37Z",
+      "side": 1,
+      "message": "A nullable reference of SSLBasicAuthRestClientProperties to be added here (#36)",
+      "revId": "9ffa33c5364c80b071db14906411bf2327813cd2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "260b35e0_9506f6ff",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/BlueprintRestLibPropertyService.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-03-24T13:37:37Z",
+      "side": 1,
+      "message": "username and password will be part of SSLBasicAuthRestClientProperties  itself now, do you stil need #170 to #175",
+      "revId": "9ffa33c5364c80b071db14906411bf2327813cd2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
