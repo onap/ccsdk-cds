@@ -97,10 +97,10 @@ class Graph {
 
         val edges: MutableList<Edge> = ArrayList()
 
-        fun neighbors(): List<Node> = edges.map { edge -> edge.target(this) }
+        fun neighbors(): List<Node> = edges.map { it.target }
 
         fun neighbors(label: EdgeLabel): List<Node> = edges.filter { it.label == label }
-            .map { edge -> edge.target(this) }
+            .map { it.target }
 
         fun labelEdges(label: EdgeLabel): List<Edge> = edges.filter { it.label == label }
 
@@ -113,8 +113,6 @@ class Graph {
         val label: EdgeLabel,
         var status: EdgeStatus = EdgeStatus.NOT_STARTED
     ) {
-
-        fun target(node: Node): Node = target
 
         fun equivalentTo(other: Edge) =
             (source == other.source && target == other.target) ||

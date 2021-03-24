@@ -18,7 +18,9 @@ package org.onap.ccsdk.cds.controllerblueprints.core
 
 import org.junit.Test
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class GraphExtensionFunctionsTest {
 
@@ -33,5 +35,74 @@ class GraphExtensionFunctionsTest {
 
         val nodePath = graph.nodes["p"]!!.neighbors(EdgeLabel.SUCCESS)
         assertNotNull(nodePath, "failed to nodePath from graph for 'p' node 'SUCCESS' label")
+    }
+
+    @Test
+    fun `isAcyclic should return false`() {
+        assertFalse(
+            """[
+             assign>deploy/SUCCESS,
+             deploy>assign/FAILURE
+         ]""".toGraph().isAcyclic()
+        )
+
+        assertFalse(
+            """[
+             assign>deploy/SUCCESS,
+             deploy>recover/FAILURE,
+             recover>deploy/SUCCESS
+         ]""".toGraph().isAcyclic()
+        )
+
+        assertFalse(
+            """[
+             assign>deploy/SUCCESS,
+             assign>recover/FAILURE,
+             recover>deploy/SUCCESS,
+             deploy>finalize/SUCCESS,
+             deploy>recover/FAILURE
+         ]""".toGraph().isAcyclic()
+        )
+
+        assertFalse(
+            """[
+             A>B/SUCCESS,
+             A>C/SUCCESS,
+             B>E/SUCCESS,
+             B>D/FAILURE,
+             D>B/FAILURE,
+             C>E/SUCCESS
+         ]""".toGraph().isAcyclic()
+        )
+    }
+
+    @Test
+    fun `isAcyclic should return true`() {
+        assertTrue(
+            """[
+             assign>deploy/SUCCESS,
+             deploy>recover/FAILURE
+         ]""".toGraph().isAcyclic()
+        )
+
+        assertTrue(
+            """[
+             A>C/SUCCESS,
+             A>B/FAILURE,
+             C>B/SUCCESS
+         ]""".toGraph().isAcyclic()
+        )
+
+        assertTrue(
+            """[
+             assign>execute1/SUCCESS,
+             assign>execute2/SUCCESS,
+             execute1>finalize/SUCCESS,
+             execute2>finalize/SUCCESS,
+             execute1>cleanup/FAILURE,
+             execute2>cleanup/FAILURE,
+             finalize>cleanup/SUCCESS
+         ]""".toGraph().isAcyclic()
+        )
     }
 }

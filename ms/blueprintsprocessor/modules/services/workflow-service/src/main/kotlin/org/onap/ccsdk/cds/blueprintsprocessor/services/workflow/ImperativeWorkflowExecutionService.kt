@@ -23,6 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutp
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.asGraph
@@ -30,6 +31,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintWorkflowExecutionService
+import org.onap.ccsdk.cds.controllerblueprints.core.isAcyclic
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.service.AbstractBlueprintWorkFlowService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
@@ -56,6 +58,10 @@ class ImperativeWorkflowExecutionService(
         val workflowName = executionServiceInput.actionIdentifiers.actionName
 
         val graph = bluePrintContext.workflowByName(workflowName).asGraph()
+
+        if (!graph.isAcyclic()) {
+            throw BlueprintException("Imperative workflow must be acyclic. Check on_success/on_failure for circular references")
+        }
 
         return coroutineScope {
             ImperativeBlueprintWorkflowService(
