@@ -257,7 +257,7 @@ open class K8sConfigValueComponent(
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        bluePrintRuntimeService.getBlueprintError().addError(runtimeException.message!!)
+        addError(runtimeException.message!!)
     }
 
     private enum class OperationType {

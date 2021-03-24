@@ -48,10 +48,11 @@ open class ComponentExecuteNodeExecutor(private val nodeTemplateExecutionService
 
             val executionInput = ctx.getRequest() as ExecutionServiceInput
 
+            val stepName = executionInput.stepData?.name ?: nodeTemplateName
+
             try { // Get the Request from the Context and Set to the Function Input and Invoke the function
                 val executionOutput = nodeTemplateExecutionService.executeNodeTemplate(
-                    ctx.getBlueprintService(),
-                    nodeTemplateName, executionInput
+                    ctx.getBlueprintService(), stepName, nodeTemplateName, executionInput
                 )
 
                 ctx.setResponse(executionOutput)

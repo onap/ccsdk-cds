@@ -10,24 +10,24 @@ class BlueprintErrorTest {
     fun testBlueprintErrorIsCreatedWithemptyList() {
         val bluePrintError = BlueprintError()
 
-        assertTrue(bluePrintError.errors.isEmpty())
+        assertTrue(bluePrintError.allErrors().isEmpty())
     }
 
     @Test
     fun testAddErrorWith3Params() {
         val bluePrintError = BlueprintError()
 
-        bluePrintError.addError("type", "name", "error")
+        bluePrintError.addError("type", "name", "error", "step")
 
-        assertEquals("type : name : error", bluePrintError.errors[0])
+        assertEquals("type : name : error", bluePrintError.stepErrors("step")!![0])
     }
 
     @Test
-    fun testAddErrorWith1Params() {
+    fun testAddErrorWith2Params() {
         val bluePrintError = BlueprintError()
 
-        bluePrintError.addError("error")
+        bluePrintError.addError("error", "step")
 
-        assertEquals("error", bluePrintError.errors[0])
+        assertEquals("error", bluePrintError.stepErrors("step")!![0])
     }
 }

@@ -42,7 +42,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyS
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
 
 @Service
 class ExecutionServiceHandler(
@@ -119,10 +118,9 @@ class ExecutionServiceHandler(
                     executionServiceInput, hashMapOf()
                 )
 
-                val errors = blueprintRuntimeService.getBlueprintError().errors
+                val errors = blueprintRuntimeService.getBlueprintError().allErrors()
                 if (errors.isNotEmpty()) {
-                    val errorMessage = errors.stream().map { it.toString() }.collect(Collectors.joining(", "))
-                    setErrorStatus(errorMessage, executionServiceOutput.status)
+                    setErrorStatus(errors.joinToString(", "), executionServiceOutput.status)
                 }
             }
         } catch (e: Exception) {

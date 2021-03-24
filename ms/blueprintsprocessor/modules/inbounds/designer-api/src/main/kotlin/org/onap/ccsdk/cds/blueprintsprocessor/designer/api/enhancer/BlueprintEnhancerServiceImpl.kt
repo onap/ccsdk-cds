@@ -78,8 +78,8 @@ open class BlueprintEnhancerServiceImpl(
             // Write the Enhanced Blueprint Resource Definitions
             ResourceDictionaryUtils.writeResourceDefinitionTypes(basePath, resourceDefinitions)
 
-            if (blueprintRuntimeService.getBlueprintError().errors.isNotEmpty()) {
-                throw BlueprintException(blueprintRuntimeService.getBlueprintError().errors.toString())
+            if (blueprintRuntimeService.getBlueprintError().allErrors().isNotEmpty()) {
+                throw BlueprintException(blueprintRuntimeService.getBlueprintError().allErrors().toString())
             }
         } catch (e: BlueprintProcessorException) {
             val errorMsg = "Error while enriching the CBA package."

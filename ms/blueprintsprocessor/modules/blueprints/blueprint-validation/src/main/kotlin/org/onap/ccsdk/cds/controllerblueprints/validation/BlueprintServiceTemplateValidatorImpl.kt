@@ -58,7 +58,7 @@ open class BlueprintServiceTemplateValidatorImpl(private val bluePrintTypeValida
             serviceTemplate.topologyTemplate?.let { validateTopologyTemplate(serviceTemplate.topologyTemplate!!) }
         } catch (e: Exception) {
             log.error("failed in blueprint service template validation", e)
-            error.addError(BlueprintConstants.PATH_SERVICE_TEMPLATE, paths.joinToString(BlueprintConstants.PATH_DIVIDER), e.message!!)
+            error.addError(BlueprintConstants.PATH_SERVICE_TEMPLATE, paths.joinToString(BlueprintConstants.PATH_DIVIDER), e.message!!, "BlueprintServiceTemplateValidator")
         }
     }
 
