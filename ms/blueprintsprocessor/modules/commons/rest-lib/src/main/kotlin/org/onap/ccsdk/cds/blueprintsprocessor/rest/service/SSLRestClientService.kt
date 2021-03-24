@@ -23,6 +23,7 @@ import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicHeader
 import org.apache.http.ssl.SSLContextBuilder
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientProperties
@@ -48,7 +49,9 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
         // set them in auth obj to be consistent. TODO: refactor
         return when (restClientProperties) {
             is SSLBasicAuthRestClientProperties -> {
-                val basicAuthProps = restClientProperties.basicAuth!!
+                val basicAuthProps = BasicAuthRestClientProperties()
+                basicAuthProps.username = restClientProperties.username
+                basicAuthProps.password = restClientProperties.password
                 basicAuthProps.additionalHeaders = restClientProperties.additionalHeaders
                 basicAuthProps.url = restClientProperties.url
                 basicAuthProps.type = restClientProperties.type

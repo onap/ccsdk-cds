@@ -77,6 +77,10 @@ open class RestClientRelationshipTemplateBuilder(name: String, description: Stri
         property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.tokenAuthRestClientProperties(block))
     }
 
+    fun sslBasicAuth(block: SSLBasicAuthRestClientPropertiesBuilder.() -> Unit) {
+        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.sslBasicAuthRestClientProperties(block))
+    }
+
     fun sslAuth(block: SslAuthRestClientPropertiesAssignmentBuilder.() -> Unit) {
         property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.sslRestClientProperties(block))
     }
@@ -91,6 +95,12 @@ fun BlueprintTypes.basicAuthRestClientProperties(block: BasicAuthRestClientPrope
 fun BlueprintTypes.tokenAuthRestClientProperties(block: TokenAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = TokenAuthRestClientPropertiesAssignmentBuilder().apply(block).build()
     assignments[RestClientProperties::type.name] = RestLibConstants.TYPE_TOKEN_AUTH.asJsonPrimitive()
+    return assignments.asJsonType()
+}
+
+fun BlueprintTypes.sslBasicAuthRestClientProperties(block: SSLBasicAuthRestClientPropertiesBuilder.() -> Unit): JsonNode {
+    val assignments = SSLBasicAuthRestClientPropertiesBuilder().apply(block).build()
+    assignments[RestClientProperties::type.name] = RestLibConstants.TYPE_SSL_BASIC_AUTH.asJsonPrimitive()
     return assignments.asJsonType()
 }
 
@@ -185,7 +195,29 @@ open class SslAuthRestClientPropertiesAssignmentBuilder : RestClientPropertiesAs
 }
 
 open class SSLBasicAuthRestClientPropertiesBuilder : SslAuthRestClientPropertiesAssignmentBuilder() {
-    // TODO()
+    open fun password(password: String) {
+        password(password.asJsonPrimitive())
+    }
+
+    open fun password(password: JsonNode) {
+        property(SSLBasicAuthRestClientProperties::password, password)
+    }
+
+    open fun username(username: String) {
+        username(username.asJsonPrimitive())
+    }
+
+    open fun username(username: JsonNode) {
+        property(SSLBasicAuthRestClientProperties::username, username)
+    }
+
+    open fun sslTrustIgnoreHostname(sslTrustIgnoreHostname: String) {
+        sslTrustIgnoreHostname(sslTrustIgnoreHostname.asJsonPrimitive())
+    }
+
+    open fun sslTrustIgnoreHostname(sslTrustIgnoreHostname: JsonNode) {
+        property(SSLBasicAuthRestClientProperties::sslTrustIgnoreHostname, sslTrustIgnoreHostname)
+    }
 }
 
 open class SSLTokenAuthRestClientPropertiesBuilder : SslAuthRestClientPropertiesAssignmentBuilder() {
