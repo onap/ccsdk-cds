@@ -102,8 +102,8 @@ class BlueprintRestLibPropertyServiceTest {
         val p: SSLBasicAuthRestClientProperties =
             properties as SSLBasicAuthRestClientProperties
 
-        assertEquals(p.basicAuth!!.username, "admin")
-        assertEquals(p.basicAuth!!.password, "cds")
+        assertEquals(p.username, "admin")
+        assertEquals(p.password, "cds")
         assertEquals(p.sslTrust, "src/test/resources/keystore.p12")
         assertEquals(p.sslTrustPassword, "changeit")
         assertEquals(p.keyStoreInstance, "PKCS12")
@@ -151,8 +151,8 @@ class BlueprintRestLibPropertyServiceTest {
         assertNotNull(properties, "failed to create property bean")
         val p: SSLBasicAuthRestClientProperties = properties as SSLBasicAuthRestClientProperties
 
-        assertEquals("admin", p.basicAuth!!.username)
-        assertEquals("cds", p.basicAuth!!.password)
+        assertEquals("admin", p.username)
+        assertEquals("cds", p.password)
         assertEquals("src/test/resources/keystore.p12", p.sslTrust)
         assertEquals("changeit", p.sslTrustPassword)
         assertEquals("PKCS12", p.keyStoreInstance)
@@ -464,10 +464,8 @@ class BlueprintRestLibPropertyServiceTest {
           "keyStoreInstance" : "PKCS12",
           "sslTrust" : "src/test/resources/keystore.p12",
           "sslTrustPassword" : "changeit",
-          "basicAuth" : {
-            "username" : "admin",
-            "password" : "cds"
-          }$headers
+          "username" : "admin",
+          "password" : "cds"$headers
         }
             """.trimIndent()
 
