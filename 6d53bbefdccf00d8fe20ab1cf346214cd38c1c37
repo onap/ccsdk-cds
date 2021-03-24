@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3484bf3_adabc181",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2021-03-24T15:07:29Z",
+      "side": 1,
+      "message": "Base image should be onap/integration-python:8.0.0",
+      "range": {
+        "startLine": 1,
+        "startChar": 5,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "6d53bbefdccf00d8fe20ab1cf346214cd38c1c37",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a13eb03b_1066fd3e",
+        "filename": "ms/py-executor/docker/Dockerfile",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2021-03-24T15:07:29Z",
+      "side": 1,
+      "message": "Base image should be onap/integration-python:8.0.0 (not currently enforced, but will be in Istanbul most likely)",
+      "range": {
+        "startLine": 1,
+        "startChar": 5,
+        "endLine": 1,
+        "endChar": 20
+      },
+      "revId": "6d53bbefdccf00d8fe20ab1cf346214cd38c1c37",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
