@@ -23,6 +23,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck.K8sRbInstanceHealthCheck
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck.K8sRbInstanceHealthCheckList
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck.K8sRbInstanceHealthCheckSimple
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -160,7 +162,7 @@ class K8sPluginInstanceApi(
         }
     }
 
-    fun getInstanceHealthCheckList(instanceId: String): List<K8sRbInstanceHealthCheck>? {
+    fun getInstanceHealthCheckList(instanceId: String): K8sRbInstanceHealthCheckList? {
         val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
@@ -170,8 +172,10 @@ class K8sPluginInstanceApi(
             )
             log.debug(result.toString())
             return if (result.status in 200..299) {
-                val objectMapper = jacksonObjectMapper()
-                val parsedObject: ArrayList<K8sRbInstanceHealthCheck>? = objectMapper.readValue(result.body)
+                val parsedObject: K8sRbInstanceHealthCheckList? = JacksonUtils.readValue(
+                    result.body,
+                    K8sRbInstanceHealthCheckList::class.java
+                )
                 parsedObject
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
                 null
@@ -208,7 +212,7 @@ class K8sPluginInstanceApi(
         }
     }
 
-    fun startInstanceHealthCheck(instanceId: String): K8sRbInstanceHealthCheck? {
+    fun startInstanceHealthCheck(instanceId: String): K8sRbInstanceHealthCheckSimple? {
         val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
@@ -218,9 +222,9 @@ class K8sPluginInstanceApi(
             )
             log.debug(result.toString())
             return if (result.status in 200..299) {
-                val parsedObject: K8sRbInstanceHealthCheck? = JacksonUtils.readValue(
+                val parsedObject: K8sRbInstanceHealthCheckSimple? = JacksonUtils.readValue(
                     result.body,
-                    K8sRbInstanceHealthCheck::class.java
+                    K8sRbInstanceHealthCheckSimple::class.java
                 )
                 parsedObject
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
