@@ -62,6 +62,7 @@ open class K8sProfileUploadComponent(
         const val INPUT_K8S_DEFINITION_NAME = "k8s-rb-definition-name"
         const val INPUT_K8S_DEFINITION_VERSION = "k8s-rb-definition-version"
         const val INPUT_K8S_PROFILE_NAMESPACE = "k8s-rb-profile-namespace"
+        const val INPUT_K8S_PROFILE_K8S_VERSION = "k8s-rb-profile-k8s-version"
         const val INPUT_K8S_PROFILE_SOURCE = "k8s-rb-profile-source"
         const val INPUT_RESOURCE_ASSIGNMENT_MAP = "resource-assignment-map"
         const val INPUT_ARTIFACT_PREFIX_NAMES = "artifact-prefix-names"
@@ -82,6 +83,7 @@ open class K8sProfileUploadComponent(
             INPUT_K8S_DEFINITION_NAME,
             INPUT_K8S_DEFINITION_VERSION,
             INPUT_K8S_PROFILE_NAMESPACE,
+            INPUT_K8S_PROFILE_K8S_VERSION,
             INPUT_K8S_PROFILE_SOURCE,
             INPUT_ARTIFACT_PREFIX_NAMES
         )
@@ -133,7 +135,7 @@ open class K8sProfileUploadComponent(
             if ((profileName == null) || (definitionName == null) || (definitionVersion == null)) {
                 log.warn("Prefix $prefix does not have required data for us to continue.")
             } else if (!api.hasDefinition()) {
-                log.warn("K8s RB Definition ($definitionName/$definitionVersion) not found ")
+                throw BluePrintProcessorException("K8s RB Definition ($definitionName/$definitionVersion) not found ")
             } else if (profileName == "") {
                 log.warn("K8s rb profile name is empty! Either define profile name to use or choose default")
             } else if (api.hasProfile(profileName)) {
@@ -142,6 +144,7 @@ open class K8sProfileUploadComponent(
                 log.info("Uploading K8s Profile..")
                 outputPrefixStatuses.put(prefix, OUTPUT_ERROR)
                 val profileNamespace: String? = prefixInputParamsMap[INPUT_K8S_PROFILE_NAMESPACE]?.returnNullIfMissing()?.asText()
+                val profileK8sVersion: String? = prefixInputParamsMap[INPUT_K8S_PROFILE_K8S_VERSION]?.returnNullIfMissing()?.asText()
                 var profileSource: String? = prefixInputParamsMap[INPUT_K8S_PROFILE_SOURCE]?.returnNullIfMissing()?.asText()
                 if (profileNamespace == null)
                     throw BluePrintProcessorException("Profile $profileName namespace is missing")
@@ -161,6 +164,8 @@ open class K8sProfileUploadComponent(
                 profile.rbName = definitionName
                 profile.rbVersion = definitionVersion
                 profile.namespace = profileNamespace
+                if (profileK8sVersion != null)
+                    profile.kubernetesVersion = profileK8sVersion
                 val profileFilePath: Path = prepareProfileFile(profileName, profileSource, artifact.file)
                 api.createProfile(profile)
                 api.uploadProfileContent(profile, profileFilePath)
