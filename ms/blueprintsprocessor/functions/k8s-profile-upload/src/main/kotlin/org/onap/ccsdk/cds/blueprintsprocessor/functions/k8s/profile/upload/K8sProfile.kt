@@ -32,6 +32,9 @@ class K8sProfile {
     @get:JsonProperty("profile-name")
     var profileName: String? = null
 
+    @get:JsonProperty("kubernetes-version")
+    var kubernetesVersion: String? = null
+
     @get:JsonProperty("namespace")
     var namespace: String? = "default"
 
