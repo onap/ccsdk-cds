@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ae93c256_da37f3a5",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/BlueprintRestLibData.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-03-25T17:03:41Z",
+      "side": 1,
+      "message": "Ack, didn\u0027t relaize the extension, it\u0027s good !",
+      "parentUuid": "e9eefd40_3ef148e1",
+      "revId": "9ffa33c5364c80b071db14906411bf2327813cd2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "260b35e0_9506f6ff",
         "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/BlueprintRestLibPropertyService.kt",
         "patchSetId": 3
