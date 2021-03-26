@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2019 IBM.
+ *  Modifications Copyright © 2021 Nokia.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 
@@ -37,6 +39,13 @@ suspend fun AbstractComponentFunction.storedContentFromResolvedArtifactNB(
 ): String {
     return BlueprintDependencyService.resourceResolutionService()
         .resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
+}
+
+suspend fun AbstractComponentFunction.storedContentFromResolvedArtifactNB(
+    resolutionKey: String
+): List<TemplateResolution?> {
+    return BlueprintDependencyService.resourceResolutionService()
+        .resolveFromDatabase(bluePrintRuntimeService, resolutionKey)
 }
 
 suspend fun AbstractComponentFunction.storedResourceResolutionsNB(

@@ -19,6 +19,13 @@ message ExecutionInput {
     google.protobuf.Timestamp timestamp = 7;
     string subRequestId = 8;
     string originatorId = 9;
+    repeated ResolvedTemplateData resolvedTemplateData=10;
+}
+
+message ResolvedTemplateData {
+    string resolutionKey = 1;
+    string artifactName = 2;
+    string result = 3;
 }
 
 // If a new version of blueprint (new UUID in DB) needs to be uploaded, then pass in the raw bytes data

@@ -1,6 +1,7 @@
 /*
  *  Copyright © 2017-2018 AT&T Intellectual Property.
  *  Modifications Copyright © 2018-2019 IBM, Bell Canada
+ *  Modifications Copyright © 2021 Nokia.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.ResourceResolutionDBService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -60,6 +62,11 @@ interface ResourceResolutionService {
         artifactTemplate: String,
         resolutionKey: String
     ): String
+
+    suspend fun resolveFromDatabase(
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
+        resolutionKey: String
+    ): List<TemplateResolution?>
 
     suspend fun resolveResources(
         bluePrintRuntimeService: BlueprintRuntimeService<*>,
@@ -121,6 +128,16 @@ open class ResourceResolutionServiceImpl(
         return templateResolutionDBService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
             bluePrintRuntimeService,
             artifactTemplate,
+            resolutionKey
+        )
+    }
+
+    override suspend fun resolveFromDatabase(
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
+        resolutionKey: String
+    ): List<TemplateResolution?> {
+        return templateResolutionDBService.findAllByResolutionKeyAndBlueprintNameAndBlueprintVersion(
+            bluePrintRuntimeService,
             resolutionKey
         )
     }

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 Bell Canada.
+ * Modifications Copyright © 2021 Nokia.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +53,24 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
             )
         }
 
+    suspend fun findAllByResolutionKeyAndBlueprintNameAndBlueprintVersion(
+        bluePrintRuntimeService: BlueprintRuntimeService<*>,
+        resolutionKey: String
+    ): List<TemplateResolution?> =
+        withContext(Dispatchers.IO) {
+
+            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+
+            val blueprintVersion = metadata[BlueprintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BlueprintConstants.METADATA_TEMPLATE_NAME]!!
+
+            findAllByResolutionKeyAndBlueprintNameAndBlueprintVersion(
+                blueprintName,
+                blueprintVersion,
+                resolutionKey
+            )
+        }
+
     suspend fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
         blueprintName: String,
         blueprintVersion: String,
@@ -68,6 +87,22 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 artifactPrefix,
                 occurrence
             )?.result ?: throw EmptyResultDataAccessException(1)
+        }
+
+    suspend fun findAllByResolutionKeyAndBlueprintNameAndBlueprintVersion(
+        blueprintName: String,
+        blueprintVersion: String,
+        resolutionKey: String,
+        occurrence: Int = 1
+    ): List<TemplateResolution?> =
+        withContext(Dispatchers.IO) {
+
+            templateResolutionRepository.findAllByResolutionKeyAndBlueprintNameAndBlueprintVersionAndOccurrence(
+                resolutionKey,
+                blueprintName,
+                blueprintVersion,
+                occurrence
+            )
         }
 
     suspend fun findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(

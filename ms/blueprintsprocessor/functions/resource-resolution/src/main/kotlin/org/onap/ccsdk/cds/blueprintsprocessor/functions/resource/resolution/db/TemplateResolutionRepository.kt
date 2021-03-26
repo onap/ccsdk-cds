@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 Bell Canada.
+ * Modifications Copyright © 2021 Nokia.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +39,13 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
         artifactName: String,
         occurrence: Int
     ): TemplateResolution?
+
+    fun findAllByResolutionKeyAndBlueprintNameAndBlueprintVersionAndOccurrence(
+        key: String,
+        blueprintName: String?,
+        blueprintVersion: String?,
+        occurrence: Int
+    ): List<TemplateResolution?>
 
     @Transactional
     fun deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(

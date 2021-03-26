@@ -2,6 +2,7 @@
 
 #
 # Copyright (C) 2019 - 2020 Bell Canada.
+#  Modifications Copyright © 2021 Nokia.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@
 import logging
 import os, sys
 import proto.CommandExecutor_pb2_grpc as CommandExecutor_pb2_grpc
+from google.protobuf.json_format import MessageToDict
 
 from command_executor_handler import CommandExecutorHandler
 import utils
@@ -34,7 +36,7 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         self.logger.info("{} - Received uploadBlueprint request".format(blueprint_name_version_uuid), extra=extra)
         handler = CommandExecutorHandler(request)
         return handler.uploadBlueprint(request)
-        
+
     def prepareEnv(self, request, context):
         blueprint_id = utils.blueprint_name_version_uuid(request)
         extra = utils.getExtraLogData(request)
@@ -58,6 +60,13 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
             self.logger.info(request, extra=extra)
 
         handler = CommandExecutorHandler(request)
+
+        if len(request.resolvedTemplateData) != 0:
+            self.logger.info("{} - Saving ResolvedTemplateData to a file.".format(blueprint_id), extra=extra)
+            self.write_payload_to_file(request)
+        else:
+            self.logger.info("{} - ResolvedTemplateData is empty. No file will be generated.".format(blueprint_id), extra=extra)
+
         exec_cmd_response = handler.execute_command(request)
         if exec_cmd_response[utils.CDS_IS_SUCCESSFUL_KEY]:
             self.logger.info("{} - Execution finished successfully.".format(blueprint_id), extra=extra)
@@ -68,3 +77,13 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         self.logger.info("Payload returned : {}".format(exec_cmd_response), extra=extra)
 
         return ret
+
+    def write_payload_to_file(self, request):
+        if request.properties is not None and len(request.properties) > 0:
+            properties = MessageToDict(request.properties)
+            file_name = properties['resolvedTemplatesFileName']
+            path = properties['resolvedTemplatesFilePath']
+
+        file = open(path + file_name, "w")
+        file.write(str(request.resolvedTemplateData))
+        file.close()

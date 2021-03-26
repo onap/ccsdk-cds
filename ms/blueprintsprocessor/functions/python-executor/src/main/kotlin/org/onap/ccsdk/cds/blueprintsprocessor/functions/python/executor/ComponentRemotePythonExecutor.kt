@@ -1,6 +1,7 @@
 /*
  *  Copyright Â© 2019 IBM.
  *  Modifications Copyright © 2020 Bell Canada.
+ *  Modifications Copyright © 2021 Nokia.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -35,6 +36,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintMod
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifactNB
+import org.onap.ccsdk.cds.controllerblueprints.command.api.ResolvedTemplateData
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
@@ -68,6 +71,7 @@ open class ComponentRemotePythonExecutor(
         const val INPUT_ENDPOINT_SELECTOR = "endpoint-selector"
         const val INPUT_DYNAMIC_PROPERTIES = "dynamic-properties"
         const val INPUT_ARGUMENT_PROPERTIES = "argument-properties"
+        const val RESOLUTION_KEY = "resolution-key"
 
         const val INPUT_COMMAND = "command"
         const val INPUT_PACKAGES = "packages"
@@ -125,6 +129,7 @@ open class ComponentRemotePythonExecutor(
         val endPointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
         val dynamicProperties = getOptionalOperationInput(INPUT_DYNAMIC_PROPERTIES)
         var packages = getOptionalOperationInput(INPUT_PACKAGES)?.returnNullIfMissing()
+        val resolutionKey = getOptionalOperationInput(RESOLUTION_KEY)?.asText()
 
         // This prevents unescaping values, as well as quoting the each parameter, in order to allow for spaces in values
         val args = getOptionalOperationInput(INPUT_ARGUMENT_PROPERTIES)?.returnNullIfMissing()
@@ -195,6 +200,8 @@ open class ComponentRemotePythonExecutor(
                 // Populate command execution properties and pass it to the remote server
                 val properties = dynamicProperties?.returnNullIfMissing()?.rootFieldsToMap() ?: hashMapOf()
 
+                val resolvedTemplates = readAndMapTemplateResolutionData(resolutionKey)
+
                 val remoteExecutionInput = RemoteScriptExecutionInput(
                     originatorId = executionServiceInput.commonHeader.originatorId,
                     requestId = processId,
@@ -202,7 +209,8 @@ open class ComponentRemotePythonExecutor(
                     remoteIdentifier = remoteIdentifier,
                     command = scriptCommand,
                     properties = properties,
-                    timeOut = executionTimeout.toLong()
+                    timeOut = executionTimeout.toLong(),
+                    resolvedTemplateData = resolvedTemplates
                 )
 
                 val remoteExecutionOutputDeferred = GlobalScope.async {
@@ -250,6 +258,22 @@ open class ComponentRemotePythonExecutor(
         }
         log.debug("Trying to close GRPC channel. request ($processId)")
         remoteScriptExecutionService.close()
+    }
+
+    private suspend fun readAndMapTemplateResolutionData(resolutionKey: String?): List<ResolvedTemplateData> {
+        val templatesFromDb = ArrayList<ResolvedTemplateData>()
+        val resolvedTemplates = storedContentFromResolvedArtifactNB(resolutionKey ?: return templatesFromDb)
+
+        resolvedTemplates.forEach {
+            val newTemplate = ResolvedTemplateData.newBuilder()
+                .setArtifactName(it?.artifactName.toString())
+                .setResolutionKey(it?.resolutionKey.toString())
+                .setResult(it?.result.toString())
+                .build()
+
+            templatesFromDb.add(newTemplate)
+        }
+        return templatesFromDb
     }
 
     // wrapper for call to prepare_env step on cmd-exec - reupload CBA and call prepare env again if cmd-exec reported CBA uuid mismatch

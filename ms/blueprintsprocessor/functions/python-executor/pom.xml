@@ -35,5 +35,9 @@
             <groupId>org.python</groupId>
             <artifactId>jython-standalone</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
+            <artifactId>resource-resolution</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -81,6 +81,28 @@ class TemplateResolutionServiceTest {
     }
 
     @Test
+    fun findAllByResolutionKeyAndBlueprintNameAndBlueprintVersion_returnsAllTemplates() {
+        val firstTemplate = TemplateResolution()
+        val secondTemplate = TemplateResolution()
+        val templates = listOf(firstTemplate, secondTemplate)
+
+        runBlocking {
+            every {
+                templateResolutionRepository.findAllByResolutionKeyAndBlueprintNameAndBlueprintVersionAndOccurrence(
+                    resolutionKey, any(), any(), any()
+                )
+            } returns templates
+            val result: List<TemplateResolution?> =
+                templateResolutionService.findAllByResolutionKeyAndBlueprintNameAndBlueprintVersion(
+                    bluePrintRuntimeService,
+                    resolutionKey
+                )
+
+            assertEquals(2, result.size)
+        }
+    }
+
+    @Test
     fun writeWithResolutionKeyTest() {
         val tr = TemplateResolution()
         runBlocking {

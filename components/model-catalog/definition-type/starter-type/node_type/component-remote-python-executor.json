@@ -48,6 +48,11 @@
               "required": false,
               "type": "json"
             },
+            "resolution-key": {
+              "description": "Key used to read resolved templates from DB.",
+              "required": false,
+              "type": "string"
+            },
             "command": {
               "description": "Command to execute.",
               "required": true,

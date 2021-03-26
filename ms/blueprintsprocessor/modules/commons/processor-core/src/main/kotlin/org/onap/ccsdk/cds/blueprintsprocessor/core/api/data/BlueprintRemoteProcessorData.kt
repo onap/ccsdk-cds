@@ -1,6 +1,7 @@
 /*
  *  Copyright © 2019 IBM.
  *  Modifications Copyright © 2020 Bell Canada.
+ *  Modifications Copyright © 2021 Nokia.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.core.api.data
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.protobuf.ByteString
+import org.onap.ccsdk.cds.controllerblueprints.command.api.ResolvedTemplateData
 import java.util.Date
 
 enum class StatusType {
@@ -55,6 +57,7 @@ data class RemoteScriptUploadBlueprintOutput(
 
 data class RemoteScriptExecutionInput(
     var originatorId: String,
+    var resolvedTemplateData: List<ResolvedTemplateData>?,
     var requestId: String,
     var subRequestId: String,
     var correlationId: String? = null,

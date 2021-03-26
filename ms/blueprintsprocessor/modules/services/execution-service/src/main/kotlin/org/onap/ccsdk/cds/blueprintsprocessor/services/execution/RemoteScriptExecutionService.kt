@@ -1,6 +1,7 @@
 /*
  *  Copyright © 2019 IBM.
  *  Modifications Copyright © 2020 Bell Canada.
+ *  Modifications Copyright © 2021 Nokia.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -185,6 +186,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
             .setTimeOut(this.timeOut.toInt())
             .setProperties(this.properties.asGrpcData())
             .setTimestamp(Timestamp.getDefaultInstance())
+            .addAllResolvedTemplateData(this.resolvedTemplateData)
             .build()
     }
 
