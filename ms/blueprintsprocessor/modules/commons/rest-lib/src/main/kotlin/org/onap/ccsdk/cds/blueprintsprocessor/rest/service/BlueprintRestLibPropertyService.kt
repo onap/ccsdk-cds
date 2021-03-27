@@ -160,20 +160,11 @@ open class BlueprintRestLibPropertyService(private var bluePrintPropertiesServic
             )
         }
 
-    private fun sslBasicAuthRestClientProperties(prefix: String):
-        SSLRestClientProperties {
-
-            val sslProps: SSLBasicAuthRestClientProperties =
-                bluePrintPropertiesService.propertyBeanType(
-                    prefix, SSLBasicAuthRestClientProperties::class.java
-                )
-            val basicProps: BasicAuthRestClientProperties =
-                bluePrintPropertiesService.propertyBeanType(
-                    prefix, BasicAuthRestClientProperties::class.java
-                )
-            sslProps.basicAuth = basicProps
-            return sslProps
-        }
+    private fun sslBasicAuthRestClientProperties(prefix: String): SSLRestClientProperties {
+        return bluePrintPropertiesService.propertyBeanType(
+            prefix, SSLBasicAuthRestClientProperties::class.java
+        )
+    }
 
     private fun sslTokenAuthRestClientProperties(prefix: String):
         SSLRestClientProperties {
