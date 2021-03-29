@@ -34,6 +34,24 @@
       "revId": "e2e3e0701fcd03ad352d622387055e2d5e1ec83b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5522be9b_f294b5fb",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2021-03-29T13:56:18Z",
+      "side": 1,
+      "message": "There is a difference between ownership and permission to execute. You can own a file and still not have permission to execute it. You do need to change permission for script files which need to be executed, but most other files only need read and write permissions.",
+      "parentUuid": "545b6b81_366a82b6",
+      "revId": "e2e3e0701fcd03ad352d622387055e2d5e1ec83b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
