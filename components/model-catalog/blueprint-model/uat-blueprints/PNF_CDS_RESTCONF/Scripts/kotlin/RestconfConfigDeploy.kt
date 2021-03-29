@@ -77,7 +77,7 @@ class RestconfConfigDeploy : AbstractScriptComponentFunction() {
                 log.error("an error occurred while configuring device {}", err)
             } finally {
                 // Un mount device
-                restconfUnMountDevice(webclientService, deviceID, "")
+                restconfUnMountDevice(webclientService, deviceID)
             }
         } catch (bpe: BlueprintProcessorException) {
             log.error("Error looking up server identifier ", bpe)
