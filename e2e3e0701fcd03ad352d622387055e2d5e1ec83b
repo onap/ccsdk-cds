@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9939fd40_d40bab08",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2021-03-29T12:41:11Z",
+      "side": 1,
+      "message": "Setting 777 recursively on all files in /opt is a bit excessive. All we really need is to add permission to execute the start script file. Please consider replacing with \n\n\u0026\u0026 find /opt/app/onap/command-executor -name \"*.sh\" -exec chmod +x {} \\;",
+      "revId": "e2e3e0701fcd03ad352d622387055e2d5e1ec83b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
