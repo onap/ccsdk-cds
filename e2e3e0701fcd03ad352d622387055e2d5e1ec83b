@@ -52,6 +52,24 @@
       "revId": "e2e3e0701fcd03ad352d622387055e2d5e1ec83b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcb8b0e4_5bf807b3",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-03-29T14:29:15Z",
+      "side": 1,
+      "message": "I get it, and I can check directories are being created with default permissions as drwxr-xr-x (where onap user has access to) but start.sh file has permissions as -rw-r--r-- and that can be fixed by committing file with correct permissions (git update-index --chmod\u003d+x start.sh) .\n\nBut not only start.sh but other python scripts needs permissions too, so instead fixing permission in git for each file, there, I can have 755 on /opt instead of 777 as onap user owns /opt !",
+      "parentUuid": "5522be9b_f294b5fb",
+      "revId": "e2e3e0701fcd03ad352d622387055e2d5e1ec83b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
