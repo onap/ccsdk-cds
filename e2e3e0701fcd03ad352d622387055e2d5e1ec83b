@@ -70,6 +70,24 @@
       "revId": "e2e3e0701fcd03ad352d622387055e2d5e1ec83b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9102078_24573ac1",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2021-03-29T15:13:17Z",
+      "side": 1,
+      "message": "Are the python scripts executed from the shell? As long as python can read them it should be fine. Otherwise how did it work before?",
+      "parentUuid": "fcb8b0e4_5bf807b3",
+      "revId": "e2e3e0701fcd03ad352d622387055e2d5e1ec83b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
