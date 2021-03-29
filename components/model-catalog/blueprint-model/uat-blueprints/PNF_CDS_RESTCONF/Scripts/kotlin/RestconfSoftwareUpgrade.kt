@@ -66,7 +66,7 @@ class RestconfSoftwareUpgrade : AbstractScriptComponentFunction() {
         } catch (err: Exception) {
             log.error("an error occurred while configuring device {}", err)
         } finally {
-            restconfUnMountDevice(model.client, model.deviceId, "")
+            restconfUnMountDevice(model.client, model.deviceId)
         }
     }
 
