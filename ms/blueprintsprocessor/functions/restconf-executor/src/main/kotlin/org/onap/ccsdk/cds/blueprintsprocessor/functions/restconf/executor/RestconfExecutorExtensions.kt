@@ -17,7 +17,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.hibernate.annotations.common.util.impl.LoggerFactory
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfConstants.Companion.RESTCONF_TOPOLOGY_CONFIG_PATH
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfConstants.Companion.RESTCONF_TOPOLOGY_OPER_PATH
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.restClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
@@ -28,44 +31,75 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyS
 /**
  * Register the Restconf module exposed dependency
  */
-
 val log = LoggerFactory.logger(AbstractScriptComponentFunction::class.java)!!
 
 fun AbstractScriptComponentFunction.restconfClientService(selector: String): BlueprintWebClientService {
     return BlueprintDependencyService.restClientService(selector)
 }
 
+fun AbstractScriptComponentFunction.restconfClientService(jsonNode: JsonNode): BlueprintWebClientService {
+    return BlueprintDependencyService.restClientService(jsonNode)
+}
+
 /**
  * Generic Mount function
  */
+suspend fun AbstractScriptComponentFunction.restconfMountDeviceJson(
+    webClientService: BlueprintWebClientService,
+    deviceId: String,
+    payload: Any
+) {
+    restconfMountDevice(webClientService, deviceId, payload, mutableMapOf("Content-Type" to "application/json"))
+}
 
+/**
+ * Generic Mount function
+ */
 suspend fun AbstractScriptComponentFunction.restconfMountDevice(
     webClientService: BlueprintWebClientService,
     deviceId: String,
     payload: Any,
     headers: Map<String, String> = mutableMapOf("Content-Type" to "application/xml")
 ) {
+    val mountUrl = restconfDeviceConfigPath(deviceId)
+    val mountCheckUrl = restconfDeviceOperPath(deviceId)
+    restconfMountDevice(webClientService, payload, mountUrl, mountCheckUrl, headers)
+}
 
-    val mountUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
+/**
+ * Generic Mount function
+ * This function mount the given deviceId and verify if device mounted successfully.
+ * This function take mount url and mount verify url as parameters.
+ */
+suspend fun AbstractScriptComponentFunction.restconfMountDevice(
+    webClientService: BlueprintWebClientService,
+    payload: Any,
+    mountUrl: String,
+    mountVerifyUrl: String,
+    headers: Map<String, String> = mutableMapOf("Content-Type" to "application/xml"),
+    expectedMountResult: String = """netconf-node-topology:connection-status":"connected"""
+) {
     log.info("sending mount request, url: $mountUrl")
-    webClientService.exchangeResource("PUT", mountUrl, payload as String, headers)
+    log.debug("sending mount request, payload: $payload")
+    val mountResult =
+        webClientService.exchangeResource(RestconfRequestType.PUT.name, mountUrl, payload as String, headers)
 
-    /** Check device has mounted */
-    val mountCheckUrl = "/restconf/operational/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
-
-    val expectedResult = """"netconf-node-topology:connection-status":"connected""""
-    val mountCheckExecutionBlock: suspend (Int) -> String = { tryCount: Int ->
-        val result = webClientService.exchangeResource("GET", mountCheckUrl, "")
-        if (result.body.contains(expectedResult)) {
-            log.info("NF was mounted successfully on ODL")
-            result.body
-        } else {
-            throw BlueprintRetryException("Wait for device($deviceId) to mount")
-        }
+    if (mountResult.status !in RestconfConstants.HTTP_SUCCESS_RANGE) {
+        throw BlueprintProcessorException("Failed to mount device with url($mountUrl) ")
     }
 
-    log.info("url for ODL status check: $mountCheckUrl")
-    webClientService.retry<String>(10, 0, 1000, mountCheckExecutionBlock)
+    /** Check device has mounted */
+    val mountCheckExecutionBlock: suspend (Int) -> String = {
+        val result = webClientService.exchangeResource(RestconfRequestType.GET.name, mountVerifyUrl, "")
+        if (!result.body.contains(expectedMountResult)) {
+            throw BlueprintRetryException("Wait for device with url($mountUrl) to mount")
+        }
+        log.info("NF was mounted successfully on ODL")
+        result.body
+    }
+
+    log.info("url for ODL status check: $mountVerifyUrl")
+    webClientService.retry(10, 0, 1000, mountCheckExecutionBlock)
 }
 
 /**
@@ -81,35 +115,26 @@ suspend fun AbstractScriptComponentFunction.restconfApplyDeviceConfig(
 ): BlueprintWebClientService.WebClientResponse<String> {
     log.debug("headers: $additionalHeaders")
     log.info("configuring device: $deviceId, Configlet: $configletToApply")
-    val applyConfigUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
-        "$deviceId/$configletResourcePath"
-    return webClientService.exchangeResource("PATCH", applyConfigUrl, configletToApply as String, additionalHeaders)
+    val applyConfigUrl = restconfDeviceConfigPath(deviceId, configletResourcePath)
+    return webClientService.exchangeResource(RestconfRequestType.PATCH.name, applyConfigUrl, configletToApply as String, additionalHeaders)
 }
 
 suspend fun AbstractScriptComponentFunction.restconfDeviceConfig(
     webClientService: BlueprintWebClientService,
     deviceId: String,
     configletResourcePath: String
-):
-    BlueprintWebClientService.WebClientResponse<String> {
-
-        val configPathUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/" +
-            "$deviceId/$configletResourcePath"
-        log.debug("sending GET request,  url: $configPathUrl")
-        return webClientService.exchangeResource("GET", configPathUrl, "")
-    }
+): BlueprintWebClientService.WebClientResponse<String> {
+    return getRequest(webClientService, restconfDeviceConfigPath(deviceId, configletResourcePath))
+}
 
 /**
  * Generic UnMount function
  */
 suspend fun AbstractScriptComponentFunction.restconfUnMountDevice(
     webClientService: BlueprintWebClientService,
-    deviceId: String,
-    payload: String
+    deviceId: String
 ) {
-    val unMountUrl = "/restconf/config/network-topology:network-topology/topology/topology-netconf/node/$deviceId"
-    log.info("sending unMount request, url: $unMountUrl")
-    webClientService.exchangeResource("DELETE", unMountUrl, "")
+    deleteRequest(webClientService, restconfDeviceConfigPath(deviceId))
 }
 
 /**
@@ -118,65 +143,99 @@ suspend fun AbstractScriptComponentFunction.restconfUnMountDevice(
 suspend fun AbstractScriptComponentFunction.genericPutPatchPostRequest(
     webClientService: BlueprintWebClientService,
     requestUrl: String,
-    requestType: String,
+    requestType: RestconfRequestType,
     payload: Any,
     headers: Map<String, String> = mutableMapOf("Content-Type" to "application/xml")
 ): BlueprintWebClientService.WebClientResponse<String> {
-    when (requestType.toUpperCase()) {
-        "PUT" -> log.info("sending PUT request, url: $requestUrl")
-        "PATCH" -> log.info("sending PATCH request, url: $requestUrl")
-        "POST" -> log.info("sending POST request, url: $requestUrl")
+    when (requestType) {
+        RestconfRequestType.PUT -> log.info("sending PUT request, url: $requestUrl")
+        RestconfRequestType.PATCH -> log.info("sending PATCH request, url: $requestUrl")
+        RestconfRequestType.POST -> log.info("sending POST request, url: $requestUrl")
         else -> throw BlueprintProcessorException("Illegal request type, only POST, PUT or PATCH allowed.")
     }
-    return webClientService.exchangeResource(requestType, requestUrl, payload as String, headers)
+    return webClientService.exchangeResource(requestType.name, requestUrl, payload as String, headers)
+}
+
+/**
+ * GET request function
+ */
+suspend fun AbstractScriptComponentFunction.getRequest(
+    webClientService: BlueprintWebClientService,
+    requestUrl: String
+): BlueprintWebClientService.WebClientResponse<String> {
+    val retryTimes = 10
+    val mountCheckExecutionBlock: suspend (Int) -> BlueprintWebClientService.WebClientResponse<String> =
+        { tryCount: Int ->
+            val result = genericGetOrDeleteRequest(webClientService, requestUrl, RestconfRequestType.GET)
+            if (result.status !in RestconfConstants.HTTP_SUCCESS_RANGE && tryCount < retryTimes - 1) {
+                throw BlueprintRetryException("Failed to read url($requestUrl) to mount")
+            }
+            log.info("NF was mounted successfully on ODL")
+            result
+        }
+
+    return webClientService.retry(retryTimes, 0, 1000, mountCheckExecutionBlock)
+}
+
+/**
+ * DELETE request function
+ */
+suspend fun AbstractScriptComponentFunction.deleteRequest(
+    webClientService: BlueprintWebClientService,
+    requestUrl: String
+): BlueprintWebClientService.WebClientResponse<String> {
+    return genericGetOrDeleteRequest(webClientService, requestUrl, RestconfRequestType.DELETE)
 }
 
 /**
  * Generic GET/DELETE request function
  */
-
 suspend fun AbstractScriptComponentFunction.genericGetOrDeleteRequest(
     webClientService: BlueprintWebClientService,
     requestUrl: String,
-    requestType: String
+    requestType: RestconfRequestType
 ): BlueprintWebClientService.WebClientResponse<String> {
-    when (requestType.toUpperCase()) {
-        "GET" -> log.info("sending GET request, url: $requestUrl")
-        "DELETE" -> log.info("sending DELETE request, url: $requestUrl")
+    when (requestType) {
+        RestconfRequestType.GET -> log.info("sending GET request, url: $requestUrl")
+        RestconfRequestType.DELETE -> log.info("sending DELETE request, url: $requestUrl")
         else -> throw BlueprintProcessorException("Illegal request type, only GET and DELETE allowed.")
     }
-    return webClientService.exchangeResource(requestType, requestUrl, "")
+    return webClientService.exchangeResource(requestType.name, requestUrl, "")
 }
 
-/**
- * Generic Mount function
- * This function mount the given deviceId and verify if device mounted successfully.
- * This function take mount url and mount verify url as parameters.
- */
-
-suspend fun AbstractScriptComponentFunction.restconfMountDevice(
-    webClientService: BlueprintWebClientService,
-    payload: Any,
-    mountUrl: String,
-    mountVerifyUrl: String,
-    headers: Map<String, String> = mutableMapOf("Content-Type" to "application/xml"),
-    expectedMountResult: String = """"netconf-node-topology:connection-status":"connected""""
-) {
-
-    log.info("sending mount request, url: $mountUrl")
-    webClientService.exchangeResource("PUT", mountUrl, payload as String, headers)
-
-    /** Check device has mounted */
-    val mountCheckExecutionBlock: suspend (Int) -> String = { tryCount: Int ->
-        val result = webClientService.exchangeResource("GET", mountVerifyUrl, "")
-        if (result.body.contains(expectedMountResult)) {
-            log.info("NF was mounted successfully on ODL")
-            result.body
-        } else {
-            throw BlueprintRetryException("Wait for device with url($mountUrl) to mount")
+suspend fun AbstractScriptComponentFunction.restconfPath(
+    restconfDatastore: RestconfRequestDatastore,
+    deviceId: String,
+    specificPath: String = ""
+): String {
+    return when (restconfDatastore) {
+        RestconfRequestDatastore.OPERATIONAL -> {
+            restconfDeviceOperPath(deviceId, specificPath)
+        }
+        RestconfRequestDatastore.CONFIG -> {
+            restconfDeviceConfigPath(deviceId, specificPath)
         }
     }
+}
 
-    log.info("url for ODL status check: $mountVerifyUrl")
-    webClientService.retry<String>(10, 0, 1000, mountCheckExecutionBlock)
+private fun AbstractScriptComponentFunction.restconfDeviceConfigPath(
+    deviceId: String,
+    specificPath: String = ""
+): String {
+    val configPath = "$RESTCONF_TOPOLOGY_CONFIG_PATH/$deviceId"
+    if (specificPath.isBlank()) {
+        return configPath
+    }
+    return "$configPath/$specificPath"
+}
+
+private fun AbstractScriptComponentFunction.restconfDeviceOperPath(
+    deviceId: String,
+    specificPath: String = ""
+): String {
+    val operPath = "$RESTCONF_TOPOLOGY_OPER_PATH/$deviceId"
+    if (specificPath.isBlank()) {
+        return operPath
+    }
+    return "$operPath/$specificPath"
 }
