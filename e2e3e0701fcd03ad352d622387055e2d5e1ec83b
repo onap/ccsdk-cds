@@ -88,6 +88,24 @@
       "revId": "e2e3e0701fcd03ad352d622387055e2d5e1ec83b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3233d51_04235d8d",
+        "filename": "ms/command-executor/src/main/docker/Dockerfile",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-03-29T15:16:56Z",
+      "side": 1,
+      "message": "by mentioning python scripts I meant to give an example, but there may be more to add !\nFor now, I don\u0027t think 755 is excessive as it gives user \u0027onap\u0027 full control on directory /opt, it owns!",
+      "parentUuid": "b9102078_24573ac1",
+      "revId": "e2e3e0701fcd03ad352d622387055e2d5e1ec83b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
