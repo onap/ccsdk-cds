@@ -16,6 +16,24 @@
       "revId": "d0ddd27df925d2a34841da7d9f9bc90362974961",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fffaa0a_285c2c37",
+        "filename": "ms/blueprintsprocessor/functions/restconf-executor/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/restconf/executor/RestconfExecutorExtensions.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 6679
+      },
+      "writtenOn": "2021-03-30T13:06:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2dfaf282_95fe3715",
+      "revId": "d0ddd27df925d2a34841da7d9f9bc90362974961",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
