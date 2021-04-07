@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd8de30e_3a5856f6",
+        "filename": "docs/usecases/media/vfw_role_of_cba.png",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-04-07T22:25:07Z",
+      "side": 1,
+      "message": "somehow this image didn\u0027t get shown on generated docs, please verify !\n\nhttps://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/3918/docs/usecases/vfw-cnf-use-case.html",
+      "revId": "317f9acf3d08394c5d6e8d645479ccc1f37593d1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60fcea43_f3ed5dfc",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-04-07T22:25:07Z",
+      "side": 1,
+      "message": "this and other sections aren\u0027t shown properly on generate docs\n\nhttps://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/3918/docs/usecases/vfw-cnf-use-case.html",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 98
+      },
+      "revId": "317f9acf3d08394c5d6e8d645479ccc1f37593d1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
