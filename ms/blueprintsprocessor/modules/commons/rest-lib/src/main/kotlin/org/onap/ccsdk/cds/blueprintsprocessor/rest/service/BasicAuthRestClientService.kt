@@ -16,15 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 
-import org.apache.http.conn.ssl.NoopHostnameVerifier
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory
-import org.apache.http.conn.ssl.TrustAllStrategy
-import org.apache.http.impl.client.CloseableHttpClient
-import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicHeader
-import org.apache.http.ssl.SSLContextBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import java.net.URI
@@ -53,17 +46,6 @@ class BasicAuthRestClientService(
     override fun host(uri: String): String {
         val uri: URI = URI.create(restClientProperties.url + uri)
         return uri.resolve(uri).toString()
-    }
-
-    override fun httpClient(): CloseableHttpClient {
-        val sslContext = SSLContextBuilder.create()
-
-        sslContext.loadTrustMaterial(TrustAllStrategy.INSTANCE)
-        val csf = SSLConnectionSocketFactory(sslContext.build(), NoopHostnameVerifier())
-        return HttpClients.custom()
-            .addInterceptorFirst(WebClientUtils.logRequest())
-            .addInterceptorLast(WebClientUtils.logResponse())
-            .setSSLSocketFactory(csf).build()
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>):
