@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7679d3ec_d32cf2e2",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-04-08T19:37:38Z",
+      "side": 1,
+      "message": "This is not redirecting anywhere !\n\nhttps://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/3930/docs/usecases/vfw-cnf-use-case.html",
+      "revId": "45cb9e7b3c40a11135c435561d39a11b797433ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b916bf2_02b41c44",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-04-08T19:37:38Z",
+      "side": 1,
+      "message": "same goes here !",
+      "range": {
+        "startLine": 233,
+        "startChar": 435,
+        "endLine": 233,
+        "endChar": 474
+      },
+      "revId": "45cb9e7b3c40a11135c435561d39a11b797433ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
