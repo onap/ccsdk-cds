@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9be61ea9_4de5712e",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-04-08T20:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7679d3ec_d32cf2e2",
+      "revId": "45cb9e7b3c40a11135c435561d39a11b797433ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b916bf2_02b41c44",
         "filename": "docs/usecases/vfw-cnf-use-case.rst",
         "patchSetId": 6
@@ -39,6 +57,30 @@
       "revId": "45cb9e7b3c40a11135c435561d39a11b797433ae",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddce3696_c3c563f9",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-04-08T20:37:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b916bf2_02b41c44",
+      "range": {
+        "startLine": 233,
+        "startChar": 435,
+        "endLine": 233,
+        "endChar": 474
+      },
+      "revId": "45cb9e7b3c40a11135c435561d39a11b797433ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
