@@ -227,7 +227,7 @@ open class K8sConfigValueComponent(
         val fileContent = templateFile.bufferedReader().readText()
         return BlueprintVelocityTemplateService.generateContent(
             fileContent,
-            params, true
+            params.toString(), true
         )
     }
 
