@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "edb3e169_da0e6854",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-04-09T21:44:04Z",
+      "side": 1,
+      "message": "I follow https://sublime-and-sphinx-guide.readthedocs.io/en/latest/references.html#links-to-external-web-pages",
+      "parentUuid": "34d83acc_611df0ad",
+      "range": {
+        "startLine": 8,
+        "startChar": 24,
+        "endLine": 8,
+        "endChar": 44
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e502f33a_1fa3ec3a",
         "filename": "docs/usecases/vfw-cnf-use-case.rst",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "5910994cb17c84480778960a1bdd630119756081",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffca653c_789669f7",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-04-09T21:44:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e502f33a_1fa3ec3a",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 288
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "114640e9_87f84a46",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-04-09T21:44:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b13fab00_d2bf2a6d",
+      "range": {
+        "startLine": 215,
+        "startChar": 599,
+        "endLine": 215,
+        "endChar": 653
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8929c947_df8eace3",
         "filename": "docs/usecases/vfw-cnf-use-case.rst",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "01a1f5d9_815d37eb",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-04-09T21:44:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8929c947_df8eace3",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 1026
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "992d3acc_954ec202",
         "filename": "docs/usecases/vfw-cnf-use-case.rst",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "5910994cb17c84480778960a1bdd630119756081",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f275b03f_b90add87",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2021-04-09T21:44:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "992d3acc_954ec202",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 1023
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
