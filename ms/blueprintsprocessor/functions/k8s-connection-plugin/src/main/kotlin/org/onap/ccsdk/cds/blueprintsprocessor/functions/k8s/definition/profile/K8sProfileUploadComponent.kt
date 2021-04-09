@@ -355,7 +355,7 @@ open class K8sProfileUploadComponent(
         val fileContent = templatedFile.bufferedReader().readText()
         val finalFileContent = BlueprintVelocityTemplateService.generateContent(
             fileContent,
-            params, true
+            params.toString(), true
         )
         if (!destinationFolder.exists())
             Files.createDirectories(destinationFolder.toPath())
