@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34d83acc_611df0ad",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-04-09T13:18:46Z",
+      "side": 1,
+      "message": "This still doesn\u0027t take anywhere !\n\nhttps://logs.onap.org/production/vex-yul-ecomp-jenkins-1/rtdv3-global-verify-master/3934/docs/usecases/vfw-cnf-use-case.html#id4",
+      "range": {
+        "startLine": 8,
+        "startChar": 24,
+        "endLine": 8,
+        "endChar": 44
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e502f33a_1fa3ec3a",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-04-09T13:18:46Z",
+      "side": 1,
+      "message": "Split big paragraphs into multiple if possible !",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 288
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b13fab00_d2bf2a6d",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-04-09T13:18:46Z",
+      "side": 1,
+      "message": "can be new line !",
+      "range": {
+        "startLine": 215,
+        "startChar": 599,
+        "endLine": 215,
+        "endChar": 653
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8929c947_df8eace3",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-04-09T13:18:46Z",
+      "side": 1,
+      "message": "Split big paragraphs into multiple if possible !",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 1026
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "992d3acc_954ec202",
+        "filename": "docs/usecases/vfw-cnf-use-case.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-04-09T13:18:46Z",
+      "side": 1,
+      "message": "Split big paragraphs into multiple if possible !",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 309,
+        "endChar": 1023
+      },
+      "revId": "5910994cb17c84480778960a1bdd630119756081",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
