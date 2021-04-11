@@ -354,7 +354,7 @@ open class K8sProfileUploadComponent(
         val fileContent = templatedFile.bufferedReader().readText()
         val finalFileContent = BluePrintVelocityTemplateService.generateContent(
             fileContent,
-            params, true
+            params.toString(), true
         )
         if (!destinationFolder.exists())
             Files.createDirectories(destinationFolder.toPath())
