@@ -1,0 +1,19 @@
+{
+	"tags": "k8s, cnf, profile, k8s-rb-instance-release-name",
+	"name": "k8s-rb-instance-release-name",
+	"group":"default",
+	"property": {
+		"description": "Name of the release for the helm package instance in k8s",
+		"type": "string"
+	},
+	"updated-by": "Rajewski, Lukasz <lukasz.rajewski@orange.com>",
+	"sources": {
+		"input": {
+			"type": "source-input"
+		},
+		"default": {
+			"type": "source-default",
+			"properties": {}
+		}
+	}
+}
