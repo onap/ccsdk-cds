@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.TextNode
 import com.github.marcoferrer.krotoplus.coroutines.client.ClientBidiCallChannel
 import com.github.marcoferrer.krotoplus.coroutines.client.clientCallBidiStreaming
 import io.grpc.ManagedChannel
@@ -193,8 +194,8 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
 
     private fun grpcProperties(selector: Any): GrpcClientProperties {
         return when (selector) {
-            is String -> {
-                bluePrintGrpcLibPropertyService.grpcClientProperties(selector.toString())
+            is TextNode -> {
+                bluePrintGrpcLibPropertyService.grpcClientProperties(selector.asText())
             }
             is JsonNode -> {
                 bluePrintGrpcLibPropertyService.grpcClientProperties(selector)
