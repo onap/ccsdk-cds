@@ -94,6 +94,8 @@ open class BlueprintCompileService {
                     add(sourcePath)
                     add("-d")
                     add(compiledJarFile.absolutePath)
+                    add("-jvm-target")
+                    add("11")
                 }
                 val deferredCompile = async {
                     val k2jvmCompiler = K2JVMCompiler()
