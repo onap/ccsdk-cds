@@ -24,11 +24,14 @@ import io.swagger.annotations.ApiParam
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.optionalClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.determineHttpStatusCode
-import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -64,8 +67,16 @@ open class ExecutionServiceController {
     )
     @ResponseBody
     @ApiOperation(value = "Health Check", hidden = true)
-    suspend fun executionServiceControllerHealthCheck(): JsonNode = mdcWebCoroutineScope {
-        "Success".asJsonPrimitive()
+    suspend fun executionServiceControllerHealthCheck(): ResponseEntity<JsonNode> = mdcWebCoroutineScope {
+        var body = mutableMapOf("success" to true)
+        var statusCode = 200
+        if (BlueprintConstants.CLUSTER_ENABLED &&
+            BlueprintDependencyService.optionalClusterService()?.clusterJoined() != true
+        ) {
+            statusCode = 503
+            body.remove("success")
+        }
+        ResponseEntity.status(statusCode).body(body.asJsonType())
     }
 
     @RequestMapping(path = ["/process"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
