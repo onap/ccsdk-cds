@@ -180,11 +180,9 @@ class BlueprintProcessorCatalogServiceImpl(
 
     private suspend fun cleanClassLoader(cacheKey: String) {
         val clusterService = BlueprintDependencyService.optionalClusterService()
-        if (null == clusterService)
-            BlueprintCompileCache.cleanClassLoader(cacheKey)
-        else {
+        if (clusterService != null && clusterService.clusterJoined()) {
             log.info("Sending ClusterMessage: Clean Classloader Cache")
             clusterService.sendMessage(BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE, cacheKey)
-        }
+        } else BlueprintCompileCache.cleanClassLoader(cacheKey)
     }
 }
