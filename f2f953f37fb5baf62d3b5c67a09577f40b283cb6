@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65623362_cbbb9432",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/DatabaseResourceAssignmentProcessor.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-05-12T23:07:34Z",
+      "side": 1,
+      "message": "do you really need else if here ?",
+      "revId": "f2f953f37fb5baf62d3b5c67a09577f40b283cb6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
