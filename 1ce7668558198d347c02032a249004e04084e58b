@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7c33976_33246328",
+        "filename": "ms/blueprintsprocessor/modules/commons/db-lib/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2021-05-12T17:53:01Z",
+      "side": 1,
+      "message": "Since Guilin CDS is using java11, I assume there is a driver for that also.",
+      "revId": "1ce7668558198d347c02032a249004e04084e58b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
