@@ -22,9 +22,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.DBDataSourceProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants.Companion.MARIA_DB
 import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants.Companion.MYSQL_DB
+import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants.Companion.MSSQL_DB
 import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants.Companion.PROCESSOR_DB
 import org.onap.ccsdk.cds.blueprintsprocessor.db.MariaDataSourceProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.db.MySqlDataSourceProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.db.MSSqlDataSourceProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
@@ -42,9 +44,10 @@ class BlueprintDBLibPropertyService(private var bluePrintPropertiesService: Blue
         when (val type = jsonNode.get("type").textValue()) {
             MYSQL_DB -> JacksonUtils.readValue(jsonNode, MySqlDataSourceProperties::class.java)
             MARIA_DB -> JacksonUtils.readValue(jsonNode, MariaDataSourceProperties::class.java)
+            MSSQL_DB -> JacksonUtils.readValue(jsonNode, MSSqlDataSourceProperties::class.java)
             else -> {
                 throw BlueprintProcessorException(
-                    "DB type ($type) is not supported. Valid types: $MARIA_DB, $MYSQL_DB"
+                    "DB type ($type) is not supported. Valid types: $MARIA_DB, $MYSQL_DB, $MSSQL_DB"
                 )
             }
         }!!
@@ -54,6 +57,7 @@ class BlueprintDBLibPropertyService(private var bluePrintPropertiesService: Blue
             return when (it) {
                 MARIA_DB, PROCESSOR_DB -> mariaDBConnectionProperties(prefix)
                 MYSQL_DB -> mySqlDBConnectionProperties(prefix)
+                MSSQL_DB -> mssqlDBConnectionProperties(prefix)
                 else -> {
                     throw BlueprintProcessorException(
                         "DB type ($it) is not supported. Valid types: $MARIA_DB, $MYSQL_DB, $PROCESSOR_DB"
@@ -66,6 +70,7 @@ class BlueprintDBLibPropertyService(private var bluePrintPropertiesService: Blue
         when (dBConnetionProperties) {
             is MariaDataSourceProperties -> MariaDatabaseConfiguration(dBConnetionProperties)
             is MySqlDataSourceProperties -> MySqlDatabaseConfiguration(dBConnetionProperties)
+            is MSSqlDataSourceProperties -> MSSqlDatabaseConfiguration(dBConnetionProperties)
             else -> throw BlueprintProcessorException(
                 "Failed to create db configuration for ${dBConnetionProperties.url}"
             )
@@ -76,4 +81,7 @@ class BlueprintDBLibPropertyService(private var bluePrintPropertiesService: Blue
 
     private fun mariaDBConnectionProperties(prefix: String): MariaDataSourceProperties =
         bluePrintPropertiesService.propertyBeanType(prefix, MariaDataSourceProperties::class.java)
+
+    private fun mssqlDBConnectionProperties(prefix: String): MSSqlDataSourceProperties =
+        bluePrintPropertiesService.propertyBeanType(prefix, MSSqlDataSourceProperties::class.java)
 }
