@@ -50,3 +50,11 @@ open class MySqlDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateDialect: String
     override var driverClassName = DBLibConstants.DRIVER_MYSQL_DB
 }
+
+open class MSSqlDataSourceProperties : DBDataSourceProperties() {
+    lateinit var hibernateHbm2ddlAuto: String
+    lateinit var hibernateDDLAuto: String
+    lateinit var hibernateNamingStrategy: String
+    lateinit var hibernateDialect: String
+    override var driverClassName = DBLibConstants.DRIVER_MSSQL_DB
+}
