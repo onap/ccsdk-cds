@@ -71,11 +71,13 @@ class DBLibConstants {
         const val MYSQL_DB: String = "mysql-db"
         const val ORACLE_DB: String = "oracle-db"
         const val POSTGRES_DB: String = "postgres-db"
+        const val MSSQL_DB: String = "mssql"
 
         // List of database drivers
         const val DRIVER_MARIA_DB = "org.mariadb.jdbc.Driver"
         const val DRIVER_MYSQL_DB = "com.mysql.jdbc.Driver"
         const val DRIVER_ORACLE_DB = "oracle.jdbc.driver.OracleDriver"
         const val DRIVER_POSTGRES_DB = "org.postgresql.Driver"
+        const val DRIVER_MSSQL_DB = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
     }
 }
