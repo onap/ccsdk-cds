@@ -112,11 +112,11 @@ open class DatabaseResourceAssignmentProcessor(
         val jdbcTemplate = blueprintDBLibService(sourceProperties, dSource)
 
         val rows = jdbcTemplate.query(sql, populateNamedParameter(inputKeyMapping))
-        if (rows.isNullOrEmpty()) {
-            logger.warn("Failed to get $dSource result for dictionary name ($dName) the query ($sql)")
-        } else {
-            populateResource(resourceAssignment, sourceProperties, rows)
+        if (rows.isEmpty()) {
+            logger.warn("Emptyset from dictionary-source($dSource) for dictionary name ($dName) the query ($sql).")
         }
+        logger.debug("Query returned ${rows.size} values")
+        populateResource(resourceAssignment, sourceProperties, rows)
     }
 
     private fun blueprintDBLibService(sourceProperties: DatabaseResourceSource, selector: String): BlueprintDBLibGenericService {
