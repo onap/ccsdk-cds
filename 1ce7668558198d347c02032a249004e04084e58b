@@ -16,6 +16,24 @@
       "revId": "1ce7668558198d347c02032a249004e04084e58b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80517287_4b511888",
+        "filename": "ms/blueprintsprocessor/modules/commons/db-lib/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 3479
+      },
+      "writtenOn": "2021-05-12T18:32:21Z",
+      "side": 1,
+      "message": "Good catch Jozsef!  Yes there is one for Java 11, will be sending an update.",
+      "parentUuid": "a7c33976_33246328",
+      "revId": "1ce7668558198d347c02032a249004e04084e58b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
