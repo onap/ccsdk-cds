@@ -16,6 +16,24 @@
       "revId": "8132319d5264cdc344be1c65c67258804da0a501",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8df10e1_33effddd",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/DatabaseResourceAssignmentProcessor.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 3479
+      },
+      "writtenOn": "2021-05-13T21:22:09Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "8cab2718_3db6b403",
+      "revId": "8132319d5264cdc344be1c65c67258804da0a501",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
