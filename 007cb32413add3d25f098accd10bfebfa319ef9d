@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ebbda48_1d91057b",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/processor/DatabaseResourceAssignmentProcessor.kt",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-05-13T22:46:47Z",
+      "side": 1,
+      "message": "This logger should be outside of if condition !",
+      "revId": "007cb32413add3d25f098accd10bfebfa319ef9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
