@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright © 2018-2019 AT&T Intellectual Property.
+  ~ Copyright © 2021 Bell Canada
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,27 +14,32 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>cba-parent</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
-        <relativePath>../../cba-parent</relativePath>
-    </parent>
+  <groupId>org.onap.ccsdk.cds.components.cba</groupId>
+  <artifactId>archetype-blueprint</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>maven-archetype</packaging>
 
-    <groupId>org.onap.ccsdk.cds.components.cba</groupId>
-    <artifactId>blueprint-model</artifactId>
-    <packaging>pom</packaging>
+  <name>Components Model Catalog - Blueprints Model - Archetype Blueprints</name>
+  <description>CDS Micro-services Archetype CBA</description>
 
-    <name>Components Model Catalog - Blueprints Model</name>
-
-    <modules>
-        <module>archetype-blueprint</module>
-        <module>test-blueprint</module>
-        <module>cba-assembly-descriptor</module>
-        <module>test-blueprint-kotlin-parent</module>
-    </modules>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-archetype-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-packaging</artifactId>
+        <version>3.2.0</version>
+      </extension>
+    </extensions>
+  </build>
 </project>
