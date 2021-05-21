@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright © 2018-2019 AT&T Intellectual Property.
+  ~ Copyright © 2021 Bell Canada
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,27 +14,28 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>cba-parent</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
-        <relativePath>../../cba-parent</relativePath>
+        <groupId>org.onap.ccsdk.cds.components.cba</groupId>
+        <artifactId>test-blueprint-kotlin-parent</artifactId>
+        <version>1.1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.onap.ccsdk.cds.components.cba</groupId>
-    <artifactId>blueprint-model</artifactId>
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
     <packaging>pom</packaging>
 
-    <name>Components Model Catalog - Blueprints Model</name>
-
-    <modules>
-        <module>archetype-blueprint</module>
-        <module>test-blueprint</module>
-        <module>cba-assembly-descriptor</module>
-        <module>test-blueprint-kotlin-parent</module>
-    </modules>
+    <properties>
+        <!-- Properties for -Pdeploy-cba, these can be overridden if needed -->
+        <cds.username>${cdsUsername}</cds.username>
+        <cds.password>${cdsPassword}</cds.password>
+        <!--cds.protocol>http</cds.protocol>
+        <cds.host>localhost</cds.host>
+        <cds.port>8081</cds.port>
+        <cds.enrich.endpoint>api/v1/blueprint-model/enrich</cds.enrich.endpoint>
+        <cds.publish.endpoint>api/v1/blueprint-model/publish</cds.publish.endpoint>
+        -->
+    </properties>
 </project>
