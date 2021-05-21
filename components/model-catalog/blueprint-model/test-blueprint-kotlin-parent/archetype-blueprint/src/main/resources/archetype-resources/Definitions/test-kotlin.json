@@ -1,0 +1,85 @@
+{
+  "metadata": {
+    "template_author": "TemplateAuthor",
+    "author-email": "ta@test.ca",
+    "template_name": "test-kotlin",
+    "template_version": "1.0.0",
+    "template_tags": "ONAP, CDS, CBA, test"
+  },
+  "topology_template": {
+    "workflows": {
+      "netconf-kotlin": {
+        "steps": {
+          "netconf-kotlin": {
+            "description": "deploy config",
+            "target": "execute-kotlin-netconf"
+          }
+        },
+        "inputs": {
+          "netconf-host": {
+            "required": true,
+            "type": "string"
+          },
+          "netconf-timeout": {
+            "required": true,
+            "type": "string"
+          }
+        },
+        "outputs": {
+          "response-data": {
+            "type": "string",
+            "value": {
+              "get_attribute": [
+                "execute-kotlin-netconf",
+                "response-data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "node_templates": {
+      "execute-kotlin-netconf" : {
+        "type" : "component-netconf-executor",
+        "requirements" : {
+          "netconf-connection" : {
+            "capability" : "netconf",
+            "node" : "netconf-device",
+            "relationship" : "tosca.relationships.ConnectsTo"
+          }
+        },
+        "interfaces" : {
+          "ComponentNetconfExecutor" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.ConfigDeploy",
+                  "instance-dependencies" : [ ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "netconf-device": {
+        "type": "vnf-netconf-device",
+        "capabilities": {
+          "netconf": {
+            "properties": {
+              "login-key": "password",
+              "login-account": "admin",
+              "target-ip-address": {
+                "get_input": "netconf-host"
+              },
+              "port-number" : 17830,
+              "connection-time-out" : {
+                "get_input": "netconf-timeout"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

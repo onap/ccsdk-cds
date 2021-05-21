@@ -1,0 +1,8 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: TemplateAuthor
+Entry-Definitions: Definitions/test-kotlin.json
+Template-Tags: test, regression
+Template-Name: test-kotlin
+Template-Version: 1.0.0
+Template-Type: DEFAULT

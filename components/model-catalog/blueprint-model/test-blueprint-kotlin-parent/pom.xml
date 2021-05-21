@@ -29,6 +29,10 @@
 
     <name>Components Model Catalog - Blueprints Model - Test Kotlin Parent</name>
 
+    <modules>
+        <module>archetype-blueprint</module>
+    </modules>
+
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
