@@ -31,7 +31,8 @@
         <!-- Properties for -Pdeploy-cba, these can be overridden if needed -->
         <cds.username>${cdsUsername}</cds.username>
         <cds.password>${cdsPassword}</cds.password>
-        <!--cds.protocol>http</cds.protocol>
+        <!--
+        cds.protocol>http</cds.protocol>
         <cds.host>localhost</cds.host>
         <cds.port>8081</cds.port>
         <cds.enrich.endpoint>api/v1/blueprint-model/enrich</cds.enrich.endpoint>
