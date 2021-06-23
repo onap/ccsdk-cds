@@ -43,11 +43,15 @@ class BlueprintMessageUtils {
             when (message) {
                 is ExecutionServiceInput -> {
                     val actionIdentifiers = message.actionIdentifiers
-                    "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
+                    val commonHeaders = message.commonHeader
+                    "requestID(${commonHeaders.requestId}), subrequestID(${commonHeaders.subRequestId}) " +
+                        "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
                 }
                 is ExecutionServiceOutput -> {
                     val actionIdentifiers = message.actionIdentifiers
-                    "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
+                    val commonHeaders = message.commonHeader
+                    "RequestID(${commonHeaders.requestId}), SubRequestID(${commonHeaders.subRequestId}) " +
+                        "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
                 }
                 else -> "message($message)"
             }
