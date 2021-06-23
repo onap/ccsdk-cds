@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa247240_433e26de",
+        "filename": "ms/blueprintsprocessor/modules/commons/message-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/message/utils/BlueprintMessageUtils.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-06-23T15:28:05Z",
+      "side": 1,
+      "message": "both conditions seems to be same, can those be combined ?",
+      "revId": "2e42e84321a81aa8a2ef8d6962807c8dfa0c30d8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "903f489d_3a891f7d",
+        "filename": "ms/blueprintsprocessor/modules/commons/message-lib/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/message/utils/BlueprintMessageUtilsTest.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-06-23T15:28:05Z",
+      "side": 1,
+      "message": "can move out this piece and avoid reduendency by using same commonHeader!",
+      "revId": "2e42e84321a81aa8a2ef8d6962807c8dfa0c30d8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
