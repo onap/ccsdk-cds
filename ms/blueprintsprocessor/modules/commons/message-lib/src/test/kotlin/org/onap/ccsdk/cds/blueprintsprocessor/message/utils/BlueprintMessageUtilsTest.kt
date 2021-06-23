@@ -21,6 +21,7 @@ import io.mockk.every
 import io.mockk.mockkStatic
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 
@@ -54,14 +55,20 @@ class BlueprintMessageUtilsTest {
 
     @Test
     fun testGetMessageLogData() {
+        var header = CommonHeader().apply {
+            requestId = "myrequestid"
+            subRequestId = "mysubrequestid"
+        }
+
         val input = ExecutionServiceInput().apply {
             actionIdentifiers = ActionIdentifiers().apply {
                 blueprintName = "bpInput"
                 blueprintVersion = "1.0.0-input"
                 actionName = "bpActionInput"
             }
+            commonHeader = header
         }
-        val expectedOnInput = "CBA(bpInput/1.0.0-input/bpActionInput)"
+        val expectedOnInput = "requestID(myrequestid), subrequestID(mysubrequestid) CBA(bpInput/1.0.0-input/bpActionInput)"
 
         val output = ExecutionServiceInput().apply {
             actionIdentifiers = ActionIdentifiers().apply {
@@ -69,8 +76,9 @@ class BlueprintMessageUtilsTest {
                 blueprintVersion = "1.0.0-output"
                 actionName = "bpActionOutput"
             }
+            commonHeader = header
         }
-        val expectedOnOutput = "CBA(bpOutput/1.0.0-output/bpActionOutput)"
+        val expectedOnOutput = "requestID(myrequestid), subrequestID(mysubrequestid) CBA(bpOutput/1.0.0-output/bpActionOutput)"
 
         val otherMessage = "some other message"
         val expectedOnOtherMessage = "message(some other message)"

@@ -17,8 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.message.utils
 
 import io.micrometer.core.instrument.Tag
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonExecutionServiceData
 import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import kotlin.math.max
@@ -41,13 +40,11 @@ class BlueprintMessageUtils {
 
         fun getMessageLogData(message: Any): String =
             when (message) {
-                is ExecutionServiceInput -> {
+                is CommonExecutionServiceData -> {
                     val actionIdentifiers = message.actionIdentifiers
-                    "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
-                }
-                is ExecutionServiceOutput -> {
-                    val actionIdentifiers = message.actionIdentifiers
-                    "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
+                    val commonHeaders = message.commonHeader
+                    "requestID(${commonHeaders.requestId}), subrequestID(${commonHeaders.subRequestId}) " +
+                        "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
                 }
                 else -> "message($message)"
             }

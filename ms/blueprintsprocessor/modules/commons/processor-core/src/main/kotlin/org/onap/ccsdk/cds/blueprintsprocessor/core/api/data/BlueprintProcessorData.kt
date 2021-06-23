@@ -33,16 +33,18 @@ import java.util.UUID
  * DATE : 8/15/2018
  */
 
-open class ExecutionServiceInput {
-
-    @get:ApiModelProperty(required = false, hidden = true)
-    var correlationUUID: String = UUID.randomUUID().toString()
-
+abstract class CommonExecutionServiceData {
     @get:ApiModelProperty(required = true, value = "Headers providing request context.")
     lateinit var commonHeader: CommonHeader
 
     @get:ApiModelProperty(required = true, value = "Provide information about the action to execute.")
     lateinit var actionIdentifiers: ActionIdentifiers
+}
+
+open class ExecutionServiceInput : CommonExecutionServiceData() {
+
+    @get:ApiModelProperty(required = false, hidden = true)
+    var correlationUUID: String = UUID.randomUUID().toString()
 
     @get:ApiModelProperty(
         required = true,
@@ -57,16 +59,10 @@ open class ExecutionServiceInput {
     var stepData: StepData? = null
 }
 
-open class ExecutionServiceOutput {
+open class ExecutionServiceOutput : CommonExecutionServiceData() {
 
     @get:ApiModelProperty(required = false, hidden = true)
     var correlationUUID: String? = null
-
-    @get:ApiModelProperty(required = true, value = "Headers providing request context.")
-    lateinit var commonHeader: CommonHeader
-
-    @get:ApiModelProperty(required = true, value = "Provide information about the action to execute.")
-    lateinit var actionIdentifiers: ActionIdentifiers
 
     @get:ApiModelProperty(required = true, value = "Status of the request.")
     lateinit var status: Status
