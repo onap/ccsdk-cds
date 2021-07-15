@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8410969d_e4c6fcc1",
+        "filename": "ms/blueprintsprocessor/application/src/main/docker/startService.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 2319
+      },
+      "writtenOn": "2021-07-15T15:47:50Z",
+      "side": 1,
+      "message": "I would have prefer to allow to give values for truststore (and storepass) so we can reuse work done in OOM where we can provide a truststore with all needed ca in it",
+      "revId": "5a830e79dbfeb3afb6de632eb6177992946039b7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
