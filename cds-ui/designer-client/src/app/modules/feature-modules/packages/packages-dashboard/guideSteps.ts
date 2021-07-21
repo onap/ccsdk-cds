@@ -52,23 +52,23 @@ export const steps = [
     //     content: 'Set your package custom keys (Optional)',
     //     title: 'Package keys',
     // },
-    // Temaplate & Mapping
+    // Template & Mapping
     {
         anchorId: 'tm-templateTab',
         content: 'A template is an artifact, and uses Modeling Concepts#artifact-mapping-resource and artifact-template-velocity. ',
-        title: 'Temaplate & Mapping',
+        title: 'Template & Mapping',
         stepId: 'tm-templateTab'
     },
     {
         anchorId: 'tm-templateName',
         content: 'Set your Template & Mapping Name.',
-        title: 'Temaplte & Mapping name',
+        title: 'Template & Mapping name',
         stepId: 'tm-templateName'
     },
     {
         anchorId: 'tm-templateType',
         content: 'Set your Template Type.',
-        title: 'Temaplte Type',
+        title: 'Template Type',
     },
     {
         anchorId: 'tm-templateContent',
