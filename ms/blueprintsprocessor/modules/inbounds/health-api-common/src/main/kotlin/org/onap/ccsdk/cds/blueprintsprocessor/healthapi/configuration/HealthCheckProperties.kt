@@ -38,7 +38,7 @@ open class HealthCheckProperties {
     @Value("#{'\${cdslistener.healthcheck.mapping-service-name-with-service-link:}'.split(']')}")
     private val cdsListenerServiceMapping: List<String>? = null
 
-    open fun getBlueprintBaseURL(): String? {
+    open fun getBluePrintBaseURL(): String? {
         return bluePrintProcessorBaseURL
     }
 
@@ -46,7 +46,7 @@ open class HealthCheckProperties {
         return cdsListenerBaseURL
     }
 
-    open fun getBlueprintServiceInformation(): List<ServiceEndpoint> {
+    open fun getBluePrintServiceInformation(): List<ServiceEndpoint> {
         val serviceName = ServiceName.BLUEPRINT
         return getListOfServiceEndPoints(blueprintprocessorServiceMapping, serviceName)
     }

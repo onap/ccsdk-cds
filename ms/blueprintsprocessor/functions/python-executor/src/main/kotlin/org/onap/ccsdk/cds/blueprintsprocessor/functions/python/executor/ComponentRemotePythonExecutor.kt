@@ -19,7 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.protobuf.ByteString
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteIdentifier
@@ -31,7 +31,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintMod
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ExecutionServiceConstant
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.RemoteScriptExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.checkFileExists
@@ -52,7 +52,7 @@ import org.springframework.stereotype.Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class ComponentRemotePythonExecutor(
     private val remoteScriptExecutionService: RemoteScriptExecutionService,
-    private val bluePrintPropertiesService: BlueprintPropertiesService,
+    private val bluePrintPropertiesService: BluePrintPropertiesService,
     private val blueprintModelRepository: BlueprintModelRepository
 ) : AbstractComponentFunction() {
 
@@ -107,7 +107,7 @@ open class ComponentRemotePythonExecutor(
             .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
 
         val artifactName: String = operationAssignment.implementation?.primary
-            ?: throw BlueprintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
 
         val artifactDefinition =
             bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
@@ -298,7 +298,7 @@ open class ComponentRemotePythonExecutor(
     }
 
     private fun noBlueprintErrors() =
-        bluePrintRuntimeService.getBlueprintError().stepErrors(stepName).isNullOrEmpty()
+        bluePrintRuntimeService.getBluePrintError().stepErrors(stepName).isNullOrEmpty()
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         addError("Failed in ComponentRemotePythonExecutor : ${runtimeException.message}")

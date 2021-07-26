@@ -18,9 +18,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientSer
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentRemoteScriptExecutor
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants.PROPERTY_CONNECTION_CONFIG
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.PROPERTY_CONNECTION_CONFIG
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils.Companion.jsonNodeFromObject
@@ -41,14 +41,14 @@ open class Mount : AbstractScriptComponentFunction() {
         val webclientService = restconfClientService(deviceInformation)
 
         val nodeId = requestPayloadActionProperty(NODE_ID)?.first()?.textValue()
-            ?: throw BlueprintProcessorException("Failed to load $NODE_ID properties.")
+            ?: throw BluePrintProcessorException("Failed to load $NODE_ID properties.")
         val mountPayload = requestPayloadActionProperty(MOUNT_PAYLOAD)?.first()
-            ?: throw BlueprintProcessorException("Failed to load $MOUNT_PAYLOAD properties.")
+            ?: throw BluePrintProcessorException("Failed to load $MOUNT_PAYLOAD properties.")
         restconfMountDeviceJson(webclientService, nodeId, mountPayload.toString())
 
         setAttribute(
             ComponentRemoteScriptExecutor.ATTRIBUTE_STATUS,
-            BlueprintConstants.STATUS_SUCCESS.asJsonPrimitive()
+            BluePrintConstants.STATUS_SUCCESS.asJsonPrimitive()
         )
     }
 
@@ -67,7 +67,7 @@ open class Execute : AbstractScriptComponentFunction() {
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
         val nodeIdJson = requestPayloadActionProperty(NODE_ID)?.first()
-            ?: throw BlueprintProcessorException("Failed to load $NODE_ID properties.")
+            ?: throw BluePrintProcessorException("Failed to load $NODE_ID properties.")
 
         val failFastJsonNode = requestPayloadActionProperty(FAIL_FAST)!!
         val failFast = if (failFastJsonNode.isEmpty) false else failFastJsonNode.first().booleanValue()
@@ -78,7 +78,7 @@ open class Execute : AbstractScriptComponentFunction() {
         val nodeId = nodeIdJson.textValue()
 
         val actionList = requestPayloadActionProperty("action")?.first()
-            ?: throw BlueprintProcessorException("Failed to load action properties.")
+            ?: throw BluePrintProcessorException("Failed to load action properties.")
         validateActionList(actionList)
 
         val actionListResults: MutableList<Map<String, JsonNode>> = mutableListOf()
@@ -113,12 +113,12 @@ open class Execute : AbstractScriptComponentFunction() {
             if (response.status in HTTP_SUCCESS_RANGE) {
                 log.info("\nRestconf execution response : \n{}", responseBody.asJsonType().toPrettyString())
                 actionResult[ComponentScriptExecutor.ATTRIBUTE_STATUS] =
-                    BlueprintConstants.STATUS_SUCCESS.asJsonPrimitive()
+                    BluePrintConstants.STATUS_SUCCESS.asJsonPrimitive()
             } else {
                 actionResult[ComponentScriptExecutor.ATTRIBUTE_STATUS] =
-                    BlueprintConstants.STATUS_FAILURE.asJsonPrimitive()
+                    BluePrintConstants.STATUS_FAILURE.asJsonPrimitive()
                 addError(
-                    BlueprintConstants.STATUS_FAILURE,
+                    BluePrintConstants.STATUS_FAILURE,
                     ComponentScriptExecutor.ATTRIBUTE_STATUS,
                     actionResponse.asText()
                 )
@@ -131,17 +131,17 @@ open class Execute : AbstractScriptComponentFunction() {
         }
 
         setAttribute(ComponentScriptExecutor.ATTRIBUTE_RESPONSE_DATA, jsonNodeFromObject(actionListResults))
-        setAttribute(ComponentScriptExecutor.ATTRIBUTE_STATUS, BlueprintConstants.STATUS_SUCCESS.asJsonPrimitive())
+        setAttribute(ComponentScriptExecutor.ATTRIBUTE_STATUS, BluePrintConstants.STATUS_SUCCESS.asJsonPrimitive())
         actionListResults.forEach { actionResult ->
             val actionResultStatus = actionResult[ComponentScriptExecutor.ATTRIBUTE_STATUS]
-            if (BlueprintConstants.STATUS_SUCCESS.asJsonPrimitive() != actionResultStatus) {
+            if (BluePrintConstants.STATUS_SUCCESS.asJsonPrimitive() != actionResultStatus) {
                 setAttribute(
                     ComponentScriptExecutor.ATTRIBUTE_STATUS,
-                    BlueprintConstants.STATUS_FAILURE.asJsonPrimitive()
+                    BluePrintConstants.STATUS_FAILURE.asJsonPrimitive()
                 )
                 val errorResponse = actionResult[ACTION_OUTPUT]!!
                 addError(
-                    BlueprintConstants.STATUS_FAILURE, ComponentScriptExecutor.ATTRIBUTE_STATUS,
+                    BluePrintConstants.STATUS_FAILURE, ComponentScriptExecutor.ATTRIBUTE_STATUS,
                     errorResponse.asText()
                 )
             }
@@ -178,19 +178,19 @@ open class Execute : AbstractScriptComponentFunction() {
 
     private fun validateActionList(actionList: JsonNode) {
         if (actionList.isEmpty) {
-            throw BlueprintProcessorException("No actions defined")
+            throw BluePrintProcessorException("No actions defined")
         }
         actionList.forEach { action ->
             action.get(ACTION_PATH)
-                ?: throw BlueprintProcessorException("Failed to load action path.")
+                ?: throw BluePrintProcessorException("Failed to load action path.")
             action.get(ACTION_DATASTORE)
-                ?: throw BlueprintProcessorException("Failed to load action datastore.")
+                ?: throw BluePrintProcessorException("Failed to load action datastore.")
             val actionTypeJsonNode = action.get(ACTION_TYPE)
-                ?: throw BlueprintProcessorException("Failed to load action type.")
+                ?: throw BluePrintProcessorException("Failed to load action type.")
             when (val actionType = RestconfRequestType.valueOf(actionTypeJsonNode.asText().toUpperCase())) {
                 RestconfRequestType.PATCH, RestconfRequestType.PUT, RestconfRequestType.POST -> {
                     action.get(ACTION_PAYLOAD)
-                        ?: throw BlueprintProcessorException("Failed to load action $actionType payload.")
+                        ?: throw BluePrintProcessorException("Failed to load action $actionType payload.")
                 }
             }
         }

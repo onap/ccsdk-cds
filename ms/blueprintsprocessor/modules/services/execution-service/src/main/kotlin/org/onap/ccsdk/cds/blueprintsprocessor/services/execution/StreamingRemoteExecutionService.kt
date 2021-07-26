@@ -30,12 +30,12 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.GrpcClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BlueprintGrpcClientService
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BlueprintGrpcLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcClientService
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcLibPropertyService
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.processing.api.BlueprintProcessingServiceGrpc
+import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -59,7 +59,7 @@ interface StreamingRemoteExecutionService<ReqT, ResT> {
     prefix = "blueprintsprocessor.streamingRemoteExecution", name = ["enabled"],
     havingValue = "true", matchIfMissing = false
 )
-class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertyService: BlueprintGrpcLibPropertyService) :
+class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertyService: BluePrintGrpcLibPropertyService) :
     StreamingRemoteExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
     private val log = logger(StreamingRemoteExecutionServiceImpl::class)
@@ -85,12 +85,12 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
             val grpcChannel = grpcChannel(selector)
 
             /** Get Send and Receive Channel for bidirectional process method*/
-            val channels = clientCallBidiStreaming(BlueprintProcessingServiceGrpc.getProcessMethod(), grpcChannel)
+            val channels = clientCallBidiStreaming(BluePrintProcessingServiceGrpc.getProcessMethod(), grpcChannel)
             commChannels[txId] = channels
         }
 
         val commChannel = commChannels[txId]
-            ?: throw BlueprintException("failed to create response subscription for transactionId($txId) channel")
+            ?: throw BluePrintException("failed to create response subscription for transactionId($txId) channel")
 
         log.info("created subscription for transactionId($txId)")
 
@@ -103,7 +103,7 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
      */
     override suspend fun send(txId: String, input: ExecutionServiceInput) {
         val sendChannel = commChannels[txId]?.requestChannel
-            ?: throw BlueprintException("failed to get transactionId($txId) send channel")
+            ?: throw BluePrintException("failed to get transactionId($txId) send channel")
         coroutineScope {
             launch {
                 sendChannel.send(input)
@@ -128,7 +128,7 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
 
             /** Send the request */
             val sendChannel = commChannels[txId]?.requestChannel
-                ?: throw BlueprintException("failed to get transactionId($txId) send channel")
+                ?: throw BluePrintException("failed to get transactionId($txId) send channel")
             sendChannel.send(input)
 
             /** Receive the response with timeout */
@@ -187,7 +187,7 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
     }
 
     suspend fun createGrpcChannel(grpcProperties: GrpcClientProperties): ManagedChannel {
-        val grpcClientService: BlueprintGrpcClientService = bluePrintGrpcLibPropertyService
+        val grpcClientService: BluePrintGrpcClientService = bluePrintGrpcLibPropertyService
             .blueprintGrpcClientService(grpcProperties)
         return grpcClientService.channel()
     }
@@ -204,7 +204,7 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
                 selector
             }
             else -> {
-                throw BlueprintException("couldn't process selector($selector)")
+                throw BluePrintException("couldn't process selector($selector)")
             }
         }
     }

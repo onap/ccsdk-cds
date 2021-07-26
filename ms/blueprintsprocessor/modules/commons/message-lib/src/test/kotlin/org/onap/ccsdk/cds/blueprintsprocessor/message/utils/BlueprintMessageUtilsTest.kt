@@ -23,7 +23,7 @@ import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 
 import kotlin.test.assertEquals
 
@@ -32,7 +32,7 @@ class BlueprintMessageUtilsTest {
     @Test
     fun testKafkaMetricTag() {
         val expected = mutableListOf<Tag>(
-            Tag.of(BlueprintConstants.METRIC_TAG_TOPIC, "my-topic")
+            Tag.of(BluePrintConstants.METRIC_TAG_TOPIC, "my-topic")
         )
         val tags = BlueprintMessageUtils.kafkaMetricTag("my-topic")
 

@@ -16,14 +16,14 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
-import org.onap.ccsdk.cds.blueprintsprocessor.db.BlueprintDBLibGenericService
+import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.MSSqlDataSourceProperties
 import org.slf4j.LoggerFactory
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.datasource.DriverManagerDataSource
 import javax.sql.DataSource
 
-class MSSqlDatabaseConfiguration(private val msSqlDataSourceProperties: MSSqlDataSourceProperties) : BlueprintDBLibGenericService {
+class MSSqlDatabaseConfiguration(private val msSqlDataSourceProperties: MSSqlDataSourceProperties) : BluePrintDBLibGenericService {
     override fun namedParameterJdbcTemplate(): NamedParameterJdbcTemplate {
         return msSqlNamedParameterJdbcTemplate(msSqlDataSource())
     }

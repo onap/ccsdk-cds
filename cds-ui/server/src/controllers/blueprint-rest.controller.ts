@@ -58,8 +58,8 @@ export class BlueprintRestController {
       },
     },
   })
-  async getOneBlueprint(@param.path.string('id') id: string) {
-    return await this.bpservice.getOneBlueprint(id);
+  async getOneBluePrint(@param.path.string('id') id: string) {
+    return await this.bpservice.getOneBluePrint(id);
   }
 
   @del('/controllerblueprint/{id}', {
@@ -70,8 +70,8 @@ export class BlueprintRestController {
       },
     },
   })
-  async deleteBlueprint(@param.path.string('id') id: string) {
-    return await this.bpservice.deleteBlueprint(id);
+  async deleteBluePrint(@param.path.string('id') id: string) {
+    return await this.bpservice.deleteBluePrint(id);
   }
 
 

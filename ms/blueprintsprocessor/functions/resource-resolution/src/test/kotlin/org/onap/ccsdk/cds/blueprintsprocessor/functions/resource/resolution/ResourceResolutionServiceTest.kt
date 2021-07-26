@@ -30,11 +30,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.PayloadUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.MockCapabilityScriptRA
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintError
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintContext
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintError
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResolutionSummary
 import org.slf4j.LoggerFactory
@@ -106,7 +106,7 @@ class ResourceResolutionServiceTest {
 
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
-            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
                 "1234",
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -160,7 +160,7 @@ class ResourceResolutionServiceTest {
         runBlocking {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
-            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
                 "1234",
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -200,7 +200,7 @@ class ResourceResolutionServiceTest {
         runBlocking {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
-            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
                 "1234",
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -245,7 +245,7 @@ class ResourceResolutionServiceTest {
             props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_SUMMARY] = true
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
-            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
                 "1234",
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -291,7 +291,7 @@ class ResourceResolutionServiceTest {
         runBlocking {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
-            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
                 "1234",
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -344,7 +344,7 @@ class ResourceResolutionServiceTest {
         runBlocking {
             Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
 
-            val bluePrintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
                 "1234",
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
             )
@@ -384,13 +384,13 @@ class ResourceResolutionServiceTest {
 
     @Test
     fun testResourceResolutionForDefinition() {
-        val resourceDefinitions = BlueprintTypes.resourceDefinitions {
+        val resourceDefinitions = BluePrintTypes.resourceDefinitions {
             resourceDefinition(name = "port-speed", description = "Port Speed") {
                 property(type = "string", required = true)
                 sources {
                     sourceCapability(id = "sdno", description = "SDNO Source") {
                         definedProperties {
-                            type(BlueprintConstants.SCRIPT_KOTLIN)
+                            type(BluePrintConstants.SCRIPT_KOTLIN)
                             scriptClassReference(MockCapabilityScriptRA::class.qualifiedName!!)
                             keyDependencies(arrayListOf("device-id"))
                         }
@@ -417,9 +417,9 @@ class ResourceResolutionServiceTest {
         }
         runBlocking {
             val raRuntimeService = mockk<ResourceAssignmentRuntimeService>()
-            every { raRuntimeService.bluePrintContext() } returns mockk<BlueprintContext>()
-            every { raRuntimeService.getBlueprintError() } returns BlueprintError()
-            every { raRuntimeService.setBlueprintError(any()) } returns Unit
+            every { raRuntimeService.bluePrintContext() } returns mockk<BluePrintContext>()
+            every { raRuntimeService.getBluePrintError() } returns BluePrintError()
+            every { raRuntimeService.setBluePrintError(any()) } returns Unit
             every { raRuntimeService.getInputValue("device-id") } returns "123456".asJsonPrimitive()
             every { raRuntimeService.putResolutionStore(any(), any()) } returns Unit
 

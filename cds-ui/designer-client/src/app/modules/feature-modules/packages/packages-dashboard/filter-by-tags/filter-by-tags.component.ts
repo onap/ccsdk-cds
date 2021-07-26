@@ -21,7 +21,7 @@ limitations under the License.
 
 import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {PackagesStore} from '../../packages.store';
-import {BlueprintModel, BlueprintPage} from '../../model/Blueprint.model';
+import {BlueprintModel, BluePrintPage} from '../../model/BluePrint.model';
 
 @Component({
     selector: 'app-filter-by-tags',
@@ -31,7 +31,7 @@ import {BlueprintModel, BlueprintPage} from '../../model/Blueprint.model';
 
 export class TagsFilteringComponent implements OnInit {
 
-    page: BlueprintPage;
+    page: BluePrintPage;
     tags: string[] = [];
     viewedTags: string[] = [];
     searchTag = '';

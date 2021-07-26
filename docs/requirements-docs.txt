@@ -13,3 +13,4 @@ sphinxcontrib-swaggerdoc
 sphinxcontrib-plantuml
 sphinx_bootstrap_theme
 lfdocs-conf
+sphinx-tabs

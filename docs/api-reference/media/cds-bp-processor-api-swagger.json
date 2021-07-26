@@ -193,7 +193,7 @@
         "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Download a Blueprint Model by ID",
         "description" : "Gets the CBA of a blueprint model by its ID. Response can be saved to a file to download the CBA.",
-        "operationId" : "BlueprintModelController_downloadBlueprint_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "operationId" : "BlueprintModelController_downloadBluePrint_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -1612,7 +1612,32 @@
     "JsonNode" : {
       "type" : "object",
       "properties" : {
-        "floatingPointNumber" : {
+        "array" : {
+          "type" : "boolean"
+        },
+        "null" : {
+          "type" : "boolean"
+        },
+        "short" : {
+          "type" : "boolean"
+        },
+        "nodeType" : {
+          "type" : "string",
+          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
+        },
+        "number" : {
+          "type" : "boolean"
+        },
+        "float" : {
+          "type" : "boolean"
+        },
+        "object" : {
+          "type" : "boolean"
+        },
+        "bigInteger" : {
+          "type" : "boolean"
+        },
+        "bigDecimal" : {
           "type" : "boolean"
         },
         "valueNode" : {
@@ -1627,53 +1652,28 @@
         "pojo" : {
           "type" : "boolean"
         },
-        "integralNumber" : {
-          "type" : "boolean"
-        },
-        "textual" : {
-          "type" : "boolean"
-        },
-        "binary" : {
-          "type" : "boolean"
-        },
-        "object" : {
-          "type" : "boolean"
-        },
-        "array" : {
-          "type" : "boolean"
-        },
-        "null" : {
-          "type" : "boolean"
-        },
-        "short" : {
-          "type" : "boolean"
-        },
-        "nodeType" : {
-          "type" : "string",
-          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
-        },
-        "float" : {
-          "type" : "boolean"
-        },
-        "number" : {
-          "type" : "boolean"
-        },
         "boolean" : {
-          "type" : "boolean"
-        },
-        "int" : {
           "type" : "boolean"
         },
         "double" : {
           "type" : "boolean"
         },
+        "int" : {
+          "type" : "boolean"
+        },
         "long" : {
           "type" : "boolean"
         },
-        "bigDecimal" : {
+        "binary" : {
           "type" : "boolean"
         },
-        "bigInteger" : {
+        "integralNumber" : {
+          "type" : "boolean"
+        },
+        "floatingPointNumber" : {
+          "type" : "boolean"
+        },
+        "textual" : {
           "type" : "boolean"
         }
       }
@@ -1831,17 +1831,13 @@
     "Page" : {
       "type" : "object",
       "properties" : {
-        "totalElements" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
         "totalPages" : {
           "type" : "integer",
           "format" : "int32"
         },
-        "number" : {
+        "totalElements" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int64"
         },
         "size" : {
           "type" : "integer",
@@ -1856,18 +1852,22 @@
         "sort" : {
           "$ref" : "#/definitions/Sort"
         },
+        "first" : {
+          "type" : "boolean"
+        },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "last" : {
+          "type" : "boolean"
+        },
         "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
         },
-        "first" : {
-          "type" : "boolean"
-        },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
-        },
-        "last" : {
-          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -1877,17 +1877,13 @@
     "PageBlueprintModelSearch" : {
       "type" : "object",
       "properties" : {
-        "totalElements" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
         "totalPages" : {
           "type" : "integer",
           "format" : "int32"
         },
-        "number" : {
+        "totalElements" : {
           "type" : "integer",
-          "format" : "int32"
+          "format" : "int64"
         },
         "size" : {
           "type" : "integer",
@@ -1902,18 +1898,22 @@
         "sort" : {
           "$ref" : "#/definitions/Sort"
         },
+        "first" : {
+          "type" : "boolean"
+        },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "last" : {
+          "type" : "boolean"
+        },
         "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
         },
-        "first" : {
-          "type" : "boolean"
-        },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
-        },
-        "last" : {
-          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -1923,26 +1923,26 @@
     "Pageable" : {
       "type" : "object",
       "properties" : {
-        "paged" : {
-          "type" : "boolean"
-        },
-        "pageNumber" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "unpaged" : {
-          "type" : "boolean"
-        },
-        "pageSize" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "offset" : {
           "type" : "integer",
           "format" : "int64"
         },
         "sort" : {
           "$ref" : "#/definitions/Sort"
+        },
+        "paged" : {
+          "type" : "boolean"
+        },
+        "unpaged" : {
+          "type" : "boolean"
+        },
+        "pageNumber" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "format" : "int32"
         }
       }
     },
@@ -2206,10 +2206,10 @@
     "Sort" : {
       "type" : "object",
       "properties" : {
-        "unsorted" : {
+        "sorted" : {
           "type" : "boolean"
         },
-        "sorted" : {
+        "unsorted" : {
           "type" : "boolean"
         },
         "empty" : {

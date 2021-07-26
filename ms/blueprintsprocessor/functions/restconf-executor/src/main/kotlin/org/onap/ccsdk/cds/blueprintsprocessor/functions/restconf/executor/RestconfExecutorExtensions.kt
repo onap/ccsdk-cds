@@ -24,9 +24,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.Restco
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.restClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintRetryException
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintRetryException
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 /**
  * Register the Restconf module exposed dependency
@@ -34,11 +34,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyS
 val log = LoggerFactory.logger(AbstractScriptComponentFunction::class.java)!!
 
 fun AbstractScriptComponentFunction.restconfClientService(selector: String): BlueprintWebClientService {
-    return BlueprintDependencyService.restClientService(selector)
+    return BluePrintDependencyService.restClientService(selector)
 }
 
 fun AbstractScriptComponentFunction.restconfClientService(jsonNode: JsonNode): BlueprintWebClientService {
-    return BlueprintDependencyService.restClientService(jsonNode)
+    return BluePrintDependencyService.restClientService(jsonNode)
 }
 
 /**
@@ -85,14 +85,14 @@ suspend fun AbstractScriptComponentFunction.restconfMountDevice(
         webClientService.exchangeResource(RestconfRequestType.PUT.name, mountUrl, payload as String, headers)
 
     if (mountResult.status !in RestconfConstants.HTTP_SUCCESS_RANGE) {
-        throw BlueprintProcessorException("Failed to mount device with url($mountUrl) ")
+        throw BluePrintProcessorException("Failed to mount device with url($mountUrl) ")
     }
 
     /** Check device has mounted */
     val mountCheckExecutionBlock: suspend (Int) -> String = {
         val result = webClientService.exchangeResource(RestconfRequestType.GET.name, mountVerifyUrl, "")
         if (!result.body.contains(expectedMountResult)) {
-            throw BlueprintRetryException("Wait for device with url($mountUrl) to mount")
+            throw BluePrintRetryException("Wait for device with url($mountUrl) to mount")
         }
         log.info("NF was mounted successfully on ODL")
         result.body
@@ -151,7 +151,7 @@ suspend fun AbstractScriptComponentFunction.genericPutPatchPostRequest(
         RestconfRequestType.PUT -> log.info("sending PUT request, url: $requestUrl")
         RestconfRequestType.PATCH -> log.info("sending PATCH request, url: $requestUrl")
         RestconfRequestType.POST -> log.info("sending POST request, url: $requestUrl")
-        else -> throw BlueprintProcessorException("Illegal request type, only POST, PUT or PATCH allowed.")
+        else -> throw BluePrintProcessorException("Illegal request type, only POST, PUT or PATCH allowed.")
     }
     return webClientService.exchangeResource(requestType.name, requestUrl, payload as String, headers)
 }
@@ -168,7 +168,7 @@ suspend fun AbstractScriptComponentFunction.getRequest(
         { tryCount: Int ->
             val result = genericGetOrDeleteRequest(webClientService, requestUrl, RestconfRequestType.GET)
             if (result.status !in RestconfConstants.HTTP_SUCCESS_RANGE && tryCount < retryTimes - 1) {
-                throw BlueprintRetryException("Failed to read url($requestUrl) to mount")
+                throw BluePrintRetryException("Failed to read url($requestUrl) to mount")
             }
             log.info("NF was mounted successfully on ODL")
             result
@@ -198,7 +198,7 @@ suspend fun AbstractScriptComponentFunction.genericGetOrDeleteRequest(
     when (requestType) {
         RestconfRequestType.GET -> log.info("sending GET request, url: $requestUrl")
         RestconfRequestType.DELETE -> log.info("sending DELETE request, url: $requestUrl")
-        else -> throw BlueprintProcessorException("Illegal request type, only GET and DELETE allowed.")
+        else -> throw BluePrintProcessorException("Illegal request type, only GET and DELETE allowed.")
     }
     return webClientService.exchangeResource(requestType.name, requestUrl, "")
 }

@@ -37,7 +37,7 @@ import { GraphGenerator } from './graph.generator.util';
 import { FunctionsStore } from './functions.store';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { BlueprintDetailModel } from '../model/Blueprint.detail.model';
+import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DesignerService } from './designer.service';
 import { FilesContent, FolderNodeElement } from '../package-creation/mapping-models/metadata/MetaDataTab.model';
@@ -66,7 +66,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     controllerSideBar: boolean;
     actionAttributesSideBar: boolean;
     functionAttributeSidebar: boolean;
-    viewedPackage: BlueprintDetailModel = new BlueprintDetailModel();
+    viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     customActionName: string;
     showAction: boolean;
     cl = 'editBar';
@@ -125,7 +125,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
         this.actionAttributesSideBar = !this.actionAttributesSideBar;
     }
 
-    publishBlueprint() {
+    publishBluePrint() {
         this.create();
         this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {
@@ -138,7 +138,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
                     this.toastService.error(error.message, 'Package error');
                     console.log(error);
                 }, () => {
-                    //  this.deployBlueprint = false;
+                    //  this.deployBluePrint = false;
                 });
             });
     }
@@ -456,7 +456,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
         this.ngUnsubscribe.complete();
     }
 
-    saveBlueprint() {
+    saveBluePrint() {
         this.ngxService.start();
         FilesContent.clear();
         let packageCreationModes: PackageCreationModes;
@@ -468,11 +468,11 @@ export class DesignerComponent implements OnInit, OnDestroy {
         });
         packageCreationModes.execute(this.cbaPackage, this.packageCreationUtils);
         this.filesData.push(this.folder.TREE_DATA);
-        this.saveBlueprintToDataBase();
+        this.saveBluePrintToDataBase();
 
     }
 
-    enrichBlueprint() {
+    enrichBluePrint() {
         this.ngxService.start();
         console.log('start enrich ------------');
         this.packageCreationStore.addTopologyTemplate(this.cbaPackage.templateTopology);
@@ -529,7 +529,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
     }
 
-    saveBlueprintToDataBase() {
+    saveBluePrintToDataBase() {
         this.create();
         this.zipFile.generateAsync({ type: 'blob' })
             .then(blob => {

@@ -20,7 +20,7 @@ package org.onap.ccsdk.cds.controllerblueprints.resource.dict.service
 import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.text.StrBuilder
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.TopologicalSortingUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
@@ -33,7 +33,7 @@ import java.io.Serializable
  */
 interface ResourceAssignmentValidationService : Serializable {
 
-    @Throws(BlueprintException::class)
+    @Throws(BluePrintException::class)
     fun validate(resourceAssignments: List<ResourceAssignment>): Boolean
 }
 
@@ -54,10 +54,10 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
             validateTemplateNDictionaryKeys(resourceAssignments)
             validateCyclicDependency(resourceAssignments)
             if (StringUtils.isNotBlank(validationMessage)) {
-                throw BlueprintException("Resource Assignment Validation Failure")
+                throw BluePrintException("Resource Assignment Validation Failure")
             }
         } catch (e: Exception) {
-            throw BlueprintException("Resource Assignment Validation :" + validationMessage.toString(), e)
+            throw BluePrintException("Resource Assignment Validation :" + validationMessage.toString(), e)
         }
         return true
     }
@@ -85,7 +85,7 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
         }
 
         if (StringUtils.isNotBlank(validationMessage)) {
-            throw BlueprintException("Resource Assignment Validation Failure")
+            throw BluePrintException("Resource Assignment Validation Failure")
         }
     }
 

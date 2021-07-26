@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.utils
 
 import io.micrometer.core.instrument.Tag
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonExecutionServiceData
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import kotlin.math.max
 
@@ -26,7 +26,7 @@ class BlueprintMessageUtils {
     companion object {
         fun kafkaMetricTag(topic: String): MutableList<Tag> =
             mutableListOf(
-                Tag.of(BlueprintConstants.METRIC_TAG_TOPIC, topic)
+                Tag.of(BluePrintConstants.METRIC_TAG_TOPIC, topic)
             )
 
         /**
