@@ -22,19 +22,19 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.asGraph
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.data.EdgeLabel
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Graph
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintWorkflowExecutionService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
 import org.onap.ccsdk.cds.controllerblueprints.core.isAcyclic
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.AbstractBlueprintWorkFlowService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.AbstractBluePrintWorkFlowService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.NodeExecuteMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.service.NodeSkipMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.service.WorkflowExecuteMessage
@@ -45,10 +45,10 @@ import kotlin.coroutines.CoroutineContext
 class ImperativeWorkflowExecutionService(
     private val nodeTemplateExecutionService: NodeTemplateExecutionService
 ) :
-    BlueprintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
+    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
-    override suspend fun executeBlueprintWorkflow(
-        bluePrintRuntimeService: BlueprintRuntimeService<*>,
+    override suspend fun executeBluePrintWorkflow(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
         executionServiceInput: ExecutionServiceInput,
         properties: MutableMap<String, Any>
     ): ExecutionServiceOutput {
@@ -60,11 +60,11 @@ class ImperativeWorkflowExecutionService(
         val graph = bluePrintContext.workflowByName(workflowName).asGraph()
 
         if (!graph.isAcyclic()) {
-            throw BlueprintException("Imperative workflow must be acyclic. Check on_success/on_failure for circular references")
+            throw BluePrintException("Imperative workflow must be acyclic. Check on_success/on_failure for circular references")
         }
 
         return coroutineScope {
-            ImperativeBlueprintWorkflowService(
+            ImperativeBluePrintWorkflowService(
                 nodeTemplateExecutionService,
                 this.coroutineContext[MDCContext]
             )
@@ -72,21 +72,21 @@ class ImperativeWorkflowExecutionService(
     }
 }
 
-open class ImperativeBlueprintWorkflowService(private val nodeTemplateExecutionService: NodeTemplateExecutionService, private val mdcContext: CoroutineContext?) :
-    AbstractBlueprintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>() {
+open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionService: NodeTemplateExecutionService, private val mdcContext: CoroutineContext?) :
+    AbstractBluePrintWorkFlowService<ExecutionServiceInput, ExecutionServiceOutput>() {
 
     final override val coroutineContext: CoroutineContext
         get() = mdcContext?.let { super.coroutineContext + it } ?: super.coroutineContext
 
-    val log = logger(ImperativeBlueprintWorkflowService::class)
+    val log = logger(ImperativeBluePrintWorkflowService::class)
 
-    lateinit var bluePrintRuntimeService: BlueprintRuntimeService<*>
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
     lateinit var executionServiceInput: ExecutionServiceInput
     lateinit var workflowName: String
 
     override suspend fun executeWorkflow(
         graph: Graph,
-        bluePrintRuntimeService: BlueprintRuntimeService<*>,
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
         input: ExecutionServiceInput
     ): ExecutionServiceOutput {
         this.graph = graph
@@ -100,7 +100,7 @@ open class ImperativeBlueprintWorkflowService(private val nodeTemplateExecutionS
         if (!workflowActor.isClosedForSend) {
             workflowActor.send(startMessage)
         } else {
-            throw BlueprintProcessorException("workflow($workflowActor) actor is closed")
+            throw BluePrintProcessorException("workflow($workflowActor) actor is closed")
         }
         return output.await()
     }
@@ -114,12 +114,12 @@ open class ImperativeBlueprintWorkflowService(private val nodeTemplateExecutionS
             if (exceptions.isNotEmpty()) {
                 exceptions.forEach {
                     val errorMessage = it.message ?: ""
-                    bluePrintRuntimeService.getBlueprintError().addError(errorMessage, "workflow")
+                    bluePrintRuntimeService.getBluePrintError().addError(errorMessage, "workflow")
                     log.error("workflow($workflowId) exception :", it)
                 }
-                message = BlueprintConstants.STATUS_FAILURE
+                message = BluePrintConstants.STATUS_FAILURE
             } else {
-                message = BlueprintConstants.STATUS_SUCCESS
+                message = BluePrintConstants.STATUS_SUCCESS
             }
             eventType = EventType.EVENT_COMPONENT_EXECUTED.name
         }
@@ -162,9 +162,9 @@ open class ImperativeBlueprintWorkflowService(private val nodeTemplateExecutionS
         val executionServiceOutput = nodeTemplateExecutionService
             .executeNodeTemplate(bluePrintRuntimeService, node.id, nodeTemplateName, nodeInput)
 
-        if (executionServiceOutput.status.message == BlueprintConstants.STATUS_FAILURE) {
+        if (executionServiceOutput.status.message == BluePrintConstants.STATUS_FAILURE) {
             // Clear step errors so that the workflow does not fail
-            bluePrintRuntimeService.getBlueprintError().stepErrors(node.id)?.clear()
+            bluePrintRuntimeService.getBluePrintError().stepErrors(node.id)?.clear()
             return EdgeLabel.FAILURE
         }
 

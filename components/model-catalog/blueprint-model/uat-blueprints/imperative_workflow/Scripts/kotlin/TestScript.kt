@@ -19,8 +19,8 @@ package cba.cds.uat
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 
@@ -41,14 +41,14 @@ open class TestScript : AbstractScriptComponentFunction() {
         setAttribute("response-data", if (shouldFail) FAILED else SUCCEEDED)
 
         if (shouldFail) {
-            throw BlueprintException("Step failed: ${this.stepName}")
+            throw BluePrintException("Step failed: ${this.stepName}")
         }
     }
 
     fun inputValue(name: String): JsonNode? {
         return try {
             return bluePrintRuntimeService.getInputValue(name)
-        } catch (e: BlueprintProcessorException) { null }
+        } catch (e: BluePrintProcessorException) { null }
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {

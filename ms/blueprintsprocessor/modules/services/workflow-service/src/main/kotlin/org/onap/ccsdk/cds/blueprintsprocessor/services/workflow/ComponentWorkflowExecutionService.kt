@@ -18,16 +18,16 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintWorkflowExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.springframework.stereotype.Service
 
 @Service("componentWorkflowExecutionService")
 open class ComponentWorkflowExecutionService(private val nodeTemplateExecutionService: NodeTemplateExecutionService) :
-    BlueprintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
+    BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput> {
 
-    override suspend fun executeBlueprintWorkflow(
-        bluePrintRuntimeService: BlueprintRuntimeService<*>,
+    override suspend fun executeBluePrintWorkflow(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
         executionServiceInput: ExecutionServiceInput,
         properties: MutableMap<String, Any>
     ): ExecutionServiceOutput {

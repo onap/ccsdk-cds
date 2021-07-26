@@ -52,7 +52,7 @@ class PythonExecutorConstants {
 }
 
 @Deprecated("CDS won't support JythonService")
-open class BlueprintPython(
+open class BluePrintPython(
     executablePath: String,
     blueprintPythonPlatform: MutableList<String>,
     val argv: MutableList<String>

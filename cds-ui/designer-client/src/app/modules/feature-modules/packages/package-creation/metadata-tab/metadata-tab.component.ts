@@ -111,7 +111,7 @@ export class MetadataTabComponent implements OnInit , OnDestroy {
         console.log('in validate');
         console.log('in this.metaDataTab.name' + this.metaDataTab.name);
         if (this.metaDataTab.name && this.metaDataTab.version) {
-            this.packageCreationService.checkBlueprintNameAndVersion(this.metaDataTab.name, this.metaDataTab.version).then(element => {
+            this.packageCreationService.checkBluePrintNameAndVersion(this.metaDataTab.name, this.metaDataTab.version).then(element => {
                 if (element) {
                     this.errorMessage = 'Package name already exists with this version. Use different name or different version number.';
                 } else if (!this.metaDataTab.version.match(this.versionPattern)) {

@@ -17,8 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.nats
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
@@ -30,25 +30,25 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
 /** Relationships Types DSL for NATS Producer */
 fun ServiceTemplateBuilder.relationshipTypeConnectsToNats() {
-    val relationshipType = BlueprintTypes.relationshipTypeConnectsToNats()
+    val relationshipType = BluePrintTypes.relationshipTypeConnectsToNats()
     if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
     this.relationshipTypes!![relationshipType.id!!] = relationshipType
 }
 
-fun BlueprintTypes.relationshipTypeConnectsToNats(): RelationshipType {
+fun BluePrintTypes.relationshipTypeConnectsToNats(): RelationshipType {
     return relationshipType(
-        id = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_NATS,
-        version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_NATS,
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
         description = "Relationship connects to through NATS Client."
     ) {
         property(
-            BlueprintConstants.PROPERTY_CONNECTION_CONFIG,
-            BlueprintConstants.DATA_TYPE_MAP,
+            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+            BluePrintConstants.DATA_TYPE_MAP,
             true,
             "Connection Config details."
         )
-        validTargetTypes(arrayListOf(BlueprintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
     }
 }
 
@@ -66,25 +66,25 @@ fun TopologyTemplateBuilder.relationshipTemplateNats(
 class NatsRelationshipTemplateBuilder(name: String, description: String) :
     RelationshipTemplateBuilder(
         name,
-        BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_NATS, description
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_NATS, description
     ) {
 
     fun tokenAuth(block: NatsTokenAuthPropertiesAssignmentBuilder.() -> Unit) {
-        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.tokenAuthNatsProperties(block))
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tokenAuthNatsProperties(block))
     }
 
     fun tlsAuth(block: NatsTLSAuthPropertiesAssignmentBuilder.() -> Unit) {
-        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.tlsAuthNatsProperties(block))
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tlsAuthNatsProperties(block))
     }
 }
 
-fun BlueprintTypes.tokenAuthNatsProperties(block: NatsTokenAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BluePrintTypes.tokenAuthNatsProperties(block: NatsTokenAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = NatsTokenAuthPropertiesAssignmentBuilder().apply(block).build()
     assignments[NatsConnectionProperties::type.name] = NatsLibConstants.TYPE_TOKEN_AUTH.asJsonPrimitive()
     return assignments.asJsonNode()
 }
 
-fun BlueprintTypes.tlsAuthNatsProperties(block: NatsTLSAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BluePrintTypes.tlsAuthNatsProperties(block: NatsTLSAuthPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = NatsTLSAuthPropertiesAssignmentBuilder().apply(block).build()
     assignments[NatsConnectionProperties::type.name] = NatsLibConstants.TYPE_TLS_AUTH.asJsonPrimitive()
     return assignments.asJsonNode()

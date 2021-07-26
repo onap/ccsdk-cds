@@ -19,9 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
 
 abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
@@ -47,7 +47,7 @@ abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
     @Deprecated("Dependencies will be resolved dynamically")
     open fun <T> functionDependencyInstanceAsType(name: String): T {
         return functionDependencyInstances[name] as? T
-            ?: throw BlueprintProcessorException("couldn't get script property instance ($name)")
+            ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
     }
 
     fun checkDynamicProperties(key: String): Boolean {
@@ -60,7 +60,7 @@ abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
 
     suspend fun executeScript(executionServiceInput: ExecutionServiceInput) {
         return when (scriptType) {
-            BlueprintConstants.SCRIPT_JYTHON -> {
+            BluePrintConstants.SCRIPT_JYTHON -> {
                 executeScriptBlocking(executionServiceInput)
             }
             else -> {
@@ -97,34 +97,34 @@ abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
      */
 
     final override fun apply(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
-        throw BlueprintException("Not Implemented, use applyNB method")
+        throw BluePrintException("Not Implemented, use applyNB method")
     }
 
     final override fun prepareRequest(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
-        throw BlueprintException("Not Implemented required")
+        throw BluePrintException("Not Implemented required")
     }
 
     final override fun prepareResponse(): ExecutionServiceOutput {
-        throw BlueprintException("Not Implemented required")
+        throw BluePrintException("Not Implemented required")
     }
 
     final override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
-        throw BlueprintException("Not Implemented required")
+        throw BluePrintException("Not Implemented required")
     }
 
     final override suspend fun prepareRequestNB(executionRequest: ExecutionServiceInput): ExecutionServiceInput {
-        throw BlueprintException("Not Implemented required")
+        throw BluePrintException("Not Implemented required")
     }
 
     final override suspend fun prepareResponseNB(): ExecutionServiceOutput {
-        throw BlueprintException("Not Implemented required")
+        throw BluePrintException("Not Implemented required")
     }
 
     override fun process(executionRequest: ExecutionServiceInput) {
-        throw BlueprintException("Not Implemented, child class will implement this")
+        throw BluePrintException("Not Implemented, child class will implement this")
     }
 
     override fun recover(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        throw BlueprintException("Not Implemented, child class will implement this")
+        throw BluePrintException("Not Implemented, child class will implement this")
     }
 }

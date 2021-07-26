@@ -1,7 +1,7 @@
-import {BlueprintPage} from './model/Blueprint.model';
+import {BluePrintPage} from './model/BluePrint.model';
 import {PackagesDashboardState} from './model/packages-dashboard.state';
 
-export function getBlueprintPageMock(): BlueprintPage {
+export function getBluePrintPageMock(): BluePrintPage {
     return {
         content: [
             {

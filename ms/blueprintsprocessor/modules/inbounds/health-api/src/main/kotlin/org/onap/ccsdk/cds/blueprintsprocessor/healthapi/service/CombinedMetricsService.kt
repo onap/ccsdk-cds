@@ -27,7 +27,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientSer
 import org.springframework.stereotype.Service
 
 /**
- *Service for combined Metrics for CDS Listener and BlueprintProcessor
+ *Service for combined Metrics for CDS Listener and BluePrintProcessor
  *
  * @author Shaaban Ebrahim
  * @version 1.0
@@ -41,7 +41,7 @@ open class CombinedMetricsService(
 
     private fun setupServiceEndpoint(): List<ServiceEndpoint> {
         return listOf(
-            ServiceEndpoint("BlueprintProcessor metrics", healthCheckProperties.getBlueprintBaseURL() + "/actuator/metrics"),
+            ServiceEndpoint("BluePrintProcessor metrics", healthCheckProperties.getBluePrintBaseURL() + "/actuator/metrics"),
             ServiceEndpoint("CDS Listener metrics", healthCheckProperties.getCDSListenerBaseURL() + "/actuator/metrics")
         )
     }

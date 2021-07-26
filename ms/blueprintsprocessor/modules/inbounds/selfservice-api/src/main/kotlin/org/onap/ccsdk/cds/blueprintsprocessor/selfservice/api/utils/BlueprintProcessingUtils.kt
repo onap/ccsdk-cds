@@ -18,8 +18,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils
 import io.micrometer.core.instrument.Tag
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.springframework.http.HttpStatus
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.util.StringUtils
@@ -30,13 +30,13 @@ import java.util.UUID
 
 const val INTERNAL_SERVER_ERROR_HTTP_STATUS_CODE = 500
 
-@Throws(BlueprintException::class, IOException::class)
+@Throws(BluePrintException::class, IOException::class)
 fun saveCBAFile(filePart: FilePart, targetDirectory: Path): Path {
 
     val fileName = StringUtils.cleanPath(filePart.filename())
 
     if (StringUtils.getFilenameExtension(fileName) != "zip") {
-        throw BlueprintException("Invalid file extension required ZIP")
+        throw BluePrintException("Invalid file extension required ZIP")
     }
 
     val changedFileName = UUID.randomUUID().toString() + ".zip"
@@ -68,19 +68,19 @@ fun determineHttpStatusCode(statusCode: Int): HttpStatus {
 fun cbaMetricTags(executionServiceInput: ExecutionServiceInput): MutableList<Tag> =
     executionServiceInput.actionIdentifiers.let {
         mutableListOf(
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_NAME, it.blueprintName),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_VERSION, it.blueprintVersion),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_ACTION, it.actionName)
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_NAME, it.blueprintName),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_VERSION, it.blueprintVersion),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_ACTION, it.actionName)
         )
     }
 
 fun cbaMetricTags(executionServiceOutput: ExecutionServiceOutput): MutableList<Tag> =
     executionServiceOutput.let {
         mutableListOf(
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_NAME, it.actionIdentifiers.blueprintName),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_VERSION, it.actionIdentifiers.blueprintVersion),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_ACTION, it.actionIdentifiers.actionName),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_STATUS, it.status.code.toString()),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_OUTCOME, it.status.message)
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_NAME, it.actionIdentifiers.blueprintName),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_VERSION, it.actionIdentifiers.blueprintVersion),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_ACTION, it.actionIdentifiers.actionName),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_STATUS, it.status.code.toString()),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_OUTCOME, it.status.message)
         )
     }

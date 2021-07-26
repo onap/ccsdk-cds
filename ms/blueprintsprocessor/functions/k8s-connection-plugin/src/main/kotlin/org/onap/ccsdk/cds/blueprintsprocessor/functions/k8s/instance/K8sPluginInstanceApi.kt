@@ -26,7 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck.K8sRbInstanceHealthCheckList
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck.K8sRbInstanceHealthCheckSimple
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod.DELETE
@@ -55,10 +55,10 @@ class K8sPluginInstanceApi(
             } else if (result.status == 500 && result.body.contains("Did not find any objects with tag"))
                 null
             else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -77,10 +77,10 @@ class K8sPluginInstanceApi(
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
                 null
             else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -116,10 +116,10 @@ class K8sPluginInstanceApi(
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
                 null
             else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -155,10 +155,10 @@ class K8sPluginInstanceApi(
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
                 null
             else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -180,10 +180,10 @@ class K8sPluginInstanceApi(
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
                 null
             else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -205,10 +205,10 @@ class K8sPluginInstanceApi(
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
                 null
             else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -230,10 +230,10 @@ class K8sPluginInstanceApi(
             } else if (result.status == 500 && result.body.contains("Error finding master table"))
                 null
             else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -252,10 +252,10 @@ class K8sPluginInstanceApi(
                 )
                 parsedObject
             } else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to create config instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -274,10 +274,10 @@ class K8sPluginInstanceApi(
                 )
                 parsedObject
             } else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to edit config instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -293,7 +293,7 @@ class K8sPluginInstanceApi(
             return result.status in 200..299
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -312,10 +312,10 @@ class K8sPluginInstanceApi(
                 )
                 parsedObject
             } else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get config instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -329,10 +329,10 @@ class K8sPluginInstanceApi(
             )
             log.debug(result.toString())
             if (result.status !in 200..299)
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to delete config instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -351,10 +351,10 @@ class K8sPluginInstanceApi(
                 )
                 parsedObject
             } else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -373,10 +373,10 @@ class K8sPluginInstanceApi(
                 )
                 parsedObject
             } else
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -390,10 +390,10 @@ class K8sPluginInstanceApi(
             )
             log.debug(result.toString())
             if (result.status !in 200..299)
-                throw BlueprintProcessorException(result.body)
+                throw BluePrintProcessorException(result.body)
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb instance")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 }

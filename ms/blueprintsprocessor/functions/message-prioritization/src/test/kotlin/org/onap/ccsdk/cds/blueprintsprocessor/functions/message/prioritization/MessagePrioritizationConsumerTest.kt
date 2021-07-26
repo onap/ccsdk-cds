@@ -27,8 +27,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.PrioritizationMessageRepository
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.DefaultMessagePrioritizeProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.kafka.KafkaMessagePrioritizationConsumer
@@ -38,17 +38,17 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.s
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.SampleMessagePrioritizationService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.service.SampleNatsMessagePrioritizationService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.utils.MessagePrioritizationSample
-import org.onap.ccsdk.cds.blueprintsprocessor.message.BlueprintMessageLibConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.KafkaMessageProducerService
-import org.onap.ccsdk.cds.blueprintsprocessor.nats.BlueprintNatsLibConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.nats.service.BlueprintNatsLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.nats.BluePrintNatsLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.nats.service.BluePrintNatsLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.nats.utils.NatsClusterUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.asByteArray
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -65,8 +65,8 @@ import kotlin.test.assertNotNull
 @DirtiesContext
 @ContextConfiguration(
     classes = [
-        BlueprintMessageLibConfiguration::class, BlueprintNatsLibConfiguration::class,
-        BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class,
+        BluePrintMessageLibConfiguration::class, BluePrintNatsLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class,
         MessagePrioritizationConfiguration::class, TestDatabaseConfiguration::class
     ]
 )
@@ -115,10 +115,10 @@ open class MessagePrioritizationConsumerTest {
     lateinit var prioritizationMessageRepository: PrioritizationMessageRepository
 
     @Autowired
-    lateinit var bluePrintMessageLibPropertyService: BlueprintMessageLibPropertyService
+    lateinit var bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
 
     @Autowired
-    lateinit var bluePrintNatsLibPropertyService: BlueprintNatsLibPropertyService
+    lateinit var bluePrintNatsLibPropertyService: BluePrintNatsLibPropertyService
 
     @Autowired
     lateinit var messagePrioritizationStateService: MessagePrioritizationStateService
@@ -128,15 +128,15 @@ open class MessagePrioritizationConsumerTest {
 
     @Before
     fun setup() {
-        BlueprintDependencyService.inject(applicationContext)
+        BluePrintDependencyService.inject(applicationContext)
     }
 
     @Test
-    fun testBlueprintKafkaJDBCKeyStore() {
+    fun testBluePrintKafkaJDBCKeyStore() {
         runBlocking {
             assertNotNull(prioritizationMessageRepository, "failed to get prioritizationMessageRepository")
 
-            val messagePrioritizationService: MessagePrioritizationStateService = BlueprintDependencyService
+            val messagePrioritizationService: MessagePrioritizationStateService = BluePrintDependencyService
                 .instance(MessagePrioritizationStateService::class)
             assertNotNull(messagePrioritizationService, "failed to get messagePrioritizationService")
 
@@ -248,7 +248,7 @@ open class MessagePrioritizationConsumerTest {
             )
 
             // Register the processor
-            BlueprintDependencyService.registerSingleton(
+            BluePrintDependencyService.registerSingleton(
                 MessagePrioritizationConstants.PROCESSOR_PRIORITIZE,
                 defaultMessagePrioritizeProcessor
             )

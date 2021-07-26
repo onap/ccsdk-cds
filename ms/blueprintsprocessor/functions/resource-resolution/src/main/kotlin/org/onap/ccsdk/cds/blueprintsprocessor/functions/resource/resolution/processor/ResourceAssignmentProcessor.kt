@@ -22,13 +22,13 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintException
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunctionNode
 import org.onap.ccsdk.cds.controllerblueprints.core.isNullOrMissing
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintVelocityTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
@@ -50,7 +50,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
      */
     open fun <T> scriptPropertyInstanceType(name: String): T {
         return scriptPropertyInstances as? T
-            ?: throw BlueprintProcessorException("couldn't get script property instance ($name)")
+            ?: throw BluePrintProcessorException("couldn't get script property instance ($name)")
     }
 
     open fun setFromInput(resourceAssignment: ResourceAssignment): Boolean {
@@ -64,7 +64,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, value)
                 return true
             }
-        } catch (e: BlueprintProcessorException) {
+        } catch (e: BluePrintProcessorException) {
             // NoOp - couldn't find value from input
         }
         return false
@@ -83,7 +83,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
                     return true
                 }
             }
-        } catch (e: BlueprintProcessorException) {
+        } catch (e: BluePrintProcessorException) {
             // NoOp - couldn't find value from input
         }
         return false
@@ -110,7 +110,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
                 return valueToResolve
             }
             // TODO("Optimize to JSON Node directly without velocity").asJsonNode().toString()
-            return BlueprintVelocityTemplateService.generateContent(valueToResolve, keyMapping.asJsonNode().toString())
+            return BluePrintVelocityTemplateService.generateContent(valueToResolve, keyMapping.asJsonNode().toString())
         }
 
     final override suspend fun applyNB(resourceAssignment: ResourceAssignment): Boolean {
@@ -126,7 +126,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
 
     suspend fun executeScript(resourceAssignment: ResourceAssignment) {
         return when (scriptType) {
-            BlueprintConstants.SCRIPT_JYTHON -> {
+            BluePrintConstants.SCRIPT_JYTHON -> {
                 executeScriptBlocking(resourceAssignment)
             }
             else -> {
@@ -163,39 +163,39 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
      */
 
     final override fun apply(resourceAssignment: ResourceAssignment): Boolean {
-        throw BlueprintException("Not Implemented, use applyNB method")
+        throw BluePrintException("Not Implemented, use applyNB method")
     }
 
     final override fun prepareRequest(resourceAssignment: ResourceAssignment): ResourceAssignment {
-        throw BlueprintException("Not Implemented required")
+        throw BluePrintException("Not Implemented required")
     }
 
     final override fun prepareResponse(): Boolean {
-        throw BlueprintException("Not Implemented required")
+        throw BluePrintException("Not Implemented required")
     }
 
     final override suspend fun prepareRequestNB(resourceAssignment: ResourceAssignment): ResourceAssignment {
-        throw BlueprintException("Not Implemented required")
+        throw BluePrintException("Not Implemented required")
     }
 
     final override suspend fun prepareResponseNB(): Boolean {
-        throw BlueprintException("Not Implemented required")
+        throw BluePrintException("Not Implemented required")
     }
 
     override fun process(resourceAssignment: ResourceAssignment) {
-        throw BlueprintException("Not Implemented, child class will implement this")
+        throw BluePrintException("Not Implemented, child class will implement this")
     }
 
     override fun recover(runtimeException: RuntimeException, resourceAssignment: ResourceAssignment) {
-        throw BlueprintException("Not Implemented, child class will implement this")
+        throw BluePrintException("Not Implemented, child class will implement this")
     }
 
     fun addError(type: String, name: String, error: String) {
-        raRuntimeService.getBlueprintError().addError(type, name, error, getName())
+        raRuntimeService.getBluePrintError().addError(type, name, error, getName())
     }
 
     fun addError(error: String) {
-        raRuntimeService.getBlueprintError().addError(error, getName())
+        raRuntimeService.getBluePrintError().addError(error, getName())
     }
 
     fun isTemplateKeyValueNull(resourceAssignment: ResourceAssignment): Boolean {

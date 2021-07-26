@@ -19,12 +19,12 @@ limitations under the License.
 ============LICENSE_END============================================
 */
 
-import {BlueprintPage} from './Blueprint.model';
+import {BluePrintPage} from './BluePrint.model';
 
 export class PackagesDashboardState {
 
-    page: BlueprintPage;
-    filteredPackages: BlueprintPage;
+    page: BluePrintPage;
+    filteredPackages: BluePrintPage;
     command: string;
     currentPage = 0;
     totalPackages: number;

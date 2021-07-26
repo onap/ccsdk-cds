@@ -22,8 +22,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Reso
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -33,7 +33,7 @@ import java.util.HashMap
 
 class MockRestResourceResolutionProcessor(
     private val blueprintRestLibPropertyService:
-        MockBlueprintRestLibPropertyService
+        MockBluePrintRestLibPropertyService
 ) : ResourceAssignmentProcessor() {
 
     private val logger = LoggerFactory.getLogger(MockRestResourceResolutionProcessor::class.java)
@@ -97,12 +97,12 @@ class MockRestResourceResolutionProcessor(
                     val errMsg =
                         "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
                     logger.warn(errMsg)
-                    throw BlueprintProcessorException(errMsg)
+                    throw BluePrintProcessorException(errMsg)
                 }
             }
         } catch (e: Exception) {
             ResourceAssignmentUtils.setFailedResourceDataValue(executionRequest, e.message)
-            throw BlueprintProcessorException(
+            throw BluePrintProcessorException(
                 "Failed in template resolutionKey ($executionRequest) assignments with: ${e.message}",
                 e
             )
@@ -117,7 +117,7 @@ class MockRestResourceResolutionProcessor(
         return blueprintRestLibPropertyService.mockBlueprintWebClientService(resourceAssignment.dictionarySource!!)
     }
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     private fun populateResource(
         resourceAssignment: ResourceAssignment,
         sourceProperties: RestResourceSource,
@@ -132,15 +132,15 @@ class MockRestResourceResolutionProcessor(
         val responseNode = JacksonUtils.jsonNode(restResponse).at(path)
 
         when (type) {
-            in BlueprintTypes.validPrimitiveTypes() -> {
+            in BluePrintTypes.validPrimitiveTypes() -> {
                 ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, responseNode)
             }
-            in BlueprintTypes.validCollectionTypes() -> {
+            in BluePrintTypes.validCollectionTypes() -> {
                 // Array Types
                 entrySchemaType = resourceAssignment.property!!.entrySchema!!.type
                 val arrayNode = responseNode as ArrayNode
 
-                if (entrySchemaType !in BlueprintTypes.validPrimitiveTypes()) {
+                if (entrySchemaType !in BluePrintTypes.validPrimitiveTypes()) {
                     val responseArrayNode = responseNode.toList()
                     for (responseSingleJsonNode in responseArrayNode) {
 

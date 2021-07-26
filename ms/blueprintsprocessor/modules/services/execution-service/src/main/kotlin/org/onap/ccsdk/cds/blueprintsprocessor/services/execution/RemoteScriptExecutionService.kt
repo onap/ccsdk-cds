@@ -29,8 +29,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutio
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptExecutionOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.RemoteScriptUploadBlueprintOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StatusType
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BlueprintGrpcClientService
-import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BlueprintGrpcLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcClientService
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.BluePrintGrpcLibPropertyService
 import org.onap.ccsdk.cds.controllerblueprints.command.api.CommandExecutorServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionInput
 import org.onap.ccsdk.cds.controllerblueprints.command.api.ExecutionOutput
@@ -63,7 +63,7 @@ interface RemoteScriptExecutionService {
     havingValue = "true", matchIfMissing = false
 )
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyService: BlueprintGrpcLibPropertyService) :
+class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyService: BluePrintGrpcLibPropertyService) :
     RemoteScriptExecutionService {
 
     private val log = LoggerFactory.getLogger(GrpcRemoteScriptExecutionService::class.java)!!
@@ -73,7 +73,7 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
 
     override suspend fun init(selector: Any) {
         // Get the GRPC Client Service based on selector
-        val grpcClientService: BlueprintGrpcClientService = if (selector is JsonNode) {
+        val grpcClientService: BluePrintGrpcClientService = if (selector is JsonNode) {
             bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector)
         } else {
             bluePrintGrpcLibPropertyService.blueprintGrpcClientService(selector.toString())

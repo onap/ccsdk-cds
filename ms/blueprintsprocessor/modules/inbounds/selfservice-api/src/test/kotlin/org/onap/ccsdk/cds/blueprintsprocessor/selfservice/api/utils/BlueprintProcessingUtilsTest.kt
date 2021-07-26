@@ -24,7 +24,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit4.SpringRunner
 
@@ -57,9 +57,9 @@ class BlueprintProcessingUtilsTest {
         }
 
         val expectedTags = mutableListOf(
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_NAME, executionServiceInput.actionIdentifiers.blueprintName),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_VERSION, executionServiceInput.actionIdentifiers.blueprintVersion),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_ACTION, executionServiceInput.actionIdentifiers.actionName)
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_NAME, executionServiceInput.actionIdentifiers.blueprintName),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_VERSION, executionServiceInput.actionIdentifiers.blueprintVersion),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_ACTION, executionServiceInput.actionIdentifiers.actionName)
         )
 
         val metricTag = cbaMetricTags(executionServiceInput)
@@ -82,11 +82,11 @@ class BlueprintProcessingUtilsTest {
         }
 
         val expectedTags = mutableListOf(
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_NAME, executionServiceOutput.actionIdentifiers.blueprintName),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_VERSION, executionServiceOutput.actionIdentifiers.blueprintVersion),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_ACTION, executionServiceOutput.actionIdentifiers.actionName),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_STATUS, executionServiceOutput.status.code.toString()),
-            Tag.of(BlueprintConstants.METRIC_TAG_BP_OUTCOME, executionServiceOutput.status.message)
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_NAME, executionServiceOutput.actionIdentifiers.blueprintName),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_VERSION, executionServiceOutput.actionIdentifiers.blueprintVersion),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_ACTION, executionServiceOutput.actionIdentifiers.actionName),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_STATUS, executionServiceOutput.status.code.toString()),
+            Tag.of(BluePrintConstants.METRIC_TAG_BP_OUTCOME, executionServiceOutput.status.message)
         )
 
         val metricTag = cbaMetricTags(executionServiceOutput)

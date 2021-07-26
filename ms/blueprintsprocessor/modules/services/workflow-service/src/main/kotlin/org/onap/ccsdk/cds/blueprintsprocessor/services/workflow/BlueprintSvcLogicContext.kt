@@ -16,20 +16,20 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.sli.core.sli.SvcLogicContext
 
 class BlueprintSvcLogicContext : SvcLogicContext() {
 
-    private var bluePrintRuntimeService: BlueprintRuntimeService<*>? = null
+    private var bluePrintRuntimeService: BluePrintRuntimeService<*>? = null
     private var request: Any? = null
     private var response: Any? = null
 
-    fun getBlueprintService(): BlueprintRuntimeService<*> {
+    fun getBluePrintService(): BluePrintRuntimeService<*> {
         return this.bluePrintRuntimeService!!
     }
 
-    fun setBlueprintRuntimeService(bluePrintRuntimeService: BlueprintRuntimeService<*>) {
+    fun setBluePrintRuntimeService(bluePrintRuntimeService: BluePrintRuntimeService<*>) {
         this.bluePrintRuntimeService = bluePrintRuntimeService
     }
 

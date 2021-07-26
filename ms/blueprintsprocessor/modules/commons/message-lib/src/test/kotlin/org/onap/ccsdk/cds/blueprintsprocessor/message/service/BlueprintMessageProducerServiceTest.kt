@@ -34,9 +34,9 @@ import org.apache.kafka.common.security.scram.ScramLoginModule
 import org.apache.kafka.common.serialization.ByteArraySerializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertyConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.message.BlueprintMessageLibConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageLibConstants
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -53,8 +53,8 @@ import kotlin.test.assertTrue
 @DirtiesContext
 @ContextConfiguration(
     classes = [
-        BlueprintMessageLibConfiguration::class,
-        BlueprintPropertyConfiguration::class, BlueprintPropertiesService::class
+        BluePrintMessageLibConfiguration::class,
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class
     ]
 )
 @TestPropertySource(
@@ -75,7 +75,7 @@ import kotlin.test.assertTrue
 open class BlueprintMessageProducerServiceTest {
 
     @Autowired
-    lateinit var bluePrintMessageLibPropertyService: BlueprintMessageLibPropertyService
+    lateinit var bluePrintMessageLibPropertyService: BluePrintMessageLibPropertyService
 
     @MockBean
     lateinit var meterRegistry: MeterRegistry
@@ -93,11 +93,11 @@ open class BlueprintMessageProducerServiceTest {
 
             every { mockKafkaTemplate.send(any(), any()) } returns responseMock
 
-            val spyBlueprintMessageProducerService = spyk(blueprintMessageProducerService, recordPrivateCalls = true)
+            val spyBluePrintMessageProducerService = spyk(blueprintMessageProducerService, recordPrivateCalls = true)
 
-            every { spyBlueprintMessageProducerService.messageTemplate(any()) } returns mockKafkaTemplate
+            every { spyBluePrintMessageProducerService.messageTemplate(any()) } returns mockKafkaTemplate
 
-            val response = spyBlueprintMessageProducerService.sendMessage("mykey", "Testing message")
+            val response = spyBluePrintMessageProducerService.sendMessage("mykey", "Testing message")
             assertTrue(response, "failed to get command response")
         }
     }

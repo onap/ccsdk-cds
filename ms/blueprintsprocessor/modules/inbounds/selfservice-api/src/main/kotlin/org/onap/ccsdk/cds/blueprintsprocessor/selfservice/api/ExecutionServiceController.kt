@@ -27,11 +27,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutp
 import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.optionalClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.determineHttpStatusCode
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -70,8 +70,8 @@ open class ExecutionServiceController {
     suspend fun executionServiceControllerHealthCheck(): ResponseEntity<JsonNode> = mdcWebCoroutineScope {
         var body = mutableMapOf("success" to true)
         var statusCode = 200
-        if (BlueprintConstants.CLUSTER_ENABLED &&
-            BlueprintDependencyService.optionalClusterService()?.clusterJoined() != true
+        if (BluePrintConstants.CLUSTER_ENABLED &&
+            BluePrintDependencyService.optionalClusterService()?.clusterJoined() != true
         ) {
             statusCode = 503
             body.remove("success")

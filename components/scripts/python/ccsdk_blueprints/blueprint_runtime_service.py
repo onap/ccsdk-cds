@@ -1,4 +1,4 @@
-class BlueprintRuntimeService:
+class BluePrintRuntimeService:
 
     def __init__(self, bps):
         self.bps = bps

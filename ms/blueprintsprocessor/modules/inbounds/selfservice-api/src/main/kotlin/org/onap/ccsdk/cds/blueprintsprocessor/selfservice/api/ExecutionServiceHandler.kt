@@ -34,21 +34,21 @@ import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.SelfServiceMetricC
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.cbaMetricTags
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.config.BlueprintLoadConfiguration
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintWorkflowExecutionService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintWorkflowExecutionService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class ExecutionServiceHandler(
-    private val bluePrintLoadConfiguration: BlueprintLoadConfiguration,
-    private val blueprintsProcessorCatalogService: BlueprintCatalogService,
+    private val bluePrintLoadConfiguration: BluePrintLoadConfiguration,
+    private val blueprintsProcessorCatalogService: BluePrintCatalogService,
     private val bluePrintWorkflowExecutionService:
-        BlueprintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>,
+        BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>,
     private val publishAuditService: PublishAuditService,
     private val meterRegistry: MeterRegistry
 ) {
@@ -111,14 +111,14 @@ class ExecutionServiceHandler(
                 val basePath = blueprintsProcessorCatalogService.getFromDatabase(blueprintName, blueprintVersion)
                 log.info("blueprint base path $basePath")
 
-                val blueprintRuntimeService = BlueprintMetadataUtils.getBlueprintRuntime(requestId, basePath.toString())
+                val blueprintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(requestId, basePath.toString())
 
-                executionServiceOutput = bluePrintWorkflowExecutionService.executeBlueprintWorkflow(
+                executionServiceOutput = bluePrintWorkflowExecutionService.executeBluePrintWorkflow(
                     blueprintRuntimeService,
                     executionServiceInput, hashMapOf()
                 )
 
-                val errors = blueprintRuntimeService.getBlueprintError().allErrors()
+                val errors = blueprintRuntimeService.getBluePrintError().allErrors()
                 if (errors.isNotEmpty()) {
                     setErrorStatus(errors.joinToString(", "), executionServiceOutput.status)
                 }
@@ -144,7 +144,7 @@ class ExecutionServiceHandler(
     /** If no blueprint is needed, then get the Service function instance mapping to the action name and execute it */
     suspend fun executeServiceFunction(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
         val actionName = executionServiceInput.actionIdentifiers.actionName
-        val instance = BlueprintDependencyService.instance<AbstractServiceFunction>(actionName)
+        val instance = BluePrintDependencyService.instance<AbstractServiceFunction>(actionName)
         checkNotNull(instance) { "failed to initialize service function($actionName)" }
         instance.actionName = actionName
         return instance.applyNB(executionServiceInput)
@@ -154,7 +154,7 @@ class ExecutionServiceHandler(
         status.errorMessage = errorMessage
         status.eventType = EventType.EVENT_COMPONENT_FAILURE.name
         status.code = 500
-        status.message = BlueprintConstants.STATUS_FAILURE
+        status.message = BluePrintConstants.STATUS_FAILURE
     }
 
     private fun response(
@@ -173,7 +173,7 @@ class ExecutionServiceHandler(
         } else {
             status.eventType = EventType.EVENT_COMPONENT_PROCESSING.name
             status.code = 200
-            status.message = BlueprintConstants.STATUS_PROCESSING
+            status.message = BluePrintConstants.STATUS_PROCESSING
         }
 
         executionServiceOutput.status = status
