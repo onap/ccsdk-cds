@@ -17,9 +17,9 @@
 package org.onap.ccsdk.cds.controllerblueprints.validation.extension
 
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintArtifactDefinitionValidator
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintTypeValidatorService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintArtifactDefinitionValidator
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeValidatorService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.service.ResourceAssignmentValidationServiceImpl
@@ -28,13 +28,13 @@ import org.springframework.stereotype.Service
 import java.io.File
 
 @Service("artifact-mapping-resource-artifact-definition-validator")
-open class ArtifactMappingResourceValidator(private val bluePrintTypeValidatorService: BlueprintTypeValidatorService) :
-    BlueprintArtifactDefinitionValidator {
+open class ArtifactMappingResourceValidator(private val bluePrintTypeValidatorService: BluePrintTypeValidatorService) :
+    BluePrintArtifactDefinitionValidator {
 
     private val log = LoggerFactory.getLogger(ArtifactMappingResourceValidator::class.toString())
 
     override fun validate(
-        bluePrintRuntimeService: BlueprintRuntimeService<*>,
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
         name: String,
         artifactDefinition: ArtifactDefinition
     ) {

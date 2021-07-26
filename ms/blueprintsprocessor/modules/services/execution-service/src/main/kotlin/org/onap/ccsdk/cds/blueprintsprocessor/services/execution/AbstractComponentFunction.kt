@@ -24,11 +24,11 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutp
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.Status
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.executeWithLock
-import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.CDS_LOCK_GROUP
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotBlank
 import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
@@ -38,8 +38,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BlueprintFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonPathParse
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.readNBLines
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintRuntimeService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintVelocityTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.slf4j.LoggerFactory
 
 /**
@@ -53,8 +53,8 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
     lateinit var executionServiceInput: ExecutionServiceInput
     var executionServiceOutput = ExecutionServiceOutput()
-    lateinit var bluePrintRuntimeService: BlueprintRuntimeService<*>
-    lateinit var bluePrintClusterService: BlueprintClusterService
+    lateinit var bluePrintRuntimeService: BluePrintRuntimeService<*>
+    lateinit var bluePrintClusterService: BluePrintClusterService
     lateinit var implementation: Implementation
     lateinit var processId: String
     lateinit var workflowName: String
@@ -88,13 +88,13 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
         log.info("preparing request id($processId) for workflow($workflowName) step($stepName)")
 
-        nodeTemplateName = this.operationInputs.getAsString(BlueprintConstants.PROPERTY_CURRENT_NODE_TEMPLATE)
+        nodeTemplateName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_NODE_TEMPLATE)
         check(nodeTemplateName.isNotEmpty()) { "couldn't get NodeTemplate name for step($stepName)" }
 
-        interfaceName = this.operationInputs.getAsString(BlueprintConstants.PROPERTY_CURRENT_INTERFACE)
+        interfaceName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_INTERFACE)
         check(interfaceName.isNotEmpty()) { "couldn't get Interface name for step($stepName)" }
 
-        operationName = this.operationInputs.getAsString(BlueprintConstants.PROPERTY_CURRENT_OPERATION)
+        operationName = this.operationInputs.getAsString(BluePrintConstants.PROPERTY_CURRENT_OPERATION)
         check(operationName.isNotEmpty()) { "couldn't get Operation name for step($stepName)" }
 
         /** Get the Implementation Details */
@@ -105,7 +105,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
         /** Resolve and validate lock properties */
         implementation.lock?.apply {
             val resolvedValues = bluePrintRuntimeService.resolvePropertyAssignments(
-                BlueprintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
+                BluePrintConstants.MODEL_DEFINITION_TYPE_NODE_TEMPLATE,
                 interfaceName,
                 mutableMapOf("key" to this.key, "acquireTimeout" to this.acquireTimeout)
             )
@@ -146,11 +146,11 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
             status.eventType = EventType.EVENT_COMPONENT_EXECUTED.name
 
-            bluePrintRuntimeService.getBlueprintError().stepErrors(stepName)?.let {
-                status.message = BlueprintConstants.STATUS_FAILURE
+            bluePrintRuntimeService.getBluePrintError().stepErrors(stepName)?.let {
+                status.message = BluePrintConstants.STATUS_FAILURE
             }
         } catch (e: Exception) {
-            status.message = BlueprintConstants.STATUS_FAILURE
+            status.message = BluePrintConstants.STATUS_FAILURE
             status.eventType = EventType.EVENT_COMPONENT_FAILURE.name
         }
         executionServiceOutput.status = status
@@ -184,7 +184,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
     fun getOperationInput(key: String): JsonNode {
         return operationInputs[key]
-            ?: throw BlueprintProcessorException("couldn't get the operation input($key) value.")
+            ?: throw BluePrintProcessorException("couldn't get the operation input($key) value.")
     }
 
     fun getOptionalOperationInput(key: String): JsonNode? {
@@ -196,11 +196,11 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     fun addError(type: String, name: String, error: String) {
-        bluePrintRuntimeService.getBlueprintError().addError(type, name, error, stepName)
+        bluePrintRuntimeService.getBluePrintError().addError(type, name, error, stepName)
     }
 
     fun addError(error: String) {
-        bluePrintRuntimeService.getBlueprintError().addError(error, stepName)
+        bluePrintRuntimeService.getBluePrintError().addError(error, stepName)
     }
 
     /**
@@ -229,12 +229,12 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
 
     suspend fun relationshipProperty(relationshipName: String, propertyName: String): JsonNode {
         return bluePrintRuntimeService.resolveRelationshipTemplateProperties(relationshipName).get(propertyName)
-            ?: throw BlueprintProcessorException("failed to get relationship($relationshipName) property($propertyName)")
+            ?: throw BluePrintProcessorException("failed to get relationship($relationshipName) property($propertyName)")
     }
 
     suspend fun mashTemplateNData(artifactName: String, json: String): String {
         val content = artifactContent(artifactName)
-        return BlueprintVelocityTemplateService.generateContent(content, json)
+        return BluePrintVelocityTemplateService.generateContent(content, json)
     }
 
     suspend fun readLinesFromArtifact(artifactName: String): List<String> {

@@ -27,7 +27,7 @@ import org.springframework.transaction.PlatformTransactionManager
 import javax.sql.DataSource
 
 @Configuration
-@Import(BlueprintDBLibConfiguration::class)
+@Import(BluePrintDBLibConfiguration::class)
 @EnableJpaRepositories(
     basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor.db.primary"],
     entityManagerFactoryRef = "primaryEntityManager",

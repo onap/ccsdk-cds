@@ -38,9 +38,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ArchiveType
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintArchiveUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
@@ -88,12 +88,12 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
             val api = K8sApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleModelInvariantUuid, vfModuleModelUuid)
 
             if (!api.hasDefinition()) {
-                throw BlueprintProcessorException("K8s RB Definition ($vfModuleModelInvariantUuid/$vfModuleModelUuid) not found ")
+                throw BluePrintProcessorException("K8s RB Definition ($vfModuleModelInvariantUuid/$vfModuleModelUuid) not found ")
             }
 
             log.info("k8s-rb-profile-name: $k8sRbProfileName")
             if (k8sRbProfileName.equals("")) {
-                throw BlueprintProcessorException("K8s rb profile name is empty! Either define profile name to use or choose default")
+                throw BluePrintProcessorException("K8s rb profile name is empty! Either define profile name to use or choose default")
             }
             if (k8sRbProfileName.equals("default") and api.hasProfile(k8sRbProfileName)) {
                 log.info("Using default profile - skipping upload")
@@ -126,13 +126,13 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         val profileFile = profileFilePath.toFile()
 
         if (!profileFile.exists())
-            throw BlueprintProcessorException("K8s Profile template file $profileFilePath does not exists")
+            throw BluePrintProcessorException("K8s Profile template file $profileFilePath does not exists")
 
         val tempMainPath: File = createTempDir("k8s-profile-", "")
         val tempProfilePath: File = createTempDir("$k8sRbProfileName-", "", tempMainPath)
         log.info("Decompressing profile to $tempProfilePath")
 
-        val decompressedProfile: File = BlueprintArchiveUtils.deCompress(
+        val decompressedProfile: File = BluePrintArchiveUtils.deCompress(
             profileFilePath.toFile(),
             "$tempProfilePath",
             ArchiveType.TarGz
@@ -150,8 +150,8 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         File(tmpOverrideFile).copyTo(File(destOverrideFile), true)
         profileFilePath = Paths.get(tempMainPath.toString().plus(File.separator).plus("template-profile.tar.gz"))
 
-        if (!BlueprintArchiveUtils.compress(decompressedProfile, profileFilePath.toFile(), ArchiveType.TarGz)) {
-            throw BlueprintProcessorException("Profile compression has failed")
+        if (!BluePrintArchiveUtils.compress(decompressedProfile, profileFilePath.toFile(), ArchiveType.TarGz)) {
+            throw BluePrintProcessorException("Profile compression has failed")
         }
         log.info("$profileFilePath compression completed")
         return profileFilePath
@@ -182,12 +182,12 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         val profileFile = profileFilePath.toFile()
 
         if (!profileFile.exists())
-            throw BlueprintProcessorException("K8s Profile template file $profileFilePath does not exists")
+            throw BluePrintProcessorException("K8s Profile template file $profileFilePath does not exists")
 
         val success = File(destPath).mkdirs()
         log.info("Decompressing profile to $destPath")
 
-        val decompressedProfile: File = BlueprintArchiveUtils.deCompress(
+        val decompressedProfile: File = BluePrintArchiveUtils.deCompress(
             profileFilePath.toFile(),
             "$destPath",
             ArchiveType.TarGz
@@ -312,7 +312,7 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
                     return false
             } catch (e: Exception) {
                 log.info("Caught exception trying to get k8s rb definition")
-                throw BlueprintProcessorException("${e.message}")
+                throw BluePrintProcessorException("${e.message}")
             }
         }
 
@@ -331,7 +331,7 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
                 }
             } catch (e: Exception) {
                 log.info("Caught exception trying to get k8s rb profile")
-                throw BlueprintProcessorException("${e.message}")
+                throw BluePrintProcessorException("${e.message}")
             }
         }
 
@@ -349,7 +349,7 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
                 }
             } catch (e: Exception) {
                 log.info("Caught exception trying to create k8s rb profile ${profile.profileName}")
-                throw BlueprintProcessorException("${e.message}")
+                throw BluePrintProcessorException("${e.message}")
             }
         }
 
@@ -364,7 +364,7 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
                 }
             } catch (e: Exception) {
                 log.info("Caught exception trying to upload k8s rb profile ${profile.profileName}")
-                throw BlueprintProcessorException("${e.message}")
+                throw BluePrintProcessorException("${e.message}")
             }
         }
     }

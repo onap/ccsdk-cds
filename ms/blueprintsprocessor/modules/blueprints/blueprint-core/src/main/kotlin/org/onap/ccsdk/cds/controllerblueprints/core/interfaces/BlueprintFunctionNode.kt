@@ -18,29 +18,29 @@
 package org.onap.ccsdk.cds.controllerblueprints.core.interfaces
 
 import kotlinx.coroutines.runBlocking
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import java.util.function.Function
 
 interface BlueprintFunctionNode<T, R> : Function<T, R> {
 
     fun getName(): String
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     fun prepareRequest(executionRequest: T): T = runBlocking {
         prepareRequestNB(executionRequest)
     }
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     fun process(executionRequest: T) = runBlocking {
         processNB(executionRequest)
     }
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     fun recover(runtimeException: RuntimeException, executionRequest: T) = runBlocking {
         recoverNB(runtimeException, executionRequest)
     }
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     fun prepareResponse(): R = runBlocking {
         prepareResponseNB()
     }
@@ -55,18 +55,18 @@ interface BlueprintFunctionNode<T, R> : Function<T, R> {
         return prepareResponse()
     }
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     suspend fun prepareRequestNB(executionRequest: T): T
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     suspend fun processNB(executionRequest: T)
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: T)
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     suspend fun prepareResponseNB(): R
 
-    @Throws(BlueprintProcessorException::class)
+    @Throws(BluePrintProcessorException::class)
     suspend fun applyNB(t: T): R
 }

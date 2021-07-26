@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
@@ -24,42 +24,42 @@ class ResourceSourceDSLTest {
 
     @Test
     fun testNodeTypeSourceInput() {
-        val nodeType = BlueprintTypes.nodeTypeSourceInput()
+        val nodeType = BluePrintTypes.nodeTypeSourceInput()
         // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceInput")
     }
 
     @Test
     fun testNodeTypeSourceDefault() {
-        val nodeType = BlueprintTypes.nodeTypeSourceDefault()
+        val nodeType = BluePrintTypes.nodeTypeSourceDefault()
         // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceDefault")
     }
 
     @Test
     fun testNodeTypeSourceDb() {
-        val nodeType = BlueprintTypes.nodeTypeSourceDb()
+        val nodeType = BluePrintTypes.nodeTypeSourceDb()
         // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceDb")
     }
 
     @Test
     fun testNodeTypeSourceRest() {
-        val nodeType = BlueprintTypes.nodeTypeSourceRest()
+        val nodeType = BluePrintTypes.nodeTypeSourceRest()
         // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceRest")
     }
 
     @Test
     fun testNodeTypeSourceCapability() {
-        val nodeType = BlueprintTypes.nodeTypeSourceCapability()
+        val nodeType = BluePrintTypes.nodeTypeSourceCapability()
         // println(nodeType.asJsonString(true))
         assertNotNull(nodeType, "failed to generate nodeTypeSourceCapability")
     }
 
     @Test
     fun testNodeTemplateSourceInput() {
-        val nodeTemplate = BlueprintTypes.nodeTemplateSourceInput("InputSystem", "") {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceInput("InputSystem", "") {
         }
         // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceInput")
@@ -67,7 +67,7 @@ class ResourceSourceDSLTest {
 
     @Test
     fun testNodeTemplateSourceDefault() {
-        val nodeTemplate = BlueprintTypes.nodeTemplateSourceDefault("DefaultSystem", "") {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceDefault("DefaultSystem", "") {
         }
         // println(nodeTemplate.asJsonString(true))
         assertNotNull(nodeTemplate, "failed to generate nodeTemplateSourceDefault")
@@ -75,7 +75,7 @@ class ResourceSourceDSLTest {
 
     @Test
     fun testNodeTemplateSourceDb() {
-        val nodeTemplate = BlueprintTypes.nodeTemplateSourceDb("DbSystem", "") {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceDb("DbSystem", "") {
             definedProperties {
                 type("SQL")
                 query("SELECT * FROM DB WHERE name = \$name")
@@ -95,7 +95,7 @@ class ResourceSourceDSLTest {
 
     @Test
     fun testNodeTemplateSourceRest() {
-        val nodeTemplate = BlueprintTypes.nodeTemplateSourceRest("restSystem", "") {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceRest("restSystem", "") {
             definedProperties {
                 type("JSON")
                 endpointSelector("rest-source-endpoint")
@@ -119,7 +119,7 @@ class ResourceSourceDSLTest {
 
     @Test
     fun testNodeTemplateSourceCapability() {
-        val nodeTemplate = BlueprintTypes.nodeTemplateSourceCapability("capabiltySystem", "") {
+        val nodeTemplate = BluePrintTypes.nodeTemplateSourceCapability("capabiltySystem", "") {
             definedProperties {
                 type("kotlin")
                 scriptClassReference("Scripts/Sample.kt")

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.convertValue
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sConfigValueRequest
@@ -14,12 +14,12 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sPluginIn
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintVelocityTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
@@ -33,7 +33,7 @@ import java.nio.file.Paths
 @Component("component-k8s-config-value")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class K8sConfigValueComponent(
-    private var bluePrintPropertiesService: BlueprintPropertiesService,
+    private var bluePrintPropertiesService: BluePrintPropertiesService,
     private val resourceResolutionService: ResourceResolutionService
 ) : AbstractComponentFunction() {
 
@@ -105,7 +105,7 @@ open class K8sConfigValueComponent(
             else if (operationType == OperationType.DELETE.toString())
                 deleteOperation(instanceId, configName)
             else
-                throw BlueprintProcessorException("Unknown operation type: $operationType")
+                throw BluePrintProcessorException("Unknown operation type: $operationType")
         }
     }
 
@@ -124,8 +124,8 @@ open class K8sConfigValueComponent(
             outputPrefixStatuses[prefix] = OUTPUT_ERROR
             val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
             val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, valueSource)
-            if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
-                throw BlueprintProcessorException(
+            if (artifact.type != BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
+                throw BluePrintProcessorException(
                     "Unexpected config artifact type for config value source $valueSource. Expecting: $artifact.type"
                 )
             val configValueRequest = K8sConfigValueRequest()
@@ -153,8 +153,8 @@ open class K8sConfigValueComponent(
             outputPrefixStatuses[prefix] = OUTPUT_ERROR
             val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
             val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, valueSource)
-            if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
-                throw BlueprintProcessorException(
+            if (artifact.type != BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
+                throw BluePrintProcessorException(
                     "Unexpected config artifact type for config value source $valueSource. Expecting: $artifact.type"
                 )
             if (api.hasConfigurationValues(instanceId, configName)) {
@@ -165,7 +165,7 @@ open class K8sConfigValueComponent(
                 configValueRequest.values = parseResult(valueSource, artifact.file)
                 api.editConfigurationValues(configValueRequest, instanceId, configName)
             } else {
-                throw BlueprintProcessorException("Error while getting configuration value")
+                throw BluePrintProcessorException("Error while getting configuration value")
             }
         }
     }
@@ -189,7 +189,7 @@ open class K8sConfigValueComponent(
         )
 
         if (!configeValueSourceFilePath.toFile().exists() || configeValueSourceFilePath.toFile().isDirectory)
-            throw BlueprintProcessorException("Specified config value source $k8sConfigLocation is not a file")
+            throw BluePrintProcessorException("Specified config value source $k8sConfigLocation is not a file")
 
         var obj: Any? = null
         val yamlReader = ObjectMapper(YAMLFactory())
@@ -225,7 +225,7 @@ open class K8sConfigValueComponent(
 
     private fun templateValues(templateFile: File, params: JsonNode): String {
         val fileContent = templateFile.bufferedReader().readText()
-        return BlueprintVelocityTemplateService.generateContent(
+        return BluePrintVelocityTemplateService.generateContent(
             fileContent,
             params.toString(), true
         )
@@ -238,7 +238,7 @@ open class K8sConfigValueComponent(
         if (profileSourceFileFolderPath.toFile().exists() && !profileSourceFileFolderPath.toFile().isDirectory)
             return profileSourceFileFolderPath.toFile()
         else
-            throw BlueprintProcessorException("Template value $profileSourceFileFolderPath is missing in CBA folder")
+            throw BluePrintProcessorException("Template value $profileSourceFileFolderPath is missing in CBA folder")
     }
 
     private fun getTemplatePrefixList(node: JsonNode?): ArrayList<String> {

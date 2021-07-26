@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.data.NodeTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.dsl.PropertyDefinitionBuilder
@@ -24,12 +24,12 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 
 /** Resource Definition DSL **/
-fun BlueprintTypes.resourceDefinitions(block: ResourceDefinitionsBuilder.() -> Unit):
+fun BluePrintTypes.resourceDefinitions(block: ResourceDefinitionsBuilder.() -> Unit):
     MutableMap<String, ResourceDefinition> {
         return ResourceDefinitionsBuilder().apply(block).build()
     }
 
-fun BlueprintTypes.resourceDefinition(
+fun BluePrintTypes.resourceDefinition(
     name: String,
     description: String,
     block: ResourceDefinitionBuilder.() -> Unit
@@ -38,12 +38,12 @@ fun BlueprintTypes.resourceDefinition(
 }
 
 /** Resource Mapping DSL **/
-fun BlueprintTypes.resourceAssignments(block: ResourceAssignmentsBuilder.() -> Unit):
+fun BluePrintTypes.resourceAssignments(block: ResourceAssignmentsBuilder.() -> Unit):
     MutableMap<String, ResourceAssignment> {
         return ResourceAssignmentsBuilder().apply(block).build()
     }
 
-fun BlueprintTypes.resourceAssignment(
+fun BluePrintTypes.resourceAssignment(
     name: String,
     dictionaryName: String,
     dictionarySource: String,

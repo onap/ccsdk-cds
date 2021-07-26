@@ -17,8 +17,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.rest
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipType
@@ -30,25 +30,25 @@ import org.onap.ccsdk.cds.controllerblueprints.core.dsl.relationshipType
 
 /** Relationships Type DSL for Rest */
 fun ServiceTemplateBuilder.relationshipTypeConnectsToRestClient() {
-    val relationshipType = BlueprintTypes.relationshipTypeConnectsToRestClient()
+    val relationshipType = BluePrintTypes.relationshipTypeConnectsToRestClient()
     if (this.relationshipTypes == null) this.relationshipTypes = hashMapOf()
     this.relationshipTypes!![relationshipType.id!!] = relationshipType
 }
 
-fun BlueprintTypes.relationshipTypeConnectsToRestClient(): RelationshipType {
+fun BluePrintTypes.relationshipTypeConnectsToRestClient(): RelationshipType {
     return relationshipType(
-        id = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT,
-        version = BlueprintConstants.DEFAULT_VERSION_NUMBER,
-        derivedFrom = BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
+        id = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT,
+        version = BluePrintConstants.DEFAULT_VERSION_NUMBER,
+        derivedFrom = BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO,
         description = "Relationship connects to through"
     ) {
         property(
-            BlueprintConstants.PROPERTY_CONNECTION_CONFIG,
-            BlueprintConstants.DATA_TYPE_MAP,
+            BluePrintConstants.PROPERTY_CONNECTION_CONFIG,
+            BluePrintConstants.DATA_TYPE_MAP,
             true,
             "Connection Config details."
         )
-        validTargetTypes(arrayListOf(BlueprintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
+        validTargetTypes(arrayListOf(BluePrintConstants.MODEL_TYPE_CAPABILITY_TYPE_ENDPOINT))
     }
 }
 
@@ -66,35 +66,35 @@ fun TopologyTemplateBuilder.relationshipTemplateRestClient(
 open class RestClientRelationshipTemplateBuilder(name: String, description: String) :
     RelationshipTemplateBuilder(
         name,
-        BlueprintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT, description
+        BluePrintConstants.MODEL_TYPE_RELATIONSHIPS_CONNECTS_TO_REST_CLIENT, description
     ) {
 
     fun basicAuth(block: BasicAuthRestClientPropertiesAssignmentBuilder.() -> Unit) {
-        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.basicAuthRestClientProperties(block))
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.basicAuthRestClientProperties(block))
     }
 
     fun tokenAuth(block: TokenAuthRestClientPropertiesAssignmentBuilder.() -> Unit) {
-        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.tokenAuthRestClientProperties(block))
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.tokenAuthRestClientProperties(block))
     }
 
     fun sslAuth(block: SslAuthRestClientPropertiesAssignmentBuilder.() -> Unit) {
-        property(BlueprintConstants.PROPERTY_CONNECTION_CONFIG, BlueprintTypes.sslRestClientProperties(block))
+        property(BluePrintConstants.PROPERTY_CONNECTION_CONFIG, BluePrintTypes.sslRestClientProperties(block))
     }
 }
 
-fun BlueprintTypes.basicAuthRestClientProperties(block: BasicAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BluePrintTypes.basicAuthRestClientProperties(block: BasicAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = BasicAuthRestClientPropertiesAssignmentBuilder().apply(block).build()
     assignments[RestClientProperties::type.name] = RestLibConstants.TYPE_BASIC_AUTH.asJsonPrimitive()
     return assignments.asJsonType()
 }
 
-fun BlueprintTypes.tokenAuthRestClientProperties(block: TokenAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BluePrintTypes.tokenAuthRestClientProperties(block: TokenAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = TokenAuthRestClientPropertiesAssignmentBuilder().apply(block).build()
     assignments[RestClientProperties::type.name] = RestLibConstants.TYPE_TOKEN_AUTH.asJsonPrimitive()
     return assignments.asJsonType()
 }
 
-fun BlueprintTypes.sslRestClientProperties(block: SslAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
+fun BluePrintTypes.sslRestClientProperties(block: SslAuthRestClientPropertiesAssignmentBuilder.() -> Unit): JsonNode {
     val assignments = SslAuthRestClientPropertiesAssignmentBuilder().apply(block).build()
     assignments[RestClientProperties::type.name] = RestLibConstants.TYPE_SSL_NO_AUTH.asJsonPrimitive()
     return assignments.asJsonType()

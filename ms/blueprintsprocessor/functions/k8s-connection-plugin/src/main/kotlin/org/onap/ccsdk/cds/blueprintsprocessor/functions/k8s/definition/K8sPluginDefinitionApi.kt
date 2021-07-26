@@ -25,7 +25,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.template.K8sTemplate
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod.DELETE
 import org.springframework.http.HttpMethod.GET
@@ -54,7 +54,7 @@ class K8sPluginDefinitionApi(
             return result.status in 200..299
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb definition")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -74,7 +74,7 @@ class K8sPluginDefinitionApi(
             return result.status in 200..299
         } catch (e: Exception) {
             log.error("Caught exception trying to get k8s rb profile")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -96,7 +96,7 @@ class K8sPluginDefinitionApi(
             }
         } catch (e: Exception) {
             log.error("Caught exception trying to create k8s rb profile ${profile.profileName}")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -118,7 +118,7 @@ class K8sPluginDefinitionApi(
             log.debug("Profile uploaded properly")
         } catch (e: Exception) {
             log.error("Caught exception trying to upload k8s rb profile ${profile.profileName}")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -137,7 +137,7 @@ class K8sPluginDefinitionApi(
             }
         } catch (e: Exception) {
             log.error("Caught exception during create template")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -154,7 +154,7 @@ class K8sPluginDefinitionApi(
             }
         } catch (e: Exception) {
             log.error("Caught exception trying to upload k8s rb template ${template.templateName}")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -172,7 +172,7 @@ class K8sPluginDefinitionApi(
             }
         } catch (e: Exception) {
             log.error("Caught exception during get template")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -184,7 +184,7 @@ class K8sPluginDefinitionApi(
             return objectMapper.readValue(result.body)
         } catch (e: Exception) {
             log.error("Caught exception during get template")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 
@@ -196,7 +196,7 @@ class K8sPluginDefinitionApi(
             return result.status in 200..299
         } catch (e: Exception) {
             log.error("Caught exception during get template")
-            throw BlueprintProcessorException("${e.message}")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
 

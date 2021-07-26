@@ -193,7 +193,7 @@
         "tags" : [ "Blueprint Model Catalog" ],
         "summary" : "Download a Blueprint Model by ID",
         "description" : "Gets the CBA of a blueprint model by its ID. Response can be saved to a file to download the CBA.",
-        "operationId" : "BlueprintModelController_downloadBlueprint_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "operationId" : "BlueprintModelController_downloadBluePrint_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "id",
@@ -1579,6 +1579,43 @@
     "JsonNode" : {
       "type" : "object",
       "properties" : {
+        "nodeType" : {
+          "type" : "string",
+          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
+        },
+        "float" : {
+          "type" : "boolean"
+        },
+        "array" : {
+          "type" : "boolean"
+        },
+        "null" : {
+          "type" : "boolean"
+        },
+        "short" : {
+          "type" : "boolean"
+        },
+        "number" : {
+          "type" : "boolean"
+        },
+        "boolean" : {
+          "type" : "boolean"
+        },
+        "double" : {
+          "type" : "boolean"
+        },
+        "int" : {
+          "type" : "boolean"
+        },
+        "long" : {
+          "type" : "boolean"
+        },
+        "object" : {
+          "type" : "boolean"
+        },
+        "binary" : {
+          "type" : "boolean"
+        },
         "valueNode" : {
           "type" : "boolean"
         },
@@ -1588,41 +1625,13 @@
         "missingNode" : {
           "type" : "boolean"
         },
-        "array" : {
-          "type" : "boolean"
-        },
-        "object" : {
-          "type" : "boolean"
-        },
-        "nodeType" : {
-          "type" : "string",
-          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
-        },
         "pojo" : {
-          "type" : "boolean"
-        },
-        "number" : {
           "type" : "boolean"
         },
         "integralNumber" : {
           "type" : "boolean"
         },
         "floatingPointNumber" : {
-          "type" : "boolean"
-        },
-        "short" : {
-          "type" : "boolean"
-        },
-        "int" : {
-          "type" : "boolean"
-        },
-        "long" : {
-          "type" : "boolean"
-        },
-        "float" : {
-          "type" : "boolean"
-        },
-        "double" : {
           "type" : "boolean"
         },
         "bigDecimal" : {
@@ -1632,15 +1641,6 @@
           "type" : "boolean"
         },
         "textual" : {
-          "type" : "boolean"
-        },
-        "boolean" : {
-          "type" : "boolean"
-        },
-        "null" : {
-          "type" : "boolean"
-        },
-        "binary" : {
           "type" : "boolean"
         }
       }
@@ -1798,23 +1798,22 @@
     "Page" : {
       "type" : "object",
       "properties" : {
-        "totalPages" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "totalElements" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "number" : {
           "type" : "integer",
           "format" : "int32"
         },
-        "size" : {
-          "type" : "integer",
-          "format" : "int32"
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
         },
-        "numberOfElements" : {
+        "size" : {
           "type" : "integer",
           "format" : "int32"
         },
@@ -1824,9 +1823,6 @@
             "type" : "object"
           }
         },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
-        },
         "first" : {
           "type" : "boolean"
         },
@@ -1835,6 +1831,10 @@
         },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
+        },
+        "numberOfElements" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "empty" : {
           "type" : "boolean"
@@ -1844,23 +1844,22 @@
     "PageBlueprintModelSearch" : {
       "type" : "object",
       "properties" : {
-        "totalPages" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
         "totalElements" : {
           "type" : "integer",
           "format" : "int64"
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "format" : "int32"
         },
         "number" : {
           "type" : "integer",
           "format" : "int32"
         },
-        "size" : {
-          "type" : "integer",
-          "format" : "int32"
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
         },
-        "numberOfElements" : {
+        "size" : {
           "type" : "integer",
           "format" : "int32"
         },
@@ -1869,9 +1868,6 @@
           "items" : {
             "$ref" : "#/definitions/BlueprintModelSearch"
           }
-        },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
         },
         "first" : {
           "type" : "boolean"
@@ -1882,6 +1878,10 @@
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
         },
+        "numberOfElements" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
         "empty" : {
           "type" : "boolean"
         }
@@ -1890,6 +1890,13 @@
     "Pageable" : {
       "type" : "object",
       "properties" : {
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
+        "offset" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
         "paged" : {
           "type" : "boolean"
         },
@@ -1903,13 +1910,6 @@
         "pageSize" : {
           "type" : "integer",
           "format" : "int32"
-        },
-        "offset" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
         }
       }
     },
@@ -2173,10 +2173,10 @@
     "Sort" : {
       "type" : "object",
       "properties" : {
-        "sorted" : {
+        "unsorted" : {
           "type" : "boolean"
         },
-        "unsorted" : {
+        "sorted" : {
           "type" : "boolean"
         },
         "empty" : {

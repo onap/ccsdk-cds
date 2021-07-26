@@ -23,21 +23,21 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.commons.io.FileUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sPluginDefinitionApi
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintVelocityTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ArchiveType
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintArchiveUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
@@ -52,7 +52,7 @@ import java.nio.file.Paths
 @Component("component-k8s-config-template")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class K8sConfigTemplateComponent(
-    private var bluePrintPropertiesService: BlueprintPropertiesService,
+    private var bluePrintPropertiesService: BluePrintPropertiesService,
     private val resourceResolutionService: ResourceResolutionService
 ) :
 
@@ -141,8 +141,8 @@ open class K8sConfigTemplateComponent(
                 }
                 val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
                 val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, templateSource)
-                if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
-                    throw BlueprintProcessorException(
+                if (artifact.type != BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
+                    throw BluePrintProcessorException(
                         "Unexpected template artifact type for template source $templateSource. Expecting: $artifact.type"
                     )
                 val template = K8sTemplate()
@@ -222,8 +222,8 @@ open class K8sConfigTemplateComponent(
                         "$k8sRbTemplateName.tar.gz"
                     )
                 )
-                if (!BlueprintArchiveUtils.compress(tempPath, finalTemplateFilePath.toFile(), ArchiveType.TarGz)) {
-                    throw BlueprintProcessorException("Config template compression has failed")
+                if (!BluePrintArchiveUtils.compress(tempPath, finalTemplateFilePath.toFile(), ArchiveType.TarGz)) {
+                    throw BluePrintProcessorException("Config template compression has failed")
                 }
                 FileUtils.deleteDirectory(tempPath)
 
@@ -233,7 +233,7 @@ open class K8sConfigTemplateComponent(
                 throw t
             }
         } else
-            throw BlueprintProcessorException("Config source $k8sConfigLocation is missing in CBA folder")
+            throw BluePrintProcessorException("Config source $k8sConfigLocation is missing in CBA folder")
     }
 
     private fun templateLocation(location: File, params: JsonNode, destinationFolder: File) {
@@ -256,7 +256,7 @@ open class K8sConfigTemplateComponent(
     private fun templateFile(templateFile: File, params: JsonNode, destinationFolder: File) {
         val finalFile = File(destinationFolder.path.plus(File.separator).plus(templateFile.nameWithoutExtension))
         val fileContent = templateFile.bufferedReader().readText()
-        val finalFileContent = BlueprintVelocityTemplateService.generateContent(
+        val finalFileContent = BluePrintVelocityTemplateService.generateContent(
             fileContent,
             params.toString(), true
         )

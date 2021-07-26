@@ -15,13 +15,13 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor.scripts
 
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.python.core.PyObject
 import org.python.core.PySyntaxError
 import org.python.util.PythonInterpreter
 
 @Deprecated("CDS won't support JythonService")
-open class BlueprintPythonInterpreterProxy(private val bluePrintPython: BlueprintPython) : PythonInterpreter() {
+open class BlueprintPythonInterpreterProxy(private val bluePrintPython: BluePrintPython) : PythonInterpreter() {
 
     fun getPythonInstance(properties: MutableMap<String, Any>?): PyObject {
         properties?.forEach { (name, value) ->
@@ -34,7 +34,7 @@ open class BlueprintPythonInterpreterProxy(private val bluePrintPython: Blueprin
             try {
                 this.exec(bluePrintPython.content)
             } catch (e: PySyntaxError) {
-                throw BlueprintProcessorException("Error executing Jython code! Python error: '$e'", e)
+                throw BluePrintProcessorException("Error executing Jython code! Python error: '$e'", e)
             }
         }
 

@@ -18,19 +18,19 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db.MessagePrioritization
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 /**
  * Register the MessagePrioritizationStateService and exposed dependency
  */
-fun BlueprintDependencyService.messagePrioritizationStateService(): MessagePrioritizationStateService =
+fun BluePrintDependencyService.messagePrioritizationStateService(): MessagePrioritizationStateService =
     instance(MessagePrioritizationStateService::class)
 
 /**
  * Expose messagePrioritizationStateService to AbstractComponentFunction
  */
 fun AbstractComponentFunction.messagePrioritizationStateService() =
-    BlueprintDependencyService.messagePrioritizationStateService()
+    BluePrintDependencyService.messagePrioritizationStateService()
 
 /**
  * MessagePrioritization correlation extensions

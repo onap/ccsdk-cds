@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.commons.io.FileUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sPluginDefinitionApi
@@ -31,14 +31,14 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ArtifactDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BlueprintVelocityTemplateService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTemplateService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ArchiveType
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintArchiveUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
@@ -53,7 +53,7 @@ import java.nio.file.Paths
 @Component("component-k8s-profile-upload")
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class K8sProfileUploadComponent(
-    private var bluePrintPropertiesService: BlueprintPropertiesService,
+    private var bluePrintPropertiesService: BluePrintPropertiesService,
     private val resourceResolutionService: ResourceResolutionService
 ) :
 
@@ -132,7 +132,7 @@ open class K8sProfileUploadComponent(
             if ((profileName == null) || (definitionName == null) || (definitionVersion == null)) {
                 log.warn("Prefix $prefix does not have required data for us to continue.")
             } else if (!api.hasDefinition(definitionName, definitionVersion)) {
-                throw BlueprintProcessorException("K8s RB Definition ($definitionName/$definitionVersion) not found ")
+                throw BluePrintProcessorException("K8s RB Definition ($definitionName/$definitionVersion) not found ")
             } else if (profileName == "") {
                 log.warn("K8s rb profile name is empty! Either define profile name to use or choose default")
             } else if (api.hasProfile(definitionName, definitionVersion, profileName)) {
@@ -144,15 +144,15 @@ open class K8sProfileUploadComponent(
                 val profileK8sVersion: String? = prefixInputParamsMap[INPUT_K8S_PROFILE_K8S_VERSION]?.returnNullIfMissing()?.asText()
                 var profileSource: String? = prefixInputParamsMap[INPUT_K8S_PROFILE_SOURCE]?.returnNullIfMissing()?.asText()
                 if (profileNamespace == null)
-                    throw BlueprintProcessorException("Profile $profileName namespace is missing")
+                    throw BluePrintProcessorException("Profile $profileName namespace is missing")
                 if (profileSource == null) {
                     profileSource = profileName
                     log.info("Profile name used instead of profile source")
                 }
                 val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
                 val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, profileSource)
-                if (artifact.type != BlueprintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE)
-                    throw BlueprintProcessorException(
+                if (artifact.type != BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_PROFILE)
+                    throw BluePrintProcessorException(
                         "Unexpected profile artifact type for profile source " +
                             "$profileSource. Expecting: $artifact.type"
                     )
@@ -239,19 +239,19 @@ open class K8sProfileUploadComponent(
                         tempProfilePath, manifestFiles
                     )
                 } else
-                    throw BlueprintProcessorException("Manifest file is missing")
+                    throw BluePrintProcessorException("Manifest file is missing")
                 // Preparation of the final profile content
                 val finalProfileFilePath = Paths.get(
                     tempMainPath.toString().plus(File.separator).plus(
                         "$k8sRbProfileName.tar.gz"
                     )
                 )
-                if (!BlueprintArchiveUtils.compress(
+                if (!BluePrintArchiveUtils.compress(
                         tempProfilePath, finalProfileFilePath.toFile(),
                         ArchiveType.TarGz
                     )
                 ) {
-                    throw BlueprintProcessorException("Profile compression has failed")
+                    throw BluePrintProcessorException("Profile compression has failed")
                 }
                 FileUtils.deleteDirectory(tempProfilePath)
 
@@ -261,7 +261,7 @@ open class K8sProfileUploadComponent(
                 throw t
             }
         } else
-            throw BlueprintProcessorException("Profile source $ks8ProfileLocation is missing in CBA folder")
+            throw BluePrintProcessorException("Profile source $ks8ProfileLocation is missing in CBA folder")
     }
 
     private fun readManifestFiles(profileSource: File, destinationFolder: File): ArrayList<File>? {
@@ -353,7 +353,7 @@ open class K8sProfileUploadComponent(
         if (!isFileInTheManifestFiles(finalFile, manifestFiles))
             return
         val fileContent = templatedFile.bufferedReader().readText()
-        val finalFileContent = BlueprintVelocityTemplateService.generateContent(
+        val finalFileContent = BluePrintVelocityTemplateService.generateContent(
             fileContent,
             params.toString(), true
         )

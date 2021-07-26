@@ -17,21 +17,21 @@
 package cba.resource.audit
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.resourceDefinitions
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintTypes
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 
 const val SOURCE_SDNO = "SDN-O"
 const val SOURCE_SDNC = "SDNC"
 const val SOURCE_AAI = "AAI"
 
-val deviceResourceDefinitions = BlueprintTypes.resourceDefinitions {
+val deviceResourceDefinitions = BluePrintTypes.resourceDefinitions {
     // Port Speed Definitions
     resourceDefinition(name = "port-speed", description = "Port Speed") {
         property(type = "string", required = true)
         sources {
             sourceCapability(id = SOURCE_SDNO, description = "SDN-O Source") {
                 definedProperties {
-                    type(BlueprintConstants.SCRIPT_KOTLIN)
+                    type(BluePrintConstants.SCRIPT_KOTLIN)
                     scriptClassReference("cba.resource.audit.processor.PortSpeedRAProcessor")
                     keyDependencies(arrayListOf("device-id"))
                 }

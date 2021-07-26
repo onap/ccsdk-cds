@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.utils
 
 import io.micrometer.core.instrument.Tag
 import org.junit.Test
-import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import kotlin.test.assertEquals
 
 class BlueprintMessageUtilsTest {
@@ -26,7 +26,7 @@ class BlueprintMessageUtilsTest {
     @Test
     fun testKafkaMetricTag() {
         val expected = mutableListOf<Tag>(
-            Tag.of(BlueprintConstants.METRIC_TAG_TOPIC, "my-topic")
+            Tag.of(BluePrintConstants.METRIC_TAG_TOPIC, "my-topic")
         )
         val tags = BlueprintMessageUtils.kafkaMetricTag("my-topic")
 
