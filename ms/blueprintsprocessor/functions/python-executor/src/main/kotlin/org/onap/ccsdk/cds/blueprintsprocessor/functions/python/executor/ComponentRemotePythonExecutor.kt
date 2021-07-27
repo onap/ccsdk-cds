@@ -19,10 +19,6 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.protobuf.ByteString
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BlueprintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
@@ -205,13 +201,7 @@ open class ComponentRemotePythonExecutor(
                     timeOut = executionTimeout.toLong()
                 )
 
-                val remoteExecutionOutputDeferred = GlobalScope.async {
-                    remoteScriptExecutionService.executeCommand(remoteExecutionInput)
-                }
-
-                val remoteExecutionOutput = withTimeout(executionTimeout * 1000L + TIMEOUT_DELTA) {
-                    remoteExecutionOutputDeferred.await()
-                }
+                val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
 
                 checkNotNull(remoteExecutionOutput) {
                     "Error: Request-id $processId did not return a result from remote command execution."
@@ -226,17 +216,11 @@ open class ComponentRemotePythonExecutor(
                 } else {
                     setNodeOutputProperties(remoteExecutionOutput.status, STEP_EXEC_CMD, logs, returnedPayload, isLogResponseEnabled)
                 } // In timeout exception cases, we don't have payload, hence `payload` is empty value.
-            } catch (timeoutEx: TimeoutCancellationException) {
+            } catch (grpcEx: io.grpc.StatusRuntimeException) {
                 val componentLevelWarningMsg =
                     if (timeout < executionTimeout) "Note: component-level timeout ($timeout) is shorter than execution timeout ($executionTimeout). " else ""
                 val timeoutErrMsg =
-                    "Command executor execution timeout. DetailedMessage: (${timeoutEx.message}) requestId ($processId). $componentLevelWarningMsg"
-                setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonType(), logging = isLogResponseEnabled)
-                addError(StatusType.FAILURE.name, STEP_EXEC_CMD, timeoutErrMsg)
-                log.error(timeoutErrMsg, timeoutEx)
-            } catch (grpcEx: io.grpc.StatusRuntimeException) {
-                val timeoutErrMsg =
-                    "Command executor timed out executing after $executionTimeout seconds requestId ($processId) grpcErr: ${grpcEx.status}"
+                    "Command executor timed out executing after $executionTimeout seconds requestId ($processId). $componentLevelWarningMsg grpcErr: ${grpcEx.status}"
                 setNodeOutputErrors(STEP_EXEC_CMD, listOf(timeoutErrMsg).asJsonType(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, timeoutErrMsg)
                 log.error(timeoutErrMsg, grpcEx)
