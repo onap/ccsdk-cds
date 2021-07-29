@@ -68,8 +68,7 @@ open class NodeTemplateExecutionService(private val bluePrintClusterService: Blu
         // Set the Blueprint Services
         plugin.bluePrintRuntimeService = bluePrintRuntimeService
         plugin.bluePrintClusterService = bluePrintClusterService
-        plugin.stepName = stepName
-        plugin.nodeTemplateName = nodeTemplateName
+        plugin.stepName = nodeTemplateName
         plugin.meterRegistry = meterRegistry
 
         // Parent request shouldn't tamper, so need to clone the request and send to the actual component.

@@ -62,10 +62,10 @@ class BluePrintWorkflowExecutionServiceImplTest {
     lateinit var bluePrintWorkflowExecutionService: BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>
 
     @MockBean
-    lateinit var bluePrintClusterService: BluePrintClusterService
+    lateinit var meterRegistry: MeterRegistry
 
     @MockBean
-    lateinit var meterRegistry: MeterRegistry
+    lateinit var bluePrintClusterService: BluePrintClusterService
 
     @Before
     fun init() {

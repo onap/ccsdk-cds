@@ -23,7 +23,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.LockAcquireTimeoutException
+import java.lang.RuntimeException
 import kotlin.test.assertEquals
 
 class BluePrintClusterExtensionsTest {
@@ -64,7 +65,7 @@ class BluePrintClusterExtensionsTest {
         }
     }
 
-    @Test(expected = BluePrintException::class)
+    @Test(expected = LockAcquireTimeoutException::class)
     fun `executeWithLock - should throw exception when lock was not acquired within timeout`() {
         runBlocking {
             every { runBlocking { clusterLockMock.tryLock(eq(0L)) } } returns false

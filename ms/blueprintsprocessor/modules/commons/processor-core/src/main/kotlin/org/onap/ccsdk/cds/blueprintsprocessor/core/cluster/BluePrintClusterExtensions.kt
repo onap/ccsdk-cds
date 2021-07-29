@@ -23,8 +23,8 @@ import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterLock
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterMember
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.LockAcquireTimeoutException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
@@ -69,7 +69,7 @@ suspend fun <R> ClusterLock.executeWithLock(acquireLockTimeout: Long, block: sus
                     lock.unLock()
                 }
             } else
-                throw BluePrintException("Failed to acquire lock within timeout")
+                throw LockAcquireTimeoutException("Failed to acquire lock within timeout")
         }
     }
 }

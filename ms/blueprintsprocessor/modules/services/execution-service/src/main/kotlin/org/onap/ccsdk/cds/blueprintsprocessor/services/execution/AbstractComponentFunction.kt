@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 import com.fasterxml.jackson.databind.JsonNode
 import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.Timer
 import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
@@ -27,6 +28,10 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
 import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.executeWithLock
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.CDS_LOCK_GROUP
+import org.onap.ccsdk.cds.blueprintsprocessor.core.service.LockAcquireTimeoutException
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentLockMetricConstants.LOCK_COUNTER_COMPONENT
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentLockMetricConstants.LOCK_NOT_ACQUIRED_COUNTER_COMPONENT
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentLockMetricConstants.LOCK_TIMER_COMPONENT
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
@@ -64,6 +69,8 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var operationName: String
     lateinit var nodeTemplateName: String
     lateinit var meterRegistry: MeterRegistry
+    var timeout: Int = 180
+    val timeoutDeltaInMillis = 100L
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
 
     override fun getName(): String {
@@ -160,14 +167,23 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     }
 
     override suspend fun applyNB(executionServiceInput: ExecutionServiceInput): ExecutionServiceOutput {
+        lateinit var lockName: String
         try {
             prepareRequestNB(executionServiceInput)
             implementation.lock?.let {
-                bluePrintClusterService.clusterLock("${it.key.textValue()}@$CDS_LOCK_GROUP")
+                lockName = "${it.key.textValue()}@$CDS_LOCK_GROUP"
+                bluePrintClusterService.clusterLock(lockName)
                     .executeWithLock(it.acquireTimeout.intValue().times(1000).toLong()) {
+                        meterRegistry.counter(LOCK_COUNTER_COMPONENT, "lockName", lockName).increment()
+                        val sample = Timer.start()
                         applyNBWithTimeout(executionServiceInput)
+                        sample.stop(meterRegistry.timer(LOCK_TIMER_COMPONENT, "lockName", lockName))
                     }
             } ?: applyNBWithTimeout(executionServiceInput)
+        } catch (lockTimeException: LockAcquireTimeoutException) {
+            meterRegistry.counter(LOCK_NOT_ACQUIRED_COUNTER_COMPONENT, "lockName", lockName).increment()
+            log.error("failed in ${getName()} : ${lockTimeException.message}", lockTimeException)
+            recoverNB(lockTimeException, executionServiceInput)
         } catch (runtimeException: RuntimeException) {
             log.error("failed in ${getName()} : ${runtimeException.message}", runtimeException)
             recoverNB(runtimeException, executionServiceInput)

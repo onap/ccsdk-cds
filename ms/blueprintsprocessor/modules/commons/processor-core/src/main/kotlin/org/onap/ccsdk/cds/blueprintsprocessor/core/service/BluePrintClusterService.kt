@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.core.service
 
 import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.BlueprintClusterTopic
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.springframework.context.ApplicationEvent
 import java.time.Duration
 import java.util.Properties
@@ -104,3 +105,5 @@ interface BlueprintClusterMessageListener<E> {
 class ClusterJoinedEvent(source: Any) : ApplicationEvent(source)
 
 const val CDS_LOCK_GROUP = "cds-lock"
+
+class LockAcquireTimeoutException(message: String) : BluePrintProcessorException(message)
