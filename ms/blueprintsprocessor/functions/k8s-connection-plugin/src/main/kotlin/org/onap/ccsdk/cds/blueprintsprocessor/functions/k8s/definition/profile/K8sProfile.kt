@@ -19,8 +19,10 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.profile
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class K8sProfile {
 
     @get:JsonProperty("rb-name")

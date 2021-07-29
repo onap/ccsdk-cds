@@ -1,7 +1,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class K8sTopic {
 
     @get:JsonProperty("name")
