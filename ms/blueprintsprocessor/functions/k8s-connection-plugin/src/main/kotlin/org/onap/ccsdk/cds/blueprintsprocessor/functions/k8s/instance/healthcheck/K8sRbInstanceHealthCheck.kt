@@ -1,7 +1,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class K8sRbInstanceHealthCheckSimple {
 
     @get:JsonProperty("healthcheck-id")
@@ -25,6 +27,7 @@ class K8sRbInstanceHealthCheckSimple {
     }
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class K8sRbInstanceHealthCheckList {
 
     @get:JsonProperty("instance-id")
@@ -47,6 +50,7 @@ class K8sRbInstanceHealthCheckList {
     }
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class K8sRbInstanceHealthCheck {
 
     @get:JsonProperty("healthcheck-id")
@@ -79,6 +83,7 @@ class K8sRbInstanceHealthCheck {
     }
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class K8sHealthCheckTest {
 
     @get:JsonProperty("StartedAt")
@@ -107,6 +112,7 @@ class K8sHealthCheckTest {
     }
 }
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 class K8sRbInstanceHealthCheckHook {
 
     @get:JsonProperty("name")
