@@ -45,7 +45,8 @@
         <json.unit.version>2.8.0</json.unit.version>
         <xmlunit.version>2.6.3</xmlunit.version>
 
-        <netty-ssl>2.0.26.Final</netty-ssl>
+  
+   
         <sshd.version>2.2.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
         <jslt.version>0.1.8</jslt.version>
