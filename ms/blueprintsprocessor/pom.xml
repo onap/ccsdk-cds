@@ -40,5 +40,6 @@
 
     <properties>
         <service.name>BlueprintsProcessor</service.name>
+        <ccsdk.sli.core.version>1.3.0-SNAPSHOT</ccsdk.sli.core.version>
     </properties>
 </project>
