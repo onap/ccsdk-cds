@@ -112,6 +112,9 @@ typings/
 **/.factorypath
 **/.directory
 
+# Added for Visual Studio Code
+.vscode
+
 **/transaction.log
 **/*versionsBackup
 **/blackDuckHub*

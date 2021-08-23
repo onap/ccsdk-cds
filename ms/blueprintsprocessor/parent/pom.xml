@@ -50,13 +50,13 @@
         <sshd.version>2.2.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
         <jslt.version>0.1.8</jslt.version>
-        <jython.version>2.7.1</jython.version>
+        <jython.version>2.7.2</jython.version>
         <jinja.version>2.5.1</jinja.version>
         <guava.version>27.0.1-jre</guava.version>
         <json-patch.version>1.9</json-patch.version>
-        <json-smart.version>2.3</json-smart.version>
+        <json-smart.version>2.4.6</json-smart.version>
 
-        <commons-io-version>2.6</commons-io-version>
+        <commons-io-version>2.8.0</commons-io-version>
         <commons-compress-version>1.20</commons-compress-version>
         <commons-collections-version>3.2.2</commons-collections-version>
     </properties>
