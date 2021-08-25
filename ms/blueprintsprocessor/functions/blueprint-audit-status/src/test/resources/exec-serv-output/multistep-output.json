@@ -1,0 +1,26 @@
+{
+  "correlationUUID": null,
+  "commonHeader": {
+    "timestamp": "2021-08-05T08:18:35.690Z",
+    "originatorId": "SDNC_DG",
+    "requestId": "ab543-3asd4",
+    "subRequestId": "81c9-4910",
+    "flags": null
+  },
+  "actionIdentifiers": {
+    "blueprintName": "multi-steps",
+    "blueprintVersion": "1.0.0",
+    "actionName": "multi-steps-workflow",
+    "mode": "sync"
+  },
+  "status": {
+    "code": 200,
+    "eventType": "EVENT_COMPONENT_EXECUTED",
+    "timestamp": "2021-08-05T08:18:35.727Z",
+    "errorMessage": null,
+    "message": "success"
+  },
+  "payload": {
+    "multi-steps-workflow-response": {}
+  }
+}
