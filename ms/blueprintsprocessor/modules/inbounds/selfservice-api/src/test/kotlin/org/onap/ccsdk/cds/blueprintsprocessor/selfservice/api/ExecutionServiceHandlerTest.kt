@@ -16,11 +16,14 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import io.micrometer.core.instrument.MeterRegistry
 import io.mockk.coVerify
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
@@ -30,9 +33,13 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.DatabaseStoreAuditService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.db.BlueprintAuditStatusRepository
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.db.BlueprintWorkflowAuditStatus
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationContext
@@ -60,6 +67,11 @@ class ExecutionServiceHandlerTest {
     @Autowired
     lateinit var applicationContext: ApplicationContext
 
+    private val blueprintAuditStatusRepository =
+        mockk<BlueprintAuditStatusRepository>()
+
+    private val testDatabaseStoreAuditService = DatabaseStoreAuditService(blueprintAuditStatusRepository)
+
     @Before
     fun init() {
         BluePrintDependencyService.inject(applicationContext)
@@ -80,7 +92,7 @@ class ExecutionServiceHandlerTest {
             }
         }
         runBlocking {
-            val executionServiceHandler = ExecutionServiceHandler(mockk(), mockk(), mockk(), mockk(), mockk(relaxed = true))
+            val executionServiceHandler = ExecutionServiceHandler(mockk(), mockk(), mockk(), mockk(), testDatabaseStoreAuditService, mockk(relaxed = true))
             val isServiceFunction = executionServiceHandler.checkServiceFunction(executionServiceInput)
             assertTrue(isServiceFunction, "failed to checkServiceFunction")
             val executionServiceOutput = executionServiceHandler.executeServiceFunction(executionServiceInput)
@@ -90,6 +102,10 @@ class ExecutionServiceHandlerTest {
 
     @Test
     fun testPublishAuditFunction() {
+
+        val jsonContent = JacksonUtils.getClassPathFileContent("execution-input/sample-payload.json")
+        val json: ObjectNode = ObjectMapper().readTree(jsonContent) as ObjectNode
+
         val executionServiceInput = ExecutionServiceInput().apply {
             commonHeader = CommonHeader().apply {
                 requestId = "1234"
@@ -100,19 +116,28 @@ class ExecutionServiceHandlerTest {
                 blueprintName = "default"
                 blueprintVersion = "1.0.0"
                 actionName = "mock-service-action"
+                mode = "async"
             }
         }
-
+        executionServiceInput.payload = json
         val publishAuditService = mockk<KafkaPublishAuditService>(relaxed = true)
+        val wfAudit = createWorkflowAuditStatusRecord(1000)
+
         val executionServiceHandler = ExecutionServiceHandler(
             mockk(),
             mockk(),
             mockk(),
             publishAuditService,
+            testDatabaseStoreAuditService,
             mockk(relaxed = true)
         )
-
+        var testOutput: Long = 1000
         coEvery { publishAuditService.publishExecutionInput(ExecutionServiceInput()) } just Runs
+
+        runBlocking {
+            every { blueprintAuditStatusRepository.findById(testOutput) } returns wfAudit
+            every { blueprintAuditStatusRepository.saveAndFlush(any<BlueprintWorkflowAuditStatus>()) } returns wfAudit
+        }
 
         var executionServiceOutput: ExecutionServiceOutput? = null
         runBlocking {
@@ -122,7 +147,39 @@ class ExecutionServiceHandlerTest {
         coVerify {
             publishAuditService.publishExecutionInput(executionServiceInput)
             publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput!!)
+            testOutput = testDatabaseStoreAuditService.storeExecutionInput(executionServiceInput)
         }
+    }
+
+    private fun createWorkflowAuditStatusRecord(
+        id: Long
+    ): BlueprintWorkflowAuditStatus {
+
+        var blueprintWorkflowAuditStatus: BlueprintWorkflowAuditStatus =
+            BlueprintWorkflowAuditStatus()
+        blueprintWorkflowAuditStatus.id = id
+        blueprintWorkflowAuditStatus.originatorId = "SDNC_DG"
+        blueprintWorkflowAuditStatus.requestMode = "sync"
+        blueprintWorkflowAuditStatus.requestId = "ab543-3asd4"
+        blueprintWorkflowAuditStatus.subRequestId = "81c9-4910"
+        blueprintWorkflowAuditStatus.status = "In progress"
+        blueprintWorkflowAuditStatus.blueprintName = "multi-steps"
+        blueprintWorkflowAuditStatus.blueprintVersion = "1.0.0"
+        blueprintWorkflowAuditStatus.workflowName = "multi-steps-workflow"
+        blueprintWorkflowAuditStatus.updatedBy = "CBA"
+        blueprintWorkflowAuditStatus.requestMode = "sync"
+        blueprintWorkflowAuditStatus.workflowTaskContent = "{\n" +
+            "    \"multi-steps-workflow-request\": {\n" +
+            "      \"multi-steps-workflow-properties\": {\n" +
+            "        \"prop1\": \"testing\",\n" +
+            "        \"prop2\": \"testing description\",\n" +
+            "        \"prop3\": \"user name \",\n" +
+            "        \"prop4\" : \"test project\"\n" +
+            "      }\n" +
+            "    }\n" +
+            "  }"
+        blueprintWorkflowAuditStatus.workflowResponseContent = " "
+        return blueprintWorkflowAuditStatus
     }
 }
 

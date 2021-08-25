@@ -81,3 +81,25 @@ CREATE TABLE IF NOT EXISTS sdnctl.RESOURCE_DICTIONARY (
   primary key PK_RESOURCE_DICTIONARY (name),
   INDEX IX_RESOURCE_DICTIONARY (name)
 ) ENGINE=InnoDB;
+
+-- -----------------------------------------------------
+-- table BLUEPRINT_WORKFLOW_AUDIT_STATUS
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS sdnctl.BLUEPRINT_WORKFLOW_AUDIT_STATUS (
+  workflow_audit_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+  workflow_task_content longtext NOT NULL,
+  originator_Id varchar(255) NOT NULL,
+  request_Id varchar(255) NOT NULL,
+  subRequest_Id varchar(255) NOT NULL,
+  workflow_name varchar(255) NOT NULL,
+  status varchar(255) NULL,
+  start_time datetime NULL,
+  end_time datetime NULL,
+  updated_date datetime NULL,
+  updated_by varchar(255) NULL,
+  blueprint_version varchar(255) NOT NULL,
+  blueprint_name varchar(255) NOT  NULL,
+  request_mode varchar(255) NULL,
+  workflow_response_content longtext  NULL,
+  blueprint_uuid varchar(255) NULL
+)  AUTO_INCREMENT = 1000 ENGINE=InnoDB;

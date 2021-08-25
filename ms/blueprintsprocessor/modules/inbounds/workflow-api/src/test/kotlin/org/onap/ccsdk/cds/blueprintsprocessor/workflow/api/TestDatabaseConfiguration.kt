@@ -1,6 +1,6 @@
 /*
- * Copyright © 2018-2019 AT&T Intellectual Property.
- *
+ * Copyright © 2021 Aarna Networks, Inc.
+ *           All rights reserved.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
+package org.onap.ccsdk.cds.blueprintsprocessor.workflow.api
 
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDataSourceProperties
@@ -33,7 +33,6 @@ import javax.sql.DataSource
 @EnableJpaRepositories(
     basePackages = [
         "org.onap.ccsdk.cds.blueprintsprocessor.db.primary",
-        "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution",
         "org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit"
     ],
     entityManagerFactoryRef = "primaryEntityManager",
@@ -47,8 +46,7 @@ open class TestDatabaseConfiguration(primaryDataSourceProperties: PrimaryDataSou
     open fun primaryEntityManager(): LocalContainerEntityManagerFactoryBean {
         return primaryEntityManager(
             "org.onap.ccsdk.cds.blueprintsprocessor.db.primary",
-            "org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit",
-            "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution"
+            "org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.db"
         )
     }
 

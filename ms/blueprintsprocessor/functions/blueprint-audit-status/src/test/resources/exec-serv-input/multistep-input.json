@@ -1,0 +1,23 @@
+{
+  "actionIdentifiers": {
+    "mode": "sync",
+    "blueprintName": "multi-steps",
+    "blueprintVersion": "1.0.0",
+    "actionName": "multi-steps-workflow"
+  },
+  "payload": {
+    "multi-steps-workflow-request": {
+      "multi-steps-workflow-properties": {
+        "prop1": "testing",
+        "prop2": "testing description",
+        "prop3": "user name ",
+        "prop4" : "test project"
+      }
+    }
+  },
+  "commonHeader": {
+    "subRequestId": "81c9-4910",
+    "requestId": "ab543-3asd4",
+    "originatorId": "SDNC_DG"
+  }
+}
