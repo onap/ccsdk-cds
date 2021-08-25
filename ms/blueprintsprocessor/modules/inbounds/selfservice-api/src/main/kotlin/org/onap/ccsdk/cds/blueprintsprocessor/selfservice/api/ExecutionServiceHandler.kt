@@ -33,6 +33,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.SelfServiceMetricC
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.SelfServiceMetricConstants.TIMER_PROCESS
 import org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api.utils.cbaMetricTags
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractServiceFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.StoreAuditService
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
@@ -50,6 +51,7 @@ class ExecutionServiceHandler(
     private val bluePrintWorkflowExecutionService:
         BluePrintWorkflowExecutionService<ExecutionServiceInput, ExecutionServiceOutput>,
     private val publishAuditService: PublishAuditService,
+    private val storeAuditService: StoreAuditService,
     private val meterRegistry: MeterRegistry
 ) {
 
@@ -102,6 +104,10 @@ class ExecutionServiceHandler(
         // Audit input
         publishAuditService.publishExecutionInput(executionServiceInput)
 
+        // store audit input details
+        val auditStoreId: Long = storeAuditService.storeExecutionInput(executionServiceInput)
+        log.info("StoreAuditService ID  $auditStoreId")
+
         val sample = Timer.start()
         try {
             /** Check Blueprint is needed for this request */
@@ -130,9 +136,14 @@ class ExecutionServiceHandler(
         // Update process metrics
         sample.stop(meterRegistry.timer(TIMER_PROCESS, cbaMetricTags(executionServiceInput)))
         meterRegistry.counter(COUNTER_PROCESS, cbaMetricTags(executionServiceOutput)).increment()
-
         // Audit output
         publishAuditService.publishExecutionOutput(executionServiceInput.correlationUUID, executionServiceOutput)
+
+        // store audit input details
+        storeAuditService.storeExecutionOutput(
+            auditStoreId, executionServiceInput.correlationUUID,
+            executionServiceOutput
+        )
         return executionServiceOutput
     }
 

@@ -23,6 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.DatabaseStoreAuditService
 import org.onap.ccsdk.cds.controllerblueprints.core.compress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
@@ -46,7 +47,8 @@ import kotlin.test.assertTrue
 @ContextConfiguration(
     classes = [
         ExecutionServiceHandler::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, SelfServiceApiTestConfiguration::class,
+        BluePrintCatalogService::class, DatabaseStoreAuditService::class,
+        SelfServiceApiTestConfiguration::class,
         ErrorCatalogTestConfiguration::class, SimpleMeterRegistry::class
     ]
 )
