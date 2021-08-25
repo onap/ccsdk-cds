@@ -33,7 +33,8 @@ import javax.sql.DataSource
 @EnableJpaRepositories(
     basePackages = [
         "org.onap.ccsdk.cds.blueprintsprocessor.db.primary",
-        "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution"
+        "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution",
+        "org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit"
     ],
     entityManagerFactoryRef = "primaryEntityManager",
     transactionManagerRef = "primaryTransactionManager"
@@ -46,6 +47,7 @@ open class TestDatabaseConfiguration(primaryDataSourceProperties: PrimaryDataSou
     open fun primaryEntityManager(): LocalContainerEntityManagerFactoryBean {
         return primaryEntityManager(
             "org.onap.ccsdk.cds.blueprintsprocessor.db.primary",
+            "org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit",
             "org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution"
         )
     }

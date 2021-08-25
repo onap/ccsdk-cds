@@ -24,7 +24,9 @@ import org.springframework.context.annotation.Configuration
 @ComponentScan(
     basePackages = [
         "org.onap.ccsdk.cds.controllerblueprints",
-        "org.onap.ccsdk.cds.blueprintsprocessor"
+        "org.onap.ccsdk.cds.blueprintsprocessor",
+        "org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit",
+        "org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.db"
     ]
 )
 @EnableAutoConfiguration

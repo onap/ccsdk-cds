@@ -37,6 +37,7 @@
         <module>selfservice-api</module>
         <module>health-api</module>
         <module>health-api-common</module>
+        <module>workflow-api</module>
     </modules>
 
     <dependencies>
