@@ -18,6 +18,7 @@
 import logging
 import os
 import time
+import yaml
 from builtins import KeyboardInterrupt
 from concurrent import futures
 from pathlib import Path, PurePath
@@ -96,13 +97,29 @@ if __name__ == '__main__':
     config_file = str(os.path.expanduser(Path(supplied_configuration_file or default_configuration_file)))
 
     configuration = ScriptExecutorConfiguration(config_file)
-    logging_formater = '%(asctime)s - %(name)s - %(threadName)s - %(levelname)s - %(message)s'
-    logging.basicConfig(filename=configuration.script_executor_property('logFile'),
-                        level=logging.DEBUG,
+    log_file_name = configuration.script_executor_property('logFile')
+    log_file = os.path.join(os.path.dirname(os.path.abspath(os.path.dirname(__file__))), "logging.yaml")
+    print(log_file)
+    with open(log_file) as log:
+        log_config = yaml.safe_load(log)
+        print(log_config)
+    logging_formater = log_config["formatters"]["default"]["format"]
+    print(log_config["loglevel"])
+    if log_config["loglevel"] == "debug":
+        loglevel = logging.DEBUG
+    elif log_config["loglevel"] == "info":
+        loglevel = logging.INFO
+    elif log_config["loglevel"] == "error":
+        loglevel = logging.ERROR
+    logging.basicConfig(filename=log_file_name,
+                        level=loglevel,
                         format=logging_formater)
-    console = logging.StreamHandler()
-    console.setLevel(logging.INFO)
+    console = logging.handlers.RotatingFileHandler(log_file_name, maxBytes=log_config["logfilesize"],
+                                                   backupCount=log_config["rollovercount"])
+    
+    console.setLevel(loglevel)
     formatter = logging.Formatter(logging_formater)
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
     serve(configuration)
+
