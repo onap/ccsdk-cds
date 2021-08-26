@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c03634f_6e3413e1",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/SelfServiceApiTestConfiguration.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-08-26T18:57:18Z",
+      "side": 1,
+      "message": "won\u0027t these be picked as part of existing base package \u0027org.onap.ccsdk.cds.blueprintsprocessor\u0027",
+      "revId": "de0f99d50d1374cba2a37193a805256f9d1f76ff",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f338213_059d29b3",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/workflow-api/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-08-26T18:57:18Z",
+      "side": 1,
+      "message": "better to use ${project.version} or add in dependencyManagement section in rootmost pom and use here",
+      "revId": "de0f99d50d1374cba2a37193a805256f9d1f76ff",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d1c329c_68f3968f",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/workflow-api/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2021-08-26T18:57:18Z",
+      "side": 1,
+      "message": "fix the indentation",
+      "revId": "de0f99d50d1374cba2a37193a805256f9d1f76ff",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
