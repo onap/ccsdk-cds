@@ -37,7 +37,7 @@
         <springfox.swagger2.version>3.0.0</springfox.swagger2.version>
         <eelf.version>1.0.0</eelf.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
-        <hazelcast.version>4.0</hazelcast.version>
+        <hazelcast.version>4.2.2</hazelcast.version>
 
         <h2database.version>1.4.197</h2database.version>
         <powermock.version>1.7.4</powermock.version>
