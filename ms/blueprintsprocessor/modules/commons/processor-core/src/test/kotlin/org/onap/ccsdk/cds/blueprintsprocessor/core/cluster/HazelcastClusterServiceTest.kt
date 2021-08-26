@@ -241,7 +241,7 @@ class HazelcastClusterServiceTest {
         log.info("initialising ...")
         val hazelcastClusterService = bluePrintClusterService as HazelcastClusterService
 
-        val memberNameMap = bluePrintClusterService.clusterMapStore<Member>("member-name-map") as IMap
+        val memberNameMap: Map<String, Member> = bluePrintClusterService.clusterMapStore<Member>("member-name-map") as IMap
         assertEquals(3, memberNameMap.size, "failed to match member size")
         memberNameMap.forEach { (key, value) -> log.info("nodeId($key), Member($value)") }
         val scheduler = hazelcastClusterService.clusterScheduler("cleanup")
