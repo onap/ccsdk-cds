@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "12cbe3b6_b9219c95",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/selfservice-api/src/test/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/selfservice/api/SelfServiceApiTestConfiguration.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 7672
+      },
+      "writtenOn": "2021-08-27T09:23:40Z",
+      "side": 1,
+      "message": "Fixed the Trailing space",
+      "parentUuid": "e14deabb_e498a8d1",
+      "revId": "de0f99d50d1374cba2a37193a805256f9d1f76ff",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f338213_059d29b3",
         "filename": "ms/blueprintsprocessor/modules/inbounds/workflow-api/pom.xml",
         "patchSetId": 1
