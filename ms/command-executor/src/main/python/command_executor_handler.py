@@ -28,6 +28,8 @@ import utils
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
 from zipfile import ZipFile
 import io
+import time
+import prometheus_client as prometheus
 
 REQUIREMENTS_TXT = "requirements.txt"
 
@@ -35,6 +37,9 @@ REQUIREMENTS_TXT = "requirements.txt"
 class CommandExecutorHandler():
     BLUEPRINTS_DEPLOY_DIR = '/opt/app/onap/blueprints/deploy/'
     TOSCA_META_FILE = 'TOSCA-Metadata/TOSCA.meta'
+    PROMETHEUS_METRICS_UPLOAD_CBA_LABEL = 'upload_cba'
+    PROMETHEUS_METRICS_PREP_ENV_LABEL = 'prepare_env'
+    PROMETHEUS_METRICS_EXEC_COMMAND_LABEL = 'execute_command'
 
     def __init__(self, request):
         self.request = request
@@ -51,6 +56,41 @@ class CommandExecutorHandler():
         self.blueprint_tosca_meta_file = self.blueprint_dir + '/' + self.TOSCA_META_FILE
         self.extra = utils.getExtraLogData(request)
         self.installed = self.blueprint_dir + '/.installed'
+        self.prometheus_histogram = self.get_prometheus_histogram()
+        self.prometheus_counter = self.get_prometheus_counter()
+        self.start_prometheus_server()
+
+    def get_prometheus_histogram(self):
+        histogram = getattr(prometheus.REGISTRY, '_command_executor_histogram', None)
+        if not histogram:
+            histogram = prometheus.Histogram('cds_ce_execution_duration_seconds',
+                             'How many times CE actions (upload, prepare env and execute) got executed and how long it took to complete for each CBA python script.',
+                             ['step', 'blueprint_name', 'blueprint_version', 'script_name'])
+            prometheus.REGISTRY._command_executor_histogram = histogram
+        return histogram
+
+    def get_prometheus_counter(self):
+        counter = getattr(prometheus.REGISTRY, '_command_executor_counter', None)
+        if not counter:
+            counter = prometheus.Counter('cds_ce_execution_error_total',
+                              'How many times CE actions (upload, prepare env and execute) got executed and failed for each CBA python script',
+                              ['step', 'blueprint_name', 'blueprint_version', 'script_name'])
+            prometheus.REGISTRY._command_executor_counter = counter
+        return counter
+
+    def start_prometheus_server(self):
+        self.logger.info("PROMETHEUS_METRICS_ENABLED: {}".format(os.environ.get('PROMETHEUS_METRICS_ENABLED')), extra=self.extra)
+        if (os.environ.get('PROMETHEUS_METRICS_ENABLED')):
+           if not "PROMETHEUS_PORT" in os.environ:
+              err_msg = "ERROR: failed to start prometheus server, PROMETHEUS_PORT env variable is not found."
+              self.logger.error(err_msg, extra=self.extra)
+              return utils.build_ret_data(False, results_log=[], error=err_msg)
+
+           server_started = getattr(prometheus.REGISTRY, '_command_executor_prometheus_server_started', None)
+           if not server_started:
+               self.logger.info("PROMETHEUS_PORT: {}".format(os.environ.get('PROMETHEUS_PORT')), extra=self.extra)
+               prometheus.start_http_server(int(os.environ.get('PROMETHEUS_PORT')))
+               prometheus.REGISTRY._command_executor_prometheus_server_started = True
 
     def is_installed(self):
         return os.path.exists(self.installed)
@@ -74,16 +114,19 @@ class CommandExecutorHandler():
     # create dir blueprintName/BlueprintVersion/BlueprintUUID, and extract binData as either ZIP file or GZIP
     # based on archiveType field...
     def uploadBlueprint(self, request):
+        start_time = time.time()
         archive_type = request.archiveType
         compressed_cba_stream = io.BytesIO(request.binData)
-        
+        self.logger.info("uploadBlueprint request {}".format(request), extra=self.extra)
         if not self.is_valid_archive_type(archive_type):
+            self.prometheus_counter.labels(self.PROMETHEUS_METRICS_UPLOAD_CBA_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
             return utils.build_grpc_blueprint_upload_response(self.request_id, self.sub_request_id, False, ["Archive type {} is not valid.".format(archive_type)])
         
         # create the BP dir self.blueprint_dir
         try:
             os.makedirs(name=self.blueprint_dir, mode=0o755, exist_ok=True)
         except OSError as ex:
+            self.prometheus_counter.labels(self.PROMETHEUS_METRICS_UPLOAD_CBA_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
             err_msg = "Failed to create blueprint dir: {} exception message: {}".format(self.blueprint_dir, ex.strerror)
             self.logger.error(err_msg, extra=self.extra)
             return utils.build_grpc_blueprint_upload_response(self.request_id, self.sub_request_id, False, [err_msg])
@@ -94,25 +137,32 @@ class CommandExecutorHandler():
                     zipfile.extractall(self.blueprint_dir)                    
                 self.logger.info("Done extracting ZIP data to dir {}".format(self.blueprint_dir), extra=self.extra)
             except (IOError, zipfile.error) as e:
+                self.prometheus_counter.labels(self.PROMETHEUS_METRICS_UPLOAD_CBA_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
                 err_msg = "Error extracting ZIP data to dir {} exception: {}".format(self.blueprint_dir, e)
                 self.logger.error(err_msg, extra=self.extra)
                 return utils.build_grpc_blueprint_upload_response(self.request_id, self.sub_request_id, False, [err_msg])
         # TODO with an actual test gzip cba...
         elif archive_type=="CBA_GZIP":
+            self.prometheus_counter.labels(self.PROMETHEUS_METRICS_UPLOAD_CBA_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
             self.logger.error("CBA_GZIP TODO", extra=self.extra)
             return utils.build_grpc_blueprint_upload_response(self.request_id, self.sub_request_id, False, ["Error extracting GZIP data to {} GZIP todo!".format(self.blueprint_dir)])
-        # Finally, everything is ok! 
+        # Finally, everything is ok!
+        self.prometheus_histogram.labels(self.PROMETHEUS_METRICS_UPLOAD_CBA_LABEL, self.blueprint_name, self.blueprint_version, None).observe(time.time() - start_time)
         return utils.build_grpc_blueprint_upload_response(self.request_id, self.sub_request_id, True, [])
 
     def prepare_env(self, request):
         results_log = []
+        start_time = time.time()
 
+        self.logger.info("prepare_env request {}".format(request), extra=self.extra)
         # validate that the blueprint name in the request exists, if not, notify the caller
         if not self.blueprint_dir_exists():
+            self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
             err_msg = "CBA directory {} not found on cmd-exec. CBA will be uploaded by BP proc.".format(self.blueprint_name_version_uuid)
             self.logger.info(err_msg, extra=self.extra)
             return utils.build_ret_data(False, results_log=results_log, error=err_msg, reupload_cba=True)
         if not self.blueprint_tosca_meta_file_exists():
+            self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
             err_msg = "CBA directory {} exists on cmd-exec, but TOSCA meta file is not found!!! Returning (null) as UUID. CBA will be uploaded by BP proc.".format(self.blueprint_name_version_uuid)
             self.logger.info(err_msg, extra=self.extra)
             return utils.build_ret_data(False, results_log=results_log, error=err_msg, reupload_cba=True)
@@ -121,22 +171,28 @@ class CommandExecutorHandler():
         if not self.is_installed():
             create_venv_status = self.create_venv()
             if not create_venv_status[utils.CDS_IS_SUCCESSFUL_KEY]:
+                self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
                 return self.err_exit("ERROR: failed to prepare environment for request {} due to error in creating virtual Python env. Original error {}".format(self.blueprint_name_version_uuid, create_venv_status[utils.ERR_MSG_KEY]))
 
             activate_venv_status = self.activate_venv()
             if not activate_venv_status[utils.CDS_IS_SUCCESSFUL_KEY]:
+                self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
                 return self.err_exit("ERROR: failed to prepare environment for request {} due Python venv_activation. Original error {}".format(self.blueprint_name_version_uuid, activate_venv_status[utils.ERR_MSG_KEY]))
+
             try:
                 with open(self.installed, "w+") as f:
                     if not self.install_packages(request, CommandExecutor_pb2.pip, f, results_log):
+                        self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
                         err_msg = "ERROR: failed to prepare environment for request {} during pip package install.".format(self.blueprint_name_version_uuid)
                         return utils.build_ret_data(False, results_log=results_log, error=err_msg)
                     f.write("\r\n") # TODO: is \r needed?
                     results_log.append("\n")
                     if not self.install_packages(request, CommandExecutor_pb2.ansible_galaxy, f, results_log):
+                        self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
                         err_msg = "ERROR: failed to prepare environment for request {} during Ansible install.".format(self.blueprint_name_version_uuid)
                         return utils.build_ret_data(False, results_log=results_log, error=err_msg)
             except Exception as ex:
+                self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
                 err_msg = "ERROR: failed to prepare environment for request {} during installing packages. Exception: {}".format(self.blueprint_name_version_uuid, ex)
                 self.logger.error(err_msg, extra=self.extra)
                 return utils.build_ret_data(False, error=err_msg)
@@ -145,18 +201,22 @@ class CommandExecutorHandler():
                 with open(self.installed, "r") as f:
                     results_log.append(f.read())
             except Exception as ex:
+                self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
                 err_msg="ERROR: failed to prepare environment during reading 'installed' file {}. Exception: {}".format(self.installed, ex)
                 return utils.build_ret_data(False, error=err_msg)
 
         # deactivate_venv(blueprint_id)
+        self.prometheus_histogram.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).observe(time.time() - start_time)
         return utils.build_ret_data(True, results_log=results_log)
 
     def execute_command(self, request):
+        start_time = time.time()
         # STDOUT/STDERR output of the process
         results_log = []
         # encoded payload returned by the process
         result = {}
 
+        self.logger.info("execute_command request {}".format(request), extra=self.extra)
         # workaround for when packages are not specified, we may not want to go through the install step
         # can just call create_venv from here.
         if not self.is_installed():
@@ -165,6 +225,7 @@ class CommandExecutorHandler():
             if not self.is_installed():
                 create_venv_status = self.create_venv
                 if not create_venv_status[utils.CDS_IS_SUCCESSFUL_KEY]:
+                    self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).inc()
                     err_msg = "{} - Failed to execute command during venv creation. Original error: {}".format(self.blueprint_name_version_uuid, create_venv_status[utils.ERR_MSG_KEY])
                     return utils.build_ret_data(False, error=err_msg)
             activate_response = self.activate_venv()
@@ -202,6 +263,7 @@ class CommandExecutorHandler():
                     completed_subprocess = subprocess.run(cmd, stdout=tmp, stderr=subprocess.STDOUT, shell=True,
                                                 env=updated_env, timeout=self.execution_timeout)
                 except TimeoutExpired:
+                    self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).inc()
                     timeout_err_msg = "Running command {} failed due to timeout of {} seconds.".format(self.blueprint_name_version_uuid, self.execution_timeout)
                     self.logger.error(timeout_err_msg, extra=self.extra)
                     utils.parse_cmd_exec_output(tmp, self.logger, result, results_log, self.extra)
@@ -210,15 +272,17 @@ class CommandExecutorHandler():
                 utils.parse_cmd_exec_output(tmp, self.logger, result, results_log, self.extra)
                 rc = completed_subprocess.returncode
         except Exception as e:
+            self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).inc()
             err_msg = "{} - Failed to execute command. Error: {}".format(self.blueprint_name_version_uuid, e)
             result.update(utils.build_ret_data(False, results_log=results_log, error=err_msg))
             return result
 
         # deactivate_venv(blueprint_id)
         #Since return code is only used to check if it's zero (success), we can just return success flag instead.
-        self.logger.debug("python return_code : {}".format(rc), extra=self.extra)
         is_execution_successful = rc == 0
         result.update(utils.build_ret_data(is_execution_successful, results_log=results_log))
+        self.prometheus_histogram.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).observe(time.time() - start_time)
+
         return result
 
     def install_packages(self, request, type, f, results):

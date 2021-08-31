@@ -68,6 +68,7 @@ services:
       - cds-network
     ports:
       - "50051:50051"
+      - "8005:8005"
     restart: always
     volumes:
       - target: /opt/app/onap/blueprints/deploy
