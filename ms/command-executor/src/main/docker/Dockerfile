@@ -18,7 +18,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
     && chmod -R 755 /opt
 
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools
-RUN pip install --no-cache-dir grpcio==1.20.0 grpcio-tools==1.20.0 virtualenv==16.7.9
+RUN pip install --no-cache-dir requests==2.26.0 grpcio==1.20.0 grpcio-tools==1.20.0 virtualenv==16.7.9
 
 USER onap
 ENTRYPOINT /opt/app/onap/command-executor/start.sh
