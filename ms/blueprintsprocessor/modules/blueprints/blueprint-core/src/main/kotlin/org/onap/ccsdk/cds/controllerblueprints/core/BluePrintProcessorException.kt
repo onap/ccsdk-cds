@@ -17,7 +17,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.core
 
-import org.apache.commons.lang.exception.ExceptionUtils
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogException
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogExceptionFluent
 import org.onap.ccsdk.cds.error.catalog.core.ErrorMessage

@@ -19,7 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.micrometer.core.instrument.MeterRegistry
-import org.apache.commons.lang.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
