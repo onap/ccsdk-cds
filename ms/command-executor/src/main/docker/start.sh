@@ -22,6 +22,19 @@ then
   export APP_PORT=50051
 fi
 
+if [ -z "${PROMETHEUS_PORT}" ]
+then
+  echo "PROMETHEUS_PORT environment variable is not set, using default(10005)."
+  export PROMETHEUS_PORT=10005
+fi
+
+if [ -z "${PROMETHEUS_METRICS_ENABLED}" ]
+then
+  echo "PROMETHEUS_METRICS_ENABLED environment variable is not set, using default(false)."
+  #enable this feature via charts.
+  export PROMETHEUS_METRICS_ENABLED=false
+fi
+
 if [ -z "${BASIC_AUTH}" ]
 then
   echo "BASIC_AUTH environment variable is not set, using default."
