@@ -1612,32 +1612,13 @@
     "JsonNode" : {
       "type" : "object",
       "properties" : {
+        "float" : {
+          "type" : "boolean"
+        },
         "array" : {
           "type" : "boolean"
         },
         "null" : {
-          "type" : "boolean"
-        },
-        "short" : {
-          "type" : "boolean"
-        },
-        "nodeType" : {
-          "type" : "string",
-          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
-        },
-        "number" : {
-          "type" : "boolean"
-        },
-        "float" : {
-          "type" : "boolean"
-        },
-        "object" : {
-          "type" : "boolean"
-        },
-        "bigInteger" : {
-          "type" : "boolean"
-        },
-        "bigDecimal" : {
           "type" : "boolean"
         },
         "valueNode" : {
@@ -1652,6 +1633,31 @@
         "pojo" : {
           "type" : "boolean"
         },
+        "integralNumber" : {
+          "type" : "boolean"
+        },
+        "floatingPointNumber" : {
+          "type" : "boolean"
+        },
+        "bigDecimal" : {
+          "type" : "boolean"
+        },
+        "bigInteger" : {
+          "type" : "boolean"
+        },
+        "textual" : {
+          "type" : "boolean"
+        },
+        "short" : {
+          "type" : "boolean"
+        },
+        "nodeType" : {
+          "type" : "string",
+          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
+        },
+        "number" : {
+          "type" : "boolean"
+        },
         "boolean" : {
           "type" : "boolean"
         },
@@ -1664,16 +1670,10 @@
         "long" : {
           "type" : "boolean"
         },
+        "object" : {
+          "type" : "boolean"
+        },
         "binary" : {
-          "type" : "boolean"
-        },
-        "integralNumber" : {
-          "type" : "boolean"
-        },
-        "floatingPointNumber" : {
-          "type" : "boolean"
-        },
-        "textual" : {
           "type" : "boolean"
         }
       }
@@ -1839,6 +1839,13 @@
           "type" : "integer",
           "format" : "int64"
         },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -1849,25 +1856,18 @@
             "type" : "object"
           }
         },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
-        },
-        "first" : {
-          "type" : "boolean"
-        },
-        "number" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "last" : {
-          "type" : "boolean"
-        },
         "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
         },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
+        },
+        "last" : {
+          "type" : "boolean"
+        },
+        "first" : {
+          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -1885,6 +1885,13 @@
           "type" : "integer",
           "format" : "int64"
         },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -1895,25 +1902,18 @@
             "$ref" : "#/definitions/BlueprintModelSearch"
           }
         },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
-        },
-        "first" : {
-          "type" : "boolean"
-        },
-        "number" : {
-          "type" : "integer",
-          "format" : "int32"
-        },
-        "last" : {
-          "type" : "boolean"
-        },
         "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
         },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
+        },
+        "last" : {
+          "type" : "boolean"
+        },
+        "first" : {
+          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -1923,17 +1923,14 @@
     "Pageable" : {
       "type" : "object",
       "properties" : {
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
         "offset" : {
           "type" : "integer",
           "format" : "int64"
         },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
-        },
         "paged" : {
-          "type" : "boolean"
-        },
-        "unpaged" : {
           "type" : "boolean"
         },
         "pageNumber" : {
@@ -1943,6 +1940,9 @@
         "pageSize" : {
           "type" : "integer",
           "format" : "int32"
+        },
+        "unpaged" : {
+          "type" : "boolean"
         }
       }
     },
@@ -2206,10 +2206,10 @@
     "Sort" : {
       "type" : "object",
       "properties" : {
-        "sorted" : {
+        "unsorted" : {
           "type" : "boolean"
         },
-        "unsorted" : {
+        "sorted" : {
           "type" : "boolean"
         },
         "empty" : {
