@@ -19,6 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.protobuf.ByteString
+import io.grpc.Status
+import io.micrometer.core.instrument.Tag
+import io.micrometer.core.instrument.Timer
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.PrepareRemoteEnvInput
@@ -41,11 +44,13 @@ import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
 import org.onap.ccsdk.cds.controllerblueprints.core.returnNullIfMissing
 import org.onap.ccsdk.cds.controllerblueprints.core.rootFieldsToMap
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import java.io.File
 
 @ConditionalOnBean(name = [ExecutionServiceConstant.SERVICE_GRPC_REMOTE_SCRIPT_EXECUTION])
 @Component("component-remote-python-executor")
@@ -73,14 +78,18 @@ open class ComponentRemotePythonExecutor(
 
         const val STEP_PREPARE_ENV = "prepare-env"
         const val STEP_EXEC_CMD = "execute-command"
+        const val STEP_UPLOAD_CBA = "upload-cba"
         const val ATTRIBUTE_EXEC_CMD_STATUS = "status"
         const val ATTRIBUTE_PREPARE_ENV_LOG = "prepare-environment-logs"
         const val ATTRIBUTE_EXEC_CMD_LOG = "execute-command-logs"
         const val ATTRIBUTE_RESPONSE_DATA = "response-data"
         const val DEFAULT_ENV_PREPARE_TIMEOUT_IN_SEC = 120
         const val DEFAULT_EXECUTE_TIMEOUT_IN_SEC = 180
-        const val TIMEOUT_DELTA = 100L
         const val DEFAULT_CBA_UPLOAD_TIMEOUT_IN_SEC = 30
+        // Prometheus metrics counters
+        const val CDS_BP_CE_GRPC_ERROR_TOTAL = "cds_bp_ce_grpc_error_total"
+        const val CDS_BP_CE_TIMEOUT_ERROR_TOTAL = "cds_bp_ce_timeout_error_total"
+        const val CDS_BP_CE_EXECUTION_DURATION_SECONDS = "cds_bp_ce_execution_duration_seconds"
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
@@ -103,19 +112,7 @@ open class ComponentRemotePythonExecutor(
         val subRequestId = executionServiceInput.commonHeader.subRequestId
         val requestId = processId
 
-        val operationAssignment: OperationAssignment = bluePrintContext
-            .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
-
-        val artifactName: String = operationAssignment.implementation?.primary
-            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
-
-        val artifactDefinition =
-            bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
-
-        checkNotBlank(artifactDefinition.file) { "couldn't get python script path($artifactName)" }
-
-        val pythonScript = normalizedFile(bluePrintContext.rootPath, artifactDefinition.file)
-
+        val pythonScript = getScriptFile()
         checkFileExists(pythonScript) { "python script(${pythonScript.absolutePath}) doesn't exists" }
 
         val endPointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
@@ -141,7 +138,10 @@ open class ComponentRemotePythonExecutor(
         // component level timeout should be => env_prep_timeout + execution_timeout
         val timeout = implementation.timeout
 
-        var scriptCommand = command.replace(pythonScript.name, artifactDefinition.file)
+        // NOTE: this was reverted back to absolute path for SR7 compatibility.
+        // CMD-EXEC SR10 onwards will look for absence of blueprint UUID in the absolute path.
+        // If such request is found, UUID will be appended.
+        var scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
         if (args != null && args.isNotEmpty()) {
             scriptCommand = scriptCommand.plus(" ").plus(args)
         }
@@ -166,10 +166,11 @@ open class ComponentRemotePythonExecutor(
             // in cases where the exception is caught in BP side due to timeout, we do not have `err_msg` returned by cmd-exec (inside `payload`),
             // hence `artifact` field will be empty
         } catch (grpcEx: io.grpc.StatusRuntimeException) {
-            val componentLevelWarningMsg =
-                if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
-            val grpcErrMsg =
-                "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId).$componentLevelWarningMsg grpcError: (${grpcEx.cause?.message})"
+            val errorType = if (grpcEx.status.code == Status.DEADLINE_EXCEEDED.code) CDS_BP_CE_TIMEOUT_ERROR_TOTAL else CDS_BP_CE_GRPC_ERROR_TOTAL
+            meterRegistry.counter(errorType, commandExecutorMetricTags(executionServiceInput, STEP_PREPARE_ENV, getScriptName())).increment()
+
+            val componentLevelWarningMsg = if (timeout < envPrepTimeout) "Note: component-level timeout ($timeout) is shorter than env-prepare timeout ($envPrepTimeout). " else ""
+            val grpcErrMsg = "Command failed during env. preparation... timeout($envPrepTimeout) requestId ($processId).$componentLevelWarningMsg grpcError: (${grpcEx.cause?.message})"
             // no execution log in case of timeout (as cmd-exec side hasn't finished to transfer output)
             // set prepare-env-log to the error msg, and cmd-exec-log to empty
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, grpcErrMsg.asJsonPrimitive())
@@ -177,8 +178,9 @@ open class ComponentRemotePythonExecutor(
             addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, grpcErrMsg)
             log.error(grpcErrMsg, grpcEx)
         } catch (e: Exception) {
-            val catchallErrMsg =
-                "Command executor failed during env. preparation.. catch-all case. timeout($envPrepTimeout) requestId ($processId). exception msg: ${e.message}"
+            meterRegistry.counter(CDS_BP_CE_GRPC_ERROR_TOTAL, commandExecutorMetricTags(executionServiceInput, STEP_PREPARE_ENV, getScriptName())).increment()
+
+            val catchallErrMsg = "Command executor failed during env. preparation.. catch-all case. timeout($envPrepTimeout) requestId ($processId). exception msg: ${e.message}"
             // no environment prepare log from executor in case of timeout (as cmd-exec side hasn't finished to transfer output), set it to error msg. Execution logs is empty.
             setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, catchallErrMsg.asJsonPrimitive())
             setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), "{}".asJsonPrimitive(), isLogResponseEnabled)
@@ -201,7 +203,9 @@ open class ComponentRemotePythonExecutor(
                     timeOut = executionTimeout.toLong()
                 )
 
+                val exeCmdTimer = Timer.start()
                 val remoteExecutionOutput = remoteScriptExecutionService.executeCommand(remoteExecutionInput)
+                exeCmdTimer.stop(meterRegistry.timer(CDS_BP_CE_EXECUTION_DURATION_SECONDS, commandExecutorMetricTags(executionServiceInput, STEP_EXEC_CMD, getScriptName())))
 
                 checkNotNull(remoteExecutionOutput) {
                     "Error: Request-id $processId did not return a result from remote command execution."
@@ -217,6 +221,9 @@ open class ComponentRemotePythonExecutor(
                     setNodeOutputProperties(remoteExecutionOutput.status, STEP_EXEC_CMD, logs, returnedPayload, isLogResponseEnabled)
                 } // In timeout exception cases, we don't have payload, hence `payload` is empty value.
             } catch (grpcEx: io.grpc.StatusRuntimeException) {
+                val errorType = if (grpcEx.status.code == Status.DEADLINE_EXCEEDED.code) CDS_BP_CE_TIMEOUT_ERROR_TOTAL else CDS_BP_CE_GRPC_ERROR_TOTAL
+                meterRegistry.counter(errorType, commandExecutorMetricTags(executionServiceInput, STEP_EXEC_CMD, getScriptName())).increment()
+
                 val componentLevelWarningMsg =
                     if (timeout < executionTimeout) "Note: component-level timeout ($timeout) is shorter than execution timeout ($executionTimeout). " else ""
                 val timeoutErrMsg =
@@ -225,8 +232,8 @@ open class ComponentRemotePythonExecutor(
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, timeoutErrMsg)
                 log.error(timeoutErrMsg, grpcEx)
             } catch (e: Exception) {
-                val catchAllErrMsg =
-                    "Command executor failed during process catch-all case requestId ($processId) timeout($envPrepTimeout) exception msg: ${e.message}"
+                meterRegistry.counter(CDS_BP_CE_GRPC_ERROR_TOTAL, commandExecutorMetricTags(executionServiceInput, STEP_EXEC_CMD, getScriptName())).increment()
+                val catchAllErrMsg = "Command executor failed during process catch-all case requestId ($processId) timeout($envPrepTimeout) exception msg: ${e.message}"
                 setNodeOutputErrors(STEP_PREPARE_ENV, listOf(catchAllErrMsg).asJsonType(), logging = isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_EXEC_CMD, catchAllErrMsg)
                 log.error(catchAllErrMsg, e)
@@ -235,6 +242,35 @@ open class ComponentRemotePythonExecutor(
         log.debug("Trying to close GRPC channel. request ($processId)")
         remoteScriptExecutionService.close()
     }
+
+    private fun getScriptFile(): File {
+        val context = bluePrintRuntimeService.bluePrintContext()
+        val operationAssignment: OperationAssignment = context
+            .nodeTemplateInterfaceOperation(nodeTemplateName, interfaceName, operationName)
+
+        val artifactName: String = operationAssignment.implementation?.primary
+            ?: throw BluePrintProcessorException("missing primary field to get artifact name for node template ($nodeTemplateName)")
+
+        val artifactDefinition =
+            bluePrintRuntimeService.resolveNodeTemplateArtifactDefinition(nodeTemplateName, artifactName)
+        checkNotBlank(artifactDefinition.file) { "couldn't get python script path($artifactName)" }
+        return normalizedFile(context.rootPath, artifactDefinition.file)
+    }
+
+    private fun getScriptName(): String {
+        return getScriptFile().name
+    }
+
+    private fun commandExecutorMetricTags(executionServiceInput: ExecutionServiceInput, step: String, scriptName: String): MutableList<Tag> =
+        executionServiceInput.actionIdentifiers.let {
+            mutableListOf(
+                Tag.of(BluePrintConstants.METRIC_TAG_BP_NAME, it.blueprintName),
+                Tag.of(BluePrintConstants.METRIC_TAG_BP_VERSION, it.blueprintVersion),
+                Tag.of(BluePrintConstants.METRIC_TAG_BP_ACTION, it.actionName),
+                Tag.of(BluePrintConstants.METRIC_TAG_STEP, step),
+                Tag.of(BluePrintConstants.METRIC_TAG_SCRIPT_NAME, scriptName)
+            )
+        }
 
     // wrapper for call to prepare_env step on cmd-exec - reupload CBA and call prepare env again if cmd-exec reported CBA uuid mismatch
     private suspend fun prepareEnv(originatorId: String, requestId: String, subRequestId: String, remoteIdentifier: RemoteIdentifier, packages: JsonNode, envPrepTimeout: Int, cbaNameVerUuid: String, archiveType: String?, cbaBinData: ByteString?, isLogResponseEnabled: Boolean, retries: Int = 3) {
@@ -246,7 +282,10 @@ open class ComponentRemotePythonExecutor(
             packages = packages,
             timeOut = envPrepTimeout.toLong()
         )
+        val preEnvTimer = Timer.start()
         val prepareEnvOutput = remoteScriptExecutionService.prepareEnv(prepareEnvInput)
+        preEnvTimer.stop(meterRegistry.timer(CDS_BP_CE_EXECUTION_DURATION_SECONDS, commandExecutorMetricTags(executionServiceInput, STEP_PREPARE_ENV, getScriptName())))
+
         log.info("$ATTRIBUTE_PREPARE_ENV_LOG - ${prepareEnvOutput.response}")
         val logs = JacksonUtils.jsonNodeFromObject(prepareEnvOutput.response)
         setAttribute(ATTRIBUTE_PREPARE_ENV_LOG, logs)
@@ -260,14 +299,16 @@ open class ComponentRemotePythonExecutor(
                 // call prepare_env again.
                 if (retries > 0) {
                     log.info("Calling prepare environment again")
-                    prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled, retries - 1)
+                    prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled)
                 } else {
+                    meterRegistry.counter(CDS_BP_CE_GRPC_ERROR_TOTAL, commandExecutorMetricTags(executionServiceInput, STEP_PREPARE_ENV, getScriptName())).increment()
                     val errMsg = "Something is wrong: prepare_env step attempted to call itself too many times after upload CBA step!"
                     log.error(errMsg)
                     setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
                     addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, errMsg)
                 }
             } else {
+                meterRegistry.counter(CDS_BP_CE_GRPC_ERROR_TOTAL, commandExecutorMetricTags(executionServiceInput, STEP_PREPARE_ENV, getScriptName())).increment()
                 setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
                 addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, logs.toString())
             }
@@ -286,9 +327,12 @@ open class ComponentRemotePythonExecutor(
             archiveType = archiveType!!,
             binData = cbaBinData!!
         )
-
+        val uploadCbaTimer = Timer.start()
         val cbaUploadOutput = remoteScriptExecutionService.uploadBlueprint(uploadCbaInput)
+        uploadCbaTimer.stop(meterRegistry.timer(CDS_BP_CE_EXECUTION_DURATION_SECONDS, commandExecutorMetricTags(executionServiceInput, STEP_UPLOAD_CBA, getScriptName())))
+
         if (cbaUploadOutput.status != StatusType.SUCCESS) {
+            meterRegistry.counter(CDS_BP_CE_GRPC_ERROR_TOTAL, commandExecutorMetricTags(executionServiceInput, STEP_UPLOAD_CBA, getScriptName())).increment()
             log.error("Error uploading CBA $cbaNameVerUuid error(${cbaUploadOutput.payload})")
             setNodeOutputErrors(STEP_PREPARE_ENV, "[]".asJsonPrimitive(), prepareEnvOutput.payload, isLogResponseEnabled)
             addError(StatusType.FAILURE.name, STEP_PREPARE_ENV, logs.toString())

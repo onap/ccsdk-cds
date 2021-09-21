@@ -257,4 +257,6 @@ object BluePrintConstants {
     const val METRIC_TAG_BP_STATUS = "status"
     const val METRIC_TAG_BP_OUTCOME = "outcome"
     const val METRIC_TAG_TOPIC = "topic"
+    const val METRIC_TAG_STEP = "step"
+    const val METRIC_TAG_SCRIPT_NAME = "script_name"
 }
