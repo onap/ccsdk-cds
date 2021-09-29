@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution
 
 import com.fasterxml.jackson.databind.JsonNode
+import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.withTimeout
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
@@ -62,6 +63,7 @@ abstract class AbstractComponentFunction : BlueprintFunctionNode<ExecutionServic
     lateinit var interfaceName: String
     lateinit var operationName: String
     lateinit var nodeTemplateName: String
+    lateinit var meterRegistry: MeterRegistry
     var operationInputs: MutableMap<String, JsonNode> = hashMapOf()
 
     override fun getName(): String {
