@@ -16,6 +16,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
+import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,6 +26,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogS
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
@@ -50,6 +52,9 @@ class TemplateControllerTest {
 
     @Autowired
     lateinit var webTestClient: WebTestClient
+
+    @MockBean
+    lateinit var meterRegistry: MeterRegistry
 
     var resolutionKey = "7cafa9f3-bbc8-49ec-8f25-fcaa6ac3ff08"
     val blueprintName = "baseconfiguration"

@@ -26,12 +26,13 @@ RESULTS_LOG_KEY = "results_log"
 REUPLOAD_CBA_KEY = "reupload_cba"
 RESPONSE_MAX_SIZE = 4 * 1024 * 1024  # 4Mb
 
-
+# part of cba_name/version/uuid path
 def blueprint_name_version_uuid(request):
-  blueprint_name = request.identifiers.blueprintName
-  blueprint_version = request.identifiers.blueprintVersion
-  blueprint_uuid = request.identifiers.blueprintUUID
-  return blueprint_name + '/' + blueprint_version + '/' + blueprint_uuid
+  return get_blueprint_name(request) + '/' + get_blueprint_version(request) + '/' + get_blueprint_uuid(request)
+
+# return blueprint_name and version part of the path (needed for legacy cmd-exec support
+def blueprint_name_version(request):
+  return get_blueprint_name(request) + '/' + get_blueprint_version(request)
 
 def get_blueprint_name(request):
   return request.identifiers.blueprintName

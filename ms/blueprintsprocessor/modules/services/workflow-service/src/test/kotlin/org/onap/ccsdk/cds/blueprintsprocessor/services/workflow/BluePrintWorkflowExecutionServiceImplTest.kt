@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import io.micrometer.core.instrument.MeterRegistry
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -62,6 +63,9 @@ class BluePrintWorkflowExecutionServiceImplTest {
 
     @MockBean
     lateinit var bluePrintClusterService: BluePrintClusterService
+
+    @MockBean
+    lateinit var meterRegistry: MeterRegistry
 
     @Before
     fun init() {
