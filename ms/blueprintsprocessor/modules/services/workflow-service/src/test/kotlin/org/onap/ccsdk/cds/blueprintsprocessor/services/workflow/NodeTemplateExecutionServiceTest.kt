@@ -15,7 +15,9 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
+import io.micrometer.core.instrument.MeterRegistry
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import kotlinx.coroutines.runBlocking
@@ -43,6 +45,9 @@ class NodeTemplateExecutionServiceTest {
 
     @MockBean
     lateinit var bluePrintClusterService: BluePrintClusterService
+
+    @MockBean
+    lateinit var meterRegistry: MeterRegistry
 
     @Before
     fun init() {
@@ -75,7 +80,7 @@ class NodeTemplateExecutionServiceTest {
             val stepName = bluePrintRuntimeService.bluePrintContext()
                 .workflowSteps("resource-assignment").keys.first()
             val nodeTemplate = "resource-assignment"
-            val nodeTemplateExecutionService = NodeTemplateExecutionService(bluePrintClusterService)
+            val nodeTemplateExecutionService = NodeTemplateExecutionService(bluePrintClusterService, mockk())
             val executionServiceOutput = nodeTemplateExecutionService
                 .executeNodeTemplate(bluePrintRuntimeService, stepName, nodeTemplate, executionServiceInput)
 

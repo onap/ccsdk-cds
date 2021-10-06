@@ -138,9 +138,6 @@ open class ComponentRemotePythonExecutor(
         // component level timeout should be => env_prep_timeout + execution_timeout
         val timeout = implementation.timeout
 
-        // NOTE: this was reverted back to absolute path for SR7 compatibility.
-        // CMD-EXEC SR10 onwards will look for absence of blueprint UUID in the absolute path.
-        // If such request is found, UUID will be appended.
         var scriptCommand = command.replace(pythonScript.name, pythonScript.absolutePath)
         if (args != null && args.isNotEmpty()) {
             scriptCommand = scriptCommand.plus(" ").plus(args)

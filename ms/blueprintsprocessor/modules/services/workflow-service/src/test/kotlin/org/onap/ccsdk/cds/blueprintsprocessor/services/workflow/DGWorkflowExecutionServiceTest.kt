@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
+import io.micrometer.core.instrument.MeterRegistry
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -48,6 +49,9 @@ class DGWorkflowExecutionServiceTest {
 
     @MockBean
     lateinit var bluePrintClusterService: BluePrintClusterService
+
+    @MockBean
+    lateinit var meterRegistry: MeterRegistry
 
     @Before
     fun init() {
