@@ -120,7 +120,7 @@ class ImperativeWorkflowExecutionServiceTest {
                     ExecutionServiceInput::class.java
                 )!!
 
-            val imperativeWorkflowExecutionService = ImperativeWorkflowExecutionService(NodeTemplateExecutionService(mockk()))
+            val imperativeWorkflowExecutionService = ImperativeWorkflowExecutionService(NodeTemplateExecutionService(mockk(), mockk()))
             val output = imperativeWorkflowExecutionService
                 .executeBluePrintWorkflow(bluePrintRuntimeService, executionServiceInput, hashMapOf())
             assertNotNull(output, "failed to get imperative workflow output")
