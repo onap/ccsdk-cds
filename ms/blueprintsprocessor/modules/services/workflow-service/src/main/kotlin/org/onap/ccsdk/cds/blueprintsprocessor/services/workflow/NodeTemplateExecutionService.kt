@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.workflow
 
 import com.fasterxml.jackson.databind.JsonNode
+import io.micrometer.core.instrument.MeterRegistry
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.StepData
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
-open class NodeTemplateExecutionService(private val bluePrintClusterService: BluePrintClusterService) {
+open class NodeTemplateExecutionService(private val bluePrintClusterService: BluePrintClusterService, private val meterRegistry: MeterRegistry) {
 
     private val log = LoggerFactory.getLogger(NodeTemplateExecutionService::class.java)!!
 
@@ -69,6 +70,7 @@ open class NodeTemplateExecutionService(private val bluePrintClusterService: Blu
         plugin.bluePrintClusterService = bluePrintClusterService
         plugin.stepName = stepName
         plugin.nodeTemplateName = nodeTemplateName
+        plugin.meterRegistry = meterRegistry
 
         // Parent request shouldn't tamper, so need to clone the request and send to the actual component.
         val clonedExecutionServiceInput = ExecutionServiceInput().apply {
