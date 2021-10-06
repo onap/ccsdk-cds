@@ -11,7 +11,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
     && cp -rf /tmp/@project.build.finalName@/opt / \
     && rm -rf /source.tar.gz \
     && rm -rf /tmp/@project.build.finalName@ \
-    && groupadd -r -g 1000 onap && useradd -r -u 1000 -g onap onap \
+    && addgroup onap -g 1000 && adduser -h /home/onap -G onap -S -D -u 1000 onap \
     && mkdir -p /opt/app/onap/blueprints/deploy /opt/app/onap/logs \
     && touch /opt/app/onap/logs/application.log \
     && chown -R onap:onap /opt \
