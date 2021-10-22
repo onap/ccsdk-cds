@@ -49,9 +49,12 @@ class CommandExecutorHandler():
         self.uuid = utils.get_blueprint_uuid(request)
         self.request_id = utils.get_blueprint_requestid(request)
         self.sub_request_id = utils.get_blueprint_subRequestId(request)
+        self.blueprint_name_version = utils.blueprint_name_version(request) # for legacy support
         self.blueprint_name_version_uuid = utils.blueprint_name_version_uuid(request)
         self.execution_timeout = utils.get_blueprint_timeout(request)
         # onap/blueprints/deploy will be ephemeral now
+        # if the command matches “/opt/app/onap/blueprints/deploy/$cba_name/$cba_version/stuff_that_is_not_cba_uuid/”
+        # then prepend the $cba_uuid before “stuff_that_is_not_cba_uuid”
         self.blueprint_dir = self.BLUEPRINTS_DEPLOY_DIR + self.blueprint_name_version_uuid
         self.blueprint_tosca_meta_file = self.blueprint_dir + '/' + self.TOSCA_META_FILE
         self.extra = utils.getExtraLogData(request)
@@ -243,11 +246,17 @@ class CommandExecutorHandler():
             if request.properties is not None and len(request.properties) > 0:
                 properties = " " + re.escape(MessageToJson(request.properties))
 
+            # compatibility hack
+            # check if the path for the request.command does not contain UUID, then add it after cba_name/cba_version path.
+            updated_request_command = request.command
+            if self.blueprint_name_version in updated_request_command and self.blueprint_name_version_uuid not in updated_request_command:
+                updated_request_command = updated_request_command.replace(self.blueprint_name_version, self.blueprint_name_version_uuid)
+
             ### TODO: replace with os.environ['VIRTUAL_ENV']?
-            if "ansible-playbook" in request.command:
-                cmd = cmd + "; " + request.command + " -e 'ansible_python_interpreter=" + self.blueprint_dir + "/bin/python'"
+            if "ansible-playbook" in updated_request_command:
+                cmd = cmd + "; " + updated_request_command + " -e 'ansible_python_interpreter=" + self.blueprint_dir + "/bin/python'"
             else:
-                cmd = cmd + "; " + request.command + properties
+                cmd = cmd + "; " + updated_request_command + properties
 
             ### extract the original header request into sys-env variables
             ### OriginatorID
