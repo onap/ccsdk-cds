@@ -150,6 +150,7 @@ export class ActionAttributesComponent implements OnInit {
     setOutputType(type: string) {
         this.outputActionAttribute.type = type;
         this.isOutputOtherType = this.checkIfTypeIsOther(type);
+        console.log(this.outputActionAttribute.type , this.isOutputOtherType , this.outputOtherType);
     }
 
     checkIfTypeIsOther(type) {
@@ -157,11 +158,15 @@ export class ActionAttributesComponent implements OnInit {
     }
 
     submitAttributes() {
+        console.log(this.getValue());
         this.addInput(this.inputActionAttribute);
         if (this.selectedFunctionName && this.selectedAttributeName) {
             console.log(this.getValue());
             this.outputActionAttribute.value =
                 this.getValue();
+        }
+        if (this.isOutputOtherType) {
+            this.outputActionAttribute.type  = this.outputOtherType;
         }
         this.addOutput(this.outputActionAttribute);
         this.clearFormInputs();
