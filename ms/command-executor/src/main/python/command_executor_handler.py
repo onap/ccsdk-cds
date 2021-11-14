@@ -244,7 +244,7 @@ class CommandExecutorHandler():
             ### if properties are defined we add them to the command
             properties = ""
             if request.properties is not None and len(request.properties) > 0:
-                properties = " " + re.escape(MessageToJson(request.properties))
+                properties = " " + re.escape(MessageToJson(request.properties)).replace('"','\\"')
 
             # compatibility hack
             # check if the path for the request.command does not contain UUID, then add it after cba_name/cba_version path.
