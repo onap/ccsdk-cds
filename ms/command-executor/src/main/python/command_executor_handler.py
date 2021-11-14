@@ -241,7 +241,7 @@ class CommandExecutorHandler():
             ### if properties are defined we add them to the command
             properties = ""
             if request.properties is not None and len(request.properties) > 0:
-                properties = " " + re.escape(MessageToJson(request.properties))
+                properties = " " + re.escape(MessageToJson(request.properties)).replace('"','\\"')
 
             ### TODO: replace with os.environ['VIRTUAL_ENV']?
             if "ansible-playbook" in request.command:
