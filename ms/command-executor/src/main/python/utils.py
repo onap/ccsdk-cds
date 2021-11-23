@@ -30,7 +30,7 @@ RESPONSE_MAX_SIZE = 4 * 1024 * 1024  # 4Mb
 def blueprint_name_version_uuid(request):
   return get_blueprint_name(request) + '/' + get_blueprint_version(request) + '/' + get_blueprint_uuid(request)
 
-# return blueprint_name and version part of the path (needed for legacy cmd-exec support
+# return blueprint_name and version part of the path (needed for legacy SR7 cmd-exec support
 def blueprint_name_version(request):
   return get_blueprint_name(request) + '/' + get_blueprint_version(request)
 
@@ -62,7 +62,11 @@ def build_grpc_response(request_id, response):
   response.pop(CDS_IS_SUCCESSFUL_KEY)
   logs = response.pop(RESULTS_LOG_KEY)
 
-  # Payload should only contains response data returned from the executed script and/or the error message
+  errorMessage = ""
+  if ERR_MSG_KEY in response:
+    errorMessage = '\n'.join(response.pop(ERR_MSG_KEY))
+
+  # Payload should only contain response data returned from the executed script and/or the error message
   payload = json.dumps(response)
 
   timestamp = Timestamp()
@@ -72,15 +76,28 @@ def build_grpc_response(request_id, response):
                                                          response=logs,
                                                          status=status,
                                                          payload=payload,
-                                                         timestamp=timestamp)
+                                                         timestamp=timestamp,
+                                                         errMsg=errorMessage)
 
   return truncate_execution_output(execution_output)
+
+
+# return the status of validate blueprint UUID call rpc
+def build_grpc_blueprint_validation_response(request_id, subrequest_id,
+    cba_uuid, success=True):
+  timestamp = Timestamp()
+  timestamp.GetCurrentTime()
+  return CommandExecutor_pb2.BlueprintValidationOutput(requestId=request_id,
+                                                subRequestId=subrequest_id,
+                                                status=CommandExecutor_pb2.SUCCESS if success else CommandExecutor_pb2.FAILURE,
+                                                cbaUUID=cba_uuid,
+                                                timestamp=timestamp)
 
 def build_grpc_blueprint_upload_response(request_id, subrequest_id, success=True, payload=[]):
   timestamp = Timestamp()
   timestamp.GetCurrentTime()
   return CommandExecutor_pb2.UploadBlueprintOutput(requestId=request_id,
-    subRequestId=subrequest_id, 
+    subRequestId=subrequest_id,
     status=CommandExecutor_pb2.SUCCESS if success else CommandExecutor_pb2.FAILURE,
     timestamp=timestamp,
     payload=json.dumps(payload))
@@ -112,30 +129,44 @@ def truncate_execution_output(execution_output):
 
 
 # Read temp file 'outputfile' into results_log and split out the returned payload into payload_result
-def parse_cmd_exec_output(outputfile, logger, payload_result, results_log,
+def parse_cmd_exec_output(outputfile, logger, payload_result, err_msg_result, results_log,
     extra):
   payload_section = []
+  ret_err_msg_section = []
   is_payload_section = False
+  is_user_script_err_msg = False
   outputfile.seek(0)
   while True:
-    output = outputfile.readline()
-    if output == '':
+    line = outputfile.readline()
+    if line == '':
       break
-    if output.startswith('BEGIN_EXTRA_PAYLOAD'):
+    # Read the user-supplied (script) return payload.
+    if line.startswith('BEGIN_EXTRA_PAYLOAD'):
       is_payload_section = True
-      output = outputfile.readline()
-    if output.startswith('END_EXTRA_PAYLOAD'):
+      line = outputfile.readline()
+    if line.startswith('END_EXTRA_PAYLOAD'):
       is_payload_section = False
-      output = ''
+      line = ''
       payload = '\n'.join(payload_section)
       msg = email.parser.Parser().parsestr(payload)
       for part in msg.get_payload():
         payload_result.update(json.loads(part.get_payload()))
-    if output and not is_payload_section:
-      logger.info(output.strip(), extra=extra)
-      results_log.append(output.strip())
-    else:
-      payload_section.append(output.strip())
+
+    # Read the user-supplied (script) error message string
+    if line.startswith('BEGIN_EXTRA_RET_ERR_MSG'):
+      is_user_script_err_msg = True
+      line = outputfile.readline()
+    if line.startswith('END_EXTRA_RET_ERR_MSG'):
+      is_user_script_err_msg = False
+      line = ''
+      err_msg_result.append('\n'.join(ret_err_msg_section))
+    if is_payload_section:
+      payload_section.append(line.strip())
+    elif is_user_script_err_msg:
+      ret_err_msg_section.append(line.strip())
+    elif line:
+      logger.info(line.strip(), extra=extra)
+      results_log.append(line.strip())
 
 
 def getExtraLogData(request=None):

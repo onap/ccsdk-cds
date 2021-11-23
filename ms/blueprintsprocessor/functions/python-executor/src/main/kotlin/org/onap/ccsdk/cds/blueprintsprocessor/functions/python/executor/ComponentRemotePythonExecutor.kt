@@ -209,11 +209,15 @@ open class ComponentRemotePythonExecutor(
                 }
                 val logs = JacksonUtils.jsonNodeFromObject(remoteExecutionOutput.response)
                 val returnedPayload = remoteExecutionOutput.payload
+                val returnedErrMsg = remoteExecutionOutput.errMsg
                 // In case of execution, `payload` (dictionary from Python execution) is preserved in `remoteExecutionOutput.payload`;
                 // It would contain `err_msg` key. It is valid to return it.
                 if (remoteExecutionOutput.status != StatusType.SUCCESS) {
                     setNodeOutputErrors(STEP_EXEC_CMD, logs, returnedPayload, isLogResponseEnabled)
-                    addError(StatusType.FAILURE.name, STEP_EXEC_CMD, logs.toString())
+                    // check if the payload is set (in case user Python script handles the error and sets the payload to return
+                    val retErrMsg: String = if (returnedErrMsg.isNullOrEmpty()) "cmd-exec has failed, please see cmd-exec log for more details."
+                    else "cmd-exec failed and returned: $returnedErrMsg"
+                    addError(StatusType.FAILURE.name, STEP_EXEC_CMD, retErrMsg)
                 } else {
                     setNodeOutputProperties(remoteExecutionOutput.status, STEP_EXEC_CMD, logs, returnedPayload, isLogResponseEnabled)
                 } // In timeout exception cases, we don't have payload, hence `payload` is empty value.
