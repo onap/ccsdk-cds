@@ -69,7 +69,8 @@ data class RemoteScriptExecutionOutput(
     var response: List<String>,
     var status: StatusType = StatusType.SUCCESS,
     var timestamp: Date = Date(),
-    var payload: JsonNode
+    var payload: JsonNode,
+    var errMsg: String?
 )
 
 data class PrepareRemoteEnvInput(
