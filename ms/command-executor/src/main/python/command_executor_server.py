@@ -62,7 +62,8 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         if exec_cmd_response[utils.CDS_IS_SUCCESSFUL_KEY]:
             self.logger.info("{} - Execution finished successfully.".format(blueprint_id), extra=extra)
         else:
-            self.logger.info("{} - Failed to executeCommand. {}".format(blueprint_id, exec_cmd_response[utils.RESULTS_LOG_KEY]), extra=extra)
+            script_err_msg = "Error returned: {}".format(exec_cmd_response[utils.ERR_MSG_KEY]) if utils.ERR_MSG_KEY in exec_cmd_response else ""
+            self.logger.info("{} - Failed to executeCommand. {} {}" .format(blueprint_id, exec_cmd_response[utils.RESULTS_LOG_KEY], script_err_msg), extra=extra)
 
         ret = utils.build_grpc_response(request.requestId, exec_cmd_response)
         self.logger.info("Payload returned : {}".format(exec_cmd_response), extra=extra)

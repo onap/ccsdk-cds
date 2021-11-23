@@ -207,7 +207,8 @@ class GrpcRemoteScriptExecutionService(private val bluePrintGrpcLibPropertyServi
             requestId = this.requestId,
             response = this.responseList,
             status = StatusType.valueOf(this.status.name),
-            payload = payload.jsonAsJsonType()
+            payload = payload.jsonAsJsonType(),
+            errMsg = errMsg
         )
     }
 
