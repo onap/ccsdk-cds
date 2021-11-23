@@ -22,7 +22,6 @@ import os
 import sys
 import re
 import subprocess
-import virtualenv
 import venv
 import utils
 import proto.CommandExecutor_pb2 as CommandExecutor_pb2
@@ -49,13 +48,13 @@ class CommandExecutorHandler():
         self.uuid = utils.get_blueprint_uuid(request)
         self.request_id = utils.get_blueprint_requestid(request)
         self.sub_request_id = utils.get_blueprint_subRequestId(request)
-        self.blueprint_name_version = utils.blueprint_name_version(request) # for legacy support
+        self.blueprint_name_version = utils.blueprint_name_version(request) #for legacy SR7 support
         self.blueprint_name_version_uuid = utils.blueprint_name_version_uuid(request)
         self.execution_timeout = utils.get_blueprint_timeout(request)
         # onap/blueprints/deploy will be ephemeral now
+        self.blueprint_dir = self.BLUEPRINTS_DEPLOY_DIR + self.blueprint_name_version_uuid
         # if the command matches “/opt/app/onap/blueprints/deploy/$cba_name/$cba_version/stuff_that_is_not_cba_uuid/”
         # then prepend the $cba_uuid before “stuff_that_is_not_cba_uuid”
-        self.blueprint_dir = self.BLUEPRINTS_DEPLOY_DIR + self.blueprint_name_version_uuid
         self.blueprint_tosca_meta_file = self.blueprint_dir + '/' + self.TOSCA_META_FILE
         self.extra = utils.getExtraLogData(request)
         self.installed = self.blueprint_dir + '/.installed'
@@ -120,7 +119,9 @@ class CommandExecutorHandler():
         start_time = time.time()
         archive_type = request.archiveType
         compressed_cba_stream = io.BytesIO(request.binData)
-        self.logger.info("uploadBlueprint request {}".format(request), extra=self.extra)
+        ### request_copy = request.pop("binData") # Do not show binData of the uploaded compressed CBA in the log
+        ### self.logger.info("uploadBlueprint request\n{}".format(request_copy), extra=self.extra)
+        self.logger.info("uploadBlueprint request\n{}".format(request), extra=self.extra)
         if not self.is_valid_archive_type(archive_type):
             self.prometheus_counter.labels(self.PROMETHEUS_METRICS_UPLOAD_CBA_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
             return utils.build_grpc_blueprint_upload_response(self.request_id, self.sub_request_id, False, ["Archive type {} is not valid.".format(archive_type)])
@@ -177,12 +178,14 @@ class CommandExecutorHandler():
                 self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
                 return self.err_exit("ERROR: failed to prepare environment for request {} due to error in creating virtual Python env. Original error {}".format(self.blueprint_name_version_uuid, create_venv_status[utils.ERR_MSG_KEY]))
 
-            activate_venv_status = self.activate_venv()
-            if not activate_venv_status[utils.CDS_IS_SUCCESSFUL_KEY]:
+            # Upgrade pip - venv comes with PIP 18.1, which is too old.
+            if not self.upgrade_pip(results_log):
                 self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
-                return self.err_exit("ERROR: failed to prepare environment for request {} due Python venv_activation. Original error {}".format(self.blueprint_name_version_uuid, activate_venv_status[utils.ERR_MSG_KEY]))
+                err_msg = "ERROR: failed to prepare environment for request {} due to error in upgrading pip.".format(self.blueprint_name_version_uuid)
+                return utils.build_ret_data(False, results_log=results_log, error=err_msg)
 
             try:
+                # NOTE: pip or ansible selection is done later inside 'install_packages'
                 with open(self.installed, "w+") as f:
                     if not self.install_packages(request, CommandExecutor_pb2.pip, f, results_log):
                         self.prometheus_counter.labels(self.PROMETHEUS_METRICS_PREP_ENV_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
@@ -201,6 +204,7 @@ class CommandExecutorHandler():
                 return utils.build_ret_data(False, error=err_msg)
         else:
             try:
+                self.logger.info(".installed file was found for request {}".format(self.blueprint_name_version_uuid), extra=self.extra)
                 with open(self.installed, "r") as f:
                     results_log.append(f.read())
             except Exception as ex:
@@ -218,6 +222,7 @@ class CommandExecutorHandler():
         results_log = []
         # encoded payload returned by the process
         result = {}
+        script_err_msg = []
 
         self.logger.info("execute_command request {}".format(request), extra=self.extra)
         # workaround for when packages are not specified, we may not want to go through the install step
@@ -231,11 +236,7 @@ class CommandExecutorHandler():
                     self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).inc()
                     err_msg = "{} - Failed to execute command during venv creation. Original error: {}".format(self.blueprint_name_version_uuid, create_venv_status[utils.ERR_MSG_KEY])
                     return utils.build_ret_data(False, error=err_msg)
-            activate_response = self.activate_venv()
-            if not activate_response[utils.CDS_IS_SUCCESSFUL_KEY]:
-                orig_error = activate_response[utils.ERR_MSG_KEY]
-                err_msg = "{} - Failed to execute command during environment activation. Original error: {}".format(self.blueprint_name_version_uuid, orig_error)
-                return utils.build_ret_data(False, error=err_msg)
+
             # touch blueprint dir to indicate this CBA was used recently
             os.utime(self.blueprint_dir)
 
@@ -246,39 +247,40 @@ class CommandExecutorHandler():
             if request.properties is not None and len(request.properties) > 0:
                 properties = " " + re.escape(MessageToJson(request.properties)).replace('"','\\"')
 
-            # compatibility hack
+            # SR7/SR10 compatibility hack
             # check if the path for the request.command does not contain UUID, then add it after cba_name/cba_version path.
             updated_request_command = request.command
             if self.blueprint_name_version in updated_request_command and self.blueprint_name_version_uuid not in updated_request_command:
                 updated_request_command = updated_request_command.replace(self.blueprint_name_version, self.blueprint_name_version_uuid)
 
-            ### TODO: replace with os.environ['VIRTUAL_ENV']?
             if "ansible-playbook" in updated_request_command:
                 cmd = cmd + "; " + updated_request_command + " -e 'ansible_python_interpreter=" + self.blueprint_dir + "/bin/python'"
             else:
                 cmd = cmd + "; " + updated_request_command + properties
 
             ### extract the original header request into sys-env variables
-            ### OriginatorID
+            # OriginatorID
             originator_id = request.originatorId
-            ### CorrelationID
+            # CorrelationID
             correlation_id = request.correlationId
             request_id_map = {'CDS_REQUEST_ID':self.request_id, 'CDS_SUBREQUEST_ID':self.sub_request_id, 'CDS_ORIGINATOR_ID': originator_id, 'CDS_CORRELATION_ID': correlation_id}
             updated_env =  { **os.environ, **request_id_map }
+            # Prepare PATH and VENV_HOME
+            updated_env['PATH'] = self.blueprint_dir + "/bin/:" + os.environ['PATH']
+            updated_env['VIRTUAL_ENV'] = self.blueprint_dir
             self.logger.info("Running blueprint {} with timeout: {}".format(self.blueprint_name_version_uuid, self.execution_timeout), extra=self.extra)
-
             with tempfile.TemporaryFile(mode="w+") as tmp:
                 try:
                     completed_subprocess = subprocess.run(cmd, stdout=tmp, stderr=subprocess.STDOUT, shell=True,
-                                                env=updated_env, timeout=self.execution_timeout)
-                except TimeoutExpired:
+                                                          env=updated_env, timeout=self.execution_timeout)
+                except TimeoutExpired as timeout_ex:
                     self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).inc()
                     timeout_err_msg = "Running command {} failed due to timeout of {} seconds.".format(self.blueprint_name_version_uuid, self.execution_timeout)
                     self.logger.error(timeout_err_msg, extra=self.extra)
-                    utils.parse_cmd_exec_output(tmp, self.logger, result, results_log, self.extra)
+                    # In the time-out case, we will never get CBA's script err msg string.
+                    utils.parse_cmd_exec_output(outputfile=tmp, logger=self.logger, payload_result=result, err_msg_result=script_err_msg, results_log=results_log, extra=self.extra)
                     return utils.build_ret_data(False, results_log=results_log, error=timeout_err_msg)
-
-                utils.parse_cmd_exec_output(tmp, self.logger, result, results_log, self.extra)
+                utils.parse_cmd_exec_output(outputfile=tmp, logger=self.logger, payload_result=result, err_msg_result=script_err_msg, results_log=results_log, extra=self.extra)
                 rc = completed_subprocess.returncode
         except Exception as e:
             self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).inc()
@@ -286,10 +288,11 @@ class CommandExecutorHandler():
             result.update(utils.build_ret_data(False, results_log=results_log, error=err_msg))
             return result
 
-        # deactivate_venv(blueprint_id)
-        #Since return code is only used to check if it's zero (success), we can just return success flag instead.
+        # Since return code is only used to check if it's zero (success), we can just return success flag instead.
         is_execution_successful = rc == 0
-        result.update(utils.build_ret_data(is_execution_successful, results_log=results_log))
+        # Propagate error message in case rc is not 0
+        ret_err_msg = None if is_execution_successful or not script_err_msg else script_err_msg
+        result.update(utils.build_ret_data(is_execution_successful, results_log=results_log, error=ret_err_msg))
         self.prometheus_histogram.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).observe(time.time() - start_time)
 
         return result
@@ -315,18 +318,41 @@ class CommandExecutorHandler():
                         return False
         return True
 
+    def upgrade_pip(self, results):
+        self.logger.info("{} - updating PIP (venv supplied pip is too old...)".format(self.blueprint_name_version_uuid), extra=self.extra)
+        full_path_to_pip = self.blueprint_dir + "/bin/pip"
+        command = [full_path_to_pip,"install","--upgrade","pip"]
+        env = dict(os.environ)
+        if "https_proxy" in os.environ:
+            env['https_proxy'] = os.environ['https_proxy']
+            self.logger.info("Using https_proxy: {}".format(env['https_proxy']), extra=self.extra)
+        try:
+            results.append(subprocess.run(command, check=True, stdout=PIPE, stderr=PIPE, env=env).stdout.decode())
+            results.append("\n")
+            self.logger.info("upgrade_pip succeeded", extra=self.extra)
+            return True
+        except CalledProcessError as e:
+            results.append(e.stderr.decode())
+            self.logger.error("upgrade_pip failed", extra=self.extra)
+            return False
+
     def install_python_packages(self, package, results):
-        self.logger.info(
-            "{} - Install Python package({}) in Python Virtual Environment".format(self.blueprint_name_version_uuid, package), extra=self.extra)
+        self.logger.info( "{} - Install Python package({}) in Python Virtual Environment".format(self.blueprint_name_version_uuid, package), extra=self.extra)
+        pip_install_user_flag = 'PIP_INSTALL_USER_FLAG' in os.environ
+
+        if pip_install_user_flag:
+            self.logger.info("Note: PIP_INSTALL_USER_FLAG is set, 'pip install' will use '--user' flag.", extra=self.extra)
 
         if REQUIREMENTS_TXT == package:
-            command = ["pip", "install", "--user", "-r", self.blueprint_dir + "/Environments/" + REQUIREMENTS_TXT]
+            full_path_to_pip = self.blueprint_dir + "/bin/pip"
+            full_path_to_requirements_txt = self.blueprint_dir + "/Environments/" + REQUIREMENTS_TXT
+            command = [full_path_to_pip, "install", "--user", "-r", full_path_to_requirements_txt] if pip_install_user_flag else [full_path_to_pip, "install", "-r", full_path_to_requirements_txt]
         elif package == 'UTILITY':
             py_ver_maj = sys.version_info.major
             py_ver_min = sys.version_info.minor
             command = ["cp", "-r", "./cds_utils", "{}/lib/python{}.{}/site-packages/".format(self.blueprint_dir, py_ver_maj,py_ver_min)]
         else:
-            command = ["pip", "install", "--user", package]
+            command = ["pip", "install", "--user", package] if pip_install_user_flag else ["pip", "install", package]
 
         env = dict(os.environ)
         if "https_proxy" in os.environ:
@@ -343,8 +369,7 @@ class CommandExecutorHandler():
             return False
 
     def install_ansible_packages(self, package, results):
-        self.logger.info(
-            "{} - Install Ansible Role package({}) in Python Virtual Environment".format(self.blueprint_name_version_uuid, package), extra=self.extra)
+        self.logger.info( "{} - Install Ansible Role package({}) in Python Virtual Environment".format(self.blueprint_name_version_uuid, package), extra=self.extra)
         command = ["ansible-galaxy", "install", package, "-p", self.blueprint_dir + "/Scripts/ansible/roles"]
 
         env = dict(os.environ)
@@ -367,45 +392,14 @@ class CommandExecutorHandler():
         self.logger.info("{} - Create Python Virtual Environment".format(self.blueprint_name_version_uuid), extra=self.extra)
         try:
             bin_dir = self.blueprint_dir + "/bin"
-            # venv doesn't populate the activate_this.py script, hence we use from virtualenv
-            venv.create(self.blueprint_dir, with_pip=True, system_site_packages=True)
-            virtualenv.writefile(os.path.join(bin_dir, "activate_this.py"), virtualenv.ACTIVATE_THIS)
+            # check if CREATE_VENV_DISABLE_SITE_PACKAGES is set
+            venv_system_site_packages_disabled = 'CREATE_VENV_DISABLE_SITE_PACKAGES' in os.environ
+            if (venv_system_site_packages_disabled):
+                self.logger.info("Note: CREATE_VENV_DISABLE_SITE_PACKAGES env var is set - environment creation will have site packages disabled.", extra=self.extra)
+            venv.create(self.blueprint_dir, with_pip=True, system_site_packages=not venv_system_site_packages_disabled)
             self.logger.info("{} - Creation of Python Virtual Environment finished.".format(self.blueprint_name_version_uuid), extra=self.extra)
             return utils.build_ret_data(True)
         except Exception as err:
             err_msg = "{} - Failed to provision Python Virtual Environment. Error: {}".format(self.blueprint_name_version_uuid, err)
             self.logger.info(err_msg, extra=self.extra)
             return utils.build_ret_data(False, error=err_msg)
-
-    # return map cds_is_successful and err_msg. Status is True on success. err_msg may existence doesn't necessarily indicate fatal condition.
-    # the 'status' should be set to False to indicate error.
-    def activate_venv(self):
-        self.logger.info("{} - Activate Python Virtual Environment".format(self.blueprint_name_version_uuid), extra=self.extra)
-
-        # Fix: The python generated activate_this.py script concatenates the env bin dir to PATH on every call
-        #      eventually this process PATH variable was so big (128Kb) that no child process could be spawn
-        #      This script will remove all duplicates; while keeping the order of the PATH folders
-        fixpathenvvar = "os.environ['PATH']=os.pathsep.join(list(dict.fromkeys(os.environ['PATH'].split(':'))))"
-
-        path = "%s/bin/activate_this.py" % self.blueprint_dir
-        try:
-            with open(path) as activate_this_script:
-                exec (activate_this_script.read(), {'__file__': path})
-            exec (fixpathenvvar)
-            self.logger.info("Running with PATH : {}".format(os.environ['PATH']), extra=self.extra)
-            return utils.build_ret_data(True)
-        except Exception as err:
-            err_msg ="{} - Failed to activate Python Virtual Environment. Error: {}".format(self.blueprint_name_version_uuid, err)
-            self.logger.info( err_msg, extra=self.extra)
-            return utils.build_ret_data(False, error=err_msg)
-
-    def deactivate_venv(self):
-        self.logger.info("{} - Deactivate Python Virtual Environment".format(self.blueprint_name_version_uuid), extra=self.extra)
-        command = ["deactivate"]
-        try:
-            subprocess.run(command, check=True)
-        except Exception as err:
-            self.logger.info(
-                "{} - Failed to deactivate Python Virtual Environment. Error: {}".format(self.blueprint_name_version_uuid, err), extra=self.extra)
-
-

@@ -64,11 +64,5 @@ def serve():
 
 if __name__ == '__main__':
     logging_formater = '%(asctime)s|%(request_id)s|%(subrequest_id)s|%(originator_id)s|%(threadName)s|%(name)s|%(levelname)s|%(message)s'
-    logging.basicConfig(filename='/opt/app/onap/logs/application.log', level=logging.DEBUG,
-                        format=logging_formater)
-    console = logging.StreamHandler()
-    console.setLevel(logging.INFO)
-    formatter = logging.Formatter(logging_formater)
-    console.setFormatter(formatter)
-    logging.getLogger('').addHandler(console)
+    logging.basicConfig(level=logging.INFO, format=logging_formater)
     serve()

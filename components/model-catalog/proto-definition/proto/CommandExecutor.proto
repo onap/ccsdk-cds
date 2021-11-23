@@ -63,15 +63,13 @@ message Identifiers {
     string blueprintUUID = 3;
 }
 
-// TODO: need to rething whether we want to include subrequest/correlationID/etc to be consistent
-// or drop requestId as it would be returned back to the context where these values are already known.
-// and we may just be concerned with the response/status
 message ExecutionOutput {
     string requestId = 1;
     repeated string response = 2;
     ResponseStatus status = 3;
     google.protobuf.Timestamp timestamp = 4;
     string payload = 5;
+    string errMsg = 6;
 }
 
 enum ResponseStatus {
