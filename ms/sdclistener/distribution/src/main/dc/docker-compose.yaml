@@ -20,6 +20,7 @@ services:
       keyStorePath:
       activateServerTLSAuth: "false"
       isUseHttpsWithDmaap: "false"
+      isUseHttpsWithSDC: "true"
       archivePath: /opt/app/onap/cds-sdc-listener/
       grpcAddress: localhost
       grpcPort: 9111
