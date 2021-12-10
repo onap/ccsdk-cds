@@ -46,6 +46,8 @@ public class SdcListenerConfigurationTest {
         assertEquals(listenerConfiguration.getEnvironmentName(), "AUTO");
         assertEquals(listenerConfiguration.getConsumerID(), "cds-id-local");
         assertEquals(listenerConfiguration.activateServerTLSAuth(), false);
+        assertEquals(listenerConfiguration.isUseHttpsWithSDC(), true);
+        assertEquals(listenerConfiguration.isUseHttpsWithDmaap(), false);
     }
 
 }
