@@ -32,7 +32,7 @@ import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
-import org.onap.sdc.impl.mock.DistributionClientResultStubImpl;
+import org.onap.sdc.utils.DistributionActionResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,15 +50,14 @@ import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.Notificati
 import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 
 @RunWith(SpringRunner.class)
-@EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class, BluePrintProcesssorHandler.class,
-        SdcListenerDto.class, ListenerServiceImpl.class, SdcListenerStatus.class, SdcListenerConfiguration.class})
-@SpringBootTest(classes = {ListenerServiceImplTest.class})
+@EnableConfigurationProperties({ SdcListenerAuthClientInterceptor.class, BluePrintProcesssorHandler.class,
+        SdcListenerDto.class, ListenerServiceImpl.class, SdcListenerStatus.class, SdcListenerConfiguration.class })
+@SpringBootTest(classes = { ListenerServiceImplTest.class })
 public class ListenerServiceImplTest {
 
     private static final String CSAR_SAMPLE = "src/test/resources/service-ServicePnfTest-csar.csar";
     private static final String WRONG_CSAR_SAMPLE = "src/test/resources/wrong_csar_pattern.csar";
-    private static final String CBA_ZIP_PATH =
-            "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
+    private static final String CBA_ZIP_PATH = "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
     private static final String ZIP_FILE = ".zip";
     private static final String CSAR_FILE = ".csar";
     private static final String DISTRIBUTION_ID = "1";
@@ -141,10 +140,20 @@ public class ListenerServiceImplTest {
         return null;
     }
 
-    public class DistributionClientDownloadResultStubImpl extends DistributionClientResultStubImpl
-            implements IDistributionClientDownloadResult {
+    public class DistributionClientDownloadResultStubImpl implements IDistributionClientDownloadResult {
 
-        public DistributionClientDownloadResultStubImpl() {}
+        @Override
+        public DistributionActionResultEnum getDistributionActionResult() {
+            return DistributionActionResultEnum.SUCCESS;
+        }
+
+        @Override
+        public String getDistributionMessageResult() {
+            return "Stub Result, method not implemented!";
+        }
+
+        public DistributionClientDownloadResultStubImpl() {
+        }
 
         public byte[] getArtifactPayload() {
             File file = Paths.get(CSAR_SAMPLE).toFile();
