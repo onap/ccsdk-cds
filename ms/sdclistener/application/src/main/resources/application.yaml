@@ -14,10 +14,15 @@ listenerservice:
     keyStorePath: ${keyStorePath}
     activateServerTLSAuth : ${activateServerTLSAuth:false}
     isUseHttpsWithDmaap: ${isUseHttpsWithDmaap:false}
+    isUseHttpsWithSDC: ${isUseHttpsWithSDC:true}
     archivePath: ${archivePath:/opt/app/onap/cds-sdc-listener/}
     grpcAddress: ${grpcAddress:localhost}
     grpcPort: ${grpcPort:9111}
     authHeader: ${authHeader:Basic Y2NzZGthcHBzOmNjc2RrYXBwcw==}
+    httpsProxyHost: ${httpsProxyHost:}
+    httpProxyHost: ${httpProxyHost:}
+    httpsProxyPort: ${httpsProxyPort:0}
+    httpProxyPort: ${httpProxyPort:0}
 #port needed by Liveness probe
 server:
   port: ${healthcheckPort:9000}
