@@ -67,6 +67,9 @@ public class SdcListenerConfiguration implements IConfiguration {
     @Value("${listenerservice.config.isUseHttpsWithDmaap}")
     private boolean isUseHttpsWithDmaap;
 
+    @Value("${listenerservice.config.isUseHttpsWithSDC}")
+    private boolean isUseHttpsWithSDC;
+
     @Override
     public String getAsdcAddress() {
         return asdcAddress;
@@ -140,6 +143,11 @@ public class SdcListenerConfiguration implements IConfiguration {
     @Override
     public Boolean isUseHttpsWithDmaap() {
         return isUseHttpsWithDmaap;
+    }
+
+    @Override
+    public Boolean isUseHttpsWithSDC() {
+        return isUseHttpsWithSDC;
     }
 
 }
