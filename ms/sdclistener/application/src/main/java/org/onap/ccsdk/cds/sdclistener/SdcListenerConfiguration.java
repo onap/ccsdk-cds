@@ -67,6 +67,21 @@ public class SdcListenerConfiguration implements IConfiguration {
     @Value("${listenerservice.config.isUseHttpsWithDmaap}")
     private boolean isUseHttpsWithDmaap;
 
+    @Value("${listenerservice.config.isUseHttpsWithSDC}")
+    private boolean isUseHttpsWithSDC;
+
+    @Value("${listenerservice.config.httpsProxyHost}")
+    private String getHttpsProxyHost;
+
+    @Value("${listenerservice.config.httpProxyHost}")
+    private String getHttpProxyHost;
+
+    @Value("${listenerservice.config.httpsProxyPort}")
+    private int getHttpsProxyPort;
+
+    @Value("${listenerservice.config.httpProxyPort}")
+    private int getHttpProxyPort;
+
     @Override
     public String getAsdcAddress() {
         return asdcAddress;
@@ -141,6 +156,32 @@ public class SdcListenerConfiguration implements IConfiguration {
     public Boolean isUseHttpsWithDmaap() {
         return isUseHttpsWithDmaap;
     }
+
+    @Override
+    public Boolean isUseHttpsWithSDC() {
+        return isUseHttpsWithSDC;
+    }
+
+    @Override
+    public String getHttpsProxyHost() {
+        return getHttpsProxyHost;
+    }
+
+    @Override
+    public String getHttpProxyHost() {
+        return getHttpsProxyHost;
+    }
+
+    @Override
+    public int getHttpsProxyPort() {
+        return getHttpsProxyPort;
+    }
+
+    @Override
+    public int getHttpProxyPort() {
+        return getHttpsProxyPort;
+    }
+
 
 }
 
