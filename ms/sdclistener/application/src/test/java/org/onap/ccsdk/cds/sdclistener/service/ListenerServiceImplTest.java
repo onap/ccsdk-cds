@@ -32,7 +32,7 @@ import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
-import org.onap.sdc.impl.mock.DistributionClientResultStubImpl;
+import org.onap.sdc.utils.DistributionActionResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -141,8 +141,18 @@ public class ListenerServiceImplTest {
         return null;
     }
 
-    public class DistributionClientDownloadResultStubImpl extends DistributionClientResultStubImpl
+    public class DistributionClientDownloadResultStubImpl
             implements IDistributionClientDownloadResult {
+
+        @Override
+        public DistributionActionResultEnum getDistributionActionResult() {
+            return DistributionActionResultEnum.SUCCESS;
+        }
+
+        @Override
+        public String getDistributionMessageResult() {
+            return "Stub Result, method not implemented!";
+        }
 
         public DistributionClientDownloadResultStubImpl() {}
 

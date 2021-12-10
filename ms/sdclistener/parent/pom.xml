@@ -39,7 +39,7 @@
         <mockk.version>1.9</mockk.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
         <mockkserver.version>5.5.1</mockkserver.version>
-        <sdc-distribution-client.version>1.4.0</sdc-distribution-client.version>
+        <sdc-distribution-client.version>1.4.5</sdc-distribution-client.version>
         <jmockit.version>1.49</jmockit.version>
         <reactorcore.version>3.2.6.RELEASE</reactorcore.version>
     </properties>
