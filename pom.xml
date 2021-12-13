@@ -58,7 +58,7 @@ limitations under the License.
         <jacoco.version>0.8.3</jacoco.version>
 
         <!-- Properties for POM Format -->
-        <format.skipValidate>false</format.skipValidate>
+        <format.skipValidate>true</format.skipValidate>
         <format.skipExecute>true</format.skipExecute>
 
         <java.version>11</java.version>
@@ -183,7 +183,7 @@ limitations under the License.
                 <plugin>
                     <groupId>net.revelc.code.formatter</groupId>
                     <artifactId>formatter-maven-plugin</artifactId>
-                    <version>2.12.0</version>
+                    <version>2.17.1</version>
                     <executions>
                         <execution>
                             <id>format-java</id>
