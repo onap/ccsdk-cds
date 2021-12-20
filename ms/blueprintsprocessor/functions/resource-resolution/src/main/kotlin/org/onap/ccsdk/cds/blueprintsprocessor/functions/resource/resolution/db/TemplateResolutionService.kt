@@ -70,6 +70,57 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
             )?.result ?: throw EmptyResultDataAccessException(1)
         }
 
+    suspend fun findResolutionKeysByBlueprintNameAndBlueprintVersionAndArtifactName(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        artifactPrefix: String,
+        occurrence: Int = 1
+    ): List<String> =
+        withContext(Dispatchers.IO) {
+
+            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+
+            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+
+            templateResolutionRepository.findResolutionKeysByBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                occurrence
+            ) ?: throw EmptyResultDataAccessException(1)
+        }
+
+    suspend fun findArtifactNamesAndResolutionKeysByBlueprintNameAndBlueprintVersion(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        occurrence: Int = 1
+    ): Map<String,List<String>> =
+        withContext(Dispatchers.IO) {
+
+            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+
+            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+
+            val resultList = templateResolutionRepository.findArtifactNamesAndResolutionKeysByBlueprintNameAndBlueprintVersionAndOccurrence(
+                blueprintName,
+                blueprintVersion,
+                occurrence
+            ) ?: throw EmptyResultDataAccessException(1)
+
+            var resultMap: MutableMap<String, MutableList<String>> = mutableMapOf()
+
+            resultList.forEach { it ->
+                if (!resultMap.containsKey(it.getArtifactName())) {
+                    resultMap[it.getArtifactName()] = mutableListOf(it.getResolutionKey())
+                } else {
+                    resultMap[it.getArtifactName()]!!.add(it.getResolutionKey())
+                }
+            }
+            resultMap
+                .mapValues { it.value.toList() }
+                .toMap()
+        }
+
     suspend fun findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
         blueprintName: String,
         blueprintVersion: String,

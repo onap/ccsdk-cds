@@ -61,6 +61,15 @@ interface ResourceResolutionService {
         resolutionKey: String
     ): String
 
+    suspend fun resolveResolutionKeysFromDatabase(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        artifactTemplate: String
+    ): List<String>
+
+    suspend fun resolveArtifactNamesAndResolutionKeysFromDatabase(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>
+    ): Map<String, List<String>>
+
     suspend fun resolveResources(
         bluePrintRuntimeService: BluePrintRuntimeService<*>,
         nodeTemplateName: String,
@@ -122,6 +131,23 @@ open class ResourceResolutionServiceImpl(
             bluePrintRuntimeService,
             artifactTemplate,
             resolutionKey
+        )
+    }
+
+    override suspend fun resolveResolutionKeysFromDatabase(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        artifactTemplate: String
+    ): List<String> {
+        return templateResolutionDBService.findResolutionKeysByBlueprintNameAndBlueprintVersionAndArtifactName(
+            bluePrintRuntimeService,
+            artifactTemplate
+        )
+    }
+
+    override suspend fun resolveArtifactNamesAndResolutionKeysFromDatabase(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>): Map<String, List<String>> {
+        return templateResolutionDBService.findArtifactNamesAndResolutionKeysByBlueprintNameAndBlueprintVersion(
+            bluePrintRuntimeService
         )
     }
 
