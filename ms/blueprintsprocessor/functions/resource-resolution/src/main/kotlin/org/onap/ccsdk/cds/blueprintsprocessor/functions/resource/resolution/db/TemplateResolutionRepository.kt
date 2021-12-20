@@ -16,6 +16,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import javax.transaction.Transactional
 
@@ -38,6 +40,25 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
         artifactName: String,
         occurrence: Int
     ): TemplateResolution?
+
+    @Query(
+        "select tr.resolutionKey from TemplateResolution tr where tr.blueprintName = :blueprintName and tr.blueprintVersion = :blueprintVersion and tr.artifactName = :artifactName and tr.occurrence = :occurrence"
+    )
+    fun findResolutionKeysByBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+        @Param("blueprintName") blueprintName: String?,
+        @Param("blueprintVersion") blueprintVersion: String?,
+        @Param("artifactName") artifactName: String,
+        @Param("occurrence") occurrence: Int
+    ): List<String>?
+
+    @Query(
+        "select tr.artifactName as artifactName, tr.resolutionKey as resolutionKey from TemplateResolution tr where tr.blueprintName = :blueprintName and tr.blueprintVersion = :blueprintVersion and tr.occurrence = :occurrence"
+    )
+    fun findArtifactNamesAndResolutionKeysByBlueprintNameAndBlueprintVersionAndOccurrence(
+        @Param("blueprintName") blueprintName: String?,
+        @Param("blueprintVersion") blueprintVersion: String?,
+        @Param("occurrence") occurrence: Int
+    ): List<TemplateResolutionSelector>?
 
     @Transactional
     fun deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(

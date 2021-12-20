@@ -39,6 +39,18 @@ suspend fun AbstractComponentFunction.storedContentFromResolvedArtifactNB(
         .resolveFromDatabase(bluePrintRuntimeService, artifactName, resolutionKey)
 }
 
+suspend fun AbstractComponentFunction.storedResolutionKeysForArtifactNameNB(
+    artifactName: String
+): List<String> {
+    return BluePrintDependencyService.resourceResolutionService()
+        .resolveResolutionKeysFromDatabase(bluePrintRuntimeService, artifactName)
+}
+
+suspend fun AbstractComponentFunction.storedArtifactNamesAndResolutionKeysNB(): List<Pair<String,String>> {
+    return BluePrintDependencyService.resourceResolutionService()
+        .resolveArtifactNamesAndResolutionKeysFromDatabase(bluePrintRuntimeService)
+}
+
 suspend fun AbstractComponentFunction.storedResourceResolutionsNB(
     resolutionKey: String,
     artifactName: String,
@@ -72,5 +84,6 @@ fun AbstractComponentFunction.storedContentFromResolvedArtifact(resolutionKey: S
     }
 
 fun AbstractComponentFunction.contentFromResolvedArtifact(artifactPrefix: String): String = runBlocking {
-    contentFromResolvedArtifactNB(artifactPrefix)
-}
+        contentFromResolvedArtifactNB(artifactPrefix)
+    }
+

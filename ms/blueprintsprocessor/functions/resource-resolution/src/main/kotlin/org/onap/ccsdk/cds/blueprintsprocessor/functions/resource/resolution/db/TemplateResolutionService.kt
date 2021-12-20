@@ -70,6 +70,46 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
             )?.result ?: throw EmptyResultDataAccessException(1)
         }
 
+    suspend fun findResolutionKeysByBlueprintNameAndBlueprintVersionAndArtifactName(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        artifactPrefix: String,
+        occurrence: Int = 1
+    ): List<String> =
+        withContext(Dispatchers.IO) {
+
+            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+
+            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+
+            templateResolutionRepository.findResolutionKeysByBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                occurrence
+            ) ?: throw EmptyResultDataAccessException(1)
+        }
+
+    suspend fun findArtifactNamesAndResolutionKeysByBlueprintNameAndBlueprintVersion(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        occurrence: Int = 1
+    ): List<Pair<String, String>> =
+        withContext(Dispatchers.IO) {
+
+            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+
+            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
+            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+
+            val resultList = templateResolutionRepository.findArtifactNamesAndResolutionKeysByBlueprintNameAndBlueprintVersionAndOccurrence(
+                blueprintName,
+                blueprintVersion,
+                occurrence
+            ) ?: throw EmptyResultDataAccessException(1)
+
+            resultList.map { r -> Pair(r.getArtifactName(), r.getResolutionKey()) }
+        }
+
     suspend fun findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
         blueprintName: String,
         blueprintVersion: String,
