@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e90b35d7_c13fb5a1",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/ResourceResolutionExtensions.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2022-01-07T14:54:31Z",
+      "side": 1,
+      "message": "Are these blocking methods intended for Jython? Jython is deprecated and we should not add new functionality to it.",
+      "revId": "76ff4c1a31273b3e2290446a33b73f4c11e659ad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1acbda5_99aca7a3",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/TemplateResolutionService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2022-01-07T14:54:31Z",
+      "side": 1,
+      "message": "Think you can remove \"return@withContext\", the return is inferred by the typesystem",
+      "revId": "76ff4c1a31273b3e2290446a33b73f4c11e659ad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
