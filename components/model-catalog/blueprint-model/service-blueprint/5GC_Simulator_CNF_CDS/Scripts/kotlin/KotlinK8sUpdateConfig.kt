@@ -122,7 +122,7 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
                 log.info("AAI Vf-module Invariant ID is : $vfModuleModelInvariantUuid")
 
-                val vfModuleModelUuid: String = item.get("model-version-id").asText()
+                val vfModuleModelUuid: String = item.get("model-customization-id").asText()
 
                 log.info("AAI Vf-module UUID is : $vfModuleModelUuid")
 
