@@ -77,7 +77,7 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
             log.info("Uploading K8S profile for template prefix $prefix")
 
             val vfModuleModelInvariantUuid: String = getResolvedParameter(payloadObject, "vf-module-model-invariant-uuid")
-            val vfModuleModelUuid: String = getResolvedParameter(payloadObject, "vf-module-model-version")
+            val vfModuleModelUuid: String = getResolvedParameter(payloadObject, "vf-module-model-customization-uuid")
             val k8sRbProfileName: String = getResolvedParameter(payloadObject, "k8s-rb-profile-name")
             val k8sRbProfileNamespace: String = getResolvedParameter(payloadObject, "k8s-rb-profile-namespace")
             val vnfId: String = getResolvedParameter(payloadObject, "vnf-id")
