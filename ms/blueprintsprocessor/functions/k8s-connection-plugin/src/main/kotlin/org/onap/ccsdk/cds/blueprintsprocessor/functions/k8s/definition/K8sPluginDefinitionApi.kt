@@ -24,12 +24,15 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.profile.K
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.template.K8sTemplate
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sRbInstanceFull
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod.DELETE
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpMethod.POST
+import org.springframework.http.HttpMethod.PUT
 import java.nio.file.Path
 
 class K8sPluginDefinitionApi(
@@ -78,6 +81,32 @@ class K8sPluginDefinitionApi(
         }
     }
 
+    fun getProfile(definition: String, definitionVersion: String, profileName: String): K8sProfile? {
+        val rbDefinitionService = K8sDefinitionRestClient(
+            k8sConfiguration,
+            definition,
+            definitionVersion
+        )
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
+                GET.name,
+                "/profile/$profileName",
+                ""
+            )
+            log.debug(result.toString())
+            return if (result.status in 200..299) {
+                val parsedObject: K8sProfile? = JacksonUtils.readValue(result.body, K8sProfile::class.java)
+                parsedObject
+            } else if (result.status == 500 && result.body.contains("Error finding master table"))
+                null
+            else
+                throw BluePrintProcessorException(result.body)
+        } catch (e: Exception) {
+            log.error("Caught exception trying to get k8s rb profile")
+            throw BluePrintProcessorException("${e.message}")
+        }
+    }
+
     fun createProfile(definition: String, definitionVersion: String, profile: K8sProfile) {
         val rbDefinitionService = K8sDefinitionRestClient(
             k8sConfiguration,
@@ -96,6 +125,46 @@ class K8sPluginDefinitionApi(
             }
         } catch (e: Exception) {
             log.error("Caught exception trying to create k8s rb profile ${profile.profileName}")
+            throw BluePrintProcessorException("${e.message}")
+        }
+    }
+
+    fun updateProfile(profile: K8sProfile) {
+        val rbDefinitionService = K8sDefinitionRestClient(
+            k8sConfiguration,
+            profile.rbName!!,
+            profile.rbVersion!!
+        )
+        val profileJsonString: String = objectMapper.writeValueAsString(profile)
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
+                PUT.name,
+                "/profile/${profile.profileName}",
+                profileJsonString
+            )
+            if (result.status !in 200..299) {
+                throw Exception(result.body)
+            }
+        } catch (e: Exception) {
+            log.error("Caught exception trying to create k8s rb profile ${profile.profileName}")
+            throw BluePrintProcessorException("${e.message}")
+        }
+    }
+
+    fun deleteProfile(definition: String, definitionVersion: String, profileName: String) {
+        val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion)
+        try {
+            val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
+                DELETE.name,
+                "/profile/${profileName}",
+                ""
+            )
+            log.debug(result.toString())
+            if (result.status !in 200..299) {
+                throw Exception(result.body)
+            }
+        } catch (e: Exception) {
+            log.error("Caught exception during get template")
             throw BluePrintProcessorException("${e.message}")
         }
     }

@@ -44,6 +44,7 @@ open class K8sConfigValueComponent(
         const val INPUT_ARTIFACT_PREFIX_NAMES = "artifact-prefix-names"
         const val INPUT_K8S_RB_CONFIG_TEMPLATE_NAME = "k8s-rb-config-template-name"
         const val INPUT_K8S_RB_CONFIG_NAME = "k8s-rb-config-name"
+        const val INPUT_K8S_RB_CONFIG_VERSION = "k8s-rb-config-version"
         const val INPUT_K8S_INSTANCE_ID = "k8s-instance-id"
         const val INPUT_K8S_CONFIG_VALUE_SOURCE = "k8s-rb-config-value-source"
         const val INPUT_K8S_CONFIG_OPERATION_TYPE = "k8s-config-operation-type"
@@ -59,6 +60,7 @@ open class K8sConfigValueComponent(
         val inputParameterNames = arrayOf(
             INPUT_K8S_RB_CONFIG_TEMPLATE_NAME,
             INPUT_K8S_RB_CONFIG_NAME,
+            INPUT_K8S_RB_CONFIG_VERSION,
             INPUT_K8S_INSTANCE_ID,
             INPUT_K8S_CONFIG_OPERATION_TYPE,
             INPUT_K8S_CONFIG_VALUE_SOURCE,
@@ -92,20 +94,21 @@ open class K8sConfigValueComponent(
             val configName: String? = prefixInputParamsMap[INPUT_K8S_RB_CONFIG_NAME]?.returnNullIfMissing()?.asText()
             val instanceId: String? = prefixInputParamsMap[INPUT_K8S_INSTANCE_ID]?.returnNullIfMissing()?.asText()
             var valueSource: String? = prefixInputParamsMap[INPUT_K8S_CONFIG_VALUE_SOURCE]?.returnNullIfMissing()?.asText()
+            var configVersion: String? = prefixInputParamsMap[INPUT_K8S_RB_CONFIG_VERSION]?.returnNullIfMissing()?.asText()
             val operationType = prefixInputParamsMap[INPUT_K8S_CONFIG_OPERATION_TYPE]?.returnNullIfMissing()?.asText()?.toUpperCase()
 
             if (valueSource == null) {
                 valueSource = configName
                 log.info("Config name used instead of value source")
             }
-            if (operationType == null || operationType == OperationType.CREATE.toString())
-                createOperation(templateName, instanceId, valueSource, outputPrefixStatuses, prefix, configName)
-            else if (operationType == OperationType.UPDATE.toString())
-                updateOperation(templateName, instanceId, valueSource, outputPrefixStatuses, prefix, configName)
-            else if (operationType == OperationType.DELETE.toString())
-                deleteOperation(instanceId, configName)
-            else
-                throw BluePrintProcessorException("Unknown operation type: $operationType")
+            when (operationType) {
+                null, OperationType.CREATE.toString() -> createOperation(templateName, instanceId, valueSource, outputPrefixStatuses, prefix, configName)
+                OperationType.UPDATE.toString() -> updateOperation(templateName, instanceId, valueSource, outputPrefixStatuses, prefix, configName)
+                OperationType.DELETE.toString() -> deleteOperation(instanceId, configName, false)
+                OperationType.DELETE_CONFIG.toString() -> deleteOperation(instanceId, configName, true)
+                OperationType.ROLLBACK.toString() -> rollbackOperation(instanceId, configName, configVersion)
+                else -> throw BluePrintProcessorException("Unknown operation type: $operationType")
+            }
         }
     }
 
@@ -170,14 +173,39 @@ open class K8sConfigValueComponent(
         }
     }
 
-    private fun deleteOperation(instanceId: String?, configName: String?) {
+    private fun rollbackOperation(instanceId: String?, configName: String?, configVersion: String?) {
+        val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
+        if (instanceId == null || configName == null || configVersion == null) {
+            log.warn("$INPUT_K8S_INSTANCE_ID or $INPUT_K8S_RB_CONFIG_NAME or $INPUT_K8S_RB_CONFIG_VERSION is null - skipping delete")
+        } else {
+            if (api.hasConfigurationValues(instanceId, configName))
+                api.rollbackConfigurationValues(instanceId, configName, configVersion, null)
+            else {
+                throw BluePrintProcessorException(
+                    "Configuration $configName does not exist. Cannot perform delete operation"
+                )
+            }
+        }
+    }
+
+    private fun deleteOperation(instanceId: String?, configName: String?, onlyDeleteConfig: Boolean) {
         val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
         if (instanceId == null || configName == null) {
             log.warn("$INPUT_K8S_INSTANCE_ID or $INPUT_K8S_RB_CONFIG_NAME is null - skipping delete")
-        } else if (api.hasConfigurationValues(instanceId, configName)) {
-            log.info("Configuration does not exists - skipping delete")
         } else {
-            api.deleteConfigurationValues(instanceId, configName)
+            if (api.hasConfigurationValues(instanceId, configName)) {
+                if (onlyDeleteConfig)
+                    api.deleteConfigurationValues(instanceId, configName, true)
+                else
+                    api.editConfigurationValuesByDelete(instanceId, configName)
+            } else {
+                if (onlyDeleteConfig)
+                    log.info("Configuration does not exists - skipping delete")
+                else
+                    throw BluePrintProcessorException(
+                        "Configuration $configName does not exist. Cannot perform delete operation"
+                    )
+            }
         }
     }
 
@@ -261,6 +289,6 @@ open class K8sConfigValueComponent(
     }
 
     private enum class OperationType {
-        CREATE, UPDATE, DELETE
+        CREATE, UPDATE, DELETE, ROLLBACK, DELETE_CONFIG
     }
 }

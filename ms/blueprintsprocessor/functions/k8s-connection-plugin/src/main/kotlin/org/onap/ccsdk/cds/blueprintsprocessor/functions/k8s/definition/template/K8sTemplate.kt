@@ -12,8 +12,14 @@ class K8sTemplate {
     @get:JsonProperty("description")
     var description: String? = null
 
+    @get:JsonProperty("chart-name")
+    var chartName: String? = null
+
+    @get:JsonProperty("has-content")
+    var hasContent: Boolean? = null
+
     override fun toString(): String {
-        return "$templateName:$description"
+        return "$templateName:$description:$chartName:$hasContent"
     }
 
     override fun equals(other: Any?): Boolean {

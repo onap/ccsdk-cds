@@ -1,8 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 IBM.
- * Modifications Copyright © 2020 Orange.
- * Modifications Copyright © 2020 Deutsche Telekom AG.
+ * Modifications Copyright © 2022 Orange.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,39 +16,21 @@
  * limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.profile
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.query
+
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sRbInstanceResourceStatus
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sRbInstanceGvk
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class K8sProfile {
+class K8sResourceStatus {
 
-    @get:JsonProperty("rb-name")
-    var rbName: String? = null
+    @get:JsonProperty("resourceCount")
+    var resourceCount: Int = 0
 
-    @get:JsonProperty("rb-version")
-    var rbVersion: String? = null
-
-    @get:JsonProperty("profile-name")
-    var profileName: String? = null
-
-    @get:JsonProperty("kubernetes-version")
-    var kubernetesVersion: String? = null
-
-    @get:JsonProperty("namespace")
-    var namespace: String? = "default"
-
-    @get:JsonProperty("labels")
-    var labels: Map<String, String>? = null
-
-    @get:JsonProperty("extra-resource-types")
-    var extraResourceTypes: List<K8sRbInstanceGvk>? = null
-
-    override fun toString(): String {
-        return "$rbName:$rbVersion:$profileName"
-    }
+    @get:JsonProperty("resourcesStatus")
+    var resourcesStatus: List<K8sRbInstanceResourceStatus>? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

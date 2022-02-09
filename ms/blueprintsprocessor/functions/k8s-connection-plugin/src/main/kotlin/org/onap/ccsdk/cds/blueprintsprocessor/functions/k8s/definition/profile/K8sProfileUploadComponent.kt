@@ -22,11 +22,15 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.profile
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.commons.io.FileUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sPluginDefinitionApi
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sRbInstance
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sRbInstanceGvk
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionService
@@ -65,6 +69,8 @@ open class K8sProfileUploadComponent(
         const val INPUT_K8S_DEFINITION_NAME = "k8s-rb-definition-name"
         const val INPUT_K8S_DEFINITION_VERSION = "k8s-rb-definition-version"
         const val INPUT_K8S_PROFILE_NAMESPACE = "k8s-rb-profile-namespace"
+        const val INPUT_K8S_PROFILE_LABELS = "k8s-rb-profile-labels"
+        const val INPUT_K8S_PROFILE_EXTRA_TYPES = "k8s-rb-profile-extra-types"
         const val INPUT_K8S_PROFILE_K8S_VERSION = "k8s-rb-profile-k8s-version"
         const val INPUT_K8S_PROFILE_SOURCE = "k8s-rb-profile-source"
         const val INPUT_RESOURCE_ASSIGNMENT_MAP = "resource-assignment-map"
@@ -86,6 +92,8 @@ open class K8sProfileUploadComponent(
             INPUT_K8S_DEFINITION_NAME,
             INPUT_K8S_DEFINITION_VERSION,
             INPUT_K8S_PROFILE_NAMESPACE,
+            INPUT_K8S_PROFILE_LABELS,
+            INPUT_K8S_PROFILE_EXTRA_TYPES,
             INPUT_K8S_PROFILE_K8S_VERSION,
             INPUT_K8S_PROFILE_SOURCE,
             INPUT_ARTIFACT_PREFIX_NAMES
@@ -143,6 +151,8 @@ open class K8sProfileUploadComponent(
                 val profileNamespace: String? = prefixInputParamsMap[INPUT_K8S_PROFILE_NAMESPACE]?.returnNullIfMissing()?.asText()
                 val profileK8sVersion: String? = prefixInputParamsMap[INPUT_K8S_PROFILE_K8S_VERSION]?.returnNullIfMissing()?.asText()
                 var profileSource: String? = prefixInputParamsMap[INPUT_K8S_PROFILE_SOURCE]?.returnNullIfMissing()?.asText()
+                var profileLabels: JsonNode? = prefixInputParamsMap[INPUT_K8S_PROFILE_LABELS]?.returnNullIfMissing()
+                var profileExtraTypes: JsonNode? = prefixInputParamsMap[INPUT_K8S_PROFILE_EXTRA_TYPES]?.returnNullIfMissing()
                 if (profileNamespace == null)
                     throw BluePrintProcessorException("Profile $profileName namespace is missing")
                 if (profileSource == null) {
@@ -163,6 +173,16 @@ open class K8sProfileUploadComponent(
                 profile.namespace = profileNamespace
                 if (profileK8sVersion != null)
                     profile.kubernetesVersion = profileK8sVersion
+                if (profileLabels != null) {
+                    val objectMapper = jacksonObjectMapper()
+                    val labelList: HashMap<String, String> = objectMapper.readValue(profileLabels.toPrettyString())
+                    profile.labels = labelList
+                }
+                if (profileExtraTypes != null) {
+                    val objectMapper = jacksonObjectMapper()
+                    val extraTypeList: ArrayList<K8sRbInstanceGvk> = objectMapper.readValue(profileExtraTypes.toPrettyString())
+                    profile.extraResourceTypes = extraTypeList
+                }
                 val profileFilePath: Path = prepareProfileFile(profileName, profileSource, artifact.file)
                 api.createProfile(definitionName, definitionVersion, profile)
                 api.uploadProfileContent(definitionName, definitionVersion, profile, profileFilePath)

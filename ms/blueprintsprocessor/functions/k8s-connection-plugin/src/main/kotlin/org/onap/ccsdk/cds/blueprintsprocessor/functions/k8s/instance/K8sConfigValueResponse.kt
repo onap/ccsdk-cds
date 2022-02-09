@@ -29,13 +29,39 @@ class K8sConfigValueResponse {
 
     @get:JsonProperty("config-version")
     @get:JsonAlias("config-verion")
-    var configVersion: Integer? = null
+    var configVersion: Int? = null
+
+    @get:JsonProperty("config-tag")
+    var configTag: String? = null
 
     @get:JsonProperty("values")
     var values: Map<String, Object>? = null
 
     override fun toString(): String {
         return "$templateName:$configName"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
+    }
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+class K8sConfigValueTag {
+    @get:JsonProperty("config-version")
+    var configVersion: Int? = null
+
+    @get:JsonProperty("config-tag")
+    var configTag: String? = null
+
+    override fun toString(): String {
+        return "$configVersion:$configTag"
     }
 
     override fun equals(other: Any?): Boolean {
