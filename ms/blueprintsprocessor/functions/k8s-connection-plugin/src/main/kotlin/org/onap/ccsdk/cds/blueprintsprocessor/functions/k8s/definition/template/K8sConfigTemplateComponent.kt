@@ -135,23 +135,27 @@ open class K8sConfigTemplateComponent(
                 log.info("Uploading K8s template..")
                 outputPrefixStatuses[prefix] = OUTPUT_ERROR
                 var templateSource: String? = prefixInputParamsMap[INPUT_K8S_TEMPLATE_SOURCE]?.returnNullIfMissing()?.asText()
-                if (templateSource == null) {
-                    templateSource = templateName
-                    log.info("Template name used instead of template source")
+
+                var templateFilePath: Path? = null
+                if (templateSource != null && templateSource != "") {
+                    val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
+                    val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, templateSource)
+                    if (artifact.type != BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
+                        throw BluePrintProcessorException(
+                            "Unexpected template artifact type for template source $templateSource. Expecting: $artifact.type"
+                        )
+                    templateFilePath = prepareTemplateFile(templateName, templateSource, artifact.file)
+                } else {
+                    templateSource = ""
+                    log.info("Configuration template without content. RB definition content will be used instead")
                 }
-                val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
-                val artifact: ArtifactDefinition = bluePrintContext.nodeTemplateArtifact(nodeTemplateName, templateSource)
-                if (artifact.type != BluePrintConstants.MODEL_TYPE_ARTIFACT_K8S_CONFIG)
-                    throw BluePrintProcessorException(
-                        "Unexpected template artifact type for template source $templateSource. Expecting: $artifact.type"
-                    )
                 val template = K8sTemplate()
                 template.templateName = templateName
                 template.description = templateSource
 
-                val templateFilePath: Path = prepareTemplateFile(templateName, templateSource, artifact.file)
                 api.createTemplate(definitionName, definitionVersion, template)
-                api.uploadConfigTemplateContent(definitionName, definitionVersion, template, templateFilePath)
+                if (templateFilePath != null)
+                    api.uploadConfigTemplateContent(definitionName, definitionVersion, template, templateFilePath)
 
                 log.info("K8s Config Upload Completed")
                 outputPrefixStatuses[prefix] = OUTPUT_UPLOADED

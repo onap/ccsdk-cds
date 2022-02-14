@@ -26,7 +26,7 @@ public class K8sPluginQueryApi(
             if (name != null)
                 path = path.plus("&Name=$name")
             if (namespace != null)
-                path = path.plus("&Namespace=$name")
+                path = path.plus("&Namespace=$namespace")
             if (labels != null && labels.isNotEmpty()) {
                 path = path.plus("&Labels=")
                 for ((name, value) in labels)
