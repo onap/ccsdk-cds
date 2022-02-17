@@ -1,6 +1,7 @@
 /*
  *  Copyright © 2019 IBM.
  *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
+ *  Modification Copyright (C) 2022 Nordix Foundation.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -67,5 +68,6 @@ class MessageLibConstants {
         const val TYPE_KAFKA_STREAMS_BASIC_AUTH = "kafka-streams-basic-auth"
         const val TYPE_KAFKA_STREAMS_SSL_AUTH = "kafka-streams-ssl-auth"
         const val TYPE_KAFKA_STREAMS_SCRAM_SSL_AUTH = "kafka-streams-scram-ssl-auth"
+        const val TYPE_KAFKA_SCRAM_PLAIN_TEXT_AUTH = "kafka-scram-plain-text-auth"
     }
 }

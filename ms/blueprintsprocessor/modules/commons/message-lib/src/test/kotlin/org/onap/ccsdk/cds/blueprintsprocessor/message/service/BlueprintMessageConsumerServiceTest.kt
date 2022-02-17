@@ -1,6 +1,7 @@
 /*
  *  Copyright © 2019 IBM.
  *  Modifications Copyright © 2018-2021 AT&T, Bell Canada Intellectual Property.
+ *  Modification Copyright (C) 2022 Nordix Foundation.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -82,6 +83,16 @@ import kotlin.test.assertTrue
             "blueprintsprocessor.messageconsumer.sample.keystorePassword=secretpassword",
             "blueprintsprocessor.messageconsumer.sample.scramUsername=sample-user",
             "blueprintsprocessor.messageconsumer.sample.scramPassword=secretpassword",
+
+            "blueprintsprocessor.messageconsumer.sample2.type=kafka-scram-plain-text-auth",
+            "blueprintsprocessor.messageconsumer.sample2.bootstrapServers=127.0.0.1:9092",
+            "blueprintsprocessor.messageconsumer.sample2.groupId=sample-group",
+            "blueprintsprocessor.messageconsumer.sample2.topic=default-topic",
+            "blueprintsprocessor.messageconsumer.sample2.clientId=default-client-id",
+            "blueprintsprocessor.messageconsumer.sample2.pollMillSec=10",
+            "blueprintsprocessor.messageconsumer.sample2.pollRecords=1",
+            "blueprintsprocessor.messageconsumer.sample2.scramUsername=sample-user",
+            "blueprintsprocessor.messageconsumer.sample2.scramPassword=secretpassword",
 
             "blueprintsprocessor.messageproducer.sample.type=kafka-scram-ssl-auth",
             "blueprintsprocessor.messageproducer.sample.bootstrapServers=127.0.0.1:9092",
@@ -246,6 +257,57 @@ open class BlueprintMessageConsumerServiceTest {
         assertEquals(
             messageConsumerProperties.type,
             "kafka-scram-ssl-auth",
+            "Authentication type doesn't match the expected value"
+        )
+
+        assertTrue(
+            configProps.containsKey(ConsumerConfig.CLIENT_ID_CONFIG),
+            "Missing expected kafka config key : ${ConsumerConfig.CLIENT_ID_CONFIG}"
+        )
+        assertTrue(
+            configProps[ConsumerConfig.CLIENT_ID_CONFIG].toString().startsWith("default-client-id"),
+            "Invalid prefix for ${ConsumerConfig.CLIENT_ID_CONFIG} : ${configProps[ConsumerConfig.CLIENT_ID_CONFIG]} is supposed to start with default-client-id"
+        )
+
+        expectedConfig.forEach {
+            assertTrue(
+                configProps.containsKey(it.key),
+                "Missing expected kafka config key : ${it.key}"
+            )
+            assertEquals(
+                configProps[it.key],
+                it.value,
+                "Unexpected value for ${it.key} got ${configProps[it.key]} instead of ${it.value}"
+            )
+        }
+    }
+
+
+    @Test
+    fun testKafkaScramPlaintextAuthConfig() {
+        val expectedConfig = mapOf<String, Any>(
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to "127.0.0.1:9092",
+            ConsumerConfig.GROUP_ID_CONFIG to "sample-group",
+            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to true,
+            ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "latest",
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java,
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to ByteArrayDeserializer::class.java,
+            CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to SecurityProtocol.SASL_PLAINTEXT.toString()
+        )
+
+        val messageConsumerProperties = bluePrintMessageLibPropertyService
+            .messageConsumerProperties("${MessageLibConstants.PROPERTY_MESSAGE_CONSUMER_PREFIX}sample2")
+
+        val configProps = messageConsumerProperties.getConfig()
+
+        assertEquals(
+            messageConsumerProperties.topic,
+            "default-topic",
+            "Topic doesn't match the expected value"
+        )
+        assertEquals(
+            messageConsumerProperties.type,
+            "kafka-scram-plain-text-auth",
             "Authentication type doesn't match the expected value"
         )
 
