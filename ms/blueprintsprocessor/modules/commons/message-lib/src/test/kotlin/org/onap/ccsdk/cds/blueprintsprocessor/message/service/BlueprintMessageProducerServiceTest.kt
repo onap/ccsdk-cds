@@ -1,4 +1,5 @@
 /*
+ *  Modification Copyright (C) 2022 Nordix Foundation.
  *  Copyright © 2019 IBM.
  *  Modifications Copyright © 2021 Bell Canada.
  *
@@ -38,6 +39,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.message.MessageLibConstants.Companion.PROPERTY_MESSAGE_PRODUCER_PREFIX
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
@@ -69,9 +71,17 @@ import kotlin.test.assertTrue
             "blueprintsprocessor.messageproducer.sample.keystore=/path/to/keystore.jks",
             "blueprintsprocessor.messageproducer.sample.keystorePassword=secretpassword",
             "blueprintsprocessor.messageproducer.sample.scramUsername=sample-user",
-            "blueprintsprocessor.messageproducer.sample.scramPassword=secretpassword"
+            "blueprintsprocessor.messageproducer.sample.scramPassword=secretpassword",
+
+            "blueprintsprocessor.messageproducer.sample2.type=kafka-scram-plain-text-auth",
+            "blueprintsprocessor.messageproducer.sample2.bootstrapServers=127.0.0.1:9092",
+            "blueprintsprocessor.messageproducer.sample2.topic=default-topic",
+            "blueprintsprocessor.messageproducer.sample2.clientId=default-client-id",
+            "blueprintsprocessor.messageproducer.sample2.scramUsername=sample-user",
+            "blueprintsprocessor.messageproducer.sample2.scramPassword=secretpassword"
         ]
 )
+
 open class BlueprintMessageProducerServiceTest {
 
     @Autowired
@@ -139,6 +149,58 @@ open class BlueprintMessageProducerServiceTest {
         assertEquals(
             messageProducerProperties.type,
             "kafka-scram-ssl-auth",
+            "Authentication type doesn't match the expected value"
+        )
+
+        assertTrue(
+            configProps.containsKey(ConsumerConfig.CLIENT_ID_CONFIG),
+            "Missing expected kafka config key : ${ConsumerConfig.CLIENT_ID_CONFIG}"
+        )
+        assertTrue(
+            configProps[ConsumerConfig.CLIENT_ID_CONFIG].toString().startsWith("default-client-id"),
+            "Invalid prefix for ${ConsumerConfig.CLIENT_ID_CONFIG} : ${configProps[ConsumerConfig.CLIENT_ID_CONFIG]} is supposed to start with default-client-id"
+        )
+
+        expectedConfig.forEach {
+            assertTrue(
+                configProps.containsKey(it.key),
+                "Missing expected kafka config key : ${it.key}"
+            )
+            assertEquals(
+                configProps[it.key],
+                it.value,
+                "Unexpected value for ${it.key} got ${configProps[it.key]} instead of ${it.value}"
+            )
+        }
+    }
+
+    @Test
+    fun testKafkaScramPlaintextAuthConfig() {
+
+        val expectedConfig = mapOf<String, Any>(
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to "127.0.0.1:9092",
+            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java,
+            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to ByteArraySerializer::class.java,
+            ProducerConfig.ACKS_CONFIG to "all",
+            ProducerConfig.MAX_BLOCK_MS_CONFIG to 250,
+            ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG to 60 * 60 * 1000,
+            ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG to true,
+            CommonClientConfigs.SECURITY_PROTOCOL_CONFIG to SecurityProtocol.SASL_PLAINTEXT.toString()
+        )
+
+        val messageProducerProperties = bluePrintMessageLibPropertyService
+            .messageProducerProperties("${MessageLibConstants.PROPERTY_MESSAGE_PRODUCER_PREFIX}sample2")
+
+        val configProps = messageProducerProperties.getConfig()
+
+        assertEquals(
+            messageProducerProperties.topic,
+            "default-topic",
+            "Topic doesn't match the expected value"
+        )
+        assertEquals(
+            messageProducerProperties.type,
+            "kafka-scram-plain-text-auth",
             "Authentication type doesn't match the expected value"
         )
 

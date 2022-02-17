@@ -1,4 +1,5 @@
 /*
+ *  Modification Copyright (C) 2022 Nordix Foundation.
  *  Copyright © 2019 IBM.
  *  Modifications Copyright © 2018-2021 AT&T, Bell Canada Intellectual Property
  *
@@ -22,6 +23,8 @@ import io.micrometer.core.instrument.MeterRegistry
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaBasicAuthMessageProducerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaScramPlainTextAuthMessageProducerProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaScramPlaintextAuthMessageConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaScramSslAuthMessageConsumerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaScramSslAuthMessageProducerProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.message.KafkaSslAuthMessageConsumerProperties
@@ -71,6 +74,11 @@ open class BluePrintMessageLibPropertyService(
                     prefix, KafkaScramSslAuthMessageProducerProperties::class.java
                 )
             }
+            MessageLibConstants.TYPE_KAFKA_SCRAM_PLAIN_TEXT_AUTH -> {
+                bluePrintPropertiesService.propertyBeanType(
+                    prefix, KafkaScramPlainTextAuthMessageProducerProperties::class.java
+                )
+            }
             else -> {
                 throw BluePrintProcessorException("Message adaptor($type) is not supported")
             }
@@ -88,6 +96,9 @@ open class BluePrintMessageLibPropertyService(
             }
             MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH -> {
                 JacksonUtils.readValue(jsonNode, KafkaScramSslAuthMessageProducerProperties::class.java)!!
+            }
+            MessageLibConstants.TYPE_KAFKA_SCRAM_PLAIN_TEXT_AUTH -> {
+                JacksonUtils.readValue(jsonNode, KafkaScramPlainTextAuthMessageProducerProperties::class.java)!!
             }
             else -> {
                 throw BluePrintProcessorException("Message adaptor($type) is not supported")
@@ -130,6 +141,12 @@ open class BluePrintMessageLibPropertyService(
                     prefix, KafkaScramSslAuthMessageConsumerProperties::class.java
                 )
             }
+            MessageLibConstants.TYPE_KAFKA_SCRAM_PLAIN_TEXT_AUTH -> {
+                bluePrintPropertiesService.propertyBeanType(
+                    prefix, KafkaScramPlaintextAuthMessageConsumerProperties::class.java
+                )
+            }
+
             /** Stream Consumer */
             MessageLibConstants.TYPE_KAFKA_STREAMS_BASIC_AUTH -> {
                 bluePrintPropertiesService.propertyBeanType(
@@ -146,6 +163,7 @@ open class BluePrintMessageLibPropertyService(
                     prefix, KafkaStreamsScramSslAuthConsumerProperties::class.java
                 )
             }
+
             else -> {
                 throw BluePrintProcessorException("Message adaptor($type) is not supported")
             }
@@ -165,6 +183,9 @@ open class BluePrintMessageLibPropertyService(
             MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH -> {
                 JacksonUtils.readValue(jsonNode, KafkaScramSslAuthMessageConsumerProperties::class.java)!!
             }
+            MessageLibConstants.TYPE_KAFKA_SCRAM_PLAIN_TEXT_AUTH -> {
+                JacksonUtils.readValue(jsonNode, KafkaScramPlaintextAuthMessageConsumerProperties::class.java)!!
+            }
             /** Stream Consumer */
             MessageLibConstants.TYPE_KAFKA_STREAMS_BASIC_AUTH -> {
                 JacksonUtils.readValue(jsonNode, KafkaStreamsBasicAuthConsumerProperties::class.java)!!
@@ -175,6 +196,7 @@ open class BluePrintMessageLibPropertyService(
             MessageLibConstants.TYPE_KAFKA_STREAMS_SCRAM_SSL_AUTH -> {
                 JacksonUtils.readValue(jsonNode, KafkaStreamsScramSslAuthConsumerProperties::class.java)!!
             }
+
             else -> {
                 throw BluePrintProcessorException("Message adaptor($type) is not supported")
             }
@@ -201,6 +223,12 @@ open class BluePrintMessageLibPropertyService(
                 MessageLibConstants.TYPE_KAFKA_SCRAM_SSL_AUTH -> {
                     return KafkaMessageConsumerService(
                         messageConsumerProperties as KafkaScramSslAuthMessageConsumerProperties,
+                        meterRegistry
+                    )
+                }
+                MessageLibConstants.TYPE_KAFKA_SCRAM_PLAIN_TEXT_AUTH -> {
+                    return KafkaMessageConsumerService(
+                        messageConsumerProperties as KafkaScramPlaintextAuthMessageConsumerProperties,
                         meterRegistry
                     )
                 }
