@@ -1,4 +1,5 @@
 /*
+ *  Copyright (C) 2022 Nordix Foundation.
  *  Copyright © 2019 IBM.
  *  Modifications Copyright © 2018-2019 AT&T Intellectual Property.
  *
@@ -113,6 +114,24 @@ class KafkaScramSslAuthMessageProducerProperties : KafkaSslAuthMessageProducerPr
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
             "username=\"${scramUsername}\" " +
             "password=\"${scramPassword}\";"
+        return configProps
+    }
+}
+
+/** (SASL) SCRAM Plaintext Auth */
+class KafkaScramPlainTextAuthMessageProducerProperties : KafkaBasicAuthMessageProducerProperties() {
+
+    var saslMechanism: String = "SCRAM-SHA-512"
+    lateinit var scramUsername: String
+    lateinit var scramPassword: String
+
+    override fun getConfig(): HashMap<String, Any> {
+        val configProps = super.getConfig()
+        configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_PLAINTEXT.toString()
+        configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
+        configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
+                "username=\"${scramUsername}\" " +
+                "password=\"${scramPassword}\";"
         return configProps
     }
 }
@@ -262,6 +281,24 @@ class KafkaScramSslAuthMessageConsumerProperties : KafkaSslAuthMessageConsumerPr
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
             "username=\"${scramUsername}\" " +
             "password=\"${scramPassword}\";"
+        return configProps
+    }
+}
+
+/** (SASL) SCRAM Plaintext Auth */
+class KafkaScramPlaintextAuthMessageConsumerProperties : KafkaBasicAuthMessageConsumerProperties() {
+
+    var saslMechanism: String = "SCRAM-SHA-512"
+    lateinit var scramUsername: String
+    lateinit var scramPassword: String
+
+    override fun getConfig(): HashMap<String, Any> {
+        val configProps = super.getConfig()
+        configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_PLAINTEXT.toString()
+        configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
+        configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
+                "username=\"${scramUsername}\" " +
+                "password=\"${scramPassword}\";"
         return configProps
     }
 }
