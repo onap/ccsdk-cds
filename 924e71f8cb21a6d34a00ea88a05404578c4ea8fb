@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1294dad4_4264611c",
+        "filename": "ms/blueprintsprocessor/modules/commons/message-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/message/service/BluePrintMessageLibPropertyService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 4405
+      },
+      "writtenOn": "2022-02-28T13:57:52Z",
+      "side": 1,
+      "message": "KafkaMessageConsumerService",
+      "range": {
+        "startLine": 230,
+        "startChar": 27,
+        "endLine": 230,
+        "endChar": 54
+      },
+      "revId": "924e71f8cb21a6d34a00ea88a05404578c4ea8fb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
