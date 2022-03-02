@@ -16,6 +16,24 @@
       "revId": "17bbf6ff0b6ae240430ed881e4400936674f5ed3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ebffacd_05556f4a",
+        "filename": "ms/blueprintsprocessor/modules/commons/message-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/message/BluePrintMessageLibConfiguration.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7617
+      },
+      "writtenOn": "2022-03-02T16:11:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c51b4b12_237e1f14",
+      "revId": "17bbf6ff0b6ae240430ed881e4400936674f5ed3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
