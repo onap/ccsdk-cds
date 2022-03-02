@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c51b4b12_237e1f14",
+        "filename": "ms/blueprintsprocessor/modules/commons/message-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/message/BluePrintMessageLibConfiguration.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2022-03-02T15:43:45Z",
+      "side": 1,
+      "message": "should a modification right be added instead ?",
+      "revId": "17bbf6ff0b6ae240430ed881e4400936674f5ed3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
