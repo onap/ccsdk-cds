@@ -9,22 +9,14 @@ Installation Guide
 Installation
 ------------
 
-ONAP is meant to be deployed within a Kubernetes environment. Hence, the de-facto way to deploy CDS is through Kubernetes.
+ONAP is meant to be deployed within a Kubernetes environment.
+Hence, the de-facto way to deploy CDS is through Kubernetes.
+ONAP also packages Kubernetes manifest as Charts, using Helm.
 
-ONAP also package Kubernetes manifest as Chart, using Helm.
+Prerequisites
+-------------
 
-Prerequisite
-------------
-
-https://docs.onap.org/en/latest/guides/onap-developer/settingup/index.html
-
-Setup local Helm
-----------------
-
-helm repo
-
-* helm serve &
-* helm repo add local http://127.0.0.1:8879
+https://docs.onap.org/en/latest/guides/onap-operator/settingup/index.html#installation
 
 Get the chart
 -------------
@@ -33,6 +25,70 @@ Make sure to checkout the release to use, by replacing $release-tag in bellow co
 
 git clone https://gerrit.onap.org/r/oom
 git checkout tags/$release-tag
+
+
+Customize blueprint-processor kafka messaging config (Optional)
+---------------------------------------------------------------
+Optionally, cds can use kafka native messaging to execute a blueprint use case.
+The blueprint-processor self-service api is the main api for interacting with CDS at runtime.
+The self-service-api topics carry actual request and response payloads,
+whereas blueprint-processor self-service-api.audit topics will carry redacted payloads
+(without sensitive data) for audit purposes.
+
+By default, cds will target the strimzi kafka cluster in ONAP.
+The strimzi kafka config is as follows:
+
+# strimzi kafka config
+
+useStrimziKafka: <true|false>
+
+If useStrimziKafka is true, the following also applies:
+
+1. Strimzi will create an associated kafka user and the topics
+   defined for Request and Audit elements below.
+
+2. The type must be kafka-scram-plain-text-auth.
+
+3. The bootstrapServers will target the strimzi kafka cluster by default.
+
+The following fields are configurable via the charts values.yaml
+(oom/kubernetes/cds/components/cds-blueprints-processor/values.yaml)
+
+.. code-block:: bash
+
+	kafkaRequestConsumer:
+	  enabled: false
+	  type: kafka-basic-auth
+	  groupId: cds-consumer
+	  topic: cds.blueprint-processor.self-service-api.request
+	  clientId: request-receiver-client-id
+	  pollMillSec: 1000
+	kafkaRequestProducer:
+	  type: kafka-basic-auth
+	  clientId: request-producer-client-id
+	  topic: cds.blueprint-processor.self-service-api.response
+	  enableIdempotence: false
+	kafkaAuditRequest:
+	  enabled: false
+	  type: kafka-basic-auth
+	  clientId: audit-request-producer-client-id
+	  topic: cds.blueprint-processor.self-service-api.audit.request
+	  enableIdempotence: false
+	kafkaAuditResponse:
+	  type: kafka-basic-auth
+	  clientId: audit-response-producer-client-id
+	  topic: cds.blueprint-processor.self-service-api.audit.response
+	  enableIdempotence: false
+
+Note:
+If more fine grained customization is required, this can be done manually
+in the application.properties file before making the helm chart.
+(oom/kubernetes/cds/components/cds-blueprints-processor/resources/config/application.properties)
+
+
+Make the chart
+--------------
+
 cd oom/kubernetes
 make cds
 
