@@ -1621,6 +1621,12 @@
         "null" : {
           "type" : "boolean"
         },
+        "bigInteger" : {
+          "type" : "boolean"
+        },
+        "bigDecimal" : {
+          "type" : "boolean"
+        },
         "valueNode" : {
           "type" : "boolean"
         },
@@ -1630,30 +1636,24 @@
         "missingNode" : {
           "type" : "boolean"
         },
-        "pojo" : {
-          "type" : "boolean"
-        },
         "integralNumber" : {
           "type" : "boolean"
         },
         "floatingPointNumber" : {
           "type" : "boolean"
         },
-        "bigDecimal" : {
-          "type" : "boolean"
-        },
-        "bigInteger" : {
-          "type" : "boolean"
-        },
         "textual" : {
           "type" : "boolean"
         },
-        "short" : {
+        "pojo" : {
           "type" : "boolean"
         },
         "nodeType" : {
           "type" : "string",
           "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
+        },
+        "short" : {
+          "type" : "boolean"
         },
         "number" : {
           "type" : "boolean"
@@ -1930,7 +1930,7 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "paged" : {
+        "unpaged" : {
           "type" : "boolean"
         },
         "pageNumber" : {
@@ -1941,7 +1941,7 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "unpaged" : {
+        "paged" : {
           "type" : "boolean"
         }
       }
