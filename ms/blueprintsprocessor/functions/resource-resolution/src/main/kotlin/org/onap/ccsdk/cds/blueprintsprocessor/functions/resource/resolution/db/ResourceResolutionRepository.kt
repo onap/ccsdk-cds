@@ -16,19 +16,23 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import javax.transaction.Transactional
 
 @Repository
 interface ResourceResolutionRepository : JpaRepository<ResourceResolution, String> {
 
+    @Query(value = "SELECT * FROM RESOURCE_RESOLUTION  WHERE resolution_key = :key AND blueprint_name = :bpn AND blueprint_version = :bpv AND artifact_name = :an AND name = :name ORDER BY occurrence DESC, creation_date DESC LIMIT 1",
+            nativeQuery = true)
     fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndName(
-        key: String,
-        blueprintName: String?,
-        blueprintVersion: String?,
-        artifactName: String,
-        name: String
-    ): ResourceResolution
+        @Param("key")key: String,
+        @Param("bpn")blueprintName: String,
+        @Param("bpv")blueprintVersion: String,
+        @Param("an")artifactName: String,
+        @Param("name")name: String
+    ): ResourceResolution?
 
     fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
         resolutionKey: String,
