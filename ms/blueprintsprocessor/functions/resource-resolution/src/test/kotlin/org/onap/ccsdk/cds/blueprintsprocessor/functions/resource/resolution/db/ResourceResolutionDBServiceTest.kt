@@ -30,6 +30,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRunt
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.dao.EmptyResultDataAccessException
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 open class ResourceResolutionDBServiceTest {
 
@@ -158,9 +159,11 @@ open class ResourceResolutionDBServiceTest {
                 resourceResolutionDBService.readValue(
                     blueprintName, blueprintVersion, artifactPrefix, resolutionKey, "bob"
                 )
-
-            assertEquals(rr.name, res.name)
-            assertEquals(rr.value, res.value)
+            assertNotEquals(res, null, "resource resolution failed")
+            if (res != null) {
+                assertEquals(rr.name, res.name)
+                assertEquals(rr.value, res.value)
+            }
         }
     }
 

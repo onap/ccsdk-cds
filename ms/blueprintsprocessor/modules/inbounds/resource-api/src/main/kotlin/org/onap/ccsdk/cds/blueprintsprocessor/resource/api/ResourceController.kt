@@ -26,6 +26,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.R
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
+import org.onap.ccsdk.cds.error.catalog.core.ErrorPayload
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -161,9 +163,14 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         @ApiParam(value = "Name of the resource to retrieve", required = true)
         @RequestParam(value = "name", required = true) name: String
     ):
-        ResponseEntity<ResourceResolution> = runBlocking {
+        ResponseEntity<out Any>? = runBlocking {
 
-            ResponseEntity.ok()
-                .body(resourceResolutionDBService.readValue(bpName, bpVersion, artifactName, resolutionKey, name))
+            var result: ResourceResolution? = resourceResolutionDBService.readValue(bpName, bpVersion, artifactName, resolutionKey, name)
+            if (result != null) {
+                ResponseEntity.ok().body(result)
+            } else {
+                var errorPayload = ErrorPayload(HttpStatus.NOT_FOUND.value(), ErrorCatalogCodes.GENERIC_FAILURE, "No records found")
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorPayload)
+            }
         }
 }
