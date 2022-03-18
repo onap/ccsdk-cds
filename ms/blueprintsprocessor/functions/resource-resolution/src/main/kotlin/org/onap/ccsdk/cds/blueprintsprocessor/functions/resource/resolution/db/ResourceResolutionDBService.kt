@@ -221,4 +221,52 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
             resolutionKey
         )
     }
+
+    /**
+     * This method returns the (highest occurrence + 1) of resource resolutions if present in DB, returns 1 otherwise.
+     * The 'occurrence' is used to persist new resource resolution in the DB.
+     *
+     * @param resolutionKey
+     * @param blueprintName
+     * @param blueprintVersion
+     * @param artifactPrefix
+     */
+    suspend fun findNextOccurrenceByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        resolutionKey: String,
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String
+    ) = withContext(Dispatchers.IO) {
+        val maxOccurrence = resourceResolutionRepository.findMaxOccurrenceByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+            resolutionKey,
+            blueprintName,
+            blueprintVersion,
+            artifactPrefix
+        )
+        maxOccurrence?.inc() ?: 1
+    }
+
+    /**
+     * This method returns the (highest occurrence + 1) of resource resolutions if present in DB, returns 1 otherwise.
+     * The 'occurrence' is used to persist new resource resolution in the DB.
+     *
+     * @param blueprintName
+     * @param blueprintVersion
+     * @param resourceId
+     * @param resourceType
+     */
+    suspend fun findNextOccurrenceByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(
+        blueprintName: String,
+        blueprintVersion: String,
+        resourceId: String,
+        resourceType: String
+    ) = withContext(Dispatchers.IO) {
+        val maxOccurrence = resourceResolutionRepository.findMaxOccurrenceByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(
+            blueprintName,
+            blueprintVersion,
+            resourceId,
+            resourceType
+        )
+        maxOccurrence?.inc() ?: 1
+    }
 }

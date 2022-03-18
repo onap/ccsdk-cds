@@ -107,9 +107,13 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
         val artifactPrefixNamesNode = getOperationInput(ResourceResolutionConstants.INPUT_ARTIFACT_PREFIX_NAMES)
         val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode, String::class.java)
+        val alwaysPerformNewResolution = occurrence <= 0
+        val resolutionsToPerform: Int = if (alwaysPerformNewResolution) 1 else occurrence
+        for (j in 1..resolutionsToPerform) {
 
-        for (j in 1..occurrence) {
-            properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = j
+            if (!alwaysPerformNewResolution) {
+                properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = j
+            }
 
             val result = resourceResolutionService.resolveResources(
                 bluePrintRuntimeService,
@@ -119,8 +123,8 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
                 stepName
             )
 
-            // provide indexed result in output if we have multiple resolution
-            if (occurrence != 1) {
+            // provide indexed result in output if we have multiple resolution.
+            if (resolutionsToPerform != 1) {
                 jsonResponse.set<JsonNode>(j.toString(), result.templateMap.asJsonNode())
                 assignmentMap.set<JsonNode>(j.toString(), result.assignmentMap.asJsonNode())
             } else {
