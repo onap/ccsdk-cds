@@ -16,6 +16,8 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import javax.transaction.Transactional
 
@@ -29,6 +31,28 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
         artifactName: String,
         name: String
     ): ResourceResolution
+
+    @Query(
+        value = "SELECT max(occurrence) FROM RESOURCE_RESOLUTION WHERE resolution_key = :key AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName ",
+        nativeQuery = true
+    )
+    fun findMaxOccurrenceByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        @Param("key")key: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String
+    ): Int?
+
+    @Query(
+        value = "SELECT max(occurrence) FROM RESOURCE_RESOLUTION WHERE blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND resource_id = :resourceId AND resource_type = :resourceType ",
+        nativeQuery = true
+    )
+    fun findMaxOccurrenceByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("resourceId")resourceId: String,
+        @Param("resourceType")resourceType: String
+    ): Int?
 
     fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
         resolutionKey: String,

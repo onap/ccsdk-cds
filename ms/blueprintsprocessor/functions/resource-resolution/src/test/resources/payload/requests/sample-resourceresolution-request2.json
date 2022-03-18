@@ -1,0 +1,31 @@
+{
+  "actionIdentifiers": {
+    "actionName": "sample-action",
+    "blueprintName": "sample-blueprint",
+    "blueprintVersion": "1.0.0",
+    "mode": "sync"
+  },
+  "commonHeader": {
+    "flags": {
+      "isForce": true,
+      "ttl": 3600
+    },
+    "originatorId": "unit_tests",
+    "requestId": "123456-1001",
+    "subRequestId": "sub-123456-1001"
+  },
+  "payload": {
+    "resource-assignment-request": {
+      "resource-assignment-properties": {
+        "request-id": "1234",
+        "profile_name": "1.0.0",
+        "service-instance-id": "siid_new_resolution",
+        "vnf-id": "vnf_new_resolution",
+        "action-name": "assign-activate",
+        "scope-type": "vnf-type",
+        "hostname": "localhost",
+        "vnf_name": "temp_vnf_new_resolution"
+      }
+    }
+  }
+}

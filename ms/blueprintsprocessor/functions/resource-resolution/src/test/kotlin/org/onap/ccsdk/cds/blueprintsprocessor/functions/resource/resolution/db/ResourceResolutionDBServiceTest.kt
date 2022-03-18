@@ -30,6 +30,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRunt
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.dao.EmptyResultDataAccessException
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 open class ResourceResolutionDBServiceTest {
 
