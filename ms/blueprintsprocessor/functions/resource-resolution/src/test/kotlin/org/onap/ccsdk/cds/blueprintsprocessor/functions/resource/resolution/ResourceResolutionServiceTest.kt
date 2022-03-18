@@ -153,6 +153,195 @@ class ResourceResolutionServiceTest {
         }
     }
 
+    /**
+     * Always perform new resolution even if resolution exists in the database.
+     */
+    @Test
+    @Throws(Exception::class)
+    fun testResolveResourceAlwaysPerformNewResolution() {
+        runBlocking {
+            // Occurrence <= 0 indicates to perform new resolution even if resolution exists in the database.
+            props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = -1
+            Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
+
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+                    "1234",
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
+
+            // Request#1
+            val executionServiceInput =
+                    JacksonUtils.readValueFromClassPathFile(
+                            "payload/requests/sample-resourceresolution-request.json",
+                            ExecutionServiceInput::class.java
+                    )!!
+
+            val resourceAssignmentRuntimeService =
+                    ResourceAssignmentUtils.transformToRARuntimeService(
+                            bluePrintRuntimeService,
+                            "testResolveResource"
+                    )
+
+            // Prepare inputs from Request#1
+            PayloadUtils.prepareInputsFromWorkflowPayload(
+                    bluePrintRuntimeService,
+                    executionServiceInput.payload,
+                    "resource-assignment"
+            )
+
+            // Resolve resources as per Request#1
+            resourceResolutionService.resolveResources(
+                    resourceAssignmentRuntimeService,
+                    "resource-assignment",
+                    "baseconfig",
+                    props
+            )
+
+            // Request#2
+            val executionServiceInput2 =
+                    JacksonUtils.readValueFromClassPathFile(
+                            "payload/requests/sample-resourceresolution-request2.json",
+                            ExecutionServiceInput::class.java
+                    )!!
+
+            // Prepare inputs from Request#2
+            PayloadUtils.prepareInputsFromWorkflowPayload(
+                    bluePrintRuntimeService,
+                    executionServiceInput2.payload,
+                    "resource-assignment"
+            )
+
+            // Resolve resources as per Request#2
+            resourceResolutionService.resolveResources(
+                    resourceAssignmentRuntimeService,
+                    "resource-assignment",
+                    "baseconfig",
+                    props
+            )
+        }.let { (templateMap, assignmentList) ->
+            assertEquals("This is Sample Velocity Template", templateMap)
+
+            val assignmentListForRequest1 = mutableListOf(
+                    "service-instance-id" to "siid_1234",
+                    "vnf-id" to "vnf_1234",
+                    "vnf_name" to "temp_vnf"
+            )
+            val assignmentListForRequest2 = mutableListOf(
+                    "service-instance-id" to "siid_new_resolution",
+                    "vnf-id" to "vnf_new_resolution",
+                    "vnf_name" to "temp_vnf_new_resolution"
+            )
+            assertEquals(assignmentListForRequest1.size, assignmentList.size)
+            assertEquals(assignmentListForRequest2.size, assignmentList.size)
+
+            // AlwaysPerformNewResolution use case - resolution request #2 should returns the resolution as per
+            // assignmentListForRequest2 since new resolution is performed.
+            var areEqual = assignmentListForRequest1.zip(assignmentList).all { (it1, it2) ->
+                it1.first == it2.name && it1.second == it2.property?.value?.asText() ?: null
+            }
+            assertEquals(false, areEqual)
+
+            areEqual = assignmentListForRequest2.zip(assignmentList).all { (it1, it2) ->
+                it1.first == it2.name && it1.second == it2.property?.value?.asText() ?: null
+            }
+            assertEquals(true, areEqual)
+        }
+    }
+
+    /**
+     * Don't perform new resolution in case resolution already exists in the database.
+     */
+    @Test
+    @Throws(Exception::class)
+    fun testResolveResourceNoNewResolution() {
+        runBlocking {
+            // Occurrence > 0 indicates to not perform new resolution if resolution exists in the database.
+            props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = 1
+            Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
+
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+                    "1234",
+                    "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
+
+            // Request#1
+            val executionServiceInput =
+                    JacksonUtils.readValueFromClassPathFile(
+                            "payload/requests/sample-resourceresolution-request.json",
+                            ExecutionServiceInput::class.java
+                    )!!
+
+            val resourceAssignmentRuntimeService =
+                    ResourceAssignmentUtils.transformToRARuntimeService(
+                            bluePrintRuntimeService,
+                            "testResolveResource"
+                    )
+
+            // Prepare inputs from Request#1
+            PayloadUtils.prepareInputsFromWorkflowPayload(
+                    bluePrintRuntimeService,
+                    executionServiceInput.payload,
+                    "resource-assignment"
+            )
+            // Resolve resources as per Request#1
+            resourceResolutionService.resolveResources(
+                    resourceAssignmentRuntimeService,
+                    "resource-assignment",
+                    "baseconfig",
+                    props
+            )
+
+            // Request#2
+            val executionServiceInput2 =
+                    JacksonUtils.readValueFromClassPathFile(
+                            "payload/requests/sample-resourceresolution-request2.json",
+                            ExecutionServiceInput::class.java
+                    )!!
+
+            // Prepare inputs from Request#2
+            PayloadUtils.prepareInputsFromWorkflowPayload(
+                    bluePrintRuntimeService,
+                    executionServiceInput2.payload,
+                    "resource-assignment"
+            )
+
+            // Resolve resources as per Request#2
+            resourceResolutionService.resolveResources(
+                    resourceAssignmentRuntimeService,
+                    "resource-assignment",
+                    "baseconfig",
+                    props
+            )
+        }.let { (templateMap, assignmentList) ->
+            assertEquals("This is Sample Velocity Template", templateMap)
+
+            val assignmentListForRequest1 = mutableListOf(
+                    "service-instance-id" to "siid_1234",
+                    "vnf-id" to "vnf_1234",
+                    "vnf_name" to "temp_vnf"
+            )
+            val assignmentListForRequest2 = mutableListOf(
+                    "service-instance-id" to "siid_new_resolution",
+                    "vnf-id" to "vnf_new_resolution",
+                    "vnf_name" to "temp_vnf_new_resolution"
+            )
+            assertEquals(assignmentListForRequest1.size, assignmentList.size)
+            assertEquals(assignmentListForRequest2.size, assignmentList.size)
+
+            //  NoNewResolution use case - resolution for request #2 returns the same resolution  as
+            //  assignmentListForRequest1 since no new resolution is/was actually performed.
+            var areEqual = assignmentListForRequest1.zip(assignmentList).all { (it1, it2) ->
+                it1.first == it2.name && it1.second == it2.property?.value?.asText() ?: null
+            }
+            assertEquals(true, areEqual)
+
+            areEqual = assignmentListForRequest2.zip(assignmentList).all { (it1, it2) ->
+                it1.first == it2.name && it1.second == it2.property?.value?.asText() ?: null
+            }
+            assertEquals(false, areEqual)
+        }
+    }
+
     @Test
     @Throws(Exception::class)
     fun testResolveResources() {

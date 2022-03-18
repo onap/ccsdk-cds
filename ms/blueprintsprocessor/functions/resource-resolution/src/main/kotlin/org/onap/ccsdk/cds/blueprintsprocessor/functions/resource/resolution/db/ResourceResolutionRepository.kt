@@ -24,15 +24,33 @@ import javax.transaction.Transactional
 @Repository
 interface ResourceResolutionRepository : JpaRepository<ResourceResolution, String> {
 
-    @Query(value = "SELECT * FROM RESOURCE_RESOLUTION  WHERE resolution_key = :key AND blueprint_name = :bpn AND blueprint_version = :bpv AND artifact_name = :an AND name = :name ORDER BY occurrence DESC, creation_date DESC LIMIT 1",
+    @Query(value = "SELECT * FROM RESOURCE_RESOLUTION WHERE resolution_key = :key AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName AND name = :name ORDER BY occurrence DESC, creation_date DESC LIMIT 1",
             nativeQuery = true)
     fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndName(
         @Param("key")key: String,
-        @Param("bpn")blueprintName: String,
-        @Param("bpv")blueprintVersion: String,
-        @Param("an")artifactName: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String,
         @Param("name")name: String
     ): ResourceResolution?
+
+    @Query(value = "SELECT max(occurrence) FROM RESOURCE_RESOLUTION WHERE resolution_key = :key AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName ",
+            nativeQuery = true)
+    fun findMaxOccurrenceByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        @Param("key")key: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String
+    ): Int?
+
+    @Query(value = "SELECT max(occurrence) FROM RESOURCE_RESOLUTION WHERE blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND resource_id = :resourceId AND resource_type = :resourceType ",
+            nativeQuery = true)
+    fun findMaxOccurrenceByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("resourceId")resourceId: String,
+        @Param("resourceType")resourceType: String
+    ): Int?
 
     fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
         resolutionKey: String,
