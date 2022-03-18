@@ -201,6 +201,7 @@ open class ResourceResolutionServiceImpl(
         val artifactMapping = "$artifactPrefix-mapping"
         val forceResolution = isForceResolution(properties)
 
+        val propertiesMutableMap = properties.toMutableMap()
         log.info("Resolving resource with resource assignment artifact($artifactMapping)")
 
         val resourceAssignmentContent =
@@ -212,7 +213,16 @@ open class ResourceResolutionServiceImpl(
                 ?: throw BluePrintProcessorException("couldn't get Dictionary Definitions")
 
         if (isToStore(properties)) {
-            val existingResourceResolution = isNewResolution(bluePrintRuntimeService, properties, artifactPrefix)
+            val alwaysPerformNewResolution = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] as Int <= 0
+            val existingResourceResolution = if (alwaysPerformNewResolution) {
+                val occurrence = findNextOccurrence(bluePrintRuntimeService, properties, artifactPrefix)
+                log.info("Always perform new resolutions  - next occurrence: $occurrence")
+                propertiesMutableMap[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
+                // Since we are performing new resolution, simply pass empty list.
+                emptyList()
+            } else {
+                isNewResolution(bluePrintRuntimeService, properties, artifactPrefix)
+            }
             if (existingResourceResolution.isNotEmpty()) {
                 if (forceResolution) {
                     resourceResolutionDBService.deleteResourceResolutionList(existingResourceResolution)
@@ -237,7 +247,7 @@ open class ResourceResolutionServiceImpl(
             resourceDefinitions,
             resourceAssignments,
             artifactPrefix,
-            properties
+            propertiesMutableMap
         )
 
         val resolutionSummary = properties.getOrDefault(
@@ -271,7 +281,7 @@ open class ResourceResolutionServiceImpl(
         }
 
         if (isToStore(properties)) {
-            templateResolutionDBService.write(properties, resolvedContent, bluePrintRuntimeService, artifactPrefix)
+            templateResolutionDBService.write(propertiesMutableMap, resolvedContent, bluePrintRuntimeService, artifactPrefix)
             log.info("Template resolution saved into database successfully : ($properties)")
         }
 
@@ -490,7 +500,7 @@ open class ResourceResolutionServiceImpl(
         }
     }
 
-    // Comparision between what we have in the database vs what we have to assign.
+    // Comparison between what we have in the database vs what we have to assign.
     private fun compareOne(resourceResolution: ResourceResolution, resourceAssignment: ResourceAssignment): Boolean {
         return (
             resourceResolution.name == resourceAssignment.name &&
@@ -508,5 +518,49 @@ open class ResourceResolutionServiceImpl(
             ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE,
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE].asJsonPrimitive()
         )
+    }
+
+    /**
+     * This method returns 'occurrence' required to persist new resource resolution.
+     *
+     * @param bluePrintRuntimeService
+     * @param properties
+     * @param artifactPrefix
+     */
+    private suspend fun findNextOccurrence(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        properties: Map<String, Any>,
+        artifactPrefix: String
+    ): Int {
+        val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
+        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
+        val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
+        val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
+
+        // This should not happen since the request has already been validated but worth to check it here as well.
+        if (resourceType.isEmpty() && resourceId.isEmpty() && resolutionKey.isEmpty()) {
+            throw BluePrintProcessorException(
+                "Can't proceed to get next occurrence: " +
+                    "Either provide a resolution-key OR combination of resource-id and resource-type"
+            )
+        }
+
+        if (resolutionKey.isNotEmpty()) {
+            return resourceResolutionDBService.findNextOccurrenceByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+                resolutionKey,
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix
+            )
+        } else {
+            return resourceResolutionDBService.findNextOccurrenceByBlueprintNameAndBlueprintVersionAndResourceIdAndResourceType(
+                blueprintName,
+                blueprintVersion,
+                resourceId,
+                resourceType
+            )
+        }
     }
 }
