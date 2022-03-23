@@ -1,0 +1,8 @@
+Code-Review+1: Jozsef Csongvai <jozsef.csongvai@bell.ca>
+Code-Review+2: Dan Timoney <dtimoney@att.com>
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Submitted-by: Dan Timoney <dtimoney@att.com>
+Submitted-at: Wed, 23 Mar 2022 18:05:48 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/ccsdk/cds/+/128044
+Project: ccsdk/cds
+Branch: refs/heads/master
