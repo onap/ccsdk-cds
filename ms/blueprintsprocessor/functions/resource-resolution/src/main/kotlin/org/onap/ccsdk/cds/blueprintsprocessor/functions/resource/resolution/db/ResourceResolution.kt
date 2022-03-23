@@ -27,6 +27,7 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EntityListeners
 import javax.persistence.Id
+import javax.persistence.Index
 import javax.persistence.Lob
 import javax.persistence.Table
 import javax.persistence.Temporal
@@ -34,7 +35,13 @@ import javax.persistence.TemporalType
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-@Table(name = "RESOURCE_RESOLUTION")
+@Table(name = "RESOURCE_RESOLUTION",
+indexes = [Index(name = "idx_rr_bpnameversion", columnList = "blueprint_name, blueprint_version"),
+    Index(name = "idx_rr_resolution_key", columnList = "resolution_key"),
+    Index(name = "idx_rr_name", columnList = "name"),
+    Index(name = "idx_rr_artifact_name", columnList = "artifact_name"),
+    Index(name = "idx_rr_resource_idtype", columnList = "resource_id, resource_type")
+])
 @Proxy(lazy = false)
 class ResourceResolution : Serializable {
 
