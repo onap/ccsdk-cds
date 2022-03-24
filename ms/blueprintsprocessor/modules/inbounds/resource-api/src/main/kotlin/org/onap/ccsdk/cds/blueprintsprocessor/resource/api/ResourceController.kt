@@ -110,6 +110,61 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         }
 
     @RequestMapping(
+        path = ["/occurrences"],
+        method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ApiOperation(
+        value = "Get the map of resolved resources with 'occurrence' as the keys to the resolved resources ",
+        notes = "With optional 'occurrence' options, subset of stored resolved resources can be retrieved " +
+            "using the blueprint name, blueprint version, artifact name and the resolution-key.",
+        response = ResourceResolution::class,
+        responseContainer = "List",
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    fun getOccurrences(
+        @ApiParam(value = "Name of the CBA.", required = true)
+        @RequestParam(value = "bpName", required = true) bpName: String,
+        @ApiParam(value = "Version of the CBA.", required = true)
+        @RequestParam(value = "bpVersion", required = true) bpVersion: String,
+        @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
+        @RequestParam(value = "artifactName", required = true, defaultValue = "") artifactName: String,
+        @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
+        @RequestParam(value = "resolutionKey", required = true, defaultValue = "") resolutionKey: String,
+        @ApiParam(value = "Number of earlier N occurrences of the resolutions.", required = false)
+        @RequestParam(value = "firstN", required = false) firstN: Int?,
+        @ApiParam(value = "Number of latest N occurrences of the resolutions.", required = false)
+        @RequestParam(value = "lastN", required = false) lastN: Int?,
+        @ApiParam(value = "For Range option - 'begin' is the start occurrence of range of the resolutions.", required = false)
+        @RequestParam(value = "begin", required = false) begin: Int?,
+        @ApiParam(value = "For Range option - 'end' is the end occurrence of the range of the resolutions.", required = false)
+        @RequestParam(value = "end", required = false) end: Int?
+    ): ResponseEntity<Map<Int, List<ResourceResolution>>> = runBlocking {
+        when {
+            artifactName.isEmpty() -> "'artifactName' must not be empty"
+            resolutionKey.isEmpty() -> "'resolutionKey' must not be empty"
+            // Optional options - validate if provided
+            (firstN != null && lastN != null) -> "Retrieve occurrences using either 'firstN'  OR 'lastN' option"
+            ((firstN != null || lastN != null) && (begin != null || end != null)) -> "Retrieve occurrences using either 'firstN'  OR 'lastN' OR 'begin' and 'end' option."
+            ((begin != null && end == null) || (begin == null && end != null)) -> " Retrieving occurrences within range - please provide both 'begin' and 'end' option"
+            else -> null
+        }?.let { throw httpProcessorException(ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API, it) }
+
+        when {
+            firstN != null ->
+                resourceResolutionDBService.findFirstNOccurrences(bpName, bpVersion, artifactName, resolutionKey, firstN)
+            lastN != null ->
+                resourceResolutionDBService.findLastNOccurrences(bpName, bpVersion, artifactName, resolutionKey, lastN)
+            begin != null && end != null ->
+                resourceResolutionDBService.findOccurrencesWithinRange(bpName, bpVersion, artifactName, resolutionKey, begin, end)
+            else ->
+                resourceResolutionDBService.readWithResolutionKey(bpName, bpVersion, artifactName, resolutionKey).groupBy(ResourceResolution::occurrence).toSortedMap(reverseOrder())
+        }.let { result -> ResponseEntity.ok().body(result) }
+    }
+
+    @RequestMapping(
+        path = [""],
         method = [RequestMethod.DELETE], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
