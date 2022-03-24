@@ -37,6 +37,45 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
     ): ResourceResolution?
 
     @Query(
+        value = "SELECT * FROM RESOURCE_RESOLUTION WHERE resolution_key = :key AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName AND occurrence <=  :firstN",
+        nativeQuery = true
+    )
+    fun findFirstNOccurrences(
+        @Param("key")key: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String,
+        @Param("firstN")begin: Int
+    ): List<ResourceResolution>
+
+    @Query(
+        value = "SELECT * FROM RESOURCE_RESOLUTION WHERE resolution_key = :key AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName AND" +
+            " occurrence > ( select max(occurrence) - :lastN from RESOURCE_RESOLUTION WHERE resolution_key = :key AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName) " +
+            "ORDER BY occurrence DESC, creation_date DESC",
+        nativeQuery = true
+    )
+    fun findLastNOccurrences(
+        @Param("key")key: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String,
+        @Param("lastN")begin: Int
+    ): List<ResourceResolution>
+
+    @Query(
+        value = "SELECT * FROM RESOURCE_RESOLUTION WHERE resolution_key = :key AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName AND occurrence BETWEEN :begin AND :end ORDER BY occurrence DESC, creation_date DESC",
+        nativeQuery = true
+    )
+    fun findOccurrencesWithinRange(
+        @Param("key")key: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String,
+        @Param("begin")begin: Int,
+        @Param("end")end: Int
+    ): List<ResourceResolution>
+
+    @Query(
         value = "SELECT max(occurrence) FROM RESOURCE_RESOLUTION WHERE resolution_key = :key AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName ",
         nativeQuery = true
     )
