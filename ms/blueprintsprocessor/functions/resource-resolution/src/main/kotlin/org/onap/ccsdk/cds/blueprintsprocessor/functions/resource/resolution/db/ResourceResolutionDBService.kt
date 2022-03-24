@@ -116,6 +116,87 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         )
     }
 
+    /**
+     * This returns the resolutions of first N 'occurrences'.
+     *
+     * @param blueprintName
+     * @param blueprintVersion
+     * @param artifactPrefix
+     * @param resolutionKey
+     * @param firstN
+     */
+    suspend fun findFirstNOccurrences(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resolutionKey: String,
+        firstN: Int
+    ): Map<Int, List<ResourceResolution>> = withContext(Dispatchers.IO) {
+
+        resourceResolutionRepository.findFirstNOccurrences(
+                resolutionKey,
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                firstN
+        ).groupBy(ResourceResolution::occurrence).toSortedMap(reverseOrder())
+    }
+
+    /**
+     * This returns the resolutions of last N 'occurrences'.
+     *
+     * @param blueprintName
+     * @param blueprintVersion
+     * @param artifactPrefix
+     * @param resolutionKey
+     * @param lastN
+     */
+    suspend fun findLastNOccurrences(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resolutionKey: String,
+        lastN: Int
+    ): Map<Int, List<ResourceResolution>> = withContext(Dispatchers.IO) {
+
+        resourceResolutionRepository.findLastNOccurrences(
+                resolutionKey,
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                lastN
+        ).groupBy(ResourceResolution::occurrence).toSortedMap(reverseOrder())
+    }
+
+    /**
+     * This returns the resolutions with 'occurrence' value between begin and end.
+     *
+     * @param blueprintName
+     * @param blueprintVersion
+     * @param artifactPrefix
+     * @param resolutionKey
+     * @param begin
+     * @param end
+     */
+    suspend fun findOccurrencesWithinRange(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resolutionKey: String,
+        begin: Int,
+        end: Int
+    ): Map<Int, List<ResourceResolution>> = withContext(Dispatchers.IO) {
+
+        resourceResolutionRepository.findOccurrencesWithinRange(
+                resolutionKey,
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                begin,
+                end
+        ).groupBy(ResourceResolution::occurrence).toSortedMap(reverseOrder())
+    }
+
     suspend fun readWithResourceIdAndResourceType(
         blueprintName: String,
         blueprintVersion: String,
