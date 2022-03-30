@@ -1,0 +1,2 @@
+sample-hostname
+${node0_backup_router_address}
