@@ -35,4 +35,6 @@ class BluePrintError {
     fun allErrors(): List<String> = errors.values.flatten()
 
     fun stepErrors(stepName: String): MutableList<String>? = errors[stepName]
+
+    fun clearAll() = errors.clear();
 }
