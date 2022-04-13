@@ -259,7 +259,7 @@ open class K8sConfigTemplateComponent(
 
     private fun templateFile(templateFile: File, params: JsonNode, destinationFolder: File) {
         val finalFile = File(destinationFolder.path.plus(File.separator).plus(templateFile.nameWithoutExtension))
-        val fileContent = templateFile.bufferedReader().readText()
+        val fileContent = Files.readString(templateFile.toPath())
         val finalFileContent = BluePrintVelocityTemplateService.generateContent(
             fileContent,
             params.toString(), true

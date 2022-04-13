@@ -27,6 +27,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -252,7 +253,7 @@ open class K8sConfigValueComponent(
     }
 
     private fun templateValues(templateFile: File, params: JsonNode): String {
-        val fileContent = templateFile.bufferedReader().readText()
+        val fileContent = Files.readString(templateFile.toPath())
         return BluePrintVelocityTemplateService.generateContent(
             fileContent,
             params.toString(), true

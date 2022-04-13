@@ -372,7 +372,7 @@ open class K8sProfileUploadComponent(
         )
         if (!isFileInTheManifestFiles(finalFile, manifestFiles))
             return
-        val fileContent = templatedFile.bufferedReader().readText()
+        val fileContent = Files.readString(templatedFile.toPath())
         val finalFileContent = BluePrintVelocityTemplateService.generateContent(
             fileContent,
             params.toString(), true
