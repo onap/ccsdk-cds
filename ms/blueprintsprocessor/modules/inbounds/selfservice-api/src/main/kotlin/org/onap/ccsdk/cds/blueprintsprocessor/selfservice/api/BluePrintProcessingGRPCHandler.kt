@@ -69,10 +69,10 @@ open class BluePrintProcessingGRPCHandler(
 
             override fun onError(error: Throwable) {
                 log.debug("Fail to process message", error)
-                if (error is BluePrintProcessorException) onErrorCatalog(error) else onError(error)
+                if (error is BluePrintProcessorException) handleWithErrorCatalog(error) else handleError(error as Exception)
             }
 
-            fun onError(error: Exception) {
+            fun handleError(error: Exception) {
                 responseObserver.onError(
                     Status.INTERNAL
                         .withDescription(error.errorMessageOrDefault())
@@ -81,7 +81,7 @@ open class BluePrintProcessingGRPCHandler(
                 )
             }
 
-            fun onErrorCatalog(error: BluePrintProcessorException) {
+            fun handleWithErrorCatalog(error: BluePrintProcessorException) {
                 if (error.protocol == "") {
                     error.grpc(ErrorCatalogCodes.GENERIC_FAILURE)
                 }
