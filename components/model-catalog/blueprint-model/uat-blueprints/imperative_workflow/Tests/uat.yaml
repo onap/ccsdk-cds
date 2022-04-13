@@ -306,3 +306,28 @@ processes:
             execute-script-2: FAILED
             execute-script-3: null
             execute-script-4: SUCCEEDED
+
+  - name: uat-unhandled-error
+    request:
+      commonHeader: &ch
+        originatorId: sdnc
+        requestId: "1234"
+        subRequestId: "1234-12234"
+      actionIdentifiers: &ai
+        blueprintName: uat-imperative-workflow
+        blueprintVersion: "1.0.0"
+        actionName: uat-unhandled-error
+        mode: sync
+      payload:
+        uat-unhandled-error-request:
+          failing-steps:
+            execute-A: true
+            clean-up: true
+    expectedResponse:
+      commonHeader: *ch
+      actionIdentifiers: *ai
+      status:
+        code: 500
+        eventType: EVENT_COMPONENT_FAILURE
+        errorMessage: "Step failed: execute-A, Step failed: clean-up, node(clean-up) outgoing edge(FAILURE) is missing."
+        message: failure

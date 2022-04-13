@@ -119,6 +119,7 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
                 }
                 message = BluePrintConstants.STATUS_FAILURE
             } else {
+                bluePrintRuntimeService.getBluePrintError().clearAll()
                 message = BluePrintConstants.STATUS_SUCCESS
             }
             eventType = EventType.EVENT_COMPONENT_EXECUTED.name
@@ -163,8 +164,6 @@ open class ImperativeBluePrintWorkflowService(private val nodeTemplateExecutionS
             .executeNodeTemplate(bluePrintRuntimeService, node.id, nodeTemplateName, nodeInput)
 
         if (executionServiceOutput.status.message == BluePrintConstants.STATUS_FAILURE) {
-            // Clear step errors so that the workflow does not fail
-            bluePrintRuntimeService.getBluePrintError().stepErrors(node.id)?.clear()
             return EdgeLabel.FAILURE
         }
 

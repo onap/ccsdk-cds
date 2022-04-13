@@ -241,7 +241,8 @@ class UatExecutor(
         }
         val response = client.execute(request) { response ->
             val statusLine = response.statusLine
-            assertThat("${process.name}", statusLine.statusCode, equalTo(HttpStatus.SC_OK))
+            val expectedCode = expectedResponse?.get("status")?.get("code")?.intValue()
+            assertThat("${process.name}", statusLine.statusCode, equalTo(expectedCode ?: HttpStatus.SC_OK))
             val entity = response.entity
             assertThat("${process.name} Response contains no content", entity, notNullValue())
             entity.content.bufferedReader().use { it.readText() }

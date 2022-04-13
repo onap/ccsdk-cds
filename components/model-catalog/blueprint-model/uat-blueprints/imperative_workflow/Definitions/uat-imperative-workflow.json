@@ -112,6 +112,30 @@
             }
           }
         }
+      },
+      "uat-unhandled-error" : {
+        "steps" : {
+          "execute-A" : {
+            "target" : "execute-script-1",
+            "on_success" : [ "finalize" ],
+            "on_failure" : [ "clean-up" ]
+          },
+          "finalize" : {
+            "target" : "execute-script-3"
+          },
+          "clean-up" : {
+            "target" : "execute-script-4"
+          }
+        },
+        "inputs" : {
+          "service-instance-id" : {
+            "type" : "string"
+          },
+          "failing-steps" : {
+            "type" : "json"
+          }
+        },
+        "outputs" : {}
       }
     },
     "node_templates" : {
