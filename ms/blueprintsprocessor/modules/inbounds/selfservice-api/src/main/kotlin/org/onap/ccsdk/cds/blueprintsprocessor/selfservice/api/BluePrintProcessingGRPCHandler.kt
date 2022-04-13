@@ -61,18 +61,17 @@ open class BluePrintProcessingGRPCHandler(
                         executionServiceHandler.process(executionServiceInput.toJava(), responseObserver)
                     }
                 } catch (e: Exception) {
-                    onError(e)
+                    if (e is BluePrintProcessorException) handleWithErrorCatalog(e) else handleError(e)
                 } finally {
                     ph.arriveAndDeregister()
                 }
             }
 
             override fun onError(error: Throwable) {
-                log.debug("Fail to process message", error)
-                if (error is BluePrintProcessorException) onErrorCatalog(error) else onError(error)
+                log.error("Terminating stream error:", error)
             }
 
-            fun onError(error: Exception) {
+            fun handleError(error: Exception) {
                 responseObserver.onError(
                     Status.INTERNAL
                         .withDescription(error.errorMessageOrDefault())
@@ -81,7 +80,7 @@ open class BluePrintProcessingGRPCHandler(
                 )
             }
 
-            fun onErrorCatalog(error: BluePrintProcessorException) {
+            fun handleWithErrorCatalog(error: BluePrintProcessorException) {
                 if (error.protocol == "") {
                     error.grpc(ErrorCatalogCodes.GENERIC_FAILURE)
                 }
