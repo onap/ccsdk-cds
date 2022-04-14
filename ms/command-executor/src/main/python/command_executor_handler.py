@@ -29,6 +29,7 @@ from zipfile import ZipFile
 import io
 import time
 import prometheus_client as prometheus
+import shlex
 
 REQUIREMENTS_TXT = "requirements.txt"
 
@@ -245,7 +246,7 @@ class CommandExecutorHandler():
             ### if properties are defined we add them to the command
             properties = ""
             if request.properties is not None and len(request.properties) > 0:
-                properties = " " + re.escape(MessageToJson(request.properties)).replace('"','\\"')
+                properties = " " + shlex.quote(MessageToJson(request.properties))
 
             # SR7/SR10 compatibility hack
             # check if the path for the request.command does not contain UUID, then add it after cba_name/cba_version path.

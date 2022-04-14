@@ -1,6 +1,6 @@
 FROM python:3.7-slim
-USER root
 
+USER root
 # add entrypoint
 COPY *.sh /opt/app/onap/command-executor/
 
