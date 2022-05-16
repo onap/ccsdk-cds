@@ -173,25 +173,45 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         notes = "Delete all the resources associated to a resolution-key using blueprint metadata, artifact name and the resolution-key."
     )
     @PreAuthorize("hasRole('USER')")
-    fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+    suspend fun deleteResolutions(
         @ApiParam(value = "Name of the CBA", required = true)
         @RequestParam(value = "bpName", required = true) bpName: String,
         @ApiParam(value = "Version of the CBA", required = true)
         @RequestParam(value = "bpVersion", required = true) bpVersion: String,
         @ApiParam(value = "Artifact name for which to retrieve a resolved resource", required = true)
-        @RequestParam(value = "artifactName", required = false, defaultValue = "") artifactName: String,
-        @ApiParam(value = "Resolution Key associated with the resolution", required = true)
-        @RequestParam(value = "resolutionKey", required = true) resolutionKey: String
+        @RequestParam(value = "artifactName", required = true, defaultValue = "") artifactName: String,
+        @ApiParam(value = "Resolution Key associated with the resolution", required = false)
+        @RequestParam(value = "resolutionKey", required = false) resolutionKey: String?,
+        @ApiParam(value = "resourceType associated with the resolution, must be used with resourceId", required = false)
+        @RequestParam(value = "resourceType", required = false) resourceType: String?,
+        @ApiParam(value = "Resolution Key associated with the resolution, must be used with resourceType", required = false)
+        @RequestParam(value = "resourceId", required = false) resourceId: String?,
+        @ApiParam(value = "Only delete last N occurrences", required = false)
+        @RequestParam(value = "lastN", required = false) lastN: Int?
     ) = runBlocking {
-        ResponseEntity.ok()
-            .body(
-                resourceResolutionDBService.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+        when {
+            resolutionKey?.isNotEmpty() == true -> resourceResolutionDBService.deleteResources(
+                bpName,
+                bpVersion,
+                artifactName,
+                resolutionKey,
+                lastN
+            )
+            resourceId?.isNotEmpty() == true && resourceType?.isNotEmpty() == true ->
+                resourceResolutionDBService.deleteResources(
                     bpName,
                     bpVersion,
                     artifactName,
-                    resolutionKey
+                    resourceType,
+                    resourceId,
+                    lastN
                 )
+            else -> throw httpProcessorException(
+                ErrorCatalogCodes.REQUEST_NOT_FOUND,
+                ResourceApiDomains.RESOURCE_API,
+                "Either use resolutionKey or resourceType + resourceId. Values cannot be blank"
             )
+        }.let { ResponseEntity.ok().body(DeleteResponse(it)) }
     }
 
     @RequestMapping(
