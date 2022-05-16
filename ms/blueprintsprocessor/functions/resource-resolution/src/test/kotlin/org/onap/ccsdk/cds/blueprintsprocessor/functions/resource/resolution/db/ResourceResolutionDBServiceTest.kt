@@ -321,15 +321,54 @@ open class ResourceResolutionDBServiceTest {
     }
 
     @Test
-    fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKeyTest() {
+    fun deleteResourcesResolutionKeyAll() {
         every {
-            resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(any(), any(), any(), any())
-        } returns Unit
+            resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(blueprintName, blueprintVersion, artifactPrefix, resolutionKey)
+        } returns 3
         runBlocking {
-            val res = resourceResolutionDBService.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
-                blueprintName, blueprintVersion, artifactPrefix, resolutionKey
+            val res = resourceResolutionDBService.deleteResources(
+                blueprintName, blueprintVersion, artifactPrefix, resolutionKey, null
             )
-            assertEquals(Unit, res)
+            assertEquals(3, res)
+        }
+    }
+
+    @Test
+    fun deleteResourcesResolutionKeyLastN() {
+        every {
+            resourceResolutionRepository.deleteLastNOccurences(blueprintName, blueprintVersion, artifactPrefix, resolutionKey, 1)
+        } returns 4
+        runBlocking {
+            val res = resourceResolutionDBService.deleteResources(
+                blueprintName, blueprintVersion, artifactPrefix, resolutionKey, 1
+            )
+            assertEquals(4, res)
+        }
+    }
+
+    @Test
+    fun deleteResourcesResourceIdAndTypeAll() {
+        every {
+            resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceTypeAndResourceId(blueprintName, blueprintVersion, artifactPrefix, resourceType, resourceId)
+        } returns 3
+        runBlocking {
+            val res = resourceResolutionDBService.deleteResources(
+                blueprintName, blueprintVersion, artifactPrefix, resourceType, resourceId, null
+            )
+            assertEquals(3, res)
+        }
+    }
+
+    @Test
+    fun deleteResourcesResourceIdAndTypeLastN() {
+        every {
+            resourceResolutionRepository.deleteLastNOccurences(blueprintName, blueprintVersion, artifactPrefix, resourceType, resourceId, 2)
+        } returns 6
+        runBlocking {
+            val res = resourceResolutionDBService.deleteResources(
+                blueprintName, blueprintVersion, artifactPrefix, resourceType, resourceId, 2
+            )
+            assertEquals(6, res)
         }
     }
 }
