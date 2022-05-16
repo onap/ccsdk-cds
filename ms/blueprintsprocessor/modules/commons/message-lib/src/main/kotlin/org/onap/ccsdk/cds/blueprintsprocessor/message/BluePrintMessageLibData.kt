@@ -130,8 +130,8 @@ class KafkaScramPlainTextAuthMessageProducerProperties : KafkaBasicAuthMessagePr
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_PLAINTEXT.toString()
         configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
-                "username=\"${scramUsername}\" " +
-                "password=\"${scramPassword}\";"
+            "username=\"${scramUsername}\" " +
+            "password=\"${scramPassword}\";"
         return configProps
     }
 }
@@ -297,8 +297,8 @@ class KafkaScramPlaintextAuthMessageConsumerProperties : KafkaBasicAuthMessageCo
         configProps[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = SecurityProtocol.SASL_PLAINTEXT.toString()
         configProps[SaslConfigs.SASL_MECHANISM] = saslMechanism
         configProps[SaslConfigs.SASL_JAAS_CONFIG] = "${ScramLoginModule::class.java.canonicalName} required " +
-                "username=\"${scramUsername}\" " +
-                "password=\"${scramPassword}\";"
+            "username=\"${scramUsername}\" " +
+            "password=\"${scramPassword}\";"
         return configProps
     }
 }

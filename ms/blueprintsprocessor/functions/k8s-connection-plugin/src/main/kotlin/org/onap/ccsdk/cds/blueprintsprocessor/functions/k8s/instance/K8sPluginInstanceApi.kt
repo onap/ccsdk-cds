@@ -303,7 +303,7 @@ class K8sPluginInstanceApi(
         }
     }
 
-    fun editConfigurationValuesByDelete(instanceId: String, configName: String): K8sConfigValueResponse?  {
+    fun editConfigurationValuesByDelete(instanceId: String, configName: String): K8sConfigValueResponse? {
         val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
@@ -450,9 +450,9 @@ class K8sPluginInstanceApi(
         val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                    GET.name,
-                    "/config/$configName/version",
-                    ""
+                GET.name,
+                "/config/$configName/version",
+                ""
             )
             log.debug(result.toString())
             return if (result.status in 200..299) {

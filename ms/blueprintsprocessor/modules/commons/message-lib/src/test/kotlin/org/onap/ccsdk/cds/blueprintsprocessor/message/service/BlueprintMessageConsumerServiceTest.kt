@@ -282,7 +282,6 @@ open class BlueprintMessageConsumerServiceTest {
         }
     }
 
-
     @Test
     fun testKafkaScramPlaintextAuthConfig() {
         val expectedConfig = mapOf<String, Any>(

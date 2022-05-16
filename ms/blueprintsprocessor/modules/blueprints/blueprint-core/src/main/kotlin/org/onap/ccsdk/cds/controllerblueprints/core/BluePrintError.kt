@@ -36,5 +36,5 @@ class BluePrintError {
 
     fun stepErrors(stepName: String): MutableList<String>? = errors[stepName]
 
-    fun clearAll() = errors.clear();
+    fun clearAll() = errors.clear()
 }

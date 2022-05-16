@@ -81,7 +81,8 @@ public class ListenerServiceImpl implements ListenerService {
     @Value("${listenerservice.config.grpcPort}")
     private int grpcPort;
 
-    private static final String CBA_ZIP_PATH = "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
+    private static final String CBA_ZIP_PATH =
+            "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
     private static final int SUCCESS_CODE = 200;
     private static final Logger LOGGER = LoggerFactory.getLogger(ListenerServiceImpl.class);
 

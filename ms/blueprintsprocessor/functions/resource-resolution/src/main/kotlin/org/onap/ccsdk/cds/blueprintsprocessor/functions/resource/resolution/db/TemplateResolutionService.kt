@@ -93,7 +93,7 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
     suspend fun findArtifactNamesAndResolutionKeysByBlueprintNameAndBlueprintVersion(
         bluePrintRuntimeService: BluePrintRuntimeService<*>,
         occurrence: Int = 1
-    ): Map<String,List<String>> =
+    ): Map<String, List<String>> =
         withContext(Dispatchers.IO) {
 
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!

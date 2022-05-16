@@ -22,7 +22,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sAbstractRestClien
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 
 open class K8sQueryRestClient(
-        k8sConfiguration: K8sConnectionPluginConfiguration
+    k8sConfiguration: K8sConnectionPluginConfiguration
 ) : K8sAbstractRestClientService(k8sConfiguration) {
 
     override fun apiUrl(): String {

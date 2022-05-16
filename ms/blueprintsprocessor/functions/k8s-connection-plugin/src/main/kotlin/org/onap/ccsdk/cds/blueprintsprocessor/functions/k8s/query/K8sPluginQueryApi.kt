@@ -1,4 +1,4 @@
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.query;
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.query
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
@@ -8,17 +8,17 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod.GET
 
 public class K8sPluginQueryApi(
-        private val k8sConfiguration: K8sConnectionPluginConfiguration
+    private val k8sConfiguration: K8sConnectionPluginConfiguration
 ) {
     private val log = LoggerFactory.getLogger(K8sPluginQueryApi::class.java)!!
 
     fun queryK8sResources(
-            cloudRegion: String,
-            kind: String,
-            apiVersion: String,
-            name: String? = null,
-            namespace: String? = null,
-            labels: Map<String, String>? = null
+        cloudRegion: String,
+        kind: String,
+        apiVersion: String,
+        name: String? = null,
+        namespace: String? = null,
+        labels: Map<String, String>? = null
     ): K8sResourceStatus? {
         val rbQueryService = K8sQueryRestClient(k8sConfiguration)
         try {
@@ -34,14 +34,14 @@ public class K8sPluginQueryApi(
                 path = path.trimEnd(',')
             }
             val result: BlueprintWebClientService.WebClientResponse<String> = rbQueryService.exchangeResource(
-                    GET.name,
-                    path,
-                    ""
+                GET.name,
+                path,
+                ""
             )
             log.debug(result.toString())
             return if (result.status in 200..299) {
                 val parsedObject: K8sResourceStatus? = JacksonUtils.readValue(
-                        result.body, K8sResourceStatus::class.java
+                    result.body, K8sResourceStatus::class.java
                 )
                 parsedObject
             } else if (result.status == 500 && result.body.contains("Error finding master table"))

@@ -58,7 +58,7 @@ limitations under the License.
         <jacoco.version>0.8.3</jacoco.version>
 
         <!-- Properties for POM Format -->
-        <format.skipValidate>true</format.skipValidate>
+        <format.skipValidate>false</format.skipValidate>
         <format.skipExecute>true</format.skipExecute>
 
         <java.version>11</java.version>

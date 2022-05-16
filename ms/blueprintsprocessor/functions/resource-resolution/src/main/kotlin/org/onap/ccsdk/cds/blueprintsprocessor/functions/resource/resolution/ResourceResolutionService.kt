@@ -145,7 +145,8 @@ open class ResourceResolutionServiceImpl(
     }
 
     override suspend fun resolveArtifactNamesAndResolutionKeysFromDatabase(
-        bluePrintRuntimeService: BluePrintRuntimeService<*>): Map<String, List<String>> {
+        bluePrintRuntimeService: BluePrintRuntimeService<*>
+    ): Map<String, List<String>> {
         return templateResolutionDBService.findArtifactNamesAndResolutionKeysByBlueprintNameAndBlueprintVersion(
             bluePrintRuntimeService
         )

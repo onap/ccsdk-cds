@@ -50,14 +50,15 @@ import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.Notificati
 import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
 
 @RunWith(SpringRunner.class)
-@EnableConfigurationProperties({ SdcListenerAuthClientInterceptor.class, BluePrintProcesssorHandler.class,
-        SdcListenerDto.class, ListenerServiceImpl.class, SdcListenerStatus.class, SdcListenerConfiguration.class })
-@SpringBootTest(classes = { ListenerServiceImplTest.class })
+@EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class, BluePrintProcesssorHandler.class,
+        SdcListenerDto.class, ListenerServiceImpl.class, SdcListenerStatus.class, SdcListenerConfiguration.class})
+@SpringBootTest(classes = {ListenerServiceImplTest.class})
 public class ListenerServiceImplTest {
 
     private static final String CSAR_SAMPLE = "src/test/resources/service-ServicePnfTest-csar.csar";
     private static final String WRONG_CSAR_SAMPLE = "src/test/resources/wrong_csar_pattern.csar";
-    private static final String CBA_ZIP_PATH = "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
+    private static final String CBA_ZIP_PATH =
+            "Artifacts/[a-zA-Z0-9-_.]+/Deployment/CONTROLLER_BLUEPRINT_ARCHIVE/[a-zA-Z0-9-_.()]+[.]zip";
     private static final String ZIP_FILE = ".zip";
     private static final String CSAR_FILE = ".csar";
     private static final String DISTRIBUTION_ID = "1";
@@ -152,8 +153,7 @@ public class ListenerServiceImplTest {
             return "Stub Result, method not implemented!";
         }
 
-        public DistributionClientDownloadResultStubImpl() {
-        }
+        public DistributionClientDownloadResultStubImpl() {}
 
         public byte[] getArtifactPayload() {
             File file = Paths.get(CSAR_SAMPLE).toFile();

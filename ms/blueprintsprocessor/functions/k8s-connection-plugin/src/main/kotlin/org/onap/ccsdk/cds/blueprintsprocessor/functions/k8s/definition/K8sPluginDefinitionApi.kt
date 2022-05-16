@@ -24,7 +24,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.profile.K
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.template.K8sTemplate
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sRbInstanceFull
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -156,7 +155,7 @@ class K8sPluginDefinitionApi(
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 DELETE.name,
-                "/profile/${profileName}",
+                "/profile/$profileName",
                 ""
             )
             log.debug(result.toString())

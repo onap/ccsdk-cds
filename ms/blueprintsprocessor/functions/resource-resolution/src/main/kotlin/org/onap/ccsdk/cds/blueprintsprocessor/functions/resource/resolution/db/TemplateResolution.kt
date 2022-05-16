@@ -35,12 +35,15 @@ import javax.persistence.TemporalType
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-@Table(name = "TEMPLATE_RESOLUTION", indexes = [
-    Index(name = "idx_tr_bpnameversion", columnList = "blueprint_name, blueprint_version"),
-    Index(name = "idx_tr_resource_idtype", columnList = "resource_id, resource_type"),
-    Index(name = "idx_tr_artifact_name", columnList = "artifact_name"),
-    Index(name = "idx_tr_resolution_key", columnList = "resolution_key")
-])
+@Table(
+    name = "TEMPLATE_RESOLUTION",
+    indexes = [
+        Index(name = "idx_tr_bpnameversion", columnList = "blueprint_name, blueprint_version"),
+        Index(name = "idx_tr_resource_idtype", columnList = "resource_id, resource_type"),
+        Index(name = "idx_tr_artifact_name", columnList = "artifact_name"),
+        Index(name = "idx_tr_resolution_key", columnList = "resolution_key")
+    ]
+)
 @Proxy(lazy = false)
 class TemplateResolution : Serializable {
 
