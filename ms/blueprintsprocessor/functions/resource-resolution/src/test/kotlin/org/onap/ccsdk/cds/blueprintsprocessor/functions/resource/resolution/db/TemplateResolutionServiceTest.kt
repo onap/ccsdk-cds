@@ -220,4 +220,48 @@ class TemplateResolutionServiceTest {
             assertEquals(tr, res)
         }
     }
+
+    @Test
+    fun deleteTemplatesResolutionKeyAll() {
+        every {
+            templateResolutionRepository.deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(resolutionKey, blueprintName, blueprintVersion, artifactPrefix)
+        }.returns(1)
+        runBlocking {
+            val result = templateResolutionService.deleteTemplates(blueprintName, blueprintVersion, artifactPrefix, resolutionKey, null)
+            assertEquals(1, result)
+        }
+    }
+
+    @Test
+    fun deleteTemplatesResolutionKeyLastN() {
+        every {
+            templateResolutionRepository.deleteTemplates(blueprintName, blueprintVersion, artifactPrefix, resolutionKey, 1)
+        }.returns(1)
+        runBlocking {
+            val result = templateResolutionService.deleteTemplates(blueprintName, blueprintVersion, artifactPrefix, resolutionKey, 1)
+            assertEquals(1, result)
+        }
+    }
+
+    @Test
+    fun deleteTemplatesResourceIdAndTypeAll() {
+        every {
+            templateResolutionRepository.deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(resourceId, resourceType, blueprintName, blueprintVersion, artifactPrefix)
+        }.returns(1)
+        runBlocking {
+            val result = templateResolutionService.deleteTemplates(blueprintName, blueprintVersion, artifactPrefix, resourceType, resourceId, null)
+            assertEquals(1, result)
+        }
+    }
+
+    @Test
+    fun deleteTemplatesResourceIdAndTypeLastN() {
+        every {
+            templateResolutionRepository.deleteTemplates(blueprintName, blueprintVersion, artifactPrefix, resourceType, resourceType, 1)
+        }.returns(1)
+        runBlocking {
+            val result = templateResolutionService.deleteTemplates(blueprintName, blueprintVersion, artifactPrefix, resourceType, resourceType, 1)
+            assertEquals(1, result)
+        }
+    }
 }

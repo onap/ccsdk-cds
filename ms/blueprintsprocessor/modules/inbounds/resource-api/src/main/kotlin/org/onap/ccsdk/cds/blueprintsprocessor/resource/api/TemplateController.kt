@@ -255,4 +255,41 @@ open class TemplateController(private val templateResolutionService: TemplateRes
 
         ResponseEntity.ok().body(resultStored)
     }
+
+    @RequestMapping(
+        path = [""],
+        method = [RequestMethod.DELETE], produces = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @PreAuthorize("hasRole('USER')")
+    fun deleteTemplates(
+        @ApiParam(value = "Name of the CBA", required = true)
+        @RequestParam(value = "bpName", required = true) bpName: String,
+        @ApiParam(value = "Version of the CBA", required = true)
+        @RequestParam(value = "bpVersion", required = true) bpVersion: String,
+        @ApiParam(value = "Artifact name", required = true)
+        @RequestParam(value = "artifactName", required = true, defaultValue = "") artifactName: String,
+        @ApiParam(value = "Resolution Key associated with the template", required = false)
+        @RequestParam(value = "resolutionKey", required = false) resolutionKey: String?,
+        @ApiParam(value = "resourceType associated with the template, must be used with resourceId", required = false)
+        @RequestParam(value = "resourceType", required = false) resourceType: String?,
+        @ApiParam(value = "Resolution Key associated with the template, must be used with resourceType", required = false)
+        @RequestParam(value = "resourceId", required = false) resourceId: String?,
+        @ApiParam(value = "Only delete last N occurrences", required = false)
+        @RequestParam(value = "lastN", required = false) lastN: Int?
+    ) = runBlocking {
+        when {
+            resolutionKey?.isNotBlank() == true -> templateResolutionService.deleteTemplates(
+                bpName, bpVersion, artifactName, resolutionKey, lastN
+            )
+            resourceType?.isNotBlank() == true && resourceId?.isNotBlank() == true ->
+                templateResolutionService.deleteTemplates(
+                    bpName, bpVersion, artifactName, resourceType, resourceId, lastN
+                )
+            else -> throw httpProcessorException(
+                ErrorCatalogCodes.REQUEST_NOT_FOUND,
+                ResourceApiDomains.RESOURCE_API,
+                "Either use resolutionKey or resourceType + resourceId. Values cannot be blank"
+            )
+        }.let { ResponseEntity.ok().body(DeleteResponse(it)) }
+    }
 }
