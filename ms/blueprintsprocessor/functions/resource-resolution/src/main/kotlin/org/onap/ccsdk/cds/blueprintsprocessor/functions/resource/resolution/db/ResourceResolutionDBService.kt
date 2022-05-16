@@ -26,6 +26,7 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 import java.util.UUID
 
 @Service
@@ -281,27 +282,80 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
     }
 
     /**
-     * This is a deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey method to delete resources
-     * associated to a specific resolution-key
+     * This method to deletes resources associated to a specific resolution-key
      *
      * @param blueprintName name of the CBA
      * @param blueprintVersion version of the CBA
      * @param artifactName name of the artifact
      * @param resolutionKey value of the resolution-key
+     * @param lastNOccurrences number of occurrences to delete starting from the last,
+     * all occurrences will be deleted when null
+     *
+     * @return number of deleted rows
      */
-    suspend fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+    fun deleteResources(
         blueprintName: String,
         blueprintVersion: String,
         artifactName: String,
-        resolutionKey: String
-    ) {
-        resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+        resolutionKey: String,
+        lastNOccurrences: Int?
+    ): Int = lastNOccurrences?.let {
+        if (lastNOccurrences < 0) {
+            throw IllegalArgumentException("last N occurrences must be a positive integer")
+        }
+        resourceResolutionRepository.deleteLastNOccurences(
             blueprintName,
             blueprintVersion,
             artifactName,
-            resolutionKey
+            resolutionKey,
+            it
         )
-    }
+    } ?: resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+        blueprintName,
+        blueprintVersion,
+        artifactName,
+        resolutionKey
+    )
+
+    /**
+     * This method to deletes resources associated to a specific resourceType and resourceId
+     *
+     * @param blueprintName name of the CBA
+     * @param blueprintVersion version of the CBA
+     * @param artifactName name of the artifact
+     * @param resourceType value of the resourceType
+     * @param resourceId value of the resourceId
+     * @param lastNOccurrences number of occurrences to delete starting from the last,
+     * all occurrences will be deleted when null
+     *
+     * @return number of deleted rows
+     */
+    fun deleteResources(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactName: String,
+        resourceType: String,
+        resourceId: String,
+        lastNOccurrences: Int?
+    ): Int = lastNOccurrences?.let {
+        if (lastNOccurrences < 0) {
+            throw IllegalArgumentException("last N occurrences must be a positive integer")
+        }
+        resourceResolutionRepository.deleteLastNOccurences(
+            blueprintName,
+            blueprintVersion,
+            artifactName,
+            resourceType,
+            resourceId,
+            it
+        )
+    } ?: resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceTypeAndResourceId(
+        blueprintName,
+        blueprintVersion,
+        artifactName,
+        resourceType,
+        resourceId
+    )
 
     suspend fun deleteResourceResolutionList(listResourceResolution: List<ResourceResolution>) = withContext(Dispatchers.IO) {
         try {

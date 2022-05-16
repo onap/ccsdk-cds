@@ -16,6 +16,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
@@ -155,9 +156,65 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
 
     @Transactional
     fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
-        blueprintName: String?,
-        blueprintVersion: String?,
+        blueprintName: String,
+        blueprintVersion: String,
         artifactName: String,
         resolutionKey: String
+    ): Int
+
+    @Transactional
+    fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceTypeAndResourceId(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactName: String,
+        resourceType: String,
+        resourceId: String
+    ): Int
+
+    @Transactional
+    @Modifying
+    @Query(
+        value = """
+        DELETE FROM RESOURCE_RESOLUTION
+        WHERE resolution_key = :resolutionKey AND blueprint_name = :blueprintName
+            AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName
+            AND occurrence > (
+                SELECT max(occurrence) - :lastN FROM RESOURCE_RESOLUTION
+                WHERE resolution_key = :resolutionKey AND blueprint_name = :blueprintName
+                    AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName)
+    """,
+        nativeQuery = true
     )
+    fun deleteLastNOccurences(
+        @Param("blueprintName") blueprintName: String,
+        @Param("blueprintVersion") blueprintVersion: String,
+        @Param("artifactName") artifactName: String,
+        @Param("resolutionKey") resolutionKey: String,
+        @Param("lastN") lastN: Int
+    ): Int
+
+    @Transactional
+    @Modifying
+    @Query(
+        value = """
+        DELETE FROM RESOURCE_RESOLUTION
+        WHERE resource_type = :resourceType AND resource_id = :resourceId
+            AND blueprint_name = :blueprintName
+            AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName
+            AND occurrence > (
+                SELECT max(occurrence) - :lastN FROM RESOURCE_RESOLUTION
+                WHERE resource_type = :resourceType AND resource_id = :resourceId
+                    AND blueprint_name = :blueprintName
+                    AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName)
+    """,
+        nativeQuery = true
+    )
+    fun deleteLastNOccurences(
+        @Param("blueprintName") blueprintName: String,
+        @Param("blueprintVersion") blueprintVersion: String,
+        @Param("artifactName") artifactName: String,
+        @Param("resourceType") resourceType: String,
+        @Param("resourceId") resourceId: String,
+        @Param("lastN") lastN: Int
+    ): Int
 }
