@@ -16,6 +16,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
@@ -162,4 +163,69 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
         artifactName: String,
         occurrence: Int
     )
+
+    @Transactional
+    fun deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        resourceId: String,
+        resourceType: String,
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactName: String
+    ): Int
+
+    @Transactional
+    fun deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        key: String,
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactName: String
+    ): Int
+
+    @Transactional
+    @Modifying
+    @Query(
+        value = """
+        DELETE FROM TEMPLATE_RESOLUTION WHERE resolution_key = :resolutionKey
+            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
+            AND artifact_name = :artifactName
+            AND occurrence > (
+                SELECT MAX(occurrence) - :lastN FROM TEMPLATE_RESOLUTION
+                WHERE resolution_key = :resolutionKey AND blueprint_name = :blueprintName
+                    AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName
+                )
+    """,
+        nativeQuery = true
+    )
+    fun deleteTemplates(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactName: String,
+        resolutionKey: String,
+        lastN: Int
+    ): Int
+
+    @Transactional
+    @Modifying
+    @Query(
+        value = """
+        DELETE FROM TEMPLATE_RESOLUTION WHERE resource_type = :resourceType
+            AND resource_id = :resourceId AND artifact_name = :artifactName
+            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
+            AND occurrence > (
+                SELECT MAX(occurrence) - :lastN FROM TEMPLATE_RESOLUTION
+                WHERE resource_type = :resourceType
+                    AND resource_id = :resourceId AND blueprint_name = :blueprintName
+                    AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName
+            )
+    """,
+        nativeQuery = true
+    )
+    fun deleteTemplates(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactName: String,
+        resourceType: String,
+        resourceId: String,
+        lastN: Int
+    ): Int
 }
