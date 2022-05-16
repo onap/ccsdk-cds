@@ -1,0 +1,67 @@
+{
+  "description": "This is Resource Deletion Component API",
+  "version": "1.0.0",
+  "attributes": {
+    "result": {
+      "description": "A map of [artifact-prefix]: { nDeletedTemplates, nDeletedResources }",
+      "required": true,
+      "type": "map"
+    },
+    "success": {
+      "required": true,
+      "type": "boolean"
+    }
+  },
+  "capabilities": {
+    "component-node": {
+      "type": "tosca.capabilities.Node"
+    }
+  },
+  "interfaces": {
+    "ResourceDeletionComponent": {
+      "operations": {
+        "process": {
+          "inputs": {
+            "resolution-key": {
+              "description": "Resolution key associated with stored assignments and templates. Required if resource-type + resource-id are empty",
+              "required": false,
+              "type": "string"
+            },
+            "resource-type": {
+              "description": "Resource-type associated with stored assignments and templates. Required if resolution-key is empty. Must be used together with resource-id",
+              "required": false,
+              "type": "string"
+            },
+            "resource-id": {
+              "description": "Resource-id associated with stored assignments and templates. Required if resolution-key is empty. Must be used together with resource-type",
+              "required": false,
+              "type": "string"
+            },
+            "artifact-prefix-names": {
+              "required": true,
+              "description": "Template , Resource Assignment Artifact Prefix names",
+              "type": "list",
+              "entry_schema": {
+                "type": "string"
+              }
+            },
+            "last-n-occurrences": {
+              "description": "Only delete last N occurrences",
+              "required": false,
+              "default": null,
+              "type": "integer"
+            },
+            "fail-on-empty": {
+              "description": "Determines if the component should fail when nothing was deleted",
+              "required": false,
+              "default": false,
+              "type": "boolean"
+            }
+          },
+          "outputs": {}
+        }
+      }
+    }
+  },
+  "derived_from": "tosca.nodes.Component"
+}
