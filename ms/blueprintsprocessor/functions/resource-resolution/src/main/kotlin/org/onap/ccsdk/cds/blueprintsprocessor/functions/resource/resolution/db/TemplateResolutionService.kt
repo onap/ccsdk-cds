@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 import java.util.UUID
 
 @Service
@@ -336,4 +337,55 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
             artifactPrefix
         )
     }
+
+    suspend fun deleteTemplates(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resolutionKey: String,
+        lastNOccurrences: Int?
+    ): Int = lastNOccurrences?.let {
+        if (lastNOccurrences < 0) {
+            throw IllegalArgumentException("last N occurrences must be a positive integer")
+        }
+        templateResolutionRepository.deleteTemplates(
+            blueprintName,
+            blueprintVersion,
+            artifactPrefix,
+            resolutionKey,
+            it
+        )
+    } ?: templateResolutionRepository.deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        resolutionKey,
+        blueprintName,
+        blueprintVersion,
+        artifactPrefix
+    )
+
+    suspend fun deleteTemplates(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resourceType: String,
+        resourceId: String,
+        lastNOccurrences: Int?
+    ): Int = lastNOccurrences?.let {
+        if (lastNOccurrences < 0) {
+            throw IllegalArgumentException("last N occurrences must be a positive integer")
+        }
+        templateResolutionRepository.deleteTemplates(
+            blueprintName,
+            blueprintVersion,
+            artifactPrefix,
+            resourceType,
+            resourceId,
+            it
+        )
+    } ?: templateResolutionRepository.deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        resourceId,
+        resourceType,
+        blueprintName,
+        blueprintVersion,
+        artifactPrefix
+    )
 }
