@@ -160,7 +160,7 @@ open class BluePrintModelHandler(
 
         if (workFlow.inputs != null) {
             for ((k, v) in workFlow.inputs!!) {
-                addPropertyInfo(v, blueprintContext, wfRes)
+                addPropertyInfo(k, v, blueprintContext, wfRes)
             }
         }
 
@@ -172,13 +172,6 @@ open class BluePrintModelHandler(
 
         wfRes.workFlowData = workFlowData
         return wfRes
-    }
-
-    private fun addPropertyInfo(prop: PropertyDefinition, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
-        addDataType(prop.type, ctx, res)
-        if (prop.entrySchema != null && prop.entrySchema!!.type != null) {
-            addDataType(prop.entrySchema!!.type, ctx, res)
-        }
     }
 
     private fun addPropertyInfo(propName: String, prop: PropertyDefinition, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
