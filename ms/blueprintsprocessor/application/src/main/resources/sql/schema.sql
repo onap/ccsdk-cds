@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS configurator.BLUEPRINT_MODEL (
   published 			varchar(1) not null,
   updated_by 			varchar(100) not null,
   tags 				longtext null default null,
+  workflows   longtext null default null,
   primary key PK_BLUEPRINT_MODEL (blueprint_model_id),
   UNIQUE KEY UK_BLUEPRINT_MODEL (artifact_name , artifact_version)
 ) ENGINE=InnoDB;
