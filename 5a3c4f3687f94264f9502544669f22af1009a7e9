@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b165a26c_ced90054",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/ResourceResolutionDBService.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2022-05-19T12:33:55Z",
+      "side": 1,
+      "message": "This one does not belong to this patch, it will be added with force-resolution",
+      "revId": "5a3c4f3687f94264f9502544669f22af1009a7e9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2c2d19f_094447d1",
+        "filename": "ms/blueprintsprocessor/functions/resource-resolution/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/resource/resolution/db/ResourceResolutionRepository.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2022-05-19T12:33:55Z",
+      "side": 1,
+      "message": "does not belong in this patch",
+      "revId": "5a3c4f3687f94264f9502544669f22af1009a7e9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
