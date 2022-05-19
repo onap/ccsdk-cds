@@ -42,6 +42,71 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
     ): TemplateResolution?
 
     @Query(
+        value = """
+         SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key 
+            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
+            AND artifact_name = :artifactName 
+            AND occurrence <=  :firstN
+        """,
+        nativeQuery = true
+    )
+    fun findFirstNOccurrences(
+        @Param("key")key: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String,
+        @Param("firstN")begin: Int
+    ): List<TemplateResolution>
+
+    @Query(
+        value = """
+        SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key 
+            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
+            AND artifact_name = :artifactName 
+            AND occurrence > ( 
+                select max(occurrence) - :lastN from RESOURCE_RESOLUTION 
+                WHERE resolution_key = :key 
+                    AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
+                    AND artifact_name = :artifactName) 
+                    ORDER BY occurrence DESC, creation_date DESC
+      """,
+        nativeQuery = true
+    )
+    fun findLastNOccurrences(
+        @Param("key")key: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String,
+        @Param("lastN")begin: Int
+    ): List<TemplateResolution>
+
+    @Query(
+        value = """
+        SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key 
+            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
+            AND artifact_name = :artifactName 
+            AND occurrence BETWEEN :begin AND :end 
+            ORDER BY occurrence DESC, creation_date DESC
+       """,
+        nativeQuery = true
+    )
+    fun findOccurrencesWithinRange(
+        @Param("key")key: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String,
+        @Param("begin")begin: Int,
+        @Param("end")end: Int
+    ): List<TemplateResolution>
+
+    fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+        resolutionKey: String,
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String
+    ): List<TemplateResolution>
+
+    @Query(
         "select tr.resolutionKey from TemplateResolution tr where tr.blueprintName = :blueprintName and tr.blueprintVersion = :blueprintVersion and tr.artifactName = :artifactName and tr.occurrence = :occurrence"
     )
     fun findResolutionKeysByBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(

@@ -241,4 +241,99 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 throw BluePrintException("Failed to store resource api result.", ex)
             }
         }
+    /**
+     * This returns the templates of first N 'occurrences'.
+     *
+     * @param blueprintName
+     * @param blueprintVersion
+     * @param artifactPrefix
+     * @param resolutionKey
+     * @param firstN
+     */
+    suspend fun findFirstNOccurrences(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resolutionKey: String,
+        firstN: Int
+    ): Map<Int, List<TemplateResolution>> = withContext(Dispatchers.IO) {
+
+        templateResolutionRepository.findFirstNOccurrences(
+            resolutionKey,
+            blueprintName,
+            blueprintVersion,
+            artifactPrefix,
+            firstN
+        ).groupBy(TemplateResolution::occurrence).toSortedMap(reverseOrder())
+    }
+
+    /**
+     * This returns the templates of last N 'occurrences'.
+     *
+     * @param blueprintName
+     * @param blueprintVersion
+     * @param artifactPrefix
+     * @param resolutionKey
+     * @param lastN
+     */
+    suspend fun findLastNOccurrences(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resolutionKey: String,
+        lastN: Int
+    ): Map<Int, List<TemplateResolution>> = withContext(Dispatchers.IO) {
+
+        templateResolutionRepository.findLastNOccurrences(
+            resolutionKey,
+            blueprintName,
+            blueprintVersion,
+            artifactPrefix,
+            lastN
+        ).groupBy(TemplateResolution::occurrence).toSortedMap(reverseOrder())
+    }
+
+    /**
+     * This returns the templates with 'occurrence' value between begin and end.
+     *
+     * @param blueprintName
+     * @param blueprintVersion
+     * @param artifactPrefix
+     * @param resolutionKey
+     * @param begin
+     * @param end
+     */
+    suspend fun findOccurrencesWithinRange(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resolutionKey: String,
+        begin: Int,
+        end: Int
+    ): Map<Int, List<TemplateResolution>> = withContext(Dispatchers.IO) {
+
+        templateResolutionRepository.findOccurrencesWithinRange(
+            resolutionKey,
+            blueprintName,
+            blueprintVersion,
+            artifactPrefix,
+            begin,
+            end
+        ).groupBy(TemplateResolution::occurrence).toSortedMap(reverseOrder())
+    }
+
+    suspend fun readWithResolutionKey(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resolutionKey: String
+    ): List<TemplateResolution> = withContext(Dispatchers.IO) {
+
+        templateResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
+            resolutionKey,
+            blueprintName,
+            blueprintVersion,
+            artifactPrefix
+        )
+    }
 }
