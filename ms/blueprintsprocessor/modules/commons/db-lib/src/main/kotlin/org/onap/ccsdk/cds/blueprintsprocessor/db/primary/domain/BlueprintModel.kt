@@ -19,12 +19,17 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain
 import com.fasterxml.jackson.annotation.JsonFormat
 import io.swagger.annotations.ApiModelProperty
 import org.hibernate.annotations.Proxy
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
 import java.util.Date
+import javax.persistence.AttributeConverter
 import javax.persistence.CascadeType
 import javax.persistence.Column
+import javax.persistence.Convert
+import javax.persistence.Converter
 import javax.persistence.Entity
 import javax.persistence.EntityListeners
 import javax.persistence.FetchType
@@ -123,8 +128,26 @@ class BlueprintModel : Serializable {
     @OneToOne(mappedBy = "blueprintModel", fetch = FetchType.EAGER, orphanRemoval = true, cascade = [CascadeType.ALL])
     var blueprintModelContent: BlueprintModelContent? = null
 
+    // will be populated with workflow specs for each workflow (JSON object)
+    @Lob
+    @Convert(converter = WorkflowsConverter::class)
+    @Column(name = "workflows", nullable = false)
+    lateinit var workflows: Map<String, Workflow>
+
     companion object {
 
         private const val serialVersionUID = 1L
+    }
+
+    @Converter
+    class WorkflowsConverter : AttributeConverter<Map<String, Workflow>, String> {
+        override fun convertToDatabaseColumn(node: Map<String, Workflow>): String {
+            return JacksonUtils.getJson(node, true)
+        }
+
+        override fun convertToEntityAttribute(dbData: String): Map<String, Workflow> {
+            if (dbData == null || "".equals(dbData)) return emptyMap()
+            return JacksonUtils.getMapFromJson(dbData, Workflow::class.java)
+        }
     }
 }

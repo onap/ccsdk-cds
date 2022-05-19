@@ -29,6 +29,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.common.ApplicationConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.data.ErrorCode
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.deCompress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
@@ -120,7 +121,7 @@ class BlueprintProcessorCatalogServiceImpl(
         }
     }
 
-    override suspend fun save(metadata: MutableMap<String, String>, archiveFile: File) {
+    override suspend fun save(metadata: MutableMap<String, String>, archiveFile: File, workflows: Map<String, Workflow>) {
         val artifactName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]
         val artifactVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]
 
@@ -152,9 +153,8 @@ class BlueprintProcessorCatalogServiceImpl(
         blueprintModel.artifactVersion = artifactVersion
         blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!
         blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]!!
-        val description =
-            if (null != metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION]) metadata[BluePrintConstants.METADATA_TEMPLATE_DESCRIPTION] else ""
-        blueprintModel.artifactDescription = description
+        blueprintModel.artifactDescription = "Controller Blueprint for $artifactName:$artifactVersion"
+        blueprintModel.workflows = workflows
 
         val blueprintModelContent = BlueprintModelContent()
         blueprintModelContent.id = metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID]

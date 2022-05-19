@@ -393,10 +393,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
 
     @PostMapping(
         path = arrayOf("/workflow-spec"),
-        produces = arrayOf(
-            MediaType
-                .APPLICATION_JSON_VALUE
-        ),
+        produces = arrayOf(MediaType.APPLICATION_JSON_VALUE),
         consumes = arrayOf(MediaType.APPLICATION_JSON_VALUE)
     )
     @ApiOperation(
@@ -418,9 +415,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         }
 
     @GetMapping(
-        path = arrayOf(
-            "/workflows/blueprint-name/{name}/version/{version}"
-        ),
+        path = arrayOf("/workflows/blueprint-name/{name}/version/{version}"),
         produces = arrayOf(MediaType.APPLICATION_JSON_VALUE)
     )
     @ApiOperation(
