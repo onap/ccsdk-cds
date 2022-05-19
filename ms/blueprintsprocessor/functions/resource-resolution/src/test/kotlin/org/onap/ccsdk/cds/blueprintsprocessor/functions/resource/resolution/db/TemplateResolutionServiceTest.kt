@@ -12,6 +12,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
 import org.springframework.dao.EmptyResultDataAccessException
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 class TemplateResolutionServiceTest {
 
@@ -92,6 +93,75 @@ class TemplateResolutionServiceTest {
             } returns null
             val res = templateResolutionService.write(props, result, bluePrintRuntimeService, artifactPrefix)
             assertEquals(tr, res)
+        }
+    }
+
+    @Test
+    fun findFirstNOccurrencesTest() {
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
+        val tr1 = TemplateResolution()
+        val tr2 = TemplateResolution()
+        val list = listOf(tr1, tr2)
+        every {
+            templateResolutionRepository.findFirstNOccurrences(
+                any(), any(), any(), any(), 1
+            )
+        } returns list
+        runBlocking {
+            val res =
+                templateResolutionService.findFirstNOccurrences(
+                    blueprintName, blueprintVersion, artifactPrefix, resolutionKey, 1
+                )
+            assertEquals(false, res.isEmpty(), "find first N occurrences test failed")
+            assertEquals(1, res.size)
+            assertNotEquals(null, res[1])
+            res[1]?.let { assertEquals(2, it.size) }
+        }
+    }
+
+    @Test
+    fun findLastNOccurrencesTest() {
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
+        val tr1 = TemplateResolution()
+        val tr2 = TemplateResolution()
+        val list = listOf(tr1, tr2)
+        every {
+            templateResolutionRepository.findLastNOccurrences(
+                any(), any(), any(), any(), 1
+            )
+        } returns list
+        runBlocking {
+            val res =
+                templateResolutionService.findLastNOccurrences(
+                    blueprintName, blueprintVersion, artifactPrefix, resolutionKey, 1
+                )
+            assertEquals(false, res.isEmpty(), "find last N occurrences test failed")
+            assertEquals(1, res.size)
+            assertNotEquals(null, res[1])
+            res[1]?.let { assertEquals(2, it.size) }
+        }
+    }
+
+    @Test
+    fun findOccurrencesWithinRangeTest() {
+        props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
+        val tr1 = TemplateResolution()
+        val tr2 = TemplateResolution()
+        val list = listOf(tr1, tr2)
+        every {
+            templateResolutionRepository.findOccurrencesWithinRange(
+                any(), any(), any(), any(), 0, 1
+            )
+        } returns list
+        runBlocking {
+            val res =
+                templateResolutionService.findOccurrencesWithinRange(
+                    blueprintName, blueprintVersion, artifactPrefix, resolutionKey, 0, 1
+                )
+            assertEquals(false, res.isEmpty(), "find occurrences within a range test failed")
+            assertEquals(1, res.size)
+            assertNotEquals(null, res[1])
+            res[1]?.let { assertEquals(2, it.size) }
         }
     }
 
