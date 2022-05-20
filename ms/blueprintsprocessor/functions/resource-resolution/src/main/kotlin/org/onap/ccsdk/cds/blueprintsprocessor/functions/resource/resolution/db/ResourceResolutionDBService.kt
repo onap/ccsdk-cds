@@ -90,7 +90,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         artifactPrefix: String,
         resolutionKey: String,
         name: String
-    ): ResourceResolution = withContext(Dispatchers.IO) {
+    ): ResourceResolution? = withContext(Dispatchers.IO) {
 
         resourceResolutionRepository.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndName(
             resolutionKey,
