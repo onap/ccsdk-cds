@@ -42,6 +42,13 @@ message BluePrintManagementOutput {
     google.protobuf.Struct properties = 4;
 }
 
+// Get the list of workflows available for a given blueprintName/Version
+message BluePrintGetWorkflowsInput {
+    org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader commonHeader = 1;
+    string blueprintName = 2;
+    string blueprintVersion = 3;
+}
+
 message FileChunk {
     bytes chunk = 1;
 }
@@ -73,4 +80,5 @@ service BluePrintManagementService {
     rpc uploadBlueprint (BluePrintUploadInput) returns (BluePrintManagementOutput);
     rpc removeBlueprint (BluePrintRemoveInput) returns (BluePrintManagementOutput);
     rpc bootstrapBlueprint (BluePrintBootstrapInput) returns (BluePrintManagementOutput);
+    rpc getWorkflows(BluePrintGetWorkflowsInput) returns (BluePrintManagementOutput);
 }

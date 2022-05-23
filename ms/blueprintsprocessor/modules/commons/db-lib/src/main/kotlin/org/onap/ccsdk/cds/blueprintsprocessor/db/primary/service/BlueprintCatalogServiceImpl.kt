@@ -21,6 +21,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.deCompress
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
@@ -71,10 +72,11 @@ abstract class BlueprintCatalogServiceImpl(
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(processingId, workingDir!!)
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+        val workflows = bluePrintRuntimeService.bluePrintContext().workflows()!!
         metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = processingId
         metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID] = valid
 
-        save(metadata, archiveFile)
+        save(metadata, archiveFile, workflows)
 
         return processingId
     }
@@ -87,7 +89,7 @@ abstract class BlueprintCatalogServiceImpl(
 
     override suspend fun deleteFromDatabase(name: String, version: String) = delete(name, version)
 
-    abstract suspend fun save(metadata: MutableMap<String, String>, archiveFile: File)
+    abstract suspend fun save(metadata: MutableMap<String, String>, archiveFile: File, workflows: Map<String, Workflow>)
     abstract suspend fun get(name: String, version: String, extract: Boolean): Path?
     abstract suspend fun delete(name: String, version: String)
 }

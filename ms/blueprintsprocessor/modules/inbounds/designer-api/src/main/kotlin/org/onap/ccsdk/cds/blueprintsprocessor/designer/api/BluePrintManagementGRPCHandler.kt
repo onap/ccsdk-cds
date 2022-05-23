@@ -29,10 +29,12 @@ import org.onap.ccsdk.cds.controllerblueprints.common.api.Status
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.emptyTONull
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.currentTimestamp
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintBootstrapInput
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintDownloadInput
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintGetWorkflowsInput
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementOutput
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintManagementServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintRemoveInput
@@ -241,6 +243,33 @@ open class BluePrintManagementGRPCHandler(
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
+    override fun getWorkflows(
+        request: BluePrintGetWorkflowsInput,
+        responseObserver: StreamObserver<BluePrintManagementOutput>
+    ) {
+        runBlocking {
+            val blueprintName = request.blueprintName
+            val blueprintVersion = request.blueprintVersion
+            val blueprint = "blueprint $blueprintName:$blueprintVersion"
+
+            log.info("request(${request.commonHeader.requestId}): Received getWorkflows $blueprint")
+            try {
+                val workflowsSetJson = bluePrintModelHandler.getWorkflowNamesFromRepository(blueprintName, blueprintVersion)
+                responseObserver.onNext(successStatus(request.commonHeader, mapOf("workflows" to workflowsSetJson).asJsonType().toString()))
+            } catch (e: Exception) {
+                responseObserver.onNext(
+                    failStatus(
+                        request.commonHeader,
+                        "request(${request.commonHeader.requestId}): Failed to get workflows for ($blueprint)", e
+                    )
+                )
+            } finally {
+                responseObserver.onCompleted()
+            }
+        }
+    }
+
     private fun outputWithFileBytes(header: CommonHeader, byteArray: ByteArray): BluePrintManagementOutput =
         BluePrintManagementOutput.newBuilder()
             .setCommonHeader(header)
@@ -258,6 +287,7 @@ open class BluePrintManagementGRPCHandler(
     private fun successStatus(header: CommonHeader, propertyContent: String? = null): BluePrintManagementOutput {
         // Populate Response Payload
         val propertiesBuilder = BluePrintManagementOutput.newBuilder().propertiesBuilder
+        // propertyContent is expected to have a string which contains a JSON map
         propertyContent?.let {
             JsonFormat.parser().merge(propertyContent, propertiesBuilder)
         }

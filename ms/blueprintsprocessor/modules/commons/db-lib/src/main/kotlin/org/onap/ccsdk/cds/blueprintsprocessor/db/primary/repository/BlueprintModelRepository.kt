@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.jetbrains.annotations.NotNull
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.springframework.data.jpa.repository.JpaRepository
@@ -58,6 +59,15 @@ interface BlueprintModelRepository : JpaRepository<BlueprintModel, String> {
      */
     @Query("SELECT m.id FROM BlueprintModel m WHERE m.artifactName = :artifactName AND m.artifactVersion = :artifactVersion")
     fun findIdByArtifactNameAndArtifactVersion(@Param("artifactName") artifactName: String, @Param("artifactVersion") artifactVersion: String): String?
+
+    /**
+     * Find the workflows for a given blueprint name/version
+     * @param artifactName artifactName
+     * @param artifactVersion artifactVersion
+     * @return String?
+     */
+    @Query("SELECT m.workflows from BlueprintModel m WHERE m.artifactName = :artifactName AND m.artifactVersion = :artifactVersion")
+    fun findWorkflowsByArtifactNameAndArtifactVersion(@Param("artifactName") artifactName: String, @Param("artifactVersion") artifactVersion: String): JsonNode?
 
     /**
      * This is a findTopByArtifactNameOrderByArtifactIdDesc method

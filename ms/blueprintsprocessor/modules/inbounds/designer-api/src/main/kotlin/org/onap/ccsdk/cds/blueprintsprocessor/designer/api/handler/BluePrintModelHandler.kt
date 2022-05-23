@@ -39,6 +39,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.DataType
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -107,42 +108,78 @@ open class BluePrintModelHandler(
     }
 
     @Throws(BluePrintException::class)
-    open suspend fun prepareWorkFlowSpec(req: WorkFlowSpecRequest):
-        WorkFlowSpecResponse {
-            val basePath = blueprintsProcessorCatalogService.getFromDatabase(
-                req
-                    .blueprintName,
-                req.version
-            )
-            log.info("blueprint base path $basePath")
+    private suspend fun getBlueprintCtxByNameAndVersion(blueprintName: String, version: String): BluePrintContext {
+        val basePath = blueprintsProcessorCatalogService.getFromDatabase(blueprintName, version)
+        log.info("blueprint base path $basePath for blueprint: $blueprintName version:$version")
+        return BluePrintMetadataUtils.getBluePrintContext(basePath.toString())
+    }
 
-            val blueprintContext = BluePrintMetadataUtils.getBluePrintContext(basePath.toString())
-            val workFlow = blueprintContext.workflowByName(req.workflowName)
-
-            val wfRes = WorkFlowSpecResponse()
-            wfRes.blueprintName = req.blueprintName
-            wfRes.version = req.version
-
-            val workFlowData = WorkFlowData()
-            workFlowData.workFlowName = req.workflowName
-            workFlowData.inputs = workFlow.inputs
-            workFlowData.outputs = workFlow.outputs
-            wfRes.workFlowData = workFlowData
-
-            if (workFlow.inputs != null) {
-                for ((k, v) in workFlow.inputs!!) {
-                    addPropertyInfo(k, v, blueprintContext, wfRes)
-                }
+    @Throws(BluePrintException::class)
+    /**
+     * Try to get workflows cached from the BLUEPRINT_MODEL table first,
+     * failing that, load the CBA from the filesystem and extract workflows.
+     * The second case is possible during update scenario - current CDS DB already contains desired CBAs and reupload
+     * is not feasible.
+     */
+    open suspend fun getWorkflowsFromRepository(name: String, version: String): Map<String, Workflow> {
+        var workflowsFromCache: Map<String, Workflow>
+        try {
+            workflowsFromCache = blueprintModelRepository.findByArtifactNameAndArtifactVersion(name, version)?.workflows!!
+            if (workflowsFromCache.isEmpty()) {
+                log.info("findByArtifactNameAndArtifactVersion did not return list of workflows for blueprintName:($name) version:($version), falling back to loading CBA from filesystem.")
+                workflowsFromCache = getBlueprintCtxByNameAndVersion(name, version).workflows()!!
+                // TODO: does it make sense to update the BLUEPRINT_MODEL workflows in this case or just wait for CBA reupload?
             }
-
-            if (workFlow.outputs != null) {
-                for ((k, v) in workFlow.outputs!!) {
-                    addPropertyInfo(k, v, blueprintContext, wfRes)
-                }
-            }
-
-            return wfRes
+        } catch (e: Exception) {
+            throw BluePrintException("Failed to get workflows from DB cache or by reading CBA", e)
         }
+        return workflowsFromCache
+    }
+
+    // lookup workflows list from field.
+    open suspend fun getWorkflowNamesFromRepository(name: String, version: String): Set<String> {
+        return getWorkflowsFromRepository(name, version).keys
+    }
+
+    @Throws(BluePrintException::class)
+    open suspend fun prepareWorkFlowSpec(req: WorkFlowSpecRequest): WorkFlowSpecResponse {
+        val basePath = blueprintsProcessorCatalogService.getFromDatabase(req.blueprintName, req.version)
+        log.info("blueprint base path $basePath")
+
+        val blueprintContext = BluePrintMetadataUtils.getBluePrintContext(basePath.toString())
+        val workFlow = blueprintContext.workflowByName(req.workflowName)
+
+        val wfRes = WorkFlowSpecResponse()
+        wfRes.blueprintName = req.blueprintName
+        wfRes.version = req.version
+
+        val workFlowData = WorkFlowData()
+        workFlowData.workFlowName = req.workflowName
+        workFlowData.inputs = workFlow.inputs
+        workFlowData.outputs = workFlow.outputs
+
+        if (workFlow.inputs != null) {
+            for ((k, v) in workFlow.inputs!!) {
+                addPropertyInfo(v, blueprintContext, wfRes)
+            }
+        }
+
+        if (workFlow.outputs != null) {
+            for ((k, v) in workFlow.outputs!!) {
+                addPropertyInfo(k, v, blueprintContext, wfRes)
+            }
+        }
+
+        wfRes.workFlowData = workFlowData
+        return wfRes
+    }
+
+    private fun addPropertyInfo(prop: PropertyDefinition, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
+        addDataType(prop.type, ctx, res)
+        if (prop.entrySchema != null && prop.entrySchema!!.type != null) {
+            addDataType(prop.entrySchema!!.type, ctx, res)
+        }
+    }
 
     private fun addPropertyInfo(propName: String, prop: PropertyDefinition, ctx: BluePrintContext, res: WorkFlowSpecResponse) {
         updatePropertyInfo(propName, prop, ctx, res)
@@ -192,23 +229,19 @@ open class BluePrintModelHandler(
         }
     }
 
+    // wrap CBA workflows list in WorkflowsResponse object
     @Throws(BluePrintException::class)
     open suspend fun getWorkflowNames(name: String, version: String): WorkFlowsResponse {
-        val basePath = blueprintsProcessorCatalogService.getFromDatabase(
-            name, version
+        var workflows = getWorkflowsFromRepository(name, version)
+        if (workflows == null) throw httpProcessorException(
+            ErrorCatalogCodes.RESOURCE_NOT_FOUND, DesignerApiDomains.DESIGNER_API,
+            "Failed to find workflows list for blueprint: ($name) version: ($version) from filesystem."
         )
-        log.info("blueprint base path $basePath")
 
         var res = WorkFlowsResponse()
         res.blueprintName = name
         res.version = version
-
-        val blueprintContext = BluePrintMetadataUtils.getBluePrintContext(
-            basePath.toString()
-        )
-        if (blueprintContext.workflows() != null) {
-            res.workflows = blueprintContext.workflows()!!.keys
-        }
+        res.workflows = workflows.keys.toMutableSet()
         return res
     }
 
@@ -242,6 +275,7 @@ open class BluePrintModelHandler(
         try {
             return upload(filePart, false)
         } catch (e: IOException) {
+            log.error("saveBlueprintModel fails ${e.message}", e)
             throw httpProcessorException(
                 ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
                 "Error in Save CBA: ${e.message}", e.errorCauseOrDefault()
@@ -527,13 +561,15 @@ open class BluePrintModelHandler(
             val enhancedByteArray = enrichBlueprintFileSource(filePart)
             return upload(enhancedByteArray, true)
         } catch (e: BluePrintProcessorException) {
-            e.http(ErrorCatalogCodes.IO_FILE_INTERRUPT)
             val errorMsg = "Error while enhancing and uploading the CBA package."
+            log.error(errorMsg, e)
+            e.http(ErrorCatalogCodes.IO_FILE_INTERRUPT)
             throw e.updateErrorMessage(
                 DesignerApiDomains.DESIGNER_API, errorMsg,
                 "Wrong CBA file provided, please verify the source CBA."
             )
         } catch (e: Exception) {
+            log.error("Error enriching/uploading CBA", e)
             throw httpProcessorException(
                 ErrorCatalogCodes.IO_FILE_INTERRUPT, DesignerApiDomains.DESIGNER_API,
                 "EnrichBlueprint: ${e.message}", e.errorCauseOrDefault()

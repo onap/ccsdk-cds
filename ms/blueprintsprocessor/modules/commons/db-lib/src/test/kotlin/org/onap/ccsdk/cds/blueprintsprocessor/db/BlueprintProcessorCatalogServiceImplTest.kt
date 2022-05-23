@@ -102,10 +102,11 @@ class BlueprintProcessorCatalogServiceImplTest {
         runBlocking {
             val file = normalizedFile("./target/blueprints/generated-cba.zip")
             assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
-            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+            val ctx = bluePrintRuntimeService.bluePrintContext()
+            val metadata = ctx.metadata!!
             metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
 
-            blueprintsProcessorCatalogService.save(metadata, file)
+            blueprintsProcessorCatalogService.save(metadata, file, ctx.workflows()!!)
         }
     }
 
@@ -114,10 +115,12 @@ class BlueprintProcessorCatalogServiceImplTest {
         runBlocking {
             val file = normalizedFile("./target/blueprints/generated-cba.zip")
             assertTrue(file.exists(), "couldnt get file ${file.absolutePath}")
-            val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+
+            val ctx = bluePrintRuntimeService.bluePrintContext()
+            val metadata = ctx.metadata!!
             metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = blueprintId
 
-            blueprintsProcessorCatalogService.save(metadata, file)
+            blueprintsProcessorCatalogService.save(metadata, file, ctx.workflows()!!)
             blueprintsProcessorCatalogService.get("baseconfiguration", "1.0.0", true)
         }
 
