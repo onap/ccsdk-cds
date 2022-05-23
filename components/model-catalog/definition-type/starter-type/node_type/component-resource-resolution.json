@@ -39,6 +39,11 @@
               "required": false,
               "type": "boolean"
             },
+            "force-resolution": {
+              "description": "Delete existing values to force new resolution. Ineffective when occurrence < 1",
+              "required": false,
+              "type": "boolean"
+            },
             "resource-type": {
               "description": "Request type.",
               "required": false,

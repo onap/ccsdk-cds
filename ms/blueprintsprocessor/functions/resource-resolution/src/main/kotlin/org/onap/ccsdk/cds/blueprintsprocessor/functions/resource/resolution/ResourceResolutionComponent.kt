@@ -63,6 +63,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         val resolutionKey =
             getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY)?.returnNullIfMissing()?.textValue() ?: ""
         val storeResult = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT)?.asBoolean() ?: false
+        val forceResolution = getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_FORCE_RESOLUTION)?.asBoolean() ?: false
         val resourceId =
             getOptionalOperationInput(ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID)?.returnNullIfMissing()?.textValue() ?: ""
 
@@ -73,6 +74,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
 
         val properties: MutableMap<String, Any> = mutableMapOf()
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = storeResult
+        properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_FORCE_RESOLUTION] = forceResolution
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] = resolutionKey
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] = resourceId
         properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] = resourceType
