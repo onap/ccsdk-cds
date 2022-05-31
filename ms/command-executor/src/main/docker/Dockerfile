@@ -15,10 +15,10 @@ RUN tar -xzf /source.tar.gz -C /tmp \
     && mkdir -p /opt/app/onap/blueprints/deploy /opt/app/onap/logs \
     && touch /opt/app/onap/logs/application.log \
     && chown -R onap:onap /opt \
-    && chmod -R 755 /opt
-
-RUN python -m pip install --no-cache-dir --upgrade pip setuptools
-RUN pip install --no-cache-dir requests==2.26.0 grpcio==1.20.0 grpcio-tools==1.20.0 virtualenv==16.7.9 prometheus-client==0.11.0
+    && chmod -R 755 /opt \
+    && apt-get update && apt-get install -y procps iputils-ping curl telnet && rm -rf /var/lib/apt/lists/* \
+    && python -m pip install --no-cache-dir --upgrade pip setuptools \
+    && pip install --no-cache-dir requests==2.26.0 grpcio==1.20.0 grpcio-tools==1.20.0 virtualenv==16.7.9 prometheus-client==0.11.0 protobuf==3.20.1
 
 USER onap
 ENTRYPOINT /opt/app/onap/command-executor/start.sh
