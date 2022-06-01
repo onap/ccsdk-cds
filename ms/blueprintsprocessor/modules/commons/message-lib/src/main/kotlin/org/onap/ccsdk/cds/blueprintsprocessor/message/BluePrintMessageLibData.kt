@@ -55,8 +55,8 @@ open class KafkaBasicAuthMessageProducerProperties : MessageProducerProperties()
 
     lateinit var clientId: String
     var acks: String = "all" // strongest producing guarantee
-    var maxBlockMs: Int = 250 // max blocking time in ms to send a message
-    var reconnectBackOffMs: Int = 60 * 60 * 1000 // time in ms before retrying connection (1 hour)
+    var maxBlockMs: Int = 5000 // max blocking time in ms to send a message
+    var reconnectBackOffMs: Int = 5000 // time in ms before retrying connection (5 seconds)
     var enableIdempotence: Boolean = true // ensure we don't push duplicates
 
     override fun getConfig(): HashMap<String, Any> {
