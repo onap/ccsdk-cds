@@ -1,0 +1,23 @@
+[
+  {
+    "name": "firmware-version",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "input-source",
+    "dictionary-source": "input",
+    "dependencies": []
+  },
+  {
+    "name": "ip-address",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "max-occurrence": 1,
+    "dictionary-name": "input-source",
+    "dictionary-source": "input",
+    "dependencies": []
+  }
+]
