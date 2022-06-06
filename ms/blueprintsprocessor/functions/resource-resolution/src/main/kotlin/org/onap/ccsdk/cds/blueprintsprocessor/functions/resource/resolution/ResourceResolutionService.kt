@@ -218,7 +218,18 @@ open class ResourceResolutionServiceImpl(
                 val occurrence = findNextOccurrence(bluePrintRuntimeService, properties, artifactPrefix)
                 log.info("Always perform new resolutions  - next occurrence: $occurrence")
                 propertiesMutableMap[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = occurrence
-                // Since we are performing new resolution, simply pass empty list.
+                // If resolution has already been performed previously then may need to update some assignments
+                val resourceAssignmentFilteredMap: Map<String, ResourceAssignment> =
+                    resourceAssignments.filter { it.maxOccurrence != null && it.maxOccurrence!! in 1 until occurrence }
+                        .associateBy { it.name }
+                if (occurrence > 1 && resourceAssignmentFilteredMap.isNotEmpty())
+                    updateResourceAssignmentByOccurrence(
+                        bluePrintRuntimeService as ResourceAssignmentRuntimeService,
+                        propertiesMutableMap,
+                        artifactPrefix,
+                        resourceAssignmentFilteredMap as MutableMap<String, ResourceAssignment>
+                    )
+                // we may be performing new resolution for some resources, simply pass an empty list.
                 emptyList()
             } else {
                 isNewResolution(bluePrintRuntimeService, properties, artifactPrefix)
@@ -497,6 +508,92 @@ open class ResourceResolutionServiceImpl(
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Utility to update the resourceAssignments with existing resolutions if maxOccurrence is defined on it.
+     */
+    private suspend fun updateResourceAssignmentByOccurrence(
+        raRuntimeService: ResourceAssignmentRuntimeService,
+        properties: Map<String, Any>,
+        artifactPrefix: String,
+        resourceAssignmentFilteredMap: MutableMap<String, ResourceAssignment>
+    ) {
+        val resourceResolutionMap =
+            getResourceResolutionByLastOccurrence(raRuntimeService, properties, artifactPrefix).associateBy { it.name }
+
+        resourceAssignmentFilteredMap
+            .filter {
+                resourceResolutionMap.containsKey(it.key) && compareOne(
+                    resourceResolutionMap[it.key]!!,
+                    it.value
+                )
+            }
+            .forEach { raMapEntry ->
+                val resourceResolution = resourceResolutionMap[raMapEntry.key]
+                val resourceAssignment = raMapEntry.value
+
+                resourceResolution?.value?.let {
+                    val value = it.asJsonType(resourceAssignment.property!!.type)
+                    resourceAssignment.property!!.value = value
+                    ResourceAssignmentUtils.setResourceDataValue(
+                        resourceAssignment,
+                        raRuntimeService,
+                        value
+                    )
+                }
+                resourceAssignment.status = resourceResolution?.status
+                resourceResolutionDBService.write(
+                    properties,
+                    raRuntimeService,
+                    artifactPrefix,
+                    resourceAssignment
+                )
+            }
+    }
+
+    /**
+     * Utility to find resource resolution based on occurrence.
+     */
+    private suspend fun getResourceResolutionByLastOccurrence(
+        bluePrintRuntimeService: BluePrintRuntimeService<*>,
+        properties: Map<String, Any>,
+        artifactPrefix: String
+    ): List<ResourceResolution> {
+
+        val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
+        val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
+        val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String
+
+        // This should not happen since the request has already been validated but worth to check it here as well.
+        if (resourceType.isEmpty() && resourceId.isEmpty() && resolutionKey.isEmpty()) {
+            throw BluePrintProcessorException(
+                "Can't proceed to get last occurrence: " +
+                    "Either provide a resolution-key OR combination of resource-id and resource-type"
+            )
+        }
+        val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
+        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
+        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+
+        return if (resolutionKey.isNotEmpty()) {
+            resourceResolutionDBService.findLastNOccurrences(
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                resolutionKey,
+                1
+            ).takeIf { it.isNotEmpty() }?.values?.first() ?: emptyList()
+        } else {
+            resourceResolutionDBService.findLastNOccurrences(
+                blueprintName,
+                blueprintVersion,
+                artifactPrefix,
+                resourceId,
+                resourceType,
+                1
+            ).takeIf { it.isNotEmpty() }?.values?.first() ?: emptyList()
         }
     }
 

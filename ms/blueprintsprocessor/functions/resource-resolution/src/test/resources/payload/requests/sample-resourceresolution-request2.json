@@ -24,7 +24,9 @@
         "action-name": "assign-activate",
         "scope-type": "vnf-type",
         "hostname": "localhost",
-        "vnf_name": "temp_vnf_new_resolution"
+        "vnf_name": "temp_vnf_new_resolution",
+        "firmware-version": "firmware-version-1",
+        "ip-address": "192.0.0.2"
       }
     }
   }
