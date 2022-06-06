@@ -51,6 +51,12 @@
         "vnf_name": {
           "required": true,
           "type": "string"
+        },
+        "firmware-version": {
+          "type" : "string"
+        },
+        "ip-address": {
+          "type" : "string"
         }
       },
       "derived_from": "tosca.datatypes.Dynamic"
