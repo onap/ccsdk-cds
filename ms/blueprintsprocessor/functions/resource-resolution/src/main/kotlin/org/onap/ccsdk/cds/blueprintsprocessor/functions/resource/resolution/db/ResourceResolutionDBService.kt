@@ -170,6 +170,35 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
     }
 
     /**
+     * This returns the resolutions of last N 'occurrences'.
+     *
+     * @param blueprintName
+     * @param blueprintVersion
+     * @param artifactPrefix
+     * @param resourceId
+     * @param resourceType
+     * @param lastN
+     */
+    suspend fun findLastNOccurrences(
+        blueprintName: String,
+        blueprintVersion: String,
+        artifactPrefix: String,
+        resourceId: String,
+        resourceType: String,
+        lastN: Int
+    ): Map<Int, List<ResourceResolution>> = withContext(Dispatchers.IO) {
+
+        resourceResolutionRepository.findLastNOccurrences(
+            resourceId,
+            resourceType,
+            blueprintName,
+            blueprintVersion,
+            artifactPrefix,
+            lastN
+        ).groupBy(ResourceResolution::occurrence).toSortedMap(reverseOrder())
+    }
+
+    /**
      * This returns the resolutions with 'occurrence' value between begin and end.
      *
      * @param blueprintName
