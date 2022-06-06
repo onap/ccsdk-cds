@@ -180,6 +180,14 @@
             "type": "artifact-mapping-resource",
             "file": "Definitions/another-mapping.json"
           },
+          "maxoccurrence-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/maxoccurrence-template.vtl"
+          },
+          "maxoccurrence-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Definitions/maxoccurrence-mapping.json"
+          },
           "notemplate-mapping": {
             "type": "artifact-mapping-resource",
             "file": "Definitions/notemplate-mapping.json"
