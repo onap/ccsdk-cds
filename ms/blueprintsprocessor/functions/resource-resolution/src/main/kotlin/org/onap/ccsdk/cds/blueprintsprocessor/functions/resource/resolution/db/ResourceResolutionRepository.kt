@@ -77,6 +77,29 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
 
     @Query(
         value = """
+        SELECT * FROM RESOURCE_RESOLUTION WHERE resource_id = :resourceId 
+            AND resource_type =:resourceType AND blueprint_name = :blueprintName 
+            AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName 
+            AND occurrence > ( 
+                select max(occurrence) - :lastN from RESOURCE_RESOLUTION 
+                WHERE resource_id = :resourceId 
+                    AND resource_type =:resourceType AND blueprint_name = :blueprintName 
+                    AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName)
+                    ORDER BY occurrence DESC, creation_date DESC
+          """,
+        nativeQuery = true
+    )
+    fun findLastNOccurrences(
+        @Param("resourceId")resourceId: String,
+        @Param("resourceType")resourceType: String,
+        @Param("blueprintName")blueprintName: String,
+        @Param("blueprintVersion")blueprintVersion: String,
+        @Param("artifactName")artifactName: String,
+        @Param("lastN")begin: Int
+    ): List<ResourceResolution>
+
+    @Query(
+        value = """
         SELECT * FROM RESOURCE_RESOLUTION WHERE resolution_key = :key
             AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
             AND artifact_name = :artifactName AND occurrence BETWEEN :begin AND :end

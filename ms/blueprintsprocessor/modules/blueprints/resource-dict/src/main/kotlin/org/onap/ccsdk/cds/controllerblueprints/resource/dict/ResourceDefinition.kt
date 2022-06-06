@@ -62,6 +62,9 @@ open class ResourceAssignment {
     @JsonProperty(value = "property")
     var property: PropertyDefinition? = null
 
+    @JsonProperty(value = "max-occurrence")
+    var maxOccurrence: Int? = null
+
     @JsonProperty("input-param")
     var inputParameter: Boolean = false
 
