@@ -249,6 +249,116 @@ class ResourceResolutionServiceTest {
     }
 
     /**
+     * Always perform new resolution even if resolution exists in the database.
+     */
+    @Test
+    @Throws(Exception::class)
+    fun testResolveResourcesForMaxOccurrence() {
+        runBlocking {
+            // Occurrence <= 0 indicates to perform new resolution even if resolution exists in the database.
+            props[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_OCCURRENCE] = -1
+            Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
+
+            // Run time for Request#1
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+                "1234",
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
+
+            // Request#1
+            val executionServiceInput =
+                JacksonUtils.readValueFromClassPathFile(
+                    "payload/requests/sample-resourceresolution-request.json",
+                    ExecutionServiceInput::class.java
+                )!!
+
+            // Prepare inputs from Request#1
+            PayloadUtils.prepareInputsFromWorkflowPayload(
+                bluePrintRuntimeService,
+                executionServiceInput.payload,
+                "resource-assignment"
+            )
+
+            val resourceAssignmentRuntimeService =
+                ResourceAssignmentUtils.transformToRARuntimeService(
+                    bluePrintRuntimeService,
+                    "testResolveResource"
+                )
+
+            // Resolve resources as per Request#1
+            resourceResolutionService.resolveResources(
+                resourceAssignmentRuntimeService,
+                "resource-assignment",
+                "maxoccurrence",
+                props
+            )
+
+            // Run time for Request#2
+            val bluePrintRuntimeService2 = BluePrintMetadataUtils.getBluePrintRuntime(
+                "1234",
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
+
+            // Request#2
+            val executionServiceInput2 =
+                JacksonUtils.readValueFromClassPathFile(
+                    "payload/requests/sample-resourceresolution-request2.json",
+                    ExecutionServiceInput::class.java
+                )!!
+
+            val resourceAssignmentRuntimeService2 =
+                ResourceAssignmentUtils.transformToRARuntimeService(
+                    bluePrintRuntimeService2,
+                    "testResolveResource"
+                )
+
+            // Prepare inputs from Request#2
+            PayloadUtils.prepareInputsFromWorkflowPayload(
+                bluePrintRuntimeService2,
+                executionServiceInput2.payload,
+                "resource-assignment"
+            )
+
+            // Resolve resources as per Request#2
+            resourceResolutionService.resolveResources(
+                resourceAssignmentRuntimeService2,
+                "resource-assignment",
+                "maxoccurrence",
+                props
+            )
+        }.let { (template, assignmentList) ->
+            assertEquals("This is maxoccurrence Velocity Template", template)
+
+            val assignmentListForRequest1 = mutableListOf(
+                "firmware-version" to "firmware-version-0",
+                "ip-address" to "192.0.0.1"
+            )
+            val assignmentListForRequest2 = mutableListOf(
+                "firmware-version" to "firmware-version-1",
+                "ip-address" to "192.0.0.1"
+            )
+            assertEquals(assignmentListForRequest1.size, assignmentList.size)
+            assertEquals(assignmentListForRequest2.size, assignmentList.size)
+
+            // firmware-version has max-occurrence = 0 means perform new resolution all the time.
+            // ip-address has max-occurrence = 1 so its resolution should only be done once.
+            //
+            // AlwaysPerformNewResolution + max-occurrence feature use case - resolution request #2 should returns
+            // the resolution as per assignmentListForRequest2 since new resolution is only performed for
+            // firmware-version and not for ip-address.
+            var areEqual = assignmentListForRequest1.zip(assignmentList).all { (it1, it2) ->
+                it1.first == it2.name && it1.second == it2.property?.value?.asText() ?: null
+            }
+            assertEquals(false, areEqual)
+
+            areEqual = assignmentListForRequest2.zip(assignmentList).all { (it1, it2) ->
+                it1.first == it2.name && it1.second == it2.property?.value?.asText() ?: null
+            }
+            assertEquals(true, areEqual)
+        }
+    }
+
+    /**
      * Don't perform new resolution in case resolution already exists in the database.
      */
     @Test
