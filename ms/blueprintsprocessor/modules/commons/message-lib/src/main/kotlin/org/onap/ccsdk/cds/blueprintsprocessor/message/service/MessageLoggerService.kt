@@ -16,12 +16,18 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.message.service
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.newCoroutineContext
+import kotlinx.coroutines.withContext
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.header.Headers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
+import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.message.addHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.message.toMap
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
@@ -91,5 +97,19 @@ class MessageLoggerService {
 
     fun messageConsumingExisting() {
         MDC.clear()
+    }
+}
+
+suspend fun <T> mdcKafkaCoroutineScope(
+    executionServiceInput: ExecutionServiceInput,
+    block: suspend CoroutineScope.() -> T
+) = coroutineScope {
+
+    MDC.put("RequestID", executionServiceInput.commonHeader.requestId)
+    MDC.put("SubRequestID", executionServiceInput.commonHeader.subRequestId)
+    MDC.put("OriginatorID", executionServiceInput.commonHeader.originatorId)
+
+    withContext(newCoroutineContext(this.coroutineContext + MDCContext(MDC.getCopyOfContextMap()))) {
+        block()
     }
 }

@@ -22,6 +22,7 @@ import io.grpc.stub.StreamObserver
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.core.utils.toJava
+import org.onap.ccsdk.cds.blueprintsprocessor.grpc.service.mdcGrpcCoroutineScope
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.BluePrintProcessingServiceGrpc
 import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
@@ -58,7 +59,9 @@ open class BluePrintProcessingGRPCHandler(
                 try {
                     ph.register()
                     runBlocking {
-                        executionServiceHandler.process(executionServiceInput.toJava(), responseObserver)
+                        mdcGrpcCoroutineScope(executionServiceInput) {
+                            executionServiceHandler.process(executionServiceInput.toJava(), responseObserver)
+                        }
                     }
                 } catch (e: Exception) {
                     if (e is BluePrintProcessorException) handleWithErrorCatalog(e) else handleError(e)

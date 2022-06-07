@@ -20,6 +20,10 @@ import io.grpc.Grpc
 import io.grpc.Metadata
 import io.grpc.ServerCall
 import io.grpc.ServerCallHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.newCoroutineContext
+import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.getStringKey
 import org.onap.ccsdk.cds.blueprintsprocessor.grpc.putStringKeyValue
 import org.onap.ccsdk.cds.controllerblueprints.common.api.CommonHeader
@@ -28,9 +32,11 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_INVO
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_PARTNER_NAME
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.ONAP_REQUEST_ID
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.MDCContext
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
+import org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceInput
 import org.slf4j.MDC
 import java.net.InetAddress
 import java.net.InetSocketAddress
@@ -106,5 +112,18 @@ class GrpcLoggerService {
         } catch (e: Exception) {
             log.warn("couldn't set grpc response headers", e)
         }
+    }
+}
+suspend fun <T> mdcGrpcCoroutineScope(
+    executionServiceInput: ExecutionServiceInput,
+    block: suspend CoroutineScope.() -> T
+) = coroutineScope {
+
+    MDC.put("RequestID", executionServiceInput.commonHeader.requestId)
+    MDC.put("SubRequestID", executionServiceInput.commonHeader.subRequestId)
+    MDC.put("OriginatorID", executionServiceInput.commonHeader.originatorId)
+
+    withContext(newCoroutineContext(this.coroutineContext + MDCContext(MDC.getCopyOfContextMap()))) {
+        block()
     }
 }

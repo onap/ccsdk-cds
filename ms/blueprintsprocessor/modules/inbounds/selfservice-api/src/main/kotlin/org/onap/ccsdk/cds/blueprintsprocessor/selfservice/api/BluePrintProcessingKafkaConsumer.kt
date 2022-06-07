@@ -26,6 +26,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.message.BlueprintMessageMetricConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BlueprintMessageConsumerService
+import org.onap.ccsdk.cds.blueprintsprocessor.message.service.mdcKafkaCoroutineScope
 import org.onap.ccsdk.cds.blueprintsprocessor.message.utils.BlueprintMessageUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsType
@@ -110,16 +111,18 @@ open class BluePrintProcessingKafkaConsumer(
                             val key = message.key() ?: UUID.randomUUID().toString()
                             val value = String(message.value(), Charset.defaultCharset())
                             val executionServiceInput = value.jsonAsType<ExecutionServiceInput>()
-                            log.info(
-                                "Consumed Message : topic(${message.topic()}) " +
-                                    "partition(${message.partition()}) " +
-                                    "leaderEpoch(${message.leaderEpoch().get()}) " +
-                                    "offset(${message.offset()}) " +
-                                    "key(${message.key()}) " +
-                                    BlueprintMessageUtils.getMessageLogData(executionServiceInput)
-                            )
-                            val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
-                            blueprintMessageProducerService.sendMessage(key, executionServiceOutput)
+                            mdcKafkaCoroutineScope(executionServiceInput) {
+                                log.info(
+                                    "Consumed Message : topic(${message.topic()}) " +
+                                        "partition(${message.partition()}) " +
+                                        "leaderEpoch(${message.leaderEpoch().get()}) " +
+                                        "offset(${message.offset()}) " +
+                                        "key(${message.key()}) " +
+                                        BlueprintMessageUtils.getMessageLogData(executionServiceInput)
+                                )
+                                val executionServiceOutput = executionServiceHandler.doProcess(executionServiceInput)
+                                blueprintMessageProducerService.sendMessage(key, executionServiceOutput)
+                            }
                         } catch (e: Exception) {
                             meterRegistry.counter(
                                 BlueprintMessageMetricConstants.KAFKA_CONSUMED_MESSAGES_ERROR_COUNTER,

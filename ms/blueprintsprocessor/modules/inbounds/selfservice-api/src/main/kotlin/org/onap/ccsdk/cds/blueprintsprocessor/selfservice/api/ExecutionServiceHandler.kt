@@ -20,8 +20,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 import io.grpc.stub.StreamObserver
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Timer
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_SYNC
@@ -60,17 +59,17 @@ class ExecutionServiceHandler(
     suspend fun process(
         executionServiceInput: ExecutionServiceInput,
         responseObserver: StreamObserver<org.onap.ccsdk.cds.controllerblueprints.processing.api.ExecutionServiceOutput>
-    ) {
-        when {
-            executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC -> {
-                GlobalScope.launch(Dispatchers.Default) {
+    ) = coroutineScope {
+        when (executionServiceInput.actionIdentifiers.mode) {
+            ACTION_MODE_ASYNC -> {
+                launch {
                     val executionServiceOutput = doProcess(executionServiceInput)
                     responseObserver.onNext(executionServiceOutput.toProto())
                     responseObserver.onCompleted()
                 }
                 responseObserver.onNext(response(executionServiceInput).toProto())
             }
-            executionServiceInput.actionIdentifiers.mode == ACTION_MODE_SYNC -> {
+            ACTION_MODE_SYNC -> {
                 val executionServiceOutput = doProcess(executionServiceInput)
                 responseObserver.onNext(executionServiceOutput.toProto())
                 responseObserver.onCompleted()

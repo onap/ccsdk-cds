@@ -32,6 +32,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.message.utils.BlueprintMessageUtil
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonString
 import org.slf4j.LoggerFactory
+import org.slf4j.MDC
 import java.nio.charset.Charset
 
 class KafkaMessageProducerService(
@@ -78,7 +79,9 @@ class KafkaMessageProducerService(
         headers?.let {
             headers.forEach { (key, value) -> recordHeaders.add(RecordHeader(key, value.toByteArray())) }
         }
+        val context = MDC.getCopyOfContextMap()
         val callback = Callback { metadata, exception ->
+            MDC.setContextMap(context)
             meterRegistry.counter(
                 BlueprintMessageMetricConstants.KAFKA_PRODUCED_MESSAGES_COUNTER,
                 BlueprintMessageUtils.kafkaMetricTag(topic)

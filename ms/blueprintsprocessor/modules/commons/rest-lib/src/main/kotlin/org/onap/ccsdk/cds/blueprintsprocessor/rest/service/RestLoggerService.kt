@@ -126,6 +126,8 @@ suspend fun <T> mdcWebCoroutineScope(
         val mdcContext = if (executionServiceInput != null) {
             // MDC Context with overridden request ID
             MDC.put("RequestID", executionServiceInput.commonHeader.requestId)
+            MDC.put("SubRequestID", executionServiceInput.commonHeader.subRequestId)
+            MDC.put("OriginatorID", executionServiceInput.commonHeader.originatorId)
             MDCContext(MDC.getCopyOfContextMap())
         } else {
             // Default MDC Context
