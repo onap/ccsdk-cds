@@ -274,7 +274,7 @@ open class ComponentRemotePythonExecutor(
         }
 
     // wrapper for call to prepare_env step on cmd-exec - reupload CBA and call prepare env again if cmd-exec reported CBA uuid mismatch
-    private suspend fun prepareEnv(originatorId: String, requestId: String, subRequestId: String, remoteIdentifier: RemoteIdentifier, packages: JsonNode, envPrepTimeout: Int, cbaNameVerUuid: String, archiveType: String?, cbaBinData: ByteString?, isLogResponseEnabled: Boolean, retries: Int = 3) {
+    private suspend fun prepareEnv(originatorId: String, requestId: String, subRequestId: String, remoteIdentifier: RemoteIdentifier, packages: JsonNode, envPrepTimeout: Int, cbaNameVerUuid: String, archiveType: String?, cbaBinData: ByteString?, isLogResponseEnabled: Boolean, innerCall: Boolean = false) {
         val prepareEnvInput = PrepareRemoteEnvInput(
             originatorId = originatorId,
             requestId = requestId,
@@ -298,7 +298,7 @@ open class ComponentRemotePythonExecutor(
                 log.info("Cmd-exec is missing the CBA $cbaNameVerUuid, it will be reuploaded.")
                 uploadCba(remoteIdentifier, requestId, subRequestId, originatorId, archiveType, cbaBinData, cbaNameVerUuid, prepareEnvOutput, isLogResponseEnabled, logs)
                 // call prepare_env again.
-                if (retries > 0) {
+                if (!innerCall) {
                     log.info("Calling prepare environment again")
                     prepareEnv(originatorId, requestId, subRequestId, remoteIdentifier, packages, envPrepTimeout, cbaNameVerUuid, archiveType, cbaBinData, isLogResponseEnabled)
                 } else {
