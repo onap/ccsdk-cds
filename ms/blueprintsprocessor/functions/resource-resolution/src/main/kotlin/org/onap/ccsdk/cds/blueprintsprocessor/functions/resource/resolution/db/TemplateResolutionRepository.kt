@@ -189,9 +189,12 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
             AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
             AND artifact_name = :artifactName
             AND occurrence > (
-                SELECT MAX(occurrence) - :lastN FROM TEMPLATE_RESOLUTION
-                WHERE resolution_key = :resolutionKey AND blueprint_name = :blueprintName
-                    AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName
+                SELECT MAX(occurrence) - :lastN FROM (
+                    SELECT occurrence FROM TEMPLATE_RESOLUTION
+                    WHERE resolution_key = :resolutionKey
+                        AND blueprint_name = :blueprintName
+                        AND blueprint_version = :blueprintVersion
+                        AND artifact_name = :artifactName) AS o
                 )
     """,
         nativeQuery = true
@@ -212,11 +215,14 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
             AND resource_id = :resourceId AND artifact_name = :artifactName
             AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
             AND occurrence > (
-                SELECT MAX(occurrence) - :lastN FROM TEMPLATE_RESOLUTION
-                WHERE resource_type = :resourceType
-                    AND resource_id = :resourceId AND blueprint_name = :blueprintName
-                    AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName
-            )
+                SELECT MAX(occurrence) - :lastN FROM (
+                    SELECT occurrence FROM TEMPLATE_RESOLUTION
+                    WHERE resource_type = :resourceType
+                        AND resource_id = :resourceId
+                        AND blueprint_name = :blueprintName
+                        AND blueprint_version = :blueprintVersion
+                        AND artifact_name = :artifactName) AS o
+                )
     """,
         nativeQuery = true
     )

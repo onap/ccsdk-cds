@@ -336,7 +336,7 @@ open class ResourceResolutionDBServiceTest {
     @Test
     fun deleteResourcesResolutionKeyLastN() {
         every {
-            resourceResolutionRepository.deleteLastNOccurences(blueprintName, blueprintVersion, artifactPrefix, resolutionKey, 1)
+            resourceResolutionRepository.deleteLastNOccurrences(blueprintName, blueprintVersion, artifactPrefix, resolutionKey, 1)
         } returns 4
         runBlocking {
             val res = resourceResolutionDBService.deleteResources(
@@ -362,7 +362,7 @@ open class ResourceResolutionDBServiceTest {
     @Test
     fun deleteResourcesResourceIdAndTypeLastN() {
         every {
-            resourceResolutionRepository.deleteLastNOccurences(blueprintName, blueprintVersion, artifactPrefix, resourceType, resourceId, 2)
+            resourceResolutionRepository.deleteLastNOccurrences(blueprintName, blueprintVersion, artifactPrefix, resourceType, resourceId, 2)
         } returns 6
         runBlocking {
             val res = resourceResolutionDBService.deleteResources(
