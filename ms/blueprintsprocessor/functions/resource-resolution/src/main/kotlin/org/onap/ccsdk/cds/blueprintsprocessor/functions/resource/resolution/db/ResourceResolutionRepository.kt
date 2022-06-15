@@ -179,13 +179,17 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
         WHERE resolution_key = :resolutionKey AND blueprint_name = :blueprintName
             AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName
             AND occurrence > (
-                SELECT max(occurrence) - :lastN FROM RESOURCE_RESOLUTION
-                WHERE resolution_key = :resolutionKey AND blueprint_name = :blueprintName
-                    AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName)
+                SELECT MAX(occurrence) - :lastN FROM (
+                    SELECT occurrence from RESOURCE_RESOLUTION
+                    WHERE resolution_key = :resolutionKey
+                        AND blueprint_name = :blueprintName
+                        AND blueprint_version = :blueprintVersion
+                        AND artifact_name = :artifactName) AS o
+                )
     """,
         nativeQuery = true
     )
-    fun deleteLastNOccurences(
+    fun deleteLastNOccurrences(
         @Param("blueprintName") blueprintName: String,
         @Param("blueprintVersion") blueprintVersion: String,
         @Param("artifactName") artifactName: String,
@@ -202,14 +206,18 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
             AND blueprint_name = :blueprintName
             AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName
             AND occurrence > (
-                SELECT max(occurrence) - :lastN FROM RESOURCE_RESOLUTION
-                WHERE resource_type = :resourceType AND resource_id = :resourceId
-                    AND blueprint_name = :blueprintName
-                    AND blueprint_version = :blueprintVersion AND artifact_name = :artifactName)
+                SELECT MAX(occurrence) - :lastN FROM (
+                    SELECT occurrence FROM RESOURCE_RESOLUTION
+                    WHERE resource_type = :resourceType
+                        AND resource_id = :resourceId
+                        AND blueprint_name = :blueprintName
+                        AND blueprint_version = :blueprintVersion
+                        AND artifact_name = :artifactName) AS o
+                )
     """,
         nativeQuery = true
     )
-    fun deleteLastNOccurences(
+    fun deleteLastNOccurrences(
         @Param("blueprintName") blueprintName: String,
         @Param("blueprintVersion") blueprintVersion: String,
         @Param("artifactName") artifactName: String,

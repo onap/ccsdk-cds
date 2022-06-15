@@ -303,7 +303,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         if (lastNOccurrences < 0) {
             throw IllegalArgumentException("last N occurrences must be a positive integer")
         }
-        resourceResolutionRepository.deleteLastNOccurences(
+        resourceResolutionRepository.deleteLastNOccurrences(
             blueprintName,
             blueprintVersion,
             artifactName,
@@ -341,7 +341,7 @@ class ResourceResolutionDBService(private val resourceResolutionRepository: Reso
         if (lastNOccurrences < 0) {
             throw IllegalArgumentException("last N occurrences must be a positive integer")
         }
-        resourceResolutionRepository.deleteLastNOccurences(
+        resourceResolutionRepository.deleteLastNOccurrences(
             blueprintName,
             blueprintVersion,
             artifactName,
