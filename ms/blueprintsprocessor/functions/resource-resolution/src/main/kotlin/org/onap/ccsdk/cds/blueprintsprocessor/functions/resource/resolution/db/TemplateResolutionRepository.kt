@@ -24,6 +24,16 @@ import javax.transaction.Transactional
 @Repository
 interface TemplateResolutionRepository : JpaRepository<TemplateResolution, String> {
 
+    @Query(
+        value = """
+        SELECT * FROM TEMPLATE_RESOLUTION
+             WHERE resource_type = :resourceType AND resource_id = :resourceId
+             AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
+             AND artifact_name = :artifactName AND occurrence = :occurrence
+             ORDER BY creation_date DESC LIMIT 1
+        """,
+        nativeQuery = true
+    )
     fun findByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
         resourceId: String,
         resourceType: String,
@@ -33,6 +43,15 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
         occurrence: Int
     ): TemplateResolution?
 
+    @Query(
+        value = """
+        SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key 
+             AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
+             AND artifact_name = :artifactName AND occurrence = :occurrence
+             ORDER BY creation_date DESC LIMIT 1
+        """,
+        nativeQuery = true
+    )
     fun findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
         key: String,
         blueprintName: String?,
