@@ -84,7 +84,7 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         @ApiParam(value = "Artifact name for which to retrieve a resolved resource", required = true)
         @RequestParam(value = "artifactName") artifactName: String,
         @ApiParam(value = "Resolution Key associated with the resolution", required = false)
-        @RequestParam(value = "resolutionKey") resolutionKey: String,
+        @RequestParam(value = "resolutionKey", required = false, defaultValue = "") resolutionKey: String,
         @ApiParam(value = "Resource Type associated with the resolution", required = false)
         @RequestParam(value = "resourceType", required = false, defaultValue = "") resourceType: String,
         @ApiParam(value = "Resource Id associated with the resolution", required = false)
@@ -102,10 +102,10 @@ open class TemplateController(private val templateResolutionService: TemplateRes
 
             var result = ""
 
-            if ((resolutionKey.isNotEmpty() || artifactName.isNotEmpty()) && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
+            if (resolutionKey.isNotEmpty() && (resourceId.isNotEmpty() || resourceType.isNotEmpty())) {
                 throw httpProcessorException(
                     ErrorCatalogCodes.REQUEST_NOT_FOUND, ResourceApiDomains.RESOURCE_API,
-                    "Either retrieve resolved template using artifact name and resolution-key OR using resource-id and resource-type."
+                    "Either retrieve resolved template using resolution-key OR using resource-id and resource-type."
                 )
             } else if (resolutionKey.isNotEmpty() && artifactName.isNotEmpty()) {
                 result = templateResolutionService.findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
@@ -115,7 +115,7 @@ open class TemplateController(private val templateResolutionService: TemplateRes
                     resolutionKey,
                     occurrence
                 )
-            } else if (resourceType.isNotEmpty() && resourceId.isNotEmpty()) {
+            } else if (resourceType.isNotEmpty() && resourceId.isNotEmpty() && artifactName.isNotEmpty()) {
                 result =
                     templateResolutionService.findByResoureIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
                         bpName,
