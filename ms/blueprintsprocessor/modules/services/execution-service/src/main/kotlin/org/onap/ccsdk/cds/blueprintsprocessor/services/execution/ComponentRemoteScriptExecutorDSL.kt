@@ -84,6 +84,10 @@ fun BluePrintTypes.nodeTypeComponentRemoteScriptExecutor(): NodeType {
             }
             outputs {
                 property(
+                    ComponentRemoteScriptExecutor.OUTPUT_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON,
+                    false, "Output Response"
+                )
+                property(
                     ComponentRemoteScriptExecutor.OUTPUT_STATUS, BluePrintConstants.DATA_TYPE_STRING,
                     true, "Status of the Component Execution ( success or failure )"
                 )
@@ -161,7 +165,13 @@ class ComponentRemoteScriptExecutorNodeTemplateBuilder(id: String, description: 
         fun status(status: String) = status(status.asJsonPrimitive())
 
         fun status(status: JsonNode) {
-            property(ComponentRemoteScriptExecutor.OUTPUT_STATUS, status)
+            property(ComponentScriptExecutor.OUTPUT_STATUS, status)
+        }
+
+        fun responseData(responseData: String) = responseData(responseData.asJsonType())
+
+        fun responseData(responseData: JsonNode) {
+            property(ComponentScriptExecutor.OUTPUT_RESPONSE_DATA, responseData)
         }
     }
 }
