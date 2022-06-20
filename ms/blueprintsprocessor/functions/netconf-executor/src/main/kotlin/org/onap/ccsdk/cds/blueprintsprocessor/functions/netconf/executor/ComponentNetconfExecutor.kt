@@ -18,13 +18,16 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentFunctionScriptingService
+import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.core.getAsString
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
@@ -39,6 +42,12 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
         const val SCRIPT_TYPE = "script-type"
         const val SCRIPT_CLASS_REFERENCE = "script-class-reference"
         const val INSTANCE_DEPENDENCIES = "instance-dependencies"
+
+        const val ATTRIBUTE_RESPONSE_DATA = "response-data"
+        const val ATTRIBUTE_STATUS = "status"
+
+        const val OUTPUT_RESPONSE_DATA = "response-data"
+        const val OUTPUT_STATUS = "status"
     }
 
     lateinit var scriptComponent: AbstractScriptComponentFunction
