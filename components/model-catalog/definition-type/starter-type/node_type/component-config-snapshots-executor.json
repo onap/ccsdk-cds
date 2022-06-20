@@ -17,6 +17,10 @@
     "response-data": {
       "required": false,
       "type": "json"
+    },
+    "status": {
+      "required": true,
+      "type": "string"
     }
   },
   "capabilities": {
@@ -84,6 +88,18 @@
                   ]
                 }
               ]
+            }
+          },
+          "outputs": {
+            "response-data": {
+              "description": "Execution Response Data.",
+              "required": false,
+              "type": "string"
+            },
+            "status": {
+              "description": "Status of the Component Execution ( success or failure )",
+              "required": false,
+              "type": "string"
             }
           }
         }
