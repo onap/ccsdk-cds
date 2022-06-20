@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.python.executor
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
+import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentRemoteScriptExecutor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
@@ -53,6 +54,10 @@ fun BluePrintTypes.nodeTypeComponentRemotePythonExecutor(): NodeType {
             ComponentRemotePythonExecutor.ATTRIBUTE_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON,
             false
         )
+        attribute(
+            ComponentRemotePythonExecutor.ATTRIBUTE_EXEC_CMD_STATUS, BluePrintConstants.DATA_TYPE_STRING,
+            true
+        )
 
         operation("ComponentRemotePythonExecutor", "ComponentRemotePythonExecutor Operation") {
             inputs {
@@ -83,6 +88,16 @@ fun BluePrintTypes.nodeTypeComponentRemotePythonExecutor(): NodeType {
                 ) {
                     entrySchema("dt-system-packages")
                 }
+            }
+            outputs {
+                property(
+                    ComponentRemotePythonExecutor.OUTPUT_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON,
+                    false, "Output Response"
+                )
+                property(
+                    ComponentRemotePythonExecutor.OUTPUT_STATUS, BluePrintConstants.DATA_TYPE_STRING,
+                    true, "Status of the Component Execution ( success or failure )"
+                )
             }
         }
     }

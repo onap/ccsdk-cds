@@ -5,6 +5,10 @@
     "response-data": {
       "required": false,
       "type": "json"
+    },
+    "status": {
+      "required": true,
+      "type": "string"
     }
   },
   "capabilities": {

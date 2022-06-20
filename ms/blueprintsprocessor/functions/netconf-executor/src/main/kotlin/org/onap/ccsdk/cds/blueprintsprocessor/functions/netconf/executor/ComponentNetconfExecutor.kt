@@ -39,6 +39,12 @@ open class ComponentNetconfExecutor(private var componentFunctionScriptingServic
         const val SCRIPT_TYPE = "script-type"
         const val SCRIPT_CLASS_REFERENCE = "script-class-reference"
         const val INSTANCE_DEPENDENCIES = "instance-dependencies"
+
+        const val ATTRIBUTE_RESPONSE_DATA = "response-data"
+        const val ATTRIBUTE_STATUS = "status"
+
+        const val OUTPUT_RESPONSE_DATA = "response-data"
+        const val OUTPUT_STATUS = "status"
     }
 
     lateinit var scriptComponent: AbstractScriptComponentFunction
