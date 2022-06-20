@@ -50,6 +50,7 @@ open class ResourceResolutionComponent(private val resourceResolutionService: Re
         const val INPUT_OCCURRENCE = "occurrence"
 
         const val ATTRIBUTE_ASSIGNMENT_PARAM = "assignment-params"
+        const val ATTRIBUTE_ASSIGNMENT_MAP = "assignment-map"
         const val ATTRIBUTE_STATUS = "status"
 
         const val OUTPUT_RESOURCE_ASSIGNMENT_PARAMS = "resource-assignment-params"
