@@ -53,6 +53,10 @@ fun BluePrintTypes.nodeTypeComponentRemotePythonExecutor(): NodeType {
             ComponentRemotePythonExecutor.ATTRIBUTE_RESPONSE_DATA, BluePrintConstants.DATA_TYPE_JSON,
             false
         )
+        attribute(
+            ComponentRemotePythonExecutor.ATTRIBUTE_EXEC_CMD_STATUS, BluePrintConstants.DATA_TYPE_STRING,
+            true
+        )
 
         operation("ComponentRemotePythonExecutor", "ComponentRemotePythonExecutor Operation") {
             inputs {
