@@ -83,6 +83,7 @@ open class ComponentRemotePythonExecutor(
         const val ATTRIBUTE_PREPARE_ENV_LOG = "prepare-environment-logs"
         const val ATTRIBUTE_EXEC_CMD_LOG = "execute-command-logs"
         const val ATTRIBUTE_RESPONSE_DATA = "response-data"
+        const val ATTRIBUTE_STATUS = "status"
         const val DEFAULT_ENV_PREPARE_TIMEOUT_IN_SEC = 120
         const val DEFAULT_EXECUTE_TIMEOUT_IN_SEC = 180
         const val DEFAULT_CBA_UPLOAD_TIMEOUT_IN_SEC = 30

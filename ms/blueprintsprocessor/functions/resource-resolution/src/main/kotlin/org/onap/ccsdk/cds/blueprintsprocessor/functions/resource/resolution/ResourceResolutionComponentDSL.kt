@@ -50,6 +50,10 @@ fun BluePrintTypes.nodeTypeComponentResourceResolution(): NodeType {
             true
         )
         attribute(
+            ResourceResolutionComponent.ATTRIBUTE_ASSIGNMENT_MAP, BluePrintConstants.DATA_TYPE_MAP,
+            false
+        )
+        attribute(
             ResourceResolutionComponent.ATTRIBUTE_STATUS, BluePrintConstants.DATA_TYPE_STRING,
             true
         )
