@@ -108,17 +108,17 @@ class ComponentConfigSnapshotsExecutorTest {
             }
             // then; we should get success and the TEST1 payload in our output properties
             assertEquals(
-                ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
+                ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_STATUS
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS
                 )
             )
             assertEquals(
                 snapshotConfig.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_SNAPSHOT
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_SNAPSHOT
                 )
             )
         }
@@ -147,17 +147,17 @@ class ComponentConfigSnapshotsExecutorTest {
             }
             // then; we should get success and the TEST payload in our output properties
             assertEquals(
-                ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
+                ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_STATUS
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS
                 )
             )
             assertEquals(
                 snapshotConfig.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_SNAPSHOT
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_SNAPSHOT
                 )
             )
         }
@@ -186,17 +186,17 @@ class ComponentConfigSnapshotsExecutorTest {
 
             // then; we should get success and the PAYLOAD payload in our output properties
             assertEquals(
-                ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
+                ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_STATUS
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS
                 )
             )
             assertEquals(
                 snapshotConfig.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_SNAPSHOT
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_SNAPSHOT
                 )
             )
         }
@@ -220,10 +220,10 @@ class ComponentConfigSnapshotsExecutorTest {
             }
 
             assertEquals(
-                ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
+                ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_STATUS
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS
                 )
             )
         }
@@ -249,10 +249,10 @@ class ComponentConfigSnapshotsExecutorTest {
             // then; we should get error in our output properties
             assertTrue(bluePrintRuntimeService.getBluePrintError().allErrors().size == 1)
             assertEquals(
-                ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_ERROR.asJsonPrimitive(),
+                ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS_ERROR.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_STATUS
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS
                 )
             )
             val msg = "Operation parameter must be fetch, store or diff"
@@ -288,10 +288,10 @@ class ComponentConfigSnapshotsExecutorTest {
 
             // then; we should get error in our output properties
             assertEquals(
-                ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_ERROR.asJsonPrimitive(),
+                ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS_ERROR.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_STATUS
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS
                 )
             )
             val message = "Could not compare config snapshots for type YANG"
@@ -330,10 +330,10 @@ class ComponentConfigSnapshotsExecutorTest {
             // then; we should get success
             assertTrue(bluePrintRuntimeService.getBluePrintError().allErrors().size == 0)
             assertEquals(
-                ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
+                ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_STATUS
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS
                 )
             )
 
@@ -347,7 +347,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 diffJson.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_SNAPSHOT
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_SNAPSHOT
                 )
             )
         }
@@ -379,10 +379,10 @@ class ComponentConfigSnapshotsExecutorTest {
             // then; we should get success
             assertTrue(bluePrintRuntimeService.getBluePrintError().allErrors().size == 0)
             assertEquals(
-                ComponentConfigSnapshotsExecutor.OUTPUT_STATUS_SUCCESS.asJsonPrimitive(),
+                ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS_SUCCESS.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_STATUS
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_STATUS
                 )
             )
 
@@ -399,7 +399,7 @@ class ComponentConfigSnapshotsExecutorTest {
                 diffXml.asJsonPrimitive(),
                 bluePrintRuntimeService.getNodeTemplateAttributeValue(
                     nodeTemplateName,
-                    ComponentConfigSnapshotsExecutor.OUTPUT_SNAPSHOT
+                    ComponentConfigSnapshotsExecutor.ATTRIBUTE_SNAPSHOT
                 )
             )
         }

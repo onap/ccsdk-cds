@@ -54,6 +54,7 @@ open class ComponentRemoteScriptExecutor(
         const val ATTRIBUTE_RESPONSE_DATA = "response-data"
         const val ATTRIBUTE_STATUS = "status"
 
+        const val OUTPUT_RESPONSE_DATA = "response-data"
         const val OUTPUT_STATUS = "status"
     }
 
