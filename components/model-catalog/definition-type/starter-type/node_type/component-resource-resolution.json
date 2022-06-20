@@ -11,6 +11,11 @@
       "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
       "required": true,
       "type": "map"
+    },
+    "status": {
+      "description": "Resource Assignment status.",
+      "required": true,
+      "type": "string"
     }
   },
   "capabilities": {
