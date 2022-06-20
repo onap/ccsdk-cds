@@ -75,12 +75,12 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
         const val DIFF_XML = "XML"
 
         // output fields names (and values) populated by this executor.
-        const val OUTPUT_STATUS = "config-snapshot-status"
-        const val OUTPUT_MESSAGE = "config-snapshot-message"
-        const val OUTPUT_SNAPSHOT = "config-snapshot-value"
+        const val ATTRIBUTE_STATUS = "config-snapshot-status"
+        const val ATTRIBUTE_MESSAGE = "config-snapshot-message"
+        const val ATTRIBUTE_SNAPSHOT = "config-snapshot-value"
 
-        const val OUTPUT_STATUS_SUCCESS = "success"
-        const val OUTPUT_STATUS_ERROR = "error"
+        const val ATTRIBUTE_STATUS_SUCCESS = "success"
+        const val ATTRIBUTE_STATUS_ERROR = "error"
     }
 
     /**
@@ -103,7 +103,7 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
             OPERATION_DIFF -> compareConfigurationSnapshot(resourceId, resourceType, contentType)
 
             else -> setNodeOutputErrors(
-                OUTPUT_STATUS_ERROR,
+                ATTRIBUTE_STATUS_ERROR,
                 "Operation parameter must be fetch, store or diff"
             )
         }
@@ -113,7 +113,7 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
      * General error handling for the executor.
      */
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        setNodeOutputErrors(OUTPUT_STATUS_ERROR, "Error : ${runtimeException.message}")
+        setNodeOutputErrors(ATTRIBUTE_STATUS_ERROR, "Error : ${runtimeException.message}")
     }
 
     /**
@@ -126,11 +126,11 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
     ) {
         try {
             val cfgSnapshotValue = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, status)
-            setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, cfgSnapshotValue)
+            setNodeOutputProperties(ATTRIBUTE_STATUS_SUCCESS, cfgSnapshotValue)
         } catch (er: NoSuchElementException) {
             val message = "No Resource config snapshot identified by resourceId={$resourceId}, " +
                 "resourceType={$resourceType} does not exists"
-            setNodeOutputErrors(OUTPUT_STATUS_ERROR, message)
+            setNodeOutputErrors(ATTRIBUTE_STATUS_ERROR, message)
         }
     }
 
@@ -145,10 +145,10 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
     ) {
         if (cfgSnapshotValue.isNotEmpty()) {
             val cfgSnapshotSaved = cfgSnapshotService.write(cfgSnapshotValue, resourceId, resourceType, status)
-            setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, cfgSnapshotSaved.config_snapshot ?: "")
+            setNodeOutputProperties(ATTRIBUTE_STATUS_SUCCESS, cfgSnapshotSaved.config_snapshot ?: "")
         } else {
             val message = "Could not store config snapshot identified by resourceId={$resourceId},resourceType={$resourceType} does not exists"
-            setNodeOutputErrors(OUTPUT_STATUS_ERROR, message)
+            setNodeOutputErrors(ATTRIBUTE_STATUS_ERROR, message)
         }
     }
 
@@ -161,14 +161,14 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
         val cfgCandidate = cfgSnapshotService.findByResourceIdAndResourceTypeAndStatus(resourceId, resourceType, CANDIDATE)
 
         if (cfgRunning.isEmpty() || cfgCandidate.isEmpty()) {
-            setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, Strings.EMPTY)
+            setNodeOutputProperties(ATTRIBUTE_STATUS_SUCCESS, Strings.EMPTY)
             return
         }
 
         when (contentType.toUpperCase()) {
             DIFF_JSON -> {
                 val patchNode = JsonDiff.asJson(cfgRunning.jsonAsJsonType(), cfgCandidate.jsonAsJsonType())
-                setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, patchNode.toString())
+                setNodeOutputProperties(ATTRIBUTE_STATUS_SUCCESS, patchNode.toString())
             }
             DIFF_XML -> {
                 val myDiff = DiffBuilder
@@ -180,11 +180,11 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
                     .normalizeWhitespace()
                     .build()
 
-                setNodeOutputProperties(OUTPUT_STATUS_SUCCESS, formatXmlDifferences(myDiff))
+                setNodeOutputProperties(ATTRIBUTE_STATUS_SUCCESS, formatXmlDifferences(myDiff))
             }
             else -> {
                 val message = "Could not compare config snapshots for type $contentType"
-                setNodeOutputErrors(OUTPUT_STATUS_ERROR, message)
+                setNodeOutputErrors(ATTRIBUTE_STATUS_ERROR, message)
             }
         }
     }
@@ -193,22 +193,22 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
      * Utility function to set the output properties of the executor node
      */
     private fun setNodeOutputProperties(status: String, snapshot: String) {
-        setAttribute(OUTPUT_STATUS, status.asJsonPrimitive())
-        setAttribute(OUTPUT_SNAPSHOT, snapshot.asJsonPrimitive())
-        log.debug("Setting output $OUTPUT_STATUS=$status")
+        setAttribute(ATTRIBUTE_STATUS, status.asJsonPrimitive())
+        setAttribute(ATTRIBUTE_SNAPSHOT, snapshot.asJsonPrimitive())
+        log.debug("Setting output $ATTRIBUTE_STATUS=$status")
     }
 
     /**
      * Utility function to set the output properties and errors of the executor node, in case of errors
      */
     private fun setNodeOutputErrors(status: String, message: String) {
-        setAttribute(OUTPUT_STATUS, status.asJsonPrimitive())
-        setAttribute(OUTPUT_MESSAGE, message.asJsonPrimitive())
-        setAttribute(OUTPUT_SNAPSHOT, "".asJsonPrimitive())
+        setAttribute(ATTRIBUTE_STATUS, status.asJsonPrimitive())
+        setAttribute(ATTRIBUTE_MESSAGE, message.asJsonPrimitive())
+        setAttribute(ATTRIBUTE_SNAPSHOT, "".asJsonPrimitive())
 
-        log.info("Setting error and output $OUTPUT_STATUS=$status, $OUTPUT_MESSAGE=$message ")
+        log.info("Setting error and output $ATTRIBUTE_STATUS=$status, $ATTRIBUTE_MESSAGE=$message ")
 
-        addError(status, OUTPUT_MESSAGE, message)
+        addError(status, ATTRIBUTE_MESSAGE, message)
     }
 
     /**
