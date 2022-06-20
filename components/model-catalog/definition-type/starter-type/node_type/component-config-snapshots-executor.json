@@ -13,10 +13,6 @@
     "config-snapshot-value": {
       "required": false,
       "type": "string"
-    },
-    "response-data": {
-      "required": false,
-      "type": "json"
     }
   },
   "capabilities": {
@@ -84,6 +80,18 @@
                   ]
                 }
               ]
+            }
+          },
+          "outputs": {
+            "response-data": {
+              "description": "Execution Response Data.",
+              "required": false,
+              "type": "string"
+            },
+            "status": {
+              "description": "Status of the Component Execution ( success or failure )",
+              "required": true,
+              "type": "string"
             }
           }
         }
