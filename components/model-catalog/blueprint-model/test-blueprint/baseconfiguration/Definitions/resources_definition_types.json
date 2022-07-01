@@ -38,6 +38,19 @@
           },
           "key-dependencies" : []
         }
+      },
+      "any-db": {
+        "type": "source-db",
+        "properties": {
+          "endpoint-selector": "dynamic-db-source",
+          "query": "SELECT artifact_name FROM sdnctl.BLUEPRINT_MODEL where artifact_version=\"1.0.0\"",
+          "input-key-mapping": {
+          },
+          "output-key-mapping": {
+            "service-instance-id": "artifact_name"
+          },
+          "key-dependencies" : []
+        }
       }
     }
   },
