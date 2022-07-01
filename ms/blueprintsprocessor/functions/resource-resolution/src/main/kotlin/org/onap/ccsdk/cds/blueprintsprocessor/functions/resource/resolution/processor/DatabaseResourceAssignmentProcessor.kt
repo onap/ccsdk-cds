@@ -32,7 +32,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.updateErrorMessage
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.KeyIdentifier
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
-import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDictionaryConstants
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
@@ -135,13 +135,15 @@ open class DatabaseResourceAssignmentProcessor(
             "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
         }
         check(resourceAssignment.dictionarySource in getListOfDBSources()) {
-            "resource assignment source is not ${ResourceDictionaryConstants.PROCESSOR_DB} but it is ${resourceAssignment.dictionarySource}"
+            "resource assignment source ${resourceAssignment.dictionarySource} is not registered in \"resourceSourceMappings\""
         }
     }
 
     // placeholder to get the list of DB sources.
-    // TODO: This will be replaced with a DB
-    private fun getListOfDBSources(): Array<String> = arrayOf(ResourceDictionaryConstants.PROCESSOR_DB)
+    private fun getListOfDBSources(): Array<String> {
+        return ResourceSourceMappingFactory.getRegisterSourceMapping()
+            .resourceSourceMappings.filterValues { it == "source-db" }.keys.toTypedArray()
+    }
 
     private fun populateNamedParameter(inputKeyMapping: Map<String, String>): Map<String, Any> {
         val namedParameters = HashMap<String, Any>()
