@@ -28,6 +28,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.util
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
@@ -66,6 +67,36 @@ class DatabaseResourceResolutionProcessorTest {
                 name = "service-instance-id"
                 dictionaryName = "service-instance-id"
                 dictionarySource = "processor-db"
+                property = PropertyDefinition().apply {
+                    type = "string"
+                }
+            }
+
+            val processorName = databaseResourceAssignmentProcessor.applyNB(resourceAssignment)
+            assertNotNull(processorName, "couldn't get Database resource assignment processor name")
+        }
+    }
+
+    @Test
+    fun `test database resource resolution any db`() {
+        runBlocking {
+            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
+
+            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
+
+            ResourceSourceMappingFactory.registerSourceMapping("processor-db", "source-db")
+            ResourceSourceMappingFactory.registerSourceMapping("any-db", "source-db")
+
+            databaseResourceAssignmentProcessor.raRuntimeService = resourceAssignmentRuntimeService
+            databaseResourceAssignmentProcessor.resourceDictionaries = ResourceAssignmentUtils
+                .resourceDefinitions(bluePrintContext.rootPath)
+
+            val resourceAssignment = ResourceAssignment().apply {
+                name = "service-instance-id"
+                dictionaryName = "service-instance-id"
+                dictionarySource = "any-db"
                 property = PropertyDefinition().apply {
                     type = "string"
                 }
