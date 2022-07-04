@@ -1,6 +1,7 @@
 /*
  *  Copyright © 2018 - 2020 IBM.
  *  Modifications Copyright © 2017-2020 AT&T, Bell Canada
+ *  Modifications Copyright © 2022 Deutche Telekom AG
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -67,7 +69,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val resourceSource = resourceAssignment.dictionarySourceDefinition
                     ?: resourceDefinition?.sources?.get(dSource)
                     ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
-
+                if ((resourceAssignment.property?.type).isNullOrEmpty())
+                    throw BluePrintProcessorException("Couldn't get data dictionary type for dictionary name (${resourceAssignment.name})")
                 val resourceSourceProperties =
                     checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
 
@@ -103,10 +106,11 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val responseStatusCode = response.status
                 val responseBody = response.body
                 val outputKeyMapping = sourceProperties.outputKeyMapping
-                if (responseStatusCode in 200..299 && outputKeyMapping.isNullOrEmpty()) {
+                val hasDirectOutputMapping = hasDirectOutputMapping(resourceAssignment, sourceProperties)
+                if (responseStatusCode in 200..299 && outputKeyMapping.isNullOrEmpty() && !hasDirectOutputMapping) {
                     resourceAssignment.status = BluePrintConstants.STATUS_SUCCESS
                     logger.info("AS>> outputKeyMapping==null, will not populateResource")
-                } else if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
+                } else if (responseStatusCode in 200..299 && (!responseBody.isBlank() || hasDirectOutputMapping)) {
                     populateResource(resourceAssignment, sourceProperties, responseBody, path)
                 } else {
                     val errMsg =
@@ -142,6 +146,19 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         }
     }
 
+    private fun hasDirectOutputMapping(resourceAssignment: ResourceAssignment, sourceProperties: RestResourceSource): Boolean {
+        val type = nullToEmpty(resourceAssignment.property?.type)
+        val dName = resourceAssignment.dictionaryName
+        val outputKeyMapping = sourceProperties.outputKeyMapping
+        if (outputKeyMapping != null) {
+            return if (type == BluePrintConstants.DATA_TYPE_JSON || type == BluePrintConstants.DATA_TYPE_MAP)
+                outputKeyMapping.isEmpty()
+            else
+                outputKeyMapping.size == 1 && outputKeyMapping.containsKey(dName) && outputKeyMapping[dName] == ""
+        }
+        return false
+    }
+
     @Throws(BluePrintProcessorException::class)
     private fun populateResource(
         resourceAssignment: ResourceAssignment,
@@ -157,10 +174,32 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
             "failed to get output-key-mappings for $dName under $dSource properties"
         }
+        if ((resourceAssignment.property?.type).isNullOrEmpty()) {
+            throw BluePrintProcessorException("Couldn't get data dictionary type for dictionary name (${resourceAssignment.name})")
+        }
         logger.info("Response processing type ($type)")
 
-        val responseNode = checkNotNull(JacksonUtils.jsonNode(restResponse).at(path)) {
-            "Failed to find path ($path) in response ($restResponse)"
+        var responseNode = if (type == BluePrintConstants.DATA_TYPE_JSON || type == BluePrintConstants.DATA_TYPE_MAP)
+            JacksonUtils.jsonNode(restResponse).at(path)
+        else
+            JacksonUtils.convertPrimitiveResourceValue(type, restResponse).at(path)
+        val hasDirectOutputMapping = hasDirectOutputMapping(resourceAssignment, sourceProperties)
+        if (hasDirectOutputMapping) {
+            logger.info("Wrapping output for the dictionary name (${resourceAssignment.name})")
+            if ((type == BluePrintConstants.DATA_TYPE_JSON || type == BluePrintConstants.DATA_TYPE_MAP) && responseNode.isObject) {
+                responseNode.fieldNames().forEach {
+                    outputKeyMapping[it] = it
+                }
+            } else {
+                val newNode = jacksonObjectMapper().createObjectNode()
+                newNode.replace(dName, responseNode)
+                outputKeyMapping[dName!!] = dName
+                responseNode = newNode
+            }
+        }
+
+        responseNode = checkNotNull(responseNode) {
+            "Failed to find path ($path) in response ($responseNode)"
         }
 
         val valueToPrint = ResourceAssignmentUtils.getValueToLog(metadata, responseNode)
