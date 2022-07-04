@@ -1,6 +1,7 @@
 /*
  *  Copyright © 2018 - 2020 IBM.
  *  Modifications Copyright © 2017-2020 AT&T, Bell Canada
+ *  Modifications Copyright © 2022 Deutche Telekom AG
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,6 +18,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
@@ -36,6 +39,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
+import java.util.HashMap
 
 /**
  * RestResourceResolutionProcessor
@@ -67,7 +71,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val resourceSource = resourceAssignment.dictionarySourceDefinition
                     ?: resourceDefinition?.sources?.get(dSource)
                     ?: throw BluePrintProcessorException("couldn't get resource definition $dName source($dSource)")
-
+                if ((resourceAssignment.property?.type).isNullOrEmpty())
+                    throw BluePrintProcessorException("Couldn't get data dictionary type for dictionary name (${resourceAssignment.name})")
                 val resourceSourceProperties =
                     checkNotNull(resourceSource.properties) { "failed to get source properties for $dName " }
 
@@ -109,11 +114,11 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val response = restClientService.exchangeResource(verb, urlPath, payload, requestHeaders.toMap())
                 val responseStatusCode = response.status
                 val responseBody = response.body
-                if (responseStatusCode in 200..299 && outputKeyMapping.isNullOrEmpty()) {
+                if (responseStatusCode in 200..299 && outputKeyMapping == null) {
                     resourceAssignment.status = BluePrintConstants.STATUS_SUCCESS
                     logger.info("AS>> outputKeyMapping==null, will not populateResource")
-                } else if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
-                    populateResource(resourceAssignment, sourceProperties, responseBody, path, outputKeyMapping)
+                } else if (responseStatusCode in 200..299) {
+                    populateResource(resourceAssignment, sourceProperties, responseBody, path)
                 } else {
                     val errMsg =
                         "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
@@ -160,14 +165,42 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         val dSource = resourceAssignment.dictionarySource
         val type = nullToEmpty(resourceAssignment.property?.type)
         val metadata = resourceAssignment.property!!.metadata
-
-        val outputKeyMapping = checkNotNull(outputKeyMapping) {
-            "failed to get output-key-mappings for $dName under $dSource properties"
-        }
+        
         logger.info("Response processing type ($type)")
 
-        val responseNode = checkNotNull(JacksonUtils.jsonNode(restResponse).at(path)) {
-            "Failed to find path ($path) in response ($restResponse)"
+        // we check null in processNB
+        var outputKeyMapping = sourceProperties.outputKeyMapping!!
+
+        var responseNode: JsonNode? = if (outputKeyMapping.isEmpty()) {
+            var tmpResponseNode = if (type == BluePrintConstants.DATA_TYPE_JSON || type == BluePrintConstants.DATA_TYPE_MAP)
+                JacksonUtils.jsonNode(restResponse).at(path)
+            else
+                JacksonUtils.convertPrimitiveResourceValue(type, restResponse).at(path)
+            if (type == BluePrintConstants.DATA_TYPE_JSON || type == BluePrintConstants.DATA_TYPE_MAP) {
+                if (tmpResponseNode.isObject) {
+                    logger.info("Creating substitute outputKeyMapping for $type type")
+                    outputKeyMapping = HashMap<String, String>()
+                    tmpResponseNode.fieldNames().forEach {
+                        outputKeyMapping[it] = it
+                    }
+                    tmpResponseNode
+                } else {
+                    val errMsg =
+                        "Failed to get $dSource result for dictionary name ($dName): response is not a JSON object"
+                    logger.warn(errMsg)
+                    throw BluePrintProcessorException(errMsg)
+                }
+            } else {
+                logger.info("Wrapping output for the dictionary name (${resourceAssignment.name})")
+                val newNode = jacksonObjectMapper().createObjectNode()
+                newNode.replace(dName, tmpResponseNode)
+                outputKeyMapping[dName!!] = dName
+                newNode
+            }
+        } else
+            JacksonUtils.jsonNode(restResponse).at(path)
+        responseNode = checkNotNull(responseNode) {
+            "Failed to find path ($path) in response ($responseNode)"
         }
 
         val valueToPrint = ResourceAssignmentUtils.getValueToLog(metadata, responseNode)
