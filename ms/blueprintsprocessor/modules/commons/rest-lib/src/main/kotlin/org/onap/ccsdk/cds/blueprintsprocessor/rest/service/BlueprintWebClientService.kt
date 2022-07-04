@@ -29,6 +29,7 @@ import org.apache.http.client.methods.HttpPatch
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpPut
 import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
@@ -45,6 +46,11 @@ import org.springframework.http.HttpMethod
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 interface BlueprintWebClientService {
 
@@ -53,9 +59,23 @@ interface BlueprintWebClientService {
     fun host(uri: String): String
 
     fun httpClient(): CloseableHttpClient {
+        val trustAllCerts: Array<TrustManager> = arrayOf<TrustManager>(
+            object : X509TrustManager {
+                override fun checkClientTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
+                override fun checkServerTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
+                override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    return emptyArray()
+                }
+            }
+        )
+
+        val sc: SSLContext = SSLContext.getInstance("SSL")
+        sc.init(null, trustAllCerts, SecureRandom())
         return HttpClients.custom()
             .addInterceptorFirst(WebClientUtils.logRequest())
             .addInterceptorLast(WebClientUtils.logResponse())
+            .setSSLContext(sc)
+            .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
             .build()
     }
 
