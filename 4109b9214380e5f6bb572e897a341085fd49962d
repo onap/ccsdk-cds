@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bce7cf39_1d2f767c",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2022-07-12T17:52:43Z",
+      "side": 1,
+      "message": "I am a bit confused about why cds-db is added in application.properties and application-dev.properties. And then any-db is added in application-test.properties?",
+      "revId": "4109b9214380e5f6bb572e897a341085fd49962d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
