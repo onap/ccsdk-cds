@@ -52,6 +52,24 @@
       "revId": "4109b9214380e5f6bb572e897a341085fd49962d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40cea937_0b13af80",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6218
+      },
+      "writtenOn": "2022-07-13T12:39:49Z",
+      "side": 1,
+      "message": "The application code should not make assumptions on external configuration overrides. Adding values to application.properties and application-dev.properties signals introduction of new behaviors/features. The purpose of this patch is just to enable users to add new databases to the configuration, rather than introducing cds-db as a default source.\n\nAlso if my memory servers me well, application.properties packaged inside the JAR is still being read, but values are overridden by the external application.properties file, which means that if you have property A in the packaged file and property B in the external, the application will load both A and B. That\u0027s why I hesitate adding new properties unless they have a purpose.\n\nI suggest we only keep the application-test.properties in this submission.",
+      "parentUuid": "11a6dd62_51ef648f",
+      "revId": "4109b9214380e5f6bb572e897a341085fd49962d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
