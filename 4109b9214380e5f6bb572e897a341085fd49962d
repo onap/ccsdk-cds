@@ -16,6 +16,24 @@
       "revId": "4109b9214380e5f6bb572e897a341085fd49962d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0fe37bf_e1bdf22d",
+        "filename": "ms/blueprintsprocessor/application/src/main/resources/application.properties",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6079
+      },
+      "writtenOn": "2022-07-13T05:25:33Z",
+      "side": 1,
+      "message": "Hi Jozsef, on application.properties and application-dev.properties I added a real life example, the configuration we wanted to use in CDS Blueprintsprocessor, but on tests I added any-db to present that it doesn\u0027t need to be any predefined value - it can be anything user configure by itself. If they wants to use cds-db, cps-db, so-db or whatever-db it\u0027s possible",
+      "parentUuid": "bce7cf39_1d2f767c",
+      "revId": "4109b9214380e5f6bb572e897a341085fd49962d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
