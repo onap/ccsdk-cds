@@ -226,6 +226,12 @@ class CommandExecutorHandler():
         script_err_msg = []
 
         self.logger.info("execute_command request {}".format(request), extra=self.extra)
+        
+        #Get the script name to be used for prometheus metrics
+        #Command looks like this: python <script name> <parameter>
+        command_array = request.command.split(" ")
+        script_name = os.path.basename(command_array[1])
+
         # workaround for when packages are not specified, we may not want to go through the install step
         # can just call create_venv from here.
         if not self.is_installed():
@@ -234,7 +240,7 @@ class CommandExecutorHandler():
             if not self.is_installed():
                 create_venv_status = self.create_venv
                 if not create_venv_status[utils.CDS_IS_SUCCESSFUL_KEY]:
-                    self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).inc()
+                    self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, script_name).inc()
                     err_msg = "{} - Failed to execute command during venv creation. Original error: {}".format(self.blueprint_name_version_uuid, create_venv_status[utils.ERR_MSG_KEY])
                     return utils.build_ret_data(False, error=err_msg)
 
@@ -275,7 +281,7 @@ class CommandExecutorHandler():
                     completed_subprocess = subprocess.run(cmd, stdout=tmp, stderr=subprocess.STDOUT, shell=True,
                                                           env=updated_env, timeout=self.execution_timeout)
                 except TimeoutExpired as timeout_ex:
-                    self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).inc()
+                    self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, script_name).inc()
                     timeout_err_msg = "Running command {} failed due to timeout of {} seconds.".format(self.blueprint_name_version_uuid, self.execution_timeout)
                     self.logger.error(timeout_err_msg, extra=self.extra)
                     # In the time-out case, we will never get CBA's script err msg string.
@@ -284,7 +290,7 @@ class CommandExecutorHandler():
                 utils.parse_cmd_exec_output(outputfile=tmp, logger=self.logger, payload_result=result, err_msg_result=script_err_msg, results_log=results_log, extra=self.extra)
                 rc = completed_subprocess.returncode
         except Exception as e:
-            self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).inc()
+            self.prometheus_counter.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, script_name).inc()
             err_msg = "{} - Failed to execute command. Error: {}".format(self.blueprint_name_version_uuid, e)
             result.update(utils.build_ret_data(False, results_log=results_log, error=err_msg))
             return result
@@ -294,7 +300,7 @@ class CommandExecutorHandler():
         # Propagate error message in case rc is not 0
         ret_err_msg = None if is_execution_successful or not script_err_msg else script_err_msg
         result.update(utils.build_ret_data(is_execution_successful, results_log=results_log, error=ret_err_msg))
-        self.prometheus_histogram.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, request.command).observe(time.time() - start_time)
+        self.prometheus_histogram.labels(self.PROMETHEUS_METRICS_EXEC_COMMAND_LABEL, self.blueprint_name, self.blueprint_version, script_name).observe(time.time() - start_time)
 
         return result
 
