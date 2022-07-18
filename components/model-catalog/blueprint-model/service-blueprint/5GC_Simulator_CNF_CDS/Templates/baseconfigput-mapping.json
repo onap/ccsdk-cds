@@ -40,17 +40,17 @@
     "version": 0
   },
   {
-    "name": "supportedNssai",
-    "property": {
-      "description": "",
-      "required": false,
-      "type": "string",
-      "default": "hello"
-    },
-    "input-param": false,
-    "dictionary-name": "supportedNssai",
-    "dictionary-source": "input",
-    "dependencies": [],
-    "version": 0
+	"name": "supportedNssai",
+	"property": {
+		"description": "",
+		"required": false,
+		"type": "string",
+		"default": "hello"
+	},
+	"input-param": false,
+	"dictionary-name": "supportedNssai",
+	"dictionary-source": "input",
+	"dependencies": [],
+	"version": 0
   }
 ]

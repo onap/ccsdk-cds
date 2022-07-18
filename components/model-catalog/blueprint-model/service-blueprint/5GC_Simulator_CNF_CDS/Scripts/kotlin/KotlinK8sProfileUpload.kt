@@ -1,6 +1,6 @@
 /*
  * Copyright © 2019 Orange
- * Author: Malinconico Aniello Paolo <aniellopaolo.malinconico@guest.telecomitalia.it>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -65,10 +65,8 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         val prefixList: ArrayList<String> = getTemplatePrefixList(executionRequest)
         for (prefix in prefixList) {
             if (prefix.toLowerCase().equals("vnf")) {
-                log.info("For vnf-level resource-assignment, profile is not performed. Creating override_values")
-                val assignmentParams = getDynamicProperties("assignment-params")
-                val payloadObject = JacksonUtils.jsonNode(assignmentParams.get(prefix).asText()) as ObjectNode
-                createOverrideVaues(payloadObject)
+                log.info("For vnf-level resource-assignment, profile is not performed.")
+
                 continue
             }
             val assignmentParams = getDynamicProperties("assignment-params")
@@ -77,14 +75,16 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
             log.info("Uploading K8S profile for template prefix $prefix")
 
             val vfModuleModelInvariantUuid: String = getResolvedParameter(payloadObject, "vf-module-model-invariant-uuid")
+            val vfModuleId: String = getResolvedParameter(payloadObject, "vf-module-id")
             val vfModuleModelUuid: String = getResolvedParameter(payloadObject, "vf-module-model-customization-uuid")
             val k8sRbProfileName: String = getResolvedParameter(payloadObject, "k8s-rb-profile-name")
             val k8sRbProfileNamespace: String = getResolvedParameter(payloadObject, "k8s-rb-profile-namespace")
-            val vnfId: String = getResolvedParameter(payloadObject, "vnf-id")
-            log.info("******vnfID************   $vnfId")
+            val releaseName:String = getResolvedParameter(payloadObject, "k8s-rb-instance-release-name")
+
+            log.info("******vfModuleID************   $vfModuleId")
             log.info("k8sRbProfileName $k8sRbProfileName")
 
-            // Extract supportedNssai
+
             val api = K8sApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleModelInvariantUuid, vfModuleModelUuid)
 
             if (!api.hasDefinition()) {
@@ -101,13 +101,15 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
                 if (api.hasProfile(k8sRbProfileName)) {
                     log.info("Profile Already Existing - skipping upload")
                 } else {
-                    val profileFilePath: Path = prepareProfileFile(k8sRbProfileName, vnfId)
+                    createOverrideValues(payloadObject,  vfModuleId, prefix)
+                    val profileFilePath: Path = prepareProfileFile(k8sRbProfileName, vfModuleId, prefix)
 
                     var profile = K8sProfile()
                     profile.profileName = k8sRbProfileName
                     profile.rbName = vfModuleModelInvariantUuid
                     profile.rbVersion = vfModuleModelUuid
                     profile.namespace = k8sRbProfileNamespace
+                    profile.releaseName = releaseName
                     api.createProfile(profile)
                     api.uploadProfileContent(profile, profileFilePath)
 
@@ -117,10 +119,10 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         }
     }
 
-    fun prepareProfileFile(k8sRbProfileName: String, vnfId: String): Path {
+    fun prepareProfileFile(k8sRbProfileName: String, vfModuleId: String, prefix: String): Path {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val bluePrintBasePath: String = bluePrintContext.rootPath
-        var profileFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus("template-profile.tar.gz"))
+        var profileFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus("$prefix-profile.tar.gz"))
         log.info("Reading K8s profile file: $profileFilePath")
 
         val profileFile = profileFilePath.toFile()
@@ -133,22 +135,23 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         log.info("Decompressing profile to $tempProfilePath")
 
         val decompressedProfile: File = BluePrintArchiveUtils.deCompress(
-            profileFilePath.toFile(),
-            "$tempProfilePath",
-            ArchiveType.TarGz
+                profileFilePath.toFile(),
+                "$tempProfilePath",
+                ArchiveType.TarGz
         )
 
         log.info("$profileFilePath decompression completed")
-        val tempOverrideValuesPath: String = "/tmp/k8s-profile-" + vnfId
+        val destPath: String = "/tmp/k8s-profile-" + vfModuleId
 
-        // Here we are copying the tmp override_values file (created at vnf level) into the profile, before uploading it. This function is performed only at vfmodule level
+        // Here we update override.yaml file
 
         log.info("Modification of override.yaml file ")
-        val tmpOverrideFile = tempOverrideValuesPath.toString().plus(File.separator).plus("override_values.yaml")
+        val manifestFileName = destPath.toString().plus(File.separator).plus("override_values.yaml")
         val destOverrideFile = tempProfilePath.toString().plus(File.separator).plus("override_values.yaml")
         log.info("destination override file $destOverrideFile")
-        File(tmpOverrideFile).copyTo(File(destOverrideFile), true)
-        profileFilePath = Paths.get(tempMainPath.toString().plus(File.separator).plus("template-profile.tar.gz"))
+        File(manifestFileName).copyTo(File(destOverrideFile), true)
+        profileFilePath = Paths.get(tempMainPath.toString().plus(File.separator).plus("$prefix-profile.tar.gz"))
+
 
         if (!BluePrintArchiveUtils.compress(decompressedProfile, profileFilePath.toFile(), ArchiveType.TarGz)) {
             throw BluePrintProcessorException("Profile compression has failed")
@@ -164,7 +167,8 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         return result
     }
 
-    fun createOverrideVaues(payloadObject: ObjectNode): String {
+
+    fun createOverrideValues(payloadObject: ObjectNode,  vfModuleId: String, prefix:String): String {
         // Extract supportedNssai
         val supportedNssaiMap = LinkedHashMap<String, Any>()
         val snssai: String = getResolvedParameter(payloadObject, "config.supportedNssai.sNssai.snssai")
@@ -173,11 +177,9 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
 
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val bluePrintBasePath: String = bluePrintContext.rootPath
-        val vnfId: String = getResolvedParameter(payloadObject, "vnf-id")
-        val destPath: String = "/tmp/k8s-profile-" + vnfId
-        log.info("*********vnfID***** $vnfId")
+        val destPath: String = "/tmp/k8s-profile-" + vfModuleId
 
-        var profileFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus("template-profile.tar.gz"))
+        var profileFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus("$prefix-profile.tar.gz"))
         log.info("Reading K8s profile file: $profileFilePath")
         val profileFile = profileFilePath.toFile()
 
@@ -188,9 +190,9 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         log.info("Decompressing profile to $destPath")
 
         val decompressedProfile: File = BluePrintArchiveUtils.deCompress(
-            profileFilePath.toFile(),
-            "$destPath",
-            ArchiveType.TarGz
+                profileFilePath.toFile(),
+                "$destPath",
+                ArchiveType.TarGz
         )
 
         log.info("$profileFilePath decompression completed")
@@ -245,6 +247,8 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         return ""
     }
 
+
+
     fun getResolvedParameter(payload: ObjectNode, keyName: String): String {
         for (node in payload.get("resource-accumulator-resolved-data").elements()) {
             if (node.get("param-name").asText().equals(keyName)) {
@@ -274,16 +278,18 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        log.info("Executing Recovery")
-        addError("${runtimeException.message}")
+        log.info("Recover function called!")
+        log.info("Execution request : $executionRequest")
+        log.error("Exception", runtimeException)
+        addError(runtimeException.message!!)
     }
 
     inner class K8sApi(
-        val username: String,
-        val password: String,
-        val baseUrl: String,
-        val definition: String,
-        val definitionVersion: String
+            val username: String,
+            val password: String,
+            val baseUrl: String,
+            val definition: String,
+            val definitionVersion: String
     ) {
         private val service: UploadFileRestClientService // BasicAuthRestClientService
 
@@ -319,9 +325,9 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         fun hasProfile(profileName: String): Boolean {
             try {
                 val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
-                    HttpMethod.GET.name,
-                    "/profile/$profileName",
-                    ""
+                        HttpMethod.GET.name,
+                        "/profile/$profileName",
+                        ""
                 )
                 if (result.status >= 200 && result.status < 300)
                     return true
@@ -340,9 +346,9 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
             val profileJsonString: String = objectMapper.writeValueAsString(profile)
             try {
                 val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
-                    HttpMethod.POST.name,
-                    "/profile",
-                    profileJsonString
+                        HttpMethod.POST.name,
+                        "/profile",
+                        profileJsonString
                 )
                 if (result.status < 200 || result.status >= 300) {
                     throw Exception(result.body)
@@ -356,8 +362,8 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
         fun uploadProfileContent(profile: K8sProfile, filePath: Path) {
             try {
                 val result: BlueprintWebClientService.WebClientResponse<String> = service.uploadBinaryFile(
-                    "/profile/${profile.profileName}/content",
-                    filePath
+                        "/profile/${profile.profileName}/content",
+                        filePath
                 )
                 if (result.status < 200 || result.status >= 300) {
                     throw Exception(result.body)
@@ -371,20 +377,20 @@ open class K8sProfileUpload : AbstractScriptComponentFunction() {
 }
 
 class UploadFileRestClientService(
-    private val restClientProperties:
+        private val restClientProperties:
         BasicAuthRestClientProperties
 ) : BlueprintWebClientService {
 
     override fun defaultHeaders(): Map<String, String> {
 
         val encodedCredentials = setBasicAuth(
-            restClientProperties.username,
-            restClientProperties.password
+                restClientProperties.username,
+                restClientProperties.password
         )
         return mapOf(
-            HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-            HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
-            HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials"
+                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
+                HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials"
         )
     }
 
@@ -393,26 +399,26 @@ class UploadFileRestClientService(
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>):
-        Array<BasicHeader> {
-            val customHeaders: MutableMap<String, String> = headers.toMutableMap()
-            // inject additionalHeaders
-            customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
+            Array<BasicHeader> {
+        val customHeaders: MutableMap<String, String> = headers.toMutableMap()
+        // inject additionalHeaders
+        customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
 
-            if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
-                val encodedCredentials = setBasicAuth(
+        if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
+            val encodedCredentials = setBasicAuth(
                     restClientProperties.username,
                     restClientProperties.password
-                )
-                customHeaders[HttpHeaders.AUTHORIZATION] =
+            )
+            customHeaders[HttpHeaders.AUTHORIZATION] =
                     "Basic $encodedCredentials"
-            }
-            return super.convertToBasicHeaders(customHeaders)
         }
+        return super.convertToBasicHeaders(customHeaders)
+    }
 
     private fun setBasicAuth(username: String, password: String): String {
         val credentialsString = "$username:$password"
         return Base64.getEncoder().encodeToString(
-            credentialsString.toByteArray(Charset.defaultCharset())
+                credentialsString.toByteArray(Charset.defaultCharset())
         )
     }
 
@@ -446,9 +452,11 @@ class K8sProfile {
     var profileName: String? = null
     @get:JsonProperty("namespace")
     var namespace: String? = "default"
+    @get:JsonProperty("releaseName")
+    var releaseName: String? = null
 
     override fun toString(): String {
-        return "$rbName:$rbVersion:$profileName"
+        return "$rbName:$rbVersion:$profileName:$releaseName"
     }
 
     override fun equals(other: Any?): Boolean {
