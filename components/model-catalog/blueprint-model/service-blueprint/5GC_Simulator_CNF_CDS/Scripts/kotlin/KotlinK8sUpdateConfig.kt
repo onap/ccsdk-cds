@@ -1,6 +1,6 @@
 /*
 *  Copyright © 2019 TechMahindra
-*  Author: Vamshi Namilikonda <vn00480215@techmahindra.com>
+*
 *  Licensed under the Apache License, Version 2.0 (the "License");
 *  you may not use this file except in compliance with the License.
 *  You may obtain a copy of the License at
@@ -21,6 +21,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptC
 import org.slf4j.LoggerFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
+import com.fasterxml.jackson.databind.node.ArrayNode
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import java.nio.file.Path
@@ -41,6 +42,14 @@ import java.nio.file.Files
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
 import org.apache.http.client.ClientProtocolException
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sPluginDefinitionApi
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sDefinitionRestClient
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sConfigValueRequest
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sPluginInstanceApi
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.module.kotlin.convertValue
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -60,6 +69,7 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
         println("Exeuting processNB")
         log.info("Executing processNB from Kotlin script: KotlinK8sUpdateConfig ...")
+        val bluePrintPropertiesService: BluePrintPropertiesService =this.functionDependencyInstanceAsType("bluePrintPropertiesService")
 
         // read the config  input
         val baseK8sApiUrl = getDynamicProperties("api-access").get("url").asText()
@@ -105,6 +115,8 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
             val aaiBody = resultOfGet.body
             val aaiPayloadObject = JacksonUtils.jsonNode(aaiBody) as ObjectNode
 
+            log.info("aaiPayloadObject: $aaiPayloadObject")
+
             for (item in aaiPayloadObject.get("vf-module")) {
 
                 log.info("item payload Deatils : $item")
@@ -126,15 +138,22 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
                 log.info("AAI Vf-module UUID is : $vfModuleModelUuid")
 
+                val vfModuleCustUuid: String = item.get("model-customization-id").asText()
+
+                log.info("AAI Vf-module Customization UUID is : $vfModuleCustUuid")
+
+
                 val vfModuleInstance: String = item.get("heat-stack-id").asText()
 
                 log.info("AAI Vf-module Heat Stack ID : $vfModuleInstance")
 
                 val profileName: String = "profile-"+ vfModuleID
-                val templateName: String = "template_" + vfModuleID
+                val templateName: String = "template_" + vfModuleCustUuid
 
-                val randomString = getRandomString(6)
-                val configName: String = "config_"+ randomString
+                //val randomString = getRandomString(6)
+                val configName: String = "config_"+ vfModuleID
+
+                log.info("payloadObject: $payloadObject")
 
                 var supportedNssai: String = getResolvedParameter(payloadObject, "supportedNssai")
 
@@ -144,12 +163,12 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
                 log.info("templateName ->"+ templateName)
 
 
-                executeK8sAPI(supportedNssai, k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleModelInvariantUuid, vfModuleModelUuid, templateName, configName, profileName)
+                executeK8sAPI(bluePrintPropertiesService,supportedNssai, k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleModelInvariantUuid, vfModuleCustUuid, templateName, configName, profileName, vfModuleInstance)
 
             }
         }
         catch (e: Exception) {
-            log.info("Caught exception trying to get the vnf Details!!")
+            log.info("Caught exception trying to set config values!!")
             throw BluePrintProcessorException("${e.message}")
         }
     }
@@ -161,7 +180,7 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
                 .joinToString("")
     }
 
-    fun executeK8sAPI(supportedNssai: String, k8sApiUsername:String, k8sApiPassword:String, baseK8sApiUrl:String, vfModuleModelInvariantUuid:String, vfModuleModelUuid: String, templateName: String, configName:String, profileName:String){
+    fun executeK8sAPI(bluePrintPropertiesService: BluePrintPropertiesService,supportedNssai: String, k8sApiUsername:String, k8sApiPassword:String, baseK8sApiUrl:String, vfModuleModelInvariantUuid:String, vfModuleCustUuid: String, templateName: String, configName:String, profileName:String, instanceId: String){
 
         println("Executing executeK8sAPI ...")
 
@@ -169,7 +188,7 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
         val sNssaiAsJsonObj = parseSupportedNssai(supportedNssai)
 
         // contruct config api
-        val api = K8sConfigApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleModelInvariantUuid, vfModuleModelUuid)
+        val api = K8sConfigApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleModelInvariantUuid, vfModuleCustUuid, instanceId, bluePrintPropertiesService)
 
 
         // invoke config api
@@ -183,7 +202,7 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
         config.values.supportedNssai.snssaiInitial.snssaiSecond.snssaiFinalArray = Array<SnssaiFinal>(sNssaiAsJsonObj.size){i-> SnssaiFinal()}
 
         val dest = buildSNssaiArray(config.values.supportedNssai.snssaiInitial.snssaiSecond.snssaiFinalArray, sNssaiAsJsonObj)
-        api.createOrUpdateConfig(config, profileName)
+        api.createOrUpdateConfig(config, profileName, instanceId, configName, templateName)
 
         log.info("K8s Configurations create or update Completed")
 
@@ -231,8 +250,18 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
         return ""
     }
 
+    fun getTemplatePrefixList(executionRequest: ExecutionServiceInput): ArrayList<String> {
+        val result = ArrayList<String>()
+        for (prefix in executionRequest.payload.get("resource-assignment-request").get("template-prefix").elements())
+            result.add(prefix.asText())
+        return result
+    }
+
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        log.info("Executing Recovery")
+        log.info("Recover function called!")
+        log.info("Execution request : $executionRequest")
+        log.error("Exception", runtimeException)
+        addError(runtimeException.message!!)
     }
 
     inner class K8sConfigApi(
@@ -240,7 +269,10 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
             val password: String,
             val baseUrl: String,
             val definition: String,
-            val definitionVersion: String
+            val definitionVersion: String,
+            val instanceId: String,
+            val bluePrintPropertiesService: BluePrintPropertiesService
+
     ) {
         private val service: UploadFileConfigClientService // BasicAuthRestClientService
 
@@ -253,14 +285,16 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
             var basicAuthRestClientProperties: BasicAuthRestClientProperties = BasicAuthRestClientProperties()
             basicAuthRestClientProperties.username = username
             basicAuthRestClientProperties.password = password
-            basicAuthRestClientProperties.url = "$baseUrl/v1/rb/definition/$definition/$definitionVersion"
+            basicAuthRestClientProperties.url = "$baseUrl/v1/instance"
             basicAuthRestClientProperties.additionalHeaders = mapOfHeaders
 
             this.service = UploadFileConfigClientService(basicAuthRestClientProperties)
         }
 
-        fun createOrUpdateConfig(configJson: K8sConfigPayloadJson, profileName: String) {
+        fun createOrUpdateConfig(configJson: K8sConfigPayloadJson, profileName: String, instanceId: String, configName: String, templateName: String) {
             val objectMapper = ObjectMapper()
+            var obj: Any? = null
+            val yamlReader = ObjectMapper(YAMLFactory())
 
             for(snssai in configJson.values.supportedNssai.snssaiInitial.snssaiSecond.snssaiFinalArray){
                 println("snssai->" +snssai.snssai)
@@ -268,7 +302,7 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
             }
 
-            val configJsonString: String = objectMapper.writeValueAsString(configJson)
+            val configJsonString: String = objectMapper.writeValueAsString(configJson.values)
 
             log.info("payload generated -> "+ configJsonString)
 
@@ -280,16 +314,20 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
             val finalPayload: String = configJsonString.replaceRange(startInd..endInd, snssaiArray)
 
             log.info("payload restructured -> "+ finalPayload)
+            obj = yamlReader.readValue(finalPayload, Any::class.java)
 
-            try {
-                val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(HttpMethod.POST.name,
-                        "/profile/${profileName}/config", finalPayload)
-                if (result.status < 200 || result.status >= 300) {
-                    throw Exception(result.body)
-                }
-            } catch (e: Exception) {
-                log.info("Caught exception trying to create or update configuration ")
-                throw BluePrintProcessorException("${e.message}")
+
+
+            val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
+
+            val configValueRequest = K8sConfigValueRequest()
+            configValueRequest.templateName = configJson.templateName
+            configValueRequest.configName = configJson.configName
+            configValueRequest.values = objectMapper.convertValue(obj)
+            if (api.hasConfigurationValues(instanceId, configName)) {
+                api.editConfigurationValues(configValueRequest, instanceId, configName)
+            } else {
+                api.createConfigurationValues(configValueRequest, instanceId)
             }
         }
 
@@ -429,16 +467,6 @@ fun main(args: Array<String>) {
 
     val kotlin = KotlinK8sUpdateConfig()
 
-    /* supportedNssai
-     k8sApiUsername
-     k8sApiPassword
-     baseK8sApiUrl
-     vfModuleModelInvariantUuid
-     vfModuleModelUuid
-     templateName
-     configName
-     profileName*/
 
-    kotlin.executeK8sAPI(supportedNssai, "admin", "admin", "http://0.0.0.0:9015", "rb_test", "1", "template_test", "config_test", "profile_test")
 
 }
