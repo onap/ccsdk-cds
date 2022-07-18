@@ -1,6 +1,6 @@
 /*
 * Copyright © 2019 TechMahindra
-* Author: Malinconico Aniello Paolo, Vamshi Namilikonda, Thamlur Raju
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -36,8 +38,13 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
+import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sPluginDefinitionApi
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sDefinitionRestClient
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.contentFromResolvedArtifactNB
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ArchiveType
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
@@ -51,6 +58,7 @@ import org.springframework.web.client.RestTemplate
 import org.yaml.snakeyaml.Yaml
 import java.util.ArrayList
 import java.io.IOException
+
 import java.util.Base64
 import java.nio.charset.Charset
 import java.nio.file.Files
@@ -80,136 +88,136 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         val aaiApiUsername = getDynamicProperties("aai-access").get("username").asText()
         val aaiApiPassword = getDynamicProperties("aai-access").get("password").asText()
 
+
+
         log.info("AAI params $aaiApiUrl")
+
+
+
 
         val resolution_key = getDynamicProperties("resolution-key").asText()
 
-        val payload = storedContentFromResolvedArtifactNB(resolution_key, prefix)
+        val sdnc_payload:String = contentFromResolvedArtifactNB("config-deploy-sdnc")
+        //log.info("SDNC payload $sdnc_payload")
+        val sdnc_payloadObject = JacksonUtils.jsonNode(sdnc_payload) as ObjectNode
 
-        val payloadObject = JacksonUtils.jsonNode(payload) as ObjectNode
 
-        val serviceInstanceID: String = getResolvedParameter(payloadObject, "service-instance-id")
-        val vnfID: String = getResolvedParameter(payloadObject, "vnf-id")
+        val aai_payload:String = contentFromResolvedArtifactNB("config-deploy-aai")
+        //log.info("AAI payload $aai_payload")
+        val aai_payloadObject = JacksonUtils.jsonNode(aai_payload) as ObjectNode
 
-        log.info("Get serviceInstanceID $serviceInstanceID")
-        log.info("Get vnfID $vnfID")
 
-        val vnfUrl = aaiApiUrl + "/aai/v19/network/generic-vnfs/generic-vnf/" + vnfID + "/vf-modules";
 
-        val mapOfHeaders = hashMapOf<String, String>()
-        mapOfHeaders.put("Accept", "application/json")
-        mapOfHeaders.put("Content-Type", "application/json")
-        mapOfHeaders.put("x-FromAppId", "SO")
-        mapOfHeaders.put("X-TransactionId", "get_aai_subscr")
-        val basicAuthRestClientProperties: BasicAuthRestClientProperties = BasicAuthRestClientProperties()
-        basicAuthRestClientProperties.username = aaiApiUsername
-        basicAuthRestClientProperties.password = aaiApiPassword
-        basicAuthRestClientProperties.url = vnfUrl
-        basicAuthRestClientProperties.additionalHeaders =mapOfHeaders
-        val basicAuthRestClientService: BasicAuthRestClientService= BasicAuthRestClientService(basicAuthRestClientProperties)
+
+
+
         try {
-            val resultOfGet: BlueprintWebClientService.WebClientResponse<String> = basicAuthRestClientService.exchangeResource(HttpMethod.GET.name, "", "")
 
-            val aaiBody = resultOfGet.body
-            val aaiPayloadObject = JacksonUtils.jsonNode(aaiBody) as ObjectNode
+            for (item in sdnc_payloadObject.get("vf-modules")){
 
-            for (item in aaiPayloadObject.get("vf-module")) {
+                var instanceID:String =""
+                val modelTopology = item.get("vf-module-data").get("vf-module-topology")
 
-                log.info("item payload Deatils : $item")
 
-                val isItBaseVfModule = item.get("is-base-vf-module").asText()
 
-                if(isItBaseVfModule.toBoolean())
-                    continue
+                val moduleParameters = modelTopology.get("vf-module-parameters").get("param")
 
-                val vfModuleID: String = item.get("vf-module-id").asText()
+                val label: String? = getParamValueByName(moduleParameters, "vf-module-label")
+                val modelInfo = modelTopology.get("onap-model-information")
+                val vfModuleInvariantID = modelInfo.get("model-invariant-uuid").asText()
+                log.info("VF MOdule Inavriant ID $vfModuleInvariantID")
+                val vfModuleCustID=modelInfo.get("model-customization-uuid").asText()
+                val vfModuleUUID=modelInfo.get("model-uuid").asText()
+                val idInfo = modelTopology.get("vf-module-topology-identifier")
+                val vfModuleID = idInfo.get("vf-module-id").asText()
+                for (aai_item in aai_payloadObject.get("vf-modules"))
+                {
+                    if (aai_item.get("vf-module-id").asText() == vfModuleID && aai_item.get("heat-stack-id") != null)
+                    {
+                        instanceID=aai_item.get("heat-stack-id").asText()
+                        break
+                    }
+                }
 
-                log.info("AAI Vf-module ID is : $vfModuleID")
 
-                val vfModuleInvariantID: String = item.get("model-invariant-id").asText()
-
-                log.info("AAI Vf-module Invariant ID is : $vfModuleInvariantID")
-
-                val vfModuleUUID: String = item.get("model-version-id").asText()
-
-                log.info("AAI Vf-module UUID is : $vfModuleUUID")
-
-                val vfModuleInstance: String = item.get("heat-stack-id").asText()
-
-                log.info("AAI Vf-module Heat Stack ID : $vfModuleInstance")
-
-                var delimiter = "/"
-
-                val Instance = vfModuleInstance.split(delimiter)
-                val instanceName = Instance[0]
-                val instanceID = Instance[1]
-                log.info("instance name is : $instanceName")
-                log.info("K8S instance ID is : $instanceID")
-
-                val instanceNameNameArray: List<String> = instanceName.split("..")
-                val typOfVfmodule = instanceNameNameArray[1]
-                log.info("Type of vf-module: $typOfVfmodule")
 
                 val k8sRbProfileName: String = "profile_" + vfModuleID
 
-                val k8sConfigTemplateName: String = "template_" + vfModuleID
+                val k8sConfigTemplateName: String = "template_" + vfModuleCustID
 
-                val api = K8sConfigTemplateApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleUUID, k8sConfigTemplateName)
+                val api = K8sConfigTemplateApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleCustID, k8sConfigTemplateName)
 
                 // Check if definition exists
                 if (!api.hasDefinition()) {
-                    throw BluePrintProcessorException("K8s Config Template ($vfModuleInvariantID/$vfModuleUUID) -  $k8sConfigTemplateName not found ")
+                    throw BluePrintProcessorException("K8S Definition ($vfModuleInvariantID/$vfModuleCustID)  not found ")
                 }
+                val bluePrintPropertiesService: BluePrintPropertiesService =this.functionDependencyInstanceAsType("bluePrintPropertiesService")
+                val k8sConfiguration = K8sConnectionPluginConfiguration(bluePrintPropertiesService)
+                val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration,vfModuleInvariantID, vfModuleCustID)
+
+
+                val def: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(HttpMethod.GET.name,"","")
+                log.info(def.body.toString())
+                val rbdef = JacksonUtils.jsonNode(def.body.toString()) as ObjectNode
+                val chartName = rbdef.get("chart-name").asText()
 
                 log.info("Config Template name: $k8sConfigTemplateName")
 
-                if (k8sRbProfileName.equals("")) {
-                    throw BluePrintProcessorException("K8s rb profile name is empty! Either define profile name to use or choose default")
-                }
+
 
                 var configTemplate = K8sConfigTemplate()
                 configTemplate.templateName = k8sConfigTemplateName
                 configTemplate.description = " "
-                configTemplate.ChartName = typOfVfmodule
+                configTemplate.ChartName = chartName
                 log.info("Chart name: ${configTemplate.ChartName}")
 
-                val instanceAPI = K8sInstanceApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleUUID)
-                val configMapName: String = instanceAPI.getInsnceDetails(instanceID, typOfVfmodule)
 
-                log.info("configmap retrieved " +typOfVfmodule+ "vfmodule ->"+ configMapName)
-                modifyTemplate(configMapName, typOfVfmodule)
-
-                val configTemplateFile: Path = prepareConfigTemplateJson(k8sConfigTemplateName, typOfVfmodule)
 
                 if (!api.hasConfigTemplate(configTemplate)) {
-                    log.info("K8s Config Template Upload Started")
+
+
+                    val configTemplateFile: Path = prepareConfigTemplateJson(k8sConfigTemplateName, vfModuleID, label)
+
+                    log.info("Config Template Upload Started")
                     api.createConfigTemplate(configTemplate)
                     api.uploadConfigTemplateContent(configTemplate, configTemplateFile)
-                    log.info("K8s Config Template Upload Completed")
+                    log.info("Config Template Upload Completed")
                 }
             }
             log.info("DAY-1 Script excution completed")
+
+
         }
         catch (e: Exception) {
-            log.info("Caught exception trying to get the vnf Details!!")
-           // throw BluePrintProcessorException("${e.message}")
+            log.info("Caught exception during config template preparation!!")
+            throw BluePrintProcessorException("${e.message}")
         }
     }
+    private fun getParamValueByName(params: JsonNode, paramName: String): String? {
+        for (param in params) {
+            if (param.get("name").asText() == paramName && param.get("value").asText() != "null") {
+                return param.get("value").asText()
 
-    fun prepareConfigTemplateJson(configTemplateName: String, typOfVfmodule: String): Path {
+            }
+        }
+        return null
+    }
+
+    fun prepareConfigTemplateJson(configTemplateName: String, vfModuleID: String, label: String?): Path {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val bluePrintBasePath: String = bluePrintContext.rootPath
 
-        var profileFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus(typOfVfmodule +"-config-template.tar.gz"))
+        var profileFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus(label +"-config-template.tar.gz"))
         log.info("Reading K8s Config Template file: $profileFilePath")
 
         val profileFile = profileFilePath.toFile()
 
         if (!profileFile.exists())
-            throw BluePrintProcessorException("K8s Profile template file $profileFilePath does not exists")
+            throw BluePrintProcessorException("K8s Config template file $profileFilePath does not exists")
 
         return profileFilePath
     }
+
 
     fun getResolvedParameter(payload: ObjectNode, keyName: String): String {
         for (node in payload.get("resource-accumulator-resolved-data").elements()) {
@@ -220,167 +228,13 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         return ""
     }
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
-        log.info("Executing Recovery")
-        addError("${runtimeException.message}")
+        log.info("Recover function called!")
+        log.info("Execution request : $executionRequest")
+        log.error("Exception", runtimeException)
+        addError(runtimeException.message!!)
     }
 
-    fun modifyTemplate(configmapName: String, typOfVfmodule: String): String {
 
-        log.info("Executing modifyTemplate ->")
-
-        val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
-        val bluePrintBasePath: String = bluePrintContext.rootPath
-
-        val destPath: String = "/tmp/config-template-"+typOfVfmodule
-
-        var templateFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus(typOfVfmodule +"-config-template.tar.gz"))
-
-        log.info("Reading config template file: ${templateFilePath}")
-        val templateFile = templateFilePath.toFile()
-
-        if (!templateFile.exists())
-            throw BluePrintProcessorException("K8s Profile template file ${templateFilePath} does not exists")
-
-        log.info("Decompressing config template to ${destPath}")
-
-        val decompressedProfile: File = BluePrintArchiveUtils.deCompress(templateFilePath.toFile(),
-                "${destPath}", ArchiveType.TarGz)
-
-        log.info("${templateFilePath.toString()} decompression completed")
-
-        //Here we update override.yaml file
-
-        val manifestFileName = destPath.plus(File.separator).plus(typOfVfmodule).plus(File.separator).plus("templates").plus(File.separator).plus("configmap.yaml")
-        log.info("Modification of configmap.yaml file at ${manifestFileName.toString()}")
-        var finalManifest = ""
-        File(manifestFileName).bufferedReader().use { inr ->
-            val manifestYaml = Yaml()
-            val manifestObject: Map<String, Any> = manifestYaml.load(inr)
-
-            for((k,v) in manifestObject) {
-                log.info("manifestObject: ${k}, ${v}" )
-            }
-
-            log.info("Uploaded YAML object")
-
-            val metadata: MutableMap<String, Any> = manifestObject.get("metadata") as MutableMap<String, Any>
-            log.info("Uploaded config YAML object")
-
-            for((k,v) in metadata) {
-                metadata.put(k, configmapName)
-            }
-
-            finalManifest = manifestYaml.dump(manifestObject)
-        }
-
-        File(manifestFileName).bufferedWriter().use { out -> out.write(finalManifest) }
-
-        log.info(finalManifest)
-
-        log.info("Reading config template file: ${templateFilePath}")
-
-        if (!templateFile.exists())
-            throw BluePrintProcessorException("config template file ${templateFilePath} does not exists")
-
-        val tempMainPath: File = createTempDir("config-template-", "")
-        val tempConfigTemplatePath: File = createTempDir("conftemplate-", "", tempMainPath)
-        log.info("Decompressing profile to ${tempConfigTemplatePath.toString()}")
-
-        val decompressedProfile2: File = BluePrintArchiveUtils.deCompress(templateFilePath.toFile(),
-                "${tempConfigTemplatePath.toString()}", ArchiveType.TarGz)
-
-        log.info("${templateFilePath.toString()} decompression completed")
-
-        //Here we update configmap.yaml file
-
-        log.info("Modification of configmap.yaml file ")
-        val manifestFileName2 = destPath.toString().plus(File.separator).plus(typOfVfmodule).plus(File.separator).plus("templates").plus(File.separator).plus("configmap.yaml")
-        val destOverrideFile = tempConfigTemplatePath.toString().plus(File.separator).plus(typOfVfmodule).plus(File.separator).plus("templates").plus(File.separator).plus("configmap.yaml")
-        log.info("destination override file ${destOverrideFile}")
-
-        File(manifestFileName2).copyTo(File(destOverrideFile), true)
-
-        if (!BluePrintArchiveUtils.compress(decompressedProfile2, templateFilePath.toFile(),
-                        ArchiveType.TarGz)) {
-            throw BluePrintProcessorException("Profile compression has failed")
-        }
-
-        log.info("${templateFilePath.toString()} compression completed")
-
-        return ""
-    }
-
-    inner class K8sInstanceApi(
-            val username: String,
-            val password: String,
-            val baseUrl: String,
-            val definition: String,
-            val definitionVersion: String
-    ) {
-        private val service: UploadConfigTemplateRestClientService // BasicAuthRestClientService
-
-        init {
-            var mapOfHeaders = hashMapOf<String, String>()
-            mapOfHeaders.put("Accept", "application/json")
-            mapOfHeaders.put("Content-Type", "application/json")
-            mapOfHeaders.put("cache-control", " no-cache")
-            mapOfHeaders.put("Accept", "application/json")
-            var basicAuthRestClientProperties: BasicAuthRestClientProperties = BasicAuthRestClientProperties()
-            basicAuthRestClientProperties.username = username
-            basicAuthRestClientProperties.password = password
-            basicAuthRestClientProperties.url = "$baseUrl/v1/instance"
-            basicAuthRestClientProperties.additionalHeaders = mapOfHeaders
-
-            this.service = UploadConfigTemplateRestClientService(basicAuthRestClientProperties)
-        }
-
-        fun getInsnceDetails(instanceId: String, vfModuleType: String): String {
-            log.info("Executing K8sInstanceApi.getInsnceDetails")
-            try {
-                val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(HttpMethod.GET.name, "/${instanceId}", "")
-                print(result)
-                if (result.status >= 200 && result.status < 300) {
-                    log.info("K8s instance details retrieved, processing it for configmap details")
-                    log.info("response body -> "+result.body.toString())
-                    val cmName: String = processInstanceResponse(result.body, vfModuleType)
-                    return cmName
-                } else
-                    return ""
-            } catch (e: Exception) {
-                log.info("Caught exception trying to get k8s instance details")
-                throw BluePrintProcessorException("${e.message}")
-            }
-        }
-
-        fun processInstanceResponse(response: String, vfModuleType: String): String {
-
-            log.info("K8s instance details retrieved, processing it for configmap details")
-
-            val gson = Gson()
-
-            val startInd = response.indexOf('[')
-            val endInd = response.indexOf(']')
-
-            val subStr = response.substring(startInd, endInd+1)
-
-            val resourceType = object : TypeToken<Array<K8sResources>>() {}.type
-
-            var resources: Array<K8sResources> = gson.fromJson(subStr, resourceType)
-
-            for (resource in resources){
-
-                if(resource.GVK?.Kind == "ConfigMap" && resource.Name?.contains(vfModuleType)){
-
-                    return resource.Name
-
-                }
-
-            }
-            return ""
-
-        }
-
-    }
 
     inner class K8sConfigTemplateApi(
             val username: String,
@@ -453,7 +307,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 }
             } catch (e: Exception) {
                 log.info("Caught exception trying to create k8s config template ${profile.templateName}  - updated")
-            //    throw BluePrintProcessorException("${e.message}")
+                //    throw BluePrintProcessorException("${e.message}")
             }
         }
 
@@ -579,6 +433,6 @@ fun main(args: Array<String>) {
 
     val kotlin = DayOneConfig()
 
-    kotlin.modifyTemplate("modified", "upf")
+
 
 }
