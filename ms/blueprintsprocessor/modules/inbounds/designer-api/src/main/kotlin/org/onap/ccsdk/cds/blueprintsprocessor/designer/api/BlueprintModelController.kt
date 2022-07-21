@@ -229,7 +229,7 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         if (bluePrintModel != null)
             ResponseEntity(bluePrintModel, HttpStatus.OK)
         else
-            ResponseEntity(HttpStatus.NO_CONTENT)
+            ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
     @GetMapping("/download/by-name/{name}/version/{version}", produces = [MediaType.APPLICATION_JSON_VALUE])
