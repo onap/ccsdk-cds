@@ -30,9 +30,9 @@ def test_http_client(request_mock):
     assert c.protocol == "http"
     assert c.url == "http://127.0.0.1:8080/api/v1"
 
-    c = Client("127.0.0.1", 8081, use_ssl=True)
+    c = Client("127.0.0.1", 8080, use_ssl=True)
     assert c.protocol == "https"
-    assert c.url == "https://127.0.0.1:8081/api/v1"
+    assert c.url == "https://127.0.0.1:8080/api/v1"
 
     c.send_request("GET", "something")
     request_mock.assert_called_once_with(method="GET", url=f"{c.url}/something", verify=False, auth=None)
