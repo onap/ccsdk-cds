@@ -38,14 +38,14 @@
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <hazelcast.version>4.2.2</hazelcast.version>
 
-        <h2database.version>1.4.197</h2database.version>
+        <h2database.version>1.4.200</h2database.version>
         <powermock.version>1.7.4</powermock.version>
         <mockkserver.version>5.5.1</mockkserver.version>
         <json.unit.version>2.8.0</json.unit.version>
         <xmlunit.version>2.6.3</xmlunit.version>
 
-  
-   
+
+
         <sshd.version>2.2.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
         <jslt.version>0.1.8</jslt.version>
@@ -499,7 +499,6 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2database.version}</version>
-                <scope>test</scope>
             </dependency>
 
             <!-- Test Dependency -->
