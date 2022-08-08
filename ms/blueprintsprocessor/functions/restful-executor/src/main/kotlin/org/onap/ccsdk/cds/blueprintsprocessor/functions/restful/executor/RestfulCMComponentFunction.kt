@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.nrmfunction.RestfulNRMServiceClient
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.function.RestfulServiceClient
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
@@ -49,7 +49,7 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
 
     fun processNRM(executionRequest: ExecutionServiceInput, input_params: ArrayNode): String {
         // process the managed object instances
-        log.info("Processing NRM Object")
+        log.info("Processing Object")
         operationInputs = executionServiceInput.stepData!!.properties
         val dynamic_properties = operationInputs.get("dynamic-properties")
         // instantiate one restClientService instance
@@ -75,9 +75,9 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
                 for (managed_object_instance in managed_object_instances) {
                     // invoke createMOI for each managed-object-instance
                     log.info("invoke createMOI for each managed-object-instance")
-                    var NRM_Restful_client = RestfulNRMServiceClient()
-                    val MOI_id = NRM_Restful_client.generateMOIid()
-                    var httpresponse = NRM_Restful_client.createMOI(web_client_service, MOI_id, managed_object_instance)
+                    var Restful_client = RestfulServiceClient()
+                    val MOI_id = Restful_client.generateMOIid()
+                    var httpresponse = Restful_client.createMOI(web_client_service, MOI_id, managed_object_instance)
                     var MOIname = managed_object_instance.get("className").toString().replace("\"", "")
                     response.put("/$MOIname/$MOI_id", httpresponse)
                 }
@@ -86,9 +86,9 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
                 for (managed_object_instance in managed_object_instances) {
                     // invoke getMOIAttributes for each managed-object-instance
                     log.info("invoke getMOIAttributes for each managed-object-instance")
-                    var NRM_Restful_client = RestfulNRMServiceClient()
+                    var Restful_client = RestfulServiceClient()
                     val MOI_id = managed_object_instance.get("id").toString().replace("\"", "")
-                    var httpresponse = NRM_Restful_client.getMOIAttributes(web_client_service, MOI_id, managed_object_instance)
+                    var httpresponse = Restful_client.getMOIAttributes(web_client_service, MOI_id, managed_object_instance)
                     var MOIname = managed_object_instance.get("className").toString().replace("\"", "")
                     response.put("/$MOIname/$MOI_id", httpresponse)
                 }
@@ -97,9 +97,9 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
                 for (managed_object_instance in managed_object_instances) {
                     // invoke modifyMOIAttributes for each managed-object-instance
                     log.info("invoke modifyMOIAttributes for each managed-object-instance")
-                    var NRM_Restful_client = RestfulNRMServiceClient()
+                    var Restful_client = RestfulServiceClient()
                     val MOI_id = managed_object_instance.get("id").toString().replace("\"", "")
-                    var httpresponse = NRM_Restful_client.modifyMOIAttributes(web_client_service, MOI_id, managed_object_instance)
+                    var httpresponse = Restful_client.modifyMOIAttributes(web_client_service, MOI_id, managed_object_instance)
                     var MOIname = managed_object_instance.get("className").toString().replace("\"", "")
                     response.put("/$MOIname/$MOI_id", httpresponse)
                 }
@@ -108,9 +108,9 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
                 for (managed_object_instance in managed_object_instances) {
                     // invoke deleteMOI for each managed-object-instance
                     log.info("invoke deleteMOI for each managed-object-instance")
-                    var NRM_Restful_client = RestfulNRMServiceClient()
+                    var Restful_client = RestfulServiceClient()
                     val MOI_id = managed_object_instance.get("id").toString().replace("\"", "")
-                    var httpresponse = NRM_Restful_client.deleteMOI(web_client_service, MOI_id, managed_object_instance)
+                    var httpresponse = Restful_client.deleteMOI(web_client_service, MOI_id, managed_object_instance)
                     var MOIname = managed_object_instance.get("className").toString().replace("\"", "")
                     response.put("/$MOIname/$MOI_id", httpresponse)
                 }
@@ -120,7 +120,6 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
                 response.put(this.workflowName, "Not Implemented")
             }
         }
-        val strresponse = "$response"
-        return strresponse
+        return "$response"
     }
 }
