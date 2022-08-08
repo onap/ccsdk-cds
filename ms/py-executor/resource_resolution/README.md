@@ -150,7 +150,7 @@ from resource_resolution.resource_resolution import ResourceResolution
 if __name__ == "__main__":
     # If you want to use only HTTP you don't have to use context manager
     r = ResourceResolution(
-        http_server_port=8081,
+        http_server_port=8080,
         http_auth_user="ccsdkapps",
         http_auth_pass="ccsdkapps",
         http_use_tls=False
