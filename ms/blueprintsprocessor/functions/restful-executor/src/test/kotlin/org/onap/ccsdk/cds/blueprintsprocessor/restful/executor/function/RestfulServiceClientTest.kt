@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.nrmfunction
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.function
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import org.junit.Ignore
@@ -55,22 +55,22 @@ import kotlin.test.assertNotNull
 )
 
 @Ignore
-class RestfulNRMServiceClientTest {
+class RestfulServiceClientTest {
 
     @Autowired
-    lateinit var restfulNRMServiceClient: RestfulNRMServiceClient
+    lateinit var restfulServiceClient: RestfulServiceClient
     lateinit var bluePrintRestLibPropertyService: BluePrintRestLibPropertyService
 
     @Test
     fun testCreateMOI() {
         val restClientService = bluePrintRestLibPropertyService.blueprintWebClientService("nrm")
-        val idStr = restfulNRMServiceClient.generateMOIid()
+        val idStr = restfulServiceClient.generateMOIid()
         var test_moi_data = JacksonUtils.jsonNode("{}") as ObjectNode
         test_moi_data.put("className", "TestMangedObjectInstance")
         var test_attributes_data = JacksonUtils.jsonNode("{}") as ObjectNode
         test_attributes_data.put("test_attribute_key", "test_attribute_value")
         test_moi_data.put("data", test_attributes_data)
-        val response = restfulNRMServiceClient.createMOI(restClientService, idStr, test_moi_data)
+        val response = restfulServiceClient.createMOI(restClientService, idStr, test_moi_data)
         assertNotNull(response, "failed to get createMOI response")
         assertEquals("Create MOI object successfully", response.get("body").get("data").toString(), "failed to get createMOI response")
     }
@@ -78,13 +78,13 @@ class RestfulNRMServiceClientTest {
     @Test
     fun testGetMOIAttributes() {
         val restClientService = bluePrintRestLibPropertyService.blueprintWebClientService("nrm")
-        val idStr = restfulNRMServiceClient.generateMOIid()
+        val idStr = restfulServiceClient.generateMOIid()
         var test_moi_data = JacksonUtils.jsonNode("{}") as ObjectNode
         test_moi_data.put("className", "TestMangedObjectInstance")
         test_moi_data.put("scope", "BASE_ONLY")
         test_moi_data.put("filter", "TestMangedObjectInstance")
         test_moi_data.put("fields", "test_attribute_key")
-        val response = restfulNRMServiceClient.getMOIAttributes(restClientService, idStr, test_moi_data)
+        val response = restfulServiceClient.getMOIAttributes(restClientService, idStr, test_moi_data)
         assertNotNull(response, "failed to get getMOIAttributes response")
         assertEquals("Get MOI object attributes successfully", response.get("body").get("data").toString(), "failed to get getMOIAttributes response")
     }
@@ -92,7 +92,7 @@ class RestfulNRMServiceClientTest {
     @Test
     fun testModifyMOIAttributes() {
         val restClientService = bluePrintRestLibPropertyService.blueprintWebClientService("nrm")
-        val idStr = restfulNRMServiceClient.generateMOIid()
+        val idStr = restfulServiceClient.generateMOIid()
         var test_moi_data = JacksonUtils.jsonNode("{}") as ObjectNode
         test_moi_data.put("className", "TestMangedObjectInstance")
         test_moi_data.put("scope", "BASE_ONLY")
@@ -100,7 +100,7 @@ class RestfulNRMServiceClientTest {
         var test_attributes_data = JacksonUtils.jsonNode("{}") as ObjectNode
         test_attributes_data.put("test_attribute_key", "modified_attribute_value")
         test_moi_data.put("data", test_attributes_data)
-        val response = restfulNRMServiceClient.modifyMOIAttributes(restClientService, idStr, test_moi_data)
+        val response = restfulServiceClient.modifyMOIAttributes(restClientService, idStr, test_moi_data)
         assertNotNull(response, "failed to get modifyMOIAttributes response")
         assertEquals(
             "Modify MOI object attributes successfully",
@@ -112,12 +112,12 @@ class RestfulNRMServiceClientTest {
     @Test
     fun testDeleteMOI() {
         val restClientService = bluePrintRestLibPropertyService.blueprintWebClientService("nrm")
-        val idStr = restfulNRMServiceClient.generateMOIid()
+        val idStr = restfulServiceClient.generateMOIid()
         var test_moi_data = JacksonUtils.jsonNode("{}") as ObjectNode
         test_moi_data.put("className", "TestMangedObjectInstance")
         test_moi_data.put("scope", "BASE_ONLY")
         test_moi_data.put("filter", "TestMangedObjectInstance")
-        val response = restfulNRMServiceClient.deleteMOI(restClientService, idStr, test_moi_data)
+        val response = restfulServiceClient.deleteMOI(restClientService, idStr, test_moi_data)
         assertNotNull(response, "failed to get delete response")
         assertEquals("Delete MOI object attributes successfully", response.get("body").get("data").toString(), "failed to get delete response")
     }

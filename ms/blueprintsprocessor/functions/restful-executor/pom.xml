@@ -26,8 +26,8 @@
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.functions</groupId>
     <artifactId>restful-executor</artifactId>
 
-    <name>MS Blueprints Processor Functions - NRM Restful executor</name>
-    <description>Blueprints Processor Function - NRM Restful executor</description>
+    <name>MS Blueprints Processor Functions - Restful executor</name>
+    <description>Blueprints Processor Function - Restful executor</description>
 
     <dependencies>
         <dependency>

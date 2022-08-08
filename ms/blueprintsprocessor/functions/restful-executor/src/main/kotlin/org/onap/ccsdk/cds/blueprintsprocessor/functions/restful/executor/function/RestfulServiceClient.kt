@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.nrmfunction
+package org.onap.ccsdk.cds.blueprintsprocessor.functions.restful.executor.function
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -26,9 +26,9 @@ import org.springframework.http.HttpMethod
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.UUID
 
-class RestfulNRMServiceClient() {
+class RestfulServiceClient() {
 
-    private val log = logger(RestfulNRMServiceClient::class.java)
+    private val log = logger(RestfulServiceClient::class.java)
 
     fun createMOI(web_client_service: BlueprintWebClientService, idStr: String, managed_object_instance: JsonNode): ObjectNode {
         val classNameStr = managed_object_instance.get("className").toString().replace("\"", "")
