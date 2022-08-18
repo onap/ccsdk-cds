@@ -22,6 +22,9 @@ open class RestClientProperties {
 
     lateinit var type: String
     lateinit var url: String
+    var connectTimeout: Int = 0
+    var socketTimeout: Int = 0
+    var connectionRequestTimeout: Int = 0
     var additionalHeaders: Map<String, String>? = null
 }
 

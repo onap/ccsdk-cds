@@ -20,21 +20,24 @@ import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
-import java.net.URI
 import java.nio.charset.Charset
 import java.util.Base64
 
-class BasicAuthRestClientService(
+open class BasicAuthRestClientService(
     private val restClientProperties:
         BasicAuthRestClientProperties
 ) :
-    BlueprintWebClientService {
+    BaseBlueprintWebClientService<BasicAuthRestClientProperties>() {
+
+    override fun getRestClientProperties(): BasicAuthRestClientProperties {
+        return restClientProperties
+    }
 
     override fun defaultHeaders(): Map<String, String> {
 
         val encodedCredentials = setBasicAuth(
-            restClientProperties.username,
-            restClientProperties.password
+            getRestClientProperties().username,
+            getRestClientProperties().password
         )
         return mapOf(
             HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
@@ -43,21 +46,16 @@ class BasicAuthRestClientService(
         )
     }
 
-    override fun host(uri: String): String {
-        val uri: URI = URI.create(restClientProperties.url + uri)
-        return uri.resolve(uri).toString()
-    }
-
     override fun convertToBasicHeaders(headers: Map<String, String>):
         Array<BasicHeader> {
             val customHeaders: MutableMap<String, String> = headers.toMutableMap()
             // inject additionalHeaders
-            customHeaders.putAll(verifyAdditionalHeaders(restClientProperties))
+            customHeaders.putAll(verifyAdditionalHeaders())
 
             if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
                 val encodedCredentials = setBasicAuth(
-                    restClientProperties.username,
-                    restClientProperties.password
+                    getRestClientProperties().username,
+                    getRestClientProperties().password
                 )
                 customHeaders[HttpHeaders.AUTHORIZATION] =
                     "Basic $encodedCredentials"
