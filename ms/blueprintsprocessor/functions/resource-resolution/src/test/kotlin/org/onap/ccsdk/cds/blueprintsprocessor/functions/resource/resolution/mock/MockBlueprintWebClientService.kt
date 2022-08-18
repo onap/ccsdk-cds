@@ -21,6 +21,7 @@ import org.mockserver.model.Header
 import org.mockserver.model.HttpRequest.request
 import org.mockserver.model.HttpResponse.response
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BaseBlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -28,7 +29,7 @@ import java.nio.charset.Charset
 import java.util.Base64
 
 class MockBlueprintWebClientService(private var restClientProperties: RestClientProperties) :
-    BlueprintWebClientService {
+    BaseBlueprintWebClientService<RestClientProperties>() {
 
     private var mockServer: ClientAndServer
     private var port: String = if (restClientProperties.url.split(":")[2].isEmpty()) "8080"
@@ -52,6 +53,10 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
         )
     }
 
+    override fun getRestClientProperties(): RestClientProperties {
+        return restClientProperties
+    }
+
     override fun defaultHeaders(): Map<String, String> {
         val encodedCredentials = this.setBasicAuth("admin", "aaiTest")
         return mapOf(
@@ -59,10 +64,6 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
             HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
             HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials"
         )
-    }
-
-    override fun host(uri: String): String {
-        return restClientProperties.url + uri
     }
 
     fun tearDown() {

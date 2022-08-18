@@ -21,11 +21,15 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.TokenAuthRestClientProperties
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 
-class TokenAuthRestClientService(
+open class TokenAuthRestClientService(
     private val restClientProperties:
         TokenAuthRestClientProperties
 ) :
-    BlueprintWebClientService {
+    BaseBlueprintWebClientService<TokenAuthRestClientProperties>() {
+
+    override fun getRestClientProperties(): TokenAuthRestClientProperties {
+        return restClientProperties
+    }
 
     override fun defaultHeaders(): Map<String, String> {
         return mapOf(
@@ -45,8 +49,4 @@ class TokenAuthRestClientService(
             }
             return super.convertToBasicHeaders(customHeaders)
         }
-
-    override fun host(uri: String): String {
-        return restClientProperties.url + uri
-    }
 }
