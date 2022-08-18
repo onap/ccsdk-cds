@@ -19,22 +19,19 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
 
-import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.springframework.http.HttpHeaders.ACCEPT
-import org.springframework.http.HttpHeaders.AUTHORIZATION
-import org.springframework.http.HttpHeaders.CONTENT_TYPE
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import java.nio.charset.Charset
-import java.util.Base64
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
 
 abstract class K8sAbstractRestClientService(
     private val k8sConfiguration: K8sConnectionPluginConfiguration
-) : BlueprintWebClientService {
+) : BasicAuthRestClientService(BasicAuthRestClientProperties()) {
 
     protected val baseUrl: String = k8sConfiguration.getProperties().url
     private var restClientProperties: BasicAuthRestClientProperties? = null
+
+    override fun getRestClientProperties(): BasicAuthRestClientProperties {
+        return getBasicAuthRestClientProperties()
+    }
 
     private fun getBasicAuthRestClientProperties(): BasicAuthRestClientProperties {
         return if (restClientProperties != null)
@@ -55,44 +52,7 @@ abstract class K8sAbstractRestClientService(
         mapOfHeaders["Accept"] = "application/json"
         mapOfHeaders["Content-Type"] = "application/json"
         mapOfHeaders["cache-control"] = " no-cache"
-        mapOfHeaders["Accept"] = "application/json"
         return mapOfHeaders
-    }
-
-    private fun setBasicAuth(username: String, password: String): String {
-        val credentialsString = "$username:$password"
-        return Base64.getEncoder().encodeToString(credentialsString.toByteArray(Charset.defaultCharset()))
-    }
-
-    override fun defaultHeaders(): Map<String, String> {
-        val encodedCredentials = setBasicAuth(
-            getBasicAuthRestClientProperties().username,
-            getBasicAuthRestClientProperties().password
-        )
-        return mapOf(
-            CONTENT_TYPE to APPLICATION_JSON_VALUE,
-            ACCEPT to APPLICATION_JSON_VALUE,
-            AUTHORIZATION to "Basic $encodedCredentials"
-        )
-    }
-
-    override fun host(uri: String): String {
-        return getBasicAuthRestClientProperties().url + uri
-    }
-
-    override fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
-        val customHeaders: MutableMap<String, String> = headers.toMutableMap()
-        // inject additionalHeaders
-        customHeaders.putAll(verifyAdditionalHeaders(getBasicAuthRestClientProperties()))
-
-        if (!headers.containsKey(AUTHORIZATION)) {
-            val encodedCredentials = setBasicAuth(
-                getBasicAuthRestClientProperties().username,
-                getBasicAuthRestClientProperties().password
-            )
-            customHeaders[AUTHORIZATION] = "Basic $encodedCredentials"
-        }
-        return super.convertToBasicHeaders(customHeaders)
     }
 
     abstract fun apiUrl(): String

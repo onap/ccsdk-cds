@@ -24,6 +24,7 @@ import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicHeader
 import org.apache.http.ssl.SSLContextBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientProperties
@@ -35,8 +36,8 @@ import java.io.FileInputStream
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 
-class SSLRestClientService(private val restClientProperties: SSLRestClientProperties) :
-    BlueprintWebClientService {
+open class SSLRestClientService(private val restClientProperties: SSLRestClientProperties) :
+    BaseBlueprintWebClientService<SSLRestClientProperties>() {
 
     var auth: BlueprintWebClientService? = null
 
@@ -44,7 +45,11 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
         auth = getAuthService()
     }
 
-    private fun getAuthService(): BlueprintWebClientService? {
+    override fun getRestClientProperties(): SSLRestClientProperties {
+        return restClientProperties
+    }
+
+    private fun getAuthService(): BaseBlueprintWebClientService<RestClientProperties>? {
         // type,url and additional headers don't get carried over to TokenAuthRestClientProperties from SSLTokenAuthRestClientProperties
         // set them in auth obj to be consistent. TODO: refactor
         return when (restClientProperties) {
@@ -81,10 +86,6 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
         )
     }
 
-    override fun host(uri: String): String {
-        return restClientProperties.url + uri
-    }
-
     override fun httpClient(): CloseableHttpClient {
 
         val keystoreInstance = restClientProperties.keyStoreInstance
@@ -117,12 +118,8 @@ class SSLRestClientService(private val restClientProperties: SSLRestClientProper
         return HttpClients.custom()
             .addInterceptorFirst(WebClientUtils.logRequest())
             .addInterceptorLast(WebClientUtils.logResponse())
+            .setDefaultRequestConfig(getRequestConfig())
             .setSSLSocketFactory(csf).build()
-    }
-
-    // Non Blocking Rest Implementation
-    override suspend fun httpClientNB(): CloseableHttpClient {
-        return httpClient()
     }
 
     override fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
