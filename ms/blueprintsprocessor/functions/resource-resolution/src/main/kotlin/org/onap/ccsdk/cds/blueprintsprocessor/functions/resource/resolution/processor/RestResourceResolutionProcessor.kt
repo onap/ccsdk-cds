@@ -74,7 +74,6 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val sourceProperties =
                     JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
 
-                val path = nullToEmpty(sourceProperties.path)
                 val inputKeyMapping =
                     checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
                 val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping).toMutableMap()
@@ -84,6 +83,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 }
 
                 // Resolving content Variables
+                val path = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.path), resolvedInputKeyMapping)
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
                 resourceSourceProperties["resolved-payload"] = JacksonUtils.jsonNode(payload)
                 val urlPath =
@@ -92,10 +92,12 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
 
                 logger.info(
                     "RestResource ($dSource) dictionary information: " +
-                        "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
+                        "URL:($urlPath), path:($path), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
                 )
-                val requestHeaders = sourceProperties.headers
-                logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
+                val requestHeaders = sourceProperties.headers.mapValues { (_, value) ->
+                    resolveFromInputKeyMapping(value, resolvedInputKeyMapping)
+                }
+                logger.info("$dSource dictionary information : ($urlPath), path:($path), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
                 // Get the Rest Client Service
                 val restClientService = blueprintWebClientService(resourceAssignment, sourceProperties)
 
