@@ -74,7 +74,6 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 val sourceProperties =
                     JacksonUtils.getInstanceFromMap(resourceSourceProperties, RestResourceSource::class.java)
 
-                val path = nullToEmpty(sourceProperties.path)
                 val inputKeyMapping =
                     checkNotNull(sourceProperties.inputKeyMapping) { "failed to get input-key-mappings for $dName under $dSource properties" }
                 val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping).toMutableMap()
@@ -84,30 +83,37 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
                 }
 
                 // Resolving content Variables
+                val path = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.path), resolvedInputKeyMapping)
                 val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
                 resourceSourceProperties["resolved-payload"] = JacksonUtils.jsonNode(payload)
                 val urlPath =
                     resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
                 val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
-
+                var outputKeyMapping = sourceProperties.outputKeyMapping
+                if (!outputKeyMapping.isNullOrEmpty()) {
+                    outputKeyMapping = outputKeyMapping.mapValues { (_, value) ->
+                        resolveFromInputKeyMapping(value, resolvedInputKeyMapping)
+                    }
+                }
                 logger.info(
                     "RestResource ($dSource) dictionary information: " +
-                        "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
+                        "URL:($urlPath), path:($path), input-key-mapping:($inputKeyMapping), output-key-mapping:($outputKeyMapping)"
                 )
-                val requestHeaders = sourceProperties.headers
-                logger.info("$dSource dictionary information : ($urlPath), ($inputKeyMapping), (${sourceProperties.outputKeyMapping})")
+                val requestHeaders = sourceProperties.headers.mapValues { (_, value) ->
+                    resolveFromInputKeyMapping(value, resolvedInputKeyMapping)
+                }
+                logger.info("$dSource dictionary information : ($urlPath), path:($path), ($inputKeyMapping), ($outputKeyMapping)")
                 // Get the Rest Client Service
                 val restClientService = blueprintWebClientService(resourceAssignment, sourceProperties)
 
                 val response = restClientService.exchangeResource(verb, urlPath, payload, requestHeaders.toMap())
                 val responseStatusCode = response.status
                 val responseBody = response.body
-                val outputKeyMapping = sourceProperties.outputKeyMapping
                 if (responseStatusCode in 200..299 && outputKeyMapping.isNullOrEmpty()) {
                     resourceAssignment.status = BluePrintConstants.STATUS_SUCCESS
                     logger.info("AS>> outputKeyMapping==null, will not populateResource")
                 } else if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
-                    populateResource(resourceAssignment, sourceProperties, responseBody, path)
+                    populateResource(resourceAssignment, sourceProperties, responseBody, path, outputKeyMapping)
                 } else {
                     val errMsg =
                         "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
@@ -147,14 +153,15 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         resourceAssignment: ResourceAssignment,
         sourceProperties: RestResourceSource,
         restResponse: String,
-        path: String
+        path: String,
+        outputKeyMapping: MutableMap<String, String>
     ) {
         val dName = resourceAssignment.dictionaryName
         val dSource = resourceAssignment.dictionarySource
         val type = nullToEmpty(resourceAssignment.property?.type)
         val metadata = resourceAssignment.property!!.metadata
 
-        val outputKeyMapping = checkNotNull(sourceProperties.outputKeyMapping) {
+        val outputKeyMapping = checkNotNull(outputKeyMapping) {
             "failed to get output-key-mappings for $dName under $dSource properties"
         }
         logger.info("Response processing type ($type)")
