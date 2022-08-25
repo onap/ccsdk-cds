@@ -120,6 +120,90 @@
             "vnf-id": "vnf-id"
           },
           "output-key-mapping": {
+            "aai-get-resource": "vnf-id"
+          },
+          "key-dependencies": [
+            "vnf-id"
+          ]
+        }
+      }
+    }
+  },
+  "aai-get-resource-null": {
+    "tags": "aai-get",
+    "name": "aai-get-resource-null",
+    "property": {
+      "description": "primary aai data to get resource with empty content",
+      "type": "string"
+    },
+    "updated-by": "Rajewski, Lukasz <lukasz.rajewski@t-mobile.pl>",
+    "sources": {
+      "aai-data": {
+        "type": "source-rest",
+        "properties": {
+          "type": "JSON",
+          "verb": "GET",
+          "url-path": "/aai/v22/network/generic-vnfs/generic-vnf/$vnf-id",
+          "path": "",
+          "input-key-mapping": {
+            "vnf-id": "vnf-id"
+          },
+          "key-dependencies": [
+            "vnf-id"
+          ]
+        }
+      }
+    }
+  },
+  "aai-get-resource-wrong-mapping": {
+    "tags": "aai-get",
+    "name": "aai-get-resource-wrong-mapping",
+    "property": {
+      "description": "primary aai data to get resource with wrong mapping",
+      "type": "string"
+    },
+    "updated-by": "Rajewski, Lukasz <lukasz.rajewski@t-mobile.pl>",
+    "sources": {
+      "aai-data": {
+        "type": "source-rest",
+        "properties": {
+          "type": "JSON",
+          "verb": "GET",
+          "url-path": "/aai/v22/network/generic-vnfs/generic-vnf/$vnf-id",
+          "path": "",
+          "input-key-mapping": {
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
+            "aai-get-resource-wrong-mapping": "wrong"
+          },
+          "key-dependencies": [
+            "vnf-id"
+          ]
+        }
+      }
+    }
+  },
+  "aai-get-json-resource": {
+    "tags": "aai-get-json",
+    "name": "aai-get-json-resource",
+    "property": {
+      "description": "primary aai data to get resource",
+      "type": "json"
+    },
+    "updated-by": "Rajewski, Lukasz <lukasz.rajewski@t-mobile.pl>",
+    "sources": {
+      "aai-data": {
+        "type": "source-rest",
+        "properties": {
+          "type": "JSON",
+          "verb": "GET",
+          "url-path": "/aai/v22/network/generic-vnfs/generic-vnf/$vnf-id",
+          "path": "",
+          "input-key-mapping": {
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
           },
           "key-dependencies": [
             "vnf-id"

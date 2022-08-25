@@ -124,7 +124,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         return true
     }
 
-    suspend fun executeScript(resourceAssignment: ResourceAssignment) {
+    open suspend fun executeScript(resourceAssignment: ResourceAssignment) {
         return when (scriptType) {
             BluePrintConstants.SCRIPT_JYTHON -> {
                 executeScriptBlocking(resourceAssignment)
@@ -198,7 +198,7 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         raRuntimeService.getBluePrintError().addError(error, getName())
     }
 
-    fun isTemplateKeyValueNull(resourceAssignment: ResourceAssignment): Boolean {
+    open fun isTemplateKeyValueNull(resourceAssignment: ResourceAssignment): Boolean {
         val resourceProp = checkNotNull(resourceAssignment.property) {
             "Failed to populate mandatory resource resource mapping $resourceAssignment"
         }
