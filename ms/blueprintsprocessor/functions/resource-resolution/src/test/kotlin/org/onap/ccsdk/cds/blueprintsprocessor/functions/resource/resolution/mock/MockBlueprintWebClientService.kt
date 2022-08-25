@@ -36,6 +36,15 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
     else restClientProperties.url.split(":")[2]
     private var headers: Map<String, String>
 
+    companion object {
+        const val JSON_OUTPUT: String = "{" +
+            "\"vnf-id\":\"123456\"," +
+            "\"param\": [{\"value\": \"vnf1\"}]," +
+            "\"vnf_name\":\"vnf1\"," +
+            "\"vnf-name\":\"vnf1\"" +
+            "}"
+    }
+
     init {
         mockServer = ClientAndServer.startClientAndServer(port.toInt())
         headers = defaultHeaders()
@@ -73,16 +82,19 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
     override fun exchangeResource(
         method: String,
         path: String,
-        payload: String
+        payload: String,
+        headers: Map<String, String>
     ): BlueprintWebClientService.WebClientResponse<String> {
-        val header = arrayOf(BasicHeader(HttpHeaders.AUTHORIZATION, headers[HttpHeaders.AUTHORIZATION]))
+        val header = arrayOf(BasicHeader(HttpHeaders.AUTHORIZATION, this.headers[HttpHeaders.AUTHORIZATION]))
         return when (method) {
             "POST" -> {
                 post(path, payload, header, String::class.java)
             }
+
             "PUT" -> {
                 put(path, payload, header, String::class.java)
             }
+
             else -> {
                 get(path, header, String::class.java)
             }
@@ -92,32 +104,36 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
     private fun setRequest(method: String, path: String) {
         val requestResponse = when (method) {
             "POST" -> {
-                "Post response"
+                ""
             }
+
             "PUT" -> {
-                "Put response"
+                ""
             }
+
             else -> {
-                "Get response"
+                JSON_OUTPUT
             }
         }
         mockServer.`when`(
             request().withHeaders(Header(HttpHeaders.AUTHORIZATION, headers[HttpHeaders.AUTHORIZATION]))
                 .withMethod(method)
                 .withPath(path)
-        ).respond(response().withStatusCode(200).withBody("{\"aai-resource\":\"$requestResponse\"}"))
+        ).respond(response().withStatusCode(200).withBody(requestResponse))
     }
 
     private fun setRequestWithPayload(method: String, path: String, payload: String) {
         val requestResponse = when (method) {
             "POST" -> {
-                "Post response"
+                ""
             }
+
             "PUT" -> {
-                "Put response"
+                ""
             }
+
             else -> {
-                "Get response"
+                JSON_OUTPUT
             }
         }
         mockServer.`when`(
@@ -126,7 +142,7 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
                 .withPath(path)
                 .withQueryStringParameter("format", "resource")
                 .withBody(payload)
-        ).respond(response().withStatusCode(200).withBody("{\"aai-resource\":\"$requestResponse\"}"))
+        ).respond(response().withStatusCode(200).withBody(requestResponse))
     }
 
     private fun setBasicAuth(username: String, password: String): String {

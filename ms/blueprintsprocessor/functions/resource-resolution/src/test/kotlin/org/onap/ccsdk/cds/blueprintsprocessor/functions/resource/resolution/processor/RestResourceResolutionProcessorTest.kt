@@ -15,6 +15,7 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,18 +23,24 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockRestResourceResolutionProcessor
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
-import kotlin.test.assertNotNull
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
@@ -53,10 +60,6 @@ class RestResourceResolutionProcessorTest {
     @BeforeTest
     fun init() {
         restResourceResolutionProcessor = MockRestResourceResolutionProcessor(bluePrintRestLibPropertyService)
-    }
-
-    @Test
-    fun `test rest resource resolution`() {
         runBlocking {
             val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
                 "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
@@ -73,75 +76,181 @@ class RestResourceResolutionProcessorTest {
             scriptPropertyInstances["mock-service2"] = MockCapabilityService()
 
             restResourceResolutionProcessor.scriptPropertyInstances = scriptPropertyInstances
+        }
+    }
 
+    @AfterTest
+    fun tearDown() {
+        bluePrintRestLibPropertyService.tearDown()
+    }
+
+    private fun getExpectedJsonResponse(field: String? = null): JsonNode {
+        val node = JacksonUtils.jsonNode(MockBlueprintWebClientService.JSON_OUTPUT)
+        return if (field != null)
+            node.get(field)
+        else
+            node
+    }
+
+    @Test
+    fun `test rest resource resolution sdnc`() {
+        runBlocking {
             val resourceAssignment = ResourceAssignment().apply {
-                name = "rr-name"
+                name = "vnf_name"
                 dictionaryName = "vnf_name"
                 dictionarySource = "sdnc"
                 property = PropertyDefinition().apply {
                     type = "string"
+                    required = true
                 }
             }
 
-            val processorName = restResourceResolutionProcessor.applyNB(resourceAssignment)
-            assertNotNull(processorName, "couldn't get Rest resource assignment processor name")
-            println(processorName)
+            val result = restResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertTrue(result, "get Rest resource assignment failed")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_SUCCESS,
+                "get Rest resource assignment failed"
+            )
+            val value = restResourceResolutionProcessor.raRuntimeService.getResolutionStore(resourceAssignment.name)
+            println("Resolution result: $result, status: ${resourceAssignment.status}, value: ${value.asText()}")
+            assertEquals(
+                getExpectedJsonResponse(resourceAssignment.name).asText(),
+                value.asText(),
+                "get Rest resource assignment failed - enexpected value"
+            )
         }
     }
 
     @Test
-    fun `test rest aai get resource resolution`() {
+    fun `test rest resource resolution get required fails`() {
         runBlocking {
-            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
-            )
-
-            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
-
-            restResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
-            restResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils
-                .resourceDefinitions(bluePrintContext.rootPath)
-
-            val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
-            scriptPropertyInstances["mock-service1"] = MockCapabilityService()
-            scriptPropertyInstances["mock-service2"] = MockCapabilityService()
-
-            restResourceResolutionProcessor.scriptPropertyInstances = scriptPropertyInstances
-
             val resourceAssignment = ResourceAssignment().apply {
-                name = "rr-aai"
+                name = "rr-aai-empty"
+                dictionaryName = "aai-get-resource-null"
+                dictionarySource = "aai-data"
+                property = PropertyDefinition().apply {
+                    type = "string"
+                    required = true
+                }
+            }
+
+            val result = restResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertFalse(result, "get Rest resource assignment succeeded while it should fail")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_FAILURE,
+                "get Rest resource assignment succeeded while it should fail"
+            )
+            println("Resolution result: $result, status: ${resourceAssignment.status}")
+        }
+    }
+
+    @Test
+    fun `test rest resource resolution get with wrong mapping fails`() {
+        runBlocking {
+            val resourceAssignment = ResourceAssignment().apply {
+                name = "rr-aai-wrong-mapping"
+                dictionaryName = "aai-get-resource-wrong-mapping"
+                dictionarySource = "aai-data"
+                property = PropertyDefinition().apply {
+                    type = "string"
+                    required = false
+                }
+            }
+
+            val result = restResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertFalse(result, "get Rest resource assignment succeeded while it should fail")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_FAILURE,
+                "get Rest resource assignment succeeded while it should fail"
+            )
+            println("Resolution result: $result, status: ${resourceAssignment.status}")
+        }
+    }
+
+    @Test
+    fun `test rest resource resolution get without output mapping`() {
+        runBlocking {
+            val resourceAssignment = ResourceAssignment().apply {
+                name = "rr-aai-empty"
+                dictionaryName = "aai-get-resource-null"
+                dictionarySource = "aai-data"
+                property = PropertyDefinition().apply {
+                    type = "string"
+                    required = false
+                }
+            }
+
+            val result = restResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertTrue(result, "get Rest resource assignment failed")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_SUCCESS,
+                "get Rest resource assignment failed"
+            )
+            println("Resolution result: $result, status: ${resourceAssignment.status}")
+        }
+    }
+
+    @Test
+    fun `test rest resource resolution aai get string`() {
+        runBlocking {
+            val resourceAssignment = ResourceAssignment().apply {
+                name = "vnf-id"
                 dictionaryName = "aai-get-resource"
                 dictionarySource = "aai-data"
                 property = PropertyDefinition().apply {
                     type = "string"
+                    required = true
                 }
             }
 
-            val processorName = restResourceResolutionProcessor.applyNB(resourceAssignment)
-            assertNotNull(processorName, "couldn't get AAI Rest resource assignment processor name")
-            println(processorName)
+            val result = restResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertTrue(result, "get AAI string Rest resource assignment failed")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_SUCCESS,
+                "get AAI string Rest resource assignment failed"
+            )
+            val value = restResourceResolutionProcessor.raRuntimeService.getResolutionStore(resourceAssignment.name)
+            println("Resolution result: $result, status: ${resourceAssignment.status}, value: ${value.asText()}")
+            assertEquals(
+                getExpectedJsonResponse(resourceAssignment.name).asText(),
+                value.asText(),
+                "get Rest resource assignment failed - enexpected value"
+            )
         }
     }
 
     @Test
-    fun `test rest aai put resource resolution`() {
+    fun `test rest resource resolution aai get json`() {
         runBlocking {
-            val bluePrintContext = BluePrintMetadataUtils.getBluePrintContext(
-                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            val resourceAssignment = ResourceAssignment().apply {
+                name = "generic-vnf"
+                dictionaryName = "aai-get-json-resource"
+                dictionarySource = "aai-data"
+                property = PropertyDefinition().apply {
+                    type = "json"
+                    required = true
+                }
+            }
+
+            val result = restResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertTrue(result, "get AAI json Rest resource assignment failed")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_SUCCESS,
+                "get AAI json Rest resource assignment failed"
             )
+            val value = restResourceResolutionProcessor.raRuntimeService.getResolutionStore(resourceAssignment.name)
+            println("Resolution result: $result, status: ${resourceAssignment.status}, value: ${value.toPrettyString()}")
+            assertEquals(
+                getExpectedJsonResponse().toPrettyString(),
+                value.toPrettyString(),
+                "get Rest resource assignment failed - enexpected value"
+            )
+        }
+    }
 
-            val resourceAssignmentRuntimeService = ResourceAssignmentRuntimeService("1234", bluePrintContext)
-
-            restResourceResolutionProcessor.raRuntimeService = resourceAssignmentRuntimeService
-            restResourceResolutionProcessor.resourceDictionaries = ResourceAssignmentUtils
-                .resourceDefinitions(bluePrintContext.rootPath)
-
-            val scriptPropertyInstances: MutableMap<String, Any> = mutableMapOf()
-            scriptPropertyInstances["mock-service1"] = MockCapabilityService()
-            scriptPropertyInstances["mock-service2"] = MockCapabilityService()
-
-            restResourceResolutionProcessor.scriptPropertyInstances = scriptPropertyInstances
-
+    @Test
+    fun `test rest resource resolution aai put`() {
+        runBlocking {
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-aai"
                 dictionaryName = "aai-put-resource"
@@ -151,9 +260,13 @@ class RestResourceResolutionProcessorTest {
                 }
             }
 
-            val processorName = restResourceResolutionProcessor.applyNB(resourceAssignment)
-            assertNotNull(processorName, "couldn't get AAI Rest resource assignment processor name")
-            println(processorName)
+            val result = restResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertTrue(result, "put AAI Rest resource assignment failed")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_SUCCESS,
+                "put AAI json Rest resource assignment failed"
+            )
+            println("Resolution result: $result, status: ${resourceAssignment.status}")
         }
     }
 }
