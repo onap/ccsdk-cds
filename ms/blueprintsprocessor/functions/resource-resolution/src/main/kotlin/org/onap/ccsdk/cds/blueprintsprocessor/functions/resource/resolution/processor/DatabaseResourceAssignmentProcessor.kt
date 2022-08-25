@@ -78,7 +78,7 @@ open class DatabaseResourceAssignmentProcessor(
         }
     }
 
-    private fun setValueFromDB(resourceAssignment: ResourceAssignment) {
+    open fun setValueFromDB(resourceAssignment: ResourceAssignment) {
         val dName = resourceAssignment.dictionaryName!!
         val dSource = resourceAssignment.dictionarySource!!
         val resourceDefinition = resourceDefinition(dName)
@@ -119,7 +119,7 @@ open class DatabaseResourceAssignmentProcessor(
         populateResource(resourceAssignment, sourceProperties, rows)
     }
 
-    private fun blueprintDBLibService(sourceProperties: DatabaseResourceSource, selector: String): BluePrintDBLibGenericService {
+    open fun blueprintDBLibService(sourceProperties: DatabaseResourceSource, selector: String): BluePrintDBLibGenericService {
         return if (isNotEmpty(sourceProperties.endpointSelector)) {
             val dbPropertiesJson = raRuntimeService.resolveDSLExpression(sourceProperties.endpointSelector!!)
             bluePrintDBLibPropertyService.JdbcTemplate(dbPropertiesJson)
@@ -129,7 +129,7 @@ open class DatabaseResourceAssignmentProcessor(
     }
 
     @Throws(BluePrintProcessorException::class)
-    private fun validate(resourceAssignment: ResourceAssignment) {
+    open fun validate(resourceAssignment: ResourceAssignment) {
         checkNotEmpty(resourceAssignment.name) { "resource assignment template key is not defined" }
         checkNotEmpty(resourceAssignment.dictionaryName) {
             "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
@@ -140,12 +140,12 @@ open class DatabaseResourceAssignmentProcessor(
     }
 
     // placeholder to get the list of DB sources.
-    private fun getListOfDBSources(): Array<String> {
+    open fun getListOfDBSources(): Array<String> {
         return ResourceSourceMappingFactory.getRegisterSourceMapping()
             .resourceSourceMappings.filterValues { it == "source-db" }.keys.toTypedArray()
     }
 
-    private fun populateNamedParameter(inputKeyMapping: Map<String, String>): Map<String, Any> {
+    open fun populateNamedParameter(inputKeyMapping: Map<String, String>): Map<String, Any> {
         val namedParameters = HashMap<String, Any>()
         inputKeyMapping.forEach {
             val expressionValue = raRuntimeService.getResolutionStore(it.value).textValue()
@@ -159,7 +159,7 @@ open class DatabaseResourceAssignmentProcessor(
     }
 
     @Throws(BluePrintProcessorException::class)
-    private fun populateResource(
+    open fun populateResource(
         resourceAssignment: ResourceAssignment,
         sourceProperties: DatabaseResourceSource,
         rows: List<Map<String, Any>>
