@@ -91,7 +91,7 @@ open class CapabilityResourceResolutionProcessor(private var componentFunctionSc
         ResourceAssignmentUtils.setFailedResourceDataValue(resourceAssignment, runtimeException.message)
     }
 
-    suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>):
+    open suspend fun scriptInstance(scriptType: String, scriptClassReference: String, instanceDependencies: List<String>):
         ResourceAssignmentProcessor {
 
             log.info("creating resource resolution of script type($scriptType), reference name($scriptClassReference)")
