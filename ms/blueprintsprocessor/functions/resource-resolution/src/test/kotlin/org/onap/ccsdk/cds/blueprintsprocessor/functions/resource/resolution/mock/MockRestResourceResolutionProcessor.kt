@@ -16,17 +16,12 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ArrayNode
 import org.apache.commons.collections.MapUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.ResourceAssignmentProcessor
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintTypes
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.RestResourceResolutionProcessor
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
-import org.onap.ccsdk.cds.controllerblueprints.core.nullToEmpty
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
 import java.util.HashMap
@@ -34,7 +29,7 @@ import java.util.HashMap
 class MockRestResourceResolutionProcessor(
     private val blueprintRestLibPropertyService:
         MockBluePrintRestLibPropertyService
-) : ResourceAssignmentProcessor() {
+) : RestResourceResolutionProcessor(blueprintRestLibPropertyService) {
 
     private val logger = LoggerFactory.getLogger(MockRestResourceResolutionProcessor::class.java)
 
@@ -53,128 +48,10 @@ class MockRestResourceResolutionProcessor(
         return "${ResourceResolutionConstants.PREFIX_RESOURCE_RESOLUTION_PROCESSOR}source-rest"
     }
 
-    override suspend fun processNB(executionRequest: ResourceAssignment) {
-        try {
-            // Check if It has Input
-            if (!setFromInput(executionRequest)) {
-                val dName = executionRequest.dictionaryName
-                val dSource = executionRequest.dictionarySource
-                val resourceDefinition = resourceDictionaries[dName]
-
-                val resourceSource = resourceDefinition!!.sources[dSource]
-
-                val resourceSourceProperties = resourceSource!!.properties
-
-                val sourceProperties =
-                    JacksonUtils.getInstanceFromMap(resourceSourceProperties!!, RestResourceSource::class.java)
-
-                val path = nullToEmpty(sourceProperties.path)
-                val inputKeyMapping = sourceProperties.inputKeyMapping
-
-                val resolvedInputKeyMapping = resolveInputKeyMappingVariables(inputKeyMapping!!).toMutableMap()
-
-                // Resolving content Variables
-                val payload = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.payload), resolvedInputKeyMapping)
-                val urlPath =
-                    resolveFromInputKeyMapping(checkNotNull(sourceProperties.urlPath), resolvedInputKeyMapping)
-                val verb = resolveFromInputKeyMapping(nullToEmpty(sourceProperties.verb), resolvedInputKeyMapping)
-
-                logger.info(
-                    "MockRestResource ($dSource) dictionary information: " +
-                        "URL:($urlPath), input-key-mapping:($inputKeyMapping), output-key-mapping:(${sourceProperties.outputKeyMapping})"
-                )
-
-                // Get the Rest Client Service
-                val restClientService = blueprintWebClientService(executionRequest)
-
-                val response = restClientService.exchangeResource(verb, urlPath, payload)
-                val responseStatusCode = response.status
-                val responseBody = response.body
-                if (responseStatusCode in 200..299 && !responseBody.isBlank()) {
-                    populateResource(executionRequest, sourceProperties, responseBody, path)
-                    restClientService.tearDown()
-                } else {
-                    val errMsg =
-                        "Failed to get $dSource result for dictionary name ($dName) using urlPath ($urlPath) response_code: ($responseStatusCode)"
-                    logger.warn(errMsg)
-                    throw BluePrintProcessorException(errMsg)
-                }
-            }
-        } catch (e: Exception) {
-            ResourceAssignmentUtils.setFailedResourceDataValue(executionRequest, e.message)
-            throw BluePrintProcessorException(
-                "Failed in template resolutionKey ($executionRequest) assignments with: ${e.message}",
-                e
-            )
-        }
-    }
-
-    override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ResourceAssignment) {
-        addError(runtimeException.message!!)
-    }
-
-    private fun blueprintWebClientService(resourceAssignment: ResourceAssignment): MockBlueprintWebClientService {
-        return blueprintRestLibPropertyService.mockBlueprintWebClientService(resourceAssignment.dictionarySource!!)
-    }
-
-    @Throws(BluePrintProcessorException::class)
-    private fun populateResource(
+    override fun blueprintWebClientService(
         resourceAssignment: ResourceAssignment,
-        sourceProperties: RestResourceSource,
-        restResponse: String,
-        path: String
-    ) {
-        val type = nullToEmpty(resourceAssignment.property?.type)
-        lateinit var entrySchemaType: String
-
-        val outputKeyMapping = sourceProperties.outputKeyMapping
-
-        val responseNode = JacksonUtils.jsonNode(restResponse).at(path)
-
-        when (type) {
-            in BluePrintTypes.validPrimitiveTypes() -> {
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, responseNode)
-            }
-            in BluePrintTypes.validCollectionTypes() -> {
-                // Array Types
-                entrySchemaType = resourceAssignment.property!!.entrySchema!!.type
-                val arrayNode = responseNode as ArrayNode
-
-                if (entrySchemaType !in BluePrintTypes.validPrimitiveTypes()) {
-                    val responseArrayNode = responseNode.toList()
-                    for (responseSingleJsonNode in responseArrayNode) {
-
-                        val arrayChildNode = JacksonUtils.objectMapper.createObjectNode()
-
-                        outputKeyMapping!!.map {
-                            val responseKeyValue = responseSingleJsonNode.get(it.key)
-                            val propertyTypeForDataType = ResourceAssignmentUtils
-                                .getPropertyType(raRuntimeService, entrySchemaType, it.key)
-
-                            JacksonUtils.populateJsonNodeValues(
-                                it.value,
-                                responseKeyValue, propertyTypeForDataType, arrayChildNode
-                            )
-                        }
-                        arrayNode.add(arrayChildNode)
-                    }
-                }
-                // Set the List of Complex Values
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, arrayNode)
-            }
-            else -> {
-                // Complex Types
-                entrySchemaType = resourceAssignment.property!!.type
-                val objectNode = JacksonUtils.objectMapper.createObjectNode()
-                outputKeyMapping!!.map {
-                    val responseKeyValue = responseNode.get(it.key)
-                    val propertyTypeForDataType = ResourceAssignmentUtils
-                        .getPropertyType(raRuntimeService, entrySchemaType, it.key)
-                    JacksonUtils.populateJsonNodeValues(it.value, responseKeyValue, propertyTypeForDataType, objectNode)
-                }
-                // Set the List of Complex Values
-                ResourceAssignmentUtils.setResourceDataValue(resourceAssignment, raRuntimeService, objectNode)
-            }
-        }
+        restResourceSource: RestResourceSource
+    ): BlueprintWebClientService {
+        return blueprintRestLibPropertyService.mockBlueprintWebClientService(resourceAssignment.dictionarySource!!)
     }
 }

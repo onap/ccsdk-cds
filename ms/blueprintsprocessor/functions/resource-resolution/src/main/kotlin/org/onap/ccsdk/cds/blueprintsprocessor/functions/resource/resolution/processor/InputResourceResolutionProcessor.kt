@@ -63,7 +63,7 @@ open class InputResourceResolutionProcessor : ResourceAssignmentProcessor() {
     }
 
     // usecase: where input data attribute doesn't match with resourceName, and needs an alternate mapping provided under key-dependencies.
-    private fun setFromKeyDependencies(resourceAssignment: ResourceAssignment) {
+    open fun setFromKeyDependencies(resourceAssignment: ResourceAssignment) {
         val dName = resourceAssignment.dictionaryName!!
         val dSource = resourceAssignment.dictionarySource!!
         val resourceDefinition = resourceDefinition(dName)

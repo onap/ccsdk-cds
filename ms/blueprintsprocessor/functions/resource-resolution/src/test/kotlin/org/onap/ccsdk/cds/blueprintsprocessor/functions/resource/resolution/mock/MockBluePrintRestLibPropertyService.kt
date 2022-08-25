@@ -22,6 +22,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPrope
 class MockBluePrintRestLibPropertyService(bluePrintProperties: BluePrintPropertiesService) :
     BluePrintRestLibPropertyService(bluePrintProperties) {
 
+    private var services = mutableSetOf<MockBlueprintWebClientService>()
+
     fun mockBlueprintWebClientService(selector: String):
         MockBlueprintWebClientService {
             val prefix = "blueprintsprocessor.restclient.$selector"
@@ -31,6 +33,13 @@ class MockBluePrintRestLibPropertyService(bluePrintProperties: BluePrintProperti
 
     private fun mockBlueprintWebClientService(restClientProperties: RestClientProperties):
         MockBlueprintWebClientService {
-            return MockBlueprintWebClientService(restClientProperties)
+            val service = MockBlueprintWebClientService(restClientProperties)
+            services.add(service)
+            return service
         }
+
+    fun tearDown() {
+        services.forEach { it.tearDown() }
+        services.clear()
+    }
 }

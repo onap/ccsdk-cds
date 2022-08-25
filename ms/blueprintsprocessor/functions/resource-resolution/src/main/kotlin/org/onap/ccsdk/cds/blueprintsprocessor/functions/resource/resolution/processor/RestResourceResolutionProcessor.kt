@@ -136,7 +136,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
         }
     }
 
-    fun blueprintWebClientService(
+    open fun blueprintWebClientService(
         resourceAssignment: ResourceAssignment,
         restResourceSource: RestResourceSource
     ): BlueprintWebClientService {
@@ -149,7 +149,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
     }
 
     @Throws(BluePrintProcessorException::class)
-    private fun populateResource(
+    open fun populateResource(
         resourceAssignment: ResourceAssignment,
         sourceProperties: RestResourceSource,
         restResponse: String,
@@ -183,7 +183,7 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
     }
 
     @Throws(BluePrintProcessorException::class)
-    private fun validate(resourceAssignment: ResourceAssignment) {
+    open fun validate(resourceAssignment: ResourceAssignment) {
         checkNotEmpty(resourceAssignment.name) { "resource assignment template key is not defined" }
         checkNotEmpty(resourceAssignment.dictionaryName) {
             "resource assignment dictionary name is not defined for template key (${resourceAssignment.name})"
