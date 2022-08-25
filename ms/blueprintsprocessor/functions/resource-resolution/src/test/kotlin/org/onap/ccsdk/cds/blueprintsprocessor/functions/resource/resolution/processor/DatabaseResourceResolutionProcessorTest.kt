@@ -25,6 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockBlueprintProcessorCatalogServiceImpl
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock.MockDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -33,7 +34,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
@@ -72,8 +74,12 @@ class DatabaseResourceResolutionProcessorTest {
                 }
             }
 
-            val processorName = databaseResourceAssignmentProcessor.applyNB(resourceAssignment)
-            assertNotNull(processorName, "couldn't get Database resource assignment processor name")
+            val result = databaseResourceAssignmentProcessor.applyNB(resourceAssignment)
+            assertTrue(result, "An error occurred while trying to test the DatabaseResourceAssignmentProcessor")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_SUCCESS,
+                "An error occurred while trying to test the DatabaseResourceAssignmentProcessor"
+            )
         }
     }
 
@@ -102,8 +108,12 @@ class DatabaseResourceResolutionProcessorTest {
                 }
             }
 
-            val processorName = databaseResourceAssignmentProcessor.applyNB(resourceAssignment)
-            assertNotNull(processorName, "couldn't get Database resource assignment processor name")
+            val result = databaseResourceAssignmentProcessor.applyNB(resourceAssignment)
+            assertTrue(result, "An error occurred while trying to test the DatabaseResourceAssignmentProcessor")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_SUCCESS,
+                "An error occurred while trying to test the DatabaseResourceAssignmentProcessor"
+            )
         }
     }
 }
