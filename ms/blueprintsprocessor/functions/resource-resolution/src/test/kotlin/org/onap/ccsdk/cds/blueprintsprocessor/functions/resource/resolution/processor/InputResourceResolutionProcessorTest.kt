@@ -24,6 +24,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
@@ -65,11 +67,16 @@ class InputResourceResolutionProcessorTest {
                 dictionarySource = "input"
                 property = PropertyDefinition().apply {
                     type = "string"
+                    required = true
                 }
             }
 
-            val operationOutcome = inputResourceResolutionProcessor.applyNB(resourceAssignment)
-            assertTrue(operationOutcome, "An error occurred while trying to test the InputResourceResolutionProcessor")
+            val result = inputResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertTrue(result, "An error occurred while trying to test the InputResourceResolutionProcessor")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_SUCCESS,
+                "An error occurred while trying to test the InputResourceResolutionProcessor"
+            )
         }
     }
 }
