@@ -15,10 +15,12 @@
  */
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.databind.node.TextNode
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.data.PropertyDefinition
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
@@ -26,7 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import kotlin.test.assertNotNull
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(classes = [DefaultResourceResolutionProcessor::class])
@@ -54,12 +57,17 @@ class DefaultResourceResolutionProcessorTest {
                 dictionarySource = "default"
                 property = PropertyDefinition().apply {
                     type = "string"
+                    defaultValue = TextNode("test")
+                    required = true
                 }
             }
 
-            val processorName = defaultResourceResolutionProcessor.applyNB(resourceAssignment)
-            assertNotNull(processorName, "couldn't get Default resource assignment processor name")
-            println(processorName)
+            val result = defaultResourceResolutionProcessor.applyNB(resourceAssignment)
+            assertTrue(result, "An error occurred while trying to test the DefaultResourceResolutionProcessor")
+            assertEquals(
+                resourceAssignment.status, BluePrintConstants.STATUS_SUCCESS,
+                "An error occurred while trying to test the DefaultResourceResolutionProcessor"
+            )
         }
     }
 }
