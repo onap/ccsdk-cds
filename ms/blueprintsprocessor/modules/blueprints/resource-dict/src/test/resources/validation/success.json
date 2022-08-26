@@ -79,8 +79,11 @@
       "type": "string",
       "required": true
     },
-    "dictionary-name": "vnf-name",
-    "dictionary-source": "input",
+    "templating-constants": {
+      "parameter-name": "vnf-name"
+    },
+    "dictionary-name": "vnf-param",
+    "dictionary-source": "sdnc",
     "dependencies": []
   },
   {

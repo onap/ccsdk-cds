@@ -19,7 +19,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.apache.commons.collections.MapUtils
+import com.fasterxml.jackson.databind.node.TextNode
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceAssignmentRuntimeService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.utils.ResourceAssignmentUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
@@ -32,7 +32,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintVelocityTem
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.slf4j.LoggerFactory
-import java.util.HashMap
 
 abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssignment, Boolean> {
 
@@ -93,15 +92,12 @@ abstract class ResourceAssignmentProcessor : BlueprintFunctionNode<ResourceAssig
         return if (resourceDictionaries.containsKey(name)) resourceDictionaries[name] else null
     }
 
-    open fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, JsonNode> {
-        val resolvedInputKeyMapping = HashMap<String, JsonNode>()
-        if (MapUtils.isNotEmpty(inputKeyMapping)) {
-            for ((key, value) in inputKeyMapping) {
-                val resultValue = raRuntimeService.getResolutionStore(value)
-                resolvedInputKeyMapping[key] = resultValue
-            }
-        }
-        return resolvedInputKeyMapping
+    open fun resolveInputKeyMappingVariables(
+        inputKeyMapping: Map<String, String>,
+        templatingConstants: Map<String, String>?
+    ): Map<String, JsonNode> {
+        val const = templatingConstants?.mapValues { TextNode(it.value) as JsonNode }
+        return inputKeyMapping.mapValues { const?.get(it.value) ?: raRuntimeService.getResolutionStore(it.value) }
     }
 
     open suspend fun resolveFromInputKeyMapping(valueToResolve: String, keyMapping: MutableMap<String, JsonNode>):

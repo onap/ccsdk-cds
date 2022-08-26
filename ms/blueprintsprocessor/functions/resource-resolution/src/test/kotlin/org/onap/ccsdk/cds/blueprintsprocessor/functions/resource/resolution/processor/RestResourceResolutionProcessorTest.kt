@@ -84,8 +84,9 @@ class RestResourceResolutionProcessorTest {
 
             val resourceAssignment = ResourceAssignment().apply {
                 name = "rr-name"
-                dictionaryName = "vnf_name"
+                dictionaryName = "vnf_parameter"
                 dictionarySource = "sdnc"
+                templatingConstants = mutableMapOf("parameter-name" to "vnf_name")
                 property = PropertyDefinition().apply {
                     type = "string"
                     required = true
