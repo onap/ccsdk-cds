@@ -17,6 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor
 
+import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.blueprintsprocessor.db.BluePrintDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDBLibGenericService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyService
@@ -100,10 +101,15 @@ open class DatabaseResourceAssignmentProcessor(
             "failed to get input-key-mappings for $dName under $dSource properties"
         }
 
-        sourceProperties.inputKeyMapping
-            ?.mapValues { raRuntimeService.getResolutionStore(it.value) }
-            ?.map { KeyIdentifier(it.key, it.value) }
-            ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
+        val resolvedInputKeyMapping = resolveInputKeyMappingVariables(
+            inputKeyMapping,
+            resourceAssignment.templatingConstants
+        ).toMutableMap()
+        logger.info("\nResolved Input Key mappings: \n$resolvedInputKeyMapping")
+
+        resolvedInputKeyMapping.map { KeyIdentifier(it.key, it.value) }.let {
+            resourceAssignment.keyIdentifiers.addAll(it)
+        }
 
         logger.info(
             "DatabaseResource ($dSource) dictionary information: " +
@@ -111,7 +117,7 @@ open class DatabaseResourceAssignmentProcessor(
         )
         val jdbcTemplate = blueprintDBLibService(sourceProperties, dSource)
 
-        val rows = jdbcTemplate.query(sql, populateNamedParameter(inputKeyMapping))
+        val rows = jdbcTemplate.query(sql, populateNamedParameter(resolvedInputKeyMapping))
         if (rows.isEmpty()) {
             logger.warn("Emptyset from dictionary-source($dSource) for dictionary name ($dName) the query ($sql).")
         }
@@ -145,10 +151,10 @@ open class DatabaseResourceAssignmentProcessor(
             .resourceSourceMappings.filterValues { it == "source-db" }.keys.toTypedArray()
     }
 
-    open fun populateNamedParameter(inputKeyMapping: Map<String, String>): Map<String, Any> {
+    open fun populateNamedParameter(inputKeyMapping: Map<String, JsonNode>): Map<String, Any> {
         val namedParameters = HashMap<String, Any>()
         inputKeyMapping.forEach {
-            val expressionValue = raRuntimeService.getResolutionStore(it.value).textValue()
+            val expressionValue = it.value.textValue()
             logger.trace("Reference dictionary key (${it.key}) resulted in value ($expressionValue)")
             namedParameters[it.key] = expressionValue
         }
