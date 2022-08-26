@@ -16,7 +16,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.mock
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.apache.commons.collections.MapUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.RestResourceSource
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.ResourceResolutionConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.processor.RestResourceResolutionProcessor
@@ -24,7 +23,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientSer
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonPrimitive
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.slf4j.LoggerFactory
-import java.util.HashMap
 
 class MockRestResourceResolutionProcessor(
     private val blueprintRestLibPropertyService:
@@ -33,15 +31,14 @@ class MockRestResourceResolutionProcessor(
 
     private val logger = LoggerFactory.getLogger(MockRestResourceResolutionProcessor::class.java)
 
-    override fun resolveInputKeyMappingVariables(inputKeyMapping: Map<String, String>): Map<String, JsonNode> {
-        val resolvedInputKeyMapping = HashMap<String, JsonNode>()
-        if (MapUtils.isNotEmpty(inputKeyMapping)) {
-
-            resolvedInputKeyMapping["service-instance-id"] = "10".asJsonPrimitive()
-            resolvedInputKeyMapping["vnf_name"] = "vnf1".asJsonPrimitive()
-            resolvedInputKeyMapping["vnf-id"] = "123456".asJsonPrimitive()
-        }
-        return resolvedInputKeyMapping
+    override fun resolveInputKeyMappingVariables(
+        inputKeyMapping: Map<String, String>,
+        templatingConstants: Map<String, String>?
+    ): Map<String, JsonNode> {
+        this.raRuntimeService.putResolutionStore("service-instance-id", "10".asJsonPrimitive())
+        this.raRuntimeService.putResolutionStore("vnf_name", "vnf1".asJsonPrimitive())
+        this.raRuntimeService.putResolutionStore("vnf-id", "123456".asJsonPrimitive())
+        return super.resolveInputKeyMappingVariables(inputKeyMapping, templatingConstants)
     }
 
     override fun getName(): String {
