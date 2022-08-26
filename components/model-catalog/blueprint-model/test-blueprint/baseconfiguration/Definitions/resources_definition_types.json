@@ -100,6 +100,38 @@
       }
     }
   },
+  "vnf_parameter": {
+    "tags": "vnf_parameter",
+    "name": "vnf_parameter",
+    "property": {
+      "description": "vnf_parameter",
+      "type": "string"
+    },
+    "updated-by": "Rajewski, Lukasz <lukasz.rajewski@t-mobile.pl>",
+    "sources": {
+      "sdnc": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/$parameter-name",
+          "path": "/param/0/value",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance-id",
+            "vnf-id": "vnf-id",
+            "parameter-name": "parameter-name"
+          },
+          "output-key-mapping": {
+            "vnf_name": "value"
+          },
+          "key-dependencies": [
+            "service-instance-id",
+            "vnf-id"
+          ]
+        }
+      }
+    }
+  },
   "aai-get-resource": {
     "tags": "aai-get",
     "name": "aai-get-resource",
