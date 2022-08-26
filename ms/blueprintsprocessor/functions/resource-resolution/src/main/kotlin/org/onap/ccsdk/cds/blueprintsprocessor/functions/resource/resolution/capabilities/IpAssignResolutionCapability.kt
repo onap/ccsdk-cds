@@ -68,14 +68,18 @@ open class IpAssignResolutionCapability : ResourceAssignmentProcessor() {
                         as MutableMap<String, String>
 
                 // Get the values from runtime store
-                val resolvedKeyValues = resolveInputKeyMappingVariables(inputKeyMapping)
-                log.info("\nResolved Input Key mappings: \n{}", resolvedKeyValues)
+                val resolvedInputKeyMapping = resolveInputKeyMappingVariables(
+                    inputKeyMapping,
+                    resourceAssignment.templatingConstants
+                ).toMutableMap()
+                log.info("\nResolved Input Key mappings: \n$resolvedInputKeyMapping")
 
-                resolvedKeyValues?.map { KeyIdentifier(it.key, it.value) }
-                    ?.let { resourceAssignment.keyIdentifiers.addAll(it) }
+                resolvedInputKeyMapping.map { KeyIdentifier(it.key, it.value) }.let {
+                    resourceAssignment.keyIdentifiers.addAll(it)
+                }
 
                 // Generate the payload using already resolved value
-                val generatedPayload = generatePayload(resolvedKeyValues, groupResourceAssignments)
+                val generatedPayload = generatePayload(resolvedInputKeyMapping, groupResourceAssignments)
                 log.info("\nIP Assign mS Request Payload: \n{}", generatedPayload.asJsonType().toPrettyString())
 
                 resourceSourceProperties["resolved-payload"] = JacksonUtils.jsonNode(generatedPayload)

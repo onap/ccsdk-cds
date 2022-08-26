@@ -18,6 +18,13 @@
 			"required": false,
 			"type": "string"
 		},
+		"templating-constants": {
+			"required": false,
+			"type": "map",
+			"entry_schema": {
+				"type": "string"
+			}
+		},
 		"dependencies": {
 			"required": true,
 			"type": "list",

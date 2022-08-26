@@ -83,6 +83,9 @@ open class ResourceAssignment {
     @JsonProperty("dependencies")
     var dependencies: MutableList<String>? = null
 
+    @JsonProperty("templating-constants")
+    var templatingConstants: MutableMap<String, String>? = null
+
     @JsonProperty("version")
     var version: Int = 0
 
