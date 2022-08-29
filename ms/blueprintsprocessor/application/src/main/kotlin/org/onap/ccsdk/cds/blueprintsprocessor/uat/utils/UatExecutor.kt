@@ -323,11 +323,15 @@ class UatExecutor(
         }
 
         override fun getInstance(selector: String, service: BlueprintWebClientService): BlueprintWebClientService {
-            val spiedService = SpyService(mapper, selector, service)
+            var spiedService = spies[selector]
+            if (spiedService != null)
+                return spiedService
+
+            spiedService = SpyService(mapper, selector, service)
             spies[selector] = spiedService
+
             return spiedService
         }
-
         fun getSpies(): List<SpyService> =
             spies.values.toList()
     }
