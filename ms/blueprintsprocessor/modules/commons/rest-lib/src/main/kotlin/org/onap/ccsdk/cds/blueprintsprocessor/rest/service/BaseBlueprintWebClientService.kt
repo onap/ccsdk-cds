@@ -23,6 +23,9 @@ import com.fasterxml.jackson.databind.JsonNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
+import org.apache.http.HttpEntity
+import org.apache.http.HttpResponse
+import org.apache.http.HttpStatus
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.methods.HttpDelete
@@ -164,11 +167,25 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         BlueprintWebClientService.WebClientResponse<T> {
             val httpResponse = httpClient().execute(httpUriRequest)
             val statusCode = httpResponse.statusLine.statusCode
-            httpResponse.entity.content.use {
+        val entity: HttpEntity? = httpResponse.entity
+        if (canResponseHaveBody(httpResponse)) {
+            entity!!.content.use {
                 val body = getResponse(it, responseType)
                 return BlueprintWebClientService.WebClientResponse(statusCode, body)
             }
+        } else {
+            val constructor = responseType.getConstructor()
+            val body = constructor.newInstance()
+            return BlueprintWebClientService.WebClientResponse(statusCode, body)
         }
+    }
+    fun canResponseHaveBody(response: HttpResponse): Boolean {
+        val status = response.statusLine.statusCode
+        return response.entity !== null &&
+                status != HttpStatus.SC_NO_CONTENT &&
+                status != HttpStatus.SC_NOT_MODIFIED &&
+                status != HttpStatus.SC_RESET_CONTENT
+    }
 
     open suspend fun getNB(path: String): BlueprintWebClientService.WebClientResponse<String> {
         return getNB(path, null, String::class.java)
