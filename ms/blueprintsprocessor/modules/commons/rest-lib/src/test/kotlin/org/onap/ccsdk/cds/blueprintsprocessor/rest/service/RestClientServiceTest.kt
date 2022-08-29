@@ -39,6 +39,8 @@ import org.springframework.boot.web.reactive.server.ReactiveWebServerFactory
 import org.springframework.boot.web.server.WebServer
 import org.springframework.context.annotation.Bean
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.http.server.reactive.HttpHandler
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService
@@ -184,7 +186,7 @@ class RestClientServiceTest {
         assertEquals(res, "Basic request arrived successfully")
     }
 
-    // @Test
+    @Test
     fun testSampleAaiReq() {
         val restClientService = bluePrintRestLibPropertyService
             .blueprintWebClientService("test")
@@ -282,6 +284,51 @@ class RestClientServiceTest {
         assertEquals(res5, "The patch request is success")
         assertEquals(res6, "The message is successfully deleted")
     }
+    @Test
+    fun testDeleteWith204StatusAndResponseAsString() {
+        val restClientService = bluePrintRestLibPropertyService
+            .blueprintWebClientService("sample")
+        val headers = mutableMapOf<String, String>()
+        headers["X-Transaction-Id"] = "1234"
+        val response = restClientService.exchangeResource(
+            HttpMethod.DELETE.name,
+            "/sample/name", ""
+        )
+        assertEquals(response.status, 204)
+        assertEquals(response.body, "")
+    }
+
+    @Test
+    fun testDeleteWith204StatusAndResponseAsCustomerWithDefaultConstructor() {
+        val restClientService = bluePrintRestLibPropertyService
+            .blueprintWebClientService("sample")
+        val headers = mutableMapOf<String, String>()
+        headers["X-Transaction-Id"] = "1234"
+        runBlocking {
+            val response = restClientService.exchangeNB(
+                HttpMethod.DELETE.name,
+                "/sample/customersWithDefaultConstructor", "", headers, CustomerWithDefaultConstructor::class.java
+            )
+            assertEquals(response.status, 204)
+            assertEquals(response.body, CustomerWithDefaultConstructor())
+        }
+    }
+
+    // @Test
+    fun testDeleteWith204StatusAndResponseAsCustomerWithoutDefaultConstructor() {
+        val restClientService = bluePrintRestLibPropertyService
+            .blueprintWebClientService("sample")
+        val headers = mutableMapOf<String, String>()
+        headers["X-Transaction-Id"] = "1234"
+        runBlocking {
+            val response = restClientService.exchangeNB(
+                HttpMethod.DELETE.name,
+                "/sample/customersWithoutDefaultConstructor", "", headers, CustomerWithoutDefaultConstructor::class.java
+            )
+            assertEquals(response.status, 204)
+            assertEquals(response.body, CustomerWithoutDefaultConstructor(""))
+        }
+    }
 }
 
 /**
@@ -293,6 +340,10 @@ open class SampleController {
 
     @GetMapping("/name")
     fun getName(): String = "Sample Controller"
+    @DeleteMapping("/name")
+    fun deleteNameWith204StatusAndEmptyBody(): ResponseEntity<Unit> {
+        return ResponseEntity(HttpStatus.NO_CONTENT)
+    }
 
     @GetMapping("/query")
     fun getQuery(@RequestParam("id") id: String): String =
@@ -377,6 +428,17 @@ open class SampleController {
         }
         return "The message is successfully deleted"
     }
+    @DeleteMapping("/customersWithDefaultConstructor")
+    fun deleteCustomersWith204StatusAndResponseAsCustomerWithDefaultConstructor():
+        ResponseEntity<CustomerWithDefaultConstructor> {
+            return ResponseEntity(CustomerWithDefaultConstructor(), HttpStatus.NO_CONTENT)
+        }
+
+    @DeleteMapping("/customersWithoutDefaultConstructor")
+    fun deleteCustomersWith204StatusAndResponseAsCustomerWithoutDefaultConstructor():
+        ResponseEntity<CustomerWithoutDefaultConstructor> {
+            return ResponseEntity(CustomerWithoutDefaultConstructor(""), HttpStatus.NO_CONTENT)
+        }
 }
 
 /**
@@ -414,3 +476,13 @@ data class Customer(
     val type: String,
     val resource: String
 )
+
+data class CustomerWithoutDefaultConstructor(
+    val name: String
+)
+
+data class CustomerWithDefaultConstructor(
+    val name: String
+) {
+    constructor() : this("")
+}
