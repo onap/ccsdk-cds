@@ -129,7 +129,7 @@ open class BluePrintWorkflowEnhancerImpl(
             dependencyNodeTemplates =
                 JacksonUtils.getListFromJsonNode(dependencyNodeTemplateNodes, String::class.java)
         } else {
-            dependencyNodeTemplates = listOf(nodeTemplateName)
+            bluePrintContext.workflowByName(name).steps!!.map { it.value.target!! }.let { dependencyNodeTemplates = it }
         }
 
         log.info("workflow($name) dependent component NodeTemplates($dependencyNodeTemplates)")
