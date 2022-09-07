@@ -40,3 +40,44 @@ Reference link for sample generated uat.yaml file for pnf plug & play use case:
 As UAT is part of unit testing, it runs in jenkins job
 `ccsdk-cds-master-verify-java <https://jenkins.onap.org/job/ccsdk-cds-master-verify-java/>`_
 whenever a new commit/patch pushed on gerrit in ccsdk/cds repo.
+
+Executing UAT based test inside you own CBA as SpringBootTest based JUnit test
+*******************************************************************************
+
+Beside the above mentioned internal usage of UATs, it is also possible to execute the User Acceptance Tests (UATs)
+locally inside your own CBA as a "simple JUnit" test.
+Therefor there exists an abstract *SpringBootTest* class **BaseBlueprintsAcceptanceTest**
+(see class in *archetype-blueprint*).
+From this you need to implement an inherited class e.g. **BlueprintAcceptanceSunnyTest**
+(see class in *archetype-blueprint*), which only needs to specify the **uat.yaml** file, that should be executed.
+This means it is possible to simply integrate this kind of tests in your own regression test suite.
+
+UATs aims to fully test your workflow of your CBA.
+
+The BPP runs in an almost production-like configuration with some minor exceptions:
+
+* It uses an embedded, in-memory, and initially empty H2 database, running in MySQL/MariaDB compatibility mode;
+* All external services are mocked.
+
+For further information about User Acceptance Tests (UATs) see the following README.md inside the CDS repository
+
+`Link to uat-blueprints README.md in CDS Github repository
+<https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/blueprint-model/uat-blueprints/README.md>`_
+
+Additionally please mention, that you also need resources, which configures the SpringBootTest. These resources you can
+also find in the *archetype-blueprint* (Tests/resources folder).
+
+To have a good starting point with your cba development, please generate the cba *archetype-blueprint* project with
+the following command.
+
+.. code-block:: bash
+
+   mvn archetype:generate -DarchetypeGroupId=org.onap.ccsdk.cds.components.cba \
+                          -DarchetypeArtifactId=archetype-blueprint \
+                          -DarchetypeVersion=1.4.0-SNAPSHOT \
+                          -DgroupId=org.onap.ccsdk.cds.components.cba \
+                          -DartifactId=testUat \
+                          -Dversion=1.0-SNAPSHOT
+
+There you will find the above mentioned base class, sample class and resources you could use as a starting point for
+writing UAT tests inside your own CBA.
