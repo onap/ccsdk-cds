@@ -33,6 +33,15 @@
       </includes>
     </fileSet>
     <fileSet encoding="UTF-8">
+      <directory>Tests/resources</directory>
+      <includes>
+        <include>**/*.properties</include>
+        <include>**/*.xml</include>
+        <include>**/*.yaml</include>
+        <include>**/*.yml</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
       <directory>Definitions</directory>
       <includes>
         <include>**/*.json</include>

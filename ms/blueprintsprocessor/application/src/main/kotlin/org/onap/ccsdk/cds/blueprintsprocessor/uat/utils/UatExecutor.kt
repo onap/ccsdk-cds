@@ -298,7 +298,7 @@ class UatExecutor(
         return "Basic " + Base64Utils.encodeToString("$username:$plainPassword".toByteArray())
     }
 
-    private class MockPreInterceptor : BluePrintRestLibPropertyService.PreInterceptor {
+    class MockPreInterceptor : BluePrintRestLibPropertyService.PreInterceptor {
 
         private val mocks = ConcurrentHashMap<String, BlueprintWebClientService>()
 
@@ -314,7 +314,7 @@ class UatExecutor(
         }
     }
 
-    private class SpyPostInterceptor(private val mapper: ObjectMapper) : BluePrintRestLibPropertyService.PostInterceptor {
+    class SpyPostInterceptor(private val mapper: ObjectMapper) : BluePrintRestLibPropertyService.PostInterceptor {
 
         private val spies = ConcurrentHashMap<String, SpyService>()
 
@@ -336,7 +336,7 @@ class UatExecutor(
             spies.values.toList()
     }
 
-    private class SpyService(
+    class SpyService(
         private val mapper: ObjectMapper,
         val selector: String,
         private val realService: BlueprintWebClientService
