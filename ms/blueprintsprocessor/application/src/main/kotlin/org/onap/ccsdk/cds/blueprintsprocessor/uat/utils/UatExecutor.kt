@@ -71,7 +71,7 @@ import java.util.concurrent.ConcurrentHashMap
  * @author Eliezio Oliveira
  */
 @Component
-class UatExecutor(
+open class UatExecutor(
     private val environment: ConfigurableEnvironment,
     private val restClientFactory: BluePrintRestLibPropertyService,
     private val mapper: ObjectMapper
@@ -298,7 +298,7 @@ class UatExecutor(
         return "Basic " + Base64Utils.encodeToString("$username:$plainPassword".toByteArray())
     }
 
-    private class MockPreInterceptor : BluePrintRestLibPropertyService.PreInterceptor {
+    open class MockPreInterceptor : BluePrintRestLibPropertyService.PreInterceptor {
 
         private val mocks = ConcurrentHashMap<String, BlueprintWebClientService>()
 
@@ -314,7 +314,7 @@ class UatExecutor(
         }
     }
 
-    private class SpyPostInterceptor(private val mapper: ObjectMapper) : BluePrintRestLibPropertyService.PostInterceptor {
+    open class SpyPostInterceptor(private val mapper: ObjectMapper) : BluePrintRestLibPropertyService.PostInterceptor {
 
         private val spies = ConcurrentHashMap<String, SpyService>()
 
@@ -336,7 +336,7 @@ class UatExecutor(
             spies.values.toList()
     }
 
-    private class SpyService(
+    open class SpyService(
         private val mapper: ObjectMapper,
         val selector: String,
         private val realService: BlueprintWebClientService
