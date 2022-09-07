@@ -30,6 +30,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
+            <artifactId>blueprintsprocessor-application</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
             <artifactId>execution-service</artifactId>
         </dependency>
@@ -90,6 +101,11 @@
                 <directory>${project.basedir}/Environments</directory>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/Tests/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -224,13 +240,33 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>default-test</id>
                         <phase>test</phase>
+                        <configuration>
+                            <!-- Sets the VM argument line used when unit tests are run. -->
+                            <argLine>-Xmx1024m </argLine>
+                            <reuseForks>false</reuseForks>
+                            <forkCount>1</forkCount>
+                        </configuration>
                         <goals>
                             <goal>test</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-test-resources</id>
+                        <goals>
+                            <goal>testResources</goal>
+                        </goals>
+                        <phase>process-test-resources</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -289,61 +325,61 @@
                                         def publishEndpoint = properties['cds.publish.endpoint'] ?: 'api/v1/blueprint-model/publish'
 
                                         def throwIfPropMissing(prop) {
-                                        value = properties[prop]
-                                        if (!value || "".equals(value)) {
-                                        throw new RuntimeException("Property missing: $prop")
-                                        }
-                                        return value
+                                            value = properties[prop]
+                                            if (!value || "".equals(value)) {
+                                                throw new RuntimeException("Property missing: $prop")
+                                            }
+                                            return value
                                         }
 
                                         def buildRequest(endpoint, fileName) {
-                                        body = new MultipartBody.Builder()
-                                        .setType(MultipartBody.FORM)
-                                        .addFormDataPart("file",
-                                        fileName,
-                                        RequestBody.create(MediaType.parse('application/zip'), new File(target, fileName)))
-                                        .build()
+                                            body = new MultipartBody.Builder()
+                                                    .setType(MultipartBody.FORM)
+                                                    .addFormDataPart("file",
+                                                            fileName,
+                                                            RequestBody.create(MediaType.parse('application/zip'), new File(target, fileName)))
+                                                    .build()
 
-                                        return new Request.Builder()
-                                        .url("$protocol://$host:$port/$endpoint")
-                                        .addHeader('Authorization', Credentials.basic(userName, password))
-                                        .post(body)
-                                        .build()
+                                            return new Request.Builder()
+                                                    .url("$protocol://$host:$port/$endpoint")
+                                                    .addHeader('Authorization', Credentials.basic(userName, password))
+                                                    .post(body)
+                                                    .build()
                                         }
 
                                         def logAndThrow(msg) {
-                                        if(response) {
-                                        log.error(response.body().string())
-                                        }
-                                        throw new RuntimeException(msg)
+                                            if(response) {
+                                                log.error(response.body().string())
+                                            }
+                                            throw new RuntimeException(msg)
                                         }
 
                                         response = null
                                         try {
-                                        def client = new OkHttpClient()
+                                            def client = new OkHttpClient()
 
-                                        response = client.newCall(buildRequest(enrichEndpoint, cba)).execute()
-                                        if (!response || !response.isSuccessful()) {
-                                        logAndThrow("Failed to enrich CBA")
-                                        }
+                                            response = client.newCall(buildRequest(enrichEndpoint, cba)).execute()
+                                            if (!response || !response.isSuccessful()) {
+                                                logAndThrow("Failed to enrich CBA")
+                                            }
 
-                                        IOUtils.copy(
-                                        response.body().byteStream(),
-                                        new FileOutputStream(new File(target, enrichedCba))
-                                        )
-                                        log.info("Created enriched cba: $enrichedCba")
+                                            IOUtils.copy(
+                                                    response.body().byteStream(),
+                                                    new FileOutputStream(new File(target, enrichedCba))
+                                            )
+                                            log.info("Created enriched cba: $enrichedCba")
 
-                                        response = client.newCall(buildRequest(publishEndpoint, enrichedCba)).execute()
-                                        if (!response || !response.isSuccessful()) {
-                                        logAndThrow("Failed to publish CBA")
-                                        }
+                                            response = client.newCall(buildRequest(publishEndpoint, enrichedCba)).execute()
+                                            if (!response || !response.isSuccessful()) {
+                                                logAndThrow("Failed to publish CBA")
+                                            }
 
-                                        log.info("CBA Deployed")
-                                        log.info(response.body().string())
+                                            log.info("CBA Deployed")
+                                            log.info(response.body().string())
                                         } finally {
-                                        if (response) {
-                                        response.close()
-                                        }
+                                            if (response) {
+                                                response.close()
+                                            }
                                         }
                                     </source>
                                 </configuration>
