@@ -31,14 +31,6 @@ import kotlin.test.assertNotNull
 
 
 class BlueprintVelocityTemplateTest {
-    private val velocityHome = System.getenv("velocity_path")
-
-
-    @BeforeTest
-    fun setup() {
-        val properties = Properties()
-        properties["file.resource.loader.path"] = velocityHome
-    }
     @Test
     fun testVelocityGeneratedContent() {
         runBlocking {
