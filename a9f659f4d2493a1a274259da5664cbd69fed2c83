@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6841bf0_2c705311",
+        "filename": "docs/modelingconcepts/test.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2022-09-09T12:53:46Z",
+      "side": 1,
+      "message": "when application is being started with UAT profile, then application is no longer accessible using \u0027ccsdkapps\u0027 credentials, rather it can be accessed with \u0027walter.white\u0027 which is defined in TestSecurity class which seems odd.\n\nIs it possible for you to fix that within this patch ?",
+      "revId": "a9f659f4d2493a1a274259da5664cbd69fed2c83",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
