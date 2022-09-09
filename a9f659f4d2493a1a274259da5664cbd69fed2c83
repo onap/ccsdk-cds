@@ -16,6 +16,24 @@
       "revId": "a9f659f4d2493a1a274259da5664cbd69fed2c83",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f8c1511_189cbdc7",
+        "filename": "docs/modelingconcepts/test.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7993
+      },
+      "writtenOn": "2022-09-09T13:13:08Z",
+      "side": 1,
+      "message": "This should have been fixed with patchset 4. I moved all critical test classes as inner classes to BaseBlueprintsAcceptanceTest. So the application should not be damaged by the test classes any more.",
+      "parentUuid": "b6841bf0_2c705311",
+      "revId": "a9f659f4d2493a1a274259da5664cbd69fed2c83",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
