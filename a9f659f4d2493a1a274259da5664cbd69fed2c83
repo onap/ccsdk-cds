@@ -34,6 +34,24 @@
       "revId": "a9f659f4d2493a1a274259da5664cbd69fed2c83",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53fd8927_0defa3c9",
+        "filename": "docs/modelingconcepts/test.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2022-09-10T14:52:00Z",
+      "side": 1,
+      "message": "org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.TestSecuritySettings is causing that problem !",
+      "parentUuid": "6f8c1511_189cbdc7",
+      "revId": "a9f659f4d2493a1a274259da5664cbd69fed2c83",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
