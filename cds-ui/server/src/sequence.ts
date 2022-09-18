@@ -55,8 +55,10 @@ export class MySequence implements SequenceHandler {
       const args = await this.parseParams(request, route);
       const result = await this.invoke(route, args);
       this.send(response, result);
-    } catch (err) {
-      this.reject(context, err);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        this.reject(context, err);
+      }
     } finally {
       const { authorization, ...headers} = request.headers;
       logger.info("Incoming request from %s %s and with header %s query %s params %s and response code: %s",
