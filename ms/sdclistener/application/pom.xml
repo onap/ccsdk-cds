@@ -67,6 +67,7 @@
         <dependency>
             <groupId>org.onap.sdc.sdc-distribution-client</groupId>
             <artifactId>sdc-distribution-client</artifactId>
+            <version>${sdc-distribution-client.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jmockit</groupId>
@@ -121,6 +122,12 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.stefanbirkner</groupId>
+            <artifactId>system-rules</artifactId>
+            <version>1.17.2</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

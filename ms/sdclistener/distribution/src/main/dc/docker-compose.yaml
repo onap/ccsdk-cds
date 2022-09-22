@@ -6,8 +6,7 @@ services:
     container_name: cdssdclistener
     restart: always
     environment:
-      asdcAddress: localhost:8443
-      messageBusAddress: localhost
+      sdcAddress: localhost:8443
       sdcusername: vid
       password: Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U
       pollingInterval: 15

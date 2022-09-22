@@ -31,11 +31,8 @@ public class SdcListenerConfiguration implements IConfiguration {
 
     public static final String TOSCA_CSAR = "TOSCA_CSAR";
 
-    @Value("${listenerservice.config.asdcAddress}")
-    private String asdcAddress;
-
-    @Value("${listenerservice.config.messageBusAddress}")
-    private List<String> messageBusAddress;
+    @Value("${listenerservice.config.sdcAddress}")
+    private String sdcAddress;
 
     @Value("${listenerservice.config.user}")
     private String user;
@@ -64,9 +61,6 @@ public class SdcListenerConfiguration implements IConfiguration {
     @Value("${listenerservice.config.activateServerTLSAuth}")
     private boolean activateServerTLSAuth;
 
-    @Value("${listenerservice.config.isUseHttpsWithDmaap}")
-    private boolean isUseHttpsWithDmaap;
-
     @Value("${listenerservice.config.isUseHttpsWithSDC}")
     private boolean isUseHttpsWithSDC;
 
@@ -83,13 +77,8 @@ public class SdcListenerConfiguration implements IConfiguration {
     private int getHttpProxyPort;
 
     @Override
-    public String getAsdcAddress() {
-        return asdcAddress;
-    }
-
-    @Override
-    public List<String> getMsgBusAddress() {
-        return messageBusAddress;
+    public String getSdcAddress() {
+        return sdcAddress;
     }
 
     @Override
@@ -153,11 +142,6 @@ public class SdcListenerConfiguration implements IConfiguration {
     }
 
     @Override
-    public Boolean isUseHttpsWithDmaap() {
-        return isUseHttpsWithDmaap;
-    }
-
-    @Override
     public Boolean isUseHttpsWithSDC() {
         return isUseHttpsWithSDC;
     }
@@ -169,7 +153,7 @@ public class SdcListenerConfiguration implements IConfiguration {
 
     @Override
     public String getHttpProxyHost() {
-        return getHttpsProxyHost;
+        return getHttpProxyHost;
     }
 
     @Override
@@ -179,9 +163,7 @@ public class SdcListenerConfiguration implements IConfiguration {
 
     @Override
     public int getHttpProxyPort() {
-        return getHttpsProxyPort;
+        return getHttpProxyPort;
     }
 
-
 }
-
