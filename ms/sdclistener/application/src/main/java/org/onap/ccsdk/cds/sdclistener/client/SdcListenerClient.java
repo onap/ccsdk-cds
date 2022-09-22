@@ -64,7 +64,6 @@ public class SdcListenerClient {
         listenerDto.setManagedChannelForGrpc();
 
         listenerDto.setDistributionClient(distributionClient);
-
         IDistributionClientResult result = distributionClient.init(configuration, notification);
         startSdcClientBasedOnTheResult(result);
     }

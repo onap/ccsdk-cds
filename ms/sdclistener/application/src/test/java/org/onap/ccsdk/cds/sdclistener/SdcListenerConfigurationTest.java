@@ -16,38 +16,47 @@
 
 package org.onap.ccsdk.cds.sdclistener;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertEquals;
-
 @RunWith(SpringRunner.class)
 @EnableConfigurationProperties(SdcListenerConfiguration.class)
 @SpringBootTest(classes = {SdcListenerConfigurationTest.class})
 public class SdcListenerConfigurationTest {
+
+    @Rule
+    public EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
     @Autowired
     private SdcListenerConfiguration listenerConfiguration;
 
     @Test
     public void testCdsSdcListenerConfiguration() {
-        assertEquals(listenerConfiguration.getAsdcAddress(), "localhost:8443");
-        assertEquals(listenerConfiguration.getMsgBusAddress().stream().findFirst().get(), "localhost");
-        assertEquals(listenerConfiguration.getUser(), "cds");
-        assertEquals(listenerConfiguration.getPassword(), "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U");
-        assertEquals(listenerConfiguration.getPollingInterval(), 15);
-        assertEquals(listenerConfiguration.getPollingTimeout(), 60);
-        assertEquals(listenerConfiguration.getRelevantArtifactTypes().stream().findFirst().get(), "TOSCA_CSAR");
-        assertEquals(listenerConfiguration.getConsumerGroup(), "cds-id-local");
-        assertEquals(listenerConfiguration.getEnvironmentName(), "AUTO");
-        assertEquals(listenerConfiguration.getConsumerID(), "cds-id-local");
-        assertEquals(listenerConfiguration.activateServerTLSAuth(), false);
-        assertEquals(listenerConfiguration.isUseHttpsWithSDC(), true);
-        assertEquals(listenerConfiguration.isUseHttpsWithDmaap(), false);
+        environmentVariables.set("SASL_JAAS_CONFIG",
+                "org.apache.kafka.common.security.scram.ScramLoginModule required username=admin password=admin-secret;");
+        assertEquals("localhost:8443", listenerConfiguration.getSdcAddress());
+        assertEquals(
+                "org.apache.kafka.common.security.scram.ScramLoginModule required username=admin password=admin-secret;",
+                listenerConfiguration.getKafkaSaslJaasConfig());
+        assertEquals("cds", listenerConfiguration.getUser());
+        assertEquals("Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U", listenerConfiguration.getPassword());
+        assertEquals(15, listenerConfiguration.getPollingInterval());
+        assertEquals(60, listenerConfiguration.getPollingTimeout());
+        assertEquals("TOSCA_CSAR", listenerConfiguration.getRelevantArtifactTypes().stream().findFirst().get());
+        assertEquals("cds-id-local", listenerConfiguration.getConsumerGroup());
+        assertEquals("AUTO", listenerConfiguration.getEnvironmentName());
+        assertEquals("cds-id-local", listenerConfiguration.getConsumerID());
+        assertFalse(listenerConfiguration.activateServerTLSAuth());
+        assertEquals(true, listenerConfiguration.isUseHttpsWithSDC());
     }
 
 }

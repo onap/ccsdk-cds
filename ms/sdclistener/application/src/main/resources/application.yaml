@@ -1,7 +1,6 @@
 listenerservice:
   config:
-    asdcAddress: ${asdcAddress:localhost:8443}
-    messageBusAddress: ${messageBusAddress:localhost}
+    sdcAddress: ${sdcAddress:localhost:8443}
     user: ${sdcusername:cds}
     password: ${password:Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U}
     pollingInterval: ${pollingInterval:15}
@@ -13,7 +12,6 @@ listenerservice:
     keyStorePassword: ${keyStorePassword}
     keyStorePath: ${keyStorePath}
     activateServerTLSAuth : ${activateServerTLSAuth:false}
-    isUseHttpsWithDmaap: ${isUseHttpsWithDmaap:false}
     isUseHttpsWithSDC: ${isUseHttpsWithSDC:true}
     archivePath: ${archivePath:/opt/app/onap/cds-sdc-listener/}
     grpcAddress: ${grpcAddress:localhost}
