@@ -178,7 +178,7 @@ fun <T> monoMdc(
 class MonoMDCCoroutine<in T>(
     parentContext: CoroutineContext,
     private val sink: MonoSink<T>
-) : AbstractCoroutine<T>(parentContext, true), Disposable {
+) : AbstractCoroutine<T>(parentContext, true, true), Disposable {
 
     private var disposed = false
 
