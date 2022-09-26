@@ -21,8 +21,8 @@ limitations under the License.
 
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.2</version>
+        <artifactId>spring-boot-26-starter-parent</artifactId>
+        <version>2.4.4</version>
         <relativePath/>
     </parent>
 
@@ -55,7 +55,7 @@ limitations under the License.
         <sonar.inclusions>**/*.java,**/*.kt</sonar.inclusions>
         <!--Specify path to load jacoco XLM report, as Sonar can't load Kotlin coverage from binary report-->
         <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <jacoco.version>0.8.3</jacoco.version>
+        <jacoco.version>0.8.7</jacoco.version>
 
         <!-- Properties for POM Format -->
         <format.skipValidate>false</format.skipValidate>
