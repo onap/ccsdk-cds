@@ -25,8 +25,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.jetbrains.kotlin.cli.common.ExitCode
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler
 import org.jetbrains.kotlin.config.Services
@@ -160,7 +160,7 @@ open class BluePrintSourceCode : SourceCode {
 data class CompiledMessageData(
     val severity: CompilerMessageSeverity,
     val message: String,
-    val location: CompilerMessageLocation?
+    val location: CompilerMessageSourceLocation?
 )
 
 /** Class to collect compilation results */
@@ -168,7 +168,7 @@ class CompilationMessageCollector : MessageCollector {
 
     private val compiledMessages: MutableList<CompiledMessageData> = arrayListOf()
 
-    override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageLocation?) {
+    override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageSourceLocation?) {
         synchronized(compiledMessages) {
             compiledMessages.add(CompiledMessageData(severity, message, location))
         }
