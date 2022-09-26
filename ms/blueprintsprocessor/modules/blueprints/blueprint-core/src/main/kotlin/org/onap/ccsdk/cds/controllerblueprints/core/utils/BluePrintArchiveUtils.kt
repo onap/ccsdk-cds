@@ -250,7 +250,7 @@ class BluePrintArchiveUtils {
 
         override fun hasMoreElements(): Boolean {
             if (zipEnumeration != null)
-                return zipEnumeration?.hasMoreElements()
+                return zipEnumeration.hasMoreElements()
             else if (archiveStream != null) {
                 nextEntry = archiveStream.nextEntry
                 if (nextEntry != null && !archiveStream.canReadEntryData(nextEntry))
