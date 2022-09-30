@@ -48,10 +48,10 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
         this.postInterceptor = null
     }
 
-    open fun blueprintWebClientService(jsonNode: JsonNode): BlueprintWebClientService {
-        val service = preInterceptor?.getInstance(jsonNode)
-            ?: blueprintWebClientService(restClientProperties(jsonNode))
-        return postInterceptor?.getInstance(jsonNode, service) ?: service
+    open fun blueprintWebClientService(jsonNode: JsonNode, selector: String = ""): BlueprintWebClientService {
+        val service = preInterceptor?.getInstance(jsonNode, selector)
+            ?: blueprintWebClientService(restClientProperties(jsonNode, selector))
+        return postInterceptor?.getInstance(jsonNode, service, selector) ?: service
     }
 
     open fun blueprintWebClientService(selector: String): BlueprintWebClientService {
@@ -67,7 +67,7 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
         val type = bluePrintPropertiesService.propertyBeanType(
             "$prefix.type", String::class.java
         )
-        return when (type) {
+        val properties = when (type) {
             RestLibConstants.TYPE_BASIC_AUTH -> {
                 basicAuthRestClientProperties(prefix)
             }
@@ -94,12 +94,15 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
                 )
             }
         }
+        val tokens = prefix.split('.')
+        properties.selector = tokens[tokens.size - 1]
+        return properties
     }
 
-    fun restClientProperties(jsonNode: JsonNode): RestClientProperties {
+    fun restClientProperties(jsonNode: JsonNode, selector: String = ""): RestClientProperties {
 
         val type = jsonNode.get("type").textValue()
-        return when (type) {
+        val properties = when (type) {
             RestLibConstants.TYPE_TOKEN_AUTH -> {
                 JacksonUtils.readValue(jsonNode, TokenAuthRestClientProperties::class.java)!!
             }
@@ -125,6 +128,8 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
                 )
             }
         }
+        properties.selector = selector
+        return properties
     }
 
     private fun blueprintWebClientService(restClientProperties: RestClientProperties):
@@ -199,14 +204,14 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
 
     interface PreInterceptor {
 
-        fun getInstance(jsonNode: JsonNode): BlueprintWebClientService?
+        fun getInstance(jsonNode: JsonNode, selector: String): BlueprintWebClientService?
 
         fun getInstance(selector: String): BlueprintWebClientService?
     }
 
     interface PostInterceptor {
 
-        fun getInstance(jsonNode: JsonNode, service: BlueprintWebClientService): BlueprintWebClientService
+        fun getInstance(jsonNode: JsonNode, service: BlueprintWebClientService, selector: String): BlueprintWebClientService
 
         fun getInstance(selector: String, service: BlueprintWebClientService): BlueprintWebClientService
     }
