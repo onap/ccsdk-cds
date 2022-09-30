@@ -106,9 +106,7 @@ class ResourceDefinitionEnhancerServiceImpl(private val resourceDefinitionRepoSe
             resourceAssignments.addAll(deferredResourceAssignment.await())
         }
 
-        val distinctResourceAssignments = resourceAssignments.distinctBy { it.name }
-        generateResourceDictionary(blueprintBasePath, distinctResourceAssignments)
-        // log.info("distinct Resource assignment ($distinctResourceAssignments)")
+        generateResourceDictionary(blueprintBasePath, resourceAssignments)
     }
 
     // Read the Resource Definitions from the Database and write to type file.
