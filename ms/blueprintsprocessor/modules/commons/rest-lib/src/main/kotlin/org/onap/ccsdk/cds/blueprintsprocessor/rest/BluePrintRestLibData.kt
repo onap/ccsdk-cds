@@ -26,6 +26,7 @@ open class RestClientProperties {
     var socketTimeout: Int = 0
     var connectionRequestTimeout: Int = 0
     var additionalHeaders: Map<String, String>? = null
+    lateinit var selector: String
 }
 
 open class SSLRestClientProperties : RestClientProperties() {

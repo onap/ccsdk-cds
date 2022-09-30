@@ -38,12 +38,14 @@ open class Mount : AbstractScriptComponentFunction() {
         log.info("Mounting ODL restconf node process")
 
         val deviceInformation = relationshipProperty(RESTCONF_CONNECTION_CONFIG, PROPERTY_CONNECTION_CONFIG)
-        val webclientService = restconfClientService(deviceInformation)
 
         val nodeId = requestPayloadActionProperty(NODE_ID)?.first()?.textValue()
             ?: throw BluePrintProcessorException("Failed to load $NODE_ID properties.")
         val mountPayload = requestPayloadActionProperty(MOUNT_PAYLOAD)?.first()
             ?: throw BluePrintProcessorException("Failed to load $MOUNT_PAYLOAD properties.")
+
+        val webclientService = restconfClientService(deviceInformation, nodeId)
+
         restconfMountDeviceJson(webclientService, nodeId, mountPayload.toString())
 
         setAttribute(
@@ -74,8 +76,8 @@ open class Execute : AbstractScriptComponentFunction() {
 
         val deviceInformation = relationshipProperty(RESTCONF_CONNECTION_CONFIG, PROPERTY_CONNECTION_CONFIG)
 
-        val webclientService = restconfClientService(deviceInformation)
         val nodeId = nodeIdJson.textValue()
+        val webclientService = restconfClientService(deviceInformation, nodeId)
 
         val actionList = requestPayloadActionProperty("action")?.first()
             ?: throw BluePrintProcessorException("Failed to load action properties.")

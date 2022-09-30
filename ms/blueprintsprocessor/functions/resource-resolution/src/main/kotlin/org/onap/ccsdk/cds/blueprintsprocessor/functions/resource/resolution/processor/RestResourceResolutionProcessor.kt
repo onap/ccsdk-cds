@@ -151,7 +151,8 @@ open class RestResourceResolutionProcessor(private val blueprintRestLibPropertyS
     ): BlueprintWebClientService {
         return if (isNotEmpty(restResourceSource.endpointSelector)) {
             val restPropertiesJson = raRuntimeService.resolveDSLExpression(restResourceSource.endpointSelector!!)
-            blueprintRestLibPropertyService.blueprintWebClientService(restPropertiesJson)
+            blueprintRestLibPropertyService.blueprintWebClientService(restPropertiesJson,
+                restResourceSource.endpointSelector!!)
         } else {
             blueprintRestLibPropertyService.blueprintWebClientService(resourceAssignment.dictionarySource!!)
         }

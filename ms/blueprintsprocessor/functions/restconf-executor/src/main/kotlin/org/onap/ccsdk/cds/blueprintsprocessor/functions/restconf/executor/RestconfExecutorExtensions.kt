@@ -37,8 +37,8 @@ fun AbstractScriptComponentFunction.restconfClientService(selector: String): Blu
     return BluePrintDependencyService.restClientService(selector)
 }
 
-fun AbstractScriptComponentFunction.restconfClientService(jsonNode: JsonNode): BlueprintWebClientService {
-    return BluePrintDependencyService.restClientService(jsonNode)
+fun AbstractScriptComponentFunction.restconfClientService(jsonNode: JsonNode, selector: String): BlueprintWebClientService {
+    return BluePrintDependencyService.restClientService(jsonNode,  selector)
 }
 
 /**
