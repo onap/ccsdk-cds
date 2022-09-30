@@ -148,7 +148,7 @@ open class ComponentRemoteAnsibleExecutor(
         val endpointSelector = getOperationInput(INPUT_ENDPOINT_SELECTOR)
 
         try {
-            return blueprintRestLibPropertyService.blueprintWebClientService(endpointSelector)
+            return blueprintRestLibPropertyService.blueprintWebClientService(endpointSelector, "ansible-remote-endpoint")
         } catch (e: NoSuchElementException) {
             throw IllegalArgumentException("No value provided for input selector $endpointSelector", e)
         }

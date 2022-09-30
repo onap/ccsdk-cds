@@ -146,7 +146,7 @@ class BluePrintRestLibPropertyServiceTest {
     fun testSSLBasicPropertiesAsJson() {
         val actualObj: JsonNode = defaultMapper.readTree(sslBasicAuthEndpointWithHeadersField())
         val properties = bluePrintRestLibPropertyService.restClientProperties(
-            actualObj
+            actualObj, "test"
         )
         assertNotNull(properties, "failed to create property bean")
         val p: SSLBasicAuthRestClientProperties = properties as SSLBasicAuthRestClientProperties
@@ -164,7 +164,7 @@ class BluePrintRestLibPropertyServiceTest {
     fun testSSLTokenPropertiesAsJson() {
         val actualObj: JsonNode = defaultMapper.readTree(sslTokenAuthEndpointWithHeadersField())
         val properties =
-            bluePrintRestLibPropertyService.restClientProperties(actualObj)
+            bluePrintRestLibPropertyService.restClientProperties(actualObj, "test")
         assertNotNull(properties, "failed to create property bean")
 
         val p: SSLTokenAuthRestClientProperties = properties as SSLTokenAuthRestClientProperties
@@ -181,7 +181,7 @@ class BluePrintRestLibPropertyServiceTest {
     fun testSSLNoAuthPropertiesAsJson() {
         val actualObj: JsonNode = defaultMapper.readTree(sslNoAuthEndpointWithHeadersField())
         val properties = bluePrintRestLibPropertyService.restClientProperties(
-            actualObj
+            actualObj, "test"
         )
         assertNotNull(properties, "failed to create property bean")
 
@@ -211,7 +211,7 @@ class BluePrintRestLibPropertyServiceTest {
     fun testBlueprintWebClientServiceWithJsonNode() {
         val actualObj: JsonNode = defaultMapper.readTree(sslBasicAuthEndpointWithHeadersField())
         val blueprintWebClientService = bluePrintRestLibPropertyService
-            .blueprintWebClientService(actualObj)
+            .blueprintWebClientService(actualObj, "test")
         assertNotNull(blueprintWebClientService, "failed to create blueprintWebClientService")
     }
 
@@ -219,12 +219,12 @@ class BluePrintRestLibPropertyServiceTest {
     private fun validateHeadersDidNotChangeWithEmptyAdditionalHeaders(noHeaders: String, withHeaders: String) {
         val parsedObj: JsonNode = defaultMapper.readTree(noHeaders)
         val bpWebClientService =
-            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj, "test")
         val extractedHeaders = bpWebClientService.convertToBasicHeaders(mapOf())
 
         val parsedObjWithHeaders: JsonNode = defaultMapper.readTree(withHeaders)
         val bpWebClientServiceWithHeaders =
-            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObjWithHeaders)
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObjWithHeaders, "test")
         val extractedHeadersWithAdditionalHeaders = bpWebClientServiceWithHeaders.convertToBasicHeaders(mapOf())
         // Array<BasicHeader<>> -> Map<String,String>
         val headersMap = extractedHeaders.map { it.name to it.value }.toMap()
@@ -242,7 +242,7 @@ class BluePrintRestLibPropertyServiceTest {
     private fun acceptsOneAdditionalHeadersTest(endPointWithHeadersJson: String) {
         val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
         val bpWebClientService =
-            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj, "test")
         val extractedHeaders = bpWebClientService.convertToBasicHeaders(mapOf())
         assertEquals(1, extractedHeaders.filter { it.name == "key1" }.count())
     }
@@ -256,7 +256,7 @@ class BluePrintRestLibPropertyServiceTest {
     private fun acceptsMultipleAdditionalHeaders(endPointWithHeadersJson: String) {
         val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
         val bpWebClientService =
-            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj, "test")
         val extractedHeaders = bpWebClientService.convertToBasicHeaders(mapOf())
         assertEquals(1, extractedHeaders.filter { it.name == "key1" }.count())
         assertEquals(1, extractedHeaders.filter { it.name == "key2" }.count())
@@ -272,7 +272,7 @@ class BluePrintRestLibPropertyServiceTest {
     private fun additionalHeadersChangedContentTypeToAPPLICATION_XML(endPointWithHeadersJson: String) {
         val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
         val bpWebClientService =
-            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj, "test")
         val extractedHeaders = bpWebClientService.convertToBasicHeaders(mapOf())
         assertEquals(
             MediaType.APPLICATION_XML.toString(),
@@ -291,7 +291,7 @@ class BluePrintRestLibPropertyServiceTest {
     private fun attemptToPutAuthorizationHeaderIntoAdditionalHeaders(endPointWithHeadersJson: String) {
         val parsedObj: JsonNode = defaultMapper.readTree(endPointWithHeadersJson)
         val bpWebClientService =
-            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj)
+            bluePrintRestLibPropertyService.blueprintWebClientService(parsedObj, "test")
         bpWebClientService.convertToBasicHeaders(mapOf())
     }
 

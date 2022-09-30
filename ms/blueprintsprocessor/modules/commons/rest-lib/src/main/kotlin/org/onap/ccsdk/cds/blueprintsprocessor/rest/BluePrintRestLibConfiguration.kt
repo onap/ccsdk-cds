@@ -41,8 +41,8 @@ fun BluePrintDependencyService.restClientService(selector: String): BlueprintWeb
     return restLibPropertyService().blueprintWebClientService(selector)
 }
 
-fun BluePrintDependencyService.restClientService(jsonNode: JsonNode): BlueprintWebClientService {
-    return restLibPropertyService().blueprintWebClientService(jsonNode)
+fun BluePrintDependencyService.restClientService(jsonNode: JsonNode, selector: String = ""): BlueprintWebClientService {
+    return restLibPropertyService().blueprintWebClientService(jsonNode, selector)
 }
 
 class RestLibConstants {

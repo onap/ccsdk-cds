@@ -302,8 +302,8 @@ open class UatExecutor(
 
         private val mocks = ConcurrentHashMap<String, BlueprintWebClientService>()
 
-        override fun getInstance(jsonNode: JsonNode): BlueprintWebClientService? {
-            TODO("jsonNode-keyed services not yet supported")
+        override fun getInstance(jsonNode: JsonNode, selector: String): BlueprintWebClientService? {
+            return mocks[selector]
         }
 
         override fun getInstance(selector: String): BlueprintWebClientService? =
@@ -318,8 +318,8 @@ open class UatExecutor(
 
         private val spies = ConcurrentHashMap<String, SpyService>()
 
-        override fun getInstance(jsonNode: JsonNode, service: BlueprintWebClientService): BlueprintWebClientService {
-            TODO("jsonNode-keyed services not yet supported")
+        override fun getInstance(jsonNode: JsonNode, service: BlueprintWebClientService, selector: String): BlueprintWebClientService {
+            return getInstance(selector, service)
         }
 
         override fun getInstance(selector: String, service: BlueprintWebClientService): BlueprintWebClientService {

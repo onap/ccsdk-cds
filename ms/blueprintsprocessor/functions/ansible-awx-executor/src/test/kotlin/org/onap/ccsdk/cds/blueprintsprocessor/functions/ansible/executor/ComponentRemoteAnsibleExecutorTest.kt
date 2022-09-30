@@ -95,7 +95,7 @@ class ComponentRemoteAnsibleExecutorTest {
         } returns WebClientResponse(200, getReport())
         val selector = mapper.readTree(endpointSelector)
         val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
-        every { bluePrintRestLibPropertyService.blueprintWebClientService(selector) } returns webClientService
+        every { bluePrintRestLibPropertyService.blueprintWebClientService(selector, "ansible-remote-endpoint") } returns webClientService
         val awxRemoteExecutor = ComponentRemoteAnsibleExecutor(bluePrintRestLibPropertyService, mapper)
         awxRemoteExecutor.checkDelay = 1
 
@@ -129,7 +129,7 @@ class ComponentRemoteAnsibleExecutorTest {
         } returns WebClientResponse(404, "")
         val selector = mapper.readTree(endpointSelector)
         val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
-        every { bluePrintRestLibPropertyService.blueprintWebClientService(selector) } returns webClientService
+        every { bluePrintRestLibPropertyService.blueprintWebClientService(selector, "ansible-remote-endpoint") } returns webClientService
         val awxRemoteExecutor = ComponentRemoteAnsibleExecutor(bluePrintRestLibPropertyService, mapper)
         awxRemoteExecutor.checkDelay = 1
 
@@ -170,7 +170,7 @@ class ComponentRemoteAnsibleExecutorTest {
         } returns WebClientResponse(500, "")
         val selector = mapper.readTree(endpointSelector)
         val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
-        every { bluePrintRestLibPropertyService.blueprintWebClientService(selector) } returns webClientService
+        every { bluePrintRestLibPropertyService.blueprintWebClientService(selector, "ansible-remote-endpoint") } returns webClientService
         val awxRemoteExecutor = ComponentRemoteAnsibleExecutor(bluePrintRestLibPropertyService, mapper)
         awxRemoteExecutor.checkDelay = 1
 
