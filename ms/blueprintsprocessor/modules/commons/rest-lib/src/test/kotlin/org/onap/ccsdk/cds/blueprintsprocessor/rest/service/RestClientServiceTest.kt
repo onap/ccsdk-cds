@@ -170,7 +170,7 @@ class RestClientServiceTest {
         val mapper = ObjectMapper()
         val actualObj: JsonNode = mapper.readTree(json)
         val restClientService = bluePrintRestLibPropertyService
-            .blueprintWebClientService(actualObj)
+            .blueprintWebClientService(actualObj, "test")
         lateinit var res: String
         runBlocking {
             val get = async(start = CoroutineStart.LAZY) {

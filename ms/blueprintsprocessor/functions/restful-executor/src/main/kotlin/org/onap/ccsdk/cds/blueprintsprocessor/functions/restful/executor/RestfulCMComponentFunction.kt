@@ -43,8 +43,8 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
     open fun bluePrintRestLibPropertyService(): BluePrintRestLibPropertyService =
         functionDependencyInstanceAsType(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
 
-    fun restClientService(clientInfo: JsonNode): BlueprintWebClientService {
-        return bluePrintRestLibPropertyService().blueprintWebClientService(clientInfo)
+    fun restClientService(clientInfo: JsonNode, selector: String): BlueprintWebClientService {
+        return bluePrintRestLibPropertyService().blueprintWebClientService(clientInfo, selector)
     }
 
     fun processNRM(executionRequest: ExecutionServiceInput, input_params: ArrayNode): String {
@@ -66,7 +66,7 @@ abstract class RestfulCMComponentFunction : AbstractScriptComponentFunction() {
             "}"
         val mapper = ObjectMapper()
         val jsonRestInfo: JsonNode = mapper.readTree(RestInfo)
-        val web_client_service = restClientService(jsonRestInfo)
+        val web_client_service = restClientService(jsonRestInfo, url)
         val managed_object_instances = input_params
         var response = JacksonUtils.jsonNode("{}") as ObjectNode
         // Invoke the corresponding function according to the workflowname
