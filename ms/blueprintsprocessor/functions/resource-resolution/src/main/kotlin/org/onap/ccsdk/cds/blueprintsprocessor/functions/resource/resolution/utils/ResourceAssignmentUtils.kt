@@ -130,24 +130,30 @@ class ResourceAssignmentUtils {
             raRuntimeService.putResolutionStore(resourceAssignment.name, value)
             raRuntimeService.putDictionaryStore(resourceAssignment.dictionaryName!!, value)
             resourceAssignment.property!!.value = value
+        }
 
+        fun transformResourceAssignment(
+            resourceAssignment: ResourceAssignment,
+            resourceAssignments: List<ResourceAssignment>,
+            raRuntimeService: ResourceAssignmentRuntimeService
+        ) {
+            val currentValue = resourceAssignment.property?.value
             val metadata = resourceAssignment.property?.metadata
             metadata?.get(ResourceResolutionConstants.METADATA_TRANSFORM_TEMPLATE)
                 ?.let { if (it.contains("$")) it else null }
                 ?.let { template ->
-                    val resolutionStore = raRuntimeService.getResolutionStore()
-                        .mapValues { e -> e.value.asText() } as MutableMap<String, Any>
+                    val resolvedParamJsonContent =
+                        generateResourceDataForAssignments(resourceAssignments.toList())
                     val newValue: JsonNode
                     try {
                         newValue = BluePrintVelocityTemplateService
-                            .generateContent(template, null, true, resolutionStore)
+                            .generateContent(template, resolvedParamJsonContent, false)
                             .also {
                                 if (hasLogProtect(metadata))
                                     logger.info("Transformed value: $resourceAssignment.name")
                                 else
-                                    logger.info("Transformed value: $value -> $it")
-                            }
-                            .let { v -> v.asJsonType() }
+                                    logger.info("Transformed value: $currentValue -> $it")
+                            }.asJsonType()
                     } catch (e: Exception) {
                         throw BluePrintProcessorException(
                             "transform-template failed: $template", e

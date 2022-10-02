@@ -188,6 +188,14 @@
             "type": "artifact-mapping-resource",
             "file": "Definitions/maxoccurrence-mapping.json"
           },
+          "transform-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/baseconfig-template.vtl"
+          },
+          "transform-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Definitions/transform-mapping.json"
+          },
           "notemplate-mapping": {
             "type": "artifact-mapping-resource",
             "file": "Definitions/notemplate-mapping.json"
