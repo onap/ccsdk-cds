@@ -1,0 +1,51 @@
+[
+  {
+    "name": "service-instance-id",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "service-instance-id",
+    "dictionary-source": "input",
+    "dependencies": [
+    ]
+  },
+  {
+    "name": "vnf-id",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "vnf-id",
+    "dictionary-source": "input",
+    "dependencies": []
+  },
+  {
+    "name": "vnf_name",
+    "input-param": false,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "vnf_name",
+    "dictionary-source": "sdnc",
+    "dependencies": [
+      "service-instance-id",
+      "vnf-id"
+    ]
+  },
+  {
+    "name": "private_net_id",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "metadata": {
+        "transform-template": "${vnf_name}_private2"
+      }
+    },
+    "dictionary-name": "int_pktgen_private_net_id",
+    "dictionary-source": "default",
+    "dependencies": [
+      "vnf_name"
+    ]
+  }
+]
