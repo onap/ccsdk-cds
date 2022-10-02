@@ -348,19 +348,29 @@ class ResourceAssignmentUtilsTest {
 
     @Test
     fun `transform resolved value with inline template`() {
-        resourceAssignmentRuntimeService.putResolutionStore("vnf_name", "abc-vnf".asJsonType())
+        val refResourceAssignment = ResourceAssignment()
+        refResourceAssignment.name = "vnf_name"
+        refResourceAssignment.dictionaryName = "vnf_name"
+        refResourceAssignment.property = PropertyDefinition()
+        refResourceAssignment.property!!.type = "string"
+        refResourceAssignment.property!!.value = "abc-vnf".asJsonType()
+
         resourceAssignment = ResourceAssignment()
         resourceAssignment.name = "int_pktgen_private_net_id"
+        resourceAssignment.dictionaryName = "int_pktgen_private_net_id"
         resourceAssignment.property = PropertyDefinition()
         resourceAssignment.property!!.type = "string"
-        val value = "".asJsonType()
+        resourceAssignment.property!!.value = "".asJsonType()
 
         // Enable transform template
         resourceAssignment.property!!.metadata =
             mutableMapOf(METADATA_TRANSFORM_TEMPLATE to "\${vnf_name}_private2")
 
-        ResourceAssignmentUtils
-            .setResourceDataValue(resourceAssignment, resourceAssignmentRuntimeService, value)
+        ResourceAssignmentUtils.transformResourceAssignment(
+            resourceAssignment,
+            listOf(refResourceAssignment),
+            resourceAssignmentRuntimeService
+        )
 
         assertEquals(
             "abc-vnf_private2",

@@ -153,6 +153,61 @@ class ResourceResolutionServiceTest {
         }
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun testResolveResourceWithTransform() {
+        runBlocking {
+
+            Assert.assertNotNull("failed to create ResourceResolutionService", resourceResolutionService)
+
+            val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(
+                "1234",
+                "./../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
+            )
+
+            val executionServiceInput =
+                JacksonUtils.readValueFromClassPathFile(
+                    "payload/requests/sample-resourceresolution-request.json",
+                    ExecutionServiceInput::class.java
+                )!!
+
+            val resourceAssignmentRuntimeService =
+                ResourceAssignmentUtils.transformToRARuntimeService(
+                    bluePrintRuntimeService,
+                    "testResolveResourceWithTransform"
+                )
+
+            // Prepare Inputs
+            PayloadUtils.prepareInputsFromWorkflowPayload(
+                bluePrintRuntimeService,
+                executionServiceInput.payload,
+                "resource-assignment"
+            )
+
+            resourceResolutionService.resolveResources(
+                resourceAssignmentRuntimeService,
+                "resource-assignment",
+                "transform",
+                props
+            )
+        }.let { (templateMap, assignmentList) ->
+            assertEquals("This is Sample Velocity Template", templateMap)
+
+            val expectedAssignmentList = mutableListOf(
+                "service-instance-id" to "siid_1234",
+                "vnf-id" to "vnf_1234",
+                "vnf_name" to "temp_vnf",
+                "private_net_id" to "temp_vnf_private2"
+            )
+            assertEquals(expectedAssignmentList.size, assignmentList.size)
+
+            val areEqual = expectedAssignmentList.zip(assignmentList).all { (it1, it2) ->
+                it1.first == it2.name && it1.second == it2.property?.value?.asText() ?: null
+            }
+            assertEquals(true, areEqual)
+        }
+    }
+
     /**
      * Always perform new resolution even if resolution exists in the database.
      */

@@ -372,6 +372,12 @@ open class ResourceResolutionServiceImpl(
                                 // Invoke Apply Method
                                 resourceAssignmentProcessor.applyNB(resourceAssignment)
 
+                                ResourceAssignmentUtils.transformResourceAssignment(
+                                    resourceAssignment,
+                                    resourceAssignments,
+                                    resourceAssignmentRuntimeService
+                                )
+
                                 if (isToStore(properties)) {
                                     resourceResolutionDBService.write(
                                         properties,
