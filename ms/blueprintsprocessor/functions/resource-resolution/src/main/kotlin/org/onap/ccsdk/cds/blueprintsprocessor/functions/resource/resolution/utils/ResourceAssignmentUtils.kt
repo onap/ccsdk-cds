@@ -136,7 +136,7 @@ class ResourceAssignmentUtils {
                 ?.let { if (it.contains("$")) it else null }
                 ?.let { template ->
                     val resolutionStore = raRuntimeService.getResolutionStore()
-                        .mapValues { e -> e.value.asText() } as MutableMap<String, Any>
+                        .mapValues { e -> if (e.value.isTextual) e.value.asText() else JacksonUtils.getJson(e.value) } as MutableMap<String, Any>
                     val newValue: JsonNode
                     try {
                         newValue = BluePrintVelocityTemplateService
