@@ -73,7 +73,7 @@ limitations under the License.
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
 
-        <ccsdk.sli.version>1.5.0-SNAPSHOT</ccsdk.sli.version>
+        <ccsdk.sli.version>1.5.1</ccsdk.sli.version>
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
     </properties>
 
