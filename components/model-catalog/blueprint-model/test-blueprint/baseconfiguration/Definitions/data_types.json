@@ -52,6 +52,10 @@
           "required": true,
           "type": "string"
         },
+        "private_net_id": {
+          "required": true,
+          "type": "string"
+        },
         "firmware-version": {
           "type" : "string"
         },
