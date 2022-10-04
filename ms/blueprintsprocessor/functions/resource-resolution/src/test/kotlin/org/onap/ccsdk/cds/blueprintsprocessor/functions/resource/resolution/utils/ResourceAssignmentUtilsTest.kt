@@ -362,9 +362,28 @@ class ResourceAssignmentUtilsTest {
         ResourceAssignmentUtils
             .setResourceDataValue(resourceAssignment, resourceAssignmentRuntimeService, value)
 
+        val valueJson = "{\"config\":{\"parameter\":\"address\",\"value\":\"0.0.0.0\"}}"
+        resourceAssignmentRuntimeService.putResolutionStore("vnf_config", JacksonUtils.objectMapper.readTree(valueJson))
+        val resourceAssignmentJson = ResourceAssignment()
+        resourceAssignmentJson.name = "vendor_vnf_configuration"
+        resourceAssignmentJson.property = PropertyDefinition()
+        resourceAssignmentJson.property!!.type = "json"
+
+        // Enable transform template
+        resourceAssignmentJson.property!!.metadata =
+            mutableMapOf(METADATA_TRANSFORM_TEMPLATE to "\${vnf_config}")
+
+        ResourceAssignmentUtils
+            .setResourceDataValue(resourceAssignmentJson, resourceAssignmentRuntimeService, JacksonUtils.objectMapper.createObjectNode())
+
         assertEquals(
             "abc-vnf_private2",
             resourceAssignment.property!!.value!!.asText()
+        )
+
+        assertEquals(
+            valueJson,
+            resourceAssignmentJson.property!!.value!!.toString()
         )
     }
 

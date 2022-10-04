@@ -100,6 +100,21 @@
       }
     }
   },
+  "int_pktgen_private_net_id": {
+    "tags": "int_pktgen_private_net_id",
+    "name": "int_pktgen_private_net_id",
+    "property": {
+      "description": "int_pktgen_private_net_id",
+      "type": "string"
+    },
+    "updated-by": "Lukasz Rajewski <lukasz.rajewski@t-mobile.pl>",
+    "sources": {
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
   "vnf_parameter": {
     "tags": "vnf_parameter",
     "name": "vnf_parameter",
