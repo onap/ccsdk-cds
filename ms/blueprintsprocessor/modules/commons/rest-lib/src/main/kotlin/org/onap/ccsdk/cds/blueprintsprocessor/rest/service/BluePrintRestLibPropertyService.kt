@@ -63,6 +63,14 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
         return postInterceptor?.getInstance(selector, service) ?: service
     }
 
+    open fun interceptExternalBlueprintWebClientService(
+        externalService: BlueprintWebClientService,
+        selector: String
+    ): BlueprintWebClientService {
+        val service = preInterceptor?.getInstance(selector) ?: externalService
+        return postInterceptor?.getInstance(selector, service) ?: service
+    }
+
     fun restClientProperties(prefix: String): RestClientProperties {
         val type = bluePrintPropertiesService.propertyBeanType(
             "$prefix.type", String::class.java

@@ -25,7 +25,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginC
 open class K8sRbInstanceRestClient(
     k8sConfiguration: K8sConnectionPluginConfiguration,
     private val instanceId: String = ""
-) : K8sAbstractRestClientService(k8sConfiguration) {
+) : K8sAbstractRestClientService(k8sConfiguration, "k8s-plugin-instance") {
 
     override fun apiUrl(): String {
         return if (instanceId != "")

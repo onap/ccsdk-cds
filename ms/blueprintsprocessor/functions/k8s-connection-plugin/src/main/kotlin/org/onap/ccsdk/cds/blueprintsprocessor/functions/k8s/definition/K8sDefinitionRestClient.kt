@@ -26,7 +26,7 @@ open class K8sDefinitionRestClient(
     k8sConfiguration: K8sConnectionPluginConfiguration,
     private val definition: String,
     private val definitionVersion: String
-) : K8sAbstractRestClientService(k8sConfiguration) {
+) : K8sAbstractRestClientService(k8sConfiguration, "k8s-plugin-definition") {
 
     override fun apiUrl(): String {
         return "$baseUrl/v1/rb/definition/$definition/$definitionVersion"
