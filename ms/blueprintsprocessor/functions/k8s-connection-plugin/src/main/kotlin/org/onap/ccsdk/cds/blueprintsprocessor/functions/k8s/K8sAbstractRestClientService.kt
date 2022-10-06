@@ -2,7 +2,7 @@
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2019 IBM.
  * Modifications Copyright © 2021 Orange.
- * Modifications Copyright © 2020 Deutsche Telekom AG.
+ * Modifications Copyright © 2022 Deutsche Telekom AG.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,20 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s
 
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 abstract class K8sAbstractRestClientService(
-    private val k8sConfiguration: K8sConnectionPluginConfiguration
+    private val k8sConfiguration: K8sConnectionPluginConfiguration,
+    clientName: String
 ) : BasicAuthRestClientService(BasicAuthRestClientProperties()) {
+
+    init {
+        val service: BluePrintRestLibPropertyService = BluePrintDependencyService.instance(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+        service.interceptExternalBlueprintWebClientService(this, clientName)
+    }
 
     protected val baseUrl: String = k8sConfiguration.getProperties().url
     private var restClientProperties: BasicAuthRestClientProperties? = null

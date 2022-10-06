@@ -23,7 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginC
 
 open class K8sQueryRestClient(
     k8sConfiguration: K8sConnectionPluginConfiguration
-) : K8sAbstractRestClientService(k8sConfiguration) {
+) : K8sAbstractRestClientService(k8sConfiguration, "k8s-plugin-query") {
 
     override fun apiUrl(): String {
         return "$baseUrl/v1/query"
