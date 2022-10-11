@@ -39,6 +39,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
@@ -198,6 +199,40 @@ class BluePrintRestLibPropertyServiceTest {
     }
 
     @Test
+    fun testSSLNoDefHeadersPropertiesAsJson() {
+        val actualObj: JsonNode = defaultMapper.readTree(sslNoDefHeadersField())
+        val properties = bluePrintRestLibPropertyService.restClientProperties(
+            actualObj
+        )
+        assertNotNull(properties, "failed to create property bean")
+
+        val p: SSLRestClientProperties =
+            properties as SSLRestClientProperties
+
+        assertEquals("src/test/resources/keystore.p12", p.sslTrust)
+        assertEquals("changeit", p.sslTrustPassword)
+        assertEquals("PKCS12", p.keyStoreInstance)
+        assertEquals("src/test/resources/keystore.p12", p.sslKey)
+        assertEquals("changeit", p.sslKeyPassword)
+        assertEquals("ssl-no-def-headers", p.type)
+        assertEquals("https://localhost:8443", p.url)
+        assertTrue(p.values.containsKey("type"))
+    }
+
+    @Test
+    fun testNoDefHeadersPropertiesAsJson() {
+        val actualObj: JsonNode = defaultMapper.readTree(noDefaultHeadersField())
+        val p = bluePrintRestLibPropertyService.restClientProperties(
+            actualObj
+        )
+        assertNotNull(p, "failed to create property bean")
+
+        assertEquals("no-def-headers", p.type)
+        assertEquals("http://127.0.0.1:8000", p.url)
+        assertTrue(p.values.containsKey("type"))
+    }
+
+    @Test
     fun testBlueprintWebClientService() {
         val blueprintWebClientService = bluePrintRestLibPropertyService
             .blueprintWebClientService("sample")
@@ -213,6 +248,22 @@ class BluePrintRestLibPropertyServiceTest {
         val blueprintWebClientService = bluePrintRestLibPropertyService
             .blueprintWebClientService(actualObj)
         assertNotNull(blueprintWebClientService, "failed to create blueprintWebClientService")
+    }
+
+    @Test
+    fun testNoHeadersForNoDefaultHeaderService() {
+        val actualObj: JsonNode = defaultMapper.readTree(noDefaultHeadersField())
+        val blueprintWebClientService = bluePrintRestLibPropertyService
+            .blueprintWebClientService(actualObj)
+        assertEquals(0, blueprintWebClientService.defaultHeaders().size)
+    }
+
+    @Test
+    fun testNoHeadersForSSLNoDefaultHeaderService() {
+        val actualObj: JsonNode = defaultMapper.readTree(sslNoDefHeadersField())
+        val blueprintWebClientService = bluePrintRestLibPropertyService
+            .blueprintWebClientService(actualObj)
+        assertEquals(0, blueprintWebClientService.defaultHeaders().size)
     }
 
     // pass the result of $typeEndpointWithHeadersField() output with and without headers to compare.
@@ -480,6 +531,17 @@ class BluePrintRestLibPropertyServiceTest {
         }
         """.trimIndent()
 
+        private fun sslNoDefHeadersField(): String = """{
+          "type" : "ssl-no-def-headers",
+          "url" : "https://localhost:8443",
+          "keyStoreInstance" : "PKCS12",
+          "sslTrust" : "src/test/resources/keystore.p12",
+          "sslTrustPassword" : "changeit",
+          "sslKey" : "src/test/resources/keystore.p12",
+          "sslKeyPassword" : "changeit"
+        }
+        """.trimIndent()
+
         // Don't forget to supply "," as the first char to make valid JSON
         private fun basicAuthEndpointWithHeadersField(headers: String = ""): String =
             """{
@@ -487,6 +549,13 @@ class BluePrintRestLibPropertyServiceTest {
               "url": "http://127.0.0.1:8000",
               "username": "user",
               "password": "pass"$headers
+            }
+            """.trimIndent()
+
+        private fun noDefaultHeadersField(): String =
+            """{
+              "type": "no-def-headers",
+              "url": "http://127.0.0.1:8000"
             }
             """.trimIndent()
 

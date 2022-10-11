@@ -75,7 +75,16 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
         val type = bluePrintPropertiesService.propertyBeanType(
             "$prefix.type", String::class.java
         )
-        return when (type) {
+        val allValues = bluePrintPropertiesService.propertyBeanType(
+            prefix, HashMap<String, Any>()::class.java
+        )
+        val properties = when (type) {
+            RestLibConstants.TYPE_NO_DEF_HEADERS -> {
+                noDefHeadersRestClientProperties(prefix, false)
+            }
+            RestLibConstants.TYPE_SSL_NO_DEF_HEADERS -> {
+                noDefHeadersRestClientProperties(prefix, true)
+            }
             RestLibConstants.TYPE_BASIC_AUTH -> {
                 basicAuthRestClientProperties(prefix)
             }
@@ -102,12 +111,18 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
                 )
             }
         }
+        properties.values = allValues
+        return properties
     }
 
     fun restClientProperties(jsonNode: JsonNode): RestClientProperties {
 
         val type = jsonNode.get("type").textValue()
-        return when (type) {
+        val allValues = JacksonUtils.readValue(jsonNode, HashMap<String, Any>()::class.java)!!
+        val properties = when (type) {
+            RestLibConstants.TYPE_NO_DEF_HEADERS -> {
+                JacksonUtils.readValue(jsonNode, RestClientProperties::class.java)!!
+            }
             RestLibConstants.TYPE_TOKEN_AUTH -> {
                 JacksonUtils.readValue(jsonNode, TokenAuthRestClientProperties::class.java)!!
             }
@@ -115,6 +130,9 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
                 JacksonUtils.readValue(jsonNode, BasicAuthRestClientProperties::class.java)!!
             }
 
+            RestLibConstants.TYPE_SSL_NO_DEF_HEADERS -> {
+                JacksonUtils.readValue(jsonNode, SSLRestClientProperties::class.java)!!
+            }
             RestLibConstants.TYPE_POLICY_MANAGER -> {
                 JacksonUtils.readValue(jsonNode, PolicyManagerRestClientProperties::class.java)!!
             }
@@ -133,24 +151,38 @@ open class BluePrintRestLibPropertyService(private var bluePrintPropertiesServic
                 )
             }
         }
+        properties.values = allValues
+        return properties
     }
 
     private fun blueprintWebClientService(restClientProperties: RestClientProperties):
         BlueprintWebClientService {
-
-            when (restClientProperties) {
+            return when (restClientProperties) {
                 is SSLRestClientProperties -> {
-                    return SSLRestClientService(restClientProperties)
+                    SSLRestClientService(restClientProperties)
                 }
                 is TokenAuthRestClientProperties -> {
-                    return TokenAuthRestClientService(restClientProperties)
+                    TokenAuthRestClientService(restClientProperties)
                 }
                 is BasicAuthRestClientProperties -> {
-                    return BasicAuthRestClientService(restClientProperties)
+                    BasicAuthRestClientService(restClientProperties)
                 }
                 else -> {
-                    throw BluePrintProcessorException("couldn't get rest service for type:${restClientProperties.type}  uri: ${restClientProperties.url}")
+                    NoHeadersBlueprintWebClientService(restClientProperties)
                 }
+            }
+        }
+
+    private fun noDefHeadersRestClientProperties(prefix: String, ssl: Boolean):
+        RestClientProperties {
+            return if (ssl) {
+                bluePrintPropertiesService.propertyBeanType(
+                    prefix, SSLRestClientProperties::class.java
+                )
+            } else {
+                bluePrintPropertiesService.propertyBeanType(
+                    prefix, RestClientProperties::class.java
+                )
             }
         }
 

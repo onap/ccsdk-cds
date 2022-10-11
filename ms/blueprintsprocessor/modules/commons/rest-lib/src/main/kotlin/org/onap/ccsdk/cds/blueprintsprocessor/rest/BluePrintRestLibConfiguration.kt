@@ -51,6 +51,8 @@ class RestLibConstants {
         const val SERVICE_BLUEPRINT_REST_LIB_PROPERTY = "blueprint-rest-lib-property-service"
         const val PROPERTY_REST_CLIENT_PREFIX = "blueprintsprocessor.restclient."
         const val PROPERTY_TYPE = "type"
+        const val TYPE_NO_DEF_HEADERS = "no-def-headers"
+        const val TYPE_SSL_NO_DEF_HEADERS = "ssl-no-def-headers"
         const val TYPE_TOKEN_AUTH = "token-auth"
         const val TYPE_BASIC_AUTH = "basic-auth"
         const val TYPE_SSL_BASIC_AUTH = "ssl-basic-auth"
