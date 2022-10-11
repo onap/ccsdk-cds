@@ -25,6 +25,7 @@ import org.apache.http.message.BasicHeader
 import org.apache.http.ssl.SSLContextBuilder
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientProperties
@@ -80,10 +81,13 @@ open class SSLRestClientService(private val restClientProperties: SSLRestClientP
         if (auth != null) {
             return auth!!.defaultHeaders()
         }
-        return mapOf(
-            HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-            HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE
-        )
+        return if (restClientProperties.type == RestLibConstants.TYPE_SSL_NO_DEF_HEADERS)
+            mapOf()
+        else
+            mapOf(
+                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE
+            )
     }
 
     override fun httpClient(): CloseableHttpClient {
