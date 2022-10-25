@@ -154,7 +154,7 @@ open class UatExecutor(
                     verify(mockClient, evalVerificationMode(expectation.times)).exchangeResource(
                         eq(request.method),
                         eq(request.path),
-                        argThat { assertJsonEquals(request.body, this) },
+                        any(),
                         argThat(RequiredMapEntriesMatcher(request.headers))
                     )
                 }
@@ -202,7 +202,7 @@ open class UatExecutor(
                     restClient.exchangeResource(
                         eq(expectation.request.method),
                         eq(expectation.request.path),
-                        any(),
+                        argThat(JsonMatcher(expectation.request.body.toString())),
                         any()
                     )
                 )
@@ -324,8 +324,11 @@ open class UatExecutor(
 
         override fun getInstance(selector: String, service: BlueprintWebClientService): BlueprintWebClientService {
             var spiedService = spies[selector]
-            if (spiedService != null)
+            if (spiedService != null) {
+                // inject the service here as realService: needed for "stateful services" (e.g. holding a session token)
+                spiedService.realService = service
                 return spiedService
+            }
 
             spiedService = SpyService(mapper, selector, service)
             spies[selector] = spiedService
@@ -339,7 +342,7 @@ open class UatExecutor(
     open class SpyService(
         private val mapper: ObjectMapper,
         val selector: String,
-        private val realService: BlueprintWebClientService
+        var realService: BlueprintWebClientService
     ) :
         BlueprintWebClientService by realService {
 
