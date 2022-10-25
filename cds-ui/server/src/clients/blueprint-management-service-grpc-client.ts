@@ -15,7 +15,7 @@
 */
 import * as fs from 'fs';
 import * as uuidv1 from 'uuid/v1';
-const grpc = require('grpc');
+const grpc = require('@grpc/grpc-js');
 import * as protoLoader from '@grpc/proto-loader';
 import { processorApiConfig } from '../config/app-config';
 
