@@ -89,61 +89,61 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         val aaiApiPassword = getDynamicProperties("aai-access").get("password").asText()
 
 
-
+   
         log.info("AAI params $aaiApiUrl")
 
 
-
+        
 
         val resolution_key = getDynamicProperties("resolution-key").asText()
 
-        val sdnc_payload:String = contentFromResolvedArtifactNB("config-deploy-sdnc")
-        //log.info("SDNC payload $sdnc_payload")
-        val sdnc_payloadObject = JacksonUtils.jsonNode(sdnc_payload) as ObjectNode
+    val sdnc_payload:String = contentFromResolvedArtifactNB("config-deploy-sdnc")
+         //log.info("SDNC payload $sdnc_payload")
+val sdnc_payloadObject = JacksonUtils.jsonNode(sdnc_payload) as ObjectNode
 
 
-        val aai_payload:String = contentFromResolvedArtifactNB("config-deploy-aai")
-        //log.info("AAI payload $aai_payload")
-        val aai_payloadObject = JacksonUtils.jsonNode(aai_payload) as ObjectNode
-
-
-
+ val aai_payload:String = contentFromResolvedArtifactNB("config-deploy-aai")
+         //log.info("AAI payload $aai_payload")
+val aai_payloadObject = JacksonUtils.jsonNode(aai_payload) as ObjectNode
 
 
 
+        
+ 
+        
         try {
-
-            for (item in sdnc_payloadObject.get("vf-modules")){
-
-                var instanceID:String =""
-                val modelTopology = item.get("vf-module-data").get("vf-module-topology")
-
-
-
-                val moduleParameters = modelTopology.get("vf-module-parameters").get("param")
-
-                val label: String? = getParamValueByName(moduleParameters, "vf-module-label")
-                val modelInfo = modelTopology.get("onap-model-information")
-                val vfModuleInvariantID = modelInfo.get("model-invariant-uuid").asText()
-                log.info("VF MOdule Inavriant ID $vfModuleInvariantID")
-                val vfModuleCustID=modelInfo.get("model-customization-uuid").asText()
-                val vfModuleUUID=modelInfo.get("model-uuid").asText()
-                val idInfo = modelTopology.get("vf-module-topology-identifier")
-                val vfModuleID = idInfo.get("vf-module-id").asText()
-                for (aai_item in aai_payloadObject.get("vf-modules"))
-                {
-                    if (aai_item.get("vf-module-id").asText() == vfModuleID && aai_item.get("heat-stack-id") != null)
-                    {
-                        instanceID=aai_item.get("heat-stack-id").asText()
-                        break
-                    }
-                }
-
+        
+         for (item in sdnc_payloadObject.get("vf-modules")){
+                
+                 var instanceID:String =""
+                 val modelTopology = item.get("vf-module-data").get("vf-module-topology")
+				
+				 
+                
+                    val moduleParameters = modelTopology.get("vf-module-parameters").get("param")
+					
+                    val label: String? = getParamValueByName(moduleParameters, "vf-module-label")
+					val modelInfo = modelTopology.get("onap-model-information")
+					val vfModuleInvariantID = modelInfo.get("model-invariant-uuid").asText()
+					log.info("VF MOdule Inavriant ID $vfModuleInvariantID")
+					val vfModuleCustID=modelInfo.get("model-customization-uuid").asText()
+					val vfModuleUUID=modelInfo.get("model-uuid").asText()
+					val idInfo = modelTopology.get("vf-module-topology-identifier")
+					val vfModuleID = idInfo.get("vf-module-id").asText()
+					for (aai_item in aai_payloadObject.get("vf-modules")) 
+					{
+                            if (aai_item.get("vf-module-id").asText() == vfModuleID && aai_item.get("heat-stack-id") != null) 
+							{
+                                instanceID=aai_item.get("heat-stack-id").asText()
+                               break 
+                            }
+					}
+					
 
 
                 val k8sRbProfileName: String = "profile_" + vfModuleID
 
-                val k8sConfigTemplateName: String = "template_" + vfModuleCustID
+                val k8sConfigTemplateName: String = "template_" + vfModuleCustID				
 
                 val api = K8sConfigTemplateApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleCustID, k8sConfigTemplateName)
 
@@ -151,30 +151,30 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 if (!api.hasDefinition()) {
                     throw BluePrintProcessorException("K8S Definition ($vfModuleInvariantID/$vfModuleCustID)  not found ")
                 }
-                val bluePrintPropertiesService: BluePrintPropertiesService =this.functionDependencyInstanceAsType("bluePrintPropertiesService")
-                val k8sConfiguration = K8sConnectionPluginConfiguration(bluePrintPropertiesService)
-                val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration,vfModuleInvariantID, vfModuleCustID)
-
-
-                val def: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(HttpMethod.GET.name,"","")
-                log.info(def.body.toString())
-                val rbdef = JacksonUtils.jsonNode(def.body.toString()) as ObjectNode
-                val chartName = rbdef.get("chart-name").asText()
+				  val bluePrintPropertiesService: BluePrintPropertiesService =this.functionDependencyInstanceAsType("bluePrintPropertiesService")
+				  val k8sConfiguration = K8sConnectionPluginConfiguration(bluePrintPropertiesService)
+				  val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration,vfModuleInvariantID, vfModuleCustID)
+				  
+                
+                 val def: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(HttpMethod.GET.name,"","")
+                 log.info(def.body.toString())
+				 val rbdef = JacksonUtils.jsonNode(def.body.toString()) as ObjectNode
+				 val chartName = rbdef.get("chart-name").asText()
 
                 log.info("Config Template name: $k8sConfigTemplateName")
 
-
-
+              
+                
                 var configTemplate = K8sConfigTemplate()
                 configTemplate.templateName = k8sConfigTemplateName
                 configTemplate.description = " "
                 configTemplate.ChartName = chartName
                 log.info("Chart name: ${configTemplate.ChartName}")
 
-
+            
 
                 if (!api.hasConfigTemplate(configTemplate)) {
-
+				   
 
                     val configTemplateFile: Path = prepareConfigTemplateJson(k8sConfigTemplateName, vfModuleID, label)
 
@@ -185,25 +185,25 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 }
             }
             log.info("DAY-1 Script excution completed")
-
-
-        }
+        
+		
+		}
         catch (e: Exception) {
             log.info("Caught exception during config template preparation!!")
             throw BluePrintProcessorException("${e.message}")
         }
     }
-    private fun getParamValueByName(params: JsonNode, paramName: String): String? {
+	private fun getParamValueByName(params: JsonNode, paramName: String): String? {
         for (param in params) {
             if (param.get("name").asText() == paramName && param.get("value").asText() != "null") {
                 return param.get("value").asText()
-
+				
             }
         }
         return null
     }
 
-    fun prepareConfigTemplateJson(configTemplateName: String, vfModuleID: String, label: String?): Path {
+   fun prepareConfigTemplateJson(configTemplateName: String, vfModuleID: String, label: String?): Path {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val bluePrintBasePath: String = bluePrintContext.rootPath
 
@@ -217,7 +217,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
         return profileFilePath
     }
-
+  
 
     fun getResolvedParameter(payload: ObjectNode, keyName: String): String {
         for (node in payload.get("resource-accumulator-resolved-data").elements()) {
@@ -231,7 +231,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         log.info("Recover function called!")
         log.info("Execution request : $executionRequest")
         log.error("Exception", runtimeException)
-        addError(runtimeException.message!!)
+		addError(runtimeException.message!!)
     }
 
 
@@ -307,7 +307,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 }
             } catch (e: Exception) {
                 log.info("Caught exception trying to create k8s config template ${profile.templateName}  - updated")
-                //    throw BluePrintProcessorException("${e.message}")
+            //    throw BluePrintProcessorException("${e.message}")
             }
         }
 
@@ -433,6 +433,6 @@ fun main(args: Array<String>) {
 
     val kotlin = DayOneConfig()
 
-
-
+    
+    
 }
