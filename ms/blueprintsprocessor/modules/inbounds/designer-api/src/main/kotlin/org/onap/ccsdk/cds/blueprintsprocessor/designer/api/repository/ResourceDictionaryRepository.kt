@@ -20,6 +20,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictio
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
+import javax.transaction.Transactional
 
 /**
  * ResourceMappingRepository.java Purpose: Provide Configuration Generator ResourceMappingRepository
@@ -59,6 +60,7 @@ interface ResourceDictionaryRepository : JpaRepository<ResourceDictionary, Strin
      *
      * @param name name
      */
+    @Transactional
     fun deleteByName(name: String)
 
     /**

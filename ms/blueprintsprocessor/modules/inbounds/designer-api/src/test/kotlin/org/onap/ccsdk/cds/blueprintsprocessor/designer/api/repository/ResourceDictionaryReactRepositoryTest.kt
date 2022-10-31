@@ -30,7 +30,6 @@ import org.springframework.test.annotation.Commit
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.transaction.annotation.Transactional
 
 @RunWith(SpringRunner::class)
 @ContextConfiguration(
@@ -80,7 +79,6 @@ class ResourceDictionaryReactRepositoryTest {
     }
 
     @Test
-    @Transactional
     @Commit
     fun test05Delete() {
         resourceDictionaryRepository.deleteByName(sourceName)
