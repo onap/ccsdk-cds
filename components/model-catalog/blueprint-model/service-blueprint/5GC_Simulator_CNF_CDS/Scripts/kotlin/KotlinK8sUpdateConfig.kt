@@ -69,7 +69,7 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
         println("Exeuting processNB")
         log.info("Executing processNB from Kotlin script: KotlinK8sUpdateConfig ...")
-        val bluePrintPropertiesService: BluePrintPropertiesService =this.functionDependencyInstanceAsType("bluePrintPropertiesService")
+		val bluePrintPropertiesService: BluePrintPropertiesService =this.functionDependencyInstanceAsType("bluePrintPropertiesService")
 
         // read the config  input
         val baseK8sApiUrl = getDynamicProperties("api-access").get("url").asText()
@@ -114,8 +114,8 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
             val aaiBody = resultOfGet.body
             val aaiPayloadObject = JacksonUtils.jsonNode(aaiBody) as ObjectNode
-
-            log.info("aaiPayloadObject: $aaiPayloadObject")
+			
+			log.info("aaiPayloadObject: $aaiPayloadObject")
 
             for (item in aaiPayloadObject.get("vf-module")) {
 
@@ -134,14 +134,14 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
                 log.info("AAI Vf-module Invariant ID is : $vfModuleModelInvariantUuid")
 
-                val vfModuleModelUuid: String = item.get("model-customization-id").asText()
+                val vfModuleModelUuid: String = item.get("model-version-id").asText()
 
                 log.info("AAI Vf-module UUID is : $vfModuleModelUuid")
-
-                val vfModuleCustUuid: String = item.get("model-customization-id").asText()
+				
+			    val vfModuleCustUuid: String = item.get("model-customization-id").asText()
 
                 log.info("AAI Vf-module Customization UUID is : $vfModuleCustUuid")
-
+			
 
                 val vfModuleInstance: String = item.get("heat-stack-id").asText()
 
@@ -152,8 +152,8 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
                 //val randomString = getRandomString(6)
                 val configName: String = "config_"+ vfModuleID
-
-                log.info("payloadObject: $payloadObject")
+				
+				log.info("payloadObject: $payloadObject")
 
                 var supportedNssai: String = getResolvedParameter(payloadObject, "supportedNssai")
 
@@ -270,9 +270,9 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
             val baseUrl: String,
             val definition: String,
             val definitionVersion: String,
-            val instanceId: String,
-            val bluePrintPropertiesService: BluePrintPropertiesService
-
+			val instanceId: String,
+			val bluePrintPropertiesService: BluePrintPropertiesService
+			
     ) {
         private val service: UploadFileConfigClientService // BasicAuthRestClientService
 
@@ -293,8 +293,8 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
         fun createOrUpdateConfig(configJson: K8sConfigPayloadJson, profileName: String, instanceId: String, configName: String, templateName: String) {
             val objectMapper = ObjectMapper()
-            var obj: Any? = null
-            val yamlReader = ObjectMapper(YAMLFactory())
+			 var obj: Any? = null
+             val yamlReader = ObjectMapper(YAMLFactory())
 
             for(snssai in configJson.values.supportedNssai.snssaiInitial.snssaiSecond.snssaiFinalArray){
                 println("snssai->" +snssai.snssai)
@@ -306,25 +306,25 @@ open class KotlinK8sUpdateConfig : AbstractScriptComponentFunction() {
 
             log.info("payload generated -> "+ configJsonString)
 
-            val startInd = configJsonString.indexOf('[')
-            val endInd = configJsonString.indexOf(']')
+           val startInd = configJsonString.indexOf('[')
+           val endInd = configJsonString.indexOf(']')
 
             val snssaiArray: String = configJsonString.substring(startInd, endInd+1).replace("\"","\\\"").replace("[","\"[").replace("]","]\"")
 
             val finalPayload: String = configJsonString.replaceRange(startInd..endInd, snssaiArray)
 
             log.info("payload restructured -> "+ finalPayload)
-            obj = yamlReader.readValue(finalPayload, Any::class.java)
+			obj = yamlReader.readValue(finalPayload, Any::class.java)
+			
 
-
-
-            val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
-
-            val configValueRequest = K8sConfigValueRequest()
-            configValueRequest.templateName = configJson.templateName
-            configValueRequest.configName = configJson.configName
-            configValueRequest.values = objectMapper.convertValue(obj)
-            if (api.hasConfigurationValues(instanceId, configName)) {
+				 
+				val api = K8sPluginInstanceApi(K8sConnectionPluginConfiguration(bluePrintPropertiesService))
+               
+                val configValueRequest = K8sConfigValueRequest()
+                configValueRequest.templateName = configJson.templateName
+                configValueRequest.configName = configJson.configName
+                configValueRequest.values = objectMapper.convertValue(obj)
+		    if (api.hasConfigurationValues(instanceId, configName)) {
                 api.editConfigurationValues(configValueRequest, instanceId, configName)
             } else {
                 api.createConfigurationValues(configValueRequest, instanceId)
@@ -467,6 +467,6 @@ fun main(args: Array<String>) {
 
     val kotlin = KotlinK8sUpdateConfig()
 
-
+   
 
 }
