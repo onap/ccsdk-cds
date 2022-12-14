@@ -22,7 +22,7 @@ limitations under the License.
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
         <artifactId>spring-boot-26-starter-parent</artifactId>
-        <version>2.4.5</version>
+        <version>2.4.6</version>
         <relativePath/>
     </parent>
 
