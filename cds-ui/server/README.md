@@ -1,4 +1,4 @@
-/*
+<!--
 ============LICENSE_START==========================================
 ===================================================================
 Copyright (C) 2018-19 IBM Intellectual Property. All rights reserved.
@@ -17,8 +17,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ============LICENSE_END============================================
-*/
+-->
 
 # cds-ui-server
 
 [![LoopBack](https://github.com/strongloop/loopback-next/raw/master/docs/site/imgs/branding/Powered-by-LoopBack-Badge-(blue)-@2x.png)](http://loopback.io/)
+
+This service provides the backend for the CDS Designer UI. In order to function correctly, you will also need to make the `cds-blueprints-processor` service available on `localhost:8080`.
+## Development
+You can launch the service with
+```sh
+npm start
+```
