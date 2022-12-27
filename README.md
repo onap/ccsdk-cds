@@ -1,10 +1,7 @@
-### Format code with ktlint checkstyle tool use the following command
-`mvn process-sources -P format`
-
-**Reference:** [ktlint docs](https://ktlint.github.io/) | [ktlint codebase](https://github.com/pinterest/ktlint)
+# Controller Design Studio (CDS)
 
 ## Basic Architecture
-![Basic_Architecture](./docs/media/CDS.png)
+![Basic_Architecture](./docs/media/CDS_architecture.jpg)
 
 ## Basic Requirements
 Before you can build this project, you must install and configure the following dependencies on your machine:
@@ -15,8 +12,8 @@ Before you can build this project, you must install and configure the following 
   5) Angular CLI & Angular v8
 
 ## Running in Development Mode
-Running `mvn clean install` command to install all libraries and dependencies for the maven and npm.
-Running `mvn clean install -Pdocker` command to install all libraries and create below docker images.
+Run `mvn clean install` command to install all libraries and dependencies for the maven and npm.
+Run `mvn clean install -Pdocker` command to install all libraries and create below docker images.
   * ccsdk-blueprintsprocessor
   * ccsdk-commandexecutor
   * ccsdk-py-executor
@@ -24,7 +21,7 @@ Running `mvn clean install -Pdocker` command to install all libraries and create
   * ccsdk-cds-ui-server
   * ccsdk-cds-ui
 
-**Note:** run `mvn clean install -Pdocker -Ddocker.skip.push=true` to build but skip pushing docker image.
+**Note:** Run `mvn clean install -Pdocker -Ddocker.skip.push=true` to build but skip pushing docker image.
 
 1) Back-end MS
    >Create `sdnctl` table in MySQL<br>
@@ -44,3 +41,8 @@ Running `mvn clean install -Pdocker` command to install all libraries and create
 
 ---
 For more information check: [CDS Docs](https://docs.onap.org/projects/onap-ccsdk-cds/en/latest/index.html)
+
+### Format code with ktlint checkstyle tool use the following command
+`mvn process-sources -P format`
+
+**Reference:** [ktlint docs](https://ktlint.github.io/) | [ktlint codebase](https://github.com/pinterest/ktlint)
