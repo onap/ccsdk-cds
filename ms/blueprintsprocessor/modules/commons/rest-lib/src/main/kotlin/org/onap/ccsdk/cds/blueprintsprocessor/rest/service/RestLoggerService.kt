@@ -150,7 +150,7 @@ suspend fun <T> mdcWebCoroutineScope(
     replaceWith = ReplaceWith("mdcWebCoroutineScope")
 )
 /** Used in Rest controller API methods to populate MDC context to nested coroutines from reactor web filter context. */
-@UseExperimental(InternalCoroutinesApi::class)
+@OptIn(InternalCoroutinesApi::class)
 fun <T> monoMdc(
     context: CoroutineContext = EmptyCoroutineContext,
     block: suspend CoroutineScope.() -> T?

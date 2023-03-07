@@ -36,7 +36,7 @@
         <guava.version>27.0.1-jre</guava.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <powermock.version>1.7.4</powermock.version>
-        <mockk.version>1.9</mockk.version>
+        <mockk.version>1.12.8</mockk.version>
         <dmaap.client.version>1.1.5</dmaap.client.version>
         <mockkserver.version>5.5.1</mockkserver.version>
         <sdc-distribution-client.version>2.0.0</sdc-distribution-client.version>

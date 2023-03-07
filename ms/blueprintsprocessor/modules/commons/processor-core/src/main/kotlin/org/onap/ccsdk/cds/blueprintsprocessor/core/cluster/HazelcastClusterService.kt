@@ -180,7 +180,7 @@ open class HazelcastClusterService(private val applicationEventPublisher: Applic
     }
 
     /** Return interface may change and it will be included in BluePrintClusterService */
-    @UseExperimental
+    @OptIn
     suspend fun clusterScheduler(name: String): IScheduledExecutorService {
         check(::hazelcast.isInitialized) { "failed to start and join cluster" }
         return hazelcast.getScheduledExecutorService(name)
