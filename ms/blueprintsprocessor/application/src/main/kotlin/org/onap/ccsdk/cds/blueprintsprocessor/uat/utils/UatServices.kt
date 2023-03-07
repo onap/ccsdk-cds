@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
+ *  Modifications Copyright © 2023 Deutche Telekom AG
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.uat.utils
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_SERVICES
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.resetContextColor
@@ -56,9 +58,11 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
         val tempFile = createTempFile()
         try {
             cbaFile.transferTo(tempFile)
-            val uatSpec = readZipEntryAsText(tempFile, UAT_SPECIFICATION_FILE)
-            val cbaBytes = tempFile.readBytes()
-            uatExecutor.execute(uatSpec, cbaBytes)
+                .doOnSuccess {
+                    val uatSpec = readZipEntryAsText(tempFile, UAT_SPECIFICATION_FILE)
+                    val cbaBytes = tempFile.readBytes()
+                    uatExecutor.execute(uatSpec, cbaBytes)
+                }.subscribe()
         } catch (e: AssertionError) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         } catch (t: Throwable) {
@@ -77,15 +81,19 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
         @RequestPart("uat", required = false) uatFile: FilePart?
     ): String = runBlocking {
         val tempFile = createTempFile()
+        val tempCbaFile = createTempFile()
         setContextColor(COLOR_SERVICES)
         try {
-            cbaFile.transferTo(tempFile)
             val uatSpec = when {
-                uatFile != null -> uatFile.readText()
+                uatFile != null -> {
+                    uatFile.transferTo(tempFile).thenReturn(tempFile).awaitSingle()
+                    tempFile.readText()
+                }
                 else -> readZipEntryAsText(tempFile, UAT_SPECIFICATION_FILE)
             }
             val uat = UatDefinition.load(mapper, uatSpec)
-            val cbaBytes = tempFile.readBytes()
+            cbaFile.transferTo(tempCbaFile).thenReturn(tempCbaFile).awaitSingle()
+            val cbaBytes = tempCbaFile.readBytes()
             val updatedUat = uatExecutor.execute(uat, cbaBytes)
             return@runBlocking updatedUat.dump(
                 mapper,
@@ -95,17 +103,8 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, t.message, t)
         } finally {
             tempFile.delete()
+            tempCbaFile.delete()
             resetContextColor()
-        }
-    }
-
-    private fun FilePart.readText(): String {
-        val tempFile = createTempFile()
-        try {
-            transferTo(tempFile).block()
-            return tempFile.readText()
-        } finally {
-            tempFile.delete()
         }
     }
 
