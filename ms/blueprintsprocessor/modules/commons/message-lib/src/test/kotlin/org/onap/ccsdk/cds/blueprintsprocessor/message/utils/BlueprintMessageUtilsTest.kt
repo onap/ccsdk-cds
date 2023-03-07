@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.message.utils
 
 import io.micrometer.core.instrument.Tag
 import io.mockk.every
-import io.mockk.mockkStatic
+import io.mockk.mockkObject
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ActionIdentifiers
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.CommonHeader
@@ -41,15 +41,15 @@ class BlueprintMessageUtilsTest {
 
     @Test
     fun testGetHostnameSuffix() {
-        mockkStatic(System::class)
-        every { System.getenv("HOSTNAME") } returns "qwertyuiop"
+        mockkObject(BlueprintMessageUtils)
+        every { BlueprintMessageUtils.getHostname() } returns "qwertyuiop"
         assertEquals("yuiop", BlueprintMessageUtils.getHostnameSuffix())
     }
 
     @Test
     fun testGetNullHostnameSuffix() {
-        mockkStatic(System::class)
-        every { System.getenv("HOSTNAME") } returns null
+        mockkObject(BlueprintMessageUtils)
+        every { BlueprintMessageUtils.getHostname() } returns null
         assertEquals(5, BlueprintMessageUtils.getHostnameSuffix().length)
     }
 

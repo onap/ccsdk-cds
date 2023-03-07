@@ -16,15 +16,11 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.core
 
-import io.mockk.CapturingSlot
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
+import org.mockito.Mockito
+import org.mockito.kotlin.any
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.never
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfReceivedEvent
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfSession
@@ -77,22 +73,22 @@ class NetconfDeviceCommunicatorTest {
 
     @Before
     fun setup() {
-        netconfSession = mockk()
-        netconfSessionListener = mockk()
-        mockInputStream = mockk()
-        mockOutputStream = mockk()
+        netconfSession = Mockito.mock(NetconfSession::class.java)
+        netconfSessionListener = Mockito.mock(NetconfSessionListener::class.java)
+        mockInputStream = Mockito.mock(InputStream::class.java)
+        mockOutputStream = Mockito.mock(OutputStream::class.java)
         replies = ConcurrentHashMap()
     }
 
     @Test
     fun `NetconfDeviceCommunicator should read from supplied reader`() {
-        every { mockInputStream.read() } returns -1
-        every { mockInputStream.read(any(), any(), any()) } returns -1
+        Mockito.`when`(mockInputStream.read()).thenReturn(-1)
+        Mockito.`when`(mockInputStream.read(any(), any(), any())).thenReturn(-1)
         val communicator: NetconfDeviceCommunicator =
             NetconfDeviceCommunicator(mockInputStream, mockOutputStream, genDeviceInfo(), netconfSessionListener, replies)
         communicator.join()
         // verify
-        verify { mockInputStream.read(any(), any(), any()) }
+        Mockito.verify(mockInputStream).read(any(), any(), any())
     }
 
     @Test
@@ -101,48 +97,11 @@ class NetconfDeviceCommunicatorTest {
         // to unregister the device.
         // we want to capture the slot to return the value as inputStreamReader will pass a char array
         // create a slot where NetconfReceivedEvent will be placed to further verify Type.DEVICE_UNREGISTERED
-        val eventSlot = CapturingSlot<NetconfReceivedEvent>()
-        every { netconfSessionListener.accept(event = capture(eventSlot)) } just Runs
+        val captured = mutableListOf<NetconfReceivedEvent>()
+        Mockito.doAnswer {
+            captured.add(it.getArgument(0))
+        }.`when`(netconfSessionListener).accept(any())
         stubInputStream = RpcMessageUtils.END_PATTERN.byteInputStream(StandardCharsets.UTF_8)
-        val inputStreamSpy = spyk(stubInputStream)
-        // RUN the test
-        val communicator = NetconfDeviceCommunicator(
-            inputStreamSpy, mockOutputStream,
-            genDeviceInfo(), netconfSessionListener, replies
-        )
-        communicator.join()
-        // Verify
-        verify { inputStreamSpy.close() }
-        assertTrue { eventSlot.isCaptured }
-        assertEquals(NetconfReceivedEvent.Type.DEVICE_UNREGISTERED, eventSlot.captured.type)
-        assertEquals(genDeviceInfo(), eventSlot.captured.deviceInfo)
-    }
-
-    @Test
-    fun `NetconfDeviceCommunicator on IOException generated DEVICE_ERROR event`() {
-        val eventSlot = CapturingSlot<NetconfReceivedEvent>()
-        every { netconfSessionListener.accept(event = capture(eventSlot)) } just Runs
-        stubInputStream = "".byteInputStream(StandardCharsets.UTF_8)
-        val inputStreamSpy = spyk(stubInputStream)
-        every { inputStreamSpy.read(any(), any(), any()) } returns 1 andThenThrows IOException("Fake IO Exception")
-        // RUN THE TEST
-        val communicator = NetconfDeviceCommunicator(
-            inputStreamSpy, mockOutputStream,
-            genDeviceInfo(), netconfSessionListener, replies
-        )
-        communicator.join()
-        // Verify
-        assertTrue { eventSlot.isCaptured }
-        assertEquals(genDeviceInfo(), eventSlot.captured.deviceInfo)
-        assertEquals(NetconfReceivedEvent.Type.DEVICE_ERROR, eventSlot.captured.type)
-    }
-
-    @Test
-    fun `NetconfDeviceCommunicator in END_PATTERN state but fails RpcMessageUtils end pattern validation`() {
-        val eventSlot = CapturingSlot<NetconfReceivedEvent>()
-        val payload = "<rpc-reply>blah</rpc-reply>"
-        stubInputStream = "$payload${RpcMessageUtils.END_PATTERN}".byteInputStream(StandardCharsets.UTF_8)
-        every { netconfSessionListener.accept(event = capture(eventSlot)) } just Runs
         // RUN the test
         val communicator = NetconfDeviceCommunicator(
             stubInputStream, mockOutputStream,
@@ -150,50 +109,113 @@ class NetconfDeviceCommunicatorTest {
         )
         communicator.join()
         // Verify
-        verify(exactly = 0) { mockInputStream.close() } // make sure the reader is not closed as this could cause problems
-        assertTrue { eventSlot.isCaptured }
+        assertTrue(captured.size == 1)
+        assertEquals(NetconfReceivedEvent.Type.DEVICE_UNREGISTERED, captured[0].type)
+        assertEquals(genDeviceInfo(), captured[0].deviceInfo)
+    }
+
+    @Test
+    fun `NetconfDeviceCommunicator on IOException generated DEVICE_ERROR event`() {
+        val captured = mutableListOf<NetconfReceivedEvent>()
+        Mockito.doAnswer {
+            captured.add(it.getArgument(0))
+        }.`when`(netconfSessionListener).accept(any())
+        stubInputStream = "".byteInputStream(StandardCharsets.UTF_8)
+        Mockito.`when`(mockInputStream.read(any(), any(), any()))
+            .thenReturn(1).thenThrow(IOException("Fake IO"))
+        // RUN THE TEST
+        val communicator = NetconfDeviceCommunicator(
+            mockInputStream, mockOutputStream,
+            genDeviceInfo(), netconfSessionListener, replies
+        )
+        communicator.join()
+        // Verify
+        assertTrue(captured.size == 1)
+        assertEquals(genDeviceInfo(), captured[0].deviceInfo)
+        assertEquals(NetconfReceivedEvent.Type.DEVICE_ERROR, captured[0].type)
+    }
+
+    @Test
+    fun `NetconfDeviceCommunicator in END_PATTERN state but fails RpcMessageUtils end pattern validation`() {
+        val captured = mutableListOf<NetconfReceivedEvent>()
+        Mockito.doAnswer {
+            captured.add(it.getArgument(0))
+        }.`when`(netconfSessionListener).accept(any())
+        val payload = "<rpc-reply>blah</rpc-reply>"
+        stubInputStream = "$payload${RpcMessageUtils.END_PATTERN}".byteInputStream(StandardCharsets.UTF_8)
+        Mockito.doAnswer {
+            val bytes = stubInputStream.readAllBytes()
+            bytes.forEachIndexed { index, byte ->
+                (it.getArgument(0) as ByteArray)[index] = byte
+            }
+            bytes.size
+        }.doReturn(-1).`when`(mockInputStream).read(any(), any(), any())
+        // RUN the test
+        val communicator = NetconfDeviceCommunicator(
+            mockInputStream, mockOutputStream,
+            genDeviceInfo(), netconfSessionListener, replies
+        )
+        communicator.join()
+        // Verify
+        Mockito.verify(mockInputStream, never()).close() // make sure the reader is not closed as this could cause problems
+        assertTrue(captured.size == 1)
         // eventually, sessionListener is called with message type DEVICE_REPLY
-        assertEquals(NetconfReceivedEvent.Type.DEVICE_REPLY, eventSlot.captured.type)
-        assertEquals(payload, eventSlot.captured.messagePayload)
+        assertEquals(NetconfReceivedEvent.Type.DEVICE_REPLY, captured[0].type)
+        assertEquals(payload, captured[0].messagePayload)
     }
 
     @Test
     fun `NetconfDeviceCommunicator in END_CHUNKED_PATTERN but validation failing produces DEVICE_ERROR`() {
-        val eventSlot = CapturingSlot<NetconfReceivedEvent>()
+        val captured = mutableListOf<NetconfReceivedEvent>()
+        Mockito.doAnswer {
+            captured.add(it.getArgument(0))
+        }.`when`(netconfSessionListener).accept(any())
         val payload = "<rpc-reply>blah</rpc-reply>"
         val payloadWithChunkedEnding = "$payload$chunkedEnding"
-        every { netconfSessionListener.accept(event = capture(eventSlot)) } just Runs
 
         stubInputStream = payloadWithChunkedEnding.byteInputStream(StandardCharsets.UTF_8)
-        // we have to ensure that the input stream is processed, so need to create a spy object.
-        val inputStreamSpy = spyk(stubInputStream)
+        Mockito.doAnswer {
+            val bytes = stubInputStream.readAllBytes()
+            bytes.forEachIndexed { index, byte ->
+                (it.getArgument(0) as ByteArray)[index] = byte
+            }
+            bytes.size
+        }.doReturn(-1).`when`(mockInputStream).read(any(), any(), any())
         // RUN the test
         val communicator = NetconfDeviceCommunicator(
-            inputStreamSpy, mockOutputStream, genDeviceInfo(),
+            mockInputStream, mockOutputStream, genDeviceInfo(),
             netconfSessionListener, replies
         )
         communicator.join()
         // Verify
-        verify(exactly = 0) { inputStreamSpy.close() } // make sure the reader is not closed as this could cause problems
-        assertTrue { eventSlot.isCaptured }
+        Mockito.verify(mockInputStream, never()).close() // make sure the reader is not closed as this could cause problems
+        assertTrue(captured.size == 1)
         // eventually, sessionListener is called with message type DEVICE_REPLY
-        assertEquals(NetconfReceivedEvent.Type.DEVICE_ERROR, eventSlot.captured.type)
-        assertEquals("", eventSlot.captured.messagePayload)
+        assertEquals(NetconfReceivedEvent.Type.DEVICE_ERROR, captured[0].type)
+        assertEquals("", captured[0].messagePayload)
     }
 
     @Test
     fun `NetconfDeviceCommunicator in END_CHUNKED_PATTERN passing validation generates DEVICE_REPLY`() {
-        val eventSlot = CapturingSlot<NetconfReceivedEvent>()
+        val captured = mutableListOf<NetconfReceivedEvent>()
+        Mockito.doAnswer {
+            captured.add(it.getArgument(0))
+        }.`when`(netconfSessionListener).accept(any())
         stubInputStream = validChunkedEncodedMsg.byteInputStream(StandardCharsets.UTF_8)
-        val inputStreamSpy = spyk(stubInputStream)
-        every { netconfSessionListener.accept(event = capture(eventSlot)) } just Runs
+        Mockito.doAnswer {
+            val bytes = stubInputStream.readAllBytes()
+            bytes.forEachIndexed { index, byte ->
+                (it.getArgument(0) as ByteArray)[index] = byte
+            }
+            bytes.size
+        }.doReturn(-1).`when`(mockInputStream).read(any(), any(), any())
         // RUN the test
-        NetconfDeviceCommunicator(inputStreamSpy, mockOutputStream, genDeviceInfo(), netconfSessionListener, replies).join()
+        NetconfDeviceCommunicator(mockInputStream, mockOutputStream, genDeviceInfo(), netconfSessionListener, replies).join()
         // Verify
-        verify(exactly = 0) { inputStreamSpy.close() } // make sure the reader is not closed as this could cause problems
-        assertTrue { eventSlot.isCaptured }
+        Mockito.verify(mockOutputStream, never()).close() // make sure the reader is not closed as this could cause problems
+        assertTrue(captured.size == 1)
         // eventually, sessionListener is called with message type DEVICE_REPLY
-        assertEquals(NetconfReceivedEvent.Type.DEVICE_REPLY, eventSlot.captured.type)
+        assertEquals(NetconfReceivedEvent.Type.DEVICE_REPLY, captured[0].type)
         assertEquals(
             """
         <rpc message-id="102"
@@ -201,7 +223,7 @@ class NetconfDeviceCommunicatorTest {
           <close-session/>
         </rpc>
             """.trimIndent(),
-            eventSlot.captured.messagePayload
+            captured[0].messagePayload
         )
     }
 
@@ -228,9 +250,6 @@ class NetconfDeviceCommunicatorTest {
         val msgPayload = "some text"
         val msgId = "100"
         stubInputStream = "".byteInputStream(StandardCharsets.UTF_8) // no data available in the stream...
-        every { mockOutputStream.write(any(), any(), any()) } just Runs
-        every { mockOutputStream.write(msgPayload.toByteArray(Charsets.UTF_8)) } just Runs
-        every { mockOutputStream.flush() } just Runs
         // Run the command
         val communicator = NetconfDeviceCommunicator(
             stubInputStream, mockOutputStream,
@@ -239,8 +258,8 @@ class NetconfDeviceCommunicatorTest {
         val completableFuture = communicator.sendMessage(msgPayload, msgId)
         communicator.join()
         // verify
-        verify { mockOutputStream.write(any(), any(), any()) }
-        verify { mockOutputStream.flush() }
+        Mockito.verify(mockOutputStream).write(any(), any(), any())
+        Mockito.verify(mockOutputStream).flush()
         assertFalse { completableFuture.isCompletedExceptionally }
     }
 
@@ -248,7 +267,8 @@ class NetconfDeviceCommunicatorTest {
     fun `sendMessage on IOError returns completed exceptionally future`() {
         val msgPayload = "some text"
         val msgId = "100"
-        every { mockOutputStream.write(any(), any(), any()) } throws IOException("Some IO error occurred!")
+        Mockito.`when`(mockOutputStream.write(any(), any(), any()))
+            .thenThrow(IOException("Some IO error occurred!"))
         stubInputStream = "".byteInputStream(StandardCharsets.UTF_8) // no data available in the stream...
         // Run the command
         val communicator = NetconfDeviceCommunicator(
@@ -257,8 +277,8 @@ class NetconfDeviceCommunicatorTest {
         )
         val completableFuture = communicator.sendMessage(msgPayload, msgId)
         // verify
-        verify { mockOutputStream.write(any(), any(), any()) }
-        verify(exactly = 0) { mockOutputStream.flush() }
+        Mockito.verify(mockOutputStream).write(any(), any(), any())
+        Mockito.verify(mockOutputStream, never()).flush()
         assertTrue { completableFuture.isCompletedExceptionally }
     }
 

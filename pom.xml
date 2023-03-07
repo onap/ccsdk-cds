@@ -73,6 +73,13 @@ limitations under the License.
         <ccsdk.build.timestamp>${maven.build.timestamp}</ccsdk.build.timestamp>
         <maven.build.timestamp.format>yyyyMMdd'T'HHmmss'Z'</maven.build.timestamp.format>
 
+        <mockk.version>1.12.8</mockk.version>
+        <kotlin.version>1.6.21</kotlin.version>
+        <kotlin.maven.version>1.6.21</kotlin.maven.version>
+        <kotlin.couroutines.version>1.6.4</kotlin.couroutines.version>
+        <kotlinpoet.version>1.11.0</kotlinpoet.version>
+        <jacoco.version>0.8.8</jacoco.version>
+
         <ccsdk.sli.version>1.5.2</ccsdk.sli.version>
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
     </properties>

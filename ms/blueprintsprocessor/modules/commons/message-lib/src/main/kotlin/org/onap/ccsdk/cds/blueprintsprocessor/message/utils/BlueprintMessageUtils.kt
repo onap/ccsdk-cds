@@ -22,31 +22,36 @@ import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.defaultToUUID
 import kotlin.math.max
 
-class BlueprintMessageUtils {
-    companion object {
-        fun kafkaMetricTag(topic: String): MutableList<Tag> =
-            mutableListOf(
-                Tag.of(BluePrintConstants.METRIC_TAG_TOPIC, topic)
-            )
+object BlueprintMessageUtils {
 
-        /**
-         * get OS hostname's last 5 characters
-         * Used to generate unique client ID.
-         */
-        fun getHostnameSuffix(): String =
-            System.getenv("HOSTNAME").defaultToUUID().let {
-                it.substring(max(0, it.length - 5))
-            }
-
-        fun getMessageLogData(message: Any): String =
-            when (message) {
-                is CommonExecutionServiceData -> {
-                    val actionIdentifiers = message.actionIdentifiers
-                    val commonHeaders = message.commonHeader
-                    "requestID(${commonHeaders.requestId}), subrequestID(${commonHeaders.subRequestId}) " +
-                        "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
-                }
-                else -> "message($message)"
-            }
+    fun getHostname(): String? {
+        return System.getenv("HOSTNAME")
     }
+
+    fun kafkaMetricTag(topic: String): MutableList<Tag> =
+        mutableListOf(
+            Tag.of(BluePrintConstants.METRIC_TAG_TOPIC, topic)
+        )
+
+    /**
+     * get OS hostname's last 5 characters
+     * Used to generate unique client ID.
+     */
+    fun getHostnameSuffix(): String {
+        return getHostname().defaultToUUID().let {
+            it.substring(max(0, it.length - 5))
+        }
+    }
+
+    fun getMessageLogData(message: Any): String =
+        when (message) {
+            is CommonExecutionServiceData -> {
+                val actionIdentifiers = message.actionIdentifiers
+                val commonHeaders = message.commonHeader
+                "requestID(${commonHeaders.requestId}), subrequestID(${commonHeaders.subRequestId}) " +
+                    "CBA(${actionIdentifiers.blueprintName}/${actionIdentifiers.blueprintVersion}/${actionIdentifiers.actionName})"
+            }
+
+            else -> "message($message)"
+        }
 }
