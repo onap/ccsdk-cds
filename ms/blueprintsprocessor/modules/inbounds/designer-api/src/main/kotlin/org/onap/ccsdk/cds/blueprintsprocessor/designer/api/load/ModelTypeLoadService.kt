@@ -98,7 +98,7 @@ open class ModelTypeLoadService(private val modelTypeHandler: ModelTypeHandler) 
                 deferred.awaitAll()
             }
 
-            if (!errorBuilder.isEmpty) {
+            if (!errorBuilder.isEmpty()) {
                 log.error(errorBuilder.toString())
             }
         } catch (e: Exception) {

@@ -61,7 +61,7 @@ open class ResourceDictionaryLoadService(private val resourceDictionaryHandler: 
             deferred.awaitAll()
         }
 
-        if (!errorBuilder.isEmpty) {
+        if (!errorBuilder.isEmpty()) {
             log.error(errorBuilder.toString())
         }
     }

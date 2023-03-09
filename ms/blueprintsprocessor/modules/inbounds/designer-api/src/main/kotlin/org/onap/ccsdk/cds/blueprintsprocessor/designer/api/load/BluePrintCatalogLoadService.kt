@@ -53,7 +53,7 @@ open class BluePrintCatalogLoadService(private val controllerBlueprintsCatalogSe
                 deferredResult.await()
             }
 
-            if (!errorBuilder.isEmpty) {
+            if (!errorBuilder.isEmpty()) {
                 log.error(errorBuilder.toString())
             }
         }
