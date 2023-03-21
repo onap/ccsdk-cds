@@ -22,6 +22,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.profile.K8sProfile
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.K8sDefinitionRestClient.Companion.getK8sDefinitionRestClient
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition.template.K8sTemplate
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
@@ -41,12 +42,12 @@ class K8sPluginDefinitionApi(
     private val objectMapper = ObjectMapper()
 
     fun hasDefinition(definition: String, definitionVersion: String): Boolean {
-        val rbDefinitionService = K8sDefinitionRestClient(
-            k8sConfiguration,
-            definition,
-            definitionVersion
-        )
         try {
+            val rbDefinitionService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 GET.name,
                 "",
@@ -61,12 +62,12 @@ class K8sPluginDefinitionApi(
     }
 
     fun hasProfile(definition: String, definitionVersion: String, profileName: String): Boolean {
-        val rbDefinitionService = K8sDefinitionRestClient(
-            k8sConfiguration,
-            definition,
-            definitionVersion
-        )
         try {
+            val rbDefinitionService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 GET.name,
                 "/profile/$profileName",
@@ -81,12 +82,12 @@ class K8sPluginDefinitionApi(
     }
 
     fun getProfile(definition: String, definitionVersion: String, profileName: String): K8sProfile? {
-        val rbDefinitionService = K8sDefinitionRestClient(
-            k8sConfiguration,
-            definition,
-            definitionVersion
-        )
         try {
+            val rbDefinitionService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 GET.name,
                 "/profile/$profileName",
@@ -107,13 +108,13 @@ class K8sPluginDefinitionApi(
     }
 
     fun createProfile(definition: String, definitionVersion: String, profile: K8sProfile) {
-        val rbDefinitionService = K8sDefinitionRestClient(
-            k8sConfiguration,
-            definition,
-            definitionVersion
-        )
         val profileJsonString: String = objectMapper.writeValueAsString(profile)
         try {
+            val rbDefinitionService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 POST.name,
                 "/profile",
@@ -129,13 +130,13 @@ class K8sPluginDefinitionApi(
     }
 
     fun updateProfile(profile: K8sProfile) {
-        val rbDefinitionService = K8sDefinitionRestClient(
-            k8sConfiguration,
-            profile.rbName!!,
-            profile.rbVersion!!
-        )
         val profileJsonString: String = objectMapper.writeValueAsString(profile)
         try {
+            val rbDefinitionService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                profile.rbName!!,
+                profile.rbVersion!!
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 PUT.name,
                 "/profile/${profile.profileName}",
@@ -151,8 +152,12 @@ class K8sPluginDefinitionApi(
     }
 
     fun deleteProfile(definition: String, definitionVersion: String, profileName: String) {
-        val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion)
         try {
+            val rbDefinitionService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 DELETE.name,
                 "/profile/$profileName",
@@ -169,12 +174,12 @@ class K8sPluginDefinitionApi(
     }
 
     fun uploadProfileContent(definition: String, definitionVersion: String, profile: K8sProfile, filePath: Path) {
-        val fileUploadService = K8sUploadFileRestClientService(
-            k8sConfiguration,
-            definition,
-            definitionVersion
-        )
         try {
+            val fileUploadService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = fileUploadService.uploadBinaryFile(
                 "/profile/${profile.profileName}/content",
                 filePath
@@ -191,9 +196,13 @@ class K8sPluginDefinitionApi(
     }
 
     fun createTemplate(definition: String, definitionVersion: String, template: K8sTemplate) {
-        val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion)
         val templateJsonString: String = objectMapper.writeValueAsString(template)
         try {
+            val rbDefinitionService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 POST.name,
                 "/config-template",
@@ -210,8 +219,12 @@ class K8sPluginDefinitionApi(
     }
 
     fun uploadConfigTemplateContent(definition: String, definitionVersion: String, template: K8sTemplate, filePath: Path) {
-        val fileUploadService = K8sUploadFileRestClientService(k8sConfiguration, definition, definitionVersion)
         try {
+            val fileUploadService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = fileUploadService.uploadBinaryFile(
                 "/config-template/${template.templateName}/content",
                 filePath
@@ -227,8 +240,12 @@ class K8sPluginDefinitionApi(
     }
 
     fun deleteTemplate(definition: String, definitionVersion: String, templateName: String) {
-        val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion)
         try {
+            val rbDefinitionService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
                 DELETE.name,
                 "/config-template/$templateName",
@@ -245,8 +262,12 @@ class K8sPluginDefinitionApi(
     }
 
     fun getTemplate(definition: String, definitionVersion: String, templateName: String): K8sTemplate {
-        val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion)
         try {
+            val rbDefinitionService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
             val result: BlueprintWebClientService.WebClientResponse<String> = getTemplateRequest(rbDefinitionService, templateName)
             log.debug(result.toString())
             return objectMapper.readValue(result.body)
@@ -257,9 +278,13 @@ class K8sPluginDefinitionApi(
     }
 
     fun hasTemplate(definition: String, definitionVersion: String, templateName: String): Boolean {
-        val rbDefinitionService = K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion)
         try {
-            val result: BlueprintWebClientService.WebClientResponse<String> = getTemplateRequest(rbDefinitionService, templateName)
+            val interceptedService = getK8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
+            val result: BlueprintWebClientService.WebClientResponse<String> = getTemplateRequest(interceptedService, templateName)
             log.debug(result.toString())
             return result.status in 200..299
         } catch (e: Exception) {
@@ -268,7 +293,7 @@ class K8sPluginDefinitionApi(
         }
     }
 
-    private fun getTemplateRequest(rbDefinitionService: K8sDefinitionRestClient, templateName: String): BlueprintWebClientService.WebClientResponse<String> {
+    private fun getTemplateRequest(rbDefinitionService: BlueprintWebClientService, templateName: String): BlueprintWebClientService.WebClientResponse<String> {
         return rbDefinitionService.exchangeResource(
             GET.name,
             "/config-template/$templateName",
