@@ -20,10 +20,31 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.query
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sAbstractRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 open class K8sQueryRestClient(
     k8sConfiguration: K8sConnectionPluginConfiguration
-) : K8sAbstractRestClientService(k8sConfiguration, "k8s-plugin-query") {
+) : K8sAbstractRestClientService(k8sConfiguration, CLIENT_NAME) {
+
+    companion object {
+        public const val CLIENT_NAME = "k8s-plugin-query"
+
+        fun getK8sQueryRestClient(
+            k8sConfiguration: K8sConnectionPluginConfiguration
+        ): BlueprintWebClientService {
+            val rbQueryService = K8sQueryRestClient(
+                k8sConfiguration
+            )
+            val service: BluePrintRestLibPropertyService =
+                BluePrintDependencyService.instance(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+            return service.interceptExternalBlueprintWebClientService(
+                rbQueryService, CLIENT_NAME
+            )
+        }
+    }
 
     override fun apiUrl(): String {
         return "$baseUrl/v1/query"

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.module.kotlin.convertValue
+import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.RequestType.EXCHANGE_RESOURCE
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.nodes.Tag
@@ -41,10 +42,16 @@ data class ProcessDefinition(
 data class RequestDefinition(
     val method: String,
     @JsonDeserialize(using = PathDeserializer::class)
-    val path: String,
+    val path: String = "",
     val headers: Map<String, String> = emptyMap(),
-    val body: JsonNode? = null
+    val body: JsonNode? = null,
+    val requestType: RequestType = EXCHANGE_RESOURCE
 )
+
+enum class RequestType {
+    EXCHANGE_RESOURCE,
+    UPLOAD_BINARY_FILE
+}
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 data class ResponseDefinition(

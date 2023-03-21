@@ -19,43 +19,36 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition
 
-import org.apache.commons.io.IOUtils
-import org.apache.http.client.ClientProtocolException
-import org.apache.http.client.entity.EntityBuilder
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.client.methods.HttpUriRequest
-import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
-import java.io.IOException
-import java.nio.charset.Charset
-import java.nio.file.Files
-import java.nio.file.Path
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 class K8sUploadFileRestClientService(
     k8sConfiguration: K8sConnectionPluginConfiguration,
     definition: String,
     definitionVersion: String
-) : K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion) {
+) : K8sDefinitionRestClient(k8sConfiguration, definition, definitionVersion, CLIENT_NAME) {
 
-    @Throws(IOException::class, ClientProtocolException::class)
-    private fun performHttpCall(httpUriRequest: HttpUriRequest): BlueprintWebClientService.WebClientResponse<String> {
-        val httpResponse = httpClient().execute(httpUriRequest)
-        val statusCode = httpResponse.statusLine.statusCode
-        httpResponse.entity.content.use {
-            val body = IOUtils.toString(it, Charset.defaultCharset())
-            return BlueprintWebClientService.WebClientResponse(statusCode, body)
+    companion object {
+        public const val CLIENT_NAME = "k8s-upload-definition"
+
+        fun getK8sUploadFileRestClientService(
+            k8sConfiguration: K8sConnectionPluginConfiguration,
+            definition: String,
+            definitionVersion: String
+        ): BlueprintWebClientService {
+            val fileUploadService = K8sUploadFileRestClientService(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
+            val service: BluePrintRestLibPropertyService =
+                BluePrintDependencyService.instance(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+            return service.interceptExternalBlueprintWebClientService(
+                fileUploadService, CLIENT_NAME
+            )
         }
-    }
-
-    fun uploadBinaryFile(path: String, filePath: Path): BlueprintWebClientService.WebClientResponse<String> {
-        val convertedHeaders: Array<BasicHeader> = convertToBasicHeaders(defaultHeaders())
-        val httpPost = HttpPost(host(path))
-        val entity = EntityBuilder.create().setBinary(Files.readAllBytes(filePath)).build()
-        httpPost.setEntity(entity)
-        RestLoggerService.httpInvoking(convertedHeaders)
-        httpPost.setHeaders(convertedHeaders)
-        return performHttpCall(httpPost)
     }
 }

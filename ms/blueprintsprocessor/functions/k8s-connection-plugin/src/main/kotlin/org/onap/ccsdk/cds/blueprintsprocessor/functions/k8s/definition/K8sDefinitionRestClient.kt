@@ -21,13 +21,38 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.definition
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sAbstractRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
+import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 open class K8sDefinitionRestClient(
     k8sConfiguration: K8sConnectionPluginConfiguration,
     private val definition: String,
-    private val definitionVersion: String
-) : K8sAbstractRestClientService(k8sConfiguration, "k8s-plugin-definition") {
+    private val definitionVersion: String,
+    private val clientName: String = CLIENT_NAME
+) : K8sAbstractRestClientService(k8sConfiguration, CLIENT_NAME) {
 
+    companion object {
+        public const val CLIENT_NAME = "k8s-plugin-definition"
+
+        fun getK8sDefinitionRestClient(
+            k8sConfiguration: K8sConnectionPluginConfiguration,
+            definition: String,
+            definitionVersion: String
+        ): BlueprintWebClientService {
+            val rbDefinitionService = K8sDefinitionRestClient(
+                k8sConfiguration,
+                definition,
+                definitionVersion
+            )
+            val service: BluePrintRestLibPropertyService =
+                BluePrintDependencyService.instance(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+            return service.interceptExternalBlueprintWebClientService(
+                rbDefinitionService, CLIENT_NAME
+            )
+        }
+    }
     override fun apiUrl(): String {
         return "$baseUrl/v1/rb/definition/$definition/$definitionVersion"
     }
