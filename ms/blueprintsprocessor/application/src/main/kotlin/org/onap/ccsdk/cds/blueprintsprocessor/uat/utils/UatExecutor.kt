@@ -52,14 +52,18 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientSer
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_MOCKITO
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.markerOf
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.MockInvocationLogger
+import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.RequestType.EXCHANGE_RESOURCE
+import org.onap.ccsdk.cds.blueprintsprocessor.uat.utils.RequestType.UPLOAD_BINARY_FILE
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.env.ConfigurableEnvironment
+import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.util.Base64Utils
+import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -151,12 +155,19 @@ open class UatExecutor(
             for ((mockClient, expectations) in expectationsPerClient) {
                 expectations.forEach { expectation ->
                     val request = expectation.request
-                    verify(mockClient, evalVerificationMode(expectation.times)).exchangeResource(
-                        eq(request.method),
-                        eq(request.path),
-                        any(),
-                        argThat(RequiredMapEntriesMatcher(request.headers))
-                    )
+                    if (request.requestType == EXCHANGE_RESOURCE) {
+                        verify(mockClient, evalVerificationMode(expectation.times)).exchangeResource(
+                            eq(request.method),
+                            eq(request.path),
+                            any(),
+                            argThat(RequiredMapEntriesMatcher(request.headers))
+                        )
+                    } else if (request.requestType == UPLOAD_BINARY_FILE) {
+                        verify(mockClient, evalVerificationMode(expectation.times)).uploadBinaryFile(
+                            eq(request.path),
+                            any()
+                        )
+                    }
                 }
                 // Don't mind the invocations to the overloaded exchangeResource(String, String, String)
                 verify(mockClient, atLeast(0)).exchangeResource(any(), any(), any())
@@ -198,16 +209,32 @@ open class UatExecutor(
                     restClient.exchangeResource(method, path, request, emptyMap())
                 }
             for (expectation in restExpectations) {
-                var stubbing = whenever(
-                    restClient.exchangeResource(
-                        eq(expectation.request.method),
-                        eq(expectation.request.path),
-                        argThat(JsonMatcher(expectation.request.body.toString())),
-                        any()
+                if (expectation.request.requestType == EXCHANGE_RESOURCE) {
+                    var stubbing = whenever(
+                        restClient.exchangeResource(
+                            eq(expectation.request.method),
+                            eq(expectation.request.path),
+                            argThat(JsonMatcher(expectation.request.body.toString())),
+                            any()
+                        )
                     )
-                )
-                for (response in expectation.responses) {
-                    stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString()))
+                    for (response in expectation.responses) {
+                        stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString()))
+                    }
+                }
+            }
+
+            for (expectation in restExpectations) {
+                if (expectation.request.requestType == UPLOAD_BINARY_FILE) {
+                    var stubbing = whenever(
+                        restClient.uploadBinaryFile(
+                            eq(expectation.request.path),
+                            any()
+                        )
+                    )
+                    for (response in expectation.responses) {
+                        stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString()))
+                    }
                 }
             }
             return restClient
@@ -361,7 +388,7 @@ open class UatExecutor(
             headers: Map<String, String>
         ): WebClientResponse<String> {
             val requestDefinition =
-                RequestDefinition(methodType, path, headers, toJson(request))
+                RequestDefinition(methodType, path, headers, toJson(request), EXCHANGE_RESOURCE)
             val realAnswer = realService.exchangeResource(methodType, path, request, headers)
             val responseBody = when {
                 // TODO: confirm if we need to normalize the response here
@@ -378,6 +405,30 @@ open class UatExecutor(
             )
             return realAnswer
         }
+
+        override fun uploadBinaryFile(path: String, filePath: Path):
+            WebClientResponse<String> {
+                val method = HttpMethod.POST.name
+                val headers = DEFAULT_HEADERS
+                val request = ""
+                val requestDefinition =
+                    RequestDefinition(method, path, headers, toJson(request), UPLOAD_BINARY_FILE)
+                val realAnswer = realService.uploadBinaryFile(path, filePath)
+                val responseBody = when {
+                    // TODO: confirm if we need to normalize the response here
+                    realAnswer.status == HttpStatus.SC_OK -> toJson(realAnswer.body)
+                    else -> null
+                }
+                val responseDefinition =
+                    ResponseDefinition(realAnswer.status, responseBody)
+                expectations.add(
+                    ExpectationDefinition(
+                        requestDefinition,
+                        responseDefinition
+                    )
+                )
+                return realAnswer
+            }
 
         override suspend fun <T> retry(times: Int, initialDelay: Long, delay: Long, block: suspend (Int) -> T): T {
             return super.retry(times, initialDelay, delay, block)

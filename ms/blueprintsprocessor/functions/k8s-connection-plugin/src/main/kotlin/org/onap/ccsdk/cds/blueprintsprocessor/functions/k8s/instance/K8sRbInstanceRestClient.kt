@@ -21,11 +21,27 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sAbstractRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 
 open class K8sRbInstanceRestClient(
     k8sConfiguration: K8sConnectionPluginConfiguration,
     private val instanceId: String = ""
 ) : K8sAbstractRestClientService(k8sConfiguration, "k8s-plugin-instance") {
+
+    companion object {
+        public const val CLIENT_NAME = "k8s-plugin-instance"
+
+        fun getK8sRbInstanceRestClient(
+            k8sConfiguration: K8sConnectionPluginConfiguration,
+            instanceId: String = ""
+        ): BlueprintWebClientService {
+            val rbInstanceService = K8sRbInstanceRestClient(
+                k8sConfiguration,
+                instanceId
+            )
+            return getInterceptedWebclientService(rbInstanceService, CLIENT_NAME)
+        }
+    }
 
     override fun apiUrl(): String {
         return if (instanceId != "")

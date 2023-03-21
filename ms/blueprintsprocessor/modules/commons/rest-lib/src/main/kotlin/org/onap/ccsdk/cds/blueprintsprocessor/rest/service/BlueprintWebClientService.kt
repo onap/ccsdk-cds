@@ -22,6 +22,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.rest.service
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintRetryException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintIOUtils
+import java.nio.file.Path
 
 interface BlueprintWebClientService {
     fun defaultHeaders(): Map<String, String>
@@ -40,6 +41,11 @@ interface BlueprintWebClientService {
         methodType: String,
         path: String,
         request: String
+    ): WebClientResponse<String>
+
+    fun uploadBinaryFile(
+        path: String,
+        filePath: Path
     ): WebClientResponse<String>
 
     suspend fun exchangeNB(methodType: String, path: String, request: Any): WebClientResponse<String>

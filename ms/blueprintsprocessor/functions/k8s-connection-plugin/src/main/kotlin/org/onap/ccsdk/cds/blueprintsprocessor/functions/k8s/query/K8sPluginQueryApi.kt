@@ -1,6 +1,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.query
 
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.query.K8sQueryRestClient.Companion.getK8sQueryRestClient
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -20,7 +21,7 @@ public class K8sPluginQueryApi(
         namespace: String? = null,
         labels: Map<String, String>? = null
     ): K8sResourceStatus? {
-        val rbQueryService = K8sQueryRestClient(k8sConfiguration)
+        val rbQueryService = getK8sQueryRestClient(k8sConfiguration)
         try {
             var path: String = "?CloudRegion=$cloudRegion&ApiVersion=$apiVersion&Kind=$kind"
             if (name != null)
