@@ -23,6 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BluePrintRestLibPropertyService
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 abstract class K8sAbstractRestClientService(
@@ -65,4 +66,17 @@ abstract class K8sAbstractRestClientService(
     }
 
     abstract fun apiUrl(): String
+
+    companion object {
+        fun getInterceptedWebclientService(
+            service: K8sAbstractRestClientService,
+            clientName: String
+        ): BlueprintWebClientService {
+            val restLibPropertyService: BluePrintRestLibPropertyService =
+                BluePrintDependencyService.instance(RestLibConstants.SERVICE_BLUEPRINT_REST_LIB_PROPERTY)
+            return restLibPropertyService.interceptExternalBlueprintWebClientService(
+                service, clientName
+            )
+        }
+    }
 }

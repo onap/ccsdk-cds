@@ -22,6 +22,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.K8sConnectionPluginConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.K8sRbInstanceRestClient.Companion.getK8sRbInstanceRestClient
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck.K8sRbInstanceHealthCheck
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck.K8sRbInstanceHealthCheckList
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.k8s.instance.healthcheck.K8sRbInstanceHealthCheckSimple
@@ -40,7 +41,7 @@ class K8sPluginInstanceApi(
     private val log = LoggerFactory.getLogger(K8sPluginInstanceApi::class.java)!!
 
     fun getInstanceList(): List<K8sRbInstance>? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -63,7 +64,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getInstanceById(instanceId: String): K8sRbInstance? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -85,7 +86,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getFullInstanceById(instanceId: String): K8sRbInstanceFull? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -122,7 +123,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getInstanceStatus(instanceId: String): K8sRbInstanceStatus? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -152,7 +153,7 @@ class K8sPluginInstanceApi(
         name: String? = null,
         labels: Map<String, String>? = null
     ): K8sRbInstanceStatus? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             var path: String = "/query?ApiVersion=$apiVersion&Kind=$kind"
             if (name != null)
@@ -185,7 +186,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getInstanceHealthCheckList(instanceId: String): K8sRbInstanceHealthCheckList? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -210,7 +211,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getInstanceHealthCheck(instanceId: String, healthCheckId: String): K8sRbInstanceHealthCheck? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -235,7 +236,7 @@ class K8sPluginInstanceApi(
     }
 
     fun startInstanceHealthCheck(instanceId: String): K8sRbInstanceHealthCheckSimple? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 POST.name,
@@ -260,7 +261,7 @@ class K8sPluginInstanceApi(
     }
 
     fun createConfigurationValues(configValues: K8sConfigValueRequest, instanceId: String): K8sConfigValueResponse? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 POST.name,
@@ -282,7 +283,7 @@ class K8sPluginInstanceApi(
     }
 
     fun editConfigurationValues(configValues: K8sConfigValueRequest, instanceId: String, configName: String): K8sConfigValueResponse? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 PUT.name,
@@ -304,7 +305,7 @@ class K8sPluginInstanceApi(
     }
 
     fun editConfigurationValuesByDelete(instanceId: String, configName: String): K8sConfigValueResponse? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 POST.name,
@@ -326,7 +327,7 @@ class K8sPluginInstanceApi(
     }
 
     fun hasConfigurationValues(instanceId: String, configName: String): Boolean {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -342,7 +343,7 @@ class K8sPluginInstanceApi(
     }
 
     fun hasConfigurationValuesVersion(instanceId: String, configName: String, version: String): Boolean {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -358,7 +359,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getConfigurationValues(instanceId: String, configName: String): K8sConfigValueResponse? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -380,7 +381,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getConfigurationValuesVersion(instanceId: String, configName: String, version: String): K8sConfigValueResponse? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -402,7 +403,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getConfigurationValuesVersionByTag(instanceId: String, configName: String, tag: String): K8sConfigValueResponse? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -424,7 +425,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getConfigurationValuesList(instanceId: String): List<K8sConfigValueResponse>? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -447,7 +448,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getConfigurationValuesVersionList(instanceId: String, configName: String): List<K8sConfigValueResponse>? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -470,7 +471,7 @@ class K8sPluginInstanceApi(
     }
 
     fun getConfigurationValuesTagList(instanceId: String, configName: String): List<K8sConfigValueTag>? {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 GET.name,
@@ -493,7 +494,7 @@ class K8sPluginInstanceApi(
     }
 
     fun deleteConfigurationValues(instanceId: String, configName: String, deleteConfigOnly: Boolean) {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             var path: String = "/config/$configName"
             if (deleteConfigOnly)
@@ -513,7 +514,7 @@ class K8sPluginInstanceApi(
     }
 
     fun rollbackConfigurationValues(instanceId: String, configName: String, configVersion: String?, configTag: String?) {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val configValues = hashMapOf<String, String>()
             if (configVersion != null)
@@ -535,7 +536,7 @@ class K8sPluginInstanceApi(
     }
 
     fun tagConfigurationValues(instanceId: String, configName: String, tagName: String) {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val configValues = hashMapOf<String, String>()
             configValues["tag-name"] = tagName
@@ -554,7 +555,7 @@ class K8sPluginInstanceApi(
     }
 
     fun deleteInstanceHealthCheck(instanceId: String, healthCheckId: String) {
-        val rbInstanceService = K8sRbInstanceRestClient(k8sConfiguration, instanceId)
+        val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
                 DELETE.name,
