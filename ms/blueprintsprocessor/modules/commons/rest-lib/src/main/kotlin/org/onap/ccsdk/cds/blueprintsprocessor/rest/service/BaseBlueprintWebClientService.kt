@@ -28,6 +28,7 @@ import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.config.RequestConfig
+import org.apache.http.client.entity.EntityBuilder
 import org.apache.http.client.methods.HttpDelete
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPatch
@@ -40,6 +41,7 @@ import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService.WebClientResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
@@ -49,6 +51,8 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.URI
 import java.nio.charset.Charset
+import java.nio.file.Files
+import java.nio.file.Path
 
 abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : BlueprintWebClientService {
 
@@ -78,7 +82,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
             .build()
     }
 
-    override fun exchangeResource(methodType: String, path: String, request: String): BlueprintWebClientService.WebClientResponse<String> {
+    override fun exchangeResource(methodType: String, path: String, request: String): WebClientResponse<String> {
         return this.exchangeResource(methodType, path, request, defaultHeaders())
     }
 
@@ -87,7 +91,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         path: String,
         request: String,
         headers: Map<String, String>
-    ): BlueprintWebClientService.WebClientResponse<String> {
+    ): WebClientResponse<String> {
         /**
          * TODO: Basic headers in the implementations of this client do not get added
          * in blocking version, whereas in NB version defaultHeaders get added.
@@ -106,26 +110,46 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         }
     }
 
+    @Throws(IOException::class, ClientProtocolException::class)
+    protected fun performHttpCall(httpUriRequest: HttpUriRequest): WebClientResponse<String> {
+        val httpResponse = httpClient().execute(httpUriRequest)
+        val statusCode = httpResponse.statusLine.statusCode
+        httpResponse.entity.content.use {
+            val body = IOUtils.toString(it, Charset.defaultCharset())
+            return WebClientResponse(statusCode, body)
+        }
+    }
+
+    open override fun uploadBinaryFile(path: String, filePath: Path): WebClientResponse<String> {
+        val convertedHeaders: Array<BasicHeader> = convertToBasicHeaders(defaultHeaders())
+        val httpPost = HttpPost(host(path))
+        val entity = EntityBuilder.create().setBinary(Files.readAllBytes(filePath)).build()
+        httpPost.setEntity(entity)
+        RestLoggerService.httpInvoking(convertedHeaders)
+        httpPost.setHeaders(convertedHeaders)
+        return performHttpCall(httpPost)
+    }
+
     // TODO: convert to multi-map
     override fun convertToBasicHeaders(headers: Map<String, String>): Array<BasicHeader> {
         return headers.map { BasicHeader(it.key, it.value) }.toTypedArray()
     }
 
-    open fun <T> delete(path: String, headers: Array<BasicHeader>, responseType: Class<T>): BlueprintWebClientService.WebClientResponse<T> {
+    open fun <T> delete(path: String, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpDelete = HttpDelete(host(path))
         RestLoggerService.httpInvoking(headers)
         httpDelete.setHeaders(headers)
         return performCallAndExtractTypedWebClientResponse(httpDelete, responseType)
     }
 
-    open fun <T> get(path: String, headers: Array<BasicHeader>, responseType: Class<T>): BlueprintWebClientService.WebClientResponse<T> {
+    open fun <T> get(path: String, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpGet = HttpGet(host(path))
         RestLoggerService.httpInvoking(headers)
         httpGet.setHeaders(headers)
         return performCallAndExtractTypedWebClientResponse(httpGet, responseType)
     }
 
-    open fun <T> post(path: String, request: Any, headers: Array<BasicHeader>, responseType: Class<T>): BlueprintWebClientService.WebClientResponse<T> {
+    open fun <T> post(path: String, request: Any, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpPost = HttpPost(host(path))
         val entity = StringEntity(strRequest(request))
         httpPost.entity = entity
@@ -134,7 +158,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         return performCallAndExtractTypedWebClientResponse(httpPost, responseType)
     }
 
-    open fun <T> put(path: String, request: Any, headers: Array<BasicHeader>, responseType: Class<T>): BlueprintWebClientService.WebClientResponse<T> {
+    open fun <T> put(path: String, request: Any, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpPut = HttpPut(host(path))
         val entity = StringEntity(strRequest(request))
         httpPut.entity = entity
@@ -143,7 +167,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         return performCallAndExtractTypedWebClientResponse(httpPut, responseType)
     }
 
-    open fun <T> patch(path: String, request: Any, headers: Array<BasicHeader>, responseType: Class<T>): BlueprintWebClientService.WebClientResponse<T> {
+    open fun <T> patch(path: String, request: Any, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpPatch = HttpPatch(host(path))
         val entity = StringEntity(strRequest(request))
         httpPatch.entity = entity
@@ -164,19 +188,19 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         httpUriRequest: HttpUriRequest,
         responseType: Class<T>
     ):
-        BlueprintWebClientService.WebClientResponse<T> {
+        WebClientResponse<T> {
             val httpResponse = httpClient().execute(httpUriRequest)
             val statusCode = httpResponse.statusLine.statusCode
             val entity: HttpEntity? = httpResponse.entity
             if (canResponseHaveBody(httpResponse)) {
                 entity!!.content.use {
                     val body = getResponse(it, responseType)
-                    return BlueprintWebClientService.WebClientResponse(statusCode, body)
+                    return WebClientResponse(statusCode, body)
                 }
             } else {
                 val constructor = responseType.getConstructor()
                 val body = constructor.newInstance()
-                return BlueprintWebClientService.WebClientResponse(statusCode, body)
+                return WebClientResponse(statusCode, body)
             }
         }
     fun canResponseHaveBody(response: HttpResponse): Boolean {
@@ -187,24 +211,24 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
             status != HttpStatus.SC_RESET_CONTENT
     }
 
-    open suspend fun getNB(path: String): BlueprintWebClientService.WebClientResponse<String> {
+    open suspend fun getNB(path: String): WebClientResponse<String> {
         return getNB(path, null, String::class.java)
     }
 
-    open suspend fun getNB(path: String, additionalHeaders: Array<BasicHeader>?): BlueprintWebClientService.WebClientResponse<String> {
+    open suspend fun getNB(path: String, additionalHeaders: Array<BasicHeader>?): WebClientResponse<String> {
         return getNB(path, additionalHeaders, String::class.java)
     }
 
     open suspend fun <T> getNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-        BlueprintWebClientService.WebClientResponse<T> = withContext(Dispatchers.IO) {
+        WebClientResponse<T> = withContext(Dispatchers.IO) {
             get(path, additionalHeaders!!, responseType)
         }
 
-    open suspend fun postNB(path: String, request: Any): BlueprintWebClientService.WebClientResponse<String> {
+    open suspend fun postNB(path: String, request: Any): WebClientResponse<String> {
         return postNB(path, request, null, String::class.java)
     }
 
-    open suspend fun postNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?): BlueprintWebClientService.WebClientResponse<String> {
+    open suspend fun postNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?): WebClientResponse<String> {
         return postNB(path, request, additionalHeaders, String::class.java)
     }
 
@@ -213,11 +237,11 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         request: Any,
         additionalHeaders: Array<BasicHeader>?,
         responseType: Class<T>
-    ): BlueprintWebClientService.WebClientResponse<T> = withContext(Dispatchers.IO) {
+    ): WebClientResponse<T> = withContext(Dispatchers.IO) {
         post(path, request, additionalHeaders!!, responseType)
     }
 
-    open suspend fun putNB(path: String, request: Any): BlueprintWebClientService.WebClientResponse<String> {
+    open suspend fun putNB(path: String, request: Any): WebClientResponse<String> {
         return putNB(path, request, null, String::class.java)
     }
 
@@ -225,7 +249,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         path: String,
         request: Any,
         additionalHeaders: Array<BasicHeader>?
-    ): BlueprintWebClientService.WebClientResponse<String> {
+    ): WebClientResponse<String> {
         return putNB(path, request, additionalHeaders, String::class.java)
     }
 
@@ -234,30 +258,30 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         request: Any,
         additionalHeaders: Array<BasicHeader>?,
         responseType: Class<T>
-    ): BlueprintWebClientService.WebClientResponse<T> = withContext(Dispatchers.IO) {
+    ): WebClientResponse<T> = withContext(Dispatchers.IO) {
         put(path, request, additionalHeaders!!, responseType)
     }
 
-    open suspend fun <T> deleteNB(path: String): BlueprintWebClientService.WebClientResponse<String> {
+    open suspend fun <T> deleteNB(path: String): WebClientResponse<String> {
         return deleteNB(path, null, String::class.java)
     }
 
     open suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?):
-        BlueprintWebClientService.WebClientResponse<String> {
+        WebClientResponse<String> {
             return deleteNB(path, additionalHeaders, String::class.java)
         }
 
     open suspend fun <T> deleteNB(path: String, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-        BlueprintWebClientService.WebClientResponse<T> = withContext(Dispatchers.IO) {
+        WebClientResponse<T> = withContext(Dispatchers.IO) {
             delete(path, additionalHeaders!!, responseType)
         }
 
     open suspend fun <T> patchNB(path: String, request: Any, additionalHeaders: Array<BasicHeader>?, responseType: Class<T>):
-        BlueprintWebClientService.WebClientResponse<T> = withContext(Dispatchers.IO) {
+        WebClientResponse<T> = withContext(Dispatchers.IO) {
             patch(path, request, additionalHeaders!!, responseType)
         }
 
-    override suspend fun exchangeNB(methodType: String, path: String, request: Any): BlueprintWebClientService.WebClientResponse<String> {
+    override suspend fun exchangeNB(methodType: String, path: String, request: Any): WebClientResponse<String> {
         return exchangeNB(
             methodType, path, request, hashMapOf(),
             String::class.java
@@ -265,7 +289,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
     }
 
     override suspend fun exchangeNB(methodType: String, path: String, request: Any, additionalHeaders: Map<String, String>?):
-        BlueprintWebClientService.WebClientResponse<String> {
+        WebClientResponse<String> {
             return exchangeNB(methodType, path, request, additionalHeaders, String::class.java)
         }
 
@@ -275,7 +299,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         request: Any,
         additionalHeaders: Map<String, String>?,
         responseType: Class<T>
-    ): BlueprintWebClientService.WebClientResponse<T> {
+    ): WebClientResponse<T> {
 
         // TODO: possible inconsistency
         // NOTE: this basic headers function is different from non-blocking
