@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfb9b5ad_2009c166",
+        "filename": "ms/blueprintsprocessor/functions/k8s-connection-plugin/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/definition/K8sUploadFileRestClientService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2023-03-23T13:49:39Z",
+      "side": 1,
+      "message": "unce uplpad methos is implemented in the base, we don\u0027t need this dedicated client at all and we can just use K8sDefinitionRestClient for profile upload",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 37
+      },
+      "revId": "10a892f92ba6c6f35dd9fbbc0c1c476e3b64d3d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ac93e88_b7b74ccd",
+        "filename": "ms/blueprintsprocessor/functions/k8s-connection-plugin/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/functions/k8s/query/K8sQueryRestClient.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2023-03-23T13:49:39Z",
+      "side": 1,
+      "message": "this part repeats in all clients, so we should add function in the K8sAbstractRestClientService doing that and just use it in each getXclient method.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 13
+      },
+      "revId": "10a892f92ba6c6f35dd9fbbc0c1c476e3b64d3d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c11aa692_e2172b4b",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/BaseBlueprintWebClientService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2023-03-23T13:49:39Z",
+      "side": 1,
+      "message": "protected",
+      "range": {
+        "startLine": 114,
+        "startChar": 4,
+        "endLine": 114,
+        "endChar": 12
+      },
+      "revId": "10a892f92ba6c6f35dd9fbbc0c1c476e3b64d3d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffc4fb03_81347af0",
+        "filename": "ms/blueprintsprocessor/modules/commons/rest-lib/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/rest/service/BaseBlueprintWebClientService.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2023-03-23T13:49:39Z",
+      "side": 1,
+      "message": "open",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 13
+      },
+      "revId": "10a892f92ba6c6f35dd9fbbc0c1c476e3b64d3d6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
