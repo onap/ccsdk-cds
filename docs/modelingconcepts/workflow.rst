@@ -42,7 +42,6 @@ which actually is the name of the ``node_template`` defined after, of type ``com
 .. code-block:: json
    :caption: **Example**
 
-      . . .
       "topology_template": {
         "workflows": {
           "resource-assignment": {
@@ -101,7 +100,6 @@ which actually is the name of the ``node_template`` defined after, of type ``com
           }
         }
       }
-      . . .
 
 .. _workflow_multiple_actions:
 
@@ -123,7 +121,6 @@ In the example above, you can see the target of the workflow's steps execute-scr
 .. code-block:: json
    :caption: **workflow plan example**
 
-    . . .
     "topology_template": {
       "workflows": {
         "execute-remote-ansible": {
@@ -268,7 +265,7 @@ Properties of a workflow
               - value resolvable using :ref:`expression` -> get_attribute
    * - steps
      - | Defines the actual step to execute as part of the workflow
-       |
+
        .. list-table::
           :widths: 25 25 50
           :header-rows: 1
@@ -284,7 +281,7 @@ Properties of a workflow
 
 Example:
 
-.. code-block:: json
+.. code-block::
    :caption: **workflow example**
 
     {

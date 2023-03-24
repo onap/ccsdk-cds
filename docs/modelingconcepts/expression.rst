@@ -23,7 +23,7 @@ TOSCA provides for a set of functions to reference elements within the template 
 
       Within CDS, this is mainly Workflow inputs.
 
-      `TOSCA specification
+      `TOSCA specification - get_input
       <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454178>`_
 
       **Example:**
@@ -59,7 +59,7 @@ TOSCA provides for a set of functions to reference elements within the template 
       The **get_attribute** function is used to retrieve the values of named attributes declared
       by the referenced node or relationship template name.
 
-      `TOSCA specification
+      `TOSCA specification - get_attribute
       <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454178>`_
 
       **Example:**
@@ -80,7 +80,7 @@ TOSCA provides for a set of functions to reference elements within the template 
       The **get_operation_output** function is used to retrieve the values of variables
       exposed / exported from an interface operation.
 
-      `TOSCA specification
+      `TOSCA specification - get_operation_output
       <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454180>`_
 
       **Example:**
@@ -96,7 +96,7 @@ TOSCA provides for a set of functions to reference elements within the template 
       The **get_artifact** function is used to retrieve artifact location between modelable
       entities defined in the same service template.
 
-      `TOSCA specification
+      `TOSCA specification - get_artifact
       <http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.2/csd01/TOSCA-Simple-Profile-YAML-v1.2-csd01.html#_Toc494454182>`_
 
       **Example:**

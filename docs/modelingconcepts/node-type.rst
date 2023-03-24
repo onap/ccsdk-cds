@@ -22,7 +22,7 @@ listed in the other section.
 
       Used to represent a **functionality** along with its **contract**, such as **inputs**, **ouputs**, and **attributes**
 
-      `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/tosca.nodes.Component.json>`_
+      `Component type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/tosca.nodes.Component.json>`_
       is the root component TOSCA node type from which other node type will derive:
 
       .. code-block:: json
@@ -51,7 +51,7 @@ listed in the other section.
 
             Will put the resolution result as an **attribute** in the workflow context called **assignment-params**.
 
-            Using the :ref:`undefined <get_attribute expression>`, this attribute can be retrieve to be
+            Using the **get_attribute** expression, this attribute can be retrieve to be
             provided as workflow output (see :ref:`workflow`).
 
             **Specify which template to resolve:**
@@ -90,7 +90,7 @@ listed in the other section.
 
             This feature is useful when you need to apply the same configuration accross network elements.
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-resource-resolution.json>`_
+            `Resource resolution <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-resource-resolution.json>`_
             is the definition:
 
             .. code-block:: json
@@ -201,7 +201,7 @@ listed in the other section.
             * for kotlin: the package name up to the class. e.g. com.example.Bob
             * for python: it has to be the path from the Scripts folder, e.g. Scripts/python/Bob.py
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-script-executor.json>`_
+            `Script executor type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-script-executor.json>`_
             is the definition
 
             .. _test_test_test:
@@ -330,7 +330,7 @@ listed in the other section.
             script that couldn't be passed as an argument, such as JSON object, etc... If used, they will be passed
             in as the last argument of the Python script.
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-remote-python-executor.json>`_
+            `Remote executor type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-remote-python-executor.json>`_
             is the definition
 
             .. code-block:: json
@@ -421,7 +421,7 @@ listed in the other section.
 
             TBD
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-remote-ansible-executor.json>`_
+            `Ansible executor <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-remote-ansible-executor.json>`_
             is the definition
 
             .. code-block:: json
@@ -501,7 +501,7 @@ listed in the other section.
 
       Defines the **contract** to resolve a resource.
 
-      `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/tosca.nodes.ResourceSource.json>`_
+      `Resource source type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/tosca.nodes.ResourceSource.json>`_
       is the root component TOSCA node type from which other node type will derive:
 
       .. code-block::
@@ -523,7 +523,7 @@ listed in the other section.
 
             Expects the **value to be provided as input** to the request.
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-input.json>`_
+            `Input source <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-input.json>`_
             is the Definition
 
             .. code-block::
@@ -542,7 +542,7 @@ listed in the other section.
 
             Expects the **value to be defaulted** in the model itself.
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-default.json>`_
+            `Default source type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-default.json>`_
             is the Definition
 
             .. code-block:: json
@@ -593,7 +593,7 @@ listed in the other section.
                  - Path expression type - default value is JSON_PATH
                  - Optional
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-rest.json>`_
+            `Rest source <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-rest.json>`_
             is the definition:
 
             .. code-block:: json
@@ -712,7 +712,7 @@ listed in the other section.
                  - Mandatory
 
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-processor-db.json>`_
+            `DB source type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-processor-db.json>`_
             is the definition:
 
             .. code-block:: json
@@ -786,7 +786,7 @@ listed in the other section.
                        - The name of the class to use to create an instance of the script
                        - Mandatory
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-capability.json>`_
+            `Capability source type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-capability.json>`_
             is the definition:
 
             .. code-block:: json
@@ -850,7 +850,7 @@ listed in the other section.
                  - The node template the workflow depends on
                  - Required
 
-            `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/dg-generic.json>`_
+            `DG source type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/dg-generic.json>`_
             is the definition:
 
             .. code-block:: json
