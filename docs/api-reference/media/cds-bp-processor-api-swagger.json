@@ -998,32 +998,6 @@
         }
       }
     },
-    "/api/v1/model-type/" : {
-      "post" : {
-        "tags" : [ "Model Type Catalog" ],
-        "summary" : "Save a model type",
-        "description" : "Save a model type by model type definition provided.",
-        "operationId" : "ModelTypeController_saveModelType_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "body",
-          "required" : false,
-          "schema" : {
-            "$ref" : "#/definitions/ModelType"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "$ref" : "#/definitions/ModelType"
-            }
-          }
-        }
-      }
-    },
     "/api/v1/model-type/by-definition/{definitionType}" : {
       "get" : {
         "tags" : [ "Model Type Catalog" ],
@@ -1179,7 +1153,7 @@
         "tags" : [ "Resources" ],
         "summary" : "Delete resources using resolution key",
         "description" : "Delete all the resources associated to a resolution-key using blueprint metadata, artifact name and the resolution-key.",
-        "operationId" : "ResourceController_deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "operationId" : "ResourceController_deleteResolutions_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "name" : "bpName",
@@ -1203,14 +1177,106 @@
           "name" : "resolutionKey",
           "in" : "query",
           "description" : "Resolution Key associated with the resolution",
-          "required" : true,
+          "required" : false,
           "type" : "string"
+        }, {
+          "name" : "resourceType",
+          "in" : "query",
+          "description" : "resourceType associated with the resolution, must be used with resourceId",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "resourceId",
+          "in" : "query",
+          "description" : "Resolution Key associated with the resolution, must be used with resourceType",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "lastN",
+          "in" : "query",
+          "description" : "Only delete last N occurrences",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
             "description" : "successful operation",
             "schema" : {
-              "$ref" : "#/definitions/Unit"
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/resources/occurrences" : {
+      "get" : {
+        "tags" : [ "Resources" ],
+        "summary" : "Get the map of resolved resources with 'occurrence' as the keys to the resolved resources ",
+        "description" : "With optional 'occurrence' options, subset of stored resolved resources can be retrieved using the blueprint name, blueprint version, artifact name and the resolution-key.",
+        "operationId" : "ResourceController_getOccurrences_GET.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bpName",
+          "in" : "query",
+          "description" : "Name of the CBA.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bpVersion",
+          "in" : "query",
+          "description" : "Version of the CBA.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "artifactName",
+          "in" : "query",
+          "description" : "Artifact name for which to retrieve a resolved resource.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resolutionKey",
+          "in" : "query",
+          "description" : "Resolution Key associated with the resolution.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "firstN",
+          "in" : "query",
+          "description" : "Number of earlier N occurrences of the resolutions.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "lastN",
+          "in" : "query",
+          "description" : "Number of latest N occurrences of the resolutions.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "begin",
+          "in" : "query",
+          "description" : "For Range option - 'begin' is the start occurrence of range of the resolutions.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "end",
+          "in" : "query",
+          "description" : "For Range option - 'end' is the end occurrence of the range of the resolutions.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/ResourceResolution"
+              }
             }
           }
         }
@@ -1258,7 +1324,80 @@
           "200" : {
             "description" : "successful operation",
             "schema" : {
-              "$ref" : "#/definitions/ResourceResolution"
+              "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/template/occurrences" : {
+      "get" : {
+        "tags" : [ "Resource template" ],
+        "summary" : "Get the map of resolved templates with 'occurrence' as the keys to the resolved templates ",
+        "description" : "With optional 'occurrence' options, subset of stored resolved templates can be retrieved using the blueprint name, blueprint version, artifact name and the resolution-key.",
+        "operationId" : "TemplateController_getOccurrences_GET.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bpName",
+          "in" : "query",
+          "description" : "Name of the CBA.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bpVersion",
+          "in" : "query",
+          "description" : "Version of the CBA.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "artifactName",
+          "in" : "query",
+          "description" : "Artifact name for which to retrieve a resolved resource.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resolutionKey",
+          "in" : "query",
+          "description" : "Resolution Key associated with the resolution.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "firstN",
+          "in" : "query",
+          "description" : "Number of earlier N occurrences of the templates.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "lastN",
+          "in" : "query",
+          "description" : "Number of latest N occurrences of the templates.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "begin",
+          "in" : "query",
+          "description" : "For Range option - 'begin' is the start occurrence of range of the templates.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "end",
+          "in" : "query",
+          "description" : "For Range option - 'end' is the end occurrence of the range of the templates.",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/TemplateResolution"
+              }
             }
           }
         }
@@ -1612,19 +1751,13 @@
     "JsonNode" : {
       "type" : "object",
       "properties" : {
+        "float" : {
+          "type" : "boolean"
+        },
         "array" : {
           "type" : "boolean"
         },
         "null" : {
-          "type" : "boolean"
-        },
-        "float" : {
-          "type" : "boolean"
-        },
-        "bigInteger" : {
-          "type" : "boolean"
-        },
-        "bigDecimal" : {
           "type" : "boolean"
         },
         "valueNode" : {
@@ -1655,25 +1788,31 @@
           "type" : "string",
           "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
         },
+        "object" : {
+          "type" : "boolean"
+        },
         "number" : {
           "type" : "boolean"
         },
-        "binary" : {
+        "bigDecimal" : {
           "type" : "boolean"
         },
-        "boolean" : {
+        "bigInteger" : {
           "type" : "boolean"
         },
         "double" : {
           "type" : "boolean"
         },
-        "int" : {
-          "type" : "boolean"
-        },
         "long" : {
           "type" : "boolean"
         },
-        "object" : {
+        "int" : {
+          "type" : "boolean"
+        },
+        "boolean" : {
+          "type" : "boolean"
+        },
+        "binary" : {
           "type" : "boolean"
         }
       }
@@ -1839,6 +1978,13 @@
           "type" : "integer",
           "format" : "int64"
         },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -1849,12 +1995,11 @@
             "type" : "object"
           }
         },
-        "number" : {
-          "type" : "integer",
-          "format" : "int32"
+        "first" : {
+          "type" : "boolean"
         },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
+        "last" : {
+          "type" : "boolean"
         },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
@@ -1862,12 +2007,6 @@
         "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
-        },
-        "last" : {
-          "type" : "boolean"
-        },
-        "first" : {
-          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -1885,6 +2024,13 @@
           "type" : "integer",
           "format" : "int64"
         },
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
+        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -1895,12 +2041,11 @@
             "$ref" : "#/definitions/BlueprintModelSearch"
           }
         },
-        "number" : {
-          "type" : "integer",
-          "format" : "int32"
+        "first" : {
+          "type" : "boolean"
         },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
+        "last" : {
+          "type" : "boolean"
         },
         "pageable" : {
           "$ref" : "#/definitions/Pageable"
@@ -1908,12 +2053,6 @@
         "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
-        },
-        "last" : {
-          "type" : "boolean"
-        },
-        "first" : {
-          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -1923,18 +2062,12 @@
     "Pageable" : {
       "type" : "object",
       "properties" : {
-        "offset" : {
-          "type" : "integer",
-          "format" : "int64"
-        },
         "sort" : {
           "$ref" : "#/definitions/Sort"
         },
-        "paged" : {
-          "type" : "boolean"
-        },
-        "unpaged" : {
-          "type" : "boolean"
+        "offset" : {
+          "type" : "integer",
+          "format" : "int64"
         },
         "pageNumber" : {
           "type" : "integer",
@@ -1943,6 +2076,12 @@
         "pageSize" : {
           "type" : "integer",
           "format" : "int32"
+        },
+        "paged" : {
+          "type" : "boolean"
+        },
+        "unpaged" : {
+          "type" : "boolean"
         }
       }
     },
@@ -2206,13 +2345,13 @@
     "Sort" : {
       "type" : "object",
       "properties" : {
+        "empty" : {
+          "type" : "boolean"
+        },
         "unsorted" : {
           "type" : "boolean"
         },
         "sorted" : {
-          "type" : "boolean"
-        },
-        "empty" : {
           "type" : "boolean"
         }
       }
@@ -2264,9 +2403,6 @@
           "description" : "Creation date of the resolution."
         }
       }
-    },
-    "Unit" : {
-      "type" : "object"
     },
     "WorkFlowSpecRequest" : {
       "type" : "object",

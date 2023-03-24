@@ -53,11 +53,11 @@ Tosca meta file captures the model entities that compose the cba package name, v
      - String
      - | The attribute that holds the blueprint package types.
        | Valid Options:
-       * "DEFAULT" – .JSON file consistent of tosca based cba package that describes the package intent.
-       * "KOTLIN_DSL" – .KT file consistent of tosca based cba package that describes the package intent
-         composed using Domain Specific Language (DSL).
-       * "GENERIC_SCRIPT" – Script file consistent of NONE tosca based cba package that describes the package intent
-         using DSL Language.
+         * "DEFAULT" – .JSON file consistent of tosca based cba package that describes the package intent.
+         * "KOTLIN_DSL" – .KT file consistent of tosca based cba package that describes the package intent
+            composed using Domain Specific Language (DSL).
+         * "GENERIC_SCRIPT" – Script file consistent of NONE tosca based cba package that describes the package intent
+            using DSL Language.
        | If not specified in the tosca.meta file the default is "DEFAULT"
    * - Template-Tags
      - Required

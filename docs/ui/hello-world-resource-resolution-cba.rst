@@ -243,37 +243,36 @@ package, which will resolve the value of the "image_name" resource from the REST
 
 .. code-block:: json
 
-    200 OK
-       {
-            "correlationUUID": null,
-            "commonHeader": {
-                "timestamp": "2020-12-13T11:43:10.993Z",
-                "originatorId": "SDNC_DG",
-                "requestId": "e5eb1f1e-3386-435d-b290-d49d8af8db4c",
-                "subRequestId": "143748f9-3cd5-4910-81c9-a4601ff2ea58",
-                "flags": null
-            },
-            "actionIdentifiers": {
-                "blueprintName": "hello_world",
-                "blueprintVersion": "1.0.0",
-                "actionName": "Action1",
-                "mode": "sync"
-            },
-            "status": {
-                "code": 200,
-                "eventType": "EVENT_COMPONENT_EXECUTED",
-                "timestamp": "2020-12-13T11:43:11.028Z",
-                "errorMessage": null,
-                "message": "success"
-            },
-            "payload": {
-                "Action1-response": {
-                    "hello-world-output": {
-                        "hello_world_template": "Hello, Sarah Abouzainah!"
-                     }
-                 }
-            }
-      }
+     {
+       "correlationUUID": null,
+       "commonHeader": {
+         "timestamp": "2020-12-13T11:43:10.993Z",
+         "originatorId": "SDNC_DG",
+         "requestId": "e5eb1f1e-3386-435d-b290-d49d8af8db4c",
+         "subRequestId": "143748f9-3cd5-4910-81c9-a4601ff2ea58",
+         "flags": null
+       },
+       "actionIdentifiers": {
+         "blueprintName": "hello_world",
+         "blueprintVersion": "1.0.0",
+         "actionName": "Action1",
+         "mode": "sync"
+       },
+       "status": {
+         "code": 200,
+         "eventType": "EVENT_COMPONENT_EXECUTED",
+         "timestamp": "2020-12-13T11:43:11.028Z",
+         "errorMessage": null,
+         "message": "success"
+       },
+       "payload": {
+         "Action1-response": {
+           "hello-world-output": {
+             "hello_world_template": "Hello, Sarah Abouzainah!"
+           }
+         }
+       }
+     }
 
 Screenshot from POSTMAN showing how to run the hello_world package, and the CDS Response:
 

@@ -39,14 +39,14 @@ This node was created, derived from ``tosca.artifacts.Root`` to be the root TOSC
       File must have **.vtl** extension.
 
       The **template** can represent anything, such as device config, payload to interact with 3rd party systems,
-      :ref:`resource-accumulator template`, etc...
+      resource-accumulator template, etc...
 
       Often a template will be **parameterized**, and each **parameter**
       must be defined within an mapping file (see 'Mapping' in this tab).
 
       `Velocity reference document <http://velocity.apache.org/engine/1.7/user-guide.html>`_
 
-      `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/artifact_type/artifact-template-velocity.json>`_
+      `Velocity artifact <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/artifact_type/artifact-template-velocity.json>`_
       is the TOSCA artifact type:
 
       .. code-block:: json
@@ -69,13 +69,13 @@ This node was created, derived from ``tosca.artifacts.Root`` to be the root TOSC
       File must have **.jinja** extension.
 
       The **template** can represent **anything**, such as device config,
-      payload to interact with 3rd party systems, :ref:`resource-accumulator template`, etc...
+      payload to interact with 3rd party systems, resource-accumulator template, etc...
 
-      Often a template will be parameterized, and each parameter must be defined within an :ref:`mapping file`.
+      Often a template will be parameterized, and each parameter must be defined within an mapping file.
 
       `Jinja reference document <https://jinja.palletsprojects.com/en/2.10.x/>`_
 
-      `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/artifact_type/artifact-template-jinja.json>`_
+      `Jinja artifact <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/artifact_type/artifact-template-jinja.json>`_
       is the TOSCA artifact type:
 
       .. code-block:: json
@@ -107,7 +107,7 @@ This node was created, derived from ``tosca.artifacts.Root`` to be the root TOSC
       The **template** can represent **anything**, such as device config,
       payload to interact with 3rd party systems, resource-accumulator template, etc...
 
-      `Here <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/artifact_type/artifact-mapping-resource.json>`_
+      `Mapping artifact <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/artifact_type/artifact-mapping-resource.json>`_
       is the TOSCA artifact type:
 
       .. code-block:: json

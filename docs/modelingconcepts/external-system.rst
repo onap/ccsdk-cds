@@ -30,7 +30,6 @@ Here are some examples on how to populate the system information within the pack
    * - .. code-block:: json
 
         {
-          . . .
           "dsl_definitions": {
           "ipam-1": {
             "type": "token-auth",
@@ -47,7 +46,6 @@ Here are some examples on how to populate the system information within the pack
    * - .. code-block:: json
 
         {
-          . . .
           "dsl_definitions": {
             "ipam-1": {
               "type": "basic-auth",
@@ -56,7 +54,6 @@ Here are some examples on how to populate the system information within the pack
               "password": "marley"
             }
           }
-          . . .
         }
 
 .. list-table::
@@ -67,19 +64,17 @@ Here are some examples on how to populate the system information within the pack
    * - .. code-block:: json
 
         {
-          . . .
           "dsl_definitions": {
             "ipam-1": {
-              "type" : "ssl-basic-auth",
-              "url" : "http://localhost:32778",
+              "type": "ssl-basic-auth",
+              "url": "http://localhost:32778",
               "keyStoreInstance": "JKS or PKCS12",
               "sslTrust": "trusture",
               "sslTrustPassword": "trustore password",
               "sslKey": "keystore",
-              "sslKeyPassword: "keystore password"
+              "sslKeyPassword": "keystore password"
             }
           }
-          . . .
         }
 
 .. list-table::
@@ -90,7 +85,6 @@ Here are some examples on how to populate the system information within the pack
    * - .. code-block:: json
 
         {
-          . . .
           "dsl_definitions": {
             "remote-executor": {
               "type": "token-auth",
@@ -99,7 +93,6 @@ Here are some examples on how to populate the system information within the pack
               "token": "Basic Y2NzZGthcHBzOmNjc2RrYXBwcw=="
             }
           }
-          . . .
         }
 
 .. list-table::
@@ -109,7 +102,6 @@ Here are some examples on how to populate the system information within the pack
    * - .. code-block:: json
 
         {
-          . . .
           "dsl_definitions": {
             "netprog-db": {
               "type": "maria-db",
@@ -118,5 +110,4 @@ Here are some examples on how to populate the system information within the pack
               "password": "netprog"
             }
           }
-          . . .
         }

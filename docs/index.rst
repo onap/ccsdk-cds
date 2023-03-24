@@ -132,6 +132,8 @@ CDS Designer UI
    :maxdepth: 2
 
    ui/designer-guide
+   ui/hello-world-resource-resolution-cba
+   ui/hello-world-script-executor-cba.rst
 
 
 Offered APIs

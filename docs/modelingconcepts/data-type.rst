@@ -98,7 +98,7 @@ List of existing data type:
          * - dictionary-name
            - Reference to the name of the data dictionary (see :ref:`data_dictionary`).
          * - dictionary-source
-           - Reference the source to use to resolve the resource (see :ref:`resource source`).
+           - Reference the source to use to resolve the resource (see :ref:`node_type`).
          * - dependencies
            - List of dependencies required to resolve this resource.
          * - updated-date

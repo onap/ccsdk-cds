@@ -11,7 +11,7 @@ Introduction
 This section shows all resources and endpoints which CDS BP processor currently provides through a swagger file
 which is automatically created during CDS build process by Swagger Maven Plugin. A corresponding Postman collection is
 also included. Endpoints can also be described using this template
-:download:`api-doc-template.rst <api-doc-template.rst>` but this is not the preferred way to describe the CDS API.
+:download:`api-doc-template.rst <media/api-doc-template.txt>` but this is not the preferred way to describe the CDS API.
 
 You can find a sample workflow tutorial :ref:`below <workflow-tutorial>` which will show how to use the endpoints
 in the right order. This will give you a better understanding of the CDS Blueprint Processor API.
@@ -83,9 +83,6 @@ HTTP Status 202 OK
                "mappings": {
                   "dispatcherHandlers": {
                      "webHandler": [
-
-                           ...
-
                            {
                               "predicate": "{GET /api/v1/blueprint-model, produces [application/json]}",
                               "handler": "org.onap.ccsdk.cds.blueprintsprocessor.designer.api.BlueprintModelController#allBlueprintModel()",
@@ -144,9 +141,6 @@ HTTP Status 202 OK
                                  }
                               }
                            }
-
-                           ...
-
                      ]
                   }
                },
