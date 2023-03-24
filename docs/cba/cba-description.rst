@@ -10,7 +10,7 @@ The CBA is **.zip** file, comprised of the following folder structure, the files
 
 .. code-block language is required for ReadTheDocs to render code-blocks. Python set as default.
 
-.. code-block:: python
+.. code-block::
 
     ├── Definitions
     │   ├── blueprint.json                          Overall TOSCA service template (workflow + node_template)

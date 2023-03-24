@@ -312,7 +312,7 @@ Import the project into the IDE
 
             **Add/replace the following in Blueprint's application-dev.properties file:**
 
-            .. code-block:: java
+            .. code-block::
 
                blueprintsprocessor.grpcclient.remote-python.type=token-auth
                blueprintsprocessor.grpcclient.remote-python.host=localhost
@@ -323,7 +323,7 @@ Import the project into the IDE
 
             **Currently the following entries need to be added in VSC too:**
 
-            .. code-block:: java
+            .. code-block::
 
                logging.level.web=DEBUG
                logging.level.org.springframework.web: DEBUG

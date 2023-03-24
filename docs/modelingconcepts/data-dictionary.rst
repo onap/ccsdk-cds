@@ -35,7 +35,7 @@ As part of modelling a data dictionary entry, the following generic information 
      - Information related
      - Mandatory
    * - sources
-     - List of resource source instance (see :ref:`resource source`)
+     - List of resource source instance (see :ref:`node_type`)
      - Mandatory
    * - property
      - Defines type and description, as nested JSON
