@@ -1,6 +1,6 @@
 # Prepare stage for multistage image build
 ## START OF STAGE0 ##
-FROM onap/ccsdk-alpine-j11-image:1.1.2 AS stage0
+FROM onap/ccsdk-alpine-j17-image:1.5.1 AS stage0
 USER root
 
 # add entrypoint
@@ -22,7 +22,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
 
 
 ## This will create actual image
-FROM onap/ccsdk-alpine-j11-image:1.1.2
+FROM onap/ccsdk-alpine-j17-image:1.5.1
 USER root
 
 COPY --from=stage0 /opt /opt
