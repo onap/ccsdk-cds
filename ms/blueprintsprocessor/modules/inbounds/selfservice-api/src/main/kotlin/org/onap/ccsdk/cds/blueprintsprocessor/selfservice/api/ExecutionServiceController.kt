@@ -36,10 +36,12 @@ import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import java.util.concurrent.Phaser
@@ -60,6 +62,9 @@ open class ExecutionServiceController {
     @Autowired
     lateinit var executionServiceHandler: ExecutionServiceHandler
 
+    @Autowired
+    lateinit var primaryEntityManager: LocalContainerEntityManagerFactoryBean
+
     @RequestMapping(
         path = ["/health-check"],
         method = [RequestMethod.GET],
@@ -67,11 +72,19 @@ open class ExecutionServiceController {
     )
     @ResponseBody
     @ApiOperation(value = "Health Check", hidden = true)
-    suspend fun executionServiceControllerHealthCheck(): ResponseEntity<JsonNode> = mdcWebCoroutineScope {
+    suspend fun executionServiceControllerHealthCheck(
+        @RequestParam(required = false, defaultValue = "false") checkDependencies: Boolean
+    ): ResponseEntity<JsonNode> = mdcWebCoroutineScope {
         var body = mutableMapOf("success" to true)
         var statusCode = 200
-        if (BluePrintConstants.CLUSTER_ENABLED &&
-            BluePrintDependencyService.optionalClusterService()?.clusterJoined() != true
+        if (
+            (
+                BluePrintConstants.CLUSTER_ENABLED &&
+                    BluePrintDependencyService.optionalClusterService()?.clusterJoined() != true
+                ) ||
+            (
+                checkDependencies && !primaryEntityManager.dataSource.connection.isValid(1)
+                )
         ) {
             statusCode = 503
             body.remove("success")
