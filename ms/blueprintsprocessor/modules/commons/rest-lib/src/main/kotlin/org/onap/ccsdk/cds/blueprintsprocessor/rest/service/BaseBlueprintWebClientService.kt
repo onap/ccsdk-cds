@@ -24,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.IOUtils
 import org.apache.http.HttpEntity
+import org.apache.http.HttpHost
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.apache.http.client.ClientProtocolException
@@ -35,6 +36,9 @@ import org.apache.http.client.methods.HttpPatch
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpPut
 import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.conn.ssl.NoopHostnameVerifier
+import org.apache.http.conn.ssl.SSLContextBuilder
+import org.apache.http.conn.ssl.TrustAllStrategy
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
@@ -74,8 +78,24 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         return requestConfigBuilder.build()
     }
 
+    open fun https_proxy(): String? {
+        return getRestClientProperties().proxy
+    }
+
     open fun httpClient(): CloseableHttpClient {
-        return HttpClients.custom()
+        var httpClients = HttpClients.custom()
+        if (https_proxy() != null && https_proxy() != "") {
+            val proxyProtocol = https_proxy()?.split(':')?.get(0) ?: "http"
+            val proxyUri = https_proxy()?.split(':')?.get(1)?.replace("/", "") ?: ""
+            val proxyPort = https_proxy()?.split(':')?.get(2)?.toInt() ?: 0
+            if (proxyUri != "" && proxyPort != 0) {
+                val proxy = HttpHost(proxyUri, proxyPort, proxyProtocol)
+                httpClients = httpClients.setProxy(proxy)
+                    .setSSLContext(SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build())
+                    .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+            }
+        }
+        return httpClients
             .addInterceptorFirst(WebClientUtils.logRequest())
             .addInterceptorLast(WebClientUtils.logResponse())
             .setDefaultRequestConfig(getRequestConfig())

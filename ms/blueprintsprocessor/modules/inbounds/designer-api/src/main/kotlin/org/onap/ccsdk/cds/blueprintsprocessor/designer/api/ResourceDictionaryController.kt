@@ -21,10 +21,14 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ResourceDictionaryHandler
+import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils.DictionarySortByOption
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -32,13 +36,14 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(value = ["/api/v1/dictionary"])
 @Api(
-    value = "Resource dictionary",
+    value = "Resource Dictionary",
     description = "Interaction with stored dictionaries"
 )
 open class ResourceDictionaryController(private val resourceDictionaryHandler: ResourceDictionaryHandler) {
@@ -59,6 +64,26 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
             resourceDictionaryHandler.getResourceDictionaryByName(name)
         }
 
+    @GetMapping("/paged", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation(
+        value = "Get Blueprints Dictionary ordered",
+        notes = "Lists all blueprint Dictionary which are saved in CDS in an ordered mode.",
+        nickname = "BlueprintModelController_allBlueprintDictionaryPaged_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api"
+    )
+    @ResponseBody
+    suspend fun allBlueprintModel(
+        @ApiParam(value = "Maximum number of returned blueprint dictionary") @RequestParam(defaultValue = "20") limit: Int,
+        @ApiParam(value = "Offset") @RequestParam(defaultValue = "0") offset: Int,
+        @ApiParam(value = "Order of returned blueprint dictionary") @RequestParam(defaultValue = "DATE") sort: DictionarySortByOption,
+        @ApiParam(value = "Ascend or descend ordering") @RequestParam(defaultValue = "ASC") sortType: String
+    ): Page<ResourceDictionary> {
+        val pageRequest = PageRequest.of(
+            offset, limit,
+            Sort.Direction.fromString(sortType), sort.columnName
+        )
+        return resourceDictionaryHandler.getAllDictionary(pageRequest)
+    }
+
     @PostMapping(
         produces = [MediaType.APPLICATION_JSON_VALUE],
         consumes = [MediaType.APPLICATION_JSON_VALUE]
@@ -72,10 +97,10 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
     @Throws(BluePrintException::class)
     suspend fun saveResourceDictionary(
         @ApiParam(value = "Resource dictionary to store", required = true)
-        @RequestBody dataDictionary: ResourceDictionary
+        @RequestBody resourceDictionary: ResourceDictionary
     ): ResourceDictionary =
         mdcWebCoroutineScope {
-            resourceDictionaryHandler.saveResourceDictionary(dataDictionary)
+            resourceDictionaryHandler.saveResourceDictionary(resourceDictionary)
         }
 
     @PostMapping(
@@ -85,18 +110,39 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
     )
     @ApiOperation(
         value = "Save a resource dictionary",
-        notes = "Save a resource dictionary by resource definition provided.",
+        notes = "Save a resource dictionary by provided resource definition json.",
         nickname = "ResourceDictionaryController_saveResourceDictionary_1_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
-        response = ResourceDefinition::class
+        response = ResourceDictionary::class
     )
     @ResponseBody
     @Throws(BluePrintException::class)
-    suspend fun saveResourceDictionary(
-        @ApiParam(value = "Resource definition to generate", required = true)
+    suspend fun saveResourceDefinition(
+        @ApiParam(value = "Resource definition to generate Resource Dictionary", required = true)
         @RequestBody resourceDefinition: ResourceDefinition
-    ): ResourceDefinition =
+    ): ResourceDictionary =
         mdcWebCoroutineScope {
             resourceDictionaryHandler.saveResourceDefinition(resourceDefinition)
+        }
+
+    @PostMapping(
+        path = ["/definition-bulk"],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+        consumes = [MediaType.APPLICATION_JSON_VALUE]
+    )
+    @ApiOperation(
+        value = "Save multiple resource dictionaries",
+        notes = "Save multiple resource dictionaries by provided resource definition json array.",
+        nickname = "ResourceDictionaryController_saveAllResourceDictionary_1_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        response = ResourceDictionary::class
+    )
+    @ResponseBody
+    @Throws(BluePrintException::class)
+    suspend fun saveAllResourceDictionary(
+        @ApiParam(value = "Resource definition json array to generate Resource Dictionaries", required = true)
+        @RequestBody resourceDefinition: List<ResourceDefinition>
+    ): MutableList<ResourceDictionary> =
+        mdcWebCoroutineScope {
+            resourceDictionaryHandler.saveAllResourceDefinition(resourceDefinition)
         }
 
     @DeleteMapping(path = ["/{name}"])

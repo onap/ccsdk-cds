@@ -48,8 +48,8 @@ import javax.annotation.PreDestroy
 @RestController
 @RequestMapping("/api/v1/execution-service")
 @Api(
-    value = "/api/v1/execution-service",
-    description = "Interaction with CBA."
+    value = "Execution Service Catalog",
+    description = "Interaction with CBA which are available in CDS"
 )
 open class ExecutionServiceController {
 
