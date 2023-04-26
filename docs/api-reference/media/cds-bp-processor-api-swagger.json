@@ -20,16 +20,19 @@
     "name" : "Blueprint Model Catalog",
     "description" : "Manages all blueprint models which are available in CDS"
   }, {
+    "name" : "Execution Service Catalog",
+    "description" : "Interaction with CBA which are available in CDS"
+  }, {
     "name" : "Model Type Catalog",
     "description" : "Manages data types in CDS"
   }, {
     "name" : "Resource configuration",
     "description" : "Interaction with stored configurations"
   }, {
-    "name" : "Resource dictionary",
+    "name" : "Resource Dictionary",
     "description" : "Interaction with stored dictionaries"
   }, {
-    "name" : "Resource template",
+    "name" : "Resource Template",
     "description" : "Interaction with resolved templates"
   }, {
     "name" : "Resources",
@@ -802,7 +805,7 @@
     },
     "/api/v1/dictionary" : {
       "post" : {
-        "tags" : [ "Resource dictionary" ],
+        "tags" : [ "Resource Dictionary" ],
         "summary" : "Save a resource dictionary",
         "description" : "Save a resource dictionary by dictionary provided.",
         "operationId" : "ResourceDictionaryController_saveResourceDictionary_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -829,7 +832,7 @@
     },
     "/api/v1/dictionary/by-names" : {
       "post" : {
-        "tags" : [ "Resource dictionary" ],
+        "tags" : [ "Resource Dictionary" ],
         "summary" : "Search for a resource dictionary",
         "description" : "Search for a resource dictionary by names provided.",
         "operationId" : "ResourceDictionaryController_searchResourceDictionaryByNames_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -862,16 +865,16 @@
     },
     "/api/v1/dictionary/definition" : {
       "post" : {
-        "tags" : [ "Resource dictionary" ],
+        "tags" : [ "Resource Dictionary" ],
         "summary" : "Save a resource dictionary",
-        "description" : "Save a resource dictionary by resource definition provided.",
+        "description" : "Save a resource dictionary by provided resource definition json.",
         "operationId" : "ResourceDictionaryController_saveResourceDictionary_1_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
           "in" : "body",
           "name" : "body",
-          "description" : "Resource definition to generate",
+          "description" : "Resource definition to generate Resource Dictionary",
           "required" : true,
           "schema" : {
             "$ref" : "#/definitions/ResourceDefinition"
@@ -881,7 +884,86 @@
           "200" : {
             "description" : "successful operation",
             "schema" : {
+              "$ref" : "#/definitions/ResourceDictionary"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dictionary/definition-bulk" : {
+      "post" : {
+        "tags" : [ "Resource Dictionary" ],
+        "summary" : "Save multiple resource dictionaries",
+        "description" : "Save multiple resource dictionaries by provided resource definition json array.",
+        "operationId" : "ResourceDictionaryController_saveAllResourceDictionary_1_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Resource definition json array to generate Resource Dictionaries",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
               "$ref" : "#/definitions/ResourceDefinition"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ResourceDictionary"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/dictionary/paged" : {
+      "get" : {
+        "tags" : [ "Resource Dictionary" ],
+        "summary" : "Get Blueprints Dictionary ordered",
+        "description" : "Lists all blueprint Dictionary which are saved in CDS in an ordered mode.",
+        "operationId" : "BlueprintModelController_allBlueprintDictionaryPaged_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Maximum number of returned blueprint dictionary",
+          "required" : false,
+          "type" : "integer",
+          "default" : 20,
+          "format" : "int32"
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "Offset",
+          "required" : false,
+          "type" : "integer",
+          "default" : 0,
+          "format" : "int32"
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "Order of returned blueprint dictionary",
+          "required" : false,
+          "type" : "string",
+          "default" : "DATE",
+          "enum" : [ "DATE" ]
+        }, {
+          "name" : "sortType",
+          "in" : "query",
+          "description" : "Ascend or descend ordering",
+          "required" : false,
+          "type" : "string",
+          "default" : "ASC"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
             }
           }
         }
@@ -889,7 +971,7 @@
     },
     "/api/v1/dictionary/resource_dictionary_group" : {
       "get" : {
-        "tags" : [ "Resource dictionary" ],
+        "tags" : [ "Resource Dictionary" ],
         "summary" : "Retrieve all resource dictionary groups",
         "description" : "Retrieve all resource dictionary groups.",
         "operationId" : "ResourceDictionaryController_getResourceDictionaryDistinct_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -909,7 +991,7 @@
     },
     "/api/v1/dictionary/search/{tags}" : {
       "get" : {
-        "tags" : [ "Resource dictionary" ],
+        "tags" : [ "Resource Dictionary" ],
         "summary" : "Search for a resource dictionary",
         "description" : "Search for a resource dictionary by tags provided.",
         "operationId" : "ResourceDictionaryController_searchResourceDictionaryByTags_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -937,7 +1019,7 @@
     },
     "/api/v1/dictionary/source-mapping" : {
       "get" : {
-        "tags" : [ "Resource dictionary" ],
+        "tags" : [ "Resource Dictionary" ],
         "summary" : "Search for a source mapping",
         "description" : "Search for a source mapping.",
         "operationId" : "ResourceDictionaryController_getResourceSourceMapping_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -954,7 +1036,7 @@
     },
     "/api/v1/dictionary/{name}" : {
       "get" : {
-        "tags" : [ "Resource dictionary" ],
+        "tags" : [ "Resource Dictionary" ],
         "summary" : "Retrieve a resource dictionary",
         "description" : "Retrieve a resource dictionary by name provided.",
         "operationId" : "ResourceDictionaryController_getResourceDictionaryByName_GET.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -977,7 +1059,7 @@
         }
       },
       "delete" : {
-        "tags" : [ "Resource dictionary" ],
+        "tags" : [ "Resource Dictionary" ],
         "summary" : "Remove a resource dictionary",
         "description" : "Remove a resource dictionary by name provided.",
         "operationId" : "ResourceDictionaryController_deleteResourceDictionaryByName_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
@@ -993,6 +1075,32 @@
             "description" : "successful operation",
             "schema" : {
               "type" : "object"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/execution-service/process" : {
+      "post" : {
+        "tags" : [ "Execution Service Catalog" ],
+        "summary" : "Execute a CBA workflow (action)",
+        "description" : "Execute the appropriate CBA's action based on the ExecutionServiceInput object passed as input.",
+        "operationId" : "ExecutionServiceController_process_POST.org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "ExecutionServiceInput payload.",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/ExecutionServiceInput"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ExecutionServiceOutput"
             }
           }
         }
@@ -1332,7 +1440,7 @@
     },
     "/api/v1/template/occurrences" : {
       "get" : {
-        "tags" : [ "Resource template" ],
+        "tags" : [ "Resource Template" ],
         "summary" : "Get the map of resolved templates with 'occurrence' as the keys to the resolved templates ",
         "description" : "With optional 'occurrence' options, subset of stored resolved templates can be retrieved using the blueprint name, blueprint version, artifact name and the resolution-key.",
         "operationId" : "TemplateController_getOccurrences_GET.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
@@ -1405,7 +1513,7 @@
     },
     "/api/v1/template/{bpName}/{bpVersion}/{artifactName}/{resolutionKey}" : {
       "post" : {
-        "tags" : [ "Resource template" ],
+        "tags" : [ "Resource Template" ],
         "summary" : "Store a resolved template w/ resolution-key",
         "description" : "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, artifact name and resolution key.",
         "operationId" : "TemplateController_postWithResolutionKey_POST.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
@@ -1455,7 +1563,7 @@
     },
     "/api/v1/template/{bpName}/{bpVersion}/{artifactName}/{resourceType}/{resourceId}" : {
       "post" : {
-        "tags" : [ "Resource template" ],
+        "tags" : [ "Resource Template" ],
         "summary" : "Store a resolved template w/ resourceId and resourceType",
         "description" : "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, artifact name, resourceId and resourceType.",
         "operationId" : "TemplateController_postWithResourceIdAndResourceType_POST.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
@@ -1516,6 +1624,29 @@
     }
   },
   "definitions" : {
+    "ActionIdentifiers" : {
+      "type" : "object",
+      "required" : [ "actionName", "mode" ],
+      "properties" : {
+        "blueprintName" : {
+          "type" : "string",
+          "description" : "Name of the CBA."
+        },
+        "blueprintVersion" : {
+          "type" : "string",
+          "description" : "Version of the CBA."
+        },
+        "actionName" : {
+          "type" : "string",
+          "description" : "Name of the workflow to execute."
+        },
+        "mode" : {
+          "type" : "string",
+          "description" : "Async processing is only supported for gRPC client.",
+          "enum" : [ "sync", "async" ]
+        }
+      }
+    },
     "ArtifactDefinition" : {
       "type" : "object",
       "properties" : {
@@ -1643,6 +1774,30 @@
         }
       }
     },
+    "CommonHeader" : {
+      "type" : "object",
+      "required" : [ "originatorId", "requestId", "subRequestId", "timestamp" ],
+      "properties" : {
+        "timestamp" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : 2012-04-23T18:25:43.511Z,
+          "description" : "Date of the execution"
+        },
+        "originatorId" : {
+          "type" : "string",
+          "description" : "Identify the system/person triggering the request."
+        },
+        "requestId" : {
+          "type" : "string",
+          "description" : "Uniquely identify a request."
+        },
+        "subRequestId" : {
+          "type" : "string",
+          "description" : "Allow for fine-grain request identifier"
+        }
+      }
+    },
     "ConstraintClause" : {
       "type" : "object",
       "properties" : {
@@ -1704,6 +1859,46 @@
         }
       }
     },
+    "ExecutionServiceInput" : {
+      "type" : "object",
+      "required" : [ "actionIdentifiers", "commonHeader", "payload" ],
+      "properties" : {
+        "commonHeader" : {
+          "description" : "Headers providing request context.",
+          "$ref" : "#/definitions/CommonHeader"
+        },
+        "actionIdentifiers" : {
+          "description" : "Provide information about the action to execute.",
+          "$ref" : "#/definitions/ActionIdentifiers"
+        },
+        "payload" : {
+          "description" : "Contain the information to be passed as input to the action.The payload is constituted of two section: the workflow input which is the higher level block (xxx-request) and the input for resource resolution located within the xxx-request block, contained within xxx-properties",
+          "$ref" : "#/definitions/ObjectNode"
+        }
+      }
+    },
+    "ExecutionServiceOutput" : {
+      "type" : "object",
+      "required" : [ "actionIdentifiers", "commonHeader", "payload", "status" ],
+      "properties" : {
+        "commonHeader" : {
+          "description" : "Headers providing request context.",
+          "$ref" : "#/definitions/CommonHeader"
+        },
+        "actionIdentifiers" : {
+          "description" : "Provide information about the action to execute.",
+          "$ref" : "#/definitions/ActionIdentifiers"
+        },
+        "status" : {
+          "description" : "Status of the request.",
+          "$ref" : "#/definitions/Status"
+        },
+        "payload" : {
+          "description" : "Contain the information to be passed as input to the action.The payload is constituted of two section: the workflow input which is the higher level block (xxx-request) and the input for resource resolution located within the xxx-request block, contained within xxx-properties",
+          "$ref" : "#/definitions/ObjectNode"
+        }
+      }
+    },
     "FilePart" : {
       "type" : "object"
     },
@@ -1751,34 +1946,16 @@
     "JsonNode" : {
       "type" : "object",
       "properties" : {
-        "float" : {
+        "double" : {
           "type" : "boolean"
         },
-        "array" : {
+        "int" : {
           "type" : "boolean"
         },
-        "null" : {
+        "long" : {
           "type" : "boolean"
         },
-        "valueNode" : {
-          "type" : "boolean"
-        },
-        "containerNode" : {
-          "type" : "boolean"
-        },
-        "missingNode" : {
-          "type" : "boolean"
-        },
-        "pojo" : {
-          "type" : "boolean"
-        },
-        "integralNumber" : {
-          "type" : "boolean"
-        },
-        "floatingPointNumber" : {
-          "type" : "boolean"
-        },
-        "textual" : {
+        "boolean" : {
           "type" : "boolean"
         },
         "short" : {
@@ -1794,25 +1971,43 @@
         "number" : {
           "type" : "boolean"
         },
+        "binary" : {
+          "type" : "boolean"
+        },
+        "floatingPointNumber" : {
+          "type" : "boolean"
+        },
+        "containerNode" : {
+          "type" : "boolean"
+        },
+        "missingNode" : {
+          "type" : "boolean"
+        },
+        "pojo" : {
+          "type" : "boolean"
+        },
+        "valueNode" : {
+          "type" : "boolean"
+        },
         "bigDecimal" : {
+          "type" : "boolean"
+        },
+        "textual" : {
           "type" : "boolean"
         },
         "bigInteger" : {
           "type" : "boolean"
         },
-        "double" : {
+        "integralNumber" : {
           "type" : "boolean"
         },
-        "long" : {
+        "array" : {
           "type" : "boolean"
         },
-        "int" : {
+        "null" : {
           "type" : "boolean"
         },
-        "boolean" : {
-          "type" : "boolean"
-        },
-        "binary" : {
+        "float" : {
           "type" : "boolean"
         }
       }
@@ -1944,6 +2139,75 @@
         }
       }
     },
+    "ObjectNode" : {
+      "type" : "object",
+      "properties" : {
+        "nodeType" : {
+          "type" : "string",
+          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
+        },
+        "double" : {
+          "type" : "boolean"
+        },
+        "int" : {
+          "type" : "boolean"
+        },
+        "long" : {
+          "type" : "boolean"
+        },
+        "boolean" : {
+          "type" : "boolean"
+        },
+        "short" : {
+          "type" : "boolean"
+        },
+        "object" : {
+          "type" : "boolean"
+        },
+        "number" : {
+          "type" : "boolean"
+        },
+        "binary" : {
+          "type" : "boolean"
+        },
+        "floatingPointNumber" : {
+          "type" : "boolean"
+        },
+        "containerNode" : {
+          "type" : "boolean"
+        },
+        "missingNode" : {
+          "type" : "boolean"
+        },
+        "pojo" : {
+          "type" : "boolean"
+        },
+        "valueNode" : {
+          "type" : "boolean"
+        },
+        "bigDecimal" : {
+          "type" : "boolean"
+        },
+        "textual" : {
+          "type" : "boolean"
+        },
+        "bigInteger" : {
+          "type" : "boolean"
+        },
+        "integralNumber" : {
+          "type" : "boolean"
+        },
+        "array" : {
+          "type" : "boolean"
+        },
+        "null" : {
+          "type" : "boolean"
+        },
+        "float" : {
+          "type" : "boolean"
+        }
+      }
+    },
     "OperationAssignment" : {
       "type" : "object",
       "properties" : {
@@ -1978,12 +2242,15 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "number" : {
+        "pageable" : {
+          "$ref" : "#/definitions/Pageable"
+        },
+        "first" : {
+          "type" : "boolean"
+        },
+        "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
-        },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
         },
         "size" : {
           "type" : "integer",
@@ -1995,18 +2262,15 @@
             "type" : "object"
           }
         },
-        "first" : {
-          "type" : "boolean"
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
         },
         "last" : {
           "type" : "boolean"
-        },
-        "pageable" : {
-          "$ref" : "#/definitions/Pageable"
-        },
-        "numberOfElements" : {
-          "type" : "integer",
-          "format" : "int32"
         },
         "empty" : {
           "type" : "boolean"
@@ -2024,12 +2288,15 @@
           "type" : "integer",
           "format" : "int64"
         },
-        "number" : {
+        "pageable" : {
+          "$ref" : "#/definitions/Pageable"
+        },
+        "first" : {
+          "type" : "boolean"
+        },
+        "numberOfElements" : {
           "type" : "integer",
           "format" : "int32"
-        },
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
         },
         "size" : {
           "type" : "integer",
@@ -2041,18 +2308,15 @@
             "$ref" : "#/definitions/BlueprintModelSearch"
           }
         },
-        "first" : {
-          "type" : "boolean"
+        "number" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
         },
         "last" : {
           "type" : "boolean"
-        },
-        "pageable" : {
-          "$ref" : "#/definitions/Pageable"
-        },
-        "numberOfElements" : {
-          "type" : "integer",
-          "format" : "int32"
         },
         "empty" : {
           "type" : "boolean"
@@ -2062,12 +2326,8 @@
     "Pageable" : {
       "type" : "object",
       "properties" : {
-        "sort" : {
-          "$ref" : "#/definitions/Sort"
-        },
-        "offset" : {
-          "type" : "integer",
-          "format" : "int64"
+        "paged" : {
+          "type" : "boolean"
         },
         "pageNumber" : {
           "type" : "integer",
@@ -2077,11 +2337,15 @@
           "type" : "integer",
           "format" : "int32"
         },
-        "paged" : {
-          "type" : "boolean"
-        },
         "unpaged" : {
           "type" : "boolean"
+        },
+        "offset" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "sort" : {
+          "$ref" : "#/definitions/Sort"
         }
       }
     },
@@ -2345,14 +2609,43 @@
     "Sort" : {
       "type" : "object",
       "properties" : {
-        "empty" : {
+        "sorted" : {
           "type" : "boolean"
         },
         "unsorted" : {
           "type" : "boolean"
         },
-        "sorted" : {
+        "empty" : {
           "type" : "boolean"
+        }
+      }
+    },
+    "Status" : {
+      "type" : "object",
+      "required" : [ "code", "eventType", "message", "timestamp" ],
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "HTTP status code equivalent."
+        },
+        "eventType" : {
+          "type" : "string",
+          "description" : "Type of the event being emitted by CDS."
+        },
+        "timestamp" : {
+          "type" : "string",
+          "format" : "date-time",
+          "example" : 2012-04-23T18:25:43.511Z,
+          "description" : "Time when the execution ended."
+        },
+        "errorMessage" : {
+          "type" : "string",
+          "description" : "Error message when system failed"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Message providing request status"
         }
       }
     },

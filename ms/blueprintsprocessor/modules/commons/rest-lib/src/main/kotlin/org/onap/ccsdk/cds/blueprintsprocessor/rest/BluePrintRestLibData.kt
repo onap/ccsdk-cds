@@ -26,6 +26,7 @@ open class RestClientProperties {
     var connectTimeout: Int = 0
     var socketTimeout: Int = 0
     var connectionRequestTimeout: Int = 0
+    var proxy: String? = null
     var additionalHeaders: Map<String, String>? = null
 }
 
