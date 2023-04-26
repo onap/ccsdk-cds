@@ -31,15 +31,17 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMappi
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.factory.ResourceSourceMappingFactory
 import org.onap.ccsdk.cds.error.catalog.core.ErrorCatalogCodes
 import org.springframework.stereotype.Service
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 
 @Service
 class ResourceDictionaryHandler(private val resourceDictionaryRepository: ResourceDictionaryRepository) {
 
     /**
-     * This is a getDataDictionaryByName service
+     * This is a getResourceDictionaryByName service
      *
      * @param name name
-     * @return DataDictionary
+     * @return ResourceDictionary
      * @throws BluePrintException BluePrintException
      */
     @Throws(BluePrintException::class)
@@ -61,7 +63,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      *
      * @param names names
      * @return List<ResourceDictionary>
-     </ResourceDictionary> */
+     */
     suspend fun searchResourceDictionaryByNames(names: List<String>): List<ResourceDictionary> {
         Preconditions.checkArgument(CollectionUtils.isNotEmpty(names), "No Search Information provide")
         return resourceDictionaryRepository.findByNameIn(names)
@@ -72,17 +74,17 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
      *
      * @param tags tags
      * @return List<ResourceDictionary>
-     </ResourceDictionary> */
+    </ResourceDictionary> */
     suspend fun searchResourceDictionaryByTags(tags: String): List<ResourceDictionary> {
         Preconditions.checkArgument(StringUtils.isNotBlank(tags), "No search tag information provide")
         return resourceDictionaryRepository.findByTagsContainingIgnoreCase(tags)
     }
 
     /**
-     * This is a saveDataDictionary service
+     * This is a saveResourceDictionary service
      *
      * @param resourceDictionary resourceDictionary
-     * @return DataDictionary
+     * @return ResourceDictionary
      */
     @Throws(BluePrintException::class)
     suspend fun saveResourceDictionary(resourceDictionary: ResourceDictionary): ResourceDictionary {
@@ -128,33 +130,49 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
     }
 
     /**
-     * This is a saveDataDictionary service
+     * This is to save single ResourceDictionary from json content
      *
      * @param resourceDefinition ResourceDefinition
-     * @return ResourceDefinition
+     * @return ResourceDictionary
      */
     @Throws(BluePrintException::class)
-    suspend fun saveResourceDefinition(resourceDefinition: ResourceDefinition): ResourceDefinition {
+    suspend fun saveResourceDefinition(resourceDefinition: ResourceDefinition): ResourceDictionary {
+        return resourceDictionaryRepository.save(enrichResourceDictionary(resourceDefinition))
+    }
+
+    /**
+     * This is to save multiple ResourceDictionaries from json array content
+     *
+     * @param resourceDefinitionList List<ResourceDefinition>
+     * @return MutableList<ResourceDictionary>
+     */
+    @Throws(BluePrintException::class)
+    suspend fun saveAllResourceDefinition(resourceDefinitionList: List<ResourceDefinition>): MutableList<ResourceDictionary> {
+        val dictionaryList: MutableList<ResourceDictionary> = mutableListOf()
+        resourceDefinitionList.forEach {
+            dictionaryList.add(enrichResourceDictionary(it))
+        }
+        return resourceDictionaryRepository.saveAll(dictionaryList)
+    }
+
+    private fun enrichResourceDictionary(resourceDefinition: ResourceDefinition): ResourceDictionary {
         val resourceDictionary = ResourceDictionary()
         resourceDictionary.name = resourceDefinition.name
         resourceDictionary.updatedBy = resourceDefinition.updatedBy
         resourceDictionary.resourceDictionaryGroup = resourceDefinition.group
         resourceDictionary.entrySchema = resourceDefinition.property.entrySchema?.type
-        if (StringUtils.isBlank(resourceDefinition.tags)) {
-            resourceDictionary.tags = (
-                resourceDefinition.name + ", " + resourceDefinition.updatedBy +
-                    ", " + resourceDefinition.updatedBy
-                )
-        } else {
-            resourceDictionary.tags = resourceDefinition.tags!!
-        }
         resourceDictionary.description = resourceDefinition.property.description!!
         resourceDictionary.dataType = resourceDefinition.property.type
         resourceDictionary.definition = resourceDefinition
 
-        validateResourceDictionary(resourceDictionary)
+        if (StringUtils.isBlank(resourceDefinition.tags)) {
+            resourceDictionary.tags = resourceDefinition.name + ", " + resourceDefinition.updatedBy
+        } else {
+            resourceDictionary.tags = resourceDefinition.tags!!
+        }
 
-        return resourceDictionaryRepository.save(resourceDictionary).definition
+        validateResourceDictionary(resourceDictionary)
+        return resourceDictionary
     }
 
     /**
@@ -174,12 +192,19 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         return ResourceSourceMappingFactory.getRegisterSourceMapping()
     }
 
+    /**
+     * This is a getResourceDirectories service
+     */
+    suspend fun getAllDictionary(pageRequest: Pageable): Page<ResourceDictionary> {
+        return resourceDictionaryRepository.findAll(pageRequest)
+    }
+
     private fun validateResourceDictionary(resourceDictionary: ResourceDictionary): Boolean {
-        checkNotEmpty(resourceDictionary.name) { "DataDictionary Definition name is missing." }
-        checkNotNull(resourceDictionary.definition) { "DataDictionary Definition Information is missing." }
-        checkNotEmpty(resourceDictionary.description) { "DataDictionary Definition Information is missing." }
-        checkNotEmpty(resourceDictionary.tags) { "DataDictionary Definition tags is missing." }
-        checkNotEmpty(resourceDictionary.updatedBy) { "DataDictionary Definition updatedBy is missing." }
+        checkNotEmpty(resourceDictionary.name) { "ResourceDictionary Definition name is missing." }
+        checkNotNull(resourceDictionary.definition) { "ResourceDictionary Definition Information is missing." }
+        checkNotEmpty(resourceDictionary.description) { "ResourceDictionary Definition Information is missing." }
+        checkNotEmpty(resourceDictionary.tags) { "ResourceDictionary Definition tags is missing." }
+        checkNotEmpty(resourceDictionary.updatedBy) { "ResourceDictionary Definition updatedBy is missing." }
         return true
     }
 

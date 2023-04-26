@@ -74,7 +74,7 @@ the following command.
 
    mvn archetype:generate -DarchetypeGroupId=org.onap.ccsdk.cds.components.cba \
                           -DarchetypeArtifactId=archetype-blueprint \
-                          -DarchetypeVersion=1.4.0-SNAPSHOT \
+                          -DarchetypeVersion=1.4.3-SNAPSHOT \
                           -DgroupId=org.onap.ccsdk.cds.components.cba \
                           -DartifactId=testUat \
                           -Dversion=1.0-SNAPSHOT
