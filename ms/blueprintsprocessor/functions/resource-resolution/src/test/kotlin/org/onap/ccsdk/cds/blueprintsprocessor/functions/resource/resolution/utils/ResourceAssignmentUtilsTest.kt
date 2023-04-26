@@ -484,13 +484,13 @@ class ResourceAssignmentUtilsTest {
 
         resourceAssignment = when (sourceType) {
             "list" -> {
-                prepareRADataDictionaryCollection(dictionary_source, sourceType, entrySchema)
+                prepareRAResourceDictionaryCollection(dictionary_source, sourceType, entrySchema)
             }
             "string" -> {
-                prepareRADataDictionaryOfPrimaryType(dictionary_source)
+                prepareRAResourceDictionaryOfPrimaryType(dictionary_source)
             }
             else -> {
-                prepareRADataDictionaryComplexType(dictionary_source, sourceType, entrySchema)
+                prepareRAResourceDictionaryComplexType(dictionary_source, sourceType, entrySchema)
             }
         }
 
@@ -508,7 +508,7 @@ class ResourceAssignmentUtilsTest {
         )
     }
 
-    private fun prepareRADataDictionaryOfPrimaryType(dictionary_source: String): ResourceAssignment {
+    private fun prepareRAResourceDictionaryOfPrimaryType(dictionary_source: String): ResourceAssignment {
         return ResourceAssignment().apply {
             name = "ipAddress"
             dictionaryName = "sample-ip"
@@ -519,7 +519,7 @@ class ResourceAssignmentUtilsTest {
         }
     }
 
-    private fun prepareRADataDictionaryCollection(
+    private fun prepareRAResourceDictionaryCollection(
         dictionary_source: String,
         sourceType: String,
         schema: String
@@ -537,7 +537,7 @@ class ResourceAssignmentUtilsTest {
         }
     }
 
-    private fun prepareRADataDictionaryComplexType(
+    private fun prepareRAResourceDictionaryComplexType(
         dictionary_source: String,
         sourceType: String,
         schema: String

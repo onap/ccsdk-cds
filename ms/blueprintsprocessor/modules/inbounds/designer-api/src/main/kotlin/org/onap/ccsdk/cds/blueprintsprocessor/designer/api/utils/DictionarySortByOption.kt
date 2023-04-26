@@ -16,8 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.utils
 
-enum class BlueprintSortByOption(val columnName: String) {
-    DATE("createdDate"),
-    NAME("artifactName"),
-    VERSION("artifactVersion")
+enum class DictionarySortByOption(val columnName: String) {
+    DATE("creationDate")
 }
