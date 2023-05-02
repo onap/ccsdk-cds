@@ -19,7 +19,7 @@
 
   <groupId>org.onap.ccsdk.cds.components.cba</groupId>
   <artifactId>archetype-blueprint</artifactId>
-  <version>1.5.1-SNAPSHOT</version>
+  <version>1.5.2-SNAPSHOT</version>
   <packaging>maven-archetype</packaging>
 
   <name>Components Model Catalog - Blueprints Model - Archetype Blueprints</name>
