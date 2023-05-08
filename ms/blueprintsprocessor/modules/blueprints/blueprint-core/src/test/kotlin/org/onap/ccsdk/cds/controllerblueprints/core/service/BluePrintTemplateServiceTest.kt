@@ -61,22 +61,36 @@ class BluePrintTemplateServiceTest {
             )
 
             val content = BluePrintJinjaTemplateService.generateContent(template, json, false, element)
-            assertNotNull(content, "failed to generate content for velocity template")
+            assertNotNull(content, "failed to generate content for jinja template")
         }
     }
 
     @Test
-    fun `no value variable should evaluate to default value - standalone template mesh test`() {
+    fun `Unresolved variable should be kept as-is - standalone velocity template mesh test`() {
         runBlocking {
             val template =
                 JacksonUtils.getClassPathFileContent("templates/default-variable-value-velocity-template.vtl")
             val json = JacksonUtils.getClassPathFileContent("templates/default-variable-value-data.json")
 
             val content = BluePrintVelocityTemplateService.generateContent(template, json)
-            // first line represents a variable whose value was successfully retrieved, second line contains a variable
-            // whose value could not be evaluated
-            val expected = "sample-hostname\n\${node0_backup_router_address}"
+            // first line represents a variable whose value was successfully retrieved,
+            // second line contains a variable whose value could not be evaluated
+            val expected = "sample-node0_hostname\n\${node0_backup_router_address}"
             assertEquals(expected, content, "No value variable should use default value")
+        }
+    }
+
+    @Test
+    fun `Unresolved variable should be kept as-is - standalone jinja template mesh test`() {
+        runBlocking {
+            val context = JacksonUtils.getClassPathFileContent("templates/default-variable-value-data.json")
+            val jinjaTemplate =
+                JacksonUtils.getClassPathFileContent("templates/default-variable-jinja-template.jinja")
+            val renderedContent =
+                BluePrintJinjaTemplateService.generateContent(jinjaTemplate, context, false, mutableMapOf())
+            val expectedContent =
+                JacksonUtils.getClassPathFileContent("templates/default-variable-jinja-template-resolved.jinja")
+            assertEquals(expectedContent, renderedContent, "No value variable should use default value")
         }
     }
 }

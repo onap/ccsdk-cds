@@ -1,3 +1,4 @@
 {
-  "node0_hostname": "sample-hostname"
+  "node0_hostname": "sample-node0_hostname",
+  "node2_backup_router_address": "sample-node2_backup_router_address"
 }
