@@ -21,9 +21,12 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.hubspot.jinjava.Jinjava
 import com.hubspot.jinjava.JinjavaConfig
+import com.hubspot.jinjava.interpret.Context
+import com.hubspot.jinjava.interpret.InterpreterFactory
 import com.hubspot.jinjava.interpret.JinjavaInterpreter
 import com.hubspot.jinjava.loader.ResourceLocator
 import com.hubspot.jinjava.loader.ResourceNotFoundException
+import com.hubspot.jinjava.objects.serialization.PyishObjectMapper
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.config.BluePrintLoadConfiguration
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintJsonNodeFactory
@@ -33,6 +36,7 @@ import java.io.IOException
 import java.nio.charset.Charset
 import java.nio.file.Files.readAllBytes
 import java.nio.file.Paths
+import java.util.Objects
 
 object BluePrintJinjaTemplateService {
 
@@ -89,27 +93,46 @@ object BluePrintJinjaTemplateService {
         additionalContext: MutableMap<String, Any>,
         resourceLocator: ResourceLocator? = null
     ): String {
-        val jinJava = Jinjava(JinjavaConfig())
-        if (resourceLocator != null) {
-            jinJava.resourceLocator = resourceLocator
-        }
-
-        val mapper = ObjectMapper()
-        val nodeFactory = BluePrintJsonNodeFactory()
-        mapper.nodeFactory = nodeFactory
-
         // Add the JSON Data to the context
         if (json.isNotEmpty()) {
-            val jsonNode = mapper.readValue<JsonNode>(json, JsonNode::class.java)
+            val mapper = ObjectMapper().setNodeFactory(BluePrintJsonNodeFactory())
+            val jsonNode = mapper.readValue(json, JsonNode::class.java)
                 ?: throw BluePrintProcessorException("couldn't get json node from json")
             if (ignoreJsonNull) {
                 jsonNode.removeNullNode()
             }
-
-            val jsonMap: Map<String, Any> = mapper.readValue(json, object : TypeReference<Map<String, Any>>() {})
-            additionalContext.putAll(jsonMap)
+            additionalContext.putAll(mapper.readValue(json, object : TypeReference<Map<String, Any>>() {}))
         }
 
-        return jinJava.render(template, additionalContext)
+        val jinjava = Jinjava(
+            JinjavaConfig(object : InterpreterFactory {
+                override fun newInstance(interpreter: JinjavaInterpreter): JinjavaInterpreter {
+                    return CustomJinjavaInterpreter(interpreter)
+                }
+
+                override fun newInstance(jinjava: Jinjava, context: Context, config: JinjavaConfig): JinjavaInterpreter {
+                    return CustomJinjavaInterpreter(jinjava, context, config)
+                }
+            })
+        )
+
+        if (resourceLocator != null) {
+            jinjava.resourceLocator = resourceLocator
+        }
+
+        return jinjava.render(template, additionalContext)
+    }
+
+    class CustomJinjavaInterpreter : JinjavaInterpreter {
+        constructor(interpreter: JinjavaInterpreter) : super(interpreter)
+        constructor(jinjava: Jinjava, context: Context, config: JinjavaConfig) : super(jinjava, context, config)
+
+        // Overriding actual getAsString method to return `context.currentNode.master.image` instead of empty string
+        override fun getAsString(`object`: Any?): String {
+            return if (config.legacyOverrides.isUsePyishObjectMapper)
+                PyishObjectMapper.getAsUnquotedPyishString(`object`)
+            else
+                Objects.toString(`object`, context.currentNode.master.image)
+        }
     }
 }
