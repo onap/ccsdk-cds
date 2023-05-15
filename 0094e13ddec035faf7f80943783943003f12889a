@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d7f50ba_5edacddb",
+        "filename": "ms/blueprintsprocessor/modules/inbounds/designer-api/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/designer/api/handler/BluePrintModelHandler.kt",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2023-05-15T22:00:16Z",
+      "side": 1,
+      "message": "Oleg, this move from above broke workflow-spec..\nas wfRes.workFlowData being referenced by updatePropertyInfo which is being invoked during #169\nand it\u0027s resulting in \u0027lateinit property workFlowData has not been initialized\u0027",
+      "revId": "0094e13ddec035faf7f80943783943003f12889a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
