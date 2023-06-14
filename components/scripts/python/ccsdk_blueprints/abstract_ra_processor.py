@@ -9,11 +9,11 @@ from org.onap.ccsdk.cds.controllerblueprints.core import \
 class AbstractRAProcessor(ResourceAssignmentProcessor):
 
     def process(self, resource_assignment):
-        print "Processing.."
+        print("Processing..")
         return None
 
     def recover(self, runtime_exception, resource_assignment):
-        print "Recovering.."
+        print("Recovering..")
         return None
 
     def set_resource_data_value(self, resource_assignment, value):
@@ -24,6 +24,6 @@ class AbstractRAProcessor(ResourceAssignmentProcessor):
             else:
                 ResourceAssignmentUtils.Companion.setFailedResourceDataValue(
                     resource_assignment, "Fail to resolve value")
-        except BluePrintProcessorException, err:
+        except BluePrintProcessorException as err:
             raise BluePrintProcessorException(
                 "Error on resource assignment. Message = " + err.message)

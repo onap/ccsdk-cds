@@ -42,11 +42,11 @@ class NetconfRpcExample(AbstractScriptComponentFunction):
             nc.unlock()
             nc.disconnect()
 
-        except JavaException, err:
+        except JavaException as err:
             log.error("Java Exception in the script {}", err)
-        except Exception, err:
+        except Exception as err:
             log.error("Python Exception in the script {}", err)
 
     def recover(self, runtime_exception, execution_request):
-        print "Recovering calling.." + PROPERTY_BLUEPRINT_BASE_PATH
+        print("Recovering calling.." + PROPERTY_BLUEPRINT_BASE_PATH)
         return None

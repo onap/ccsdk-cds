@@ -7,9 +7,9 @@ class AbstractPythonComponentFunction(AbstractComponentFunction):
         AbstractComponentFunction.__init__(self)
 
     def process(self, execution_request):
-        print "Processing calling from parent..."
+        print("Processing calling from parent...")
         return None
 
     def recover(self, runtime_exception, execution_request):
-        print "Recovering calling from parent..."
+        print("Recovering calling from parent...")
         return None
