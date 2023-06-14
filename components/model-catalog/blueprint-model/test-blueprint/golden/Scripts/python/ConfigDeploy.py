@@ -48,5 +48,5 @@ class ConfigDeploy(NetconfComponentFunction):
 
   def recover(self, runtime_exception, execution_request):
         log.error("Exception in the script {}", runtime_exception)
-        print self.addError(runtime_exception.cause.message)
+        print(self.addError(runtime_exception.cause.message))
         return None

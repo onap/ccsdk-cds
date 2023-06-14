@@ -8,10 +8,10 @@ class SampleRAProcessor(AbstractRAProcessor):
         AbstractRAProcessor.__init__(self)
 
     def process(self, resource_assignment):
-        print "Processing calling.." + PROPERTY_BLUEPRINT_BASE_PATH
+        print("Processing calling.." + PROPERTY_BLUEPRINT_BASE_PATH)
         self.set_resource_data_value(resource_assignment, "")
         return None
 
     def recover(self, runtime_exception, resource_assignment):
-        print "Recovering calling.." + PROPERTY_BLUEPRINT_BASE_PATH
+        print("Recovering calling.." + PROPERTY_BLUEPRINT_BASE_PATH)
         return None

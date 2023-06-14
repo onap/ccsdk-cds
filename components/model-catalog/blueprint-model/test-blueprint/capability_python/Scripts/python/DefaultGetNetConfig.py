@@ -37,12 +37,12 @@ class DefaultGetNetConfig(AbstractPythonComponentFunction):
                 if (deviceResponse.status != netconf_constant.STATUS_SUCCESS and deviceResponse.errorMessage != 'null'):
                     errorMessage = "Get Running Config Failure ::"+ deviceResponse.errorMessage
 
-        except Exception, err:
+        except Exception as err:
             log.info("Exception in the script {}",err.getMessage())
             status = netconf_constant.STATUS_FAILURE
             errorMessage = "Get Running Config Failure ::"+err.getMessage()
 
     def  recover(self, runtime_exception, execution_request):
-        print "Recovering calling.." + PROPERTY_BLUEPRINT_BASE_PATH
+        print("Recovering calling.." + PROPERTY_BLUEPRINT_BASE_PATH)
         return None
 
