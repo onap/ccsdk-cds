@@ -42,7 +42,7 @@ if (require.main === module) {
   // Run the application
   const config = {
     rest: {
-      protocol: 'https',
+      protocol: process.env.PROTOCOL || 'https',
       pfx: p12,
       passphrase: passphrase,
       port: +process.env.PORT || 3000,
