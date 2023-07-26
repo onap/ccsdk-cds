@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Verified+1: ONAP Required GHA <releng+onap.required.gha@linuxfoundation.org>
+Code-Review+2: KAPIL SINGAL <ks220y@att.com>
+Submitted-by: Dan Timoney <dtimoney@att.com>
+Submitted-at: Wed, 26 Jul 2023 13:59:56 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/ccsdk/cds/+/135443
+Project: ccsdk/cds
+Branch: refs/heads/london
