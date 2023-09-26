@@ -58,11 +58,10 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
         val tempFile = createTempFile()
         try {
             cbaFile.transferTo(tempFile)
-                .doOnSuccess {
-                    val uatSpec = readZipEntryAsText(tempFile, UAT_SPECIFICATION_FILE)
-                    val cbaBytes = tempFile.readBytes()
-                    uatExecutor.execute(uatSpec, cbaBytes)
-                }.subscribe()
+            cbaFile.transferTo(tempFile).thenReturn(tempFile).awaitSingle()
+            val uatSpec = readZipEntryAsText(tempFile, UAT_SPECIFICATION_FILE)
+            val cbaBytes = tempFile.readBytes()
+            uatExecutor.execute(uatSpec, cbaBytes)
         } catch (e: AssertionError) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         } catch (t: Throwable) {
