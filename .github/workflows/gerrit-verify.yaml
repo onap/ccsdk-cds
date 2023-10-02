@@ -41,16 +41,6 @@ on:
         description: "Gerrit refspec of change"
         required: true
         type: string
-      JDK_VERSION:
-        description: "OpenJDK version"
-        required: false
-        default: "17"
-        type: string
-      MVN_VERSION:
-        description: "Maven version"
-        required: false
-        default: "3.8.2"
-        type: string
       TARGET_REPO:
         # yamllint disable-line rule:line-length
         description: "The target GitHub repository needing the required workflow"
