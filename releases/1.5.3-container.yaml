@@ -1,0 +1,17 @@
+---
+distribution_type: 'container'
+container_release_tag: '1.5.3'
+project: 'ccsdk-cds'
+log_dir: 'ccsdk-cds-maven-docker-stage-london/112/'
+ref: 3916f0f92c1f8e053e57af376d3ad440ee201aa0
+containers:
+    - name: 'ccsdk-blueprintsprocessor'
+      version: '1.5.3-STAGING-20231002T095220Z'
+    - name: 'ccsdk-commandexecutor'
+      version: '1.5.3-STAGING-20231002T095220Z'
+    - name: 'ccsdk-py-executor'
+      version: '1.5.3-STAGING-20231002T095220Z'
+    - name: 'ccsdk-sdclistener'
+      version: '1.5.3-STAGING-20231002T095220Z'
+    - name: 'ccsdk-cds-ui-server'
+      version: '1.5.3-STAGING-20231002T095220Z'
