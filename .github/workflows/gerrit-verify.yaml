@@ -44,8 +44,7 @@ on:
       TARGET_REPO:
         # yamllint disable-line rule:line-length
         description: "The target GitHub repository needing the required workflow"
-        required: false
-        default: ${{ github.repository }}
+        required: true
         type: string
 
 concurrency:
