@@ -41,11 +41,6 @@ on:
         description: "Gerrit refspec of change"
         required: true
         type: string
-      TARGET_REPO:
-        # yamllint disable-line rule:line-length
-        description: "The target GitHub repository needing the required workflow"
-        required: true
-        type: string
 
 concurrency:
   # yamllint disable-line rule:line-length
@@ -88,7 +83,6 @@ jobs:
       GERRIT_REFSPEC: ${{ inputs.GERRIT_REFSPEC }}
       JDK_VERSION: "17"
       MVN_VERSION: "3.8.2"
-      TARGET_REPO: ${{ inputs.TARGET_REPO }}
 
   vote:
     if: ${{ always() }}
