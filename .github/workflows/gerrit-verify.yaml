@@ -86,8 +86,8 @@ jobs:
       GERRIT_PATCHSET_REVISION: ${{ inputs.GERRIT_PATCHSET_REVISION }}
       GERRIT_PROJECT: ${{ inputs.GERRIT_PROJECT }}
       GERRIT_REFSPEC: ${{ inputs.GERRIT_REFSPEC }}
-      JDK_VERSION: ${{ inputs.JDK_VERSION }}
-      MVN_VERSION: ${{ inputs.MVN_VERSION }}
+      JDK_VERSION: "17"
+      MVN_VERSION: "3.8.2"
       TARGET_REPO: ${{ inputs.TARGET_REPO }}
 
   vote:
