@@ -16,6 +16,23 @@
       "message": "recheck",
       "revId": "0af2af76041bf2837031a0778b35099e5bfc753e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c1b2c96_d29e4991",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 481
+      },
+      "writtenOn": "2023-10-05T20:13:09Z",
+      "side": 1,
+      "message": "recheck",
+      "revId": "0af2af76041bf2837031a0778b35099e5bfc753e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     }
   ]
 }
