@@ -22,7 +22,7 @@ limitations under the License.
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
         <artifactId>spring-boot-26-starter-parent</artifactId>
-        <version>2.5.4</version>
+        <version>2.6.1</version>
         <relativePath/>
     </parent>
 
@@ -75,6 +75,19 @@ limitations under the License.
 
         <ccsdk.sli.version>1.5.2</ccsdk.sli.version>
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
+
+        <kotlin.version>1.6.21</kotlin.version>
+        <kotlin.maven.version>1.6.21</kotlin.maven.version>
+        <kotlin.couroutines.version>1.6.4</kotlin.couroutines.version>
+        <kotlinpoet.version>1.11.0</kotlinpoet.version>
+        <apache.httpcomponents.client.version>4.5.13</apache.httpcomponents.client.version>
+
+        <grpc.version>1.29.0</grpc.version>
+        <netty-ssl>2.0.50.Final</netty-ssl>
+        <protobuff.java.version>3.10.0</protobuff.java.version>
+        <protobuff.java.utils.version>3.10.0</protobuff.java.utils.version>
+        <mockk.version>1.12.8</mockk.version>
+
     </properties>
 
     <build>
