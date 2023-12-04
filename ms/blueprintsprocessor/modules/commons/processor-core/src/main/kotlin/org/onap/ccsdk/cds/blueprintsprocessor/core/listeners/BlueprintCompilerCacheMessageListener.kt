@@ -16,11 +16,13 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.core.listeners
 
+import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.BlueprintClusterTopic
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterMessage
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BluePrintClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.BlueprintClusterMessageListener
 import org.onap.ccsdk.cds.blueprintsprocessor.core.service.ClusterJoinedEvent
+import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.logger
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -39,9 +41,16 @@ open class BlueprintCompilerCacheMessageListener(private val clusterService: Blu
     }
 
     override fun onMessage(message: BluePrintClusterMessage<String>?) {
-        message?.let {
-            log.info("Received ClusterMessage - Cleaning compile cache for blueprint (${it.payload})")
-            BluePrintCompileCache.cleanClassLoader(it.payload)
+        message?.let { bluePrintClusterMessage ->
+            log.info("Received ClusterMessage - Cleaning compile cache for blueprint (${bluePrintClusterMessage.payload})")
+            val payload = bluePrintClusterMessage.payload
+            BluePrintCompileCache.cleanClassLoader(payload)
+            runBlocking {
+                deleteNBDir(payload).let { success ->
+                    if (success) log.info("Deleted deployed blueprint model :$payload")
+                    else log.info("Fail to delete deployed blueprint model :$payload")
+                }
+            }
         }
     }
 }
