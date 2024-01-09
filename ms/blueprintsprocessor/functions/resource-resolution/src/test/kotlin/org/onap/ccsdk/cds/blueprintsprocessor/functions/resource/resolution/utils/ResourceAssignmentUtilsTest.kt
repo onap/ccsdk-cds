@@ -40,6 +40,8 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintMetadataUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
+import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.concurrent.thread
 import kotlin.test.assertEquals
 
 data class IpAddress(val port: String, val ip: String)
@@ -385,6 +387,24 @@ class ResourceAssignmentUtilsTest {
             valueJson,
             resourceAssignmentJson.property!!.value!!.toString()
         )
+    }
+
+    @Test
+    fun `resource resolution issue of resourceStore HashMap during resource resolution`() {
+        var uncaughtExceptionOccured = AtomicBoolean(false)
+        for (i in 1..1000) {
+            thread {
+                resourceAssignmentRuntimeService.putResolutionStore("key_$i", "value_$i".asJsonType())
+            }
+            val t = thread(false) {
+                resourceAssignmentRuntimeService.getResolutionStore()
+                // often ConcurrentModificationException occurs here
+            }
+            t.uncaughtExceptionHandler =
+                Thread.UncaughtExceptionHandler { t, e -> uncaughtExceptionOccured = AtomicBoolean(true) }
+            t.start()
+        }
+        assertEquals(uncaughtExceptionOccured.get(), false)
     }
 
     private fun initInputMapAndExpectedValuesForPrimitiveType() {

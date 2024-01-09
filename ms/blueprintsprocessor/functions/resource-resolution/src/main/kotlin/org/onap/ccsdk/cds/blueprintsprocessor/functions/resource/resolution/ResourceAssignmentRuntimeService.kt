@@ -4,12 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.DefaultBluePrintRuntimeService
+import java.util.concurrent.ConcurrentHashMap
 
 class ResourceAssignmentRuntimeService(private var id: String, private var bluePrintContext: BluePrintContext) :
     DefaultBluePrintRuntimeService(id, bluePrintContext) {
 
     private lateinit var resolutionId: String
-    private var resourceStore: MutableMap<String, JsonNode> = hashMapOf()
+    private var resourceStore: MutableMap<String, JsonNode> = ConcurrentHashMap()
 
     fun createUniqueId(key: String) {
         resolutionId = "$id-$key"
