@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.NullNode
-import org.apache.commons.collections.MapUtils
+import org.apache.commons.collections4.MapUtils
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException

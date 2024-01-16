@@ -18,7 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler
 
 import com.google.common.base.Preconditions
-import org.apache.commons.collections.CollectionUtils
+import org.apache.commons.collections4.CollectionUtils
 import org.apache.commons.lang3.StringUtils
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiDomains
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
