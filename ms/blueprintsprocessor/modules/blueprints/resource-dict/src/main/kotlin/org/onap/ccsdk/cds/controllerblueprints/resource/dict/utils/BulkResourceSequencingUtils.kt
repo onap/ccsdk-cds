@@ -16,7 +16,7 @@
 
 package org.onap.ccsdk.cds.controllerblueprints.resource.dict.utils
 
-import org.apache.commons.collections.CollectionUtils
+import org.apache.commons.collections4.CollectionUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.asListOfString
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.TopologicalSortingUtils
