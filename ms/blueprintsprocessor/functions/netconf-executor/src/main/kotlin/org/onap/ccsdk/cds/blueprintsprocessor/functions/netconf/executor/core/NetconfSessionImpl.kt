@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableSet
 import org.apache.sshd.client.SshClient
 import org.apache.sshd.client.channel.ClientChannel
 import org.apache.sshd.client.session.ClientSession
-import org.apache.sshd.common.FactoryManager
+import org.apache.sshd.core.CoreModuleProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfException
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.NetconfRpcService
@@ -204,8 +204,8 @@ class NetconfSessionImpl(private val deviceInfo: DeviceInfo, private val rpcServ
     private fun startClient() {
         setupNewSSHClient()
 
-        client.properties.putIfAbsent(FactoryManager.IDLE_TIMEOUT, TimeUnit.SECONDS.toMillis(idleTimeout.toLong()))
-        client.properties.putIfAbsent(FactoryManager.NIO2_READ_TIMEOUT, TimeUnit.SECONDS.toMillis(idleTimeout + 15L))
+        client.properties.putIfAbsent(CoreModuleProperties.IDLE_TIMEOUT.name, TimeUnit.SECONDS.toMillis(idleTimeout.toLong()))
+        client.properties.putIfAbsent(CoreModuleProperties.NIO2_READ_TIMEOUT.name, TimeUnit.SECONDS.toMillis(idleTimeout + 15L))
         client.start()
 
         startSession()

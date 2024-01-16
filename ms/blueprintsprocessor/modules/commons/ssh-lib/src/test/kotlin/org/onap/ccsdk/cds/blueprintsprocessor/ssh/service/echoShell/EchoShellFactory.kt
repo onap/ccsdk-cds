@@ -19,7 +19,9 @@ package org.onap.ccsdk.cds.blueprintsprocessor.ssh.service.echoShell
 import org.apache.sshd.common.Factory
 import org.apache.sshd.server.Environment
 import org.apache.sshd.server.ExitCallback
+import org.apache.sshd.server.channel.ChannelSession
 import org.apache.sshd.server.command.Command
+import org.apache.sshd.server.shell.ShellFactory
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -27,9 +29,13 @@ import java.io.InputStreamReader
 import java.io.InterruptedIOException
 import java.io.OutputStream
 
-class EchoShellFactory : Factory<Command> {
+class EchoShellFactory : Factory<Command>, ShellFactory {
 
     override fun create(): Command {
+        return EchoShell()
+    }
+
+    override fun createShell(channel: ChannelSession?): Command {
         return EchoShell()
     }
 
@@ -69,14 +75,14 @@ class EchoShell : Command, Runnable {
     }
 
     @Throws(IOException::class)
-    override fun start(env: Environment) {
+    override fun start(channel: ChannelSession?, env: Environment?) {
         environment = env
         thread = Thread(this, "EchoShell")
         thread!!.isDaemon = true
         thread!!.start()
     }
 
-    override fun destroy() {
+    override fun destroy(channel: ChannelSession?) {
         thread!!.interrupt()
     }
 

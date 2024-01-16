@@ -33,7 +33,7 @@
 
     <properties>
         <eelf.version>1.0.0</eelf.version>
-        <guava.version>27.0.1-jre</guava.version>
+        <guava.version>33.0.0-jre</guava.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <powermock.version>1.7.4</powermock.version>
         <mockk.version>1.12.8</mockk.version>
@@ -63,9 +63,9 @@
                 <version>3.2.1</version>
             </dependency>
             <dependency>
-                <groupId>commons-collections</groupId>
-                <artifactId>commons-collections</artifactId>
-                <version>3.2.2</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.4</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>

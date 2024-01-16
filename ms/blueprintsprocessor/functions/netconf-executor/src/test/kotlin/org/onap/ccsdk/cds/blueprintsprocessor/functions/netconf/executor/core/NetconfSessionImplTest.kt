@@ -30,7 +30,7 @@ import org.apache.sshd.client.future.DefaultAuthFuture
 import org.apache.sshd.client.future.DefaultConnectFuture
 import org.apache.sshd.client.future.DefaultOpenFuture
 import org.apache.sshd.client.session.ClientSession
-import org.apache.sshd.common.FactoryManager
+import org.apache.sshd.core.CoreModuleProperties
 import org.junit.Before
 import org.junit.Test
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.netconf.executor.api.DeviceInfo
@@ -385,8 +385,8 @@ class NetconfSessionImplTest {
         netconfSessionSpy.setClient(mockSshClient)
         netconfSessionSpy.connect()
         verify { mockSshClient.start() }
-        assertTrue { propertiesMap.containsKey(FactoryManager.IDLE_TIMEOUT) }
-        assertTrue { propertiesMap.containsKey(FactoryManager.NIO2_READ_TIMEOUT) }
+        assertTrue { propertiesMap.containsKey(CoreModuleProperties.IDLE_TIMEOUT.name) }
+        assertTrue { propertiesMap.containsKey(CoreModuleProperties.NIO2_READ_TIMEOUT.name) }
     }
 
     @Test
@@ -429,7 +429,7 @@ class NetconfSessionImplTest {
             val succeededSessionFuture = DefaultConnectFuture(Any(), Any())
             succeededSessionFuture.value = mockClientSession
             every { mockSshClient.connect(deviceInfo.username, deviceInfo.ipAddress, deviceInfo.port) } returns succeededSessionFuture
-            every { mockClientSession.waitFor(any(), any()) } returns
+            every { mockClientSession.waitFor(any(), any<Long>()) } returns
                 setOf(ClientSession.ClientSessionEvent.WAIT_AUTH, ClientSession.ClientSessionEvent.CLOSED)
             val netconfSessionSpy = spyk(netconfSession, recordPrivateCalls = true)
             every { netconfSessionSpy["setupNewSSHClient"]() as Unit } just Runs
@@ -451,7 +451,7 @@ class NetconfSessionImplTest {
         val succeededSessionFuture = DefaultConnectFuture(Any(), Any())
         succeededSessionFuture.value = mockClientSession
         every { mockSshClient.connect(deviceInfo.username, deviceInfo.ipAddress, deviceInfo.port) } returns succeededSessionFuture
-        every { mockClientSession.waitFor(any(), any()) } returns
+        every { mockClientSession.waitFor(any(), any<Long>()) } returns
             setOf(
                 ClientSession.ClientSessionEvent.WAIT_AUTH,
                 ClientSession.ClientSessionEvent.CLOSED,
