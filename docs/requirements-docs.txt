@@ -6,3 +6,4 @@ sphinxcontrib-swaggerdoc
 sphinxcontrib-spelling
 sphinxcontrib-plantuml
 sphinx-tabs
+six
