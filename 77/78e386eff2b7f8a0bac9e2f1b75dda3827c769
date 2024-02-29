@@ -1,0 +1,10 @@
+Verified+1: Thomas Kulik <thomas.kulik@telekom.de>
+Code-Review+2: Jessica Wagantall <jwagantall@linuxfoundation.org>
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Thomas Kulik <thomas.kulik@telekom.de>
+Verified+1: ONAP Required GHA <releng+onap.required.gha@linuxfoundation.org>
+Submitted-by: Jessica Wagantall <jwagantall@linuxfoundation.org>
+Submitted-at: Thu, 29 Feb 2024 18:26:36 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/ccsdk/cds/+/137396
+Project: ccsdk/cds
+Branch: refs/heads/master
