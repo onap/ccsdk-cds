@@ -67,7 +67,7 @@ jobs:
         run: sleep 10s
 
   run-maven-clm:
-    needs: prepare
+    needs: notify
     # yamllint disable-line rule:line-length
     uses: lfit/releng-reusable-workflows/.github/workflows/composed-maven-nexus-iq.yaml@main
     with:
