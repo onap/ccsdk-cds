@@ -81,8 +81,8 @@ jobs:
       GERRIT_PROJECT: ${{ inputs.GERRIT_PROJECT }}
       GERRIT_REFSPEC: ${{ inputs.GERRIT_REFSPEC }}
       # yamllint disable rule:line-length
-      mvn-phases: "clean install dependency:tree com.sonatype.clm:clm-maven-plugin:2.41.0-02:index"
-      mvn-opts: >-
+      MVN_PHASES: "clean install dependency:tree com.sonatype.clm:clm-maven-plugin:2.41.0-02:index"
+      MVN_OPTS: >-
         -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
         -Dmaven.repo.local=/tmp/r -Dorg.ops4j.pax.url.mvn.localRepository=/tmp/r
         -DaltDeploymentRepository=staging::default::file:"${GITHUB_WORKSPACE}"/m2repo
