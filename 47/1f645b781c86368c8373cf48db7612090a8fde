@@ -1,0 +1,9 @@
+Code-Review+2: Kevin Sandi <ksandi@contractor.linuxfoundation.org>
+Verified+1: ONAP Required GHA <releng+onap.required.gha@linuxfoundation.org>
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Eric Ball <eball@linuxfoundation.org>
+Submitted-by: Kevin Sandi <ksandi@contractor.linuxfoundation.org>
+Submitted-at: Mon, 18 Mar 2024 18:57:10 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/ccsdk/cds/+/137527
+Project: ccsdk/cds
+Branch: refs/heads/master
