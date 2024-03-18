@@ -81,7 +81,7 @@ jobs:
       GERRIT_PROJECT: ${{ inputs.GERRIT_PROJECT }}
       GERRIT_REFSPEC: ${{ inputs.GERRIT_REFSPEC }}
       # yamllint disable rule:line-length
-      ENV_VARS: "{MAVEN_OPTS: --add-opens=java.base/java.util=ALL-UNNAMED}"
+      ENV_VARS: '{"MAVEN_OPTS": "--add-opens=java.base/java.util=ALL-UNNAMED"}'
       ENV_SECRETS: "{}"
       JDK_VERSION: "17"
       MVN_PHASES: "clean install dependency:tree com.sonatype.clm:clm-maven-plugin:2.41.0-02:index"
