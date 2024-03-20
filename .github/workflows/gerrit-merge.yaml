@@ -92,9 +92,42 @@ jobs:
     secrets:
       NEXUS_IQ_PASSWORD: ${{ secrets.NEXUS_IQ_PASSWORD }}
 
+  run-maven-sonar:
+    needs: notify
+    # yamllint disable-line rule:line-length
+    uses: lfit/releng-reusable-workflows/.github/workflows/composed-maven-sonar-cloud.yaml@main
+    with:
+      GERRIT_BRANCH: ${{ inputs.GERRIT_BRANCH }}
+      GERRIT_CHANGE_ID: ${{ inputs.GERRIT_CHANGE_ID }}
+      GERRIT_CHANGE_NUMBER: ${{ inputs.GERRIT_CHANGE_NUMBER }}
+      GERRIT_CHANGE_URL: ${{ inputs.GERRIT_CHANGE_URL }}
+      GERRIT_EVENT_TYPE: ${{ inputs.GERRIT_EVENT_TYPE }}
+      GERRIT_PATCHSET_NUMBER: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
+      GERRIT_PATCHSET_REVISION: ${{ inputs.GERRIT_PATCHSET_REVISION }}
+      GERRIT_PROJECT: ${{ inputs.GERRIT_PROJECT }}
+      GERRIT_REFSPEC: ${{ inputs.GERRIT_REFSPEC }}
+      # yamllint disable rule:line-length
+      ENV_VARS: '{"MAVEN_OPTS": "--add-opens=java.base/java.util=ALL-UNNAMED"}'
+      ENV_SECRETS: "{}"
+      JDK_VERSION: "17"
+      MVN_PHASES: "clean install"
+      MVN_OPTS: >-
+        -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+        -Dmaven.repo.local=/tmp/r -Dorg.ops4j.pax.url.mvn.localRepository=/tmp/r
+        -DaltDeploymentRepository=staging::default::file:"${GITHUB_WORKSPACE}"/m2repo
+      SONAR_ARGS: >
+      -Dsonar.organization=onap
+      -Dsonar.projectKey=onap_ccsdk-cds
+      -Dsonar.sources=src/main
+      -Dsonar.test.inclusions=**/*.java,**/*.kt
+      -Dsonar.tests=src/tests
+      -Dsonar.verbose=true
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
   report-status:
     if: ${{ always() }}
-    needs: [notify, run-maven-clm]
+    needs: [notify, run-maven-clm, run-maven-sonar]
     runs-on: ubuntu-latest
     steps:
       - name: Get workflow conclusion
