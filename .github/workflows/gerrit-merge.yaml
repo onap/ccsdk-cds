@@ -116,12 +116,12 @@ jobs:
         -Dmaven.repo.local=/tmp/r -Dorg.ops4j.pax.url.mvn.localRepository=/tmp/r
         -DaltDeploymentRepository=staging::default::file:"${GITHUB_WORKSPACE}"/m2repo
       SONAR_ARGS: >
-      -Dsonar.organization=onap
-      -Dsonar.projectKey=onap_ccsdk-cds
-      -Dsonar.sources=src/main
-      -Dsonar.test.inclusions=**/*.java,**/*.kt
-      -Dsonar.tests=src/tests
-      -Dsonar.verbose=true
+        -Dsonar.organization=onap
+        -Dsonar.projectKey=onap_ccsdk-cds
+        -Dsonar.sources=src/main
+        -Dsonar.test.inclusions=**/*.java,**/*.kt
+        -Dsonar.tests=src/tests
+        -Dsonar.verbose=true
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
