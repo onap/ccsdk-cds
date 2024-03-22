@@ -110,14 +110,9 @@ jobs:
       ENV_VARS: '{"MAVEN_OPTS": "--add-opens=java.base/java.util=ALL-UNNAMED"}'
       ENV_SECRETS: "{}"
       JDK_VERSION: "17"
-      MVN_PHASES: "clean install"
-      MVN_OPTS: >-
-        -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
-        -Dmaven.repo.local=/tmp/r -Dorg.ops4j.pax.url.mvn.localRepository=/tmp/r
-        -DaltDeploymentRepository=staging::default::file:"${GITHUB_WORKSPACE}"/m2repo
+      SONAR_PROJECT_KEY: "onap_ccsdk-cds"
+      SONAR_ORG: "onap"
       SONAR_ARGS: >
-        -Dsonar.organization=onap
-        -Dsonar.projectKey=onap_ccsdk-cds
         -Dsonar.sources=src/main
         -Dsonar.test.inclusions=**/*.java,**/*.kt
         -Dsonar.tests=src/tests
