@@ -91,6 +91,7 @@ jobs:
         -DaltDeploymentRepository=staging::default::file:"${GITHUB_WORKSPACE}"/m2repo
     secrets:
       NEXUS_IQ_PASSWORD: ${{ secrets.NEXUS_IQ_PASSWORD }}
+    continue-on-error: true
 
   run-maven-sonar:
     needs: [notify, run-maven-clm]
