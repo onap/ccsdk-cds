@@ -115,7 +115,7 @@ jobs:
       SONAR_ARGS: >
         -Dsonar.sources=src/main
         -Dsonar.test.inclusions=**/*.java,**/*.kt
-        -Dsonar.tests=src/tests
+        -Dsonar.tests=src/test
         -Dsonar.verbose=true
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
