@@ -93,7 +93,7 @@ jobs:
       NEXUS_IQ_PASSWORD: ${{ secrets.NEXUS_IQ_PASSWORD }}
 
   run-maven-sonar:
-    needs: [notify, run-maven-clm]
+    needs: notify
     # yamllint disable-line rule:line-length
     uses: lfit/releng-reusable-workflows/.github/workflows/composed-maven-sonar-cloud.yaml@main
     with:
