@@ -192,6 +192,9 @@ open class Execute : AbstractScriptComponentFunction() {
                     action.get(ACTION_PAYLOAD)
                         ?: throw BluePrintProcessorException("Failed to load action $actionType payload.")
                 }
+                RestconfRequestType.GET, RestconfRequestType.DELETE -> {
+                    // No payload required for GET or DELETE
+                }
             }
         }
     }

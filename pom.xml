@@ -22,8 +22,8 @@ limitations under the License.
 
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
-        <artifactId>spring-boot-27-starter-parent</artifactId>
-        <version>2.8.0</version>
+        <artifactId>spring-boot-27-jdk-17-starter-parent</artifactId>
+        <version>2.8.0-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
@@ -56,13 +56,13 @@ limitations under the License.
         <sonar.inclusions>**/*.java,**/*.kt</sonar.inclusions>
         <!--Specify path to load jacoco XLM report, as Sonar can't load Kotlin coverage from binary report-->
         <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <jacoco.version>0.8.7</jacoco.version>
+        <jacoco.version>0.8.12</jacoco.version>
 
         <!-- Properties for POM Format -->
         <format.skipValidate>false</format.skipValidate>
         <format.skipExecute>true</format.skipExecute>
 
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
 
@@ -78,18 +78,52 @@ limitations under the License.
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
 
         <kotlin.version>1.7.0</kotlin.version>
-        <kotlin.maven.version>1.6.21</kotlin.maven.version>
-        <kotlin.couroutines.version>1.6.4</kotlin.couroutines.version>
+        <kotlin.maven.version>1.7.0</kotlin.maven.version>
+        <kotlin.couroutines.version>1.7.0</kotlin.couroutines.version>
         <kotlinpoet.version>1.11.0</kotlinpoet.version>
-        <apache.httpcomponents.client.version>4.5.13</apache.httpcomponents.client.version>
+        <apache.httpcomponents.client.version>4.5.14</apache.httpcomponents.client.version>
 
         <grpc.version>1.29.0</grpc.version>
-        <netty-ssl>2.0.50.Final</netty-ssl>
-        <protobuff.java.version>3.10.0</protobuff.java.version>
-        <protobuff.java.utils.version>3.16.3</protobuff.java.utils.version>
-        <mockk.version>1.12.8</mockk.version>
+        <netty-ssl>2.0.66.Final</netty-ssl>
+        <protobuff.java.version>3.21.7</protobuff.java.version>
+        <protobuff.java.utils.version>3.21.7</protobuff.java.utils.version>
+        <mockk.version>1.13.12</mockk.version>
 
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.13</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial.snappy</groupId>
+            <artifactId>snappy-java</artifactId>
+            <version>1.1.10.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.15.3</version>
+        </dependency>
+
+    </dependencies>
 
     <build>
         <pluginManagement>

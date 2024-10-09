@@ -77,6 +77,13 @@ open class HealthCheckProperties {
     }
 
     private fun getServiceEndpoint(serviceEndpointInfo: List<String>): ServiceEndpoint {
+        // Ensure the list has at least 2 elements
+        if (serviceEndpointInfo.size < 2) {
+            // Use default values if the list is too short
+            return ServiceEndpoint("", "")
+        }
+
+        // Safely access elements assuming the list has at least 2 elements
         return ServiceEndpoint(
             removeSpecialCharacter(serviceEndpointInfo[0]), removeSpecialCharacter(serviceEndpointInfo[1])
         )

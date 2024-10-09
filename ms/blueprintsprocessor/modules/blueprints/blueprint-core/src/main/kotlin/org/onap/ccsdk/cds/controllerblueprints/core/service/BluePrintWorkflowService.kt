@@ -347,6 +347,7 @@ abstract class AbstractBluePrintWorkFlowService<In, Out> : CoroutineScope, BlueP
                         }
                     }
                 }
+                else -> log.info("Handling other types of Message")
             }
         }
     }
