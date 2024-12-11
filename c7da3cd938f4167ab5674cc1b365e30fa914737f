@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25f99b84_616b5cd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2024-12-11T15:12:16Z",
+      "side": 1,
+      "message": "Please use released version 3.0.1 of parent pom instead of snapshot",
+      "revId": "c7da3cd938f4167ab5674cc1b365e30fa914737f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
