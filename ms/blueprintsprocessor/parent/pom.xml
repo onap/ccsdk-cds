@@ -33,7 +33,6 @@
     <properties>
         <!-- Override CDS version from parent to be project.version -->
         <error.catalog.version>${project.version}</error.catalog.version>
-        <dmaap.client.version>1.1.5</dmaap.client.version>
         <springfox.swagger2.version>3.0.0</springfox.swagger2.version>
         <eelf.version>1.0.0</eelf.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
@@ -354,11 +353,6 @@
             <dependency>
                 <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
                 <artifactId>message-lib</artifactId>
-                <version>${ccsdk.cds.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
-                <artifactId>dmaap-lib</artifactId>
                 <version>${ccsdk.cds.version}</version>
             </dependency>
             <dependency>

@@ -36,7 +36,6 @@
         <module>processor-core</module>
         <module>db-lib</module>
         <module>rest-lib</module>
-        <module>dmaap-lib</module>
         <module>grpc-lib</module>
         <module>message-lib</module>
         <module>ssh-lib</module>
