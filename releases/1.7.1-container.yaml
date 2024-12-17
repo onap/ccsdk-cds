@@ -1,0 +1,18 @@
+
+---
+distribution_type: 'container'
+container_release_tag: '1.7.1'
+project: 'ccsdk-cds'
+log_dir: 'ccsdk-cds-maven-docker-stage-master/2000/'
+ref: 6199ecee0a9018197250baff3b272b1a1be8fcb6
+containers:
+    - name: 'ccsdk-blueprintsprocessor'
+      version: '1.7.1-STAGING-20241217T082924Z'
+    - name: 'ccsdk-commandexecutor'
+      version: '1.7.1-STAGING-20241217T082924Z'
+    - name: 'ccsdk-py-executor'
+      version: '1.7.1-STAGING-20241217T082924Z'
+    - name: 'ccsdk-sdclistener'
+      version: '1.7.1-STAGING-20241217T082924Z'
+    - name: 'ccsdk-cds-ui-server'
+      version: '1.7.1-STAGING-20241217T082924Z'
