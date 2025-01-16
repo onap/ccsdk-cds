@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb88a43b_e65b69ef",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2025-01-16T14:07:17Z",
+      "side": 1,
+      "message": "Where jdk17 changes tested with GRPC communication ? as per documentations PROTOBUF only version above 3.25.x supports jdk17 and accordingly need to upgrade grpc version to (1.69.0) and netty-ssl to (2.0.69.Final)",
+      "revId": "b992a32981f459249634daa1dfdeb26b060a4e80",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
