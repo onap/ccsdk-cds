@@ -43,6 +43,7 @@
         <mockkserver.version>5.13.0</mockkserver.version>
         <json.unit.version>2.8.0</json.unit.version>
         <xmlunit.version>2.6.3</xmlunit.version>
+        <bytebuddy.version>1.14.17</bytebuddy.version>
 
         <sshd.version>2.10.0</sshd.version>
         <jsch.version>0.1.55</jsch.version>
@@ -507,12 +508,32 @@
                 <artifactId>mockk</artifactId>
                 <version>${mockk.version}</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>net.bytebuddy</groupId>
+                        <artifactId>byte-buddy</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>net.bytebuddy</groupId>
+                        <artifactId>byte-buddy</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>io.mockk</groupId>
                 <artifactId>mockk-jvm</artifactId>
                 <version>${mockk.version}</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>net.bytebuddy</groupId>
+                        <artifactId>byte-buddy</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>net.bytebuddy</groupId>
+                        <artifactId>byte-buddy</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.mock-server</groupId>
@@ -548,6 +569,18 @@
                 <groupId>org.jetbrains.kotlinx</groupId>
                 <artifactId>kotlinx-coroutines-test</artifactId>
                 <version>${kotlin.couroutines.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${bytebuddy.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${bytebuddy.version}</version>
                 <scope>test</scope>
             </dependency>
 
