@@ -23,15 +23,15 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
 import java.util.Date
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EntityListeners
-import javax.persistence.Id
-import javax.persistence.Index
-import javax.persistence.Lob
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.Id
+import jakarta.persistence.Index
+import jakarta.persistence.Lob
+import jakarta.persistence.Table
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
@@ -64,9 +64,9 @@ class ResourceResolution : Serializable {
     @Column(name = "name", nullable = false)
     var name: String? = null
 
-    @get:ApiModelProperty(value = "Value of the resolution.", required = true)
     @Lob
-    @Column(name = "value", nullable = false)
+    @get:ApiModelProperty(value = "Value of the resolution.", required = true)
+    @Column(name = "value", nullable = false, columnDefinition = "LONGTEXT")
     var value: String? = null
 
     @get:ApiModelProperty(value = "Whether success of failure.", required = true)

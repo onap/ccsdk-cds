@@ -22,7 +22,7 @@ limitations under the License.
 
     <parent>
         <groupId>org.onap.ccsdk.parent</groupId>
-        <artifactId>spring-boot-27-jdk-17-starter-parent</artifactId>
+        <artifactId>spring-boot-35-starter-parent</artifactId>
         <version>3.2.0</version>
         <relativePath/>
     </parent>
@@ -77,16 +77,17 @@ limitations under the License.
         <ccsdk.sli.version>1.5.2</ccsdk.sli.version>
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
 
-        <kotlin.version>1.7.0</kotlin.version>
-        <kotlin.maven.version>1.7.0</kotlin.maven.version>
-        <kotlin.couroutines.version>1.7.0</kotlin.couroutines.version>
+        <kotlin.version>1.9.0</kotlin.version>
+        <kotlin.maven.version>1.9.0</kotlin.maven.version>
+        <kotlin.couroutines.version>1.9.0</kotlin.couroutines.version>
         <kotlinpoet.version>1.11.0</kotlinpoet.version>
         <apache.httpcomponents.client.version>4.5.14</apache.httpcomponents.client.version>
 
+        <bytebuddy.version>1.14.17</bytebuddy.version>
         <grpc.version>1.29.0</grpc.version>
-        <netty-ssl>2.0.66.Final</netty-ssl>
-        <protobuff.java.version>3.21.7</protobuff.java.version>
-        <protobuff.java.utils.version>3.21.7</protobuff.java.utils.version>
+        <netty-ssl>2.0.70.Final</netty-ssl>
+        <protobuff.java.version>3.25.8</protobuff.java.version>
+        <protobuff.java.utils.version>3.25.8</protobuff.java.utils.version>
         <mockk.version>1.13.12</mockk.version>
 
     </properties>
@@ -94,8 +95,13 @@ limitations under the License.
     <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.13</version>
+            <artifactId>logback-core</artifactId>
+            <version>1.5.18</version>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.4</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.okio</groupId>
@@ -115,7 +121,7 @@ limitations under the License.
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
-            <version>3.8.0</version>
+            <version>3.9.1</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>

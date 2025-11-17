@@ -22,7 +22,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.uat.utils
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.support.TestPropertySourceUtils
-import org.springframework.util.Base64Utils
+import java.util.Base64
 
 class TestSecuritySettings {
     companion object {
@@ -31,7 +31,7 @@ class TestSecuritySettings {
         private const val authPassword = "Heisenberg"
 
         fun clientAuthToken() =
-            "Basic " + Base64Utils.encodeToString("$authUsername:$authPassword".toByteArray())
+            "Basic " + Base64.getEncoder().encodeToString("$authUsername:$authPassword".toByteArray())
     }
 
     class ServerContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {

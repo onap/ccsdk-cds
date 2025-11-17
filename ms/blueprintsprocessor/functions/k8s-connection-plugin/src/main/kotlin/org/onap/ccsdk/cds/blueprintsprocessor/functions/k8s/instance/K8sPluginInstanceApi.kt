@@ -44,7 +44,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "",
                 ""
             )
@@ -67,7 +67,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "",
                 ""
             )
@@ -89,7 +89,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "?full=true",
                 ""
             )
@@ -126,7 +126,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/status",
                 ""
             )
@@ -165,7 +165,7 @@ class K8sPluginInstanceApi(
                 path = path.trimEnd(',')
             }
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 path,
                 ""
             )
@@ -189,7 +189,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/healthcheck",
                 ""
             )
@@ -214,7 +214,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/healthcheck/$healthCheckId",
                 ""
             )
@@ -239,7 +239,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                POST.name,
+                POST.name(),
                 "/healthcheck",
                 ""
             )
@@ -264,7 +264,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                POST.name,
+                POST.name(),
                 "/config",
                 JacksonUtils.getJson(configValues)
             )
@@ -286,7 +286,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                PUT.name,
+                PUT.name(),
                 "/config/$configName",
                 JacksonUtils.getJson(configValues)
             )
@@ -308,7 +308,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                POST.name,
+                POST.name(),
                 "/config/$configName/delete",
                 ""
             )
@@ -330,7 +330,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/config/$configName",
                 ""
             )
@@ -346,7 +346,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/config/$configName/version/$version",
                 ""
             )
@@ -362,7 +362,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/config/$configName",
                 ""
             )
@@ -384,7 +384,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/config/$configName/version/$version",
                 ""
             )
@@ -406,7 +406,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/config/$configName/tag/$tag",
                 ""
             )
@@ -428,7 +428,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/config",
                 ""
             )
@@ -451,7 +451,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/config/$configName/version",
                 ""
             )
@@ -474,7 +474,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/config/$configName/tag",
                 ""
             )
@@ -500,7 +500,7 @@ class K8sPluginInstanceApi(
             if (deleteConfigOnly)
                 path = path.plus("?deleteConfigOnly=true")
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                DELETE.name,
+                DELETE.name(),
                 path,
                 ""
             )
@@ -522,7 +522,7 @@ class K8sPluginInstanceApi(
             if (configTag != null)
                 configValues["config-tag"] = configTag
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                POST.name,
+                POST.name(),
                 "/config/$configName/rollback",
                 JacksonUtils.getJson(configValues)
             )
@@ -541,7 +541,7 @@ class K8sPluginInstanceApi(
             val configValues = hashMapOf<String, String>()
             configValues["tag-name"] = tagName
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                POST.name,
+                POST.name(),
                 "/config/$configName/tagit",
                 JacksonUtils.getJson(configValues)
             )
@@ -558,7 +558,7 @@ class K8sPluginInstanceApi(
         val rbInstanceService = getK8sRbInstanceRestClient(k8sConfiguration, instanceId)
         try {
             val result: BlueprintWebClientService.WebClientResponse<String> = rbInstanceService.exchangeResource(
-                DELETE.name,
+                DELETE.name(),
                 "/healthcheck/$healthCheckId",
                 ""
             )

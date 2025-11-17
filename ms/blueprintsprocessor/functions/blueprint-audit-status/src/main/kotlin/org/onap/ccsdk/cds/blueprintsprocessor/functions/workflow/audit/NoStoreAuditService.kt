@@ -23,7 +23,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.db.Bluepr
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
-import javax.annotation.PostConstruct
+import jakarta.annotation.PostConstruct
 
 /**
  * Workflow request and response details are persisted to database

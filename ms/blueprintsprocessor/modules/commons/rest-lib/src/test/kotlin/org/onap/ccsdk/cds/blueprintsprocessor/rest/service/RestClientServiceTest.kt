@@ -125,7 +125,7 @@ class RestClientServiceTest {
         val restClientService = bluePrintRestLibPropertyService
             .blueprintWebClientService("sample")
         val response = restClientService.exchangeResource(
-            HttpMethod.GET.name, "/sample/query?id=3", ""
+            HttpMethod.GET.name(), "/sample/query?id=3", ""
         )
         assertEquals(
             "query with id:3", response.body,
@@ -138,7 +138,7 @@ class RestClientServiceTest {
         val restClientService = bluePrintRestLibPropertyService
             .blueprintWebClientService("sample")
         val response = restClientService.exchangeResource(
-            HttpMethod.PATCH.name, "/sample/name", ""
+            HttpMethod.PATCH.name(), "/sample/name", ""
         )
         assertEquals(
             "Patch request successful", response.body,
@@ -153,7 +153,7 @@ class RestClientServiceTest {
         val headers = mutableMapOf<String, String>()
         headers["X-Transaction-Id"] = "1234"
         val response = restClientService.exchangeResource(
-            HttpMethod.GET.name,
+            HttpMethod.GET.name(),
             "/sample/name", ""
         )
         assertNotNull(response.body, "failed to get response")
@@ -175,7 +175,7 @@ class RestClientServiceTest {
         runBlocking {
             val get = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
-                    HttpMethod.GET.name,
+                    HttpMethod.GET.name(),
                     "/sample/basic", ""
                 ).body
             }
@@ -210,7 +210,7 @@ class RestClientServiceTest {
         runBlocking {
             val get1 = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
-                    HttpMethod.GET.name,
+                    HttpMethod.GET.name(),
                     "/sample/aai/v22/business/customers", "", headers,
                     Customer::class.java
                 ).body
@@ -218,7 +218,7 @@ class RestClientServiceTest {
 
             val get2 = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
-                    HttpMethod.GET.name,
+                    HttpMethod.GET.name(),
                     "/sample/aai/v22/business/customers", "", headers,
                     Customer::class.java
                 ).body
@@ -226,7 +226,7 @@ class RestClientServiceTest {
 
             val post = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
-                    HttpMethod.POST.name,
+                    HttpMethod.POST.name(),
                     "/sample/aai/v22/business/customers", post1, headers,
                     String::class.java
                 ).body
@@ -234,7 +234,7 @@ class RestClientServiceTest {
 
             val put = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
-                    HttpMethod.PUT.name,
+                    HttpMethod.PUT.name(),
                     "/sample/aai/v22/business/customers", post1, headers,
                     String::class.java
                 ).body
@@ -242,7 +242,7 @@ class RestClientServiceTest {
 
             val patch = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
-                    HttpMethod.PATCH.name,
+                    HttpMethod.PATCH.name(),
                     "/sample/aai/v22/business/customers", post1, headers,
                     String::class.java
                 ).body
@@ -250,7 +250,7 @@ class RestClientServiceTest {
 
             val delete = async(start = CoroutineStart.LAZY) {
                 restClientService.exchangeNB(
-                    HttpMethod.DELETE.name,
+                    HttpMethod.DELETE.name(),
                     "/sample/aai/v22/business/customers", "", headers,
                     String::class.java
                 ).body
@@ -291,7 +291,7 @@ class RestClientServiceTest {
         val headers = mutableMapOf<String, String>()
         headers["X-Transaction-Id"] = "1234"
         val response = restClientService.exchangeResource(
-            HttpMethod.DELETE.name,
+            HttpMethod.DELETE.name(),
             "/sample/name", ""
         )
         assertEquals(response.status, 204)
@@ -306,7 +306,7 @@ class RestClientServiceTest {
         headers["X-Transaction-Id"] = "1234"
         runBlocking {
             val response = restClientService.exchangeNB(
-                HttpMethod.DELETE.name,
+                HttpMethod.DELETE.name(),
                 "/sample/customersWithDefaultConstructor", "", headers, CustomerWithDefaultConstructor::class.java
             )
             assertEquals(response.status, 204)
@@ -322,7 +322,7 @@ class RestClientServiceTest {
         headers["X-Transaction-Id"] = "1234"
         runBlocking {
             val response = restClientService.exchangeNB(
-                HttpMethod.DELETE.name,
+                HttpMethod.DELETE.name(),
                 "/sample/customersWithoutDefaultConstructor", "", headers, CustomerWithoutDefaultConstructor::class.java
             )
             assertEquals(response.status, 204)

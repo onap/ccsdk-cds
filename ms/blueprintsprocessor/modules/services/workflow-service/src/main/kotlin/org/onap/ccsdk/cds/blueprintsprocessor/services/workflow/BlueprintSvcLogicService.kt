@@ -37,7 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import java.util.Properties
-import javax.annotation.PostConstruct
+import jakarta.annotation.PostConstruct
 
 interface BlueprintSvcLogicService : SvcLogicServiceBase {
 

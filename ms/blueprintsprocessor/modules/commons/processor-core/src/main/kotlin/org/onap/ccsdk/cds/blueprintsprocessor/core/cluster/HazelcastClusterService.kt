@@ -193,7 +193,7 @@ open class HazelcastClusterService(private val applicationEventPublisher: Applic
         }
     }
 
-    override suspend fun <T> sendMessage(topic: BlueprintClusterTopic, message: T) {
+    override suspend fun <T : Any> sendMessage(topic: BlueprintClusterTopic, message: T) {
         hazelcast.getReliableTopic<T>(topic.name).publish(message)
     }
 

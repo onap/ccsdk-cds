@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.db
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import javax.transaction.Transactional
+import jakarta.transaction.Transactional
 
 /**
  * JPA repository managing {@link BlueprintWorkflowAuditStatus} table.

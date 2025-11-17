@@ -24,15 +24,15 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
 import java.util.Date
-import javax.persistence.Column
-import javax.persistence.Convert
-import javax.persistence.Entity
-import javax.persistence.EntityListeners
-import javax.persistence.Id
-import javax.persistence.Lob
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import jakarta.persistence.Column
+import jakarta.persistence.Convert
+import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.Id
+import jakarta.persistence.Lob
+import jakarta.persistence.Table
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
 
 /**
  * Provide ResourceDictionary Entity
@@ -65,17 +65,16 @@ class ResourceDictionary : Serializable {
 
     @Lob
     @Convert(converter = JpaResourceDefinitionConverter::class)
-    @Column(name = "definition", nullable = false)
+    @Column(name = "definition", nullable = false, columnDefinition = "LONGTEXT")
     @ApiModelProperty(value = "Definition", required = true)
     lateinit var definition: ResourceDefinition
 
     @Lob
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, columnDefinition = "LONGTEXT")
     @ApiModelProperty(value = "Description", required = true, example = "\"demo_artifacts_version\"")
     lateinit var description: String
 
-    @Lob
-    @Column(name = "tags", nullable = false)
+    @Column(name = "tags", nullable = false, columnDefinition = "LONGTEXT")
     @ApiModelProperty(value = "Tags", required = true, example = "\"hostname\"")
     lateinit var tags: String
 

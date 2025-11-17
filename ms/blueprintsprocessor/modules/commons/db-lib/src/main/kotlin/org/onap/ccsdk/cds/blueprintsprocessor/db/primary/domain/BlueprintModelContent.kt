@@ -23,16 +23,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
 import java.util.Date
 import java.util.Objects
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EntityListeners
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.Lob
-import javax.persistence.OneToOne
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.Lob
+import jakarta.persistence.OneToOne
+import jakarta.persistence.Table
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
 
 /**
  * Provide Blueprint Model Content Entity
@@ -62,11 +62,11 @@ class BlueprintModelContent : Serializable {
     var blueprintModel: BlueprintModel? = null
 
     @Lob
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "LONGTEXT")
     var description: String? = null
 
     @Lob
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, columnDefinition = "LONGBLOB")
     @ApiModelProperty(required = true)
     lateinit var content: ByteArray
 
@@ -77,25 +77,13 @@ class BlueprintModelContent : Serializable {
     var creationDate = Date()
 
     override fun toString(): String {
-        return "[" + "id = " + id +
-            ", name = " + name +
-            ", contentType = " + contentType +
-            "]"
+        return "BlueprintModelContent(id='$id', name='$name', contentType='$contentType')"
     }
 
     override fun equals(o: Any?): Boolean {
-
-        if (o === this) {
-            return true
-        }
-        if (o !is BlueprintModelContent) {
-            return false
-        }
-        val blueprintModelContent = o as BlueprintModelContent?
-        return (
-            id == blueprintModelContent!!.id && name == blueprintModelContent.name &&
-                contentType == blueprintModelContent.contentType
-            )
+        if (o === this) return true
+        if (o !is BlueprintModelContent) return false
+        return id == o.id && name == o.name && contentType == o.contentType
     }
 
     override fun hashCode(): Int {

@@ -15,7 +15,7 @@ blueprintsprocessor:
         primary:
             driverClassName: org.mariadb.jdbc.Driver
             hibernateDDLAuto: none
-            hibernateDialect: org.hibernate.dialect.MySQL5InnoDBDialect
+            hibernateDialect: org.hibernate.dialect.MariaDBDialect
             hibernateHbm2ddlAuto: update
             hibernateNamingStrategy: org.hibernate.cfg.ImprovedNamingStrategy
             password: sdnctl

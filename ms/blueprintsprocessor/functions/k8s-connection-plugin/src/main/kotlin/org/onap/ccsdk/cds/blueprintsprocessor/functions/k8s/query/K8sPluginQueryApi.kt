@@ -35,7 +35,7 @@ public class K8sPluginQueryApi(
                 path = path.trimEnd(',')
             }
             val result: BlueprintWebClientService.WebClientResponse<String> = rbQueryService.exchangeResource(
-                GET.name,
+                GET.name(),
                 path,
                 ""
             )

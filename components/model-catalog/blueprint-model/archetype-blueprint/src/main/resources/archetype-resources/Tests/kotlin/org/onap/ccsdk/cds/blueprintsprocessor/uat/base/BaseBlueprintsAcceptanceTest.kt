@@ -23,12 +23,12 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.context.support.TestPropertySourceUtils
-import org.springframework.util.Base64Utils
+import java.util.Base64
 import java.io.File
 import java.io.IOException
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
-import javax.annotation.PreDestroy
+import jakarta.annotation.PreDestroy
 import kotlin.test.BeforeTest
 import kotlin.test.AfterTest
 
@@ -159,7 +159,7 @@ abstract class BaseBlueprintsAcceptanceTest() {
             private const val authPassword = "Heisenberg"
 
             fun clientAuthToken() =
-                "Basic " + Base64Utils.encodeToString("$authUsername:$authPassword".toByteArray())
+                "Basic " + Base64.getEncoder().encodeToString("$authUsername:$authPassword".toByteArray())
         }
 
         class ServerContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {

@@ -22,15 +22,15 @@ import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import java.io.Serializable
 import java.util.Date
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GenerationType
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.Lob
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GenerationType
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
+import jakarta.persistence.Lob
+import jakarta.persistence.Table
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
 
 /**
  * BlueprintWorkflowAuditStatus Model.
@@ -47,9 +47,9 @@ class BlueprintWorkflowAuditStatus : Serializable {
     @Column(name = "workflow_audit_id")
     var id: Long = 0
 
-    @get:ApiModelProperty(value = "Workflow payload.", required = true)
     @Lob
-    @Column(name = "workflow_task_content", nullable = false)
+    @get:ApiModelProperty(value = "Workflow payload.", required = true)
+    @Column(name = "workflow_task_content", nullable = false, columnDefinition = "LONGTEXT")
     @ApiModelProperty(required = true)
     lateinit var workflowTaskContent: String
 
@@ -123,9 +123,9 @@ class BlueprintWorkflowAuditStatus : Serializable {
     @ApiModelProperty(required = true)
     lateinit var requestMode: String
 
-    @get:ApiModelProperty(value = "workflow response content", required = false)
     @Lob
-    @Column(name = "workflow_response_content", nullable = true)
+    @get:ApiModelProperty(value = "workflow response content", required = false)
+    @Column(name = "workflow_response_content", nullable = true, columnDefinition = "LONGTEXT")
     @ApiModelProperty(required = false)
     lateinit var workflowResponseContent: String
 

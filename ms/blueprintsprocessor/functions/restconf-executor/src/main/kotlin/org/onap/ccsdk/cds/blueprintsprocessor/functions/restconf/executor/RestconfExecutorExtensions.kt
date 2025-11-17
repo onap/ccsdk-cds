@@ -18,7 +18,6 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.hibernate.annotations.common.util.impl.LoggerFactory
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfConstants.Companion.RESTCONF_TOPOLOGY_CONFIG_PATH
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.restconf.executor.RestconfConstants.Companion.RESTCONF_TOPOLOGY_OPER_PATH
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.restClientService
@@ -27,11 +26,12 @@ import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptC
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintRetryException
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
+import org.slf4j.LoggerFactory
 
 /**
  * Register the Restconf module exposed dependency
  */
-val log = LoggerFactory.logger(AbstractScriptComponentFunction::class.java)!!
+val log = LoggerFactory.getLogger(AbstractScriptComponentFunction::class.java)!!
 
 fun AbstractScriptComponentFunction.restconfClientService(selector: String): BlueprintWebClientService {
     return BluePrintDependencyService.restClientService(selector)

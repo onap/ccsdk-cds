@@ -28,8 +28,7 @@ import org.onap.ccsdk.cds.error.catalog.core.HttpErrorCodes
 import org.onap.ccsdk.cds.error.catalog.core.utils.ErrorCatalogUtils
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.stereotype.Service
-import javax.annotation.PostConstruct
-
+import jakarta.annotation.PostConstruct
 @Service
 @ConditionalOnBean(ErrorCatalogLoadService::class)
 open class ErrorCatalogService(private var errorCatalogLoadService: ErrorCatalogLoadService) {

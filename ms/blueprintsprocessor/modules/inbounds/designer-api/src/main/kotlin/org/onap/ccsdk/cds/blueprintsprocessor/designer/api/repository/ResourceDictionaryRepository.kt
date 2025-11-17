@@ -20,7 +20,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictio
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
-import javax.transaction.Transactional
+import jakarta.transaction.Transactional
 
 /**
  * ResourceMappingRepository.java Purpose: Provide Configuration Generator ResourceMappingRepository

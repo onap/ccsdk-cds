@@ -22,14 +22,14 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import java.util.Date
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EntityListeners
-import javax.persistence.Id
-import javax.persistence.Lob
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.Id
+import jakarta.persistence.Lob
+import jakarta.persistence.Table
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
 
 @EnableJpaAuditing
 @EntityListeners(AuditingEntityListener::class)
@@ -56,19 +56,19 @@ open class MessagePrioritization {
     var priority: Int = 5
 
     @Lob
-    @Column(name = "message", nullable = false)
+    @Column(name = "message", nullable = false, columnDefinition = "LONGTEXT")
     var message: String? = null
 
     @Lob
-    @Column(name = "error", nullable = true)
+    @Column(name = "error", nullable = true, columnDefinition = "LONGTEXT")
     var error: String? = null
 
     @Lob
-    @Column(name = "aggregated_message_ids", nullable = true)
+    @Column(name = "aggregated_message_ids", nullable = true, columnDefinition = "LONGTEXT")
     var aggregatedMessageIds: String? = null
 
     @Lob
-    @Column(name = "correlation_id", nullable = true)
+    @Column(name = "correlation_id", nullable = true, columnDefinition = "LONGTEXT")
     var correlationId: String? = null
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

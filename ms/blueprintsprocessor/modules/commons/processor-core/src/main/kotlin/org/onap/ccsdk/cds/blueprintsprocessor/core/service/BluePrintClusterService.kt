@@ -58,7 +58,7 @@ interface BluePrintClusterService {
     suspend fun shutDown(duration: Duration)
 
     /** Send [message] to the listener(s) of a [topic] */
-    suspend fun <T> sendMessage(topic: BlueprintClusterTopic, message: T)
+    suspend fun <T : Any> sendMessage(topic: BlueprintClusterTopic, message: T)
 
     /** Register a [listener] to a [topic] and returns his UUID */
     fun <T> addBlueprintClusterMessageListener(topic: BlueprintClusterTopic, listener: BlueprintClusterMessageListener<T>): UUID

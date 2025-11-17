@@ -45,7 +45,7 @@ import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.returnResult
-import org.springframework.util.Base64Utils
+import java.util.Base64
 import org.springframework.web.reactive.function.BodyInserters
 import java.io.File
 import java.nio.charset.StandardCharsets.UTF_8
@@ -247,7 +247,7 @@ class BlueprintModelControllerTest {
         webTestClient.delete().uri("/api/v1/blueprint-model/name/${bp!!.artifactName}/version/${bp!!.artifactVersion}")
             .header(
                 "Authorization",
-                "Basic " + Base64Utils
+                "Basic " + Base64.getEncoder()
                     .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8))
             )
             .exchange()
@@ -263,12 +263,12 @@ class BlueprintModelControllerTest {
         setParam: Boolean
     ) {
 
-        log.info("Requesting($uri): Method(${requestMethod.name})")
+        log.info("Requesting($uri): Method(${requestMethod.name()})")
 
         webTestClient.method(requestMethod).uri(uri)
             .header(
                 "Authorization",
-                "Basic " + Base64Utils
+                "Basic " + Base64.getEncoder()
                     .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8))
             )
             .body(body)

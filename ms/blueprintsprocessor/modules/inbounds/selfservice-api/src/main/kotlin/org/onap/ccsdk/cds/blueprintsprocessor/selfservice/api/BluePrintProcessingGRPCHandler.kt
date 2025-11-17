@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import java.util.concurrent.Phaser
-import javax.annotation.PreDestroy
+import jakarta.annotation.PreDestroy
 
 @Service
 open class BluePrintProcessingGRPCHandler(

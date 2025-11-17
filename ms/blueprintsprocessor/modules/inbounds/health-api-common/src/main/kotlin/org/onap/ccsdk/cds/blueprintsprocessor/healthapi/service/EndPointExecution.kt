@@ -44,7 +44,7 @@ open class EndPointExecution(
     open fun retrieveWebClientResponse(serviceEndpoint: ServiceEndpoint): WebClientEnpointResponse? {
         try {
             addClientPropertiesConfiguration(serviceEndpoint)
-            val result = basicAuthRestClientService.exchangeResource(HttpMethod.GET.name, "", "")
+            val result = basicAuthRestClientService.exchangeResource(HttpMethod.GET.name(), "", "")
             if (result.status == 200)
                 return WebClientEnpointResponse(result)
         } catch (e: Exception) {

@@ -19,10 +19,10 @@ package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import io.mockk.coVerify
 import io.mockk.Runs
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -41,7 +41,6 @@ import org.onap.ccsdk.cds.controllerblueprints.core.jsonAsJsonType
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Service
 import org.springframework.test.context.ContextConfiguration
@@ -55,13 +54,13 @@ import kotlin.test.assertTrue
 @ContextConfiguration(
     classes = [
         MockServiceAction::class, SelfServiceApiTestConfiguration::class,
-        ErrorCatalogTestConfiguration::class
+        ErrorCatalogTestConfiguration::class, SimpleMeterRegistry::class
     ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class ExecutionServiceHandlerTest {
 
-    @MockBean
+    @Autowired
     lateinit var meterRegistry: MeterRegistry
 
     @Autowired

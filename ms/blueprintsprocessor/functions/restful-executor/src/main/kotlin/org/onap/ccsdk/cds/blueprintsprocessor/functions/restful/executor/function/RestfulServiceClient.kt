@@ -43,7 +43,7 @@ class RestfulServiceClient() {
         request_object.put("data", request_object_value)
         val requestBodystr = request_object.toString()
         log.info("MOI request body: " + requestBodystr)
-        val response = web_client_service.exchangeResource(HttpMethod.PUT.name, pathStr, requestBodystr)
+        val response = web_client_service.exchangeResource(HttpMethod.PUT.name(), pathStr, requestBodystr)
         var response_object = generateResponse(response.status, response.body)
         log.info("MOI response status: " + response.status)
         return response_object
@@ -58,7 +58,7 @@ class RestfulServiceClient() {
             pathStr = addQueryParameters(pathStr, "fields", attribute_value.toString().replace("\"", ""))
         }
         log.info("MOI Path: " + pathStr)
-        val response = web_client_service.exchangeResource(HttpMethod.GET.name, pathStr, "")
+        val response = web_client_service.exchangeResource(HttpMethod.GET.name(), pathStr, "")
         log.info("MOI response status: " + response.status)
         var response_object = generateResponse(response.status, response.body)
         return response_object
@@ -74,7 +74,7 @@ class RestfulServiceClient() {
         request_object.put("data", managed_object_instance.get("data"))
         val requestBodystr = request_object.toString()
         log.info("MOI request body: " + requestBodystr)
-        val response = web_client_service.exchangeResource(HttpMethod.PATCH.name, pathStr, requestBodystr)
+        val response = web_client_service.exchangeResource(HttpMethod.PATCH.name(), pathStr, requestBodystr)
         log.info("MOI response status: " + response.status)
         var response_object = generateResponse(response.status, response.body)
         return response_object
@@ -86,7 +86,7 @@ class RestfulServiceClient() {
         pathStr = addQueryParameters(pathStr, "scope", managed_object_instance.get("scope").toString().replace("\"", ""))
         pathStr = addQueryParameters(pathStr, "filter", managed_object_instance.get("filter").toString().replace("\"", ""))
         log.info("MOI Path: " + pathStr)
-        val response = web_client_service.exchangeResource(HttpMethod.DELETE.name, pathStr, "")
+        val response = web_client_service.exchangeResource(HttpMethod.DELETE.name(), pathStr, "")
         log.info("MOI response status: " + response.status)
         var response_object = generateResponse(response.status, response.body)
         return response_object

@@ -17,7 +17,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import javax.transaction.Transactional
+import jakarta.transaction.Transactional
 
 /**
  * JPA repository managing the underlying ResourceConfigSnapshot table.

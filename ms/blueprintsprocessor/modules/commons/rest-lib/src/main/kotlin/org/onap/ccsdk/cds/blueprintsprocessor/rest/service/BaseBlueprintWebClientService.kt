@@ -118,7 +118,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
          * the difference is in convertToBasicHeaders vs basicHeaders
          */
         val convertedHeaders: Array<BasicHeader> = convertToBasicHeaders(headers)
-        return when (HttpMethod.resolve(methodType)) {
+        return when (HttpMethod.valueOf(methodType)) {
             HttpMethod.DELETE -> delete(path, convertedHeaders, String::class.java)
             HttpMethod.GET -> get(path, convertedHeaders, String::class.java)
             HttpMethod.POST -> post(path, request, convertedHeaders, String::class.java)
@@ -324,7 +324,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         // TODO: possible inconsistency
         // NOTE: this basic headers function is different from non-blocking
         val convertedHeaders: Array<BasicHeader> = basicHeaders(additionalHeaders!!)
-        return when (HttpMethod.resolve(methodType)) {
+        return when (HttpMethod.valueOf(methodType)) {
             HttpMethod.GET -> getNB(path, convertedHeaders, responseType)
             HttpMethod.POST -> postNB(path, request, convertedHeaders, responseType)
             HttpMethod.DELETE -> deleteNB(path, convertedHeaders, responseType)

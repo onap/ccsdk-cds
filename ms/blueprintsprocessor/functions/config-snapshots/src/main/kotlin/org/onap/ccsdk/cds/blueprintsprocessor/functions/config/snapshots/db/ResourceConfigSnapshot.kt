@@ -23,14 +23,14 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
 import java.util.Date
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.EntityListeners
-import javax.persistence.Id
-import javax.persistence.Lob
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.Id
+import jakarta.persistence.Lob
+import jakarta.persistence.Table
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
 
 /**
  * ResourceConfigSnapshot model
@@ -58,9 +58,9 @@ class ResourceConfigSnapshot : Serializable {
     @Column(name = "status", nullable = false)
     var status: Status? = null
 
-    @get:ApiModelProperty(value = "Snapshot of the resource as retrieved from resource.", required = true, example = "\"config_snapshot\"")
     @Lob
-    @Column(name = "config_snapshot", nullable = false)
+    @get:ApiModelProperty(value = "Snapshot of the resource as retrieved from resource.", required = true, example = "\"config_snapshot\"")
+    @Column(name = "config_snapshot", nullable = false, columnDefinition = "LONGTEXT")
     var config_snapshot: String? = null
 
     @Id

@@ -49,7 +49,7 @@ class K8sPluginDefinitionApi(
                 definitionVersion
             )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "",
                 ""
             )
@@ -69,7 +69,7 @@ class K8sPluginDefinitionApi(
                 definitionVersion
             )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/profile/$profileName",
                 ""
             )
@@ -89,7 +89,7 @@ class K8sPluginDefinitionApi(
                 definitionVersion
             )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
-                GET.name,
+                GET.name(),
                 "/profile/$profileName",
                 ""
             )
@@ -116,7 +116,7 @@ class K8sPluginDefinitionApi(
                 definitionVersion
             )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
-                POST.name,
+                POST.name(),
                 "/profile",
                 profileJsonString
             )
@@ -138,7 +138,7 @@ class K8sPluginDefinitionApi(
                 profile.rbVersion!!
             )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
-                PUT.name,
+                PUT.name(),
                 "/profile/${profile.profileName}",
                 profileJsonString
             )
@@ -159,7 +159,7 @@ class K8sPluginDefinitionApi(
                 definitionVersion
             )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
-                DELETE.name,
+                DELETE.name(),
                 "/profile/$profileName",
                 ""
             )
@@ -204,7 +204,7 @@ class K8sPluginDefinitionApi(
                 definitionVersion
             )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
-                POST.name,
+                POST.name(),
                 "/config-template",
                 templateJsonString
             )
@@ -247,7 +247,7 @@ class K8sPluginDefinitionApi(
                 definitionVersion
             )
             val result: BlueprintWebClientService.WebClientResponse<String> = rbDefinitionService.exchangeResource(
-                DELETE.name,
+                DELETE.name(),
                 "/config-template/$templateName",
                 ""
             )
@@ -295,7 +295,7 @@ class K8sPluginDefinitionApi(
 
     private fun getTemplateRequest(rbDefinitionService: BlueprintWebClientService, templateName: String): BlueprintWebClientService.WebClientResponse<String> {
         return rbDefinitionService.exchangeResource(
-            GET.name,
+            GET.name(),
             "/config-template/$templateName",
             ""
         )

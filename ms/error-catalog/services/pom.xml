@@ -65,6 +65,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-script-util</artifactId>
+            <version>1.8.22</version>
         </dependency>
         <!-- Kotlin Dependencies -->
         <dependency>

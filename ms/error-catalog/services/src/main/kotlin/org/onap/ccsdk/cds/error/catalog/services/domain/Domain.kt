@@ -18,17 +18,17 @@ package org.onap.ccsdk.cds.error.catalog.services.domain
 
 import java.io.Serializable
 import java.util.UUID
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.JoinTable
-import javax.persistence.Lob
-import javax.persistence.ManyToMany
-import javax.persistence.Table
-import javax.persistence.UniqueConstraint
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.Lob
+import jakarta.persistence.ManyToMany
+import jakarta.persistence.Table
+import jakarta.persistence.UniqueConstraint
 
 /**
  *  Provide ErrorCode Entity
@@ -51,7 +51,7 @@ class Domain : Serializable {
     lateinit var applicationId: String
 
     @Lob
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "LONGTEXT")
     var description: String = ""
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])

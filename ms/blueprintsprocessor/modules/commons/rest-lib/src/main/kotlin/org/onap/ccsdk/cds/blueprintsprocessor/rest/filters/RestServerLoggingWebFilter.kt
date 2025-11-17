@@ -30,7 +30,7 @@ open class RestServerLoggingWebFilter : WebFilter {
 
         val loggingService = RestLoggerService()
         loggingService.entering(serverWebExchange.request)
-        val filterChain = webFilterChain.filter(serverWebExchange).subscriberContext(
+        val filterChain = webFilterChain.filter(serverWebExchange).contextWrite(
             Context.of(MDCContext, MDCContext())
         )
         loggingService.exiting(serverWebExchange.request, serverWebExchange.response)

@@ -62,7 +62,7 @@ import org.springframework.core.env.ConfigurableEnvironment
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
-import org.springframework.util.Base64Utils
+import java.util.Base64
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 
@@ -322,7 +322,7 @@ open class UatExecutor(
             )
             else -> username
         }
-        return "Basic " + Base64Utils.encodeToString("$username:$plainPassword".toByteArray())
+        return "Basic " + Base64.getEncoder().encodeToString("$username:$plainPassword".toByteArray())
     }
 
     open class MockPreInterceptor : BluePrintRestLibPropertyService.PreInterceptor {
@@ -408,7 +408,7 @@ open class UatExecutor(
 
         override fun uploadBinaryFile(path: String, filePath: Path):
             WebClientResponse<String> {
-                val method = HttpMethod.POST.name
+                val method = HttpMethod.POST.name()
                 val headers = DEFAULT_HEADERS
                 val request = ""
                 val requestDefinition =

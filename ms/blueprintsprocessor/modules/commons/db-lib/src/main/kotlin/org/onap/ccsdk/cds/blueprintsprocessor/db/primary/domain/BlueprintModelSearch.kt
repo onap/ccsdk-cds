@@ -25,13 +25,13 @@ import io.swagger.annotations.ApiModelProperty
 import org.springframework.data.annotation.LastModifiedDate
 import java.io.Serializable
 import java.util.Date
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Lob
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Lob
+import jakarta.persistence.Table
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
 
 /**
  * Provide Blueprint Model Search Entity
@@ -69,9 +69,9 @@ class BlueprintModelSearch : Serializable {
     @Column(name = "artifact_version", nullable = false)
     var artifactVersion: String? = null
 
-    @ApiModelProperty(value = "Artifact Description, usually empty", example = "\"\"", required = false)
     @Lob
-    @Column(name = "artifact_description")
+    @ApiModelProperty(value = "Artifact Description, usually empty", example = "\"\"", required = false)
+    @Column(name = "artifact_description", columnDefinition = "LONGTEXT")
     var artifactDescription: String? = null
 
     @ApiModelProperty(value = "Internal Version of CBA, usually null", example = "null", required = false)
@@ -98,8 +98,7 @@ class BlueprintModelSearch : Serializable {
     var updatedBy: String? = null
 
     @ApiModelProperty(value = "Tags to identify the CBA, defined in Metadata", example = "\"test\"", required = true)
-    @Lob
-    @Column(name = "tags", nullable = false)
+    @Column(name = "tags", nullable = false, columnDefinition = "LONGTEXT")
     var tags: String? = null
 
     companion object {

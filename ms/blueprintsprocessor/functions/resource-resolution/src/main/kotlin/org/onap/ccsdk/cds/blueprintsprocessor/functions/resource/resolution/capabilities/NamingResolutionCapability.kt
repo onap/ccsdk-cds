@@ -92,7 +92,7 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
 
                 // Get the Rest Response
                 val response = restClientService.exchangeResource(
-                    HttpMethod.POST.name,
+                    HttpMethod.POST.name(),
                     "/web/service/v1/genNetworkElementName/cds", generatedPayload
                 )
 

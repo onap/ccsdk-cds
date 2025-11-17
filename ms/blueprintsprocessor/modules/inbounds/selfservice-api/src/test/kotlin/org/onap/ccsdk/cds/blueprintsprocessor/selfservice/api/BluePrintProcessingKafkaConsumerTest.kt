@@ -18,6 +18,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
 import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.delay
@@ -29,7 +30,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguratio
 import org.onap.ccsdk.cds.blueprintsprocessor.message.BluePrintMessageLibConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.message.service.BluePrintMessageLibPropertyService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
@@ -40,13 +40,14 @@ import kotlin.test.assertNotNull
 @ContextConfiguration(
     classes = [
         BluePrintMessageLibConfiguration::class, SelfServiceApiTestConfiguration::class,
-        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, ErrorCatalogTestConfiguration::class
+        BluePrintPropertyConfiguration::class, BluePrintPropertiesService::class, ErrorCatalogTestConfiguration::class,
+        SimpleMeterRegistry::class,
     ]
 )
 @TestPropertySource(locations = ["classpath:application-test.properties"])
 class BluePrintProcessingKafkaConsumerTest {
 
-    @MockBean
+    @Autowired
     lateinit var meterRegistry: MeterRegistry
 
     @Autowired

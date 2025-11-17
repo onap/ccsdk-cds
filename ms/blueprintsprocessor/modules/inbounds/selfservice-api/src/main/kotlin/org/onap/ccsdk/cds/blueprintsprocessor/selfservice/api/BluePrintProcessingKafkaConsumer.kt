@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service
 import java.nio.charset.Charset
 import java.util.UUID
 import java.util.concurrent.Phaser
-import javax.annotation.PreDestroy
+import jakarta.annotation.PreDestroy
 
 @ConditionalOnProperty(
     name = ["blueprintsprocessor.messageconsumer.self-service-api.kafkaEnable"],

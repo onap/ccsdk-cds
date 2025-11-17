@@ -25,21 +25,21 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
 import java.util.Date
-import javax.persistence.AttributeConverter
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.Convert
-import javax.persistence.Converter
-import javax.persistence.Entity
-import javax.persistence.EntityListeners
-import javax.persistence.FetchType
-import javax.persistence.Id
-import javax.persistence.Lob
-import javax.persistence.OneToOne
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
-import javax.persistence.UniqueConstraint
+import jakarta.persistence.AttributeConverter
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Convert
+import jakarta.persistence.Converter
+import jakarta.persistence.Entity
+import jakarta.persistence.EntityListeners
+import jakarta.persistence.FetchType
+import jakarta.persistence.Id
+import jakarta.persistence.Lob
+import jakarta.persistence.OneToOne
+import jakarta.persistence.Table
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
+import jakarta.persistence.UniqueConstraint
 
 /**
  *  Provide BlueprintModel Entity
@@ -96,7 +96,7 @@ class BlueprintModel : Serializable {
     lateinit var artifactVersion: String
 
     @Lob
-    @Column(name = "artifact_description")
+    @Column(name = "artifact_description", columnDefinition = "LONGTEXT")
     var artifactDescription: String? = null
 
     @Column(name = "internal_version")
@@ -120,8 +120,7 @@ class BlueprintModel : Serializable {
     @ApiModelProperty(required = true)
     lateinit var updatedBy: String
 
-    @Lob
-    @Column(name = "tags", nullable = false)
+    @Column(name = "tags", nullable = false, columnDefinition = "LONGTEXT")
     @ApiModelProperty(required = true)
     lateinit var tags: String
 
@@ -131,7 +130,7 @@ class BlueprintModel : Serializable {
     // will be populated with workflow specs for each workflow (JSON object)
     @Lob
     @Convert(converter = WorkflowsConverter::class)
-    @Column(name = "workflows", nullable = false)
+    @Column(name = "workflows", nullable = false, columnDefinition = "LONGTEXT")
     lateinit var workflows: Map<String, Workflow>
 
     companion object {
@@ -145,9 +144,10 @@ class BlueprintModel : Serializable {
             return JacksonUtils.getJson(node, true)
         }
 
-        override fun convertToEntityAttribute(dbData: String): Map<String, Workflow> {
-            if (dbData == null || "".equals(dbData)) return emptyMap()
-            return JacksonUtils.getMapFromJson(dbData, Workflow::class.java)
+        override fun convertToEntityAttribute(dbData: String?): Map<String, Workflow> {
+            return dbData?.let {
+                JacksonUtils.getMapFromJson(it, Workflow::class.java)
+            } ?: emptyMap()
         }
     }
 }

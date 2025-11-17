@@ -116,8 +116,8 @@ class BluePrintArchiveUtils {
             compressionLevel: Int = Deflater.DEFAULT_COMPRESSION,
             fixedModificationTime: Long? = null
         ): T
-            where T : OutputStream {
-            val stream: ArchiveOutputStream = if (archiveType == ArchiveType.Zip)
+                where T : OutputStream {
+            val stream = if (archiveType == ArchiveType.Zip)
                 ZipArchiveOutputStream(output).apply { setLevel(compressionLevel) }
             else
                 TarArchiveOutputStream(GzipCompressorOutputStream(output))
@@ -129,7 +129,7 @@ class BluePrintArchiveUtils {
                             @Throws(IOException::class)
                             override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
                                 if (pathFilter.test(file)) {
-                                    var archiveEntry: ArchiveEntry = aos.createArchiveEntry(
+                                    val archiveEntry = aos.createArchiveEntry(
                                         file.toFile(),
                                         baseDir.relativize(file).toString()
                                     )
@@ -140,7 +140,9 @@ class BluePrintArchiveUtils {
                                         }
                                         entry.time = 0
                                     }
-                                    aos.putArchiveEntry(archiveEntry)
+                                    val aosArchiveEntry = aos as ArchiveOutputStream<ArchiveEntry>
+                                    aosArchiveEntry.putArchiveEntry(archiveEntry)
+
                                     Files.copy(file, aos)
                                     aos.closeArchiveEntry()
                                 }
@@ -149,16 +151,16 @@ class BluePrintArchiveUtils {
 
                             @Throws(IOException::class)
                             override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-                                var archiveEntry: ArchiveEntry?
-                                if (archiveType == ArchiveType.Zip) {
-                                    val entry = ZipArchiveEntry(baseDir.relativize(dir).toString() + "/")
-                                    fixedModificationTime?.let {
-                                        entry.time = it
-                                    }
-                                    archiveEntry = entry
-                                } else
-                                    archiveEntry = TarArchiveEntry(baseDir.relativize(dir).toString() + "/")
-                                aos.putArchiveEntry(archiveEntry)
+                                val archiveEntry: ArchiveEntry =
+                                    if (archiveType == ArchiveType.Zip) {
+                                        val entry = ZipArchiveEntry(baseDir.relativize(dir).toString() + "/")
+                                        fixedModificationTime?.let {
+                                            entry.time = it
+                                        }
+                                        entry
+                                    } else
+                                        TarArchiveEntry(baseDir.relativize(dir).toString() + "/")
+                                (aos as ArchiveOutputStream<ArchiveEntry>).putArchiveEntry(archiveEntry)
                                 aos.closeArchiveEntry()
                                 return FileVisitResult.CONTINUE
                             }
@@ -183,7 +185,7 @@ class BluePrintArchiveUtils {
             } else { // Tar Gz
                 var tarGzArchiveIs: InputStream = BufferedInputStream(archiveFile.inputStream())
                 tarGzArchiveIs = GzipCompressorInputStream(tarGzArchiveIs)
-                val tarGzArchive: ArchiveInputStream = TarArchiveInputStream(tarGzArchiveIs)
+                val tarGzArchive = TarArchiveInputStream(tarGzArchiveIs)
                 enumeration = ArchiveEnumerator(tarGzArchive)
             }
 
@@ -219,7 +221,7 @@ class BluePrintArchiveUtils {
 
         private val zipArchive: ZipFile?
         private val zipEnumeration: Enumeration<ZipArchiveEntry>?
-        private val archiveStream: ArchiveInputStream?
+        private val archiveStream: ArchiveInputStream<ArchiveEntry>?
         private var nextEntry: ArchiveEntry? = null
         private val hasSharedEntryInputStream: Boolean
 
@@ -230,8 +232,8 @@ class BluePrintArchiveUtils {
             hasSharedEntryInputStream = false
         }
 
-        constructor(archiveStream: ArchiveInputStream) {
-            this.archiveStream = archiveStream
+        constructor(archiveStream: TarArchiveInputStream) {
+            this.archiveStream = archiveStream as ArchiveInputStream<ArchiveEntry>
             zipArchive = null
             zipEnumeration = null
             hasSharedEntryInputStream = true

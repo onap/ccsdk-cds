@@ -41,32 +41,32 @@ open class ModelTypeReactRepository(private val modelTypeRepository: ModelTypeRe
 
     fun findByModelNameIn(modelNames: List<String>): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByModelNameIn(modelNames))
-            .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.boundedElastic())
     }
 
     fun findByDerivedFrom(derivedFrom: String): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByDerivedFrom(derivedFrom))
-            .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.boundedElastic())
     }
 
     fun findByDerivedFromIn(derivedFroms: List<String>): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByDerivedFromIn(derivedFroms))
-            .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.boundedElastic())
     }
 
     fun findByDefinitionType(definitionType: String): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByDefinitionType(definitionType))
-            .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.boundedElastic())
     }
 
     fun findByDefinitionTypeIn(definitionTypes: List<String>): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByDefinitionTypeIn(definitionTypes))
-            .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.boundedElastic())
     }
 
     fun findByTagsContainingIgnoreCase(tags: String): Flux<ModelType> {
         return Flux.fromIterable(modelTypeRepository.findByTagsContainingIgnoreCase(tags))
-            .subscribeOn(Schedulers.elastic())
+            .subscribeOn(Schedulers.boundedElastic())
     }
 
     fun deleteByModelName(modelName: String): Mono<Void> {

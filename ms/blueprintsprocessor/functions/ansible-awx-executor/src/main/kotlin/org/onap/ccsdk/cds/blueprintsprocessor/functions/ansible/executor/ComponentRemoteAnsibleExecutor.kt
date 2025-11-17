@@ -62,8 +62,8 @@ open class ComponentRemoteAnsibleExecutor(
 
     // HTTP related constants
     private val HTTP_SUCCESS = 200..202
-    private val GET = HttpMethod.GET.name
-    private val POST = HttpMethod.POST.name
+    private val GET = HttpMethod.GET.name()
+    private val POST = HttpMethod.POST.name()
     private val plainTextHeaders = mapOf("Accept" to "text/plain")
 
     var checkDelay: Long = 15_000
