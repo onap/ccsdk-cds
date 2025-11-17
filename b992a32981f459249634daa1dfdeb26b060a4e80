@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bd3ebb4_8661935b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2701
+      },
+      "writtenOn": "2025-11-17T17:32:51Z",
+      "side": 1,
+      "message": "Once upgrade to SB 3.5 is merged this one could be abandoned",
+      "revId": "b992a32981f459249634daa1dfdeb26b060a4e80",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb88a43b_e65b69ef",
