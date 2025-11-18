@@ -1,0 +1,270 @@
+---
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: 2025 The Linux Foundation
+
+name: '🔑 Generate PQCA CBOM'
+
+on:
+  push:
+    branches:
+      - master
+
+  workflow_dispatch:
+    inputs:
+      GERRIT_BRANCH:
+        description: "Branch that change is against"
+        required: true
+        type: string
+      GERRIT_CHANGE_ID:
+        description: "The ID for the change"
+        required: true
+        type: string
+      GERRIT_CHANGE_NUMBER:
+        description: "The Gerrit number"
+        required: true
+        type: string
+      GERRIT_CHANGE_URL:
+        description: "URL to the change"
+        required: true
+        type: string
+      GERRIT_EVENT_TYPE:
+        description: "Type of Gerrit event"
+        required: true
+        type: string
+      GERRIT_PATCHSET_NUMBER:
+        description: "The patch number for the change"
+        required: true
+        type: string
+      GERRIT_PATCHSET_REVISION:
+        description: "The revision sha"
+        required: true
+        type: string
+      GERRIT_PROJECT:
+        description: "Project in Gerrit"
+        required: true
+        type: string
+      GERRIT_REFSPEC:
+        description: "Gerrit refspec of change"
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: "gerrit-merge-cbom-${{ github.workflow }}-${{ github.event.inputs.GERRIT_CHANGE_ID || github.run_id }}"
+  cancel-in-progress: true
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      # Harden the runner used by this workflow
+      # yamllint disable-line rule:line-length
+      - uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2  # v2.13.2
+        with:
+          egress-policy: audit
+
+      - name: Notify job start
+        # yamllint disable-line rule:line-length
+        uses: lfreleng-actions/gerrit-review-action@537251ec667665b386f70b330b05446e3fc29087 # v0.9
+        with:
+          host: ${{ vars.GERRIT_SERVER }}
+          username: ${{ vars.GERRIT_SSH_USER }}
+          key: ${{ secrets.GERRIT_SSH_PRIVKEY }}
+          known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
+          gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
+          gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
+          vote-type: clear
+      - name: Allow replication
+        run: sleep 10s
+
+  cbom-create:
+    name: 'Generate PQCA CBOM'
+    runs-on: ubuntu-latest
+    needs: [notify]
+    permissions:
+      contents: write
+      pull-requests: write
+    timeout-minutes: 45 # Set this timeout value as needed
+    steps:
+      # Harden the runner used by this workflow
+      # yamllint disable-line rule:line-length
+      - uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2  # v2.13.2
+        with:
+          egress-policy: audit
+
+      # yamllint disable-line rule:line-length
+      - uses: lfreleng-actions/checkout-gerrit-change-action@54d751e8bd167bc91f7d665dabe33fae87aaaa63 # v0.9
+        with:
+          gerrit-refspec: ${{ inputs.GERRIT_REFSPEC }}
+          gerrit-url: ${{ vars.GERRIT_URL }}
+          delay: "0s"
+
+      - name: 'Extract project name from .gitreview'
+        id: extract-project
+        run: |
+          if [ -f .gitreview ]; then
+            PROJECT_NAME=$(grep '^project=' .gitreview | cut -d'=' -f2 | sed 's/\.git$//' | tr '/' '-')
+            echo "project-name=${PROJECT_NAME}" >> $GITHUB_OUTPUT
+            echo "Detected project: ${PROJECT_NAME}"
+          else
+            echo "Error: .gitreview file not found"
+            exit 1
+          fi
+
+      - name: Load secret from 1Password
+        uses: 1password/load-secrets-action@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3.0.0
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          NEXUS_PASSWORD: op://elnqtgip7eqavqvgodjbiiaqd4/${{ steps.extract-project.outputs.project-name }}/password
+
+      - name: 'Output SHA1 sum of password'
+        env:
+          NEXUS_PASSWORD: $NEXUS_PASSWORD
+        run: |
+          # Output SHA1 sum of password
+          VALUE_SHA1=$(echo -n "$NEXUS_PASSWORD" | sha1sum | awk '{print $1}')
+          echo "SHA1 sum of NEXUS_PASSWORD is: $VALUE_SHA1"
+
+      - name: 'Generate Maven global settings'
+        id: create-settings
+        env:
+          NEXUS_PASSWORD: ${{ env.NEXUS_PASSWORD }}
+        run: |
+          # Extract project name from .gitreview file
+          if [ -f .gitreview ]; then
+            PROJECT_NAME=$(grep '^project=' .gitreview | cut -d'=' -f2 | sed 's/\.git$//' | tr '/' '-')
+            echo "Detected project: ${PROJECT_NAME}"
+          else
+            echo "Error: .gitreview file not found"
+            exit 1
+          fi
+          
+          cat > global-settings.xml << EOF
+          <settings>
+            <servers>
+              <server>
+                <id>ecomp-releases</id>
+                <username>${PROJECT_NAME}</username>
+                <password>${NEXUS_PASSWORD}</password>
+              </server>
+              <server>
+                <id>ecomp-snapshots</id>
+                <username>${PROJECT_NAME}</username>
+                <password>${NEXUS_PASSWORD}</password>
+              </server>
+              <server>
+                <id>onap-releases</id>
+                <username>${PROJECT_NAME}</username>
+                <password>${NEXUS_PASSWORD}</password>
+              </server>
+              <server>
+                <id>onap-snapshots</id>
+                <username>${PROJECT_NAME}</username>
+                <password>${NEXUS_PASSWORD}</password>
+              </server>
+              <server>
+                <id>nexus3.onap.org:10003</id>
+                <username>${PROJECT_NAME}</username>
+                <password>${NEXUS_PASSWORD}</password>
+              </server>
+            </servers>
+            <mirrors>
+              <mirror>
+                <id>onap-public</id>
+                <mirrorOf>*</mirrorOf>
+                <url>https://nexus.onap.org/content/groups/public/</url>
+              </mirror>
+            </mirrors>
+            <profiles>
+              <profile>
+                <id>onap-nexus</id>
+                <repositories>
+                  <repository>
+                    <id>onap-public</id>
+                    <url>https://nexus.onap.org/content/groups/public/</url>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                  </repository>
+                </repositories>
+                <pluginRepositories>
+                  <pluginRepository>
+                    <id>onap-public</id>
+                    <url>https://nexus.onap.org/content/groups/public/</url>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                  </pluginRepository>
+                </pluginRepositories>
+              </profile>
+            </profiles>
+            <activeProfiles>
+              <activeProfile>onap-nexus</activeProfile>
+            </activeProfiles>
+          </settings>
+          EOF
+          {
+            echo 'settings-content<<SETTINGS_EOF'
+            cat global-settings.xml
+            echo 'SETTINGS_EOF'
+          } >> $GITHUB_OUTPUT
+
+      - name: 'Build with Maven'
+        # yamllint disable-line rule:line-length
+        uses: lfreleng-actions/maven-build-action@main
+        with:
+          jdk-version: '17'
+          distribution: 'temurin'
+          mvn-version: '3.8.2'
+          mvn-phases: 'clean package'
+          mvn-params: '-DskipTests -Djib.skip=true'
+          # yamllint disable-line rule:line-length
+          mvn-opts: '-Ddocker.push.registry=nexus3.onap.org:10003 -Ddocker.pull.registry=nexus3.onap.org:10003 -Dmaven.repo.local=/tmp/r -Dorg.ops4j.pax.url.mvn.localRepository=/tmp/r -DaltDeploymentRepository=staging::default::file:"${GITHUB_WORKSPACE}"/m2repo -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
+          global-settings: |
+            ${{ steps.create-settings.outputs.settings-content }}
+          run-jacoco: 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Create CBOM'
+        # yamllint disable-line rule:line-length
+        uses: PQCA/cbomkit-action@fe04ae510fe80fcfa7d145859fcba8e5dbd0b649 # v2.1.2
+        id: cbom
+        env:
+          CBOMKIT_LANGUAGES: java, python # or java or python
+
+      - name: 'Commit changes to new branch'
+        # Allows persisting the CBOMs after job completion and
+        # sharing them with another job in the same workflow.
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: 'CBOM'
+          path: ${{ steps.cbom.outputs.pattern }}
+          if-no-files-found: warn
+
+  report-status:
+    if: ${{ always() }}
+    needs: [notify, cbom-create]
+    runs-on: ubuntu-latest
+    steps:
+      # Harden the runner used by this workflow
+      # yamllint disable-line rule:line-length
+      - uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2  # v2.13.2
+        with:
+          egress-policy: audit
+
+      - name: Get workflow conclusion
+        uses: technote-space/workflow-conclusion-action@v3
+
+      - name: Report workflow conclusion
+        # yamllint disable-line rule:line-length
+        uses: lfreleng-actions/gerrit-review-action@537251ec667665b386f70b330b05446e3fc29087 # v0.9
+        with:
+          host: ${{ vars.GERRIT_SERVER }}
+          username: ${{ vars.GERRIT_SSH_USER }}
+          key: ${{ secrets.GERRIT_SSH_PRIVKEY }}
+          known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
+          gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
+          gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
+          vote-type: ${{ env.WORKFLOW_CONCLUSION }}
