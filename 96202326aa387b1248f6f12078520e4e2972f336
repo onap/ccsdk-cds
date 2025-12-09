@@ -33,6 +33,23 @@
       "message": "stage-release",
       "revId": "96202326aa387b1248f6f12078520e4e2972f336",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2fa2b42_2df36685",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 865
+      },
+      "writtenOn": "2025-12-09T17:43:10Z",
+      "side": 1,
+      "message": "Was these changes ever tested ? seems like BPP is not coming up clean - Caused by: java.lang.ClassNotFoundException: jakarta.xml.bind.JAXBException",
+      "revId": "96202326aa387b1248f6f12078520e4e2972f336",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     }
   ],
   "submitRequirementResults": [
