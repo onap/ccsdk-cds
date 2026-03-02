@@ -29,7 +29,7 @@ it is easy and enables debugging.
 
 * CDS in Microk8s: https://wiki.onap.org/display/DW/Running+CDS+on+Microk8s (RDT link to be added)
 * CDS in Minikube: https://wiki.onap.org/display/DW/Running+CDS+in+minikube (RDT link to be added)
-* CDS in an IDE:  https://docs.onap.org/projects/onap-ccsdk-cds/en/latest/userguide/running-bp-processor-in-ide.html
+* CDS in an IDE:  ../userguides/developer-guide/running-bp-processor-in-ide.html
 
 Run PNF Simulator and install module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -303,7 +303,7 @@ here but they are not tested by the author of this guide.
       .. warning::
          This method of setting up the PNF simulator is not tested by the author of this guide
 
-      You can refer to `PnP PNF Simulator wiki page <https://wiki.onap.org/display/DW/PnP+PNF+Simulator>`_
+      You can refer to `PnP PNF Simulator wiki page <https://lf-onap.atlassian.net/wiki/spaces/DW/pages/16529416>`_
       to clone the GIT repo and start the required docker containers. We are interested in the
       `sysrepo/sysrepo-netopeer2` docker container to load a simple YANG similar to vFW Packet Generator.
 

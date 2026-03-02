@@ -38,7 +38,7 @@ Reference link for sample generated uat.yaml file for pnf plug & play use case:
 `uat.yaml file <https://gerrit.onap.org/r/gitweb?p=ccsdk/cds.git;a=tree;f=components/model-catalog/blueprint-model/uat-blueprints/pnf_config/Tests;h=230d506720c4a1066784c1fe9e0ba0206bbb13cf;hb=refs/heads/master>`_.
 
 As UAT is part of unit testing, it runs in jenkins job
-`ccsdk-cds-master-verify-java <https://jenkins.onap.org/job/ccsdk-cds-master-verify-java/>`_
+`ccsdk-cds-master-verify-java <https://jenkins.onap.org/job/ccsdk-cds-maven-verify-master-mvn39-openjdk21/>`_
 whenever a new commit/patch pushed on gerrit in ccsdk/cds repo.
 
 Executing UAT based test inside you own CBA as SpringBootTest based JUnit test
