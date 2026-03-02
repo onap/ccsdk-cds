@@ -96,7 +96,7 @@ Also please click below for resource source available details
    resourcesource
 
 .. _TOSCA: http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#DEFN_ENTITY_NODE_TYPE
-.. _Resource: https://wiki.onap.org/display/DW/Modeling+Concepts#ModelingConcepts-NodeResourceSource
+.. _Resource: https://docs.onap.org/projects/onap-ccsdk-cds/en/latest/modelingconcepts/node-type.html
 
 
 .. |image0| image:: media/mandatory.JPG

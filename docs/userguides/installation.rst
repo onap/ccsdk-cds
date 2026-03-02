@@ -23,7 +23,7 @@ Get the chart
 
 Make sure to checkout the release to use, by replacing $release-tag in bellow command
 
-git clone https://gerrit.onap.org/r/oom
+git clone https://gerrit.onap.org/r/a/oom
 git checkout tags/$release-tag
 
 

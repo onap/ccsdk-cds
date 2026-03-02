@@ -433,7 +433,7 @@ CBA of vFW CNF use case is already enriched and VSP of vFW CNF has CBA included 
 
 Further information about the use case, role of the CDS and all the steps required to reproduce the process can be found in the dedicated web page
 
-:ref:`vFirewall CNF Use Case<onap-integration:docs_vFW_CNF_CDS>`
+`vFirewall CNF Use Case <https://docs.onap.org/projects/onap-integration/en/latest/docs_vFW_CNF_CDS.html>`_
 
 The vFW CNF use case is an official use case used for verification of the CNF Orchestration extensions.
 

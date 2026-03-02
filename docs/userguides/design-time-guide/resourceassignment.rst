@@ -71,4 +71,4 @@ capability-data: defines what capability to use to create a specific resource, a
 
 In order to facilitate NETCONF interaction within scripts, a python NetconfClient binded to our Kotlin implementation is made available. This NetconfClient can be used when using the netconf-component-executor.
 
-The client can be find here: https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_netconf/netconfclient.py
+The client can be find here: https://github.com/onap/ccsdk-cds/blob/master/components/scripts/python/ccsdk_netconf/netconfclient.py
