@@ -153,10 +153,7 @@ HTTP Status 202 OK
 API Reference
 --------------
 
-.. warning::
-   In the used Sphinx plugin `sphinxcontrib-swaggerdoc` some information of the swagger file is not
-   rendered completely, e.g. the request body. Use your favorite Swagger Editor and paste the swagger file
-   to get a complete view of the API reference, e.g. on https://editor.swagger.io/.
+
 
 .. swaggerv2doc:: media/cds-bp-processor-api-swagger.json
 
