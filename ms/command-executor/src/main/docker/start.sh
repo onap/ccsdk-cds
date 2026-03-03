@@ -52,4 +52,4 @@ then
 fi
 
 cd /opt/app/onap/python/
-python server.py ${APP_PORT} ${BASIC_AUTH}
+opentelemetry-instrument python server.py ${APP_PORT} ${BASIC_AUTH}

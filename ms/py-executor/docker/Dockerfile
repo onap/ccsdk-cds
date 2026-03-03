@@ -20,5 +20,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools
 RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements/docker.txt
 
+RUN pip install --no-cache-dir opentelemetry-distro==0.40b0 opentelemetry-exporter-otlp-proto-http==1.19.0
+
 USER onap
 ENTRYPOINT /opt/app/onap/py-executor/start.sh

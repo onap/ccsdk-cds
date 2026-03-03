@@ -18,7 +18,8 @@ RUN tar -xzf /source.tar.gz -C /tmp \
     && chmod -R 755 /opt \
     && apt-get update && apt-get install -y procps iputils-ping curl telnet && rm -rf /var/lib/apt/lists/* \
     && python -m pip install --no-cache-dir --upgrade pip setuptools \
-    && pip install --no-cache-dir requests==2.26.0 grpcio==1.20.0 grpcio-tools==1.20.0 virtualenv==16.7.9 prometheus-client==0.11.0 protobuf==3.20.1
+    && pip install --no-cache-dir requests==2.26.0 grpcio==1.20.0 grpcio-tools==1.20.0 virtualenv==16.7.9 prometheus-client==0.11.0 protobuf==3.20.1 \
+    && pip install --no-cache-dir opentelemetry-distro==0.40b0 opentelemetry-exporter-otlp-proto-http==1.19.0
 
 USER onap
 ENTRYPOINT /opt/app/onap/command-executor/start.sh

@@ -64,4 +64,4 @@ fi
 
 
 cd /opt/app/onap/python/
-python server.py
+opentelemetry-instrument python server.py
