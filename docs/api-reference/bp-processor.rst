@@ -153,9 +153,10 @@ HTTP Status 202 OK
 API Reference
 --------------
 
-
-
-.. swaggerv2doc:: media/cds-bp-processor-api-swagger.json
+The full API reference is available in the swagger file provided in the `Download`_ section above.
+You can explore the API interactively by importing the swagger file into tools such as
+`Swagger UI <https://swagger.io/tools/swagger-ui/>`_ or
+`Postman <https://www.postman.com/>`_.
 
 
 

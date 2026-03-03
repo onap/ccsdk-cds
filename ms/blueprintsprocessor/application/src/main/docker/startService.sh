@@ -10,9 +10,10 @@ export APP_HOME=/opt/app/onap
 #[[ - $APP_CONFIG_HOME/${PRIVATE_CA} ]] && keytool -import -noprompt -trustcacerts -keystore $JAVA_HOME/lib/security/cacerts -storepass ${TRUSTSTORE_PASSWD} -alias ${PRIVATE_CA} -file $APP_CONFIG_HOME/${PRIVATE_CA}
 
 #Instead of above, using cert-initializer truststore to replace the default java cacerts
-[[ -f $AAF_CREDSPATH/truststoreONAPall.jks ]] && cp $AAF_CREDSPATH/truststoreONAPall.jks $JAVA_HOME/lib/security/cacerts 
+[[ -f $AAF_CREDSPATH/truststoreONAPall.jks ]] && cp $AAF_CREDSPATH/truststoreONAPall.jks $JAVA_HOME/lib/security/cacerts
 
-exec java -classpath "/etc:${APP_HOME}/lib/*:/lib/*:/src:/schema:/generated-sources:${APP_CONFIG_HOME}:${APP_HOME}" \
+exec java -javaagent:/opt/app/onap/opentelemetry-javaagent.jar \
+-classpath "/etc:${APP_HOME}/lib/*:/lib/*:/src:/schema:/generated-sources:${APP_CONFIG_HOME}:${APP_HOME}" \
 -DappName=${APP_NAME} -DappVersion=${BUNDLEVERSION} \
 -DrouteOffer=${ROUTEOFFER} \
 -DVERSION_ROUTEOFFER_ENVCONTEXT=${BUNDLEVERSION}/${STICKYSELECTORKEY}/${ENVCONTEXT} \
