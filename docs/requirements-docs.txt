@@ -1,7 +1,6 @@
 sphinx>=7.1.2
 sphinx-rtd-theme>=2.0.0
-sphinxcontrib-blockdiag>=3.0.0
-sphinxcontrib-seqdiag>=3.0.0
+sphinxcontrib-mermaid>=1.0.0
 sphinxcontrib-openapi>=0.8.4
 sphinxcontrib-spelling>=8.0.0
 sphinxcontrib-plantuml>=0.27
