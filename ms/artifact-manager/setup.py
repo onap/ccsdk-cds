@@ -23,9 +23,9 @@ setup(
     description="CDS Artifact Manager",
     packages=["manager"],
     install_requires=[
-        "grpcio-tools>=1.25.0",
-        "protobuf>=3.20.1",
+        "grpcio-tools>=1.48.2",
+        "protobuf>=3.20.3",
         "onappylog>=1.0.9",
-        "click>=7.0",
+        "click>=8.0",
     ],
 )

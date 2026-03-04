@@ -1,8 +1,8 @@
-requests==2.26.0
-grpcio==1.20.0
-grpcio-tools==1.20.0
-virtualenv==16.7.9
-prometheus-client==0.11.0
-protobuf==3.20.1
-opentelemetry-distro==0.40b0
-opentelemetry-exporter-otlp-proto-http==1.19.0
+requests==2.31.0
+grpcio==1.48.2
+grpcio-tools==1.48.2
+virtualenv==20.26.6
+prometheus-client==0.21.1
+protobuf==3.20.3
+opentelemetry-distro==0.44b0
+opentelemetry-exporter-otlp-proto-http==1.23.0
