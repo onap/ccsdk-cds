@@ -18,7 +18,10 @@ RUN tar -xzf /source.tar.gz -C /tmp \
     && chmod -R 755 /opt
 
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools
-RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements/docker.txt
+RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements.txt
+RUN pip install --no-cache-dir /opt/app/onap/dependencies/common
+RUN pip install --no-cache-dir -r /opt/app/onap/dependencies/artifact-manager/requirements.txt
+RUN pip install --no-cache-dir /opt/app/onap/dependencies/artifact-manager
 
 RUN pip install --no-cache-dir opentelemetry-distro==0.40b0 opentelemetry-exporter-otlp-proto-http==1.19.0
 

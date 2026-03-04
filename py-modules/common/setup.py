@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name="cdscommon",
     version="0.1",
     description="CDS Common Python Modules",
     packages=["proto"],
-    install_requires=["grpcio-tools"],
+    install_requires=["grpcio-tools>=1.25.0"],
 )

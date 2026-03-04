@@ -27,5 +27,12 @@
             <directory>${project.basedir}/src/main/python</directory>
             <outputDirectory>opt/app/onap/python</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>opt/app/onap/python</outputDirectory>
+            <includes>
+                <include>requirements.txt</include>
+            </includes>
+        </fileSet>
     </fileSets>
 </assembly>

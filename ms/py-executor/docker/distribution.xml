@@ -62,7 +62,7 @@
             <directory>${project.basedir}</directory>
             <outputDirectory>opt/app/onap/python</outputDirectory>
             <includes>
-                <include>requirements/*.txt</include>
+                <include>requirements.txt</include>
             </includes>
             <useDefaultExcludes>true</useDefaultExcludes>
             <fileMode>0666</fileMode>
