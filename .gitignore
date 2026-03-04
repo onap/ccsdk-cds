@@ -3,6 +3,7 @@
 
 # Python
 **/*.pyc
+**/*.egg-info/
 
 **/.apt_generated
 # Logs
@@ -161,3 +162,4 @@ MacOS
 
 # Generated dependency list
 direct-dependencies.txt
+.coverage
