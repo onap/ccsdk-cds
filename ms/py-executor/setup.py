@@ -29,5 +29,7 @@ setup(
         "requests>=2.22.0",
         "ncclient>=0.6.6",
         "ansible>=2.8.5",
+        "opentelemetry-distro==0.40b0",
+        "opentelemetry-exporter-otlp-proto-http==1.19.0",
     ],
 )
