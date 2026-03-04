@@ -29,6 +29,12 @@
     <name>Components Model Catalog - Blueprints Model - CBA Assembly Descriptor</name>
     <description>Shared assembly descriptor</description>
 
+    <properties>
+        <!-- This module contains no code to scan for sonarqube
+        and not setting skip to true here breaks the whole sonarqube job -->
+        <sonar.skip>true</sonar.skip>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

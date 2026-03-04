@@ -15,57 +15,94 @@
  */
 
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi
-/*
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintCoreConfiguration
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.ComponentScriptExecutor
-import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintCatalogService
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.test.web.reactive.server.WebTestClient
-*/
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.junit.MockitoJUnitRunner
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration.HealthCheckProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ApplicationHealth
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.WebClientEnpointResponse
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.CombinedHealthService
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.EndPointExecution
+import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
+import org.springframework.boot.actuate.health.Status
 
 /**
- *Unit tests for making sure that two endpoints is up and running
+ * Unit tests for CombinedHealthService verifying health check aggregation logic.
  *
  * @author Shaaban Ebrahim
  * @version 1.0
  */
-/*
-@RunWith(SpringRunner::class)
-@WebFluxTest
-@ContextConfiguration(
-    classes = [BluePrintRuntimeService::class, BluePrintCoreConfiguration::class,
-        BluePrintCatalogService::class, ComponentScriptExecutor::class]
-)
-@ComponentScan(basePackages = ["org.onap.ccsdk.cds.blueprintsprocessor", "org.onap.ccsdk.cds.controllerblueprints"])
-@TestPropertySource(locations = ["classpath:application-test.properties"])
+@RunWith(MockitoJUnitRunner::class)
 class HealthCheckApplicationTests {
 
-    @Autowired
-    lateinit var webTestClient: WebTestClient
+    @Mock
+    private val endPointExecution: EndPointExecution? = null
 
-    @Test
-    fun testHealthApiUp() {
-        webTestClient.get().uri("/api/v1/combinedHealth")
-            .exchange()
-            .expectStatus().is2xxSuccessful
+    @Mock
+    private val healthCheckProperties: HealthCheckProperties? = null
+
+    @InjectMocks
+    private var combinedHealthService: CombinedHealthService? = null
+
+    @Before
+    fun setup() {
+        Mockito.`when`(healthCheckProperties!!.getBluePrintBaseURL())
+            .thenReturn("http://cds-blueprints-processor-http:8080/")
+        Mockito.`when`(healthCheckProperties.getCDSListenerBaseURL())
+            .thenReturn("http://cds-sdc-listener:8080/")
     }
 
     @Test
-    fun testMetricsApiUp() {
-        webTestClient.get().uri("/api/v1/combinedMetrics")
-            .exchange()
-            .expectStatus().is2xxSuccessful
+    fun testGetCombinedHealthCheckWhenServicesAreDown() {
+        Mockito.`when`(
+            endPointExecution!!.retrieveWebClientResponse(
+                Mockito.any(ServiceEndpoint::class.java)
+            )
+        ).thenReturn(WebClientEnpointResponse(BlueprintWebClientService.WebClientResponse(500, "")))
+
+        val result = combinedHealthService!!.getCombinedHealthCheck()
+
+        assertNotNull(result)
+        assertEquals(2, result.size)
+        result.forEach { health ->
+            assertNotNull(health)
+            assertEquals(Status.DOWN, health!!.status)
+        }
+    }
+
+    @Test
+    fun testGetCombinedHealthCheckWhenServicesAreUp() {
+        val successResponse = WebClientEnpointResponse(
+            BlueprintWebClientService.WebClientResponse(200, "")
+        )
+        val healthUp = ApplicationHealth(Status.UP, hashMapOf())
+
+        Mockito.`when`(
+            endPointExecution!!.retrieveWebClientResponse(
+                Mockito.any(ServiceEndpoint::class.java)
+            )
+        ).thenReturn(successResponse)
+        Mockito.`when`(
+            endPointExecution.getHealthFromWebClientEnpointResponse(
+                Mockito.any(WebClientEnpointResponse::class.java)
+            )
+        ).thenReturn(healthUp)
+
+        val result = combinedHealthService!!.getCombinedHealthCheck()
+
+        assertNotNull(result)
+        assertEquals(2, result.size)
+        result.forEach { health ->
+            assertNotNull(health)
+            assertEquals(Status.UP, health!!.status)
+        }
     }
 }
-
-*/
-
-class HealthCheckApplicationTests
