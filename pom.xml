@@ -32,7 +32,7 @@ limitations under the License.
     <version>1.9.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Aggregator</name>
+    <name>ccsdk-cds</name>
     <description>CCSDK Controller Design Studio</description>
     <url>https://wiki.onap.org</url>
     <organization>
