@@ -1152,6 +1152,9 @@ height: 40px;
 .body-container{
   padding: 0 30px !important;
 }
+.body-container:has(.creat-action-container){
+  padding-right: 160px !important;
+}
 .body-container > .container{
   padding: 0;
 }
@@ -2532,7 +2535,10 @@ hr{
   top: 104px;
   width: 130px;
   text-align: center;
+  z-index: 10;
+  background: #FAFAFA;
 }
+
 .action-button{
   display: inline-block;
   width: 70px;
