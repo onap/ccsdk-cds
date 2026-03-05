@@ -26,6 +26,7 @@ import { DictionaryMetadataComponent } from './dictionary-metadata/dictionary-me
 import { SourcesTemplateComponent } from './sources-template/sources-template.component';
 import { DictionaryCreationService } from './dictionary-creation.service';
 import { ToastrService } from 'ngx-toastr';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-resource-dictionary-creation',
@@ -90,6 +91,17 @@ export class ResourceDictionaryCreationComponent implements OnInit {
       });
     }).unsubscribe();
     // this.sourcesTemplateComponent.saveSorcesDataToStore();
+  }
+
+  downloadDictionary() {
+    this.metadataTabComponent.saveMetaDataToStore();
+    this.dictionaryCreationStore.state$.subscribe(state => {
+      const metadata = state.metaData;
+      const blob = new Blob([JSON.stringify(metadata, null, 2)], { type: 'application/json' });
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const baseName = (metadata && metadata.name) ? metadata.name : 'dictionary';
+      saveAs(blob, baseName + '-' + timestamp + '.json');
+    }).unsubscribe();
   }
 
   goBackToDashBorad() {
