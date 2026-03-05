@@ -158,8 +158,8 @@ const server = http.createServer(async (req, res) => {
     return res.end(buf);
   }
 
-  // GET /api/v1/blueprint-model/   (list all)
-  if (method === 'GET' && pathname === `${BASE}/blueprint-model/`) {
+  // GET /api/v1/blueprint-model   (list all)
+  if (method === 'GET' && (pathname === `${BASE}/blueprint-model/` || pathname === `${BASE}/blueprint-model`)) {
     return json(res, blueprints);
   }
 
@@ -176,8 +176,8 @@ const server = http.createServer(async (req, res) => {
     return json(res, { message: 'deleted', id: m[1] });
   }
 
-  // POST /api/v1/blueprint-model/enrich/   – returns enriched CBA zip
-  if (method === 'POST' && pathname === `${BASE}/blueprint-model/enrich/`) {
+  // POST /api/v1/blueprint-model/enrich   – returns enriched CBA zip
+  if (method === 'POST' && (pathname === `${BASE}/blueprint-model/enrich` || pathname === `${BASE}/blueprint-model/enrich/`)) {
     await readBody(req); // drain multipart body
     const buf = minimalZip();
     res.writeHead(200, {
@@ -190,10 +190,12 @@ const server = http.createServer(async (req, res) => {
 
   // POST upload stubs – drain multipart body, echo back first fixture blueprint
   if (method === 'POST' && (
+    pathname === `${BASE}/blueprint-model` ||
     pathname === `${BASE}/blueprint-model/` ||
+    pathname === `${BASE}/blueprint-model/publish` ||
     pathname === `${BASE}/blueprint-model/publish/` ||
-    pathname === `${BASE}/blueprint-model/enrichandpublish/` ||
-    pathname === `${BASE}/blueprint-model/publish`   // deploy (no trailing slash)
+    pathname === `${BASE}/blueprint-model/enrichandpublish` ||
+    pathname === `${BASE}/blueprint-model/enrichandpublish/`
   )) {
     await readBody(req);
     return json(res, blueprints[0]);

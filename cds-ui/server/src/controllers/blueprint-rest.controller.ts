@@ -161,12 +161,13 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
-        // if (appConfig.action.deployBlueprint.grpcEnabled)
         if (appConfig.action.grpcEnabled)
           return this.uploadFileToBlueprintProcessorGrpc(file, 'DRAFT', response);
         else
-          return this.uploadFileToBlueprintController(file, '/blueprint-model/', response);
-      }, err => {
+          return this.uploadFileToBlueprintController(file, '/blueprint-model', response);
+      }).then(resp => {
+        resolve(resp);
+      }).catch(err => {
         reject(err);
       });
     });
@@ -201,12 +202,13 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
-        // if (appConfig.action.deployBlueprint.grpcEnabled)
         if (appConfig.action.grpcEnabled)
           return this.uploadFileToBlueprintProcessorGrpc(file, 'PUBLISH', response);
         else
-          return this.uploadFileToBlueprintController(file, '/blueprint-model/publish/', response);
-      }, err => {
+          return this.uploadFileToBlueprintController(file, '/blueprint-model/publish', response);
+      }).then(resp => {
+        resolve(resp);
+      }).catch(err => {
         reject(err);
       });
     });
@@ -244,7 +246,7 @@ export class BlueprintRestController {
         if (appConfig.action.grpcEnabled)
           return this.uploadFileToBlueprintProcessorGrpc(file, 'ENRICH', response);
         else
-          return this.uploadFileToBlueprintController(file, '/blueprint-model/enrich/', response);
+          return this.uploadFileToBlueprintController(file, '/blueprint-model/enrich', response);
         //   this.uploadFileToBlueprintController(file, "/blueprint-model/enrich/", response).then(resp => {
         //     resolve(resp);
         //   }, err => {
@@ -252,6 +254,10 @@ export class BlueprintRestController {
         //   });
         // }, err => {
         //   reject(err);
+      }).then(resp => {
+        resolve(resp);
+      }).catch(err => {
+        reject(err);
       });
     });
   }
@@ -277,7 +283,11 @@ export class BlueprintRestController {
         if (appConfig.action.grpcEnabled)
           return this.uploadFileToBlueprintProcessorGrpc(file, 'ENRICH', response);
         else
-          return this.uploadFileToBlueprintController(file, '/blueprint-model/enrichandpublish/', response);
+          return this.uploadFileToBlueprintController(file, '/blueprint-model/enrichandpublish', response);
+      }).then(resp => {
+        resolve(resp);
+      }).catch(err => {
+        reject(err);
       });
     });
   }
@@ -329,12 +339,13 @@ export class BlueprintRestController {
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
       this.getFileFromMultiPartForm(request).then(file => {
-        // if (appConfig.action.deployBlueprint.grpcEnabled)
         if (appConfig.action.grpcEnabled)
           return this.uploadFileToBlueprintProcessorGrpc(file, 'PUBLISH', response);
         else
           return this.uploadFileToBlueprintProcessor(file, '/blueprint-model/publish', response);
-      }, err => {
+      }).then(resp => {
+        resolve(resp);
+      }).catch(err => {
         reject(err);
       });
     });
