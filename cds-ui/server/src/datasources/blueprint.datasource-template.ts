@@ -9,7 +9,7 @@ export default {
     "operations": [{
         "template": {
             "method": "GET",
-            "url": processorApiConfig.http.url + "/blueprint-model/",
+            "url": processorApiConfig.http.url + "/blueprint-model",
             "headers": {
                 "accepts": "application/json",
                 "content-type": "application/json",

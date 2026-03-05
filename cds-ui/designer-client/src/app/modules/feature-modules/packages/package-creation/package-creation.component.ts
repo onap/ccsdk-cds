@@ -140,8 +140,9 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
                             this.router.navigate(['/packages/package/' + id]);
                         }
                     }, error => {
-                        // this.toastService.error('Error occure during editng process ' + error.message);
+                        this.toastService.error('Error occurred during save: ' + error.message);
                         console.log('Error -' + error.message);
+                        this.ngxService.stop();
                     }, () => {
                         this.ngxService.stop();
                     });
