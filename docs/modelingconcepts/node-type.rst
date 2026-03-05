@@ -204,8 +204,6 @@ listed in the other section.
             `Script executor type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/component-script-executor.json>`_
             is the definition
 
-            .. _test_test_test:
-
             .. code-block:: json
               :caption: **component-script-executor**
 
@@ -712,7 +710,7 @@ listed in the other section.
                  - Mandatory
 
 
-            `DB source type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-processor-db.json>`_
+            `DB source type <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/definition-type/starter-type/node_type/source-db.json>`_
             is the definition:
 
             .. code-block:: json

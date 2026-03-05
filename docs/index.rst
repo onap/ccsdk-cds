@@ -99,7 +99,7 @@ Library
     itself.
 
     The helper can be found in below link:
-    https://github.com/onap/ccsdk-apps/blob/master/components/scripts/python/ccsdk_netconf/common.py
+    https://github.com/onap/ccsdk-cds/blob/master/components/scripts/python/ccsdk_netconf/common.py
 
 .. |toscaModel| image:: media/tosca_model.jpg
    :width: 500pt

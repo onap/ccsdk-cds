@@ -17,7 +17,7 @@ This way, code changes can be conveniently tested and debugged.
 Check out the code
 ~~~~~~~~~~~~~~~~~~~
 
-Check out the code from Gerrit: https://gerrit.onap.org/r/#/admin/projects/ccsdk/cds
+Check out the code from Gerrit: https://gerrit.onap.org/r/admin/repos/ccsdk/cds
 
 Build it locally
 ~~~~~~~~~~~~~~~~~~

@@ -49,5 +49,15 @@ def setup(app):
     app.add_css_file("css/ribbon.css")
 
 linkcheck_ignore = [
-  r'http://localhost:\d+/'
+  # Local/development URLs referenced in installation and usage guides
+  r'http://localhost:\d+/',
+  r'https?://127\.0\.0\.1:\d+/',
+  # GitHub rate-limits CI runners (HTTP 429) making checks unreliable;
+  # also, line-number anchors (#L123) are rendered via JavaScript and
+  # cannot be resolved by the link checker
+  r'https://github\.com/onap/',
+  # Wiki attachment/thumbnail images were lost during the wiki.onap.org
+  # migration to lf-onap.atlassian.net; the old download URLs now 404
+  r'https://wiki\.onap\.org/download/attachments/',
+  r'https://wiki\.onap\.org/download/thumbnails/',
 ]
