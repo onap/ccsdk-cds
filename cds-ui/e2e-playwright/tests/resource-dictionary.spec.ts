@@ -116,14 +116,15 @@ test.describe('Resource Dictionary – API integration via proxy', () => {
     });
 
     test('direct GET /resourcedictionary/search/:tags returns matching entries', async ({ request }) => {
-        const resp = await request.get('http://localhost:3000/resourcedictionary/search/network');
+        // 'k8s' is used as the search tag because the fixture contains 13 entries tagged with it.
+        const resp = await request.get('http://localhost:3000/resourcedictionary/search/k8s');
         expect(resp.status()).toBe(200);
         const body = await resp.json();
         expect(Array.isArray(body)).toBe(true);
         expect(body.length).toBeGreaterThan(0);
         // Every returned entry must have the searched tag
         for (const entry of body) {
-            expect((entry.tags as string)).toContain('network');
+            expect((entry.tags as string)).toContain('k8s');
         }
     });
 });
@@ -169,8 +170,8 @@ test.describe('Resource Dictionary – paged listing', () => {
         // Wait for Angular to render the dictionary list items
         const cards = page.locator('app-dictionary-list .card');
         await expect(cards.first()).toBeVisible({ timeout: 10_000 });
-        // The fixture has 3 dictionaries + 1 static "Create/Import" card = 4
-        await expect(cards).toHaveCount(4);
+        // The component fetches pageSize=5 dictionaries by default, plus 1 static "Create/Import" card = 6
+        await expect(cards).toHaveCount(6);
     });
 
     test('dictionary header shows correct total count', async ({ page }) => {
@@ -181,9 +182,9 @@ test.describe('Resource Dictionary – paged listing', () => {
             ),
             page.goto('/#/resource-dictionary'),
         ]);
-        // The header shows "Resource Dictionary (N Dictionary)"
+        // The header shows "Resource Dictionary (N Dictionary)" where N is the total count from the fixture
         const header = page.locator('app-dictionary-header h2');
-        await expect(header).toContainText('3', { timeout: 10_000 });
+        await expect(header).toContainText('169', { timeout: 10_000 });
     });
 });
 
@@ -211,9 +212,9 @@ test.describe('Resource Dictionary – create then list', () => {
             page.goto('/#/resource-dictionary'),
         ]);
 
-        // Dictionary list should still render cards (3 dictionaries + 1 create card)
+        // Dictionary list should still render cards (pageSize=5 dictionaries + 1 create card)
         const cards = page.locator('app-dictionary-list .card');
         await expect(cards.first()).toBeVisible({ timeout: 10_000 });
-        await expect(cards).toHaveCount(4);
+        await expect(cards).toHaveCount(6);
     });
 });

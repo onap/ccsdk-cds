@@ -76,6 +76,11 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
     paletteGraph: joint.dia.Graph;
     palettePaper: joint.dia.Paper;
+    zoomLevel = 1.0;
+    isPanning = false;
+    panStartX = 0;
+    panStartY = 0;
+    elementPointerDownEvt: { clientX: number; clientY: number } | null = null;
     ngUnsubscribe = new Subject();
     opt = { tx: 100, ty: 100 };
     filesData: any = [];
@@ -123,6 +128,16 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
     _toggleSidebar2() {
         this.actionAttributesSideBar = !this.actionAttributesSideBar;
+    }
+
+    zoomIn() {
+        this.zoomLevel = Math.min(this.zoomLevel + 0.1, 3.0);
+        this.boardPaper.scale(this.zoomLevel, this.zoomLevel);
+    }
+
+    zoomOut() {
+        this.zoomLevel = Math.max(this.zoomLevel - 0.1, 0.1);
+        this.boardPaper.scale(this.zoomLevel, this.zoomLevel);
     }
 
     publishBluePrint() {
@@ -308,12 +323,73 @@ export class DesignerComponent implements OnInit, OnDestroy {
                 console.log(link);
             });
 
-            this.boardPaper.on('element:pointerdown', element => {
-                // this.modelSelected.emit(element.model.get('model'));
+            this.boardPaper.on('element:pointerdown', (elementView: any, evt: any) => {
+                this.elementPointerDownEvt = { clientX: evt.clientX, clientY: evt.clientY };
+            });
+
+            // Open the sidepane only on a clean click (no drag). Compare client
+            // coordinates from pointerdown vs pointerup; if the mouse moved more
+            // than 5 px in either axis we treat it as a drag and skip opening.
+            this.boardPaper.on('element:pointerup', (elementView: any, evt: any) => {
+                if (!this.elementPointerDownEvt) { return; }
+                const dx = Math.abs(evt.clientX - this.elementPointerDownEvt.clientX);
+                const dy = Math.abs(evt.clientY - this.elementPointerDownEvt.clientY);
+                this.elementPointerDownEvt = null;
+                if (dx > 5 || dy > 5) { return; }
+
+                const elementType = elementView.model.attributes.type;
+                if (elementType === ActionElementTypeName) {
+                    const actionName = elementView.model.attributes.attrs['#label'].text;
+                    this.openActionAttributes(actionName);
+                } else if (elementType === 'board.FunctionElement') {
+                    const parentCell = elementView.model.getParentCell();
+                    if (parentCell && parentCell.attributes.type === ActionElementTypeName) {
+                        const actionName = parentCell.attributes.attrs['#label'].text;
+                        this.currentActionName = actionName;
+                        this.designerStore.setCurrentAction(actionName);
+                        this.steps = Object.keys(
+                            this.designerState.template.workflows[actionName]['steps']);
+                    }
+                    const functionName = elementView.model.attributes.attrs['#label'].text;
+                    this.openFunctionAttributes(functionName);
+                }
             });
 
             this.boardPaper.on('blank:pointerclick', () => {
                 // this.selectedModel = undefined;
+            });
+
+            this.boardPaper.$el.on('wheel', (event: any) => {
+                event.preventDefault();
+                if (event.originalEvent.deltaY < 0) {
+                    this.zoomIn();
+                } else {
+                    this.zoomOut();
+                }
+            });
+
+            this.boardPaper.on('blank:pointerdown', (evt: any) => {
+                this.isPanning = true;
+                this.panStartX = evt.clientX;
+                this.panStartY = evt.clientY;
+                this.boardPaper.$el.addClass('is-panning');
+            });
+
+            this.boardPaper.$el.on('mousemove.pan', (evt: any) => {
+                if (!this.isPanning) { return; }
+                const dx = evt.clientX - this.panStartX;
+                const dy = evt.clientY - this.panStartY;
+                this.panStartX = evt.clientX;
+                this.panStartY = evt.clientY;
+                const t = this.boardPaper.translate();
+                this.boardPaper.translate(t.tx + dx, t.ty + dy);
+            });
+
+            $(document).on('mouseup.boardPan', () => {
+                if (this.isPanning) {
+                    this.isPanning = false;
+                    this.boardPaper.$el.removeClass('is-panning');
+                }
             });
 
             this.boardGraph.on('change:position', (cell) => {
@@ -452,6 +528,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        $(document).off('mouseup.boardPan');
         this.ngUnsubscribe.next();
         this.ngUnsubscribe.complete();
     }

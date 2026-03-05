@@ -150,13 +150,13 @@
             </li>
             <li class="vertical_line"></li>
             <li>
-                <button type="button" class="btn tooltip-bottom" data-tooltip="Zoom Out">
+                <button (click)="zoomOut()" type="button" class="btn tooltip-bottom" data-tooltip="Zoom Out">
                     <img src="/assets/img/icon-zoomOut.svg">
                 </button>
             </li>
-            <li class="zoom-percent">100%</li>
+            <li class="zoom-percent">{{(zoomLevel * 100) | number:'1.0-0'}}%</li>
             <li>
-                <button type="button" class="btn tooltip-bottom" data-tooltip="Zoom In">
+                <button (click)="zoomIn()" type="button" class="btn tooltip-bottom" data-tooltip="Zoom In">
                     <img src="/assets/img/icon-zoomIn.svg"></button>
             </li>
         </ul>
@@ -276,11 +276,11 @@
                 </button>
             </div>
             <div class="btn-group mr-2" role="group" aria-label="Second group">
-                <button type="button" class="btn btn-secondary tooltip-bottom" data-tooltip="Zoom Out">
+                <button (click)="zoomOut()" type="button" class="btn btn-secondary tooltip-bottom" data-tooltip="Zoom Out">
                     <img src="/assets/img/icon-zoomOut.svg">
                 </button>
-                <button type="button" class="btn btn-secondary pl-0 pr-0">100%</button>
-                <button type="button" class="btn btn-secondary tooltip-bottom" data-tooltip="Zoom In">
+                <button type="button" class="btn btn-secondary pl-0 pr-0">{{(zoomLevel * 100) | number:'1.0-0'}}%</button>
+                <button (click)="zoomIn()" type="button" class="btn btn-secondary tooltip-bottom" data-tooltip="Zoom In">
                     <img src="/assets/img/icon-zoomIn.svg">
                 </button>
             </div>
