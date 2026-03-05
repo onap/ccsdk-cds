@@ -24,6 +24,22 @@ export class DataDictionaryController {
     public rdservice: ResourceDictionaryService,
   ) { }
 
+  @get('/resourcedictionary/paged', {
+    responses: {
+      '200': {
+        description: 'Resource Dictionary with pagination',
+        content: { 'application/json': {} },
+      },
+    },
+  })
+  async getPagedDictionary(
+    @param.query.number('limit') limit: number,
+    @param.query.number('offset') offset: number,
+    @param.query.string('sort') sort: string,
+    @param.query.string('sortType') sortType: string) {
+    return await this.rdservice.getPagedDictionary(limit, offset, sort, sortType || 'ASC');
+  }
+
   @get('/resourcedictionary/{name}', {
     responses: {
       '200': {
