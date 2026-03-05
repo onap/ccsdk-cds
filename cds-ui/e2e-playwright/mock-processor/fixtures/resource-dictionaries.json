@@ -1,0 +1,71 @@
+[
+  {
+    "name": "hostname",
+    "tags": "network,host,demo",
+    "updatedBy": "admin",
+    "updatedDate": "2024-01-10T00:00:00.000Z",
+    "definition": {
+      "tags": "network,host,demo",
+      "updated-by": "admin",
+      "sources": {
+        "input": {
+          "type": "source-input",
+          "properties": {}
+        }
+      },
+      "property": {
+        "required": true,
+        "type": "string",
+        "description": "The hostname of the VNF component"
+      }
+    }
+  },
+  {
+    "name": "vnf-id",
+    "tags": "vnf,id,demo",
+    "updatedBy": "admin",
+    "updatedDate": "2024-01-10T00:00:00.000Z",
+    "definition": {
+      "tags": "vnf,id,demo",
+      "updated-by": "admin",
+      "sources": {
+        "input": {
+          "type": "source-input",
+          "properties": {}
+        },
+        "aai": {
+          "type": "source-rest",
+          "properties": {
+            "url-path": "/network/generic-vnfs/generic-vnf/{vnf-id}"
+          }
+        }
+      },
+      "property": {
+        "required": true,
+        "type": "string",
+        "description": "The VNF identifier"
+      }
+    }
+  },
+  {
+    "name": "v-server-ip",
+    "tags": "network,ip,server",
+    "updatedBy": "designer",
+    "updatedDate": "2024-02-05T00:00:00.000Z",
+    "definition": {
+      "tags": "network,ip,server",
+      "updated-by": "designer",
+      "sources": {
+        "default": {
+          "type": "source-default",
+          "properties": {}
+        }
+      },
+      "property": {
+        "required": false,
+        "type": "string",
+        "description": "Server IP address"
+      }
+    }
+  }
+]

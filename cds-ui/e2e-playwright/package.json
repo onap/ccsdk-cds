@@ -1,0 +1,19 @@
+{
+  "name": "cds-ui-e2e-playwright",
+  "version": "1.0.0",
+  "description": "Playwright end-to-end tests for cds-ui (frontend + backend)",
+  "private": true,
+  "scripts": {
+    "dev": "bash start-dev.sh",
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "report": "npx playwright show-report",
+    "install:browsers": "npx playwright install --with-deps chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,71 @@
+[
+  {
+    "modelName": "source-input",
+    "derivedFrom": "tosca.nodes.Root",
+    "definitionType": "data_type",
+    "definition": {
+      "description": "This is an input source type",
+      "version": "1.0.0",
+      "attributes": {},
+      "operations": {}
+    },
+    "description": "Input source type",
+    "version": "1.0.0",
+    "tags": "source,input",
+    "creationDate": "2024-01-01T00:00:00.000Z",
+    "updatedBy": "admin"
+  },
+  {
+    "modelName": "source-default",
+    "derivedFrom": "tosca.nodes.Root",
+    "definitionType": "data_type",
+    "definition": {
+      "description": "This is a default source type",
+      "version": "1.0.0",
+      "attributes": {},
+      "operations": {}
+    },
+    "description": "Default source type",
+    "version": "1.0.0",
+    "tags": "source,default",
+    "creationDate": "2024-01-01T00:00:00.000Z",
+    "updatedBy": "admin"
+  },
+  {
+    "modelName": "source-rest",
+    "derivedFrom": "tosca.nodes.Root",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "REST source type",
+      "version": "1.0.0",
+      "properties": {
+        "url-path": { "required": true, "type": "string" },
+        "verb": { "required": false, "type": "string", "default": "GET" }
+      },
+      "operations": {}
+    },
+    "description": "REST-based source type",
+    "version": "1.0.0",
+    "tags": "source,rest,http",
+    "creationDate": "2024-01-01T00:00:00.000Z",
+    "updatedBy": "admin"
+  },
+  {
+    "modelName": "source-db",
+    "derivedFrom": "tosca.nodes.Root",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "Database source type",
+      "version": "1.0.0",
+      "properties": {
+        "query": { "required": true, "type": "string" }
+      },
+      "operations": {}
+    },
+    "description": "Database source type",
+    "version": "1.0.0",
+    "tags": "source,db,database",
+    "creationDate": "2024-01-01T00:00:00.000Z",
+    "updatedBy": "admin"
+  }
+]
