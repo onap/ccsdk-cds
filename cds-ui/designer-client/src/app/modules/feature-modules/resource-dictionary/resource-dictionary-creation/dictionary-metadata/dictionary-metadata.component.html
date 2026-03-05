@@ -19,9 +19,9 @@
 */-->
 <div class="card creat-card">
     <div class="single-line-model">
-        <label class="label-name">Name</label>
+        <label class="label-name">Name <span class="required-indicator">*</span></label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.name" placeholder="Dictionary Name">
+            <input type="input" [(ngModel)]="metaDataTab.name" (ngModelChange)="saveMetaDataToStore()" placeholder="Dictionary Name" required>
         </div>
         <!-- <div class="model-note-container error-message">
             Package name already exists with this version. Please enter a different name or enter different version
@@ -33,7 +33,7 @@
         <label class="label-name">Version <span>*</span></label>
         <div class="label-input">
             <input type="input" [readOnly]="!packageNameAndVersionEnables" [(ngModel)]="metaDataTab.version"
-                (input)="validatePackageNameAndVersion()" placeholder="Example: 1.0.0"> 
+                (input)="validatePackageNameAndVersion()" placeholder="Example: 1.0.0">
         </div>
         <div class="model-note-container error-message">{{errorMessage}}</div>
     </div>  -->
@@ -44,15 +44,15 @@
         </div>
     </div>
     <div class="single-line-model">
-        <label class="label-name">Data Type</label>
+        <label class="label-name">Data Type <span class="required-indicator">*</span></label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.property.type" placeholder="Data Type">
+            <input type="input" [(ngModel)]="metaDataTab.property.type" (ngModelChange)="saveMetaDataToStore()" placeholder="Data Type" required>
         </div>
     </div>
     <div class="single-line-model">
-        <label class="label-name">Description</label>
+        <label class="label-name">Description <span class="required-indicator">*</span></label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.property.description" placeholder="Descripe the package">
+            <input type="input" [(ngModel)]="metaDataTab.property.description" (ngModelChange)="saveMetaDataToStore()" placeholder="Describe the package" required>
         </div>
     </div>
     <div class="single-line-model">
@@ -76,9 +76,9 @@
         </div>
     </div> -->
     <div class="single-line-model">
-        <label class="label-name">Updated By</label>
+        <label class="label-name">Updated By <span class="required-indicator">*</span></label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab['updated-by']" placeholder="Updated By">
+            <input type="input" [(ngModel)]="metaDataTab['updated-by']" (ngModelChange)="saveMetaDataToStore()" placeholder="Updated By">
         </div>
     </div>
 

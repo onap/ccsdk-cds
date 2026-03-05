@@ -17,3 +17,7 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
+.required-indicator {
+    color: #dc3545;
+    font-weight: bold;
+}

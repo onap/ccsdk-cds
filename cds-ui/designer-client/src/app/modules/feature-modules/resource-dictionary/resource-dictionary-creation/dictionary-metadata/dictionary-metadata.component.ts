@@ -57,6 +57,13 @@ export class DictionaryMetadataComponent implements OnInit {
 
     }
 
+    isFormValid(): boolean {
+        return !!(this.metaDataTab.name && this.metaDataTab.name.trim().length > 0
+            && this.metaDataTab.property.type && this.metaDataTab.property.type.trim().length > 0
+            && this.metaDataTab.property.description && this.metaDataTab.property.description.trim().length > 0
+            && this.metaDataTab['updated-by'] && this.metaDataTab['updated-by'].trim().length > 0);
+    }
+
     // getSources() {
     //     this.dictionaryCreationService.getSources().subscribe(res => {
     //         console.log(res);

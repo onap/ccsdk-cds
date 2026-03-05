@@ -67,11 +67,10 @@ export class ResourceDictionaryCreationComponent implements OnInit {
 
   saveDictionaryToStore() {
     this.metadataTabComponent.saveMetaDataToStore();
-    // console.log('00000000000');
-    // this.dictionaryCreationStore.getSources();
-    // this.dictionaryCreationStore.state$.subscribe(dd => {
-    //   console.log(dd);
-    // });
+  }
+
+  isSaveDisabled(): boolean {
+    return !this.metadataTabComponent || !this.metadataTabComponent.isFormValid();
   }
 
   createDictionary() {
