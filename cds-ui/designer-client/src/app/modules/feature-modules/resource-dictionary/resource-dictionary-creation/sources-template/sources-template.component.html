@@ -75,7 +75,7 @@
           <div id="collapse-{{item.key}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
             <div class="card-body">
               <ace-editor [mode]="'json'" (textChange)="addProperties(item,editor.text)" [autoUpdateContent]="true"
-                [durationBeforeCallback]="500" [theme]="'tomorrow_night_bright'" #editor style="height:300px;">
+                [durationBeforeCallback]="500" [theme]="'eclipse'" #editor style="height:300px;">
               </ace-editor>
             </div>
           </div>
@@ -95,7 +95,7 @@
             </mat-expansion-panel-header>
             <br>
             <ace-editor [(text)]=item.value [mode]="'javascript'" [autoUpdateContent]="true"
-              [durationBeforeCallback]="1000" (textChanged)="textChanged($event,item)" [theme]="'tomorrow_night_bright'"
+              [durationBeforeCallback]="1000" (textChanged)="textChanged($event,item)" [theme]="'eclipse'"
               #editor style="height:300px;">
             </ace-editor>
           </mat-expansion-panel>

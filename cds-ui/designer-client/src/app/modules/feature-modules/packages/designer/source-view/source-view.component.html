@@ -137,7 +137,7 @@
 </nav>
 
 <ng-sidebar-container class="sidebar-container">
-    
+
     <ng-sidebar [(opened)]="controllerSideBar" [sidebarClass]="'demo-sidebar controllerSidebar container-fluid'"
         [mode]="'push'" #sidebarLeft>
         <div class="row">
@@ -153,8 +153,8 @@
 
     <div ng-sidebar-content id="board-paper">
         <ace-editor [(text)]="content" [mode]="'json'" [autoUpdateContent]="true" [durationBeforeCallback]="1000"
-            [theme]="'tomorrow_night_bright'" #editor style="height:500px">
+            [theme]="'eclipse'" #editor style="height:500px">
         </ace-editor>
 
     </div>
-    </ng-sidebar-container> 
+    </ng-sidebar-container>

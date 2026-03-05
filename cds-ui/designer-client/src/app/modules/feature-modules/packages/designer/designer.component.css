@@ -313,7 +313,7 @@ tspan#type{
   font-size: 13px;
 }
 .input-search-controller::placeholder{
-  color: #D0D7E4;
+  color: #6B7D93;
   font-size: 12px;
 }
 .input-search-controller:focus{
@@ -431,13 +431,13 @@ p.compType-4{
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
-  color: #C3CDDB;
+  color: #6B7D93;
 }
 .controllerSidebar b{
   margin-left: 12px;
   margin-bottom: 9px;
   font-size: 12px;
-  color: #C3CDDB;
+  color: #6B7D93;
 }
 /*PAUSE*/
 /* .ng-sidebar__content .joint-paper > svg{
@@ -547,7 +547,7 @@ p.compType-4{
 .inserActionBtns .btn:last-child{
   background: #fff;
   border: solid 1px #D9E6F2;
-  color: #C3CDDB;
+  color: #6B7D93;
   margin-top: 14px;
 }
 .controllerSidebar .custom-control label{
@@ -846,7 +846,7 @@ p.compType-4{
   box-shadow: 0 0 0 4px rgba(0,149,255,0.15);
 }
 .attributesContainer .form-control::placeholder{
-  color: #CFD7E5;
+  color: #8E95A0;
 }
 .attributesContainer .attribute-value{
   text-transform: unset;
@@ -984,7 +984,7 @@ p.compType-4{
 }
 .accordion .btn-link{
   padding: 0;
-  color: #C3CDDB;
+  color: #6B7D93;
   font-weight: bold;
   font-size: 13px;
   text-transform: uppercase;
@@ -1184,7 +1184,7 @@ ul.editor{
   padding-top: 0 !important;
 }
 .createAttributeTabs .nav-item a{
-  color: #C3CDDB !important;
+  color: #6B7D93 !important;
 }
 .createAttributeTabs .nav-item a,
 .createAttributeTabs .nav-item a.active{
@@ -1214,7 +1214,7 @@ ul.editor{
 }
 .createAttributeTabs .notation{
   margin-left: 3px;
-  color: #C3CDDB !important;
+  color: #6B7D93 !important;
   font-weight: normal;
 }
 .addedFunctionsList,
@@ -1342,7 +1342,7 @@ ul.editor{
   color: #1B3E6F;
 }
 .create-form .form-control::placeholder{
-  color: #C3CDDB;
+  color: #6B7D93;
 }
 .create-form .form-control:focus{
   border-bottom-color: #1B3E6F;
@@ -1745,7 +1745,7 @@ ul.editor{
 .tooltiptext h6{
   background: transparent;
   line-height: 24px !important;
-  color: #C3CDDB;
+  color: #6B7D93;
   text-transform: initial;
 }
 .tooltipHTML .tooltiptext span{
