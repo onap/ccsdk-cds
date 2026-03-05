@@ -70,6 +70,14 @@ function pagedResponse(items, query) {
   const sliced = items.slice(offset, offset + limit);
   return {
     content:          sliced,
+    pageable: {
+      pageNumber:     page,
+      pageSize:       limit,
+      sort:           { sorted: true, unsorted: false, empty: false },
+      offset:         offset,
+      unpaged:        false,
+      paged:          true,
+    },
     totalElements:    items.length,
     totalPages:       Math.ceil(items.length / limit),
     size:             limit,
@@ -82,8 +90,18 @@ function pagedResponse(items, query) {
   };
 }
 
-/** Return the smallest valid ZIP binary (4 bytes of PK magic). */
-function minimalZip() {
+const CBA_ZIPS = path.join(FIXTURES, 'cba-zips');
+
+/**
+ * Load a real CBA ZIP from fixtures/cba-zips/ for the given name+version.
+ * Falls back to a minimal 4-byte PK header if the file does not exist.
+ */
+function loadCbaZip(name, version) {
+  const zipPath = path.join(CBA_ZIPS, `${name}-${version}.zip`);
+  if (fs.existsSync(zipPath)) {
+    return fs.readFileSync(zipPath);
+  }
+  // Fallback: smallest valid ZIP binary (4 bytes of PK magic).
   return Buffer.from('504b0304', 'hex');
 }
 
@@ -149,7 +167,7 @@ const server = http.createServer(async (req, res) => {
   if (method === 'GET' &&
       (m = pathname.match(`^${BASE}/blueprint-model/download/by-name/([^/]+)/version/([^/]+)$`))) {
     const [, name, version] = m;
-    const buf = minimalZip();
+    const buf = loadCbaZip(decodeURIComponent(name), decodeURIComponent(version));
     res.writeHead(200, {
       'Content-Type':        'application/zip',
       'Content-Disposition': `attachment; filename="${name}-${version}.zip"`,
@@ -164,10 +182,13 @@ const server = http.createServer(async (req, res) => {
   }
 
   // GET /api/v1/blueprint-model/:id
+  // Returns the blueprint wrapped in an array so the LoopBack BFF's
+  // responsePath "$.*" extracts it as [{ … }] rather than an array of
+  // bare property values.
   if (method === 'GET' &&
       (m = pathname.match(`^${BASE}/blueprint-model/([^/]+)$`))) {
     const bp = blueprints.find(b => b.id === m[1]);
-    return bp ? json(res, bp) : json(res, { error: 'not found' }, 404);
+    return bp ? json(res, [bp]) : json(res, { error: 'not found' }, 404);
   }
 
   // DELETE /api/v1/blueprint-model/:id
@@ -179,7 +200,11 @@ const server = http.createServer(async (req, res) => {
   // POST /api/v1/blueprint-model/enrich   – returns enriched CBA zip
   if (method === 'POST' && (pathname === `${BASE}/blueprint-model/enrich` || pathname === `${BASE}/blueprint-model/enrich/`)) {
     await readBody(req); // drain multipart body
-    const buf = minimalZip();
+    // Return the first available CBA zip as the 'enriched' result
+    const firstBp = blueprints[0];
+    const buf = firstBp
+      ? loadCbaZip(firstBp.artifactName, firstBp.artifactVersion)
+      : Buffer.from('504b0304', 'hex');
     res.writeHead(200, {
       'Content-Type':        'application/zip',
       'Content-Disposition': 'attachment; filename="enriched.zip"',

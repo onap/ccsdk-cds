@@ -10,11 +10,17 @@
  *      mock is running the integration tests assert exact HTTP 200 responses
  *      and fixture data rendered in the DOM.
  *
- * Fixture data (from mock-processor/fixtures/blueprints.json):
- *   vFW-CDS  1.0.0  tags: vFW,firewall,demo
- *   vDNS-CDS 2.0.0  tags: vDNS,dns,demo
- *   vLB-CDS  1.1.0  tags: vLB,loadbalancer
- *   vPE-CDS  3.0.0  tags: vPE,archived,edge
+ * Fixture data (from mock-processor/fixtures/blueprints.json – real data from
+ * cds-ui-oom-sm-master.tnaplab.telekom.de):
+ *   RT-resource-resolution  1.0.0  tags: test, regression
+ *   vLB_CDS_KOTLIN          1.0.0  tags: test, vDNS-CDS, SCALE-OUT, MARCO
+ *   vLB_CDS_RESTCONF        1.0.0  tags: vLB-CDS
+ *   vLB_CDS                 1.0.0  tags: vLB_CDS
+ *   5G_Core                 2.0.0  tags: Thamlur Raju, Malinconico Aniello Paolo,Vamshi, 5G_Core
+ *   vFW-CDS                 1.0.0  tags: vFW-CDS
+ *   pnf_netconf             1.0.0  tags: pnf_netconf
+ *   APACHE                  1.0.0  tags: Lukasz Rajewski, CNF
+ *   ubuntu20                1.0.0  tags: ubuntu20
  */
 
 import { test, expect } from '@playwright/test';
@@ -27,11 +33,15 @@ import { test, expect } from '@playwright/test';
  * template uses *ngFor to render one card per blueprint in the fixture.
  */
 async function waitForPackageCards(page: import('@playwright/test').Page) {
-    // At least one package name should appear (fixture has 4 blueprints)
+    // At least one package name should appear (fixture has 9 blueprints)
     await expect(page.locator('.packageName').first()).toBeVisible({ timeout: 20_000 });
 }
 
-const FIXTURE_NAMES = ['vFW-CDS', 'vDNS-CDS', 'vLB-CDS', 'vPE-CDS'] as const;
+const FIXTURE_NAMES = [
+  'RT-resource-resolution', 'vLB_CDS_KOTLIN', 'vLB_CDS_RESTCONF', 'vLB_CDS',
+  '5G_Core', 'vFW-CDS', 'pnf_netconf', 'APACHE', 'ubuntu20',
+] as const;
+const FIXTURE_COUNT = FIXTURE_NAMES.length;
 
 test.describe('Packages Dashboard', () => {
   test.beforeEach(async ({ page }) => {
@@ -167,30 +177,33 @@ test.describe('Packages Dashboard – fixture data loaded from mock', () => {
 
   test('package cards render fixture data correctly', async ({ page }) => {
     // Counts – one card per fixture blueprint
-    await expect(page.locator('.packageName')).toHaveCount(4, { timeout: 20_000 });
+    await expect(page.locator('.packageName')).toHaveCount(FIXTURE_COUNT, { timeout: 20_000 });
 
-    // Each fixture artifact name is visible
+    // Each fixture artifact name is visible (use anchored regex to avoid substring collisions,
+    // e.g. 'vLB_CDS' would otherwise also match 'vLB_CDS_KOTLIN' and 'vLB_CDS_RESTCONF')
     for (const name of FIXTURE_NAMES) {
-      await expect(page.locator('.packageName', { hasText: name })).toBeVisible();
+      await expect(
+        page.locator('.packageName').filter({ hasText: new RegExp(`^\\s*${name}\\s*$`) })
+      ).toBeVisible();
     }
 
     // Version strings (rendered as "v{artifactVersion}")
-    for (const v of ['v1.0.0', 'v2.0.0', 'v1.1.0', 'v3.0.0']) {
-      await expect(page.locator('.package-version', { hasText: v })).toBeVisible();
-    }
+    // 8 blueprints at v1.0.0 and 1 at v2.0.0
+    await expect(page.locator('.package-version', { hasText: 'v1.0.0' }).first()).toBeVisible();
+    await expect(page.locator('.package-version', { hasText: 'v2.0.0' })).toBeVisible();
 
-    // Deployed icon – only vFW-CDS, vDNS-CDS and vPE-CDS have published: "Y"
-    await expect(page.locator('img.icon-deployed')).toHaveCount(3);
+    // Deployed icon – all 9 blueprints have published: "Y"
+    await expect(page.locator('img.icon-deployed')).toHaveCount(FIXTURE_COUNT);
 
     // Description and tags – one element per card, at least one non-empty desc
-    await expect(page.locator('.package-desc')).toHaveCount(4);
+    await expect(page.locator('.package-desc')).toHaveCount(FIXTURE_COUNT);
     await expect(page.locator('.package-desc').first()).not.toBeEmpty();
-    await expect(page.locator('.packageTag')).toHaveCount(4);
-    await expect(page.locator('.packageTag', { hasText: /demo/ }).first()).toBeVisible();
+    await expect(page.locator('.packageTag')).toHaveCount(FIXTURE_COUNT);
+    await expect(page.locator('.packageTag').first()).not.toBeEmpty();
 
     // Action buttons – each card must have both buttons
-    await expect(page.locator('.btn-card-config')).toHaveCount(4);
-    await expect(page.locator('.btn-card-topology')).toHaveCount(4);
+    await expect(page.locator('.btn-card-config')).toHaveCount(FIXTURE_COUNT);
+    await expect(page.locator('.btn-card-topology')).toHaveCount(FIXTURE_COUNT);
   });
 });
 
@@ -234,7 +247,7 @@ test.describe('Packages Dashboard – search', () => {
     await expect(page.locator('.packageName', { hasText: 'vFW-CDS' })).toBeVisible({ timeout: 10_000 });
   });
 
-  test('clearing the search term restores all four package cards', async ({ page }) => {
+  test('clearing the search term restores all package cards', async ({ page }) => {
     // Filter down to vFW results
     await page.evaluate(() => {
       const input = document.querySelector('.searchInput') as HTMLInputElement;
@@ -251,7 +264,7 @@ test.describe('Packages Dashboard – search', () => {
     });
     await page.waitForLoadState('networkidle');
 
-    await expect(page.locator('.packageName')).toHaveCount(4, { timeout: 20_000 });
+    await expect(page.locator('.packageName')).toHaveCount(FIXTURE_COUNT, { timeout: 20_000 });
   });
 });
 

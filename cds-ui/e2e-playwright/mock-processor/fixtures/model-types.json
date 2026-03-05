@@ -1,71 +1,1762 @@
 [
   {
-    "modelName": "source-input",
-    "derivedFrom": "tosca.nodes.Root",
+    "modelName": "datatype-property",
+    "derivedFrom": "tosca.datatypes.Root",
     "definitionType": "data_type",
     "definition": {
-      "description": "This is an input source type",
       "version": "1.0.0",
-      "attributes": {},
-      "operations": {}
+      "description": "This is Entry point Input Data Type, which is dynamic datatype, The parameter names will be populated during the Design time for each inputs",
+      "properties": {
+        "type": {
+          "required": true,
+          "type": "string"
+        },
+        "description": {
+          "required": false,
+          "type": "string"
+        },
+        "required": {
+          "required": false,
+          "type": "boolean"
+        },
+        "default": {
+          "required": false,
+          "type": "string"
+        },
+        "entry_schema": {
+          "required": false,
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
     },
-    "description": "Input source type",
+    "description": "This is Entry point Input Data Type, which is dynamic datatype, The parameter names will be populated during the Design time for each inputs",
     "version": "1.0.0",
-    "tags": "source,input",
-    "creationDate": "2024-01-01T00:00:00.000Z",
-    "updatedBy": "admin"
+    "tags": "datatype-property,tosca.datatypes.Root,data_type",
+    "creationDate": "2026-03-04T14:26:41.463Z",
+    "updatedBy": "System"
   },
   {
-    "modelName": "source-default",
-    "derivedFrom": "tosca.nodes.Root",
+    "modelName": "datatype-resource-assignment",
+    "derivedFrom": "tosca.datatypes.Root",
     "definitionType": "data_type",
     "definition": {
-      "description": "This is a default source type",
       "version": "1.0.0",
-      "attributes": {},
-      "operations": {}
+      "description": "This is Resource Assignment Data Type",
+      "properties": {
+        "property": {
+          "required": true,
+          "type": "datatype-property"
+        },
+        "input-param": {
+          "required": true,
+          "type": "boolean"
+        },
+        "dictionary-name": {
+          "required": false,
+          "type": "string"
+        },
+        "dictionary-source": {
+          "required": false,
+          "type": "string"
+        },
+        "templating-constants": {
+          "required": false,
+          "type": "map",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "dependencies": {
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "required": false,
+          "type": "string"
+        },
+        "message": {
+          "required": false,
+          "type": "string"
+        },
+        "updated-date": {
+          "required": false,
+          "type": "string"
+        },
+        "updated-by": {
+          "required": false,
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
     },
-    "description": "Default source type",
+    "description": "This is Resource Assignment Data Type",
     "version": "1.0.0",
-    "tags": "source,default",
-    "creationDate": "2024-01-01T00:00:00.000Z",
-    "updatedBy": "admin"
+    "tags": "datatype-resource-assignment,tosca.datatypes.Root,data_type",
+    "creationDate": "2026-03-04T14:26:41.467Z",
+    "updatedBy": "System"
   },
   {
-    "modelName": "source-rest",
-    "derivedFrom": "tosca.nodes.Root",
-    "definitionType": "node_type",
+    "modelName": "dt-license-key",
+    "derivedFrom": "tosca.datatypes.Root",
+    "definitionType": "data_type",
     "definition": {
-      "description": "REST source type",
+      "version": "1.0.0",
+      "description": "This is dt-plicense-key Data Type",
+      "properties": {
+        "license-key": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    },
+    "description": "This is dt-plicense-key Data Type",
+    "version": "1.0.0",
+    "tags": "dt-license-key,tosca.datatypes.Root,data_type",
+    "creationDate": "2026-03-04T14:26:41.466Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "dt-netbox-ip",
+    "derivedFrom": "tosca.datatypes.Root",
+    "definitionType": "data_type",
+    "definition": {
+      "version": "1.0.0",
+      "description": "This is Netbox IP Data Type",
+      "properties": {
+        "address": {
+          "required": true,
+          "type": "string"
+        },
+        "id": {
+          "required": true,
+          "type": "integer"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    },
+    "description": "This is Netbox IP Data Type",
+    "version": "1.0.0",
+    "tags": "dt-netbox-ip,tosca.datatypes.Root,data_type",
+    "creationDate": "2026-03-04T14:26:41.478Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "dt-system-packages",
+    "derivedFrom": "tosca.datatypes.Root",
+    "definitionType": "data_type",
+    "definition": {
+      "description": "This represent System Package Data Type",
       "version": "1.0.0",
       "properties": {
-        "url-path": { "required": true, "type": "string" },
-        "verb": { "required": false, "type": "string", "default": "GET" }
+        "type": {
+          "required": true,
+          "type": "string",
+          "constraints": [
+            {
+              "valid_values": [
+                "ansible_galaxy",
+                "pip"
+              ]
+            }
+          ]
+        },
+        "package": {
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        }
       },
-      "operations": {}
+      "derived_from": "tosca.datatypes.Root"
     },
-    "description": "REST-based source type",
+    "description": "This represent System Package Data Type",
     "version": "1.0.0",
-    "tags": "source,rest,http",
-    "creationDate": "2024-01-01T00:00:00.000Z",
-    "updatedBy": "admin"
+    "tags": "dt-system-packages,tosca.datatypes.Root,data_type",
+    "creationDate": "2026-03-04T14:26:41.478Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "dt-v4-aggregate",
+    "derivedFrom": "tosca.datatypes.Root",
+    "definitionType": "data_type",
+    "definition": {
+      "version": "1.0.0",
+      "description": "This is dt-v4-aggregate Data Type",
+      "properties": {
+        "ipv4-address": {
+          "required": true,
+          "type": "string"
+        },
+        "ipv4-plen": {
+          "required": false,
+          "type": "integer"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    },
+    "description": "This is dt-v4-aggregate Data Type",
+    "version": "1.0.0",
+    "tags": "dt-v4-aggregate,tosca.datatypes.Root,data_type",
+    "creationDate": "2026-03-04T14:26:41.468Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "tosca.datatypes.Credential",
+    "derivedFrom": "tosca.datatypes.Root",
+    "definitionType": "data_type",
+    "definition": {
+      "version": "1.0.0",
+      "description": "Credential",
+      "properties": {
+        "protocol": {
+          "required": false,
+          "type": "string"
+        },
+        "token_type": {
+          "required": true,
+          "type": "string",
+          "default": "password"
+        },
+        "token": {
+          "required": false,
+          "type": "string"
+        },
+        "keys": {
+          "required": false,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "user": {
+          "required": false,
+          "type": "string"
+        }
+      },
+      "derived_from": "tosca.datatypes.Root"
+    },
+    "description": "Credential",
+    "version": "1.0.0",
+    "tags": "tosca.datatypes.Credential,tosca.datatypes.Root,data_type",
+    "creationDate": "2026-03-04T14:26:41.478Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-config-snapshots-executor",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Resource configuration snapshots Execution Component.",
+      "version": "1.0.0",
+      "attributes": {
+        "config-snapshot-status": {
+          "required": true,
+          "type": "string"
+        },
+        "config-snapshot-message": {
+          "required": true,
+          "type": "string"
+        },
+        "config-snapshot-value": {
+          "required": false,
+          "type": "string"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ComponentConfigSnapshotsExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "operation": {
+                  "description": "Operation to perform: fetch, store, diff. (required)",
+                  "required": true,
+                  "type": "string",
+                  "constraints": [
+                    {
+                      "valid_values": [
+                        "fetch",
+                        "store",
+                        "diff"
+                      ]
+                    }
+                  ]
+                },
+                "resource-id": {
+                  "description": "Identifier for the resource config to operate on. (required)",
+                  "required": true,
+                  "type": "string"
+                },
+                "resource-type": {
+                  "description": "Type of the resource config to operate on, e.g. PNF, VNF, etc. (required)",
+                  "required": true,
+                  "type": "string"
+                },
+                "resource-status": {
+                  "description": "Status of the resource to fetch or store, either RUNNING or CANDIDATE. (optional)",
+                  "required": false,
+                  "type": "string",
+                  "default": "RUNNING",
+                  "constraints": [
+                    {
+                      "valid_values": [
+                        "RUNNING",
+                        "CANDIDATE"
+                      ]
+                    }
+                  ]
+                },
+                "resource-snapshot": {
+                  "description": "The resource config snapshot to store for the resource identified by id/type/status. (store operation only)",
+                  "required": false,
+                  "type": "string"
+                },
+                "diff-content-type": {
+                  "description": "Specify the type of content expected, to perform comparison on. (diff operation only)",
+                  "required": false,
+                  "type": "string",
+                  "constraints": [
+                    {
+                      "valid_values": [
+                        "xml",
+                        "json"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This is Resource configuration snapshots Execution Component.",
+    "version": "1.0.0",
+    "tags": "component-config-snapshots-executor,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.378Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-jython-executor",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Jython Execution Component.",
+      "version": "1.0.0",
+      "attributes": {
+        "response-data": {
+          "required": false,
+          "type": "json"
+        },
+        "status": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ComponentJythonExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "instance-dependencies": {
+                  "required": true,
+                  "description": "Instance Names to Inject to Jython Script.",
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "dynamic-properties": {
+                  "description": "Dynamic Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data in JSON format.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This is Jython Execution Component.",
+    "version": "1.0.0",
+    "tags": "component-jython-executor,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.571Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-k8s-config-template",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This component is rendering and sending the k8s config template to the multicloud plugin.",
+      "version": "1.0.0",
+      "attributes": {
+        "statuses": {
+          "required": true,
+          "type": "json"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "K8sConfigTemplateComponent": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "k8s-rb-config-template-name": {
+                  "description": "K8s template name",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-definition-name": {
+                  "description": "K8s definition name",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-definition-version": {
+                  "description": "Version of the definition",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-config-template-source": {
+                  "description": "Source (tgz/folder) for the template in CBA",
+                  "required": false,
+                  "type": "string"
+                },
+                "artifact-prefix-names": {
+                  "description": "Resource Assignment Artifact Prefix names",
+                  "required": false,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "resource-assignment-map": {
+                  "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "statuses": {
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This component is rendering and sending the k8s config template to the multicloud plugin.",
+    "version": "1.0.0",
+    "tags": "component-k8s-config-template,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.589Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-k8s-config-value",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This component is sending the k8s config value to the multicloud plugin.",
+      "version": "1.0.0",
+      "attributes": {
+        "statuses": {
+          "required": true,
+          "type": "json"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "K8sConfigValueComponent": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "k8s-rb-config-template-name": {
+                  "description": "K8s template name",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-config-name": {
+                  "description": "K8s config name",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-instance-id": {
+                  "description": "K8s instance id",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-config-value-source": {
+                  "description": "Location of value source in CBA",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-config-operation-type": {
+                  "required": false,
+                  "type": "string",
+                  "constraints": [
+                    {
+                      "valid_values": [
+                        "create",
+                        "update",
+                        "delete"
+                      ]
+                    }
+                  ],
+                  "default": "create"
+                },
+                "artifact-prefix-names": {
+                  "description": "Resource Assignment Artifact Prefix names",
+                  "required": false,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "resource-assignment-map": {
+                  "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "statuses": {
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This component is sending the k8s config value to the multicloud plugin.",
+    "version": "1.0.0",
+    "tags": "component-k8s-config-value,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.575Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-k8s-profile-upload",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This component is rendering and sending the k8s profile to the multicloud plugin.",
+      "version": "1.0.0",
+      "attributes": {
+        "statuses": {
+          "required": true,
+          "type": "json"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "K8sProfileUploadComponent": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "k8s-rb-profile-name": {
+                  "description": "K8s profile name",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-definition-name": {
+                  "description": "K8s definition name",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-definition-version": {
+                  "description": "Version of the definition",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-profile-namespace": {
+                  "description": "a K8s namespace for the profile",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-profile-k8s-version": {
+                  "description": "a K8s cluster version for the profile",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-profile-source": {
+                  "description": "Source (tgz/folder) for the template in CBA",
+                  "required": false,
+                  "type": "string"
+                },
+                "artifact-prefix-names": {
+                  "description": "Resource Assignment Artifact Prefix names",
+                  "required": false,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "resource-assignment-map": {
+                  "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "statuses": {
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This component is rendering and sending the k8s profile to the multicloud plugin.",
+    "version": "1.0.0",
+    "tags": "component-k8s-profile-upload,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.374Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-netconf-executor",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Netconf Transaction Configuration Component API",
+      "version": "1.0.0",
+      "attributes": {
+        "response-data": {
+          "required": false,
+          "type": "json"
+        },
+        "status": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "requirements": {
+        "netconf-connection": {
+          "capability": "netconf",
+          "node": "vnf-netconf-device",
+          "relationship": "tosca.relationships.ConnectsTo"
+        }
+      },
+      "interfaces": {
+        "ComponentNetconfExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "script-type": {
+                  "description": "Script type, kotlin type is supported",
+                  "required": true,
+                  "type": "string",
+                  "default": "internal",
+                  "constraints": [
+                    {
+                      "valid_values": [
+                        "kotlin",
+                        "jython",
+                        "internal"
+                      ]
+                    }
+                  ]
+                },
+                "script-class-reference": {
+                  "description": "Kotlin Script class name or jython script name.",
+                  "required": true,
+                  "type": "string"
+                },
+                "instance-dependencies": {
+                  "required": true,
+                  "description": "Instance names to inject to Jython or Kotlin Script.",
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "dynamic-properties": {
+                  "description": "Dynamic Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data in JSON format.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This is Netconf Transaction Configuration Component API",
+    "version": "1.0.0",
+    "tags": "component-netconf-executor,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.581Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-remote-ansible-executor",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Remote Ansible Playbook (AWX) Execution Component.",
+      "version": "1.0.0",
+      "attributes": {
+        "ansible-command-status": {
+          "required": true,
+          "type": "string"
+        },
+        "ansible-command-logs": {
+          "required": true,
+          "type": "string"
+        },
+        "ansible-artifacts": {
+          "required": false,
+          "type": "json"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ComponentRemoteAnsibleExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "job-template-name": {
+                  "description": "Primary key or name of the job template to launch new job.",
+                  "required": false,
+                  "type": "string"
+                },
+                "ansible-fire-failure": {
+                  "description": "ansible fire failue status ",
+                  "required": false,
+                  "type": "boolean"
+                },
+                "workflow-job-template-id": {
+                  "description": "Primary key (name not supported) of the workflow job template to launch new job.",
+                  "required": false,
+                  "type": "string"
+                },
+                "limit": {
+                  "description": "Specify host limit for job template to run.",
+                  "required": false,
+                  "type": "string"
+                },
+                "inventory": {
+                  "description": "Specify inventory for job template to run.",
+                  "required": false,
+                  "type": "string"
+                },
+                "extra-vars": {
+                  "required": false,
+                  "type": "json",
+                  "description": "json formatted text that contains extra variables to pass on."
+                },
+                "tags": {
+                  "description": "Specify tagged actions in the playbook to run.",
+                  "required": false,
+                  "type": "string"
+                },
+                "skip-tags": {
+                  "description": "Specify tagged actions in the playbook to omit.",
+                  "required": false,
+                  "type": "string"
+                },
+                "endpoint-selector": {
+                  "description": "Remote AWX Server selector name.",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This is Remote Ansible Playbook (AWX) Execution Component.",
+    "version": "1.0.0",
+    "tags": "component-remote-ansible-executor,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.462Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-remote-python-executor",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Remote Python Execution Component.",
+      "version": "1.0.0",
+      "attributes": {
+        "status": {
+          "required": true,
+          "type": "string"
+        },
+        "prepare-environment-logs": {
+          "required": false,
+          "type": "string"
+        },
+        "execute-command-logs": {
+          "required": false,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "response-data": {
+          "required": false,
+          "type": "json"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ComponentRemotePythonExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "endpoint-selector": {
+                  "description": "Remote Container or Server selector name.",
+                  "required": false,
+                  "type": "string",
+                  "default": "remote-python"
+                },
+                "dynamic-properties": {
+                  "description": "Dynamic Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                },
+                "argument-properties": {
+                  "description": "Argument Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                },
+                "command": {
+                  "description": "Command to execute.",
+                  "required": true,
+                  "type": "string"
+                },
+                "packages": {
+                  "description": "Packages to install based on type.",
+                  "required": false,
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "dt-system-packages"
+                  }
+                },
+                "env-prepare-timeout": {
+                  "description": "Time-out for environment preparation.",
+                  "required": false,
+                  "type": "integer",
+                  "default": 120
+                },
+                "execution-timeout": {
+                  "description": "Time-out for the execution step.",
+                  "required": false,
+                  "type": "integer",
+                  "default": 180
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This is Remote Python Execution Component.",
+    "version": "1.0.0",
+    "tags": "component-remote-python-executor,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.462Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-remote-script-executor",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "Generic Remote Script Component Executor",
+      "version": "1.0.0",
+      "attributes": {
+        "response-data": {
+          "description": "Remote executed response data.",
+          "required": false,
+          "type": "json"
+        },
+        "status": {
+          "description": "Remote execution status.",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "interfaces": {
+        "ComponentRemoteScriptExecutor": {
+          "operations": {
+            "process": {
+              "description": "ComponentRemoteScriptExecutor Operation",
+              "inputs": {
+                "blueprint-version": {
+                  "description": "Blueprint version.",
+                  "required": true,
+                  "type": "string"
+                },
+                "blueprint-name": {
+                  "description": "Blueprint name.",
+                  "required": true,
+                  "type": "string"
+                },
+                "selector": {
+                  "description": "Remote GRPC selector or DSL reference or GRPC Json config.",
+                  "required": true,
+                  "type": "json"
+                },
+                "blueprint-action": {
+                  "description": "Blueprint action name.",
+                  "required": true,
+                  "type": "string"
+                },
+                "timeout": {
+                  "description": "Remote execution timeout in sec.",
+                  "required": true,
+                  "type": "integer",
+                  "default": 180
+                },
+                "request-data": {
+                  "description": "Dynamic Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "Generic Remote Script Component Executor",
+    "version": "1.0.0",
+    "tags": "component-remote-script-executor,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.188Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-resource-deletion",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Resource Deletion Component API",
+      "version": "1.0.0",
+      "attributes": {
+        "result": {
+          "description": "A map of [artifact-prefix]: { nDeletedTemplates, nDeletedResources }",
+          "required": true,
+          "type": "map"
+        },
+        "success": {
+          "required": true,
+          "type": "boolean"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ResourceDeletionComponent": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "resolution-key": {
+                  "description": "Resolution key associated with stored assignments and templates. Required if resource-type + resource-id are empty",
+                  "required": false,
+                  "type": "string"
+                },
+                "resource-type": {
+                  "description": "Resource-type associated with stored assignments and templates. Required if resolution-key is empty. Must be used together with resource-id",
+                  "required": false,
+                  "type": "string"
+                },
+                "resource-id": {
+                  "description": "Resource-id associated with stored assignments and templates. Required if resolution-key is empty. Must be used together with resource-type",
+                  "required": false,
+                  "type": "string"
+                },
+                "artifact-prefix-names": {
+                  "required": true,
+                  "description": "Template , Resource Assignment Artifact Prefix names",
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "last-n-occurrences": {
+                  "description": "Only delete last N occurrences",
+                  "required": false,
+                  "default": null,
+                  "type": "integer"
+                },
+                "fail-on-empty": {
+                  "description": "Determines if the component should fail when nothing was deleted",
+                  "required": false,
+                  "default": false,
+                  "type": "boolean"
+                }
+              },
+              "outputs": {}
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This is Resource Deletion Component API",
+    "version": "1.0.0",
+    "tags": "component-resource-deletion,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.456Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-resource-resolution",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Resource Assignment Component API",
+      "version": "1.0.0",
+      "attributes": {
+        "assignment-params": {
+          "description": "Holds resolved template, resolution-summary or key-value",
+          "required": true,
+          "type": "string"
+        },
+        "assignment-map": {
+          "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+          "required": true,
+          "type": "map"
+        },
+        "status": {
+          "description": "Resource Assignment status.",
+          "required": true,
+          "type": "string"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ResourceResolutionComponent": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "resolution-key": {
+                  "description": "Key for service instance related correlation.",
+                  "required": false,
+                  "type": "string"
+                },
+                "occurrence": {
+                  "description": "Number of time to perform the resolution.",
+                  "required": false,
+                  "default": 1,
+                  "type": "integer"
+                },
+                "store-result": {
+                  "description": "Whether or not to store the output.",
+                  "required": false,
+                  "type": "boolean"
+                },
+                "force-resolution": {
+                  "description": "Delete existing values to force new resolution. Ineffective when occurrence < 1",
+                  "required": false,
+                  "type": "boolean"
+                },
+                "resource-type": {
+                  "description": "Request type.",
+                  "required": false,
+                  "type": "string"
+                },
+                "resolution-summary": {
+                  "description": "Enable resolution-summary output",
+                  "required": false,
+                  "type": "boolean"
+                },
+                "artifact-prefix-names": {
+                  "required": true,
+                  "description": "Template , Resource Assignment Artifact Prefix names",
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "request-id": {
+                  "description": "Request Id, Unique Id for the request.",
+                  "required": true,
+                  "type": "string"
+                },
+                "resource-id": {
+                  "description": "Resource Id.",
+                  "required": false,
+                  "type": "string"
+                },
+                "action-name": {
+                  "description": "Action Name of the process",
+                  "required": false,
+                  "type": "string"
+                },
+                "dynamic-properties": {
+                  "description": "Dynamic Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "resource-assignment-params": {
+                  "required": true,
+                  "type": "string"
+                },
+                "resource-assignment-map": {
+                  "required": true,
+                  "type": "string"
+                },
+                "status": {
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This is Resource Assignment Component API",
+    "version": "1.0.0",
+    "tags": "component-resource-resolution,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.257Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "component-script-executor",
+    "derivedFrom": "tosca.nodes.Component",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is CLI Transaction Configuration Component API",
+      "version": "1.0.0",
+      "attributes": {
+        "response-data": {
+          "required": false,
+          "type": "json"
+        },
+        "status": {
+          "required": true,
+          "type": "string"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "interfaces": {
+        "ComponentScriptExecutor": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "script-type": {
+                  "description": "Script type, kotlin type is supported",
+                  "required": true,
+                  "type": "string",
+                  "default": "internal",
+                  "constraints": [
+                    {
+                      "valid_values": [
+                        "kotlin",
+                        "jython",
+                        "internal"
+                      ]
+                    }
+                  ]
+                },
+                "script-class-reference": {
+                  "description": "Kotlin Script class name or jython script name.",
+                  "required": true,
+                  "type": "string"
+                },
+                "instance-dependencies": {
+                  "required": true,
+                  "description": "Instance names to inject to Jython or Kotlin Script.",
+                  "type": "list",
+                  "entry_schema": {
+                    "type": "string"
+                  }
+                },
+                "dynamic-properties": {
+                  "description": "Dynamic Json Content or DSL Json reference.",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "response-data": {
+                  "description": "Execution Response Data.",
+                  "required": false,
+                  "type": "string"
+                },
+                "status": {
+                  "description": "Status of the Component Execution ( success or failure )",
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Component"
+    },
+    "description": "This is CLI Transaction Configuration Component API",
+    "version": "1.0.0",
+    "tags": "component-script-executor,tosca.nodes.Component,node_type",
+    "creationDate": "2026-03-04T14:26:42.453Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "dg-generic",
+    "derivedFrom": "tosca.nodes.Workflow",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Generic Directed Graph Type",
+      "version": "1.0.0",
+      "properties": {
+        "content": {
+          "required": true,
+          "type": "string"
+        },
+        "dependency-node-templates": {
+          "required": true,
+          "description": "Dependent Step Components NodeTemplate name.",
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Workflow"
+    },
+    "description": "This is Generic Directed Graph Type",
+    "version": "1.0.0",
+    "tags": "dg-generic,tosca.nodes.Workflow,node_type",
+    "creationDate": "2026-03-04T14:26:42.464Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "source-capability",
+    "derivedFrom": "tosca.nodes.ResourceSource",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Component Resource Source Node Type",
+      "version": "1.0.0",
+      "properties": {
+        "script-type": {
+          "required": true,
+          "type": "string",
+          "default": "kotlin",
+          "constraints": [
+            {
+              "valid_values": [
+                "kotlin",
+                "internal",
+                "jython"
+              ]
+            }
+          ]
+        },
+        "script-class-reference": {
+          "description": "Capability reference name for internal and kotlin, for jython script file path",
+          "required": true,
+          "type": "string"
+        },
+        "instance-dependencies": {
+          "required": false,
+          "description": "Instance dependency Names to Inject to Kotlin / Jython Script.",
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "key-dependencies": {
+          "description": "Resource Resolution dependency dictionary names.",
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.ResourceSource"
+    },
+    "description": "This is Component Resource Source Node Type",
+    "version": "1.0.0",
+    "tags": "source-capability,tosca.nodes.ResourceSource,node_type",
+    "creationDate": "2026-03-04T14:26:42.567Z",
+    "updatedBy": "System"
   },
   {
     "modelName": "source-db",
+    "derivedFrom": "tosca.nodes.ResourceSource",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Database Resource Source Node Type",
+      "version": "1.0.0",
+      "properties": {
+        "type": {
+          "required": true,
+          "default": "SQL",
+          "type": "string",
+          "constraints": [
+            {
+              "valid_values": [
+                "SQL",
+                "PLSQL"
+              ]
+            }
+          ]
+        },
+        "endpoint-selector": {
+          "required": false,
+          "type": "string"
+        },
+        "query": {
+          "required": true,
+          "type": "string"
+        },
+        "input-key-mapping": {
+          "required": false,
+          "type": "map",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "output-key-mapping": {
+          "required": false,
+          "type": "map",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "key-dependencies": {
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.ResourceSource"
+    },
+    "description": "This is Database Resource Source Node Type",
+    "version": "1.0.0",
+    "tags": "source-db,tosca.nodes.ResourceSource,node_type",
+    "creationDate": "2026-03-04T14:26:42.253Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "source-default",
+    "derivedFrom": "tosca.nodes.ResourceSource",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Default Resource Source Node Type",
+      "version": "1.0.0",
+      "properties": {},
+      "derived_from": "tosca.nodes.ResourceSource"
+    },
+    "description": "This is Default Resource Source Node Type",
+    "version": "1.0.0",
+    "tags": "source-default,tosca.nodes.ResourceSource,node_type",
+    "creationDate": "2026-03-04T14:26:42.369Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "source-input",
+    "derivedFrom": "tosca.nodes.ResourceSource",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Input Resource Source Node Type",
+      "version": "1.0.0",
+      "properties": {},
+      "derived_from": "tosca.nodes.ResourceSource"
+    },
+    "description": "This is Input Resource Source Node Type",
+    "version": "1.0.0",
+    "tags": "source-input,tosca.nodes.ResourceSource,node_type",
+    "creationDate": "2026-03-04T14:26:42.461Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "source-rest",
+    "derivedFrom": "tosca.nodes.ResourceSource",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Rest Resource Source Node Type",
+      "version": "1.0.0",
+      "properties": {
+        "type": {
+          "required": true,
+          "type": "string",
+          "default": "JSON",
+          "constraints": [
+            {
+              "valid_values": [
+                "JSON"
+              ]
+            }
+          ]
+        },
+        "headers": {
+          "required": false,
+          "type": "map",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "verb": {
+          "required": true,
+          "type": "string",
+          "default": "GET",
+          "constraints": [
+            {
+              "valid_values": [
+                "GET",
+                "POST",
+                "DELETE",
+                "PUT"
+              ]
+            }
+          ]
+        },
+        "payload": {
+          "required": false,
+          "type": "string",
+          "default": ""
+        },
+        "endpoint-selector": {
+          "required": false,
+          "type": "string"
+        },
+        "url-path": {
+          "required": true,
+          "type": "string"
+        },
+        "path": {
+          "required": true,
+          "type": "string"
+        },
+        "expression-type": {
+          "required": false,
+          "type": "string",
+          "default": "JSON_PATH",
+          "constraints": [
+            {
+              "valid_values": [
+                "JSON_PATH",
+                "JSON_POINTER"
+              ]
+            }
+          ]
+        },
+        "input-key-mapping": {
+          "required": false,
+          "type": "map",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "output-key-mapping": {
+          "required": false,
+          "type": "map",
+          "entry_schema": {
+            "type": "string"
+          }
+        },
+        "key-dependencies": {
+          "required": true,
+          "type": "list",
+          "entry_schema": {
+            "type": "string"
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.ResourceSource"
+    },
+    "description": "This is Rest Resource Source Node Type",
+    "version": "1.0.0",
+    "tags": "source-rest,tosca.nodes.ResourceSource,node_type",
+    "creationDate": "2026-03-04T14:26:42.461Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "tosca.nodes.Artifact",
     "derivedFrom": "tosca.nodes.Root",
     "definitionType": "node_type",
     "definition": {
-      "description": "Database source type",
+      "description": "This is Deprecated Artifact Node Type.",
       "version": "1.0.0",
-      "properties": {
-        "query": { "required": true, "type": "string" }
-      },
-      "operations": {}
+      "derived_from": "tosca.nodes.Root"
     },
-    "description": "Database source type",
+    "description": "This is Deprecated Artifact Node Type.",
     "version": "1.0.0",
-    "tags": "source,db,database",
-    "creationDate": "2024-01-01T00:00:00.000Z",
-    "updatedBy": "admin"
+    "tags": "tosca.nodes.Artifact,tosca.nodes.Root,node_type",
+    "creationDate": "2026-03-04T14:26:42.456Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "tosca.nodes.Component",
+    "derivedFrom": "tosca.nodes.Root",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is default Component Node",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "description": "This is default Component Node",
+    "version": "1.0.0",
+    "tags": "tosca.nodes.Component,tosca.nodes.Root,node_type",
+    "creationDate": "2026-03-04T14:26:42.454Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "tosca.nodes.ResourceSource",
+    "derivedFrom": "tosca.nodes.Root",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "TOSCA base type for Resource Sources",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "description": "TOSCA base type for Resource Sources",
+    "version": "1.0.0",
+    "tags": "tosca.nodes.ResourceSource,tosca.nodes.Root,node_type",
+    "creationDate": "2026-03-04T14:26:42.453Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "tosca.nodes.Vnf",
+    "derivedFrom": "tosca.nodes.Root",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is VNF Node Type",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "description": "This is VNF Node Type",
+    "version": "1.0.0",
+    "tags": "tosca.nodes.Vnf,tosca.nodes.Root,node_type",
+    "creationDate": "2026-03-04T14:26:42.462Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "tosca.nodes.Workflow",
+    "derivedFrom": "tosca.nodes.Root",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is Directed Graph Node Type",
+      "version": "1.0.0",
+      "derived_from": "tosca.nodes.Root"
+    },
+    "description": "This is Directed Graph Node Type",
+    "version": "1.0.0",
+    "tags": "tosca.nodes.Workflow,tosca.nodes.Root,node_type",
+    "creationDate": "2026-03-04T14:26:42.453Z",
+    "updatedBy": "System"
+  },
+  {
+    "modelName": "vnf-netconf-device",
+    "derivedFrom": "tosca.nodes.Vnf",
+    "definitionType": "node_type",
+    "definition": {
+      "description": "This is VNF Device with Netconf  Capability",
+      "version": "1.0.0",
+      "capabilities": {
+        "netconf": {
+          "type": "tosca.capabilities.Netconf",
+          "properties": {
+            "login-key": {
+              "required": true,
+              "type": "string",
+              "default": "sdnc"
+            },
+            "login-account": {
+              "required": true,
+              "type": "string",
+              "default": "sdnc-tacacs"
+            },
+            "source": {
+              "required": false,
+              "type": "string",
+              "default": "npm"
+            },
+            "target-ip-address": {
+              "required": true,
+              "type": "string"
+            },
+            "port-number": {
+              "required": true,
+              "type": "integer",
+              "default": 830
+            },
+            "connection-time-out": {
+              "required": false,
+              "type": "integer",
+              "default": 30
+            }
+          }
+        },
+        "restconf": {
+          "type": "tosca.capabilities.Restconf",
+          "properties": {
+            "login-key": {
+              "required": true,
+              "type": "string"
+            },
+            "login-account": {
+              "required": true,
+              "type": "string"
+            },
+            "target-ip-address": {
+              "required": true,
+              "type": "string"
+            },
+            "port-number": {
+              "required": true,
+              "type": "integer"
+            },
+            "connection-time-out": {
+              "required": false,
+              "type": "integer",
+              "default": 30
+            }
+          }
+        }
+      },
+      "derived_from": "tosca.nodes.Vnf"
+    },
+    "description": "This is VNF Device with Netconf  Capability",
+    "version": "1.0.0",
+    "tags": "vnf-netconf-device,tosca.nodes.Vnf,node_type",
+    "creationDate": "2026-03-04T14:26:42.589Z",
+    "updatedBy": "System"
   }
 ]
