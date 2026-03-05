@@ -279,65 +279,65 @@ Hello World CBA Reference
 -  :ref:`hello_world_script_executor_cba`
 
 
-.. |image1| image:: https://wiki.onap.org/download/attachments/84650426/CDS%20Logo.png?version=4&modificationDate=1591723580000&api=v2
+.. |image1| image:: ../media/ui/CDS_Logo.png
    :width: 200pt
-.. |image2| image:: https://wiki.onap.org/download/thumbnails/84650426/Feature%201.png?version=1&modificationDate=1591032224000&api=v2
+.. |image2| image:: ../media/ui/Feature_1.png
    :width: 50pt
-.. |image3| image:: https://wiki.onap.org/download/thumbnails/84650426/Feature%202.png?version=1&modificationDate=1591032225000&api=v2
+.. |image3| image:: ../media/ui/Feature_2.png
    :width: 47pt
-.. |image4| image:: https://wiki.onap.org/download/thumbnails/84650426/Feature%203.png?version=1&modificationDate=1591032226000&api=v2
+.. |image4| image:: ../media/ui/Feature_3.png
    :width: 47pt
-.. |image5| image:: https://wiki.onap.org/download/thumbnails/84650426/Feature%204.png?version=1&modificationDate=1591032227000&api=v2
+.. |image5| image:: ../media/ui/Feature_4.png
    :width: 60pt
-.. |image6| image:: https://wiki.onap.org/download/thumbnails/84650426/Feature%205.png?version=1&modificationDate=1591032227000&api=v2
+.. |image6| image:: ../media/ui/Feature_5.png
    :width: 50pt
-.. |image7| image:: https://wiki.onap.org/download/thumbnails/84650426/Feature%206.png?version=1&modificationDate=1591032228000&api=v2
+.. |image7| image:: ../media/ui/Feature_6.png
    :width: 30pt
-.. |image8| image:: https://wiki.onap.org/download/attachments/84650426/Interface.jpg?version=2&modificationDate=1609155664000&api=v2
+.. |image8| image:: ../media/ui/Interface.jpg
    :width: 1000pt
-.. |image9| image:: https://wiki.onap.org/download/attachments/84650426/Package%20List.jpg?version=3&modificationDate=1609322704000&api=v2
+.. |image9| image:: ../media/ui/Package_List.jpg
    :width: 1000pt
-.. |image10| image:: https://wiki.onap.org/download/attachments/84650426/Create%20Package%20User%20flow.jpg?version=2&modificationDate=1609156805000&api=v2
+.. |image10| image:: ../media/ui/Create_Package_User_flow.jpg
    :width: 1000pt
-.. |image11| image:: https://wiki.onap.org/download/attachments/84650426/Create%20Package.jpg?version=2&modificationDate=1609157022000&api=v2
+.. |image11| image:: ../media/ui/Create_Package.jpg
    :width: 1000pt
-.. |image12| image:: https://wiki.onap.org/download/attachments/84650426/Package%20Configuration%20-%20MetaData.jpg?version=2&modificationDate=1609157275000&api=v2
+.. |image12| image:: ../media/ui/Package_Configuration_MetaData.jpg
    :width: 1000pt
-.. |image13| image:: https://wiki.onap.org/download/attachments/84650426/Package%20Configuration%20-%20Action%20Menu.jpg?version=2&modificationDate=1609157671000&api=v2
+.. |image13| image:: ../media/ui/Package_Configuration_Action_Menu.jpg
    :width: 1000pt
-.. |image14| image:: https://wiki.onap.org/download/attachments/84650426/Package%20Configuration%20-%20Info%20Box.jpg?version=2&modificationDate=1609158391000&api=v2
+.. |image14| image:: ../media/ui/Package_Configuration_Info_Box.jpg
    :width: 1000pt
-.. |image15| image:: https://wiki.onap.org/download/attachments/84650426/Temp%20%26%20Mapp%201.jpg?version=2&modificationDate=1609158797000&api=v2
+.. |image15| image:: ../media/ui/Temp_Mapp_1.jpg
    :width: 1000pt
-.. |image16| image:: https://wiki.onap.org/download/attachments/84650426/Temp%20%26%20Mapp%202.jpg?version=2&modificationDate=1609158980000&api=v2
+.. |image16| image:: ../media/ui/Temp_Mapp_2.jpg
    :width: 1000pt
-.. |image17| image:: https://wiki.onap.org/download/attachments/84650426/Temp%20%26%20Mapp%203.jpg?version=2&modificationDate=1609159240000&api=v2
+.. |image17| image:: ../media/ui/Temp_Mapp_3.jpg
    :width: 500pt
-.. |image18| image:: https://wiki.onap.org/download/attachments/84650426/Temp%20%26%20Mapp%204.jpg?version=1&modificationDate=1609159448000&api=v2
+.. |image18| image:: ../media/ui/Temp_Mapp_4.jpg
    :width: 1000pt
-.. |image19| image:: https://wiki.onap.org/download/attachments/84650426/Temp%20%26%20Mapp%205.jpg?version=1&modificationDate=1609159694000&api=v2
+.. |image19| image:: ../media/ui/Temp_Mapp_5.jpg
    :width: 1000pt
-.. |image20| image:: https://wiki.onap.org/download/attachments/84650426/Temp%20%26%20Mapp%206.jpg?version=2&modificationDate=1609159862000&api=v2
+.. |image20| image:: ../media/ui/Temp_Mapp_6.jpg
    :width: 1000pt
-.. |image21| image:: https://wiki.onap.org/download/attachments/84650426/Temp%20%26%20Mapp%207.jpg?version=3&modificationDate=1609162172000&api=v2
+.. |image21| image:: ../media/ui/Temp_Mapp_7.jpg
    :width: 1000pt
-.. |image22| image:: https://wiki.onap.org/download/attachments/84650426/Temp%20%26%20Mapp%208.jpg?version=2&modificationDate=1609162135000&api=v2
+.. |image22| image:: ../media/ui/Temp_Mapp_8.jpg
    :width: 1000pt
-.. |image23| image:: https://wiki.onap.org/download/attachments/84650426/Scripts%201.jpg?version=2&modificationDate=1609163160000&api=v2
+.. |image23| image:: ../media/ui/Scripts_1.jpg
    :width: 1000pt
-.. |image24| image:: https://wiki.onap.org/download/attachments/84650426/Scripts%202.jpg?version=2&modificationDate=1609164336000&api=v2
+.. |image24| image:: ../media/ui/Scripts_2.jpg
    :width: 1000pt
-.. |image25| image:: https://wiki.onap.org/download/attachments/84650426/Scripts%203.jpg?version=2&modificationDate=1609164337000&api=v2
+.. |image25| image:: ../media/ui/Scripts_3.jpg
    :width: 1000pt
-.. |image26| image:: https://wiki.onap.org/download/attachments/84650426/Scripts%204.jpg?version=1&modificationDate=1609164989000&api=v2
+.. |image26| image:: ../media/ui/Scripts_4.jpg
    :width: 1000pt
-.. |image27| image:: https://wiki.onap.org/download/attachments/84650426/Definitions%201.jpg?version=2&modificationDate=1609167774000&api=v2
+.. |image27| image:: ../media/ui/Definitions_1.jpg
    :width: 1000pt
-.. |image28| image:: https://wiki.onap.org/download/attachments/84650426/Definitions%202.jpg?version=2&modificationDate=1609168384000&api=v2
+.. |image28| image:: ../media/ui/Definitions_2.jpg
    :width: 1000pt
-.. |image29| image:: https://wiki.onap.org/download/attachments/84650426/Definitions%203.jpg?version=2&modificationDate=1609168385000&api=v2
+.. |image29| image:: ../media/ui/Definitions_3.jpg
    :width: 1000pt
-.. |image30| image:: https://wiki.onap.org/download/attachments/84650426/DSL.jpg?version=1&modificationDate=1609168557000&api=v2
+.. |image30| image:: ../media/ui/DSL.jpg
    :width: 1000pt
-.. |image31| image:: https://wiki.onap.org/download/attachments/84650426/Topology%20Template.jpg?version=1&modificationDate=1609169308000&api=v2
+.. |image31| image:: ../media/ui/Topology_Template.jpg
    :width: 1000pt
