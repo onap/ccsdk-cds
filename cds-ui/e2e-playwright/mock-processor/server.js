@@ -201,6 +201,11 @@ const server = http.createServer(async (req, res) => {
 
   // ── dictionary ───────────────────────────────────────────────────────────────
 
+  // GET /api/v1/dictionary/paged   (must precede /:name)
+  if (method === 'GET' && pathname === `${BASE}/dictionary/paged`) {
+    return json(res, pagedResponse(resourceDictionaries, query));
+  }
+
   // GET /api/v1/dictionary/source-mapping   (must precede /:name)
   if (method === 'GET' && pathname === `${BASE}/dictionary/source-mapping`) {
     return json(res, { INPUT: 'input', DEFAULT: 'default', DB: 'db', REST: 'rest' });

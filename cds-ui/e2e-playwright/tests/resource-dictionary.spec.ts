@@ -9,12 +9,10 @@
  *   3. Search & filter UI – sub-components render.
  *   4. API integration – requests are proxied through the LoopBack BFF to the
  *      mock-processor and return successful responses.
- *
- * Implementation note: the BFF does not expose a paged dictionary endpoint
- * (/resourcedictionary/paged), so the dictionary list on this page renders  *
- * empty in the test environment.  The tests that assert on card data are
- * therefore skipped; this serves as a documented gap in the BFF implementation
- * rather than a test environment problem.
+ *   5. Dictionary listing – the paged endpoint returns data and dictionary
+ *      cards are rendered.
+ *   6. Create-then-list flow – creating a dictionary then navigating back
+ *      shows the list.
  */
 
 import { test, expect } from '@playwright/test';
@@ -140,5 +138,82 @@ test.describe('Resource Dictionary – navigation', () => {
 
         expect(page.url()).toContain('resource-dictionary');
         await expect(page.locator('app-dictionary-header')).toBeAttached({ timeout: 10_000 });
+    });
+});
+
+test.describe('Resource Dictionary – paged listing', () => {
+    test('GET /resourcedictionary/paged returns a Page object with content array', async ({ request }) => {
+        const resp = await request.get('http://localhost:3000/resourcedictionary/paged?offset=0&limit=5&sort=DATE&sortType=ASC');
+        expect(resp.status()).toBe(200);
+        const body = await resp.json();
+        // LoopBack REST connector wraps the response in a single-element array
+        expect(Array.isArray(body)).toBe(true);
+        expect(body.length).toBe(1);
+        const pageObj = body[0];
+        expect(pageObj).toHaveProperty('content');
+        expect(pageObj).toHaveProperty('totalElements');
+        expect(Array.isArray(pageObj.content)).toBe(true);
+        expect(pageObj.totalElements).toBeGreaterThan(0);
+        expect(pageObj.content.length).toBeGreaterThan(0);
+    });
+
+    test('dictionary cards are rendered on the page', async ({ page }) => {
+        // Register response listener BEFORE navigating to avoid race condition
+        await Promise.all([
+            page.waitForResponse(
+                r => r.url().includes('/resourcedictionary/paged') && r.status() === 200,
+                { timeout: 15_000 },
+            ),
+            page.goto('/#/resource-dictionary'),
+        ]);
+        // Wait for Angular to render the dictionary list items
+        const cards = page.locator('app-dictionary-list .card');
+        await expect(cards.first()).toBeVisible({ timeout: 10_000 });
+        // The fixture has 3 dictionaries + 1 static "Create/Import" card = 4
+        await expect(cards).toHaveCount(4);
+    });
+
+    test('dictionary header shows correct total count', async ({ page }) => {
+        await Promise.all([
+            page.waitForResponse(
+                r => r.url().includes('/resourcedictionary/paged') && r.status() === 200,
+                { timeout: 15_000 },
+            ),
+            page.goto('/#/resource-dictionary'),
+        ]);
+        // The header shows "Resource Dictionary (N Dictionary)"
+        const header = page.locator('app-dictionary-header h2');
+        await expect(header).toContainText('3', { timeout: 10_000 });
+    });
+});
+
+test.describe('Resource Dictionary – create then list', () => {
+    test('creating a dictionary and navigating back shows the list', async ({ page }) => {
+        // Navigate to the create dictionary page
+        await Promise.all([
+            page.waitForResponse(
+                r => r.url().includes('/resourcedictionary/paged') && r.status() === 200,
+                { timeout: 15_000 },
+            ),
+            page.goto('/#/resource-dictionary'),
+        ]);
+
+        // Click "Create Dictionary" link on the add-card
+        await page.locator('a', { hasText: 'Create Dictionary' }).click();
+        await expect(page).toHaveURL(/createDictionary/);
+
+        // Navigate back to the dictionary list – register listener before navigating
+        await Promise.all([
+            page.waitForResponse(
+                r => r.url().includes('/resourcedictionary/paged') && r.status() === 200,
+                { timeout: 15_000 },
+            ),
+            page.goto('/#/resource-dictionary'),
+        ]);
+
+        // Dictionary list should still render cards (3 dictionaries + 1 create card)
+        const cards = page.locator('app-dictionary-list .card');
+        await expect(cards.first()).toBeVisible({ timeout: 10_000 });
+        await expect(cards).toHaveCount(4);
     });
 });
