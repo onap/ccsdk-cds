@@ -217,3 +217,38 @@ test.describe('Resource Dictionary – create then list', () => {
         await expect(cards).toHaveCount(4);
     });
 });
+
+test.describe('Resource Dictionary – download dictionary', () => {
+    test('Download button triggers a JSON file download with timestamp in filename', async ({ page }) => {
+        // Navigate to the create dictionary page
+        await page.goto('/#/resource-dictionary/createDictionary');
+        await page.waitForLoadState('networkidle');
+
+        // Verify we are on the create dictionary page
+        await expect(page).toHaveURL(/createDictionary/);
+
+        // Locate the Download button
+        const downloadBtn = page.locator('a.action-button', { hasText: 'Download' });
+        await expect(downloadBtn).toBeVisible({ timeout: 10_000 });
+
+        // Listen for download event before clicking
+        const [download] = await Promise.all([
+            page.waitForEvent('download', { timeout: 15_000 }),
+            downloadBtn.click(),
+        ]);
+
+        // Verify the downloaded file has a .json extension and contains a timestamp pattern
+        const fileName = download.suggestedFilename();
+        expect(fileName).toMatch(/\.json$/);
+        // Timestamp pattern: YYYY-MM-DDTHH-MM-SS-mmmZ
+        expect(fileName).toMatch(/\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}/);
+
+        // Verify the file content is valid JSON
+        const filePath = await download.path();
+        if (filePath) {
+            const fs = require('fs');
+            const content = fs.readFileSync(filePath, 'utf-8');
+            expect(() => JSON.parse(content)).not.toThrow();
+        }
+    });
+});
