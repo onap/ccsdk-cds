@@ -12,6 +12,7 @@ export interface ResourceDictionaryService {
   getModelType(source: string): Promise<JSON>;
   getDataTypes(): Promise<JSON>;
   getResourceDictionaryByType(type: string): Promise<JSON>;
+  getPagedDictionary(limit: number, offset: number, sort: string, sortType: string): Promise<any>;
 }
 
 export class ResourceDictionaryServiceProvider implements Provider<ResourceDictionaryService> {

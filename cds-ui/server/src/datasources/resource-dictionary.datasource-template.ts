@@ -140,6 +140,21 @@ export default {
     {
         "template": {
             "method": "GET",
+            "url": processorApiConfig.http.url + "/dictionary/paged?limit={limit}&offset={offset}&sort={sort}&sortType={sortType}",
+            "headers": {
+                "accepts": "application/json",
+                "content-type": "application/json",
+                "authorization": processorApiConfig.http.authToken
+            },
+            "responsePath": "$",
+        },
+        "functions": {
+            "getPagedDictionary": ["limit", "offset", "sort", "sortType"],
+        }
+    },
+    {
+        "template": {
+            "method": "GET",
             "url": processorApiConfig.http.url + "/model-type/by-definition/{type}",
             "headers": {
                 "accepts": "application/json",

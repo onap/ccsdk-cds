@@ -76,17 +76,17 @@ export class DictionaryStore extends Store<DictionaryDashboardState> {
     protected getPagedDictionary(pageNumber: number, pageSize: number, sortBy: string = this.state.sortBy) {
 
         this.dictionaryServiceList.getPagedDictionary(pageNumber, pageSize, sortBy)
-            .subscribe((pages: DictionaryPage) => {
+            .subscribe((pages: DictionaryPage[]) => {
                 console.log(pages);
                 this.setState({
                     ...this.state,
-                    page: pages,
-                    filteredPackages: pages,
+                    page: pages[0],
+                    filteredPackages: pages[0],
                     command: '',
-                    totalPackages: pages.totalElements,
+                    totalPackages: pages[0].totalElements,
                     currentPage: pageNumber,
                     // this param is set only in get all as it represents the total number of pacakges in the server
-                    totalDictionariesWithoutSearchorFilters: pages.totalElements,
+                    totalDictionariesWithoutSearchorFilters: pages[0].totalElements,
                     tags: [],
                     sortBy
                 });
@@ -95,14 +95,14 @@ export class DictionaryStore extends Store<DictionaryDashboardState> {
 
     private searchPagedDictionary(keyWord: string, pageNumber: number, pageSize: number, sortBy: string = this.state.sortBy) {
         this.dictionaryServiceList.getPagedDictionaryByKeyWord(keyWord, pageNumber, pageSize, sortBy)
-            .subscribe((pages: DictionaryPage) => {
+            .subscribe((pages: DictionaryPage[]) => {
                 console.log(pages);
                 this.setState({
                     ...this.state,
-                    page: pages,
-                    filteredPackages: pages,
+                    page: pages[0],
+                    filteredPackages: pages[0],
                     command: keyWord,
-                    totalPackages: pages.totalElements,
+                    totalPackages: pages[0].totalElements,
                     currentPage: pageNumber,
                     tags: [],
                     sortBy
