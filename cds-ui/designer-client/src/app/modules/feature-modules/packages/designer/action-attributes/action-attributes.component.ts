@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {InputActionAttribute, OutputActionAttribute} from './models/InputActionAttribute';
 import {DesignerStore} from '../designer.store';
 import {DesignerDashboardState} from '../model/designer.dashboard.state';
@@ -53,9 +53,12 @@ export class ActionAttributesComponent implements OnInit {
     suggestedDeletedInput: any = {};
     suggestedEditedAttribute: any = {};
 
+    @Output() actionRenamed = new EventEmitter<{ oldName: string; newName: string }>();
+
     constructor(private designerStore: DesignerStore,
                 private functionsStore: FunctionsStore,
-                private packageCreationStore: PackageCreationStore) {
+                private packageCreationStore: PackageCreationStore,
+                private cd: ChangeDetectorRef) {
 
     }
 
@@ -68,6 +71,10 @@ export class ActionAttributesComponent implements OnInit {
                 this.actionName = this.designerState.actionName;
                 console.log(this.actionName);
                 const action = this.designerState.template.workflows[this.actionName] as Action;
+                if (!action) {
+                    this.cd.detectChanges();
+                    return;
+                }
                 if (action.steps) {
                     const steps = Object.keys(action.steps);
                     this.isFunctionAttributeActive = steps && steps.length > 0;
@@ -86,6 +93,7 @@ export class ActionAttributesComponent implements OnInit {
                     this.outputs = this.extractFields(namesOfOutput, action.outputs);
                 }
             }
+            this.cd.detectChanges();
         });
 
         this.functionsStore.state$.subscribe(functions => {
@@ -99,6 +107,24 @@ export class ActionAttributesComponent implements OnInit {
             });
     }
 
+
+    onActionNameChange(event: Event) {
+        const inputEl = event.target as HTMLInputElement;
+        const trimmed = inputEl.value.trim();
+        if (!trimmed) {
+            // Reject empty name – restore the current store value in the DOM.
+            this.actionName = this.designerState.actionName;
+            inputEl.value = this.actionName;
+            return;
+        }
+        const oldName = this.designerState.actionName;
+        if (trimmed === oldName) {
+            return;
+        }
+        this.actionName = trimmed;
+        this.designerStore.renameAction(oldName, trimmed);
+        this.actionRenamed.emit({ oldName, newName: trimmed });
+    }
 
     private extractFields(namesOfOutput: string[], container: {}) {
         const fields = [];
