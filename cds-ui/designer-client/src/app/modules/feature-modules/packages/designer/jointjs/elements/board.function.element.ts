@@ -301,12 +301,13 @@ const FunctionElement = joint.shapes.standard.Rectangle.define('board.FunctionEl
                                     26.3244706 L34.2352941,32.2609412 Z" id="Shape"></path>
                                 </g>
                                 <text id="func-board-element-text"
-                                    font-family="HelveticaNeue-Bold, Helvetica Neue"
-                                    font-size="13"
-                                font-weight="bold" line-spacing="18">
-                                    <tspan id="label" x="20" y="70">execute</tspan>
-                                    <tspan id="type" x="30" y="92"
-                                    font-family="HelveticaNeue, Helvetica Neue" font-size="12"
+                                    font-family="Arial, Helvetica, sans-serif"
+                                    font-size="16"
+                                font-weight="bold" line-spacing="18"
+                                text-anchor="middle">
+                                    <tspan id="label" x="125" y="70">execute</tspan>
+                                    <tspan id="type" x="125" y="92"
+                                    font-family="Arial, Helvetica, sans-serif" font-size="12"
                                     font-weight="normal"></tspan>
                                 </text>
                             </g>

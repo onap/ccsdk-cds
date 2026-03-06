@@ -14,8 +14,8 @@ declare module 'jointjs' {
         }
     }
 }
-const rectWidth = 616;
-const rectHeight = 381;
+const rectWidth = 360;
+const rectHeight = 254;
 // custom element implementation
 // https://resources.jointjs.com/tutorials/joint/tutorials/custom-elements.html#markup
 const ActionElement = joint.shapes.standard.Rectangle.define(ActionElementTypeName, {
@@ -45,7 +45,7 @@ const ActionElement = joint.shapes.standard.Rectangle.define(ActionElementTypeNa
                     <g id="name">
                         <path id="Rectangle"
                         fill="#C3CDDB"></path>
-                        <text id="Action-1" font-family="HelveticaNeue-Bold, Helvetica Neue"
+                        <text id="Action-1" font-family="Arial, Helvetica, sans-serif"
                         font-size="13" font-weight="bold" fill="#1273EB">
                             <tspan id="label" x="0" y="20">Action 1</tspan>
                         </text>

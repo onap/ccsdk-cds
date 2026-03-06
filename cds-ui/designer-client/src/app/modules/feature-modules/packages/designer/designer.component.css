@@ -40,6 +40,12 @@ body{
 .editNavbar .navbar{
   padding: 0;
 }
+.editNavbar .navbar-collapse {
+  pointer-events: none;
+}
+.editNavbar .navbar-collapse > * {
+  pointer-events: auto;
+}
 
 /*Header*/
 header{
@@ -984,7 +990,6 @@ p.compType-4{
 }
 
 .viewBtns .btn{
-  margin-top: 16px;
   padding: 0 12px !important;
   border: 0;
   font-size: 11px;

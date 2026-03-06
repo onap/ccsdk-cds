@@ -35,9 +35,10 @@ export class PackageCreationExtractionService {
         this.zipFile = new JSZip();
         let packageName = null;
         this.zipFile.loadAsync(blob).then((zip) => {
-            Object.keys(zip.files).filter(fileName => fileName.includes('TOSCA-Metadata/'))
-                .forEach((filename) => {
-                    zip.files[filename].async('string').then((fileData) => {
+            const metadataPromises = Object.keys(zip.files)
+                .filter(fileName => fileName.includes('TOSCA-Metadata/'))
+                .map((filename) => {
+                    return zip.files[filename].async('string').then((fileData) => {
                         if (fileData) {
                             if (filename.includes('TOSCA-Metadata/')) {
 
@@ -49,30 +50,30 @@ export class PackageCreationExtractionService {
                         }
                     });
                 });
-        });
 
-        this.zipFile.loadAsync(blob).then((zip) => {
-            Object.keys(zip.files).forEach((filename) => {
-                zip.files[filename].async('string').then((fileData) => {
-                    console.log(filename);
-                    if (fileData) {
-                        if (filename.includes('Scripts/')) {
-                            this.setScripts(filename, fileData);
-                        } else if (filename.includes('Templates/')) {
-                            if (filename.includes('-mapping.')) {
-                                this.setMapping(filename, fileData);
-                            } else if (filename.includes('-template.')) {
-                                this.setTemplates(filename, fileData);
+            Promise.all(metadataPromises).then(() => {
+                Object.keys(zip.files).forEach((filename) => {
+                    zip.files[filename].async('string').then((fileData) => {
+                        console.log(filename);
+                        if (fileData) {
+                            if (filename.includes('Scripts/')) {
+                                this.setScripts(filename, fileData);
+                            } else if (filename.includes('Templates/')) {
+                                if (filename.includes('-mapping.')) {
+                                    this.setMapping(filename, fileData);
+                                } else if (filename.includes('-template.')) {
+                                    this.setTemplates(filename, fileData);
+                                }
+
+                            } else if (filename.includes('Definitions/')) {
+                                this.setImports(filename, fileData, packageName);
+                            } else if (filename.includes('Plans/')) {
+                                this.setPlans(filename, fileData);
+                            } else if (filename.includes('Requirements/')) {
+                                this.setRequirements(filename, fileData);
                             }
-
-                        } else if (filename.includes('Definitions/')) {
-                            this.setImports(filename, fileData, packageName);
-                        } else if (filename.includes('Plans/')) {
-                            this.setPlans(filename, fileData);
-                        } else if (filename.includes('Requirements/')) {
-                            this.setRequirements(filename, fileData);
                         }
-                    }
+                    });
                 });
             });
         });

@@ -174,7 +174,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // this.ngxService.start();
         this.customActionName = this.route.snapshot.paramMap.get('actionName');
-        if (this.customActionName !== '') {
+        if (this.customActionName) {
             this.showAction = true;
         }
         this.initializeBoard();
@@ -637,6 +637,21 @@ export class DesignerComponent implements OnInit, OnDestroy {
         this.designerStore.setCurrentAction(customActionName);
         /* tslint:disable:no-string-literal */
         this.steps = Object.keys(this.designerState.template.workflows[customActionName]['steps']);
+    }
+
+    onActionRenamed(event: { oldName: string; newName: string }) {
+        const idx = this.actions.indexOf(event.oldName);
+        if (idx !== -1) {
+            this.actions[idx] = event.newName;
+        }
+        if (this.currentActionName === event.oldName) {
+            this.currentActionName = event.newName;
+        }
+        const cell = this.boardGraph.getCells()
+            .find(c => c.attr('#label/text') === event.oldName);
+        if (cell) {
+            cell.attr('#label/text', event.newName);
+        }
     }
 
     openFunctionAttributes(customFunctionName: string) {

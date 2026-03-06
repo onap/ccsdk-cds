@@ -160,17 +160,13 @@
                     <img src="/assets/img/icon-zoomIn.svg"></button>
             </li>
         </ul>
-        <!--Designer/Scripting View Tabs-->
-        <ul class="navbar ml-2" style="list-style: none">
-            <li class="nav-item">
-                <div class="btn-group viewBtns" role="group">
-                    <button type="button" class="btn btn-secondary topologySource active"><i class="icon-topologyView-active" aria-hidden="true"></i> Designer</button>
-                    <button [routerLink]="['/designer/source', packageId]" type="button"
-                        class="btn btn-secondary topologyView"><i class="icon-topologySource" aria-hidden="true"></i>Scripting
-                    </button>
-                </div>
-            </li>
-        </ul>
+    </div>
+    <!--Designer/Scripting View Tabs – outside navbar-collapse so they stay pinned at the right on all screen sizes-->
+    <div class="btn-group viewBtns ml-auto flex-shrink-0" role="group">
+        <button type="button" class="btn btn-secondary topologySource active"><i class="icon-topologyView-active" aria-hidden="true"></i> Designer</button>
+        <button [routerLink]="['/designer/source', packageId]" type="button"
+            class="btn btn-secondary topologyView"><i class="icon-topologySource" aria-hidden="true"></i>Scripting
+        </button>
     </div>
 </nav>
 
@@ -312,7 +308,7 @@
                             </div>
                         </div>
                     </div>
-                    <app-action-attributes></app-action-attributes>
+                    <app-action-attributes (actionRenamed)="onActionRenamed($event)"></app-action-attributes>
                 </div>
             </div>
         </div>

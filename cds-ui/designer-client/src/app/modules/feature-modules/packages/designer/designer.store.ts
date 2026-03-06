@@ -170,6 +170,20 @@ export class DesignerStore extends Store<DesignerDashboardState> {
         });
     }
 
+    renameAction(oldName: string, newName: string) {
+        const workflows = { ...this.state.template.workflows };
+        workflows[newName] = workflows[oldName];
+        delete workflows[oldName];
+        this.setState({
+            ...this.state,
+            actionName: newName,
+            template: {
+                ...this.state.template,
+                workflows
+            }
+        });
+    }
+
     setCurrentFunction(customFunctionName: string) {
         this.setState({
             ...this.state,
