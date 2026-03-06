@@ -109,8 +109,8 @@
         <i class="fa arr-size">&#xf100;</i>
     </button>
     <div class="collapse navbar-collapse ">
-        <ul class="navbar ml-auto" style="list-style: none">
-            <li style="margin-right: 60px">
+        <ul class="navbar" style="list-style: none">
+            <li>
                 <ul class="navbar editor">
                     <li>
                         <button type="button" class="btn tooltip-bottom" data-tooltip="Undo">
@@ -124,15 +124,12 @@
                     </li>
                 </ul>
             </li>
-
-            <li class="nav-item">
-                <div class="btn-group viewBtns source-view-bar" role="group">
-                    <button (click)="convertAndOpenInDesingerView(viewedPackage.id)" type="button"
-                        class="btn btn-secondary topologySource"><i class="icon-topologyView-active" aria-hidden="true"></i> Designer</button>
-                    <button type="button" class="btn btn-secondary topologyView active"><i class="icon-topologySource" aria-hidden="true"></i>Scripting</button>
-                </div>
-            </li>
         </ul>
+    </div>
+    <div class="btn-group viewBtns ml-auto flex-shrink-0" role="group">
+        <button (click)="convertAndOpenInDesingerView(viewedPackage.id)" type="button"
+            class="btn btn-secondary topologySource"><i class="icon-topologyView-active" aria-hidden="true"></i> Designer</button>
+        <button type="button" class="btn btn-secondary topologyView active"><i class="icon-topologySource" aria-hidden="true"></i>Scripting</button>
     </div>
 </nav>
 

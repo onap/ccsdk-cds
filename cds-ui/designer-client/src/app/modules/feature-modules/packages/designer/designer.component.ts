@@ -25,7 +25,7 @@ limitations under the License.
 
 import dagre from 'dagre';
 import graphlib from 'graphlib';
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import * as joint from 'jointjs';
 import './jointjs/elements/palette.function.element';
 import './jointjs/elements/action.element';
@@ -62,6 +62,10 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
     encapsulation: ViewEncapsulation.None
 })
 export class DesignerComponent implements OnInit, OnDestroy {
+    @ViewChild('sidebarLeft', { static: false }) sidebarLeft: any;
+    @ViewChild('sidebarRight1', { static: false }) sidebarRight1: any;
+    @ViewChild('sidebarRight2', { static: false }) sidebarRight2: any;
+
 
     controllerSideBar: boolean;
     actionAttributesSideBar: boolean;
@@ -93,6 +97,31 @@ export class DesignerComponent implements OnInit, OnDestroy {
     designerState: DesignerDashboardState;
     currentActionName: string;
     packageId: any;
+    private isDeletingAction = false;
+    private suppressSidebarOpenUntil = 0;
+    private deleteActionModalHiddenHandler = () => {
+        // Keep both panes closed even after Bootstrap completes modal teardown.
+        this.closeAttributePanes();
+        this.cleanupDeleteModalArtifacts();
+        this.elementPointerDownEvt = null;
+        // Keep suppressing open handlers briefly to avoid focus/click races.
+        this.suppressSidebarOpenUntil = Date.now() + 600;
+        setTimeout(() => {
+            this.isDeletingAction = false;
+        }, 650);
+        const active = document.activeElement as HTMLElement | null;
+        if (active) {
+            active.blur();
+        }
+    }
+
+    private cleanupDeleteModalArtifacts() {
+        // Guard against Bootstrap modal teardown races that can leave an
+        // invisible backdrop covering the canvas and blocking panning.
+        ($('#deleteActionModal') as any).removeClass('show').css('display', 'none').attr('aria-hidden', 'true');
+        $('body').removeClass('modal-open').css('padding-right', '');
+        $('.modal-backdrop').remove();
+    }
 
     constructor(
         private designerStore: DesignerStore,
@@ -174,7 +203,7 @@ export class DesignerComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // this.ngxService.start();
         this.customActionName = this.route.snapshot.paramMap.get('actionName');
-        if (this.customActionName !== '') {
+        if (this.customActionName) {
             this.showAction = true;
         }
         this.initializeBoard();
@@ -276,6 +305,10 @@ export class DesignerComponent implements OnInit, OnDestroy {
         this.activatedRoute.paramMap.subscribe(res => {
             this.packageId = res.get('id');
         });
+
+        // Bootstrap modal animations/focus can race with sidebar state updates.
+        // Re-assert closed state when the delete modal is fully hidden.
+        ($('#deleteActionModal') as any).on('hidden.bs.modal', this.deleteActionModalHiddenHandler);
 
     }
 
@@ -423,13 +456,26 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
     insertCustomActionIntoBoard() {
         console.log('saving action to store action workflow....');
-        let actionName = this.graphUtil.generateNewActionName();
-        while (this.actions.includes(actionName)) {
-            actionName = this.graphUtil.generateNewActionName();
-        }
+        const actionName = this.generateNextDefaultActionName();
         this.graphUtil.createCustomActionWithName(actionName, this.boardGraph);
         this.designerStore.addDeclarativeWorkFlow(actionName);
         this.actions.push(actionName);
+    }
+
+    private generateNextDefaultActionName(): string {
+        const usedNumbers = new Set<number>();
+        this.actions.forEach(action => {
+            const match = /^Action\s*(\d+)$/i.exec(action.trim());
+            if (match) {
+                usedNumbers.add(parseInt(match[1], 10));
+            }
+        });
+
+        let next = 1;
+        while (usedNumbers.has(next)) {
+            next++;
+        }
+        return `Action${next}`;
     }
 
     stencilPaperEventListeners() {
@@ -529,8 +575,27 @@ export class DesignerComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         $(document).off('mouseup.boardPan');
+        ($('#deleteActionModal') as any).off('hidden.bs.modal', this.deleteActionModalHiddenHandler);
         this.ngUnsubscribe.next();
         this.ngUnsubscribe.complete();
+    }
+
+    private closeAttributePanes() {
+        this.actionAttributesSideBar = false;
+        this.functionAttributeSidebar = false;
+        if (this.sidebarRight1 && this.sidebarRight1.close) {
+            this.sidebarRight1.close();
+        }
+        if (this.sidebarRight2 && this.sidebarRight2.close) {
+            this.sidebarRight2.close();
+        }
+    }
+
+    private openLeftControllerPane() {
+        this.controllerSideBar = true;
+        if (this.sidebarLeft && this.sidebarLeft.open) {
+            this.sidebarLeft.open();
+        }
     }
 
     saveBluePrint() {
@@ -630,7 +695,9 @@ export class DesignerComponent implements OnInit, OnDestroy {
     }
 
     openActionAttributes(customActionName: string) {
-        console.log('opening here action attributes');
+        if (this.isDeletingAction || Date.now() < this.suppressSidebarOpenUntil) {
+            return;
+        }
         this.currentActionName = customActionName;
         this.actionAttributesSideBar = true;
         this.functionAttributeSidebar = false;
@@ -639,14 +706,84 @@ export class DesignerComponent implements OnInit, OnDestroy {
         this.steps = Object.keys(this.designerState.template.workflows[customActionName]['steps']);
     }
 
+    deleteCurrentAction() {
+        const actionName = this.currentActionName;
+        this.isDeletingAction = true;
+        this.suppressSidebarOpenUntil = Date.now() + 600;
+
+        // Close sidebars and clear UI state first.
+        this.closeAttributePanes();
+        // Keep the actions list visible after delete.
+        this.openLeftControllerPane();
+        this.currentActionName = '';
+        this.steps = [];
+        this.elementPointerDownEvt = null;
+
+        const idx = this.actions.indexOf(actionName);
+        if (idx !== -1) {
+            this.actions.splice(idx, 1);
+        }
+
+        const cell = this.boardGraph.getCells()
+            .find(c => c.attributes.type === ActionElementTypeName &&
+                c.attr('#label/text') === actionName);
+        if (cell) {
+            cell.remove();
+        }
+
+        this.designerStore.deleteWorkflow(actionName);
+
+        // Re-assert pane closure after store emissions/render passes.
+        setTimeout(() => {
+            this.closeAttributePanes();
+            this.openLeftControllerPane();
+        });
+
+        // Close the confirmation modal programmatically. We intentionally do NOT
+        // use data-dismiss="modal" on the Delete button because Bootstrap's
+        // async dismiss (fade-out → refocus trigger element → backdrop removal)
+        // races with Angular's change detection and can cause stale pointer /
+        // focus events to open unrelated panes.
+        ($('#deleteActionModal') as any).modal('hide');
+
+        // Fallback cleanup in case hidden.bs.modal does not fully remove backdrop.
+        setTimeout(() => this.cleanupDeleteModalArtifacts(), 0);
+        setTimeout(() => this.cleanupDeleteModalArtifacts(), 250);
+    }
+
+    onActionRenamed(event: { oldName: string; newName: string }) {
+        const idx = this.actions.indexOf(event.oldName);
+        if (idx !== -1) {
+            this.actions[idx] = event.newName;
+        }
+        if (this.currentActionName === event.oldName) {
+            this.currentActionName = event.newName;
+        }
+        const cell = this.boardGraph.getCells()
+            .find(c => c.attr('#label/text') === event.oldName);
+        if (cell) {
+            cell.attr('#label/text', event.newName);
+        }
+    }
+
     openFunctionAttributes(customFunctionName: string) {
-        // console.log(customFunctionName);
+        if (this.isDeletingAction || Date.now() < this.suppressSidebarOpenUntil) {
+            return;
+        }
+        const currentWorkflow = this.designerState && this.designerState.template
+            ? this.designerState.template.workflows[this.currentActionName]
+            : null;
+        const currentStep = currentWorkflow && currentWorkflow['steps']
+            ? currentWorkflow['steps'][customFunctionName]
+            : null;
+        if (!currentStep) {
+            this.functionAttributeSidebar = false;
+            return;
+        }
+
         this.actionAttributesSideBar = false;
         this.functionAttributeSidebar = true;
-        // console.log(this.designerState.template.workflows[this.currentActionName]
-        // ['steps'][customFunctionName]['target']);
-        this.designerStore.setCurrentFunction(this.designerState.template.workflows[this.currentActionName]
-        ['steps'][customFunctionName]['target']);
+        this.designerStore.setCurrentFunction(currentStep['target']);
     }
 
     getTarget(stepname) {
