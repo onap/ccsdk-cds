@@ -26,10 +26,13 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.dao.IncorrectResultSizeDataAccessException
 import org.springframework.http.ResponseEntity
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
+import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.server.ServerWebInputException
 
 abstract class ErrorCatalogExceptionHandler(private val errorCatalogService: ErrorCatalogService) {
+
+    private val log = LoggerFactory.getLogger(ErrorCatalogExceptionHandler::class.java)
 
     @ExceptionHandler(ErrorCatalogException::class)
     fun errorCatalogException(e: ErrorCatalogException): ResponseEntity<ErrorPayload> {
@@ -79,6 +82,7 @@ abstract class ErrorCatalogExceptionHandler(private val errorCatalogService: Err
 
     @ExceptionHandler
     fun errorCatalogException(e: Exception): ResponseEntity<ErrorPayload> {
+        log.error("Unhandled exception: ${e.message}", e)
         val error = ErrorCatalogException(
             HttpErrorCodes.code(ErrorCatalogCodes.GENERIC_FAILURE),
             e.errorMessageOrDefault(), e.errorCauseOrDefault()

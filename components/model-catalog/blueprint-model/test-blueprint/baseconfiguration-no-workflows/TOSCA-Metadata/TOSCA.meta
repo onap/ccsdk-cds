@@ -1,0 +1,8 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: Test
+Entry-Definitions: Definitions/empty-blueprint.json
+Template-Name: baseconfiguration-no-workflows
+Template-Version: 1.0.0
+Template-Type: DEFAULT
+Template-Tags: test, no-workflows

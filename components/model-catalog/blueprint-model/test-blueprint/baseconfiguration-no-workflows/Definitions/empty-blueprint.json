@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "template_author": "Test",
+    "author-email": "test@test.com",
+    "user-groups": "ADMIN, OPERATION",
+    "template_name": "baseconfiguration-no-workflows",
+    "template_version": "1.0.0",
+    "template_tags": "test, no-workflows"
+  },
+  "imports": [],
+  "topology_template": {}
+}

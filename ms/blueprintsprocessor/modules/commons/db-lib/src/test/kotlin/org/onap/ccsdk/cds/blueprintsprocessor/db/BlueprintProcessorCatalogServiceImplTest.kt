@@ -72,6 +72,10 @@ class BlueprintProcessorCatalogServiceImplTest {
         normalizedFile("./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration")
             .compress(normalizedFile("./target/blueprints/generated-cba.zip"))
 
+        // Create sample CBA zip without workflows
+        normalizedFile("./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration-no-workflows")
+            .compress(normalizedFile("./target/blueprints/generated-cba-no-workflows.zip"))
+
         bluePrintRuntimeService = BluePrintMetadataUtils.bluePrintRuntime(
             blueprintId,
             "./../../../../../components/model-catalog/blueprint-model/test-blueprint/baseconfiguration"
@@ -133,6 +137,19 @@ class BlueprintProcessorCatalogServiceImplTest {
                 "${blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintArchivePath}/baseconfiguration " +
                 "from data base."
         )
+    }
+
+    @Test
+    fun `test save CBA without workflows`() {
+        runBlocking {
+            val file = normalizedFile("./target/blueprints/generated-cba-no-workflows.zip")
+            assertTrue(file.exists(), "couldn't get file ${file.absolutePath}")
+
+            blueprintsProcessorCatalogService.saveToDatabase("5678", file)
+            blueprintsProcessorCatalogService.getFromDatabase("baseconfiguration-no-workflows", "1.0.0")
+
+            blueprintsProcessorCatalogService.deleteFromDatabase("baseconfiguration-no-workflows", "1.0.0")
+        }
     }
 
     @Test
