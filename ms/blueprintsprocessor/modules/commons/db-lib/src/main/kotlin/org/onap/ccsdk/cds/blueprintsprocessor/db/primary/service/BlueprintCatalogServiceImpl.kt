@@ -72,7 +72,7 @@ abstract class BlueprintCatalogServiceImpl(
 
         val bluePrintRuntimeService = BluePrintMetadataUtils.getBluePrintRuntime(processingId, workingDir!!)
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
-        val workflows = bluePrintRuntimeService.bluePrintContext().workflows()!!
+        val workflows = bluePrintRuntimeService.bluePrintContext().workflows() ?: emptyMap()
         metadata[BluePrintConstants.PROPERTY_BLUEPRINT_PROCESS_ID] = processingId
         metadata[BluePrintConstants.PROPERTY_BLUEPRINT_VALID] = valid
 
