@@ -31,42 +31,51 @@
 </div>
 <div class="card creat-card">
     <div class="single-line-model">
-        <label class="label-name">Name <span>*</span></label>
+        <label class="label-name" [class.label-invalid]="touchedFields['name'] && !metaDataTab.name?.trim()">Name <span>*</span></label>
         <div class="label-input">
             <input tourAnchor="mt-packageName" type="input"  [readOnly]="!isNameEditable"  (change)="checkRequiredElements()"
-                [(ngModel)]="metaDataTab.name" placeholder="Package name">
+                [(ngModel)]="metaDataTab.name" placeholder="Package name"
+                [class.input-invalid]="touchedFields['name'] && !metaDataTab.name?.trim()"
+                (blur)="markFieldTouched('name')">
         </div>
-        <!--<div class="model-note-container error-message">
-            Package name already exists with this version. Please enter a different name or enter different version
-            number.
-        </div>-->
+        <div class="model-note-container error-message" *ngIf="touchedFields['name'] && !metaDataTab.name?.trim()">
+            Package name is required
+        </div>
     </div>
 
     <div class="single-line-model">
-        <label class="label-name">Version <span>*</span></label>
+        <label class="label-name" [class.label-invalid]="touchedFields['version'] && !metaDataTab.version?.trim()">Version <span>*</span></label>
         <div class="label-input">
             <input tourAnchor="mt-packageVersion" type="input" (change)="checkRequiredElements()"
                 [(ngModel)]="metaDataTab.version" (input)="validatePackageNameAndVersion()"
-                pattern="(\d+)\.(\d+)\.(\d+)" placeholder="Example: 1.0.0">
+                pattern="(\d+)\.(\d+)\.(\d+)" placeholder="Example: 1.0.0"
+                [class.input-invalid]="touchedFields['version'] && !metaDataTab.version?.trim()"
+                (blur)="markFieldTouched('version')">
         </div>
         <div class="model-note-container tag-notes">Must follow this format (1.0.0)</div>
+        <div class="model-note-container error-message" *ngIf="touchedFields['version'] && !metaDataTab.version?.trim()">Version is required</div>
         <div class="model-note-container error-message">{{errorMessage}}</div>
     </div>
     <div class="single-line-model">
-        <label class="label-name">Description <span>*</span></label>
+        <label class="label-name">Description</label>
         <div class="label-input">
             <input tourAnchor="mt-packageDescription" type="input" [(ngModel)]="metaDataTab.description"
-                (change)="checkRequiredElements()" placeholder="Descripe the package">
+                (change)="checkRequiredElements()" placeholder="Describe the package">
         </div>
     </div>
 
     <div class="single-line-model">
-        <label class="label-name">Tags <span>*</span></label>
+        <label class="label-name" [class.label-invalid]="touchedFields['tags'] && tags.size === 0">Tags <span>*</span></label>
         <div class="label-input">
             <input tourAnchor="mt-packageTags" type="input" (keyup.enter)="addTag($event)"
-                (keyup.Space)="addTag($event)" placeholder="Ex., vDNS-CDS">
+                (keyup.Space)="addTag($event)" placeholder="Ex., vDNS-CDS"
+                [class.input-invalid]="touchedFields['tags'] && tags.size === 0"
+                (blur)="markFieldTouched('tags')">
         </div>
         <div class="model-note-container tag-notes">Use ENTER/SPACE to add tag</div>
+        <div class="model-note-container error-message" *ngIf="touchedFields['tags'] && tags.size === 0">
+            At least one tag is required
+        </div>
         <div class="model-note-container tages-container">
             <span *ngFor="let tag of tags" class="single-tage">{{tag}}
                 <i (click)="removeTag(tag)" class="fa fa-times-circle"></i>

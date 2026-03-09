@@ -733,7 +733,9 @@
                             </button>
 
 
-                            <button class="btn btn-sm btn-deploy" (click)="deployCurrentPackage()"><i
+                            <button class="btn btn-sm btn-deploy" (click)="deployCurrentPackage()"
+                                    [disabled]="!isMetadataValid"
+                                    [title]="isMetadataValid ? 'Deploy package' : 'Fill in all required metadata fields before deploying'"><i
                                     class="fa fa-play-circle"></i> Deploy
                             </button>
                         </div>

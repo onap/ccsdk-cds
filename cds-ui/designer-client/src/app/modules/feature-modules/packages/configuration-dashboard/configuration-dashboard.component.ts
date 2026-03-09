@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BluePrintDetailModel } from '../model/BluePrint.detail.model';
 import { PackageCreationStore } from '../package-creation/package-creation.store';
@@ -27,7 +27,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
     templateUrl: './configuration-dashboard.component.html',
     styleUrls: ['./configuration-dashboard.component.css'],
 })
-export class ConfigurationDashboardComponent extends ComponentCanDeactivate implements OnInit, OnDestroy {
+export class ConfigurationDashboardComponent extends ComponentCanDeactivate implements OnInit, OnDestroy, AfterViewInit {
     viewedPackage: BluePrintDetailModel = new BluePrintDetailModel();
     @ViewChild(MetadataTabComponent, { static: false })
     metadataTabComponent: MetadataTabComponent;
@@ -46,6 +46,7 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     currentBlob = new Blob();
     vlbDefinition: CBADefinition = new CBADefinition();
     isSaveEnabled = false;
+    isMetadataValid = false;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     metadataClasses = 'nav-item nav-link active';
     private cbaPackage: CBAPackage = new CBAPackage();
@@ -107,6 +108,16 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         });
 
 
+    }
+
+    ngAfterViewInit() {
+        if (this.metadataTabComponent) {
+            this.metadataTabComponent.metadataValid$
+                .pipe(takeUntil(this.ngUnsubscribe))
+                .subscribe(valid => {
+                    this.isMetadataValid = valid;
+                });
+        }
     }
 
     private refreshCurrentPackage(id?) {
@@ -225,6 +236,10 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
     }
 
     deployCurrentPackage() {
+        if (!this.isMetadataValid) {
+            this.toastService.error('Please fill in all required metadata fields (Name, Version, Tags) before deploying.');
+            return;
+        }
         this.ngxService.start();
         this.formTreeData();
         this.deployPackage();
@@ -346,4 +361,3 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         return throwError(errorMessage);
     }
 }
-
