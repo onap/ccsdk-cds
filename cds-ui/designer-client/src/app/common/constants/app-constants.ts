@@ -100,7 +100,8 @@ export const BlueprintURLs = {
     getMetaDate: '/controllerblueprint/meta-data/',
     countOfAllBluePrints: '/controllerblueprint/list/count',
     getMetaDatePageable: '/controllerblueprint/metadata/paged',
-    getBlueprintByName: '/controllerblueprint/by-name/'
+    getBlueprintByName: '/controllerblueprint/by-name/',
+    getWorkflows: '/controllerblueprint/workflows/'
 };
 
 export const ResourceDictionaryURLs = {
@@ -122,6 +123,10 @@ export const ControllerCatalogURLs = {
     saveControllerCatalog: '/controllercatalog/save',
     getDefinition: '/controllercatalog/model-type/by-definition',
     getDerivedFrom: '/controllercatalog/model-type/by-derivedfrom'
+};
+
+export const ExecutionURLs = {
+    execute: '/controllerblueprint/execute',
 };
 
 

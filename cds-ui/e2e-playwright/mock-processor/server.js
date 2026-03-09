@@ -168,6 +168,17 @@ const server = http.createServer(async (req, res) => {
     return bp ? json(res, bp) : json(res, { error: 'not found' }, 404);
   }
 
+  // GET /api/v1/blueprint-model/workflows/blueprint-name/:name/version/:version
+  if (method === 'GET' &&
+      (m = pathname.match(`^${BASE}/blueprint-model/workflows/blueprint-name/([^/]+)/version/([^/]+)$`))) {
+    const [, name, version] = m;
+    const bp = blueprints.find(
+      b => b.artifactName === decodeURIComponent(name) && b.artifactVersion === decodeURIComponent(version));
+    if (!bp) return json(res, { error: 'not found' }, 404);
+    const workflows = bp.workflows ? Object.keys(bp.workflows) : [];
+    return json(res, { blueprintName: bp.artifactName, version: bp.artifactVersion, workflows });
+  }
+
   // GET /api/v1/blueprint-model/download/by-name/:name/version/:version
   if (method === 'GET' &&
       (m = pathname.match(`^${BASE}/blueprint-model/download/by-name/([^/]+)/version/([^/]+)$`))) {
@@ -318,6 +329,45 @@ const server = http.createServer(async (req, res) => {
   if (method === 'DELETE' &&
       (m = pathname.match(`^${BASE}/model-type/([^/]+)$`))) {
     return json(res, { message: 'deleted', name: m[1] });
+  }
+
+  // ── execution-service ──────────────────────────────────────────────────────
+
+  // POST /api/v1/execution-service/process
+  if (method === 'POST' && (pathname === `${BASE}/execution-service/process` || pathname === `${BASE}/execution-service/process/`)) {
+    const raw = await readBody(req);
+    let input;
+    try { input = JSON.parse(raw); } catch (_) { input = {}; }
+    const header = (input.commonHeader || {});
+    const actionIds = (input.actionIdentifiers || {});
+    const response = {
+      commonHeader: {
+        timestamp: new Date().toISOString(),
+        originatorId: header.originatorId || 'CDS',
+        requestId: header.requestId || 'mock-request-id',
+        subRequestId: header.subRequestId || 'mock-sub-request-id',
+      },
+      actionIdentifiers: {
+        blueprintName: actionIds.blueprintName || '',
+        blueprintVersion: actionIds.blueprintVersion || '',
+        actionName: actionIds.actionName || '',
+        mode: actionIds.mode || 'sync',
+      },
+      status: {
+        code: 200,
+        eventType: 'EVENT_COMPONENT_EXECUTED',
+        timestamp: new Date().toISOString(),
+        message: 'success',
+      },
+      payload: {
+        'resource-resolution-response': {
+          'meshed-template': {
+            json: '{"hostname": "mock-host-01", "ip-address": "10.0.0.1"}',
+          },
+        },
+      },
+    };
+    return json(res, response);
   }
 
   // ── fallthrough ───────────────────────────────────────────────────────────────

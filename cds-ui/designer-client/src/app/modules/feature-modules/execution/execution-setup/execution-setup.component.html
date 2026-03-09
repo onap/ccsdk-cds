@@ -1,0 +1,108 @@
+<div class="execution-setup-container">
+    <div class="row">
+        <!-- Left column: form fields -->
+        <div class="col-md-4">
+            <div class="card setup-card">
+                <div class="card-body">
+                    <h5 class="card-title">Blueprint Selection</h5>
+
+                    <div class="form-group">
+                        <label for="blueprintName">Blueprint Name</label>
+                        <select id="blueprintName"
+                                class="form-control"
+                                [(ngModel)]="blueprintName"
+                                (ngModelChange)="onBlueprintNameChange()">
+                            <option value="" disabled>Select a blueprint...</option>
+                            <option *ngFor="let name of uniquePackageNames" [value]="name">
+                                {{ name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blueprintVersion">Version</label>
+                        <select id="blueprintVersion"
+                                class="form-control"
+                                [(ngModel)]="blueprintVersion"
+                                (ngModelChange)="onBlueprintVersionChange()"
+                                [disabled]="availableVersions.length === 0">
+                            <option value="" disabled>Select version...</option>
+                            <option *ngFor="let ver of availableVersions" [value]="ver">
+                                {{ ver }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="actionName">Action Name</label>
+                        <select id="actionName"
+                                class="form-control"
+                                [(ngModel)]="actionName"
+                                (ngModelChange)="onActionChange()"
+                                [disabled]="availableActions.length === 0">
+                            <option value="" disabled>Select an action...</option>
+                            <option *ngFor="let action of availableActions" [value]="action">
+                                {{ action }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <hr>
+
+                    <div class="execution-actions">
+                        <button class="btn btn-primary btn-execute"
+                                [disabled]="!canExecute()"
+                                (click)="executeBlueprint()">
+                            <i class="fa fa-play mr-1" *ngIf="!isExecuting"></i>
+                            <i class="fa fa-spinner fa-spin mr-1" *ngIf="isExecuting"></i>
+                            {{ isExecuting ? 'Executing...' : 'Execute' }}
+                        </button>
+                        <button class="btn btn-outline-secondary ml-2"
+                                (click)="resetPayload()">
+                            <i class="fa fa-refresh mr-1"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right column: JSON payload editor -->
+        <div class="col-md-8">
+            <div class="card editor-card">
+                <div class="card-body">
+                    <h5 class="card-title">Request Payload (ExecutionServiceInput)</h5>
+                    <div class="ace-editor-wrapper">
+                        <ace-editor
+                            [(text)]="payloadText"
+                            [mode]="'json'"
+                            [theme]="'eclipse'"
+                            [options]="aceOptions"
+                            style="min-height: 350px; width: 100%; font-size: 13px;">
+                        </ace-editor>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response panel -->
+            <div class="card response-card mt-3" *ngIf="lastResponseText">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fa fa-check-circle text-success mr-1" *ngIf="lastResponse"></i>
+                        <i class="fa fa-times-circle text-danger mr-1" *ngIf="!lastResponse"></i>
+                        Execution Response
+                    </h5>
+                    <div class="ace-editor-wrapper">
+                        <ace-editor
+                            [text]="lastResponseText"
+                            [mode]="'json'"
+                            [theme]="'eclipse'"
+                            [readOnly]="true"
+                            [options]="{ maxLines: 20, minLines: 5, showPrintMargin: false }"
+                            style="min-height: 150px; width: 100%; font-size: 13px;">
+                        </ace-editor>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

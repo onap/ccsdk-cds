@@ -322,6 +322,64 @@ export class BlueprintRestController {
     });
   }
 
+  @post('/controllerblueprint/execute')
+  async executeBlueprint(
+    @requestBody({
+      description: 'ExecutionServiceInput JSON payload',
+      required: true,
+      content: {
+        'application/json': {
+          schema: { type: 'object' },
+        },
+      },
+    })
+    body: object,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<Response> {
+    const options = {
+      url: processorApiConfig.http.url + '/execution-service/process',
+      headers: {
+        Authorization: processorApiConfig.http.authToken,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    };
+    return new Promise((resolve, reject) => {
+      request_lib.post(options)
+        .on('error', err => {
+          reject(err);
+        })
+        .pipe(response)
+        .once('finish', () => {
+          resolve(response);
+        });
+    });
+  }
+
+  @get('/controllerblueprint/workflows/{name}/{version}')
+  async getWorkflows(
+    @param.path.string('name') name: string,
+    @param.path.string('version') version: string,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<Response> {
+    const options = {
+      url: processorApiConfig.http.url + '/blueprint-model/workflows/blueprint-name/' + name + '/version/' + version,
+      headers: {
+        Authorization: processorApiConfig.http.authToken,
+      },
+    };
+    return new Promise((resolve, reject) => {
+      request_lib.get(options)
+        .on('error', err => {
+          reject(err);
+        })
+        .pipe(response)
+        .once('finish', () => {
+          resolve(response);
+        });
+    });
+  }
+
   @post('/controllerblueprint/deploy-blueprint')
   async deploy(
     @requestBody({

@@ -1,0 +1,35 @@
+.execution-setup-container {
+    padding: 15px 0;
+}
+
+.setup-card,
+.editor-card,
+.response-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.setup-card .card-title,
+.editor-card .card-title,
+.response-card .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.btn-execute {
+    min-width: 120px;
+}
+
+.ace-editor-wrapper {
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+}

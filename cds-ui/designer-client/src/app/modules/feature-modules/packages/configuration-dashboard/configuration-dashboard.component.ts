@@ -250,6 +250,15 @@ export class ConfigurationDashboardComponent extends ComponentCanDeactivate impl
         this.router.navigate(['/packages/designer', id, { actionName: this.customActionName }]);
     }
 
+    goToExecute() {
+        this.router.navigate(['/execute'], {
+            queryParams: {
+                name: this.viewedPackage.artifactName,
+                version: this.viewedPackage.artifactVersion
+            }
+        });
+    }
+
     public dropped(files: NgxFileDropEntry[]) {
 
     }
