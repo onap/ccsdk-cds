@@ -3,7 +3,7 @@ import {PackageCreationService} from '../package-creation.service';
 import {MetaDataTabModel} from '../mapping-models/metadata/MetaDataTab.model';
 import {PackageCreationStore} from '../package-creation.store';
 import {ActivatedRoute} from '@angular/router';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 
 
@@ -27,6 +27,8 @@ export class MetadataTabComponent implements OnInit , OnDestroy {
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     isNameEditable = false;
     ngUnsubscribe = new Subject();
+    metadataValid$ = new BehaviorSubject<boolean>(false);
+    touchedFields: { [key: string]: boolean } = {};
     constructor(
         private route: ActivatedRoute,
         private packageCreationService: PackageCreationService,
@@ -66,7 +68,7 @@ export class MetadataTabComponent implements OnInit , OnDestroy {
                  }*/
                 // this.tags = element.metaData.templateTags;
 
-
+                this.updateValidityState();
             }
         });
     }
@@ -74,6 +76,7 @@ export class MetadataTabComponent implements OnInit , OnDestroy {
     removeTag(value) {
         // console.log(event);
         this.tags.delete(value);
+        this.updateValidityState();
     }
 
     addTag(event) {
@@ -83,6 +86,8 @@ export class MetadataTabComponent implements OnInit , OnDestroy {
             event.target.value = '';
             this.tags.add(value.trim());
         }
+        this.markFieldTouched('tags');
+        this.updateValidityState();
     }
 
     removeKey(event, key) {
@@ -119,6 +124,7 @@ export class MetadataTabComponent implements OnInit , OnDestroy {
                 } else {
                     this.errorMessage = '';
                 }
+                this.updateValidityState();
             });
         }
 
@@ -137,6 +143,23 @@ export class MetadataTabComponent implements OnInit , OnDestroy {
         newMetaData.mapOfCustomKey = this.metaDataTab.mapOfCustomKey;
         newMetaData.mode = this.metaDataTab.mode;
         this.packageCreationStore.changeMetaData(newMetaData);
+        this.updateValidityState();
+    }
+
+    markFieldTouched(field: string) {
+        this.touchedFields[field] = true;
+    }
+
+    isMetadataValid(): boolean {
+        const regexp = RegExp(this.versionPattern);
+        return !!(this.metaDataTab.name && this.metaDataTab.name.trim()
+            && this.metaDataTab.version && regexp.test(this.metaDataTab.version)
+            && this.tags && this.tags.size > 0
+            && !this.errorMessage);
+    }
+
+    updateValidityState() {
+        this.metadataValid$.next(this.isMetadataValid());
     }
 
     ngOnDestroy() {
