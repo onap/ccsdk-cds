@@ -37,6 +37,8 @@ const resourceDictionaries = JSON.parse(
   fs.readFileSync(path.join(FIXTURES, 'resource-dictionaries.json'), 'utf8'));
 const modelTypes = JSON.parse(
   fs.readFileSync(path.join(FIXTURES, 'model-types.json'), 'utf8'));
+const workflowSpecs = JSON.parse(
+  fs.readFileSync(path.join(FIXTURES, 'workflow-specs.json'), 'utf8'));
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -166,6 +168,17 @@ const server = http.createServer(async (req, res) => {
     const bp = blueprints.find(
       b => b.artifactName === name && b.artifactVersion === version);
     return bp ? json(res, bp) : json(res, { error: 'not found' }, 404);
+  }
+
+  // GET /api/v1/blueprint-model/workflows/blueprint-name/:name/version/:version
+  if (method === 'GET' &&
+      (m = pathname.match(`^${BASE}/blueprint-model/workflows/blueprint-name/([^/]+)/version/([^/]+)$`))) {
+    const [, name, version] = m;
+    const bp = blueprints.find(
+      b => b.artifactName === decodeURIComponent(name) && b.artifactVersion === decodeURIComponent(version));
+    if (!bp) return json(res, { error: 'not found' }, 404);
+    const workflows = bp.workflows ? Object.keys(bp.workflows) : [];
+    return json(res, { blueprintName: bp.artifactName, version: bp.artifactVersion, workflows });
   }
 
   // GET /api/v1/blueprint-model/download/by-name/:name/version/:version
@@ -318,6 +331,73 @@ const server = http.createServer(async (req, res) => {
   if (method === 'DELETE' &&
       (m = pathname.match(`^${BASE}/model-type/([^/]+)$`))) {
     return json(res, { message: 'deleted', name: m[1] });
+  }
+
+  // ── workflow-spec ──────────────────────────────────────────────────────────
+
+  // POST /api/v1/blueprint-model/workflow-spec
+  if (method === 'POST' && (pathname === `${BASE}/blueprint-model/workflow-spec` || pathname === `${BASE}/blueprint-model/workflow-spec/`)) {
+    const raw = await readBody(req);
+    let body;
+    try { body = JSON.parse(raw); } catch (_) { return json(res, { error: 'invalid body' }, 400); }
+    const workflowName = body.workflowName || '';
+    const spec = workflowSpecs[workflowName];
+    if (!spec) {
+      return json(res, {
+        code: 404,
+        status: 'NOT_FOUND',
+        message: 'No workflow spec found for ' + workflowName
+      }, 404);
+    }
+    return json(res, {
+      blueprintName: body.blueprintName || '',
+      version: body.version || '',
+      workFlowData: {
+        workFlowName: workflowName,
+        inputs: spec.inputs || {},
+        outputs: spec.outputs || {}
+      },
+      dataTypes: spec.dataTypes || {}
+    });
+  }
+
+  // ── execution-service ──────────────────────────────────────────────────────
+
+  // POST /api/v1/execution-service/process
+  if (method === 'POST' && (pathname === `${BASE}/execution-service/process` || pathname === `${BASE}/execution-service/process/`)) {
+    const raw = await readBody(req);
+    let input;
+    try { input = JSON.parse(raw); } catch (_) { input = {}; }
+    const header = (input.commonHeader || {});
+    const actionIds = (input.actionIdentifiers || {});
+    const response = {
+      commonHeader: {
+        timestamp: new Date().toISOString(),
+        originatorId: header.originatorId || 'CDS',
+        requestId: header.requestId || 'mock-request-id',
+        subRequestId: header.subRequestId || 'mock-sub-request-id',
+      },
+      actionIdentifiers: {
+        blueprintName: actionIds.blueprintName || '',
+        blueprintVersion: actionIds.blueprintVersion || '',
+        actionName: actionIds.actionName || '',
+        mode: actionIds.mode || 'sync',
+      },
+      status: {
+        code: 200,
+        eventType: 'EVENT_COMPONENT_EXECUTED',
+        timestamp: new Date().toISOString(),
+        message: 'success',
+      },
+      payload: {
+        'resource-resolution-response': {
+          'meshed-template': {
+            json: '{"hostname": "mock-host-01", "ip-address": "10.0.0.1"}',
+          },
+        },
+      },
+    };
+    return json(res, response);
   }
 
   // ── fallthrough ───────────────────────────────────────────────────────────────

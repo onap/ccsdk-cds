@@ -1,0 +1,86 @@
+.execution-setup-container {
+    padding: 15px 0;
+}
+
+.setup-card,
+.editor-card,
+.response-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.setup-card .card-title,
+.editor-card .card-title,
+.response-card .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.btn-execute {
+    min-width: 120px;
+}
+
+.ace-editor-wrapper {
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+}
+
+/* Action Inputs */
+.action-inputs-section {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 12px;
+}
+
+.section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.input-field-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 2px;
+}
+
+.complex-input-group {
+    margin-bottom: 8px;
+}
+
+.complex-group-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.complex-fields {
+    padding-left: 10px;
+    border-left: 2px solid #e0e0e0;
+}
+
+.complex-fields .form-group {
+    margin-bottom: 8px;
+}
+
+.input-group-block {
+    margin-bottom: 4px;
+}
+
+.action-inputs-loading,
+.action-inputs-error {
+    padding: 6px 0;
+}

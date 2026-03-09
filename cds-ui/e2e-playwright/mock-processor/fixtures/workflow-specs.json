@@ -1,0 +1,133 @@
+{
+  "resource-resolution": {
+    "inputs": {
+      "resolution-key": {
+        "type": "string",
+        "required": false,
+        "description": "Resolution key for the resource resolution"
+      },
+      "store-result": {
+        "type": "boolean",
+        "required": false,
+        "description": "Whether to store the resolved resources"
+      },
+      "resource-assignment-properties": {
+        "type": "dt-resource-assignment-properties",
+        "required": true,
+        "description": "Dynamic properties for resource assignment"
+      }
+    },
+    "outputs": {
+      "meshed-template": { "type": "json", "value": {} }
+    },
+    "dataTypes": {
+      "dt-resource-assignment-properties": {
+        "derivedFrom": "tosca.datatypes.Dynamic",
+        "description": "Dynamic DataType for resource assignment",
+        "properties": {
+          "service-instance-id": { "type": "string", "required": true, "description": "Service Instance ID" },
+          "vnf-id": { "type": "string", "required": true, "description": "VNF Instance ID" },
+          "vf-module-id": { "type": "string", "required": false, "description": "VF Module ID" }
+        }
+      }
+    }
+  },
+  "config-assign": {
+    "inputs": {
+      "resolution-key": {
+        "type": "string",
+        "required": false,
+        "description": "Resolution key for config assignment"
+      },
+      "config-assign-properties": {
+        "type": "dt-config-assign-properties",
+        "required": true,
+        "description": "Dynamic properties for config assignment"
+      }
+    },
+    "outputs": {},
+    "dataTypes": {
+      "dt-config-assign-properties": {
+        "derivedFrom": "tosca.datatypes.Dynamic",
+        "description": "Dynamic DataType for config assignment",
+        "properties": {
+          "service-instance-id": { "type": "string", "required": true, "description": "Service Instance ID" },
+          "vnf-id": { "type": "string", "required": true, "description": "VNF Instance ID" },
+          "hostname": { "type": "string", "required": false, "description": "Target hostname" }
+        }
+      }
+    }
+  },
+  "config-deploy": {
+    "inputs": {
+      "resolution-key": {
+        "type": "string",
+        "required": false,
+        "description": "Resolution key for config deployment"
+      },
+      "config-deploy-properties": {
+        "type": "dt-config-deploy-properties",
+        "required": true,
+        "description": "Dynamic properties for config deployment"
+      }
+    },
+    "outputs": {},
+    "dataTypes": {
+      "dt-config-deploy-properties": {
+        "derivedFrom": "tosca.datatypes.Dynamic",
+        "description": "Dynamic DataType for config deployment",
+        "properties": {
+          "service-instance-id": { "type": "string", "required": true, "description": "Service Instance ID" },
+          "vnf-id": { "type": "string", "required": true, "description": "VNF Instance ID" },
+          "ip-address": { "type": "string", "required": false, "description": "Device IP address" },
+          "hostname": { "type": "string", "required": false, "description": "Device hostname" }
+        }
+      }
+    }
+  },
+  "health-check": {
+    "inputs": {
+      "health-check-properties": {
+        "type": "dt-health-check-properties",
+        "required": true,
+        "description": "Health check parameters"
+      }
+    },
+    "outputs": {
+      "health-check-result": { "type": "string", "value": "" }
+    },
+    "dataTypes": {
+      "dt-health-check-properties": {
+        "derivedFrom": "tosca.datatypes.Dynamic",
+        "description": "Dynamic DataType for health check",
+        "properties": {
+          "service-instance-id": { "type": "string", "required": true, "description": "Service Instance ID" },
+          "vnf-id": { "type": "string", "required": true, "description": "VNF Instance ID" },
+          "health-check-type": { "type": "string", "required": false, "description": "Type of health check to perform" }
+        }
+      }
+    }
+  },
+  "activate-restconf": {
+    "inputs": {
+      "activate-restconf-properties": {
+        "type": "dt-activate-restconf-properties",
+        "required": true,
+        "description": "RESTCONF activation parameters"
+      }
+    },
+    "outputs": {},
+    "dataTypes": {
+      "dt-activate-restconf-properties": {
+        "derivedFrom": "tosca.datatypes.Dynamic",
+        "description": "Dynamic DataType for RESTCONF activation",
+        "properties": {
+          "service-instance-id": { "type": "string", "required": true, "description": "Service Instance ID" },
+          "vnf-id": { "type": "string", "required": true, "description": "VNF Instance ID" },
+          "ip-address": { "type": "string", "required": true, "description": "Device IP address" },
+          "port": { "type": "integer", "required": false, "description": "RESTCONF port number" }
+        }
+      }
+    }
+  }
+}

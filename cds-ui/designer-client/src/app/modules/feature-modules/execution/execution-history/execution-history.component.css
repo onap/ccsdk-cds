@@ -1,0 +1,20 @@
+.execution-history-container {
+    padding: 15px 0;
+}
+
+.history-row {
+    cursor: pointer;
+}
+
+.request-id {
+    font-family: monospace;
+    font-size: 12px;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.empty-state i {
+    display: block;
+}
