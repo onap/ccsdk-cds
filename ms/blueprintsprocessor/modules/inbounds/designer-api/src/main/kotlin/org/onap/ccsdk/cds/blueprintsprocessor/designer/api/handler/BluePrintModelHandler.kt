@@ -256,6 +256,11 @@ open class BluePrintModelHandler(
         return blueprintModelSearchRepository.findAll(pageRequest)
     }
 
+    open fun allBlueprintModelByPublished(published: Boolean, pageRequest: Pageable): Page<BlueprintModelSearch> {
+        val dbPublished = if (published) "Y" else "N"
+        return blueprintModelSearchRepository.findByPublished(dbPublished, pageRequest)
+    }
+
     /**
      * This is a saveBlueprintModel method
      *

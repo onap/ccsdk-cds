@@ -9,18 +9,20 @@
  *      the LoopBack BFF which in turn calls the mock-processor.  Now that the
  *      mock is running the integration tests assert exact HTTP 200 responses
  *      and fixture data rendered in the DOM.
+ *   5. Tab filtering – Deployed / Under Construction tabs filter by published
+ *      status via the `published` query parameter.
  *
  * Fixture data (from mock-processor/fixtures/blueprints.json – real data from
  * cds-ui-oom-sm-master.tnaplab.telekom.de):
- *   RT-resource-resolution  1.0.0  tags: test, regression
- *   vLB_CDS_KOTLIN          1.0.0  tags: test, vDNS-CDS, SCALE-OUT, MARCO
- *   vLB_CDS_RESTCONF        1.0.0  tags: vLB-CDS
- *   vLB_CDS                 1.0.0  tags: vLB_CDS
- *   5G_Core                 2.0.0  tags: Thamlur Raju, Malinconico Aniello Paolo,Vamshi, 5G_Core
- *   vFW-CDS                 1.0.0  tags: vFW-CDS
- *   pnf_netconf             1.0.0  tags: pnf_netconf
- *   APACHE                  1.0.0  tags: Lukasz Rajewski, CNF
- *   ubuntu20                1.0.0  tags: ubuntu20
+ *   RT-resource-resolution  1.0.0  published=Y  tags: test, regression
+ *   vLB_CDS_KOTLIN          1.0.0  published=Y  tags: test, vDNS-CDS, SCALE-OUT, MARCO
+ *   vLB_CDS_RESTCONF        1.0.0  published=Y  tags: vLB-CDS
+ *   vLB_CDS                 1.0.0  published=N  tags: vLB_CDS
+ *   5G_Core                 2.0.0  published=Y  tags: Thamlur Raju, Malinconico Aniello Paolo,Vamshi, 5G_Core
+ *   vFW-CDS                 1.0.0  published=Y  tags: vFW-CDS
+ *   pnf_netconf             1.0.0  published=N  tags: pnf_netconf
+ *   APACHE                  1.0.0  published=Y  tags: Lukasz Rajewski, CNF
+ *   ubuntu20                1.0.0  published=N  tags: ubuntu20
  */
 
 import { test, expect } from '@playwright/test';
@@ -42,6 +44,22 @@ const FIXTURE_NAMES = [
   '5G_Core', 'vFW-CDS', 'pnf_netconf', 'APACHE', 'ubuntu20',
 ] as const;
 const FIXTURE_COUNT = FIXTURE_NAMES.length;
+
+// Blueprints with published="Y" (deployed)
+const DEPLOYED_NAMES = [
+  'RT-resource-resolution', 'vLB_CDS_KOTLIN', 'vLB_CDS_RESTCONF',
+  '5G_Core', 'vFW-CDS', 'APACHE',
+] as const;
+const DEPLOYED_COUNT = DEPLOYED_NAMES.length;
+
+// Blueprints with published="N" (under construction)
+const UNDER_CONSTRUCTION_NAMES = ['vLB_CDS', 'pnf_netconf', 'ubuntu20'] as const;
+const UNDER_CONSTRUCTION_COUNT = UNDER_CONSTRUCTION_NAMES.length;
+
+/** Selector for a tab link by its visible text. */
+function tabLink(text: string) {
+  return `#nav-tab .nav-link`;
+}
 
 test.describe('Packages Dashboard', () => {
   test.beforeEach(async ({ page }) => {
@@ -69,31 +87,28 @@ test.describe('Packages Dashboard', () => {
   // -------------------------------------------------------------------------
 
   test('shows the "All" tab', async ({ page }) => {
-    const allTab = page.locator('#nav-home-tab');
+    const allTab = page.locator('#nav-tab .nav-link', { hasText: 'All' });
     await expect(allTab).toBeVisible({ timeout: 10_000 });
-    await expect(allTab).toHaveText('All');
   });
 
   test('shows the "Deployed" tab', async ({ page }) => {
-    const deployedTab = page.locator('#nav-profile-tab');
+    const deployedTab = page.locator('#nav-tab .nav-link', { hasText: 'Deployed' });
     await expect(deployedTab).toBeVisible({ timeout: 10_000 });
-    await expect(deployedTab).toHaveText('Deployed');
   });
 
   test('shows the "Under Construction" tab', async ({ page }) => {
-    const underConstructionTab = page.locator('#nav-contact-tab');
+    const underConstructionTab = page.locator('#nav-tab .nav-link', { hasText: 'Under' });
     await expect(underConstructionTab).toBeVisible({ timeout: 10_000 });
     await expect(underConstructionTab).toContainText('Under');
   });
 
   test('shows the "Archived" tab', async ({ page }) => {
-    const archivedTab = page.locator('#nav-contact1-tab');
+    const archivedTab = page.locator('#nav-tab .nav-link', { hasText: 'Archived' });
     await expect(archivedTab).toBeVisible({ timeout: 10_000 });
-    await expect(archivedTab).toHaveText('Archived');
   });
 
   test('"All" tab is active by default', async ({ page }) => {
-    const allTab = page.locator('#nav-home-tab');
+    const allTab = page.locator('#nav-tab .nav-link', { hasText: 'All' });
     await expect(allTab).toHaveClass(/active/, { timeout: 10_000 });
   });
 
@@ -121,22 +136,20 @@ test.describe('Packages Dashboard', () => {
   // -------------------------------------------------------------------------
 
   test('clicking "Deployed" tab makes it active', async ({ page }) => {
-    const deployedTab = page.locator('#nav-profile-tab');
-    // The ngx-ui-loader overlay from app-sort-packages persists while the app
-    // waits for the upstream CDS processor (which is absent in the e2e env).
-    // Bootstrap tabs are jQuery-driven; trigger the show via Bootstrap's API
-    // to reliably switch the active tab regardless of overlay state.
-    await page.evaluate(() => {
-      (window as any).$('#nav-profile-tab').tab('show');
-    });
+    const deployedTab = page.locator('#nav-tab .nav-link', { hasText: 'Deployed' });
+    await deployedTab.dispatchEvent('click');
     await expect(deployedTab).toHaveClass(/active/);
   });
 
+  test('clicking "Under Construction" tab makes it active', async ({ page }) => {
+    const ucTab = page.locator('#nav-tab .nav-link', { hasText: /Under/ });
+    await ucTab.dispatchEvent('click');
+    await expect(ucTab).toHaveClass(/active/);
+  });
+
   test('clicking "Archived" tab makes it active', async ({ page }) => {
-    const archivedTab = page.locator('#nav-contact1-tab');
-    await page.evaluate(() => {
-      (window as any).$('#nav-contact1-tab').tab('show');
-    });
+    const archivedTab = page.locator('#nav-tab .nav-link', { hasText: 'Archived' });
+    await archivedTab.dispatchEvent('click');
     await expect(archivedTab).toHaveClass(/active/);
   });
 
@@ -192,8 +205,8 @@ test.describe('Packages Dashboard – fixture data loaded from mock', () => {
     await expect(page.locator('.package-version', { hasText: 'v1.0.0' }).first()).toBeVisible();
     await expect(page.locator('.package-version', { hasText: 'v2.0.0' })).toBeVisible();
 
-    // Deployed icon – all 9 blueprints have published: "Y"
-    await expect(page.locator('img.icon-deployed')).toHaveCount(FIXTURE_COUNT);
+    // Deployed icon – only 6 blueprints have published: "Y"
+    await expect(page.locator('img.icon-deployed')).toHaveCount(DEPLOYED_COUNT);
 
     // Description and tags – one element per card, at least one non-empty desc
     await expect(page.locator('.package-desc')).toHaveCount(FIXTURE_COUNT);
@@ -329,5 +342,110 @@ test.describe('Client-side navigation', () => {
 
     const dashboard = page.locator('app-packages-dashboard');
     await expect(dashboard).toBeAttached({ timeout: 10_000 });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tab filtering – Deployed / Under Construction tabs filter by published status
+// ---------------------------------------------------------------------------
+
+test.describe('Packages Dashboard – tab filtering', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/#/packages');
+    await waitForPackageCards(page);
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('clicking "Deployed" tab sends published=true and shows only deployed packages', async ({ page }) => {
+    const deployedTab = page.locator('#nav-tab .nav-link', { hasText: 'Deployed' });
+
+    const responsePromise = page.waitForResponse(
+      resp => resp.url().includes('controllerblueprint/paged') && resp.url().includes('published=true'),
+      { timeout: 15_000 },
+    );
+    await page.evaluate(() => {
+      (document.querySelector('#nav-tab .nav-link:nth-child(2)') as HTMLElement).click();
+    });
+    const apiResponse = await responsePromise;
+
+    expect(apiResponse.status()).toBe(200);
+
+    // Wait for cards to update
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.packageName')).toHaveCount(DEPLOYED_COUNT, { timeout: 20_000 });
+
+    // Only deployed packages should be visible
+    for (const name of DEPLOYED_NAMES) {
+      await expect(
+        page.locator('.packageName').filter({ hasText: new RegExp(`^\\s*${name}\\s*$`) })
+      ).toBeVisible();
+    }
+
+    // Under-construction packages should NOT be visible
+    for (const name of UNDER_CONSTRUCTION_NAMES) {
+      await expect(
+        page.locator('.packageName').filter({ hasText: new RegExp(`^\\s*${name}\\s*$`) })
+      ).toHaveCount(0);
+    }
+
+    // All visible cards should have the deployed icon
+    await expect(page.locator('img.icon-deployed')).toHaveCount(DEPLOYED_COUNT);
+  });
+
+  test('clicking "Under Construction" tab sends published=false and shows only non-deployed packages', async ({ page }) => {
+    const ucTab = page.locator('#nav-tab .nav-link', { hasText: /Under/ });
+
+    const [apiResponse] = await Promise.all([
+      page.waitForResponse(
+        resp => resp.url().includes('controllerblueprint/paged') && resp.url().includes('published=false'),
+        { timeout: 15_000 },
+      ),
+      ucTab.dispatchEvent('click'),
+    ]);
+
+    expect(apiResponse.status()).toBe(200);
+
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.packageName')).toHaveCount(UNDER_CONSTRUCTION_COUNT, { timeout: 20_000 });
+
+    // Only under-construction packages should be visible
+    for (const name of UNDER_CONSTRUCTION_NAMES) {
+      await expect(
+        page.locator('.packageName').filter({ hasText: new RegExp(`^\\s*${name}\\s*$`) })
+      ).toBeVisible();
+    }
+
+    // None of the deployed packages should be visible
+    for (const name of DEPLOYED_NAMES) {
+      await expect(
+        page.locator('.packageName').filter({ hasText: new RegExp(`^\\s*${name}\\s*$`) })
+      ).toHaveCount(0);
+    }
+
+    // Under-construction packages should NOT have the deployed icon
+    await expect(page.locator('img.icon-deployed')).toHaveCount(0);
+  });
+
+  test('switching back to "All" tab clears the published filter and shows all packages', async ({ page }) => {
+    // First switch to Deployed
+    const deployedTab = page.locator('#nav-tab .nav-link', { hasText: 'Deployed' });
+    await deployedTab.dispatchEvent('click');
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.packageName')).toHaveCount(DEPLOYED_COUNT, { timeout: 20_000 });
+
+    // Now switch back to All
+    const allTab = page.locator('#nav-tab .nav-link', { hasText: 'All' });
+
+    const [apiResponse] = await Promise.all([
+      page.waitForResponse(
+        resp => resp.url().includes('controllerblueprint/paged') && resp.status() === 200,
+        { timeout: 15_000 },
+      ),
+      allTab.dispatchEvent('click'),
+    ]);
+
+    expect(apiResponse.status()).toBe(200);
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.packageName')).toHaveCount(FIXTURE_COUNT, { timeout: 20_000 });
   });
 });

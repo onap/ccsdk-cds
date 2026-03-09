@@ -136,13 +136,18 @@ open class BlueprintModelController(private val bluePrintModelHandler: BluePrint
         @ApiParam(value = "Maximum number of returned blueprint models") @RequestParam(defaultValue = "20") limit: Int,
         @ApiParam(value = "Offset") @RequestParam(defaultValue = "0") offset: Int,
         @ApiParam(value = "Order of returned blueprint models") @RequestParam(defaultValue = "DATE") sort: BlueprintSortByOption,
-        @ApiParam(value = "Ascend or descend ordering") @RequestParam(defaultValue = "ASC") sortType: String
+        @ApiParam(value = "Ascend or descend ordering") @RequestParam(defaultValue = "ASC") sortType: String,
+        @ApiParam(value = "Filter by published status (true or false)") @RequestParam(required = false) published: Boolean?
     ): Page<BlueprintModelSearch> {
         val pageRequest = PageRequest.of(
             offset, limit,
             Sort.Direction.fromString(sortType), sort.columnName
         )
-        return this.bluePrintModelHandler.allBlueprintModel(pageRequest)
+        return if (published != null) {
+            this.bluePrintModelHandler.allBlueprintModelByPublished(published, pageRequest)
+        } else {
+            this.bluePrintModelHandler.allBlueprintModel(pageRequest)
+        }
     }
 
     @GetMapping("meta-data/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])

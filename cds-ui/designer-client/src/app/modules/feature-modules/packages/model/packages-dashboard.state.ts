@@ -31,4 +31,5 @@ export class PackagesDashboardState {
     tags: string[];
     sortBy = 'DATE';
     totalPackagesWithoutSearchorFilters: number;
+    publishedFilter: boolean = null;
 }

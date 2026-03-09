@@ -33,15 +33,15 @@
                 <!--Nav Tabs-->
                 <div class="col pr-0">
                     <div class="nav nav-tabs " id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
-                            role="tab" aria-controls="nav-home" aria-selected="true">All</a>
-                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
-                            role="tab" aria-controls="nav-profile" aria-selected="false">Deployed</a>
-                        <a tourAnchor="test3" class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"
-                            href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Under
+                        <a class="nav-item nav-link" [class.active]="activeTab === 'All'"
+                            (click)="selectTab('All')" role="tab" aria-selected="true">All</a>
+                        <a class="nav-item nav-link" [class.active]="activeTab === 'Deployed'"
+                            (click)="selectTab('Deployed')" role="tab" aria-selected="false">Deployed</a>
+                        <a tourAnchor="test3" class="nav-item nav-link" [class.active]="activeTab === 'Under Construction'"
+                            (click)="selectTab('Under Construction')" role="tab" aria-selected="false">Under
                             Construction</a>
-                        <a class="nav-item nav-link" id="nav-contact1-tab" data-toggle="tab" href="#nav-contact1"
-                            role="tab" aria-controls="nav-contact1" aria-selected="false">Archived</a>
+                        <a class="nav-item nav-link" [class.active]="activeTab === 'Archived'"
+                            (click)="selectTab('Archived')" role="tab" aria-selected="false">Archived</a>
                     </div>
                 </div>
                 <!--Nav Search & Filter-->

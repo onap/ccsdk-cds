@@ -105,4 +105,6 @@ interface BlueprintModelSearchRepository : JpaRepository<BlueprintModelSearch, L
         artifactType: String,
         pageRequest: Pageable
     ): Page<BlueprintModelSearch>
+
+    fun findByPublished(published: String, pageRequest: Pageable): Page<BlueprintModelSearch>
 }
