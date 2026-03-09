@@ -1,0 +1,64 @@
+<app-header></app-header>
+
+<div class="new-wrapper">
+    <div class="container-fluid main-container">
+        <header class="page-title" style="padding: 16px 30px 12px;">
+            <div class="row">
+                <h2 class="col m-0">
+                    <ul class="breadcrumb-header">
+                        <li><a routerLink="/packages">CBA Packages</a></li>
+                        <i class="fa fa-angle-right ml-2 mr-2"></i>
+                        <li>Execute</li>
+                    </ul>
+                </h2>
+            </div>
+        </header>
+        <div class="container-fluid body-container">
+            <div class="container">
+                <nav class="row">
+                    <div class="col">
+                        <div class="nav nav-tabs" id="execution-nav-tab" role="tablist">
+                            <a class="nav-item nav-link"
+                               [class.active]="activeTab === 'setup'"
+                               (click)="selectTab('setup')"
+                               id="nav-setup-tab"
+                               role="tab">
+                                <i class="fa fa-cog mr-1"></i> Execution Setup
+                            </a>
+                            <a class="nav-item nav-link"
+                               [class.active]="activeTab === 'history'"
+                               (click)="selectTab('history')"
+                               id="nav-history-tab"
+                               role="tab">
+                                <i class="fa fa-history mr-1"></i> Execution History
+                            </a>
+                            <a class="nav-item nav-link"
+                               [class.active]="activeTab === 'liveview'"
+                               (click)="selectTab('liveview')"
+                               id="nav-liveview-tab"
+                               role="tab">
+                                <i class="fa fa-terminal mr-1"></i> Live View
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="tab-content" id="execution-tab-content">
+                    <div *ngIf="activeTab === 'setup'" class="tab-pane fade show active" role="tabpanel">
+                        <app-execution-setup
+                            [prefilledName]="prefilledName"
+                            [prefilledVersion]="prefilledVersion"
+                            (executionCompleted)="selectTab('liveview')">
+                        </app-execution-setup>
+                    </div>
+                    <div *ngIf="activeTab === 'history'" class="tab-pane fade show active" role="tabpanel">
+                        <app-execution-history></app-execution-history>
+                    </div>
+                    <div *ngIf="activeTab === 'liveview'" class="tab-pane fade show active" role="tabpanel">
+                        <app-live-view></app-live-view>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

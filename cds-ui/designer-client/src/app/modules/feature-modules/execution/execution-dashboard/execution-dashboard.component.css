@@ -1,0 +1,11 @@
+.tab-content {
+    padding: 20px 0;
+}
+
+.nav-tabs .nav-link {
+    cursor: pointer;
+}
+
+.nav-tabs .nav-link.active {
+    font-weight: 600;
+}

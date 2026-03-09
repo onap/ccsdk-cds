@@ -163,3 +163,4 @@ MacOS
 # Generated dependency list
 direct-dependencies.txt
 .coverage
+out-tsc
