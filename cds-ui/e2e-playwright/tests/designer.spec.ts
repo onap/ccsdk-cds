@@ -840,3 +840,163 @@ test.describe('Designer – Action Deletion', () => {
         ).toHaveCount(1);
     });
 });
+
+// ── View Source ───────────────────────────────────────────────────────────────
+//
+// These tests verify that the "View Action Source" and "View Function Source"
+// buttons in the attribute side-panes open a modal containing the JSON source
+// of the respective action workflow or function node_template.
+//
+// Uses the real fixture blueprint (RT-resource-resolution) so the designer
+// store contains actual topology data:
+//   workflow:      resource-resolution
+//   node_template: resource-resolution  (step name on canvas: helloworld)
+
+test.describe('Designer – View Source', () => {
+
+    const sourceModal = '#viewSourceModal';
+
+    /** Returns the viewport center {x, y} of the first JointJS canvas element
+     *  whose #label tspan contains exactly the given text. */
+    async function getCanvasElementCenter(
+        page: import('@playwright/test').Page,
+        label: string,
+    ): Promise<{ x: number; y: number }> {
+        await expect(
+            page.locator('#board-paper tspan').filter({ hasText: label }).first(),
+        ).toBeAttached({ timeout: 30_000 });
+
+        const center = await page.evaluate((lbl: string) => {
+            const tspans = Array.from(
+                document.querySelectorAll<SVGTSpanElement>('#board-paper tspan[id="label"]'),
+            );
+            const match = tspans.find(t => t.textContent?.trim() === lbl);
+            if (!match) { return null; }
+            const r = match.getBoundingClientRect();
+            return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        }, label);
+
+        if (!center) { throw new Error(`Canvas element labeled "${label}" not found`); }
+        return center;
+    }
+
+    /** Click on the action node to open the Action Attributes pane. */
+    async function openActionPane(page: import('@playwright/test').Page) {
+        const { x, y } = await getCanvasElementCenter(page, 'resource-resolution');
+        await page.mouse.move(x, y);
+        await page.mouse.down();
+        await page.mouse.up();
+        await expect(
+            page.locator('h6:has-text("Action Attributes")'),
+        ).toBeInViewport({ timeout: 5_000 });
+    }
+
+    /** Click on the function node to open the Function Attributes pane. */
+    async function openFunctionPane(page: import('@playwright/test').Page) {
+        // We must first click the action to set currentActionName, then click
+        // the function.  The fixture has action "resource-resolution" with
+        // embedded function "helloworld".
+        const actionCenter = await getCanvasElementCenter(page, 'resource-resolution');
+        await page.mouse.move(actionCenter.x, actionCenter.y);
+        await page.mouse.down();
+        await page.mouse.up();
+        await expect(
+            page.locator('h6:has-text("Action Attributes")'),
+        ).toBeInViewport({ timeout: 5_000 });
+
+        const funcCenter = await getCanvasElementCenter(page, 'helloworld');
+        await page.mouse.move(funcCenter.x, funcCenter.y);
+        await page.mouse.down();
+        await page.mouse.up();
+        await expect(
+            page.locator('h6:has-text("Function Attributes")'),
+        ).toBeInViewport({ timeout: 5_000 });
+    }
+
+    test.beforeEach(async ({ page }) => {
+        await gotoDesigner(page);
+        await waitForBoardPaper(page);
+    });
+
+    // ── Action Source ────────────────────────────────────────────────────────
+
+    test('View Action Source button opens modal with workflow JSON', async ({ page }) => {
+        await openActionPane(page);
+
+        const viewBtn = page.locator('.attributesSideBar .btn.view-source').first();
+        await viewBtn.click();
+
+        const modal = page.locator(sourceModal);
+        await expect(modal).toBeVisible({ timeout: 5_000 });
+
+        // Title should identify the action.
+        await expect(modal.locator('.modal-title')).toContainText('Action Source');
+        await expect(modal.locator('.modal-title')).toContainText('resource-resolution');
+
+        // Body should contain workflow JSON with the step name.
+        const pre = modal.locator('pre.source-json-pre');
+        await expect(pre).toBeVisible();
+        const text = await pre.textContent() ?? '';
+        expect(text).toContain('"steps"');
+        expect(text).toContain('"helloworld"');
+    });
+
+    test('View Action Source modal can be closed', async ({ page }) => {
+        await openActionPane(page);
+
+        page.locator('.attributesSideBar .btn.view-source').first().click();
+        await expect(page.locator(sourceModal)).toBeVisible({ timeout: 5_000 });
+
+        await page.locator(`${sourceModal} .btn-secondary`).click();
+        await expect(page.locator(sourceModal)).not.toBeVisible({ timeout: 5_000 });
+    });
+
+    // ── Function Source ──────────────────────────────────────────────────────
+
+    test('View Function Source button opens modal with node_template JSON', async ({ page }) => {
+        await openFunctionPane(page);
+
+        // The function pane's view-source button is the second .btn.view-source
+        // in the DOM (first is from the action pane, which is hidden but still
+        // present).  Target the visible one.
+        const viewBtn = page.locator('.attributesSideBar .btn.view-source:visible').first();
+        await viewBtn.click();
+
+        const modal = page.locator(sourceModal);
+        await expect(modal).toBeVisible({ timeout: 5_000 });
+
+        await expect(modal.locator('.modal-title')).toContainText('Function Source');
+        await expect(modal.locator('.modal-title')).toContainText('resource-resolution');
+
+        const pre = modal.locator('pre.source-json-pre');
+        await expect(pre).toBeVisible();
+        const text = await pre.textContent() ?? '';
+        expect(text).toContain('"type"');
+        expect(text).toContain('component-resource-resolution');
+        expect(text).toContain('"interfaces"');
+    });
+
+    test('View Function Source modal can be closed', async ({ page }) => {
+        await openFunctionPane(page);
+
+        page.locator('.attributesSideBar .btn.view-source:visible').first().click();
+        await expect(page.locator(sourceModal)).toBeVisible({ timeout: 5_000 });
+
+        await page.locator(`${sourceModal} .btn-secondary`).click();
+        await expect(page.locator(sourceModal)).not.toBeVisible({ timeout: 5_000 });
+    });
+
+    test('View Function Source JSON is valid parseable JSON', async ({ page }) => {
+        await openFunctionPane(page);
+
+        page.locator('.attributesSideBar .btn.view-source:visible').first().click();
+        const modal = page.locator(sourceModal);
+        await expect(modal).toBeVisible({ timeout: 5_000 });
+
+        const text = await modal.locator('pre.source-json-pre').textContent() ?? '';
+        expect(() => JSON.parse(text)).not.toThrow();
+        const parsed = JSON.parse(text);
+        expect(parsed).toHaveProperty('type');
+        expect(parsed).toHaveProperty('interfaces');
+    });
+});

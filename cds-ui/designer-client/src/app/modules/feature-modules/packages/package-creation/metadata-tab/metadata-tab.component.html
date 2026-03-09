@@ -3,7 +3,7 @@
     <div class="single-line-model">
         <label class="label-name">Mode</label>
         <div class="label-input">
-            <label name="trst" *ngFor="let mode of modes; let i = index" class="pl-0">
+            <label name="trst" *ngFor="let mode of modes; let i = index">
                 <input class="form-check-input" [(ngModel)]="modeType" type="radio" name="radioMode" id="radioMode"
                     [value]="mode.name">
 

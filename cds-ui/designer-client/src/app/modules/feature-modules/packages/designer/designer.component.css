@@ -782,6 +782,17 @@ p.compType-4{
   color: #fff;
   font-size: 11px;
 }
+.source-json-pre{
+  background: #1B3E6F;
+  color: #E0E0E0;
+  padding: 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  max-height: 60vh;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
 .trash-item,
 .trash-item:hover{
   background: #fff;

@@ -301,7 +301,7 @@
                         <div class="col-3 pl-0">
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button type="button" class="btn view-source" tooltip="View Action Source"
-                                    placement="bottom"><i class="icon-source"></i></button>
+                                    placement="bottom" (click)="viewActionSource()"><i class="icon-source" aria-hidden="true"></i></button>
                                 <button type="button" data-toggle="modal" data-target="#deleteActionModal"
                                     class="btn trash-item" tooltip="Delete Action" placement="bottom"><i
                                         class="icon-delete-sm" aria-hidden="true"></i></button>
@@ -329,7 +329,7 @@
                         <div class="col-3 pl-0">
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button type="button" class="btn view-source" tooltip="View Function Source"
-                                    placement="bottom"><i class="icon-source"></i></button>
+                                    placement="bottom" (click)="viewFunctionSource()"><i class="icon-source"></i></button>
                                 <button type="button" class="btn trash-item" tooltip="Delete Function"
                                     placement="bottom"><i class="icon-delete-sm" type="button"
                                         aria-hidden="true"></i></button>
@@ -363,6 +363,27 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-danger"
                     (click)="deleteCurrentAction()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--View Source Modal-->
+<div class="modal fade" id="viewSourceModal" tabindex="-1" role="dialog"
+    aria-labelledby="viewSourceModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewSourceModalTitle">{{viewSourceTitle}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <img src="assets/img/icon-close.svg" />
+                </button>
+            </div>
+            <div class="modal-body">
+                <pre class="source-json-pre">{{viewSourceContent}}</pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

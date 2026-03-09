@@ -97,6 +97,8 @@ export class DesignerComponent implements OnInit, OnDestroy {
     designerState: DesignerDashboardState;
     currentActionName: string;
     packageId: any;
+    viewSourceContent = '';
+    viewSourceTitle = '';
     private isDeletingAction = false;
     private suppressSidebarOpenUntil = 0;
     private deleteActionModalHiddenHandler = () => {
@@ -784,6 +786,30 @@ export class DesignerComponent implements OnInit, OnDestroy {
         this.actionAttributesSideBar = false;
         this.functionAttributeSidebar = true;
         this.designerStore.setCurrentFunction(currentStep['target']);
+    }
+
+    viewFunctionSource() {
+        const funcName = this.designerState.functionName;
+        const nodeTemplate = funcName
+            ? this.designerState.template.node_templates[funcName]
+            : null;
+        this.viewSourceTitle = 'Function Source: ' + (funcName || '');
+        this.viewSourceContent = nodeTemplate
+            ? JSON.stringify(nodeTemplate, null, 2)
+            : '{ }';
+        ($('#viewSourceModal') as any).modal('show');
+    }
+
+    viewActionSource() {
+        const actionName = this.currentActionName;
+        const workflow = actionName
+            ? this.designerState.template.workflows[actionName]
+            : null;
+        this.viewSourceTitle = 'Action Source: ' + (actionName || '');
+        this.viewSourceContent = workflow
+            ? JSON.stringify(workflow, null, 2)
+            : '{ }';
+        ($('#viewSourceModal') as any).modal('show');
     }
 
     getTarget(stepname) {
