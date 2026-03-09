@@ -89,8 +89,8 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
             console.log(cbaPackage);
             console.log('abbaaaas' + cbaPackage.metaData.name);
             this.cbaPackage = cbaPackage;
-            if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.description
-                && cbaPackage.metaData.name && cbaPackage.metaData.version &&
+            if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.name
+                && cbaPackage.metaData.version &&
                 regexp.test(cbaPackage.metaData.version)) {
                 this.isSaveEnabled = true;
                 if (!this.metadataClasses.includes('complete')) {
