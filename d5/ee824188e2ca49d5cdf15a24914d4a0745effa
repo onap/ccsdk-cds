@@ -1,0 +1,9 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Lukasz Rajewski <lukasz.rajewski@t-mobile.pl>
+Verified+1: ONAP Required GHA <releng+onap.required.gha@linuxfoundation.org>
+Verified+1: ONAP Bypass GHA <releng+onap.bypass.gha@linuxfoundation.org>
+Submitted-by: Lukasz Rajewski <lukasz.rajewski@t-mobile.pl>
+Submitted-at: Mon, 09 Mar 2026 13:50:48 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/ccsdk/cds/+/143554
+Project: ccsdk/cds
+Branch: refs/heads/master
