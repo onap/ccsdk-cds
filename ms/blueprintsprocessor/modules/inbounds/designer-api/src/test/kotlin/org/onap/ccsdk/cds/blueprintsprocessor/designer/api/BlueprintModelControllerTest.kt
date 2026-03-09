@@ -273,6 +273,77 @@ class BlueprintModelControllerTest {
             .jsonPath("$.content.length()").isEqualTo(0)
     }
 
+    /**
+     * Regression test for CCSDK-4184: workFlowData must be set on the response object before the
+     * input/output property loops run, because updatePropertyInfo() accesses
+     * res.workFlowData.workFlowName.  Without the fix, every call raises
+     * "lateinit property workFlowData has not been initialized".
+     */
+    @Test
+    fun test07d_getWorkflowSpec_withInputsAndComplexType_returnsWorkFlowDataAndDataTypes() {
+        // 'resource-assignment' has one input of the complex type dt-resource-assignment-properties
+        // which triggers both addPropertyInfo → updatePropertyInfo AND addDataType paths.
+        webTestClient.post()
+            .uri("/api/v1/blueprint-model/workflow-spec")
+            .header(
+                "Authorization",
+                "Basic " + Base64.getEncoder()
+                    .encodeToString(("ccsdkapps:ccsdkapps").toByteArray(UTF_8))
+            )
+            .header("Content-Type", "application/json")
+            .bodyValue(
+                """{"blueprintName":"baseconfiguration","version":"1.0.0","workflowName":"resource-assignment"}"""
+            )
+            .exchange()
+            .expectStatus().isOk
+            .expectBody()
+            .jsonPath("$.workFlowData").exists()
+            .jsonPath("$.workFlowData.workFlowName").isEqualTo("resource-assignment")
+            .jsonPath("$.workFlowData.inputs").exists()
+            .jsonPath("$.workFlowData.inputs['resource-assignment-properties']").exists()
+            .jsonPath("$.dataTypes").exists()
+            .jsonPath("$.dataTypes['dt-resource-assignment-properties']").exists()
+    }
+
+    @Test
+    fun test07e_getWorkflowSpec_withNoInputs_returnsEmptyWorkFlowData() {
+        // 'activate-restconf' has no inputs or outputs — the loops are skipped entirely,
+        // but workFlowData must still be populated correctly.
+        webTestClient.post()
+            .uri("/api/v1/blueprint-model/workflow-spec")
+            .header(
+                "Authorization",
+                "Basic " + Base64.getEncoder()
+                    .encodeToString(("ccsdkapps:ccsdkapps").toByteArray(UTF_8))
+            )
+            .header("Content-Type", "application/json")
+            .bodyValue(
+                """{"blueprintName":"baseconfiguration","version":"1.0.0","workflowName":"activate-restconf"}"""
+            )
+            .exchange()
+            .expectStatus().isOk
+            .expectBody()
+            .jsonPath("$.workFlowData").exists()
+            .jsonPath("$.workFlowData.workFlowName").isEqualTo("activate-restconf")
+    }
+
+    @Test
+    fun test07f_getWorkflowSpec_unknownWorkflow_returns4xx() {
+        webTestClient.post()
+            .uri("/api/v1/blueprint-model/workflow-spec")
+            .header(
+                "Authorization",
+                "Basic " + Base64.getEncoder()
+                    .encodeToString(("ccsdkapps:ccsdkapps").toByteArray(UTF_8))
+            )
+            .header("Content-Type", "application/json")
+            .bodyValue(
+                """{"blueprintName":"baseconfiguration","version":"1.0.0","workflowName":"nonexistent-workflow"}"""
+            )
+            .exchange()
+            .expectStatus().is5xxServerError
+    }
+
     @Test
     @Throws(JSONException::class)
     fun test08_searchBlueprintModels() {

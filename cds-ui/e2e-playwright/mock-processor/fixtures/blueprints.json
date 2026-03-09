@@ -10,7 +10,12 @@
     "artifactName": "RT-resource-resolution",
     "published": "Y",
     "updatedBy": "Selffish",
-    "tags": "test, regression"
+    "tags": "test, regression",
+    "workflows": {
+      "resource-resolution": { "steps": {}, "inputs": {}, "outputs": {} },
+      "config-assign": { "steps": {}, "inputs": {}, "outputs": {} },
+      "config-deploy": { "steps": {}, "inputs": {}, "outputs": {} }
+    }
   },
   {
     "id": "bf26fbf2-4bf5-482e-9cc1-e48e4878aceb",
@@ -23,7 +28,11 @@
     "artifactName": "vLB_CDS_KOTLIN",
     "published": "Y",
     "updatedBy": "PLATANIA, MARCO <platania@research.att.com>",
-    "tags": "test, vDNS-CDS, SCALE-OUT, MARCO"
+    "tags": "test, vDNS-CDS, SCALE-OUT, MARCO",
+    "workflows": {
+      "resource-resolution": { "steps": {}, "inputs": {}, "outputs": {} },
+      "health-check": { "steps": {}, "inputs": {}, "outputs": {} }
+    }
   },
   {
     "id": "3bca2b79-020d-4c98-ad19-a425a42c17d8",
@@ -36,7 +45,10 @@
     "artifactName": "vLB_CDS_RESTCONF",
     "published": "Y",
     "updatedBy": "Seaudi, Abdelmuhaimen <abdelmuhaimen.seaudi@orange.com>",
-    "tags": "vLB-CDS"
+    "tags": "vLB-CDS",
+    "workflows": {
+      "resource-resolution": { "steps": {}, "inputs": {}, "outputs": {} }
+    }
   },
   {
     "id": "8713ea11-fbdd-4a58-ae01-e5ba4ff42a44",
@@ -49,7 +61,11 @@
     "artifactName": "vLB_CDS",
     "published": "N",
     "updatedBy": "Seaudi, Abdelmuhaimen <abdelmuhaimen.seaudi@orange.com>",
-    "tags": "vLB_CDS"
+    "tags": "vLB_CDS",
+    "workflows": {
+      "resource-resolution": { "steps": {}, "inputs": {}, "outputs": {} },
+      "activate-restconf": { "steps": {}, "inputs": {}, "outputs": {} }
+    }
   },
   {
     "id": "d97bc302-0077-4cf7-a494-9d070767fac5",
@@ -62,7 +78,11 @@
     "artifactName": "5G_Core",
     "published": "Y",
     "updatedBy": "Thamlur Raju <TR00568434@TechMahindra.com>, Sangeeta Bellara <sangeeta.bellara@t-systems.com>",
-    "tags": "Thamlur Raju, Malinconico Aniello Paolo,Vamshi, 5G_Core"
+    "tags": "Thamlur Raju, Malinconico Aniello Paolo,Vamshi, 5G_Core",
+    "workflows": {
+      "resource-resolution": { "steps": {}, "inputs": {}, "outputs": {} },
+      "config-assign": { "steps": {}, "inputs": {}, "outputs": {} }
+    }
   },
   {
     "id": "a63117f8-2aa0-4b96-b8d2-ddaa9fa3b633",
@@ -75,7 +95,10 @@
     "artifactName": "vFW-CDS",
     "published": "Y",
     "updatedBy": "PLATANIA, MARCO <platania@research.att.com>",
-    "tags": "vFW-CDS"
+    "tags": "vFW-CDS",
+    "workflows": {
+      "resource-resolution": { "steps": {}, "inputs": {}, "outputs": {} }
+    }
   },
   {
     "id": "08dbe39c-f3db-40b7-8e77-c5ef069d4f1b",
@@ -88,7 +111,11 @@
     "artifactName": "pnf_netconf",
     "published": "N",
     "updatedBy": "Aarna Services",
-    "tags": "pnf_netconf"
+    "tags": "pnf_netconf",
+    "workflows": {
+      "config-assign": { "steps": {}, "inputs": {}, "outputs": {} },
+      "config-deploy": { "steps": {}, "inputs": {}, "outputs": {} }
+    }
   },
   {
     "id": "7b54c252-74a4-4cfa-b4f6-bdaa25c55ee7",
@@ -101,7 +128,10 @@
     "artifactName": "APACHE",
     "published": "Y",
     "updatedBy": "Lukasz Rajewski <lukasz.rajewski@orange.com>",
-    "tags": "Lukasz Rajewski, CNF"
+    "tags": "Lukasz Rajewski, CNF",
+    "workflows": {
+      "resource-resolution": { "steps": {}, "inputs": {}, "outputs": {} }
+    }
   },
   {
     "id": "9c254141-2083-47f6-980e-5b2f33563862",
@@ -114,6 +144,9 @@
     "artifactName": "ubuntu20",
     "published": "N",
     "updatedBy": "RG, ONES <romain.garel@orange.com>",
-    "tags": "ubuntu20"
+    "tags": "ubuntu20",
+    "workflows": {
+      "resource-resolution": { "steps": {}, "inputs": {}, "outputs": {} }
+    }
   }
 ]

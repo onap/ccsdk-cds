@@ -1,0 +1,191 @@
+<div class="execution-setup-container">
+    <div class="row">
+        <!-- Left column: form fields -->
+        <div class="col-md-4">
+            <div class="card setup-card">
+                <div class="card-body">
+                    <h5 class="card-title">Blueprint Selection</h5>
+
+                    <div class="form-group">
+                        <label for="blueprintName">Blueprint Name</label>
+                        <select id="blueprintName"
+                                class="form-control"
+                                [(ngModel)]="blueprintName"
+                                (ngModelChange)="onBlueprintNameChange()">
+                            <option value="" disabled>Select a blueprint...</option>
+                            <option *ngFor="let name of uniquePackageNames" [value]="name">
+                                {{ name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blueprintVersion">Version</label>
+                        <select id="blueprintVersion"
+                                class="form-control"
+                                [(ngModel)]="blueprintVersion"
+                                (ngModelChange)="onBlueprintVersionChange()"
+                                [disabled]="availableVersions.length === 0">
+                            <option value="" disabled>Select version...</option>
+                            <option *ngFor="let ver of availableVersions" [value]="ver">
+                                {{ ver }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="actionName">Action Name</label>
+                        <select id="actionName"
+                                class="form-control"
+                                [(ngModel)]="actionName"
+                                (ngModelChange)="onActionChange()"
+                                [disabled]="availableActions.length === 0">
+                            <option value="" disabled>Select an action...</option>
+                            <option *ngFor="let action of availableActions" [value]="action">
+                                {{ action }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Action Inputs: loading state -->
+                    <div *ngIf="loadingSpec" class="action-inputs-loading mt-2">
+                        <i class="fa fa-spinner fa-spin mr-1"></i>
+                        <small class="text-muted">Loading action inputs...</small>
+                    </div>
+
+                    <!-- Action Inputs: spec load failed -->
+                    <div *ngIf="actionName && !loadingSpec && specLoadFailed" class="action-inputs-error mt-2">
+                        <small class="text-muted">
+                            <i class="fa fa-exclamation-triangle mr-1"></i>
+                            Could not load input schema. Edit the JSON payload manually.
+                        </small>
+                    </div>
+
+                    <!-- Action Inputs: dynamic form -->
+                    <div *ngIf="actionName && !loadingSpec && inputGroups.length > 0"
+                         class="action-inputs-section mt-3" id="actionInputs">
+                        <label class="section-label">Action Inputs</label>
+
+                        <div *ngFor="let group of inputGroups" class="input-group-block">
+                            <!-- Primitive input (not a data type reference) -->
+                            <div *ngIf="!group.isComplex" class="form-group">
+                                <label [for]="'input-' + group.inputName" class="input-field-label">
+                                    {{ group.inputName }}
+                                    <span class="text-danger" *ngIf="group.required">*</span>
+                                </label>
+                                <input *ngIf="group.type !== 'boolean'"
+                                       [id]="'input-' + group.inputName"
+                                       class="form-control form-control-sm"
+                                       [type]="group.type === 'integer' ? 'number' : 'text'"
+                                       [(ngModel)]="group.value"
+                                       (ngModelChange)="onFieldChange()"
+                                       [placeholder]="group.description"
+                                       [attr.data-input-name]="group.inputName">
+                                <select *ngIf="group.type === 'boolean'"
+                                        [id]="'input-' + group.inputName"
+                                        class="form-control form-control-sm"
+                                        [(ngModel)]="group.value"
+                                        (ngModelChange)="onFieldChange()"
+                                        [attr.data-input-name]="group.inputName">
+                                    <option value="">-- select --</option>
+                                    <option value="true">true</option>
+                                    <option value="false">false</option>
+                                </select>
+                            </div>
+
+                            <!-- Complex input (data type with nested fields) -->
+                            <div *ngIf="group.isComplex" class="complex-input-group">
+                                <label class="complex-group-label">
+                                    {{ group.inputName }}
+                                    <span class="text-danger" *ngIf="group.required">*</span>
+                                </label>
+                                <div class="complex-fields">
+                                    <div *ngFor="let field of group.fields" class="form-group">
+                                        <label [for]="'field-' + group.inputName + '-' + field.name"
+                                               class="input-field-label">
+                                            {{ field.name }}
+                                            <span class="text-danger" *ngIf="field.required">*</span>
+                                        </label>
+                                        <input *ngIf="field.type !== 'boolean'"
+                                               [id]="'field-' + group.inputName + '-' + field.name"
+                                               class="form-control form-control-sm"
+                                               [type]="field.type === 'integer' ? 'number' : 'text'"
+                                               [(ngModel)]="field.value"
+                                               (ngModelChange)="onFieldChange()"
+                                               [placeholder]="field.description"
+                                               [attr.data-field-name]="field.name">
+                                        <select *ngIf="field.type === 'boolean'"
+                                                [id]="'field-' + group.inputName + '-' + field.name"
+                                                class="form-control form-control-sm"
+                                                [(ngModel)]="field.value"
+                                                (ngModelChange)="onFieldChange()"
+                                                [attr.data-field-name]="field.name">
+                                            <option value="">-- select --</option>
+                                            <option value="true">true</option>
+                                            <option value="false">false</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="execution-actions">
+                        <button class="btn btn-primary btn-execute"
+                                [disabled]="!canExecute()"
+                                (click)="executeBlueprint()">
+                            <i class="fa fa-play mr-1" *ngIf="!isExecuting"></i>
+                            <i class="fa fa-spinner fa-spin mr-1" *ngIf="isExecuting"></i>
+                            {{ isExecuting ? 'Executing...' : 'Execute' }}
+                        </button>
+                        <button class="btn btn-outline-secondary ml-2"
+                                (click)="resetPayload()">
+                            <i class="fa fa-refresh mr-1"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right column: JSON payload editor -->
+        <div class="col-md-8">
+            <div class="card editor-card">
+                <div class="card-body">
+                    <h5 class="card-title">Request Payload (ExecutionServiceInput)</h5>
+                    <div class="ace-editor-wrapper">
+                        <ace-editor
+                            [(text)]="payloadText"
+                            [mode]="'json'"
+                            [theme]="'eclipse'"
+                            [options]="aceOptions"
+                            style="min-height: 350px; width: 100%; font-size: 13px;">
+                        </ace-editor>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response panel -->
+            <div class="card response-card mt-3" *ngIf="lastResponseText">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fa fa-check-circle text-success mr-1" *ngIf="lastResponse"></i>
+                        <i class="fa fa-times-circle text-danger mr-1" *ngIf="!lastResponse"></i>
+                        Execution Response
+                    </h5>
+                    <div class="ace-editor-wrapper">
+                        <ace-editor
+                            [text]="lastResponseText"
+                            [mode]="'json'"
+                            [theme]="'eclipse'"
+                            [readOnly]="true"
+                            [options]="{ maxLines: 20, minLines: 5, showPrintMargin: false }"
+                            style="min-height: 150px; width: 100%; font-size: 13px;">
+                        </ace-editor>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

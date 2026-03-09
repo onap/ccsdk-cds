@@ -1,0 +1,48 @@
+<div class="execution-history-container">
+    <div class="row mb-3" *ngIf="hasHistory">
+        <div class="col text-right">
+            <button class="btn btn-sm btn-outline-secondary" (click)="clearHistory()">
+                <i class="fa fa-trash mr-1"></i> Clear History
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="!hasHistory" class="empty-state text-center p-5">
+        <i class="fa fa-history fa-3x text-muted mb-3"></i>
+        <p class="text-muted">No execution history yet.</p>
+        <p class="text-muted small">Execute a blueprint from the Execution Setup tab to see results here.</p>
+    </div>
+
+    <table class="table table-hover" *ngIf="hasHistory">
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Blueprint</th>
+                <th>Version</th>
+                <th>Action</th>
+                <th>Status</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let exec of executions"
+                (click)="selectExecution(exec)"
+                [class.table-active]="selectedExecution === exec"
+                class="history-row">
+                <td class="request-id">{{ exec.requestId }}</td>
+                <td>{{ exec.blueprintName }}</td>
+                <td>{{ exec.blueprintVersion }}</td>
+                <td>{{ exec.actionName }}</td>
+                <td>
+                    <span class="badge"
+                          [class.badge-success]="exec.status === 'success'"
+                          [class.badge-danger]="exec.status === 'failure'"
+                          [class.badge-warning]="exec.status === 'pending'">
+                        {{ exec.status }}
+                    </span>
+                </td>
+                <td>{{ exec.timestamp }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -31,6 +31,10 @@ const routes: Routes = [
         path: 'resource-dictionary',
         loadChildren: './modules/feature-modules/resource-dictionary/resource-dictionary.module#ResourceDictionaryModule'
     },
+    {
+        path: 'execute',
+        loadChildren: './modules/feature-modules/execution/execution.module#ExecutionModule'
+    },
     // { path: '', component: MainAppComponent },
     {
         path: '',
@@ -45,4 +49,3 @@ const routes: Routes = [
 })
 export class AppRoutingModule {
 }
-

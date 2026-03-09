@@ -158,6 +158,8 @@ open class BluePrintModelHandler(
         workFlowData.inputs = workFlow.inputs
         workFlowData.outputs = workFlow.outputs
 
+        wfRes.workFlowData = workFlowData
+
         if (workFlow.inputs != null) {
             for ((k, v) in workFlow.inputs!!) {
                 addPropertyInfo(k, v, blueprintContext, wfRes)
@@ -169,8 +171,6 @@ open class BluePrintModelHandler(
                 addPropertyInfo(k, v, blueprintContext, wfRes)
             }
         }
-
-        wfRes.workFlowData = workFlowData
         return wfRes
     }
 
