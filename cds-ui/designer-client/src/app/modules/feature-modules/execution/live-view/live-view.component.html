@@ -1,0 +1,36 @@
+<div class="live-view-container">
+    <div *ngIf="!lastResponse" class="empty-state text-center p-5">
+        <i class="fa fa-terminal fa-3x text-muted mb-3"></i>
+        <p class="text-muted">No execution response available.</p>
+        <p class="text-muted small">Execute a blueprint from the Execution Setup tab to see live results here.</p>
+    </div>
+
+    <div *ngIf="lastResponse">
+        <div class="status-banner" [ngClass]="{
+            'status-success': status === 'success',
+            'status-failure': status === 'failure',
+            'status-completed': status === 'completed'
+        }">
+            <i class="fa fa-check-circle mr-2" *ngIf="status === 'success'"></i>
+            <i class="fa fa-times-circle mr-2" *ngIf="status === 'failure'"></i>
+            <i class="fa fa-info-circle mr-2" *ngIf="status === 'completed'"></i>
+            {{ statusLabel }}
+        </div>
+
+        <div class="card response-card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Execution Response (ExecutionServiceOutput)</h5>
+                <div class="ace-editor-wrapper">
+                    <ace-editor
+                        [text]="lastResponseText"
+                        [mode]="'json'"
+                        [theme]="'eclipse'"
+                        [readOnly]="true"
+                        [options]="{ maxLines: 40, minLines: 10, showPrintMargin: false }"
+                        style="min-height: 300px; width: 100%; font-size: 13px;">
+                    </ace-editor>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
