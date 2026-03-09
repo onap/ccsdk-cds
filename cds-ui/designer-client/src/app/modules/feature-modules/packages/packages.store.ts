@@ -47,6 +47,15 @@ export class PackagesStore extends Store<PackagesDashboardState> {
         this.getPagedPackages(0, this.pageSize);
     }
 
+    public filterByPublished(published: boolean) {
+        this.setState({
+            ...this.state,
+            publishedFilter: published,
+            currentPage: 0
+        });
+        this.getPagedPackages(0, this.pageSize);
+    }
+
     public search(command: string) {
         if (command) {
             this.searchPagedPackages(command, 0, this.pageSize);
@@ -82,7 +91,7 @@ export class PackagesStore extends Store<PackagesDashboardState> {
 
     protected getPagedPackages(pageNumber: number, pageSize: number, sortBy: string = this.state.sortBy) {
 
-        this.packagesServiceList.getPagedPackages(pageNumber, pageSize, sortBy)
+        this.packagesServiceList.getPagedPackages(pageNumber, pageSize, sortBy, this.state.publishedFilter)
             .subscribe((pages: BluePrintPage[]) => {
                 this.setState({
                     ...this.state,

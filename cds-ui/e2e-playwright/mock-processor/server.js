@@ -132,7 +132,12 @@ const server = http.createServer(async (req, res) => {
 
   // GET /api/v1/blueprint-model/paged
   if (method === 'GET' && pathname === `${BASE}/blueprint-model/paged`) {
-    return json(res, pagedResponse(blueprints, query));
+    let items = blueprints;
+    if (query.published) {
+      const pub = query.published === 'true' ? 'Y' : 'N';
+      items = items.filter(b => b.published === pub);
+    }
+    return json(res, pagedResponse(items, query));
   }
 
   // GET /api/v1/blueprint-model/search/:tags

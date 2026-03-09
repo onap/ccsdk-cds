@@ -32,8 +32,10 @@ declare var $: any;
 export class PackagesDashboardComponent implements OnInit, OnDestroy {
 
     startTour = false;
+    activeTab = 'All';
     constructor(
         private tourService: TourService,
+        private packagesStore: PackagesStore,
     ) { }
 
     ngOnInit() {
@@ -88,6 +90,12 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
 
     stopTour() {
         localStorage.setItem('tour-guide', 'false');
+    }
+
+    selectTab(tab: string) {
+        this.activeTab = tab;
+        const publishedMap = { All: null, Deployed: true, 'Under Construction': false, Archived: null };
+        this.packagesStore.filterByPublished(publishedMap[tab]);
     }
 
     ngOnDestroy(): void {

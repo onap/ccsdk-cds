@@ -89,7 +89,7 @@ export default {
     {
         "template": {
             "method": "GET",
-            "url": processorApiConfig.http.url + "/blueprint-model/paged?limit={limit}&offset={offset}&sort={sort}&sortType={sortType}",
+            "url": processorApiConfig.http.url + "/blueprint-model/paged?limit={limit}&offset={offset}&sort={sort}&sortType={sortType}&published={published}",
             "headers": {
                 "accepts": "application/json",
                 "content-type": "application/json",
@@ -98,7 +98,7 @@ export default {
             "responsePath": "$",
         },
         "functions": {
-            "getPagedBlueprints": ["limit", "offset", "sort", "sortType"],
+            "getPagedBlueprints": ["limit", "offset", "sort", "sortType", "published"],
         }
     },
     {

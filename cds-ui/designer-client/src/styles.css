@@ -732,6 +732,7 @@ height: 40px;
   font-weight: bold;
   color: #6B7D93 !important;
   border: none !important;
+  cursor: pointer;
 }
 .nav-tabs .nav-link:focus,
 .nav-tabs .nav-link:hover{

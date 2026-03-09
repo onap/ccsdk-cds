@@ -218,6 +218,63 @@ class BlueprintModelControllerTest {
 
     @Test
     @Throws(JSONException::class)
+    fun test07a_getPagedBlueprintModels() {
+        webTestClient.get()
+            .uri("/api/v1/blueprint-model/paged?offset=0&limit=20&sort=DATE&sortType=ASC")
+            .header(
+                "Authorization",
+                "Basic " + Base64.getEncoder()
+                    .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8))
+            )
+            .exchange()
+            .expectStatus().isOk
+            .expectBody()
+            .jsonPath("$.content").isArray
+            .jsonPath("$.totalElements").isNumber
+            .jsonPath("$.content.length()").value<Int> {
+                assertTrue(it > 0, "paged response should have at least one element")
+            }
+    }
+
+    @Test
+    @Throws(JSONException::class)
+    fun test07b_getPagedBlueprintModelsFilteredByPublishedY() {
+        webTestClient.get()
+            .uri("/api/v1/blueprint-model/paged?offset=0&limit=20&sort=DATE&sortType=ASC&published=true")
+            .header(
+                "Authorization",
+                "Basic " + Base64.getEncoder()
+                    .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8))
+            )
+            .exchange()
+            .expectStatus().isOk
+            .expectBody()
+            .jsonPath("$.content").isArray
+            .jsonPath("$.content.length()").value<Int> {
+                assertTrue(it > 0, "published=true should return at least one element")
+            }
+            .jsonPath("$.content[0].published").isEqualTo("Y")
+    }
+
+    @Test
+    @Throws(JSONException::class)
+    fun test07c_getPagedBlueprintModelsFilteredByPublishedN() {
+        webTestClient.get()
+            .uri("/api/v1/blueprint-model/paged?offset=0&limit=20&sort=DATE&sortType=ASC&published=false")
+            .header(
+                "Authorization",
+                "Basic " + Base64.getEncoder()
+                    .encodeToString(("ccsdkapps" + ":" + "ccsdkapps").toByteArray(UTF_8))
+            )
+            .exchange()
+            .expectStatus().isOk
+            .expectBody()
+            .jsonPath("$.content").isArray
+            .jsonPath("$.content.length()").isEqualTo(0)
+    }
+
+    @Test
+    @Throws(JSONException::class)
     fun test08_searchBlueprintModels() {
         webTestClient(
             HttpMethod.GET, null,

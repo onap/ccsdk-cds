@@ -36,14 +36,18 @@ export class PackagesApiService {
     constructor(private api: ApiService<BluePrintPage>) {
     }
 
-    getPagedPackages(pageNumber: number, pageSize: number, sortBy: string): Observable<BluePrintPage[]> {
+    getPagedPackages(pageNumber: number, pageSize: number, sortBy: string, published: boolean = null): Observable<BluePrintPage[]> {
         const sortType = sortBy.includes('DATE') ? 'DESC' : 'ASC';
-        return this.api.get(BlueprintURLs.getPagedBlueprints, {
+        const params: any = {
             offset: pageNumber,
             limit: pageSize,
             sort: sortBy,
-            sortType
-        });
+            sortType,
+        };
+        if (published !== null) {
+            params.published = published;
+        }
+        return this.api.get(BlueprintURLs.getPagedBlueprints, params);
     }
 
     async checkBluePrintIfItExists(name: string, version: string): Promise<BluePrintPage[]> {

@@ -47,7 +47,7 @@
     "internalVersion": null,
     "createdDate": "2026-03-04T14:55:25.696Z",
     "artifactName": "vLB_CDS",
-    "published": "Y",
+    "published": "N",
     "updatedBy": "Seaudi, Abdelmuhaimen <abdelmuhaimen.seaudi@orange.com>",
     "tags": "vLB_CDS"
   },
@@ -86,7 +86,7 @@
     "internalVersion": null,
     "createdDate": "2026-03-04T14:55:38.385Z",
     "artifactName": "pnf_netconf",
-    "published": "Y",
+    "published": "N",
     "updatedBy": "Aarna Services",
     "tags": "pnf_netconf"
   },
@@ -112,7 +112,7 @@
     "internalVersion": null,
     "createdDate": "2026-03-04T14:56:10.388Z",
     "artifactName": "ubuntu20",
-    "published": "Y",
+    "published": "N",
     "updatedBy": "RG, ONES <romain.garel@orange.com>",
     "tags": "ubuntu20"
   }
