@@ -38,6 +38,12 @@
         <dependency>
             <groupId>io.nats</groupId>
             <artifactId>java-nats-streaming</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.nats</groupId>
+                    <artifactId>jnats</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
