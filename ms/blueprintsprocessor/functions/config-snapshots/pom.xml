@@ -52,9 +52,8 @@
             <artifactId>xmlunit-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-testing</artifactId>
-            <version>6.2.7.Final</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
