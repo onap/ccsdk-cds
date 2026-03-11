@@ -73,6 +73,16 @@
                 <artifactId>spring-kafka</artifactId>
                 <version>${spring-kafka.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>3.9.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-streams</artifactId>
+                <version>${kafka.version}</version>
+            </dependency>
 
             <!--Swagger Dependencies -->
             <dependency>
@@ -119,20 +129,9 @@
                 <version>${guava.version}</version>
             </dependency>
             <dependency>
-                <groupId>net.javacrumbs.json-unit</groupId>
-                <artifactId>json-unit-json-path</artifactId>
-                <version>${json.unit.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.python</groupId>
                 <artifactId>jython-standalone</artifactId>
                 <version>${jython.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.minidev</groupId>
-                <artifactId>json-smart</artifactId>
-                <version>${json-smart.version}</version>
             </dependency>
 
             <!-- Kotlin Dependencies -->
@@ -167,6 +166,8 @@
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-script-util</artifactId>
+                <!-- This module is not being published any longer and
+                should be replaced by it's successor kotlin-scripting-jsr223 -->
                 <version>1.8.22</version>
             </dependency>
             <dependency>
@@ -214,12 +215,6 @@
                 <version>${hazelcast.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-core</artifactId>
-                <version>6.4.6</version>
-            </dependency>
-
             <!-- Adaptors -->
             <dependency>
                 <groupId>org.apache.sshd</groupId>
@@ -238,14 +233,9 @@
                 <version>${jsch.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-clients</artifactId>
-                <version>3.9.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.kafka</groupId>
-                <artifactId>kafka-streams</artifactId>
-                <version>${kafka.version}</version>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.5.18</version>
             </dependency>
 
             <!-- Error Catalog -->
@@ -528,12 +518,6 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito2</artifactId>
-                <version>${powermock.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>com.nhaarman.mockitokotlin2</groupId>
                 <artifactId>mockito-kotlin</artifactId>
                 <version>2.2.0</version>
@@ -567,6 +551,12 @@
                 <artifactId>byte-buddy-agent</artifactId>
                 <version>${bytebuddy.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-testing</artifactId>
+                <version>${hibernate.version}</version>
+                <scope>test</scope>
+            </dependency>
 
             <!-- Spring Kafka -->
             <dependency>
@@ -590,7 +580,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.14.0</version>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -605,10 +594,6 @@
         <dependency>
             <groupId>net.minidev</groupId>
             <artifactId>json-smart</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.javacrumbs.json-unit</groupId>
-            <artifactId>json-unit-json-path</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -739,28 +724,6 @@
     </dependencies>
 
     <repositories>
-        <repository>
-            <id>spring-libs-milestone</id>
-            <name>Spring Milestone Maven Repository</name>
-            <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>spring-libs-milestone-snapshot</id>
-            <name>Spring Milestone Maven Repository - snapshots</name>
-            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
     <build>

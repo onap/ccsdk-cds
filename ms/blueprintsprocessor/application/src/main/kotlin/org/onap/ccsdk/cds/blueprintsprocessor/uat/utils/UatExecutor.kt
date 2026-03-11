@@ -25,6 +25,8 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.atLeast
 import com.nhaarman.mockitokotlin2.atMost
+import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
@@ -201,39 +203,42 @@ open class UatExecutor(
             )
 
             // Delegates to overloaded exchangeResource(String, String, String, Map<String, String>)
-            whenever(restClient.exchangeResource(any(), any(), any()))
-                .thenAnswer { invocation ->
-                    val method = invocation.arguments[0] as String
-                    val path = invocation.arguments[1] as String
-                    val request = invocation.arguments[2] as String
-                    restClient.exchangeResource(method, path, request, emptyMap())
-                }
+            // Use doAnswer/doReturn to avoid WrongTypeOfReturnValue caused by MockInvocationLogger
+            // calling toString() on the SmartNull return value during Mockito's stubbing-recording phase
+            doAnswer { invocation ->
+                val method = invocation.arguments[0] as String
+                val path = invocation.arguments[1] as String
+                val request = invocation.arguments[2] as String
+                restClient.exchangeResource(method, path, request, emptyMap())
+            }.whenever(restClient).exchangeResource(any(), any(), any())
             for (expectation in restExpectations) {
                 if (expectation.request.requestType == EXCHANGE_RESOURCE) {
-                    var stubbing = whenever(
-                        restClient.exchangeResource(
-                            eq(expectation.request.method),
-                            eq(expectation.request.path),
-                            argThat(JsonMatcher(expectation.request.body.toString())),
-                            any()
-                        )
-                    )
-                    for (response in expectation.responses) {
-                        stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString()))
+                    val responses = expectation.responses
+                        .map { response -> WebClientResponse(response.status, response.body.toString()) }
+                    if (responses.isNotEmpty()) {
+                        doReturn(responses[0], *responses.drop(1).toTypedArray())
+                            .whenever(restClient)
+                            .exchangeResource(
+                                eq(expectation.request.method),
+                                eq(expectation.request.path),
+                                argThat(JsonMatcher(expectation.request.body.toString())),
+                                any()
+                            )
                     }
                 }
             }
 
             for (expectation in restExpectations) {
                 if (expectation.request.requestType == UPLOAD_BINARY_FILE) {
-                    var stubbing = whenever(
-                        restClient.uploadBinaryFile(
-                            eq(expectation.request.path),
-                            any()
-                        )
-                    )
-                    for (response in expectation.responses) {
-                        stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString()))
+                    val responses = expectation.responses
+                        .map { response -> WebClientResponse(response.status, response.body.toString()) }
+                    if (responses.isNotEmpty()) {
+                        doReturn(responses[0], *responses.drop(1).toTypedArray())
+                            .whenever(restClient)
+                            .uploadBinaryFile(
+                                eq(expectation.request.path),
+                                any()
+                            )
                     }
                 }
             }
