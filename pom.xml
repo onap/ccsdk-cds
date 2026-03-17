@@ -77,13 +77,13 @@ limitations under the License.
         <ccsdk.sli.version>1.5.2</ccsdk.sli.version>
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
 
-        <kotlin.version>1.9.0</kotlin.version>
+        <kotlin.version>1.9.25</kotlin.version>
         <kotlin.maven.version>1.9.0</kotlin.maven.version>
         <kotlin.couroutines.version>1.9.0</kotlin.couroutines.version>
         <kotlinpoet.version>1.11.0</kotlinpoet.version>
         <apache.httpcomponents.client.version>4.5.14</apache.httpcomponents.client.version>
 
-        <bytebuddy.version>1.14.17</bytebuddy.version>
+        <bytebuddy.version>1.17.7</bytebuddy.version>
         <grpc.version>1.29.0</grpc.version>
         <netty-ssl>2.0.70.Final</netty-ssl>
         <protobuff.java.version>3.25.8</protobuff.java.version>
@@ -106,9 +106,8 @@ limitations under the License.
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>2.0</version>
+            <version>2.4</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -348,6 +347,81 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <!-- MAVEN ENFORCER PLUGIN – ensures dependency hygiene           -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <fail>true</fail>
+                            <rules>
+                                <!-- Enforce dependency convergence -->
+                                <dependencyConvergence>
+                                    <message>
+                                        Dependency convergence failure: multiple versions detected.
+                                    </message>
+                                </dependencyConvergence>
+
+                                <!-- Ban legacy/broken or security-vulnerable dependencies -->
+                                <bannedDependencies>
+                                    <searchTransitive>true</searchTransitive>
+                                    <excludes>
+                                        <!-- Old JAXB -->
+                                        <exclude>com.sun.xml.bind:jaxb-impl</exclude>
+                                        <exclude>com.sun.xml.bind:jaxb-core</exclude>
+
+                                        <!-- Vulnerable or obsolete libs -->
+                                        <exclude>commons-collections:commons-collections:[3.0,4.0)</exclude>
+
+                                        <!-- Ban all 1.8.x -->
+                                        <exclude>commons-beanutils:commons-beanutils:[1.8,1.9)</exclude>
+
+                                        <!-- Ban exactly 1.9.0 -->
+                                        <exclude>commons-beanutils:commons-beanutils:[1.9.0]</exclude>
+
+                                        <exclude>org.hsqldb:hsqldb:1.*</exclude>
+
+                                        <!-- Bad Netty versions (incompatible with Reactor & gRPC) -->
+                                        <exclude>io.netty:netty-*: [4.1.50,4.1.60)</exclude>
+
+                                        <!-- Ban all kotlin-stdlib versions except 1.9.25 -->
+                                        <exclude>org.jetbrains.kotlin:kotlin-stdlib:(,1.9.25),(1.9.25,)</exclude>
+
+                                        <!-- Ban all jakarta xml bind versions except 4.0.2 -->
+                                        <exclude>jakarta.xml.bind:jakarta.xml.bind-api:(,4.0.2),(4.0.2,)</exclude>
+
+                                    </excludes>
+                                    <message>
+                                        Forbidden dependency detected — remove or upgrade to compliant version.
+                                    </message>
+                                </bannedDependencies>
+
+                                <!-- Require consistent dependency versions (Kotlin/Netty/Jakarta/etc.) -->
+                                <requireUpperBoundDeps>
+                                    <message>
+                                        Version conflict detected — upper bound rule violated.
+                                    </message>
+                                </requireUpperBoundDeps>
+
+                                <!-- Require Java 17+ -->
+                                <requireJavaVersion>
+                                    <version>[17,)</version>
+                                    <message>
+                                        Java 17+ is required to build ccsdk-cds.
+                                    </message>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
