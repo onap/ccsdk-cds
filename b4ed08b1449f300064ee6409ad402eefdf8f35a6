@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d421350c_87c052be",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-24T14:21:12Z",
+      "side": 1,
+      "message": "This dep is wrongly declared here. As it is of type `pom` it may only be declared in the `dependencyManagement` section. Since it is already correctly declared like this in the root `pom.xml`, this declaration here can just be removed.\nThat will also get rid of these build warnings, that are currently being printed:\n```\n[\u001b[1;33mWARNING\u001b[m] Some problems were encountered while building the effective model for org.onap.ccsdk.cds.components.cba:cba-assembly-descriptor:jar:1.10.0-SNAPSHOT\n[\u001b[1;33mWARNING\u001b[m] \u0027dependencies.dependency.scope\u0027 for org.glassfish.jaxb:jaxb-bom:pom must be one of [provided, compile, runtime, test, system] but is \u0027import\u0027. @ org.onap.ccsdk.cds.blueprintsprocessor:blueprintsprocessor-parent:1.10.0-SNAPSHOT, /home/ubuntu/development/onap/ccsdk/cds/ms/blueprintsprocessor/parent/pom.xml, line 723, column 20\n[\u001b[1;33mWARNING\u001b[m] \n[\u001b[1;33mWARNING\u001b[m] Some problems were encountered while building the effective model for org.onap.ccsdk.cds.components.cba:test-blueprint-kotlin-parent:pom:1.10.0-SNAPSHOT\n[\u001b[1;33mWARNING\u001b[m] \u0027dependencies.dependency.scope\u0027 for org.glassfish.jaxb:jaxb-bom:pom must be one of [provided, compile, runtime, test, system] but is \u0027import\u0027. @ org.onap.ccsdk.cds.blueprintsprocessor:blueprintsprocessor-parent:1.10.0-SNAPSHOT, /home/ubuntu/development/onap/ccsdk/cds/ms/blueprintsprocessor/parent/pom.xml, line 723, column 20\n[\u001b[1;33mWARNING\u001b[m] \n[\u001b[1;33mWARNING\u001b[m] Some problems were encountered while building the effective model for org.onap.ccsdk.cds.components.cba:blueprint-model:pom:1.10.0-SNAPSHOT\n[\u001b[1;33mWARNING\u001b[m] \u0027dependencies.dependency.scope\u0027 for org.glassfish.jaxb:jaxb-bom:pom must be one of [provided, compile, runtime, test, system] but is \u0027import\u0027. @ org.onap.ccsdk.cds.blueprintsprocessor:blueprintsprocessor-parent:1.10.0-SNAPSHOT, /home/ubuntu/development/onap/ccsdk/cds/ms/blueprintsprocessor/parent/pom.xml, line 723, column 20\n[\u001b[1;33mWARNING\u001b[m] \n[\u001b[1;33mWARNING\u001b[m] It is highly recommended to fix these problems because they threaten the stability of your build.\n[\u001b[1;33mWARNING\u001b[m] \n```",
+      "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55c11487_d5b299fb",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-24T14:21:12Z",
+      "side": 1,
+      "message": "These leftovers should be removed",
+      "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81f969b1_5124b5fc",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-24T14:21:12Z",
+      "side": 1,
+      "message": "Duplicate declaration of the property here",
+      "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fdc7315_814f64d7",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-24T14:21:12Z",
+      "side": 1,
+      "message": "Perhaps you can move this declaration to the other two kotlin related declarations starting at line `227`.",
+      "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91667b3c_b9d49c8e",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-24T14:21:12Z",
+      "side": 1,
+      "message": "I assume that the three `kotlinx-` deps should be in sync. Further above there is already a `\u003ckotlin.couroutines.version\u003e1.9.0\u003c/kotlin.couroutines.version\u003e` declared, so you can just use that here (`${kotlin.couroutines.version}`)",
+      "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
