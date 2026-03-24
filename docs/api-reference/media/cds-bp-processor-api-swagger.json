@@ -373,6 +373,12 @@
           "required" : false,
           "type" : "string",
           "default" : "ASC"
+        }, {
+          "name" : "published",
+          "in" : "query",
+          "description" : "Filter by published status (true or false)",
+          "required" : false,
+          "type" : "boolean"
         } ],
         "responses" : {
           "200" : {
@@ -1955,6 +1961,9 @@
         "missingNode" : {
           "type" : "boolean"
         },
+        "pojo" : {
+          "type" : "boolean"
+        },
         "integralNumber" : {
           "type" : "boolean"
         },
@@ -1970,15 +1979,9 @@
         "textual" : {
           "type" : "boolean"
         },
-        "pojo" : {
-          "type" : "boolean"
-        },
         "nodeType" : {
           "type" : "string",
           "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
-        },
-        "short" : {
-          "type" : "boolean"
         },
         "array" : {
           "type" : "boolean"
@@ -1990,9 +1993,6 @@
           "type" : "boolean"
         },
         "number" : {
-          "type" : "boolean"
-        },
-        "object" : {
           "type" : "boolean"
         },
         "boolean" : {
@@ -2007,7 +2007,13 @@
         "long" : {
           "type" : "boolean"
         },
+        "short" : {
+          "type" : "boolean"
+        },
         "binary" : {
+          "type" : "boolean"
+        },
+        "object" : {
           "type" : "boolean"
         }
       }
@@ -2155,6 +2161,9 @@
         "missingNode" : {
           "type" : "boolean"
         },
+        "pojo" : {
+          "type" : "boolean"
+        },
         "integralNumber" : {
           "type" : "boolean"
         },
@@ -2170,12 +2179,6 @@
         "textual" : {
           "type" : "boolean"
         },
-        "pojo" : {
-          "type" : "boolean"
-        },
-        "short" : {
-          "type" : "boolean"
-        },
         "array" : {
           "type" : "boolean"
         },
@@ -2186,9 +2189,6 @@
           "type" : "boolean"
         },
         "number" : {
-          "type" : "boolean"
-        },
-        "object" : {
           "type" : "boolean"
         },
         "boolean" : {
@@ -2203,7 +2203,13 @@
         "long" : {
           "type" : "boolean"
         },
+        "short" : {
+          "type" : "boolean"
+        },
         "binary" : {
+          "type" : "boolean"
+        },
+        "object" : {
           "type" : "boolean"
         }
       }
@@ -2252,9 +2258,6 @@
         "last" : {
           "type" : "boolean"
         },
-        "first" : {
-          "type" : "boolean"
-        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -2271,6 +2274,9 @@
         },
         "sort" : {
           "$ref" : "#/definitions/Sort"
+        },
+        "first" : {
+          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -2298,9 +2304,6 @@
         "last" : {
           "type" : "boolean"
         },
-        "first" : {
-          "type" : "boolean"
-        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -2318,6 +2321,9 @@
         "sort" : {
           "$ref" : "#/definitions/Sort"
         },
+        "first" : {
+          "type" : "boolean"
+        },
         "empty" : {
           "type" : "boolean"
         }
@@ -2326,10 +2332,10 @@
     "Pageable" : {
       "type" : "object",
       "properties" : {
-        "paged" : {
+        "unpaged" : {
           "type" : "boolean"
         },
-        "unpaged" : {
+        "paged" : {
           "type" : "boolean"
         },
         "pageSize" : {
