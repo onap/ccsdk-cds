@@ -14,7 +14,7 @@
   ~  limitations under the License.
 */
 import * as fs from 'fs';
-import * as uuidv1 from 'uuid/v1';
+import uuidv1 = require('uuid/v1');
 const grpc = require('@grpc/grpc-js');
 import * as protoLoader from '@grpc/proto-loader';
 import { processorApiConfig } from '../config/app-config';
@@ -116,4 +116,3 @@ class BluePrintManagementServiceGrpcClient {
 }
 
 export const bluePrintManagementServiceGrpcClient = new BluePrintManagementServiceGrpcClient();
-
