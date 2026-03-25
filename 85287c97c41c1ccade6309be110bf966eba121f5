@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba6d58d7_78679816",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-25T14:27:39Z",
+      "side": 1,
+      "message": "Can you add some description to the CR message?\nSomething like\n\n```\n- expect some headers\n- write cba files to other location\n- ...\n```",
+      "revId": "85287c97c41c1ccade6309be110bf966eba121f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
