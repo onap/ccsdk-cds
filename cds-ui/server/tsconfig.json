@@ -12,6 +12,7 @@
     "**/*.d.ts"
   ],
   "compilerOptions": {
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "ignoreDeprecations": "6.0"
   }
 }

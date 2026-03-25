@@ -71,7 +71,6 @@
         "filereader": "^0.10.3",
         "form-data": "^2.3.3",
         "formidable": "^1.2.1",
-        "fs": "0.0.1-security",
         "@grpc/grpc-js": "^1.7.0",
         "jszip": "^3.2.1",
         "loopback-connector-rest": "^3.4.1",
