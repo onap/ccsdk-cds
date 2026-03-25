@@ -843,8 +843,8 @@ height: 40px;
   position: relative;
   text-indent: 10px;
   line-height: 32px;
-  background-color: #eee;
-  border: 1px solid #ccc;
+  background-color: #e0e0e0;
+  border: 1px solid #999;
   border-radius: 3px;
   box-shadow: 0 1px 0 rgba(255,255,255, .9) inset, 0 1px 3px rgba(0,0,0, .1);
   width: 100%;
@@ -895,18 +895,18 @@ height: 40px;
   border-radius: 3px;
   text-indent: 10px;
   line-height: 28px;
-  background-color: #eee;
-  border: 1px solid #ccc;
+  background-color: #e0e0e0;
+  border: 1px solid #999;
 }
 .dropdown-content a{
   display: block;
 }
 .dropdown-content a:hover{
-  background: #e8e8e8;
+  background: #d5d5d5;
 }
 .dropdown-toggle:hover ~ .dropdown-text,
 .dropdown-toggle:focus ~ .dropdown-text{
-  background-color: #e8e8e8;
+  background-color: #d5d5d5;
 }
 .dropdown-toggle:focus ~ .dropdown-text{
   box-shadow: 0 1px 3px rgba(0,0,0, .2) inset, 0 1px 0 rgba(255,255,255, 0.8);
@@ -3042,7 +3042,7 @@ animation: glowing 1500ms infinite;
 }
 .ace_print-margin{
   left: 100% !important;
-  background: #eee !important;
+  background: #d5d5d5 !important;
 }
 .ace_content{
   width: 100% !important;

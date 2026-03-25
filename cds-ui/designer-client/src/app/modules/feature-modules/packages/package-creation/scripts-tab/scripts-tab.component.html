@@ -1,7 +1,7 @@
 <div class="import-container-all">
     <div class="mb-4">
         <!--Create Script File-->
-    <button type="button" data-target="#createScriptsModal" data-toggle="modal" class="btn mb-2 mr-2 create-script-button"><i class="fa fa-plus"></i> <span></span>Create Script
+    <button type="button" data-target="#createScriptsModal" data-toggle="modal" class="btn mb-2 mr-2 create-script-button"><i class="fa fa-plus" aria-hidden="true"></i> <span></span>Create Script
     </button>
         <span tourAnchor="st-scriptsImport" class="import-container-span">Or you can also <a data-target="#scriptsModal"
                 data-toggle="modal" (click)="resetTheUploadedFiles()" href="#"><b>Import File</b></a></span>
@@ -21,10 +21,10 @@
                     <h5 class="mb-0 d-flex justify-content-between">
                         <button (click)="changeDivShow(mapIndex)" aria-expanded="false" class="btn btn-link collapsed"
                             data-toggle="collapse">
-                            <i class="icon-file-code"></i> {{file.key}}
+                            <i class="icon-file-code" aria-hidden="true"></i> {{file.key}}
                         </button>
                         <a data-toggle="modal" (click)="initDelete(file)" data-target="#exampleModal"
-                            class="accordion-delete"><i class="icon-delete-sm"></i></a>
+                            class="accordion-delete"><i class="icon-delete-sm" aria-hidden="true"></i></a>
                         <!-- <a (click)="removeFile(file.key,mapIndex)" data-toggle="modal" data-target="#exampleModal" class="accordion-delete"><i
                                     class="icon-delete-sm"></i></a> -->
                         <!-- Delete Modal -->

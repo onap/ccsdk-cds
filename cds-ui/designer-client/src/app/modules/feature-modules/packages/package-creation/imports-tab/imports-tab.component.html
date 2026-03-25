@@ -38,11 +38,11 @@
                     <h5 class="mb-0 d-flex justify-content-between">
                         <button class="btn btn-link " data-toggle="collapse" aria-expanded="false"
                             (click)="changeDivShow(mapIndex)">
-                            <i class="icon-file-code"></i> {{file.key}} <span class="readonlyTxt">(ReadOnly)</span>
+                            <i class="icon-file-code" aria-hidden="true"></i> {{file.key}} <span class="readonlyTxt">(ReadOnly)</span>
                         </button>
 
                         <a data-toggle="modal" (click)="initDelete(file)" data-target="#exampleModal1"
-                            class="accordion-delete"><i class="icon-delete-sm"></i></a>
+                            class="accordion-delete"><i class="icon-delete-sm" aria-hidden="true"></i></a>
 
                         <!-- <a class="accordion-delete" (click)="removeFile(mapIndex)"><i class="icon-delete-sm"></i></a> -->
                         <!-- Delete Modal -->

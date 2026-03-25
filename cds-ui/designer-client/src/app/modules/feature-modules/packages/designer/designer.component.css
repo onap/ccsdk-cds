@@ -297,7 +297,7 @@ tspan#type{
   font-size: 13px;
 }
 .input-search-controller::placeholder{
-  color: #6B7D93;
+  color: #4A5568;
   font-size: 12px;
 }
 .input-search-controller:focus{
@@ -415,13 +415,13 @@ p.compType-4{
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
-  color: #6B7D93;
+  color: #4A5568;
 }
 .controllerSidebar b{
   margin-left: 12px;
   margin-bottom: 9px;
   font-size: 12px;
-  color: #6B7D93;
+  color: #4A5568;
 }
 .functionsList .joint-paper{
   width: 100% !important;
@@ -501,7 +501,7 @@ p.compType-4{
   top: 1.25rem;
 }
 .actionsList .custom-control-label p{
-  color: #C7D0DD;
+  color: #6B7D93;
   font-size: 12px;
 }
 .inserActionBtns .btn{

@@ -49,14 +49,14 @@
 
                     <!-- Action Inputs: loading state -->
                     <div *ngIf="loadingSpec" class="action-inputs-loading mt-2">
-                        <i class="fa fa-spinner fa-spin mr-1"></i>
+                        <i class="fa fa-spinner fa-spin mr-1" aria-hidden="true"></i>
                         <small class="text-muted">Loading action inputs...</small>
                     </div>
 
                     <!-- Action Inputs: spec load failed -->
                     <div *ngIf="actionName && !loadingSpec && specLoadFailed" class="action-inputs-error mt-2">
                         <small class="text-muted">
-                            <i class="fa fa-exclamation-triangle mr-1"></i>
+                            <i class="fa fa-exclamation-triangle mr-1" aria-hidden="true"></i>
                             Could not load input schema. Edit the JSON payload manually.
                         </small>
                     </div>
@@ -136,13 +136,13 @@
                         <button class="btn btn-primary btn-execute"
                                 [disabled]="!canExecute()"
                                 (click)="executeBlueprint()">
-                            <i class="fa fa-play mr-1" *ngIf="!isExecuting"></i>
-                            <i class="fa fa-spinner fa-spin mr-1" *ngIf="isExecuting"></i>
+                            <i class="fa fa-play mr-1" *ngIf="!isExecuting" aria-hidden="true"></i>
+                            <i class="fa fa-spinner fa-spin mr-1" *ngIf="isExecuting" aria-hidden="true"></i>
                             {{ isExecuting ? 'Executing...' : 'Execute' }}
                         </button>
                         <button class="btn btn-outline-secondary ml-2"
                                 (click)="resetPayload()">
-                            <i class="fa fa-refresh mr-1"></i> Reset
+                            <i class="fa fa-refresh mr-1" aria-hidden="true"></i> Reset
                         </button>
                     </div>
                 </div>
@@ -170,8 +170,8 @@
             <div class="card response-card mt-3" *ngIf="lastResponseText">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <i class="fa fa-check-circle text-success mr-1" *ngIf="lastResponse"></i>
-                        <i class="fa fa-times-circle text-danger mr-1" *ngIf="!lastResponse"></i>
+                        <i class="fa fa-check-circle text-success mr-1" *ngIf="lastResponse" aria-hidden="true"></i>
+                        <i class="fa fa-times-circle text-danger mr-1" *ngIf="!lastResponse" aria-hidden="true"></i>
                         Execution Response
                     </h5>
                     <div class="ace-editor-wrapper">

@@ -7,7 +7,7 @@
                 <h2 class="col m-0">
                     <ul class="breadcrumb-header">
                         <li><a routerLink="/packages">CBA Packages</a></li>
-                        <i class="fa fa-angle-right ml-2 mr-2"></i>
+                        <i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i>
                         <li>Execute</li>
                     </ul>
                 </h2>
@@ -23,21 +23,21 @@
                                (click)="selectTab('setup')"
                                id="nav-setup-tab"
                                role="tab">
-                                <i class="fa fa-cog mr-1"></i> Execution Setup
+                                <i class="fa fa-cog mr-1" aria-hidden="true"></i> Execution Setup
                             </a>
                             <a class="nav-item nav-link"
                                [class.active]="activeTab === 'history'"
                                (click)="selectTab('history')"
                                id="nav-history-tab"
                                role="tab">
-                                <i class="fa fa-history mr-1"></i> Execution History
+                                <i class="fa fa-history mr-1" aria-hidden="true"></i> Execution History
                             </a>
                             <a class="nav-item nav-link"
                                [class.active]="activeTab === 'liveview'"
                                (click)="selectTab('liveview')"
                                id="nav-liveview-tab"
                                role="tab">
-                                <i class="fa fa-terminal mr-1"></i> Live View
+                                <i class="fa fa-terminal mr-1" aria-hidden="true"></i> Live View
                             </a>
                         </div>
                     </div>

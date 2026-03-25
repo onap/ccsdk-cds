@@ -5,7 +5,7 @@
 .setup-card,
 .editor-card,
 .response-card {
-    border: 1px solid #e0e0e0;
+    border: 1px solid #bdbdbd;
     border-radius: 4px;
 }
 
@@ -21,7 +21,7 @@
 .form-group label {
     font-size: 12px;
     font-weight: 600;
-    color: #666;
+    color: #555;
     margin-bottom: 4px;
 }
 
@@ -30,13 +30,13 @@
 }
 
 .ace-editor-wrapper {
-    border: 1px solid #e0e0e0;
+    border: 1px solid #bdbdbd;
     border-radius: 3px;
 }
 
 /* Action Inputs */
 .action-inputs-section {
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #bdbdbd;
     padding-top: 12px;
 }
 
@@ -51,7 +51,7 @@
 .input-field-label {
     font-size: 11px;
     font-weight: 600;
-    color: #555;
+    color: #444;
     margin-bottom: 2px;
 }
 
@@ -69,7 +69,7 @@
 
 .complex-fields {
     padding-left: 10px;
-    border-left: 2px solid #e0e0e0;
+    border-left: 2px solid #bdbdbd;
 }
 
 .complex-fields .form-group {

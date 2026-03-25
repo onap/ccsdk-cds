@@ -35,7 +35,7 @@
       			</mat-expansion-panel-header>
             <json-editor [options]="options" [data]="item.data" on-change="onChange(item,$event)"></json-editor>
    			 </mat-expansion-panel>
-   			 <button matSuffix mat-icon-button (click)="delete(item,i)"><mat-icon class="icon">delete</mat-icon></button>
+   		 <button matSuffix mat-icon-button (click)="delete(item,i)" aria-label="Delete"><mat-icon class="icon" aria-hidden="true">delete</mat-icon></button>
     	</div>
     </div>
   </div>
@@ -44,7 +44,7 @@
     <h3>Source Options</h3>
 	<mat-form-field>
     	<input [(ngModel)]="searchText" type="input" matInput placeholder="search sources">
-      <button matSuffix mat-icon-button (click)="getResources()"><mat-icon>search</mat-icon></button>
+      <button matSuffix mat-icon-button (click)="getResources()" aria-label="Search"><mat-icon aria-hidden="true">search</mat-icon></button>
     	<mat-hint>db,mdsal,input,default,..</mat-hint>
   	</mat-form-field>
   	<br><br>
