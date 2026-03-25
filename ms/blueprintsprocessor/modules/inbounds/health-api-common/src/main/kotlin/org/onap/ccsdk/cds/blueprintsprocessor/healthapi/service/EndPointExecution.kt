@@ -50,7 +50,7 @@ open class EndPointExecution(
         } catch (e: Exception) {
             logger.error("service name ${serviceEndpoint.serviceName} is down ${e.message}")
         }
-        return WebClientEnpointResponse(BlueprintWebClientService.WebClientResponse(500, ""))
+        return WebClientEnpointResponse(BlueprintWebClientService.WebClientResponse(500, "", emptyMap()))
     }
 
     private fun addClientPropertiesConfiguration(serviceEndpoint: ServiceEndpoint) {
