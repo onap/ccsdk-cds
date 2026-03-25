@@ -104,13 +104,13 @@
                         <button [disabled]="!(templateFileContent?.trim()?.length > 0)"
                             (click)="getMappingTableFromTemplate($event)" class="mapping-source-load" [ngClass]="templateFileContent?.trim()?.length > 0
                             ?'hover-enable':'hover-disable'">
-                            <i class="icon-use-attributes"></i>
+                            <i class="icon-use-attributes" aria-hidden="true"></i>
                             <br />
                             <span>Use Current Template Instance</span>
                         </button>
                         <a href="#" (click)="allowedExt=['.csv','.xml']" data-toggle="modal"
                             data-target="#templateModal" class="mapping-source-load">
-                            <i class="icon-upload-attributes"></i>
+                            <i class="icon-upload-attributes" aria-hidden="true"></i>
                             <br />
                             <div>Upload Attributes List</div>
                             <div class="source-load-note">CSV or XML files</div>
@@ -140,10 +140,10 @@
                                 <label class="custom-control-label" for="customCheck1"></label>
                             </div>
                             <button [disabled]="selectedProps.size <=0" type="button" class="btn" (click)="reMap()"
-                                tooltip="Re-mapping" placement="bottom"><i class="icon-autoMap"></i></button>
+                                tooltip="Re-mapping" placement="bottom"><i class="icon-autoMap" aria-hidden="true"></i></button>
                             <button [disabled]="selectedProps.size <=0" type="button" class="btn"
                                 (click)="removeProps()" tooltip="Remove" placement="bottom"><i
-                                    class="icon-delete-sm"></i></button>
+                                    class="icon-delete-sm" aria-hidden="true"></i></button>
                             <div class="mappingSelectedAtt">
                                 <span>{{selectedProps.size}} selected </span>
                                 <span>({{mappingRes.length}} attributes in total)</span>
@@ -155,7 +155,7 @@
                         </mat-form-field>
                         <mat-paginator [pageSizeOptions]="[10, 25,50, 100,this.mappingRes.length]">
                         </mat-paginator>
-                        
+
                         <table mat-table matSortDisableClear [dataSource]="initDataSource" matSort>
                             <!-- select Column -->
                             <ng-container matColumnDef="select">

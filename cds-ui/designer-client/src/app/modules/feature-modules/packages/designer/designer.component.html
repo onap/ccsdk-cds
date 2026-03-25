@@ -9,7 +9,7 @@
                     <li class="breadcrumb-item">
                         <a href="#">CBA Packages</a>
                     </li>
-                    <i class="fa fa-angle-right ml-2 mr-2"></i>
+                    <i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i>
                     <li class="breadcrumb-item">
                         <a routerLink="/packages/package/{{packageId}}">{{viewedPackage.artifactName}}</a>
                         <button type="button" class="btn package-info-btn tooltip-bottom" data-toggle="modal"
@@ -17,7 +17,7 @@
                             <!--   <i class="icon-info" aria-hidden="true"></i>-->
                         </button>
                     </li>
-                    <i class="fa fa-angle-right ml-2 mr-2"></i>
+                    <i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i>
                     <li class="breadcrumb-item active" aria-current="page">
                         <p class="mb-0">Designer Mode</p>
                     </li>
@@ -72,15 +72,15 @@
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
                             data-tooltip="Preview">
-                            <i class="fa fa-eye"></i>
+                            <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
                         <a (click)="downloadPackage()" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
                             data-tooltip="Download">
-                            <i class="fa fa-download"></i>
+                            <i class="fa fa-download" aria-hidden="true"></i>
                         </a>
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
                             data-tooltip="Share">
-                            <i class="fa fa-share-square"></i>
+                            <i class="fa fa-share-square" aria-hidden="true"></i>
                         </a>
                     </div>
                 </li>
@@ -112,7 +112,7 @@
     <!--Actions/Functions Side Menu Toogole Button-->
     <button (click)="_toggleSidebar1()" class="toggoleBtn active btn tooltip-bottom" title="" aria-pressed="true"
         data-tooltip="Collapse Side bar">
-        <i class="fa arr-size">&#xf100;</i>
+        <i class="fa arr-size" aria-hidden="true">&#xf100;</i>
     </button>
     <!--Nav Tabs-->
     <div class="collapse navbar-collapse ">
@@ -255,7 +255,7 @@
         <button class="rotate" (click)="_toggleSidebar1()">
             <span>
                 Controller
-                <i class="fa fa-angle-double-left"></i>
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
             </span>
         </button>
 
@@ -329,7 +329,7 @@
                         <div class="col-3 pl-0">
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <button type="button" class="btn view-source" tooltip="View Function Source"
-                                    placement="bottom" (click)="viewFunctionSource()"><i class="icon-source"></i></button>
+                                    placement="bottom" (click)="viewFunctionSource()"><i class="icon-source" aria-hidden="true"></i></button>
                                 <button type="button" class="btn trash-item" tooltip="Delete Function"
                                     placement="bottom"><i class="icon-delete-sm" type="button"
                                         aria-hidden="true"></i></button>
