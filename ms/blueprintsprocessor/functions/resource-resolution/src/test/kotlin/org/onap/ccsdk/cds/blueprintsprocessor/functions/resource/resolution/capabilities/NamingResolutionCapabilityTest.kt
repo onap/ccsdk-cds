@@ -70,7 +70,8 @@ class NamingResolutionCapabilityTest {
             "vf-module-name" : "dlsst001dbcx-adsf-Base-01",
             "vnfc-name" : "dlsst001dbcx"
             }
-        """.trimMargin()
+        """.trimMargin(),
+            emptyMap()
         )
         every { blueprintWebClientService.exchangeResource(any(), any(), any()) } returns mockResponse
 

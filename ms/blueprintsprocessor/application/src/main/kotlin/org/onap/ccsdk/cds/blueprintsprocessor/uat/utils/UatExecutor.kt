@@ -219,7 +219,7 @@ open class UatExecutor(
                         )
                     )
                     for (response in expectation.responses) {
-                        stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString()))
+                        stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString(), response.headers))
                     }
                 }
             }
@@ -233,7 +233,7 @@ open class UatExecutor(
                         )
                     )
                     for (response in expectation.responses) {
-                        stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString()))
+                        stubbing = stubbing.thenReturn(WebClientResponse(response.status, response.body.toString(), response.headers))
                     }
                 }
             }
