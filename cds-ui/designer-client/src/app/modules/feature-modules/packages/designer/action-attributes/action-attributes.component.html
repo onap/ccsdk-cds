@@ -65,7 +65,7 @@
                                     <a class="accordion-delete deleteAttribute" tooltip="Delete Attribute"
                                         (click)="markDeletedInput(input)" data-toggle="modal"
                                         data-target="#exampleModalScrollable1" placement="bottom"><i
-                                            class="icon-delete-sm"></i></a>
+                                            class="icon-delete-sm" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -113,11 +113,11 @@
                                 <div class="attributeOptions">
                                     <a data-toggle="modal" data-target="#exampleModalScrollablte"
                                         class="accordion-delete editAttribute" tooltip="Edit Attribute"
-                                        placement="bottom" (click)="editAttribute(output)"><i class="icon-edit"></i></a>
+                                        placement="bottom" (click)="editAttribute(output)"><i class="icon-edit" aria-hidden="true"></i></a>
                                     <a class="accordion-delete deleteAttribute" tooltip="Delete Attribute"
                                         (click)="markDeletedInput(output)" data-toggle="modal"
                                         data-target="#exampleModalScrollable1" placement="bottom"><i
-                                            class="icon-delete-sm"></i></a>
+                                            class="icon-delete-sm" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -552,7 +552,7 @@
                                         'list-group-item list-group-item-action active':
                                         'list-group-item list-group-item-action'" [id]="step"
                                             *ngFor="let step of steps" data-toggle="list" href="#list-home" role="tab"
-                                            aria-controls="home"><i class="icon-resource_resolution mr-1"
+                                                aria-controls="home"><i class="icon-resource_resolution mr-1"
                                                 aria-hidden="true"></i>
                                             {{step}} <i class="icon-next_arrow" aria-hidden="true" (click)="setInputAndOutputs(
                                             this.designerState.template.workflows[actionName]['steps'][step]['target']

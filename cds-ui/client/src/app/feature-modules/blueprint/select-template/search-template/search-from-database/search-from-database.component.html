@@ -22,8 +22,8 @@ limitations under the License.
     <mat-form-field class="search-full-width">
         <!-- <input #resourceSelect type="text" [(ngModel)]="searchText" placeholder="Search Resources" matInput [matAutocomplete]="auto" formControlName="search_input"> -->
         <input matInput type="text" [(ngModel)]="searchText" placeholder="Search Resources" formControlName="search_input">
-        <button matSuffix mat-icon-button (click)="fetchResourceByName()">
-      <mat-icon>search</mat-icon>
+        <button matSuffix mat-icon-button (click)="fetchResourceByName()" aria-label="Search">
+      <mat-icon aria-hidden="true">search</mat-icon>
     </button>
         <!-- <mat-autocomplete #auto="matAutocomplete">
       <mat-option (click)="selected(option)" *ngFor="let option of options" [value]="option.tags">

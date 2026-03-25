@@ -7,7 +7,7 @@
                     <li class="breadcrumb-item">
                         <a href="#">CBA Packages</a>
                     </li>
-                    <i class="fa fa-angle-right ml-2 mr-2"></i>
+                    <i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i>
                     <li class="breadcrumb-item">
                         <a href="/package/{{this.packageId}}">{{viewedPackage.artifactName}}</a>
                         <button type="button" class="btn package-info-btn" data-toggle="modal"
@@ -15,7 +15,7 @@
                             <i class="icon-info" aria-hidden="true"></i>
                         </button>
                     </li>
-                    <i class="fa fa-angle-right ml-2 mr-2"></i>
+                    <i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i>
                     <li class="breadcrumb-item active" aria-current="page">
                         <p class="mb-0">Topology View</p>
                     </li>
@@ -70,15 +70,15 @@
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
                             data-tooltip="Preview">
-                            <i class="fa fa-eye"></i>
+                            <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
                             data-tooltip="Download">
-                            <i class="fa fa-download"></i>
+                            <i class="fa fa-download" aria-hidden="true"></i>
                         </a>
                         <a href="#" role="button" aria-pressed="true" class="btn-topology-action float tooltip-bottom"
                             data-tooltip="Share">
-                            <i class="fa fa-share-square"></i>
+                            <i class="fa fa-share-square" aria-hidden="true"></i>
                         </a>
                     </div>
                 </li>
@@ -106,7 +106,7 @@
 <nav class="editNavbar row source-button {{cl}} navbar navbar-expand-lg">
     <button (click)="_toggleSidebar1()" class="toggoleBtn active btn tooltip-bottom" title="" aria-pressed="true"
         data-tooltip="Collapse Side bar">
-        <i class="fa arr-size">&#xf100;</i>
+        <i class="fa arr-size" aria-hidden="true">&#xf100;</i>
     </button>
     <div class="collapse navbar-collapse ">
         <ul class="navbar" style="list-style: none">

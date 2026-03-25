@@ -7,7 +7,7 @@
                 <h2 class="col m-0">
                     <ul class="breadcrumb-header">
                         <li><a routerLink="/packages">CBA Packages</a></li>
-                        <i class="fa fa-angle-right ml-2 mr-2"></i>
+                        <i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i>
                         <li>{{viewedPackage.artifactName}}</li>
                     </ul>
                 </h2>
@@ -178,7 +178,7 @@
 
                             <button (click)="checkSkipTypesOfAction()" type="button" class="btn btn-sm btn-primary mb-2"
                                     data-toggle="modal" [attr.data-target]="dataTarget">
-                                <i class="icon-topologyView-active"></i> Designer Mode
+                                <i class="icon-topologyView-active" aria-hidden="true"></i> Designer Mode
                             </button>
                             <!-- Designer Modal -->
                             <div class="modal fade createActionModal" id="exampleModalLong" tabindex="-1" role="dialog"
@@ -189,7 +189,7 @@
                                             <h5 class="modal-title" id="exampleModalLongTitle"></h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                                                     title="Close">
-                                                <i class="icon-action-close"></i>
+                                                <i class="icon-action-close" aria-hidden="true"></i>
                                             </button>
                                         </div>
                                         <div class="modal-body">
@@ -733,14 +733,14 @@
                             </button>
 
 
-                            <button class="btn btn-sm btn-deploy" (click)="deployCurrentPackage()"
+                            <button class="btn btn-sm btn-deploy mb2" (click)="deployCurrentPackage()"
                                     [disabled]="!isMetadataValid"
                                     [title]="isMetadataValid ? 'Deploy package' : 'Fill in all required metadata fields before deploying'"><i
-                                    class="fa fa-play-circle"></i> Deploy
+                                    class="fa fa-play-circle" aria-hidden="true"></i> Deploy
                             </button>
                             <button class="btn btn-sm btn-execute ml-1" (click)="goToExecute()"
                                     title="Execute this blueprint">
-                                <i class="fa fa-bolt"></i> Execute
+                                <i class="fa fa-bolt" aria-hidden="true"></i> Execute
                             </button>
                         </div>
                     </div>
@@ -852,7 +852,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="removePackageModalLabel">Delete Package</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i class="icon-action-close"></i>
+                    <i class="icon-action-close" aria-hidden="true"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -874,7 +874,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="discardChangesModalLabel">Discard Changes</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i class="icon-action-close"></i>
+                    <i class="icon-action-close" aria-hidden="true"></i>
                 </button>
             </div>
             <div class="modal-body">
