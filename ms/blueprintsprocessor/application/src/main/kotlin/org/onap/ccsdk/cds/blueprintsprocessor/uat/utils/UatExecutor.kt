@@ -214,7 +214,7 @@ open class UatExecutor(
             for (expectation in restExpectations) {
                 if (expectation.request.requestType == EXCHANGE_RESOURCE) {
                     val responses = expectation.responses
-                        .map { response -> WebClientResponse(response.status, response.body.toString()) }
+                        .map { response -> WebClientResponse(response.status, response.body.toString(), response.headers) }
                     if (responses.isNotEmpty()) {
                         doReturn(responses[0], *responses.drop(1).toTypedArray())
                             .whenever(restClient)
@@ -231,7 +231,7 @@ open class UatExecutor(
             for (expectation in restExpectations) {
                 if (expectation.request.requestType == UPLOAD_BINARY_FILE) {
                     val responses = expectation.responses
-                        .map { response -> WebClientResponse(response.status, response.body.toString()) }
+                        .map { response -> WebClientResponse(response.status, response.body.toString(), response.headers) }
                     if (responses.isNotEmpty()) {
                         doReturn(responses[0], *responses.drop(1).toTypedArray())
                             .whenever(restClient)

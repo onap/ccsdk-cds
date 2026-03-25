@@ -36,6 +36,8 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
     else restClientProperties.url.split(":")[2]
     private var headers: Map<String, String>
 
+    private val contentTypeResponseHeader = Header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+
     companion object {
         const val JSON_OUTPUT: String = "{" +
             "\"vnf-id\":\"123456\"," +
@@ -119,7 +121,7 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
             request().withHeaders(Header(HttpHeaders.AUTHORIZATION, headers[HttpHeaders.AUTHORIZATION]))
                 .withMethod(method)
                 .withPath(path)
-        ).respond(response().withStatusCode(200).withBody(requestResponse))
+        ).respond(response().withStatusCode(200).withBody(requestResponse).withHeader(contentTypeResponseHeader))
     }
 
     private fun setRequestWithPayload(method: String, path: String, payload: String) {
@@ -142,7 +144,7 @@ class MockBlueprintWebClientService(private var restClientProperties: RestClient
                 .withPath(path)
                 .withQueryStringParameter("format", "resource")
                 .withBody(payload)
-        ).respond(response().withStatusCode(200).withBody(requestResponse))
+        ).respond(response().withStatusCode(200).withBody(requestResponse).withHeaders(contentTypeResponseHeader))
     }
 
     private fun setBasicAuth(username: String, password: String): String {

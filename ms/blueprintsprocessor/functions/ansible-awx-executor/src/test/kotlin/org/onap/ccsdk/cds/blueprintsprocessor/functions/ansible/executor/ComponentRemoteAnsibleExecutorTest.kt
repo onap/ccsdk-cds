@@ -66,33 +66,33 @@ class ComponentRemoteAnsibleExecutorTest {
 
         every {
             webClientService.exchangeResource("GET", "/api/v2/job_templates/hello_world_job_template/", "")
-        } returns WebClientResponse(200, getJobTemplates(jtId))
+        } returns WebClientResponse(200, getJobTemplates(jtId), emptyMap())
         every {
             webClientService.exchangeResource("GET", "/api/v2/job_templates/$jtId/launch/", "")
-        } returns WebClientResponse(200, getJobTemplateLaunch(jtId))
+        } returns WebClientResponse(200, getJobTemplateLaunch(jtId), emptyMap())
         every {
             webClientService.exchangeResource("GET", "/api/v2/inventories/?name=Demo+Inventory", "")
-        } returns WebClientResponse(200, getInventory())
+        } returns WebClientResponse(200, getInventory(), emptyMap())
         every {
             webClientService.exchangeResource(
                 "POST", "/api/v2/job_templates/$jtId/launch/",
                 """{"inventory":1,"extra_vars":{"site_id":"3 - Belmont","tor_group":"vEPC"}}"""
             )
-        } returns WebClientResponse(201, newJobTemplateLaunch(jtId, jobId))
+        } returns WebClientResponse(201, newJobTemplateLaunch(jtId, jobId), emptyMap())
         every {
             webClientService.exchangeResource("GET", "/api/v2/jobs/$jobId/", "")
         } returnsMany listOf(
-            WebClientResponse(200, getJobStatus1(jtId, jobId)),
-            WebClientResponse(200, getJobStatus2(jtId, jobId)),
-            WebClientResponse(200, getJobStatus3(jtId, jobId)),
-            WebClientResponse(200, getJobStatus4(jtId, jobId))
+            WebClientResponse(200, getJobStatus1(jtId, jobId), emptyMap()),
+            WebClientResponse(200, getJobStatus2(jtId, jobId), emptyMap()),
+            WebClientResponse(200, getJobStatus3(jtId, jobId), emptyMap()),
+            WebClientResponse(200, getJobStatus4(jtId, jobId), emptyMap())
         )
         every {
             webClientService.exchangeResource(
                 "GET", "/api/v2/jobs/$jobId/stdout/?format=txt", "",
                 mapOf("Accept" to "text/plain")
             )
-        } returns WebClientResponse(200, getReport())
+        } returns WebClientResponse(200, getReport(), emptyMap())
         val selector = mapper.readTree(endpointSelector)
         val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
         every { bluePrintRestLibPropertyService.blueprintWebClientService(selector) } returns webClientService
@@ -120,13 +120,13 @@ class ComponentRemoteAnsibleExecutorTest {
 
         every {
             webClientService.exchangeResource("GET", "/api/v2/job_templates/hello_world_job_template/", "")
-        } returns WebClientResponse(200, getJobTemplates(jtId))
+        } returns WebClientResponse(200, getJobTemplates(jtId), emptyMap())
         every {
             webClientService.exchangeResource("GET", "/api/v2/job_templates/$jtId/launch/", "")
-        } returns WebClientResponse(200, getJobTemplateLaunch(jtId))
+        } returns WebClientResponse(200, getJobTemplateLaunch(jtId), emptyMap())
         every {
             webClientService.exchangeResource("GET", "/api/v2/inventories/?name=Demo+Inventory", "")
-        } returns WebClientResponse(404, "")
+        } returns WebClientResponse(404, "", emptyMap())
         val selector = mapper.readTree(endpointSelector)
         val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
         every { bluePrintRestLibPropertyService.blueprintWebClientService(selector) } returns webClientService
@@ -155,19 +155,19 @@ class ComponentRemoteAnsibleExecutorTest {
 
         every {
             webClientService.exchangeResource("GET", "/api/v2/job_templates/hello_world_job_template/", "")
-        } returns WebClientResponse(200, getJobTemplates(jtId))
+        } returns WebClientResponse(200, getJobTemplates(jtId), emptyMap())
         every {
             webClientService.exchangeResource("GET", "/api/v2/job_templates/$jtId/launch/", "")
-        } returns WebClientResponse(200, getJobTemplateLaunch(jtId))
+        } returns WebClientResponse(200, getJobTemplateLaunch(jtId), emptyMap())
         every {
             webClientService.exchangeResource("GET", "/api/v2/inventories/?name=Demo+Inventory", "")
-        } returns WebClientResponse(200, getInventory())
+        } returns WebClientResponse(200, getInventory(), emptyMap())
         every {
             webClientService.exchangeResource(
                 "POST", "/api/v2/job_templates/$jtId/launch/",
                 """{"limit":"123","tags":"some-tag","skip_tags":"some-skip-tag","inventory":1,"extra_vars":{"site_id":"3 - Belmont","tor_group":"vEPC"}}"""
             )
-        } returns WebClientResponse(500, "")
+        } returns WebClientResponse(500, "", emptyMap())
         val selector = mapper.readTree(endpointSelector)
         val bluePrintRestLibPropertyService = mockk<BluePrintRestLibPropertyService>()
         every { bluePrintRestLibPropertyService.blueprintWebClientService(selector) } returns webClientService

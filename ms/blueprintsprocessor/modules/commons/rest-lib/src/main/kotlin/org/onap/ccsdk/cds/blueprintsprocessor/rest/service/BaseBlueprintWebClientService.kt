@@ -134,9 +134,10 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
     protected fun performHttpCall(httpUriRequest: HttpUriRequest): WebClientResponse<String> {
         val httpResponse = httpClient().execute(httpUriRequest)
         val statusCode = httpResponse.statusLine.statusCode
+        val responseHeaders: Map<String, String> = httpResponse.allHeaders.associate { header -> header.name to header.value }
         httpResponse.entity.content.use {
             val body = IOUtils.toString(it, Charset.defaultCharset())
-            return WebClientResponse(statusCode, body)
+            return WebClientResponse(statusCode, body, responseHeaders)
         }
     }
 
@@ -211,16 +212,17 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         WebClientResponse<T> {
             val httpResponse = httpClient().execute(httpUriRequest)
             val statusCode = httpResponse.statusLine.statusCode
+            val responseHeaders: Map<String, String> = httpResponse.allHeaders.associate { header -> header.name to header.value }
             val entity: HttpEntity? = httpResponse.entity
             if (canResponseHaveBody(httpResponse)) {
                 entity!!.content.use {
                     val body = getResponse(it, responseType)
-                    return WebClientResponse(statusCode, body)
+                    return WebClientResponse(statusCode, body, responseHeaders)
                 }
             } else {
                 val constructor = responseType.getConstructor()
                 val body = constructor.newInstance()
-                return WebClientResponse(statusCode, body)
+                return WebClientResponse(statusCode, body, responseHeaders)
             }
         }
     fun canResponseHaveBody(response: HttpResponse): Boolean {

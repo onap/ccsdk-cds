@@ -68,7 +68,8 @@ class IpAssignResolutionCapabilityTest {
             "fixed_ipv4_Address_02" : "10.10.10.12",
             "fixed_ipv4_Address_03" : "10.10.10.13"
             }
-        """.trimMargin()
+        """.trimMargin(),
+            emptyMap()
         )
         every { blueprintWebClientService.exchangeResource(any(), any(), any()) } returns mockResponse
 
