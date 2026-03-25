@@ -18,6 +18,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35ae2ff5_4485d892",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-25T06:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d421350c_87c052be",
+      "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55c11487_d5b299fb",
@@ -52,6 +70,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73f35aa9_ce1fa48b",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-25T06:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81f969b1_5124b5fc",
+      "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fdc7315_814f64d7",
@@ -69,6 +105,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49c6b5a1_3355c226",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-25T06:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fdc7315_814f64d7",
+      "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91667b3c_b9d49c8e",
@@ -82,6 +136,24 @@
       "writtenOn": "2026-03-24T14:21:12Z",
       "side": 1,
       "message": "I assume that the three `kotlinx-` deps should be in sync. Further above there is already a `\u003ckotlin.couroutines.version\u003e1.9.0\u003c/kotlin.couroutines.version\u003e` declared, so you can just use that here (`${kotlin.couroutines.version}`)",
+      "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afc3376d_7fa251b0",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-03-25T06:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91667b3c_b9d49c8e",
       "revId": "b4ed08b1449f300064ee6409ad402eefdf8f35a6",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     }
