@@ -38,6 +38,7 @@ import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory
 import org.springframework.boot.web.reactive.server.ReactiveWebServerFactory
 import org.springframework.boot.web.server.WebServer
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -131,6 +132,20 @@ class RestClientServiceTest {
             "query with id:3", response.body,
             "failed to get query param response"
         )
+    }
+
+    @Test
+    fun testResponseWithResponseHeaders() {
+        val restClientService = bluePrintRestLibPropertyService
+            .blueprintWebClientService("sample")
+        val response = restClientService.exchangeResource(
+            HttpMethod.GET.name(), "/sample/queryWithResponseHeaders?id=3", ""
+        )
+        assertEquals(
+            "query with id:3", response.body,
+            "failed to get query param response"
+        )
+        assertEquals("sample-value", response.responseHeaders["X-Test-Header"])
     }
 
     @Test
@@ -348,6 +363,14 @@ open class SampleController {
     @GetMapping("/query")
     fun getQuery(@RequestParam("id") id: String): String =
         "query with id:$id"
+
+    @GetMapping("/queryWithResponseHeaders")
+    fun getQueryWithResponseHeaders(@RequestParam("id") id: String): ResponseEntity<String> {
+        val responseHeaders = HttpHeaders().apply {
+            setAll(mapOf("X-Test-Header" to "sample-value"))
+        }
+        return ResponseEntity("query with id:$id", responseHeaders, HttpStatus.OK)
+    }
 
     @GetMapping("/path/{id}/get")
     fun getPathParam(@PathVariable("id") id: String): String =

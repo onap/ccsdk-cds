@@ -79,5 +79,6 @@ interface BlueprintWebClientService {
     }
 
     // TODO maybe there could be cases where we care about return headers?
-    data class WebClientResponse<T>(val status: Int, val body: T)
+    // Returning the Response headers including the status and body
+    data class WebClientResponse<T>(val status: Int, val body: T, val responseHeaders: Map<String, String> = emptyMap())
 }

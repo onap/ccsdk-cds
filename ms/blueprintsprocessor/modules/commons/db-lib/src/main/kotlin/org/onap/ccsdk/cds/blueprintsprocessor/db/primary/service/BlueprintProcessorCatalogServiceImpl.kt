@@ -18,6 +18,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.service
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.BlueprintClusterTopic
 import org.onap.ccsdk.cds.blueprintsprocessor.core.cluster.optionalClusterService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
@@ -83,35 +85,38 @@ class BlueprintProcessorCatalogServiceImpl(
             UUID.randomUUID().toString(), "cba.zip"
         )
 
+        log.info("getting blueprint Id using name($name), version($version) from db")
+        val blueprintId = try {
+            withContext(Dispatchers.IO) {
+                blueprintModelRepository.findIdByArtifactNameAndArtifactVersion(name, version)
+                    ?: throw BluePrintProcessorException("Blueprint does not exist in DB")
+            }
+        } catch (e: Exception) {
+            if (deployFile.exists()) {
+                deleteNBDir(deployFile.absolutePath)
+            }
+            throw BluePrintProcessorException(
+                "failed to get cba file name($name), version($version) from db" +
+                    " : ${e.message}"
+            )
+        }
+
         if (extract && deployFile.exists()) {
+            /** Check and update if the different idFile exists **/
+            val idFileExists: Boolean = withContext(Dispatchers.IO) {
+                deployFile
+                    .listFiles()
+                    ?.any { it.isFile && it.name == blueprintId }
+                    ?: false
+            }
+            if (!idFileExists) {
+                log.info("update (${deployFile.absolutePath}) folder with the current version")
+                updateDeployFolder(name, version, cbaFile, deployFile)
+            }
             log.info("cba file name($name), version($version) already present(${deployFile.absolutePath})")
         } else {
-            deployFile.reCreateNBDirs()
-            cbaFile.parentFile.reCreateNBDirs()
-
-            try {
-                log.info("getting cba file name($name), version($version) from db")
-                blueprintModelRepository.findByArtifactNameAndArtifactVersion(name, version)?.also {
-                    it.blueprintModelContent.run {
-
-                        cbaFile.writeBytes(this!!.content!!)
-                        cbaFile.deCompress(deployFile)
-                        log.info("cba file name($name), version($version) saved in (${deployFile.absolutePath})")
-                    }
-                }
-
-                check(deployFile.exists() && deployFile.list().isNotEmpty()) {
-                    throw BluePrintProcessorException("file check failed")
-                }
-            } catch (e: Exception) {
-                deleteNBDir(deployFile.absolutePath)
-                throw BluePrintProcessorException(
-                    "failed to get  get cba file name($name), version($version) from db" +
-                        " : ${e.message}"
-                )
-            } finally {
-                deleteNBDir(cbaFile.parentFile.absolutePath)
-            }
+            log.info("creating cba file of name($name), version($version) in (${deployFile.absolutePath})")
+            updateDeployFolder(name, version, cbaFile, deployFile)
         }
 
         return if (extract) {
@@ -184,5 +189,39 @@ class BlueprintProcessorCatalogServiceImpl(
             log.info("Sending ClusterMessage: Clean Classloader Cache")
             clusterService.sendMessage(BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE, cacheKey)
         } else BluePrintCompileCache.cleanClassLoader(cacheKey)
+    }
+
+    private suspend fun updateDeployFolder(name: String, version: String, cbaFile: File, deployFile: File) {
+        deployFile.reCreateNBDirs()
+        cbaFile.parentFile.reCreateNBDirs()
+
+        try {
+            withContext(Dispatchers.IO) {
+                blueprintModelRepository.findByArtifactNameAndArtifactVersion(name, version)
+            }?.also {
+                it.blueprintModelContent.run {
+                    cbaFile.writeBytes(this!!.content!!)
+                    cbaFile.deCompress(deployFile)
+                    /** Add a new file using Id **/
+                    val idFile = File(deployFile, it.id.toString())
+                    withContext(Dispatchers.IO) {
+                        idFile.createNewFile()
+                    }
+                    log.info("cba file name($name), version($version) saved in (${deployFile.absolutePath})")
+                }
+            }
+
+            check(deployFile.exists() && deployFile.list().isNotEmpty()) {
+                throw BluePrintProcessorException("file check failed")
+            }
+        } catch (e: Exception) {
+            deleteNBDir(deployFile.absolutePath)
+            throw BluePrintProcessorException(
+                "failed to update cba file name($name), version($version) in deploy folder" +
+                    " : ${e.message}"
+            )
+        } finally {
+            deleteNBDir(cbaFile.parentFile.absolutePath)
+        }
     }
 }
