@@ -33,6 +33,23 @@
       "message": "Why local copy of CBA requires to update ? as any change in CBA package will have a unique uuid and the directory structure should be creating underneath that unique id. There every new version of CBA package will have it\u0027s own version directory or uuid directory.",
       "revId": "65b5990ec44b3bbcc70567dceb3d74267948deeb",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d29f1136_c14f7216",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-04-01T12:16:50Z",
+      "side": 1,
+      "message": "stage-docker-release",
+      "revId": "65b5990ec44b3bbcc70567dceb3d74267948deeb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     }
   ],
   "submitRequirementResults": [
