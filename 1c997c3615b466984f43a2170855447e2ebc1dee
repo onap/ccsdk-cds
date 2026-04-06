@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66116039_bd93eac4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 8049
+      },
+      "writtenOn": "2026-04-06T12:53:34Z",
+      "side": 1,
+      "message": "Looks like the documentation links check is failing due to references to the Gerrit GitWeb interface. We might want to update these to use the GitHub mirror equivalent link. The GitWeb interface has been widely abused by bots and scrapers and recently we\u0027ve had to disable this due to high system load (making the Gerrit server unresponsive).\n\ni.e. A Gerrit GitWeb URL like this:\nhttps://gerrit.onap.org/r/gitweb?p\u003dccsdk/cds.git;a\u003dtree;f\u003dcomponents/model-catalog/blueprint-model/uat-blueprints/pnf_config/Tests;h\u003d230d506720c4a1066784c1fe9e0ba0206bbb13cf;hb\u003drefs/heads/master\n\nBecomes something like the below:\nhttps://github.com/onap/ccsdk-cds/tree/52f99b48facfad69776a408a3958e1f797034ae5/components/model-catalog/blueprint-model/uat-blueprints/pnf_config/Tests",
+      "revId": "1c997c3615b466984f43a2170855447e2ebc1dee",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
