@@ -526,7 +526,7 @@ open class ResourceResolutionServiceImpl(
         resourceAssignmentFilteredMap
             .filter {
                 resourceResolutionMap.containsKey(it.key) && compareOne(
-                    resourceResolutionMap[it.key]!!,
+                    checkNotNull(resourceResolutionMap[it.key]) { "couldn't find value for ${it.key}" },
                     it.value
                 )
             }
@@ -574,8 +574,8 @@ open class ResourceResolutionServiceImpl(
             )
         }
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
-        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+        val blueprintVersion = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]) { "couldn't get template version from meta data" }
+        val blueprintName = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]) { "couldn't get template name from meta data" }
 
         return if (resolutionKey.isNotEmpty()) {
             resourceResolutionDBService.findLastNOccurrences(
@@ -630,8 +630,8 @@ open class ResourceResolutionServiceImpl(
         artifactPrefix: String
     ): Int {
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
-        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+        val blueprintVersion = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]) { "couldn't get template version from meta data" }
+        val blueprintName = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]) { "couldn't get template name from meta data" }
         val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
         val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
         val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String

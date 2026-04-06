@@ -139,7 +139,7 @@ open class Execute : AbstractScriptComponentFunction() {
                     ComponentScriptExecutor.ATTRIBUTE_STATUS,
                     BluePrintConstants.STATUS_FAILURE.asJsonPrimitive()
                 )
-                val errorResponse = actionResult[ACTION_OUTPUT]!!
+                val errorResponse = checkNotNull(actionResult[ACTION_OUTPUT]) { "couldn't get value for the defined action output" }
                 addError(
                     BluePrintConstants.STATUS_FAILURE, ComponentScriptExecutor.ATTRIBUTE_STATUS,
                     errorResponse.asText()

@@ -99,7 +99,7 @@ open class ResourceAssignmentValidationServiceImpl : ResourceAssignmentValidatio
             if (CollectionUtils.isNotEmpty(resourceAssignment.dependencies)) {
                 resourceAssignment.dependencies!!.map {
                     log.trace("Topological Graph link from {} to {}", it, resourceAssignment.name)
-                    topologySorting.add(resourceAssignmentMap[it]!!, resourceAssignment)
+                    topologySorting.add(checkNotNull(resourceAssignmentMap[it]) { "required value not found" }, resourceAssignment)
                 }
             } else {
                 topologySorting.add(startResourceAssignment, resourceAssignment)

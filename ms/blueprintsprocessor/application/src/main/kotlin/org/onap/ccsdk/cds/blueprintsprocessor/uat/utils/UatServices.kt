@@ -27,6 +27,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.COLOR_SERVICE
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.resetContextColor
 import org.onap.ccsdk.cds.blueprintsprocessor.uat.logging.LogColor.setContextColor
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.UAT_SPECIFICATION_FILE
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -67,7 +69,9 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
         } catch (t: Throwable) {
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, t.message, t)
         } finally {
-            tempFile.delete()
+            if (!tempFile.delete()) {
+                log.warn("Failed to delete temp file : ${tempFile.name}")
+            }
             resetContextColor()
         }
     }
@@ -101,8 +105,12 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
         } catch (t: Throwable) {
             throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, t.message, t)
         } finally {
-            tempFile.delete()
-            tempCbaFile.delete()
+            if (!tempFile.delete()) {
+                log.warn("Failed to delete temp file : ${tempFile.name}")
+            }
+            if (!tempCbaFile.delete()) {
+                log.warn("Failed to delete temp cba file : ${tempCbaFile.name}")
+            }
             resetContextColor()
         }
     }
@@ -121,5 +129,7 @@ open class UatServices(private val uatExecutor: UatExecutor, private val mapper:
 
         // Fields that can be safely ignored from BPP response, and can be omitted on the UAT specification.
         private val FIELDS_TO_EXCLUDE = listOf("timestamp")
+
+        private val log: Logger = LoggerFactory.getLogger(UatServices::class.java)
     }
 }

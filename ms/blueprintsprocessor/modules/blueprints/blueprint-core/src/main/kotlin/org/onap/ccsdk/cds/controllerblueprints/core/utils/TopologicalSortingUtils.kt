@@ -69,7 +69,7 @@ class TopologicalSortingUtils<V> {
     fun outDegree(): Map<V, Int> {
         val result: MutableMap<V, Int> = hashMapOf()
         for (v in neighbors.keys)
-            result[v] = neighbors[v]!!.size
+            result[v] = checkNotNull(neighbors[v]) { "required entry not found" }.size
         return result
     }
 
@@ -78,8 +78,8 @@ class TopologicalSortingUtils<V> {
         for (v in neighbors.keys)
             result[v] = 0 // All in-degrees are 0
         for (from in neighbors.keys) {
-            for (to in neighbors[from]!!) {
-                result[to] = result[to]!! + 1 // Increment in-degree
+            for (to in checkNotNull(neighbors[from]) { "required entry not found" }) {
+                result[to] = checkNotNull(result[to]) { "required entry not found" } + 1 // Increment in-degree
             }
         }
         return result
@@ -98,8 +98,8 @@ class TopologicalSortingUtils<V> {
             val v = zeroVerts.pop() // Choose a vertex with zero in-degree
             result.add(v) // Vertex v is next in topol order
             // "Remove" vertex v by updating its neighbors
-            for (neighbor in neighbors[v]!!) {
-                degree[neighbor] = degree[neighbor]!! - 1
+            for (neighbor in checkNotNull(neighbors[v]) { "required entry not found" }) {
+                degree[neighbor] = checkNotNull(degree[neighbor]) { "required entry not found" } - 1
                 // Remember any vertices that now have zero in-degree
                 if (degree[neighbor] == 0) zeroVerts.push(neighbor)
             }
@@ -119,9 +119,9 @@ class TopologicalSortingUtils<V> {
         queue.offer(start) // Place start node in queue
         while (!queue.isEmpty()) {
             val v = queue.remove()
-            val vDist = distance[v]!!
+            val vDist = checkNotNull(distance[v]) { "required entry not found" }
             // Update neighbors
-            for (neighbor in neighbors[v]!!) {
+            for (neighbor in checkNotNull(neighbors[v]) { "required entry not found" }) {
                 if (distance[neighbor] != null) continue // Ignore if already done
                 distance[neighbor] = vDist + 1
                 queue.offer(neighbor)

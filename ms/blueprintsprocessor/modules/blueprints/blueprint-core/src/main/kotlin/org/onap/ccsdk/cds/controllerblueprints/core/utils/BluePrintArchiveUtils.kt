@@ -190,7 +190,7 @@ class BluePrintArchiveUtils {
             }
 
             enumeration.use {
-                while (enumeration!!.hasMoreElements()) {
+                while (enumeration.hasMoreElements()) {
                     val entry: ArchiveEntry? = enumeration.nextElement()
                     val destFilePath = File(targetPath, entry!!.name)
                     destFilePath.parentFile.mkdirs()

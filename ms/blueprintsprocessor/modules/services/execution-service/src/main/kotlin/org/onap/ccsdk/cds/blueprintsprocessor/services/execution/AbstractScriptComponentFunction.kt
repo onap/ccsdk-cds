@@ -55,7 +55,8 @@ abstract class AbstractScriptComponentFunction : AbstractComponentFunction() {
     }
 
     fun getDynamicProperties(key: String): JsonNode {
-        return operationInputs[DYNAMIC_PROPERTIES]!!.get(key)
+        val value = checkNotNull(operationInputs[DYNAMIC_PROPERTIES]) { "couldn't get value for defined properties" }
+        return value.get(key)
     }
 
     suspend fun executeScript(executionServiceInput: ExecutionServiceInput) {

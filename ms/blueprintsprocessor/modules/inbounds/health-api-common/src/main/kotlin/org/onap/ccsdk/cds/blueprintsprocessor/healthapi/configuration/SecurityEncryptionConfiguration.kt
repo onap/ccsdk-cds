@@ -19,7 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration
 import org.apache.commons.net.util.Base64
 import org.springframework.stereotype.Component
 import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.GCMParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 @Component
@@ -30,10 +30,12 @@ class SecurityEncryptionConfiguration {
 
     fun encrypt(value: String): String? {
         try {
-            val (iv, skeySpec, cipher) = initChiper()
-            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv)
+            val (gcmSpec, skeySpec, cipher) = initChiper()
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, gcmSpec)
             val encrypted = cipher.doFinal(value.toByteArray())
-            return Base64.encodeBase64String(encrypted)
+            val ivBytes = gcmSpec.iv
+            val combined = ivBytes + encrypted
+            return Base64.encodeBase64String(combined)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -42,9 +44,11 @@ class SecurityEncryptionConfiguration {
 
     open fun decrypt(encrypted: String): String? {
         try {
-            val (iv, skeySpec, cipher) = initChiper()
-            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv)
-            val original = cipher.doFinal(Base64.decodeBase64(encrypted))
+            val combined = Base64.decodeBase64(encrypted)
+            val ciphertext = combined.copyOfRange(12, combined.size)
+            val (gcmSpec, skeySpec, cipher) = initChiper()
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, gcmSpec)
+            val original = cipher.doFinal(ciphertext)
             return String(original)
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -52,10 +56,11 @@ class SecurityEncryptionConfiguration {
         return String()
     }
 
-    private fun initChiper(): Triple<IvParameterSpec, SecretKeySpec, Cipher> {
-        val iv = IvParameterSpec(initVector.toByteArray(charset("UTF-8")))
+    private fun initChiper(): Triple<GCMParameterSpec, SecretKeySpec, Cipher> {
+        val iv = initVector.toByteArray(charset("UTF-8")).copyOf(12)
+        val gcmSpec = GCMParameterSpec(128, iv)
         val secretKeySpec = SecretKeySpec(key.toByteArray(charset("UTF-8")), "AES")
-        val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
-        return Triple(iv, secretKeySpec, cipher)
+        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        return Triple(gcmSpec, secretKeySpec, cipher)
     }
 }

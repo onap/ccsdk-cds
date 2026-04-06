@@ -55,10 +55,14 @@ class Graph {
         if (!nodes.containsKey(destination)) {
             addNode(destination)
         }
-        val edge = Edge(nodes[source]!!, nodes[destination]!!, label)
+        val edge = Edge(
+            checkNotNull(nodes[source]) { "couldn't find value for $source" },
+            checkNotNull(nodes[destination]) { "couldn't find value for $destination" },
+            label
+        )
         if (!edges.contains(edge)) {
             edges.add(edge)
-            nodes[source]!!.edges.add(edge)
+            checkNotNull(nodes[source]) { "couldn't find value for $source" }.edges.add(edge)
         }
     }
 

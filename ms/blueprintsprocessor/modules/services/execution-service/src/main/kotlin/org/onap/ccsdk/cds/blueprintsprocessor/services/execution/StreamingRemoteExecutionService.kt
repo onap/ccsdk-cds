@@ -162,7 +162,8 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
         val grpcProperties = grpcProperties(selector)
         val selectorName = "${grpcProperties.host}:${grpcProperties.port}"
         if (grpcChannels.containsKey(selectorName)) {
-            grpcChannels[selectorName]!!.shutdownNow()
+            val channel = checkNotNull(grpcChannels[selectorName]) { "couldn't get GRPC Channel of $selectorName" }
+            channel.shutdownNow()
             grpcChannels.remove(selectorName)
             log.info("grpc channel($selectorName) shutdown completed")
         }
@@ -174,10 +175,11 @@ class StreamingRemoteExecutionServiceImpl(private val bluePrintGrpcLibPropertySe
         val selectorName = "${grpcProperties.host}:${grpcProperties.port}"
         val isGrpcChannelCached = grpcChannels.containsKey(selectorName)
         val grpcChannel = if (isGrpcChannelCached) {
-            if (grpcChannels[selectorName]!!.isShutdown) {
+            val channel = checkNotNull(grpcChannels[selectorName]) { "couldn't get GRPC Channel of $selectorName" }
+            if (channel.isShutdown) {
                 createGrpcChannel(grpcProperties)
             } else {
-                grpcChannels[selectorName]!!
+                channel
             }
         } else {
             createGrpcChannel(grpcProperties)

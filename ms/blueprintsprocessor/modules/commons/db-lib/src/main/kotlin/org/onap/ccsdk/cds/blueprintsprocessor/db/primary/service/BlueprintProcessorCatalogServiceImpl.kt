@@ -156,8 +156,8 @@ class BlueprintProcessorCatalogServiceImpl(
             ?: BluePrintConstants.FLAG_N
         blueprintModel.artifactName = artifactName
         blueprintModel.artifactVersion = artifactVersion
-        blueprintModel.updatedBy = metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]!!
-        blueprintModel.tags = metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]!!
+        blueprintModel.updatedBy = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_AUTHOR]) { "couldn't get template author from meta data" }
+        blueprintModel.tags = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_TAGS]) { "couldn't get template tags from meta data" }
         blueprintModel.artifactDescription = "Controller Blueprint for $artifactName:$artifactVersion"
         blueprintModel.workflows = workflows
 

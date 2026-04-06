@@ -20,6 +20,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInpu
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.codec.multipart.FilePart
 import org.springframework.util.StringUtils
@@ -29,6 +31,8 @@ import java.nio.file.Path
 import java.util.UUID
 
 const val INTERNAL_SERVER_ERROR_HTTP_STATUS_CODE = 500
+
+private val log: Logger = LoggerFactory.getLogger("BlueprintProcessingUtils")
 
 @Throws(BluePrintException::class, IOException::class)
 fun saveCBAFile(filePart: FilePart, targetDirectory: Path): Path {
@@ -44,8 +48,8 @@ fun saveCBAFile(filePart: FilePart, targetDirectory: Path): Path {
     val targetLocation = targetDirectory.resolve(changedFileName)
 
     val file = File(targetLocation.toString())
-    if (file.exists()) {
-        file.delete()
+    if (file.exists() && !file.delete()) {
+        log.warn("Failed to delete existing file : ${file.name}")
     }
     file.createNewFile()
 

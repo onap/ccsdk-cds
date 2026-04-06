@@ -42,8 +42,8 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
 
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+            val blueprintVersion = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]) { "couldn't get template version from meta data" }
+            val blueprintName = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]) { "couldn't get template name from meta data" }
 
             findByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
                 blueprintName,
@@ -80,8 +80,8 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
 
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+            val blueprintVersion = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]) { "couldn't get template version from meta data" }
+            val blueprintName = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]) { "couldn't get template name from meta data" }
 
             templateResolutionRepository.findResolutionKeysByBlueprintNameAndBlueprintVersionAndArtifactNameAndOccurrence(
                 blueprintName,
@@ -99,8 +99,8 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
 
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+            val blueprintVersion = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]) { "couldn't get template version from meta data" }
+            val blueprintName = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]) { "couldn't get template name from meta data" }
 
             val resultList = templateResolutionRepository.findArtifactNamesAndResolutionKeysByBlueprintNameAndBlueprintVersionAndOccurrence(
                 blueprintName,
@@ -114,7 +114,8 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
                 if (!resultMap.containsKey(it.getArtifactName())) {
                     resultMap[it.getArtifactName()] = mutableListOf(it.getResolutionKey())
                 } else {
-                    resultMap[it.getArtifactName()]!!.add(it.getResolutionKey())
+                    val resultMapValue = checkNotNull(resultMap[it.getArtifactName()]) { "couldn't get value for key ${it.getArtifactName()}" }
+                    resultMapValue.add(it.getResolutionKey())
                 }
             }
             resultMap
@@ -151,8 +152,8 @@ class TemplateResolutionService(private val templateResolutionRepository: Templa
 
         val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
 
-        val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-        val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+        val blueprintVersion = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]) { "couldn't get template version from meta data" }
+        val blueprintName = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]) { "couldn't get template name from meta data" }
         val resolutionKey = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOLUTION_KEY] as String
         val resourceId = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_ID] as String
         val resourceType = properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_RESOURCE_TYPE] as String

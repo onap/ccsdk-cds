@@ -329,8 +329,8 @@ Import the project into the IDE
                logging.level.org.springframework.web: DEBUG
 
                #Encrypted username and password for health check service
-               endpoints.user.name=eHbVUbJAj4AG2522cSbrOQ==
-               endpoints.user.password=eHbVUbJAj4AG2522cSbrOQ==
+               endpoints.user.name=ZW5jcnlwdGlvbkluKku+TuXv7+dHH2yFXUTPM6N1Ui0p00OEkQ==
+               endpoints.user.password=ZW5jcnlwdGlvbkluKku+TuXv7+dHH2yFXUTPM6N1Ui0p00OEkQ==
 
                #BaseUrls for health check blueprint processor services
                blueprintprocessor.healthcheck.baseUrl=http://localhost:8080/

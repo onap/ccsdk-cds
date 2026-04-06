@@ -89,8 +89,8 @@ open class ResourceDeletionComponent(
     private suspend fun runDelete(fn: suspend (String, String, String, Int?) -> DeletionResult):
         Map<String, DeletionResult> {
             val metadata = bluePrintRuntimeService.bluePrintContext().metadata!!
-            val blueprintVersion = metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]!!
-            val blueprintName = metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]!!
+            val blueprintVersion = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_VERSION]) { "couldn't get template version from meta data" }
+            val blueprintName = checkNotNull(metadata[BluePrintConstants.METADATA_TEMPLATE_NAME]) { "couldn't get template name from meta data" }
             val artifactPrefixNamesNode = getOperationInput(INPUT_ARTIFACT_PREFIX_NAMES)
             val artifactPrefixNames = JacksonUtils.getListFromJsonNode(artifactPrefixNamesNode, String::class.java)
             val lastN = getOptionalOperationInput(INPUT_LAST_N_OCCURRENCES)?.let {
