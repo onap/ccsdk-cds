@@ -145,6 +145,14 @@ Offered APIs
    api-reference/index
 
 
+Release Notes
+-------------
+
+.. toctree::
+   :maxdepth: 1
+
+   release-notes
+
 Controller Design Studio Presentation
 -------------------------------------
 
