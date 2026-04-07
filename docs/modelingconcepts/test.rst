@@ -35,7 +35,7 @@ A quick outline of the UAT generation process follows:
    to be integrated into the CDS project, under the folder :file:`components/model-catalog/blueprint-model/uat-blueprints`.
 
 Reference link for sample generated uat.yaml file for pnf plug & play use case:
-`uat.yaml file <https://gerrit.onap.org/r/gitweb?p=ccsdk/cds.git;a=tree;f=components/model-catalog/blueprint-model/uat-blueprints/pnf_config/Tests;h=230d506720c4a1066784c1fe9e0ba0206bbb13cf;hb=refs/heads/master>`_.
+`uat.yaml file <https://github.com/onap/ccsdk-cds/blob/master/components/model-catalog/blueprint-model/uat-blueprints/pnf_config/Tests/uat.yaml>`_.
 
 As UAT is part of unit testing, it runs in jenkins job
 `ccsdk-cds-master-verify-java <https://jenkins.onap.org/job/ccsdk-cds-maven-verify-master-mvn39-openjdk21/>`_
