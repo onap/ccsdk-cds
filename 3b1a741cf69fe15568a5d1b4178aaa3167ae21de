@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd71288_526be1d5",
+        "filename": ".github/workflows/gerrit-merge-cbom.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 7833
+      },
+      "writtenOn": "2026-04-14T17:16:57Z",
+      "side": 1,
+      "message": "remove unnecessary blank spaces",
+      "revId": "3b1a741cf69fe15568a5d1b4178aaa3167ae21de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
