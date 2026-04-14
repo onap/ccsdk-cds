@@ -45,6 +45,7 @@
         <xmlunit.version>2.6.3</xmlunit.version>
 
         <sshd.version>2.10.0</sshd.version>
+        <eddsa.version>0.3.0</eddsa.version>
         <jsch.version>0.1.55</jsch.version>
         <jslt.version>0.1.8</jslt.version>
         <jython.version>2.7.2</jython.version>
@@ -226,6 +227,11 @@
                         <artifactId>slf4j-api</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>net.i2p.crypto</groupId>
+                <artifactId>eddsa</artifactId>
+                <version>${eddsa.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jcraft</groupId>
