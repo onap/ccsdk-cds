@@ -26,8 +26,9 @@ export const steps = [
     },
     {
         anchorId: 'metadataTab',
-        content: 'Give your automation package a unique name (e.g. vRouter-day2) and version (e.g. 1.0.0). ' +
-            'Tags let operators search for packages on the dashboard.',
+        content: 'Give your package a unique name (e.g. pnf-netconf-day2) and version (1.0.0). ' +
+            'Tags let you filter packages on the dashboard. Name and version must be unique — ' +
+            'if a package with that name and version already exists, increment the version.',
         title: 'Metadata Tab',
         route: 'packages/createPackage'
     },
@@ -59,8 +60,9 @@ export const steps = [
     // Template & Mapping
     {
         anchorId: 'tm-templateTab',
-        content: 'A template is the configuration payload CDS sends to the device — a NETCONF RPC or REST body. ' +
-            'Mapping links each template variable to a Resource Dictionary entry that CDS resolves at runtime.',
+        content: 'A template is the configuration payload CDS sends to the device at runtime — for example, ' +
+            'a NETCONF RPC body or a REST request. Write it in Velocity or Jinja2 using $variable placeholders. ' +
+            'The Mapping section links each placeholder to a Data Dictionary entry that CDS resolves when the workflow runs.',
         title: 'Template & Mapping',
         stepId: 'tm-templateTab'
     },
@@ -100,8 +102,9 @@ export const steps = [
     // Script
     {
         anchorId: 'st-scriptsTab',
-        content: 'Upload Kotlin or Python scripts that implement your workflow logic. ' +
-            'Each script must implement a CDS component interface (e.g. ComponentFunctionScriptingService).',
+        content: 'Upload Kotlin or Python scripts that implement custom workflow logic. ' +
+            'Scripts referenced by your blueprint must implement a CDS component interface. ' +
+            'For PNF blueprints, Kotlin scripts are typical. For resource resolution, Python is common.',
         title: 'Scripts',
         stepId: 'st-scriptsTab'
     },
@@ -113,15 +116,18 @@ export const steps = [
     // DSL
     {
         anchorId: 'dslTab',
-        content: 'DSL Properties define named connections to external systems (AAI, SDNC, Netconf). ' +
-            'Reference these names inside your templates and workflow definitions.',
+        content: 'DSL Properties define named connections to external systems — NETCONF endpoints, AAI, SDNC. ' +
+            'Use these names inside your node templates. For PNF blueprints, define a netconf-connection here; ' +
+            'for VNF blueprints, define AAI and SDNC connections.',
         title: 'External Systems support',
         stepId: 'dslTab'
     },
     // save package
     {
         anchorId: 'packageSave',
-        content: 'Click to save your package.',
+        content: 'Save stores your draft in CDS. After saving, use the lifecycle bar above to: ' +
+            '(1) import your Data Dictionary, (2) enrich the blueprint — CDS validates and completes the mappings, ' +
+            'and (3) publish it so SO can use it in macro service orchestration.',
         title: 'Save'
     }
 ];

@@ -117,6 +117,7 @@ export const ResourceDictionaryURLs = {
     getMetaDatePageable: '/resourcedictionary/metadata/paged',
     getDictionaryByName: '/resourcedictionary/by-name/',
     getPagedDictionary: '/resourcedictionary/paged',
+    definitionBulk: '/resourcedictionary/definition-bulk',
 };
 
 export const ControllerCatalogURLs = {

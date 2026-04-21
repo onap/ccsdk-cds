@@ -122,6 +122,21 @@
                         </a> -->
                     </div>
 
+                    <div *ngIf="unmappedVars.length > 0" class="unmapped-vars-warning alert alert-warning mt-3">
+                        <strong>{{ unmappedVars.length }} template variable(s) have no dictionary mapping:</strong>
+                        <ul class="unmapped-list mb-0 mt-1">
+                            <li *ngFor="let v of unmappedVars">
+                                <code class="var-badge">${{ v }}</code>
+                                <span class="unmapped-hint ml-2 text-muted">
+                                    — not in mapping table, enrichment will fail without it
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div *ngIf="unmappedVars.length === 0 && mappingRes?.length > 0" class="alert alert-success mt-3">
+                        All template variables are mapped.
+                    </div>
+
                     <div class="table-container">
 
 

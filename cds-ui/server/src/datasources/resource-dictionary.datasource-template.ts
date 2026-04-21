@@ -165,7 +165,22 @@ export default {
         },
         "functions": {
             "getResourceDictionaryByType": ["type"]
-
+        }
+    },
+    {
+        "template": {
+            "method": "POST",
+            "url": processorApiConfig.http.url + "/dictionary/definition-bulk",
+            "headers": {
+                "accepts": "application/json",
+                "content-type": "application/json",
+                "authorization": processorApiConfig.http.authToken
+            },
+            "body": "{entries}",
+            "responsePath": "$"
+        },
+        "functions": {
+            "definitionBulk": ["entries"]
         }
     }
     ]

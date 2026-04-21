@@ -89,6 +89,75 @@
             <span>Save</span></button>
         </div>
 
+        <!-- Lifecycle action bar -->
+        <div class="lifecycle-bar">
+          <div class="lifecycle-step complete">
+            <span class="step-circle">1</span>
+            <span class="step-label">Edit</span>
+          </div>
+          <div class="lifecycle-connector"></div>
+
+          <div class="lifecycle-step" [class.complete]="lifecycle.ddImported">
+            <span class="step-circle">2</span>
+            <span class="step-label">Data Dictionary</span>
+            <button class="lifecycle-btn" (click)="openDDImportModal()">
+              {{ lifecycle.ddImported ? 'Re-import DD' : 'Import DD' }}
+            </button>
+          </div>
+          <div class="lifecycle-connector"></div>
+
+          <div class="lifecycle-step" [class.complete]="lifecycle.enriched">
+            <span class="step-circle">3</span>
+            <span class="step-label">Enrich</span>
+            <button class="lifecycle-btn" [disabled]="!isSaveEnabled" (click)="enrichCurrentPackage()">
+              Enrich
+            </button>
+            <span *ngIf="lifecycle.enrichError" class="lifecycle-error">{{ lifecycle.enrichError }}</span>
+          </div>
+          <div class="lifecycle-connector"></div>
+
+          <div class="lifecycle-step" [class.complete]="lifecycle.published">
+            <span class="step-circle">4</span>
+            <span class="step-label">Publish</span>
+            <button class="lifecycle-btn" [disabled]="!lifecycle.enriched" (click)="publishCurrentPackage()">
+              Publish
+            </button>
+          </div>
+        </div>
+
+        <!-- DD Import Modal -->
+        <div class="modal fade" id="ddImportModal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Import Data Dictionary</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+              </div>
+              <div class="modal-body">
+                <p>Upload a <code>dd.json</code> file (JSON array of data dictionary entries). These
+                entries will be registered with the CDS blueprint processor so enrichment can resolve
+                your template variables.</p>
+                <ngx-file-drop [multiple]="false" [accept]="['.json']"
+                    dropZoneLabel="Drop dd.json here" (onFileDrop)="onDDFileDrop($event)">
+                  <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                    <div class="folder-upload-text">Drag &amp; Drop dd.json or
+                      <button type="button" class="btn btn-sm btn-primary"
+                        (click)="openFileSelector()">Browse</button>
+                    </div>
+                  </ng-template>
+                </ngx-file-drop>
+                <div *ngIf="ddImportFile" class="mt-2">
+                  Selected: <strong>{{ ddImportFile.name }}</strong>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" [disabled]="!ddImportFile"
+                  data-dismiss="modal" (click)="importDataDictionary()">Import</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <nav class="row">
           <!--Nav Tabs-->

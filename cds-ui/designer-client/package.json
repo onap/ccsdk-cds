@@ -6,7 +6,9 @@
     "start": "npm run lint && ng serve --proxy-config proxy.conf.json && ng build --prod --aot ",
     "build": "npm run lint && ng build --prod --aot ",
     "build:local": "ng build --prod --aot",
+    "serve": "NODE_OPTIONS=--openssl-legacy-provider ng serve --proxy-config proxy.conf.json --port 4200",
     "test": "ng test",
+    "test:e2e:pw": "npx playwright test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "sonar": "sonar-scanner"
@@ -57,6 +59,7 @@
     "@angular/compiler-cli": "~8.2.14",
     "@angular/language-service": "~8.2.9",
     "@babel/compat-data": "7.8.0",
+    "@playwright/test": "^1.59.1",
     "@types/backbone": "^1.4.1",
     "@types/datatables.net": "^1.10.18",
     "@types/jasmine": "~3.3.8",

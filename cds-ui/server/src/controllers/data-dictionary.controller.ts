@@ -153,4 +153,17 @@ export class DataDictionaryController {
     return await this.rdservice.getResourceDictionaryByType(type);
   }
 
+  @post('/resourcedictionary/definition-bulk', {
+    responses: {
+      '200': {
+        content: { 'application/json': {} }
+      }
+    },
+  })
+  async definitionBulk(@requestBody({
+    content: { 'application/json': { schema: { type: 'array' } } },
+  }) entries: JSON): Promise<any> {
+    return await this.rdservice.definitionBulk(entries);
+  }
+
 }

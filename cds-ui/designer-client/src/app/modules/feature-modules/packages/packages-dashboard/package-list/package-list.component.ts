@@ -70,6 +70,6 @@ export class PackageListComponent implements OnInit {
         }, err => {
             this.toastService.error('Error has occured during deleting package ' + err.message);
         });
-
     }
+
 }

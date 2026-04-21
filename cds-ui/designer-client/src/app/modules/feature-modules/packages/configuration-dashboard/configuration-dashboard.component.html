@@ -733,12 +733,12 @@
                             </button>
 
 
-                            <button class="btn btn-sm btn-deploy mb2" (click)="deployCurrentPackage()"
+                            <button class="btn btn-sm btn-deploy mb-2" (click)="deployCurrentPackage()"
                                     [disabled]="!isMetadataValid"
                                     [title]="isMetadataValid ? 'Deploy package' : 'Fill in all required metadata fields before deploying'"><i
                                     class="fa fa-play-circle" aria-hidden="true"></i> Deploy
                             </button>
-                            <button class="btn btn-sm btn-execute ml-1" (click)="goToExecute()"
+                            <button class="btn btn-sm btn-execute" (click)="goToExecute()"
                                     title="Execute this blueprint">
                                 <i class="fa fa-bolt" aria-hidden="true"></i> Execute
                             </button>

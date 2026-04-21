@@ -36,6 +36,9 @@ import { PackageCreationService } from './package-creation.service';
 import { ComponentCanDeactivate } from '../../../../common/core/canDactivate/ComponentCanDeactivate';
 import { DesignerStore } from '../designer/designer.store';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { mapBlueprintError } from '../../../../common/core/services/blueprint-error-handler';
+import { NgxFileDropEntry, FileSystemFileEntry } from 'ngx-file-drop';
+declare var $: any;
 
 
 @Component({
@@ -80,6 +83,9 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
     elementRef: ElementRef;
     versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     metadataClasses = 'nav-item nav-link active complete';
+    lifecycle = { ddImported: false, enriched: false, published: false, enrichError: '' };
+    ddImportFile: File = null;
+    private enrichedBlob: Blob = null;
     private cbaPackage: CBAPackage;
 
     ngOnInit() {
@@ -142,7 +148,8 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
                             this.router.navigate(['/packages/package/' + id]);
                         }
                     }, error => {
-                        this.toastService.error('Error occurred during save: ' + error.message);
+                        const mapped = mapBlueprintError(error);
+                        this.toastService.error(mapped.suggestion, mapped.title, { timeOut: 8000, closeButton: true });
                         console.log('Error -' + error.message);
                         this.ngxService.stop();
                     }, () => {
@@ -160,6 +167,81 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
 
     }
 
+
+    openDDImportModal() {
+        this.ddImportFile = null;
+        ($('#ddImportModal') as any).modal('show');
+    }
+
+    onDDFileDrop(files: NgxFileDropEntry[]) {
+        if (files.length > 0 && files[0].fileEntry.isFile) {
+            (files[0].fileEntry as FileSystemFileEntry).file((f: File) => { this.ddImportFile = f; });
+        }
+    }
+
+    importDataDictionary() {
+        if (!this.ddImportFile) { return; }
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+            try {
+                const entries = JSON.parse(e.target.result);
+                this.packageCreationService.importDataDictionary(entries).subscribe(
+                    () => {
+                        this.lifecycle.ddImported = true;
+                        this.toastService.success('Data dictionary imported — ' + entries.length + ' entries registered.');
+                    },
+                    err => this.toastService.error(
+                        'DD import failed: check the JSON format and try again.', 'Import failed', { timeOut: 8000 })
+                );
+            } catch (err) {
+                this.toastService.error('Invalid JSON file. Please select a valid dd.json.', 'Import failed', { timeOut: 8000 });
+            }
+        };
+        reader.readAsText(this.ddImportFile);
+    }
+
+    enrichCurrentPackage() {
+        this.ngxService.start();
+        this.lifecycle.enrichError = '';
+        FilesContent.clear();
+        this.cbaPackage = PackageCreationModes.mapModeType(this.cbaPackage);
+        this.cbaPackage.metaData = PackageCreationModes.setEntryPoint(this.cbaPackage.metaData);
+        PackageCreationBuilder.getCreationMode(this.cbaPackage).execute(this.cbaPackage, this.packageCreationUtils);
+        this.filesData.push(this.folder.TREE_DATA);
+        this.packageCreationService.enrichCurrentPackage().then(obs$ => {
+            obs$.subscribe(
+                (blob: Blob) => {
+                    this.enrichedBlob = blob;
+                    this.lifecycle.enriched = true;
+                    this.toastService.success('Blueprint enriched successfully. Ready to publish.');
+                    this.ngxService.stop();
+                },
+                err => {
+                    const mapped = mapBlueprintError(err);
+                    this.lifecycle.enrichError = mapped.suggestion;
+                    this.toastService.error(mapped.suggestion, mapped.title, { timeOut: 10000, closeButton: true });
+                    this.ngxService.stop();
+                }
+            );
+        });
+    }
+
+    publishCurrentPackage() {
+        if (!this.enrichedBlob) { return; }
+        this.ngxService.start();
+        this.packageCreationService.deploy(this.enrichedBlob).subscribe(
+            () => {
+                this.lifecycle.published = true;
+                this.toastService.success('Blueprint published and ready for use in SO workflows.');
+                this.ngxService.stop();
+            },
+            err => {
+                this.toastService.error(
+                    'Publish failed. The blueprint processor rejected the enriched CBA.', 'Publish failed', { timeOut: 8000 });
+                this.ngxService.stop();
+            }
+        );
+    }
 
     goBackToDashBorad() {
         this.router.navigate(['/packages']);

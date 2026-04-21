@@ -106,6 +106,10 @@ export class PackageCreationService {
         return formData;
     }
 
+    importDataDictionary(entries: any[]): Observable<any> {
+        return this.api.post(ResourceDictionaryURLs.definitionBulk, entries);
+    }
+
     getTemplateAndMapping(variables: string[]): Observable<ResourceDictionary[]> {
         return this.api.post(ResourceDictionaryURLs.searchResourceDictionaryByNames, variables);
     }

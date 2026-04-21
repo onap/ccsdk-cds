@@ -59,6 +59,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     fileToDelete: any = {};
     parserFactory: ParserFactory;
     selectedProps: Set<string>;
+    unmappedVars: string[] = [];
     resColumns: string[] = [
         'Required', 'Template Input',
         'name', 'Dictionary Name',
@@ -361,8 +362,27 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     textChanges(code: any, fileName: string) {
-        //  this.packageCreationStore.addTemplate(fileName, code);
-        // this.templateFileContent = code;
+        this.templateFileContent = code;
+        this.updateUnmappedVars();
+    }
+
+    updateUnmappedVars() {
+        const allVars = this.extractTemplateVars(this.templateFileContent, this.templateExt);
+        const mapped = new Set((this.mappingRes || []).map((m: any) => m.name));
+        this.unmappedVars = allVars.filter(v => !mapped.has(v));
+    }
+
+    private extractTemplateVars(content: string, ext: string): string[] {
+        if (!content) { return []; }
+        let matches: string[] = [];
+        if (ext === 'vtl') {
+            matches = (content.match(/\$\{?([A-Za-z_][A-Za-z0-9_\-]*)\}?/g) || [])
+                .map(m => m.replace(/^\$\{?/, '').replace(/\}$/, ''));
+        } else if (ext === 'j2') {
+            matches = (content.match(/\{\{\s*([A-Za-z_][A-Za-z0-9_\-]*)\s*\}\}/g) || [])
+                .map(m => m.replace(/\{\{\s*/, '').replace(/\s*\}\}/, '').trim());
+        }
+        return [...new Set(matches)];
     }
 
     public fileOver(event) {
@@ -416,6 +436,7 @@ export class TemplMappCreationComponent implements OnInit, OnDestroy, AfterViewI
                 this.mappingRes = this.convertDictionaryToMap(this.resourceDictionaryRes);
                 console.log(this.mappingRes);
                 this.rerender();
+                this.updateUnmappedVars();
                 if (this.resourceDictionaryRes && this.resourceDictionaryRes.length <= 0) {
                     message = 'No values for those attributes';
                 }
