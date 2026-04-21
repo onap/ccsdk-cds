@@ -1,29 +1,33 @@
 
 
+
 export const steps = [
     {
         anchorId: 'allTab',
-        content: 'Package list is where you get access to your all and most recent CBA packages.',
+        content: 'Package list shows all your CBA packages. Each package bundles the templates, mappings, and scripts ' +
+            'that CDS uses to automate day-2 operations on a network function.',
         title: 'Managing your CBA packages',
     },
-    // {
-    //     anchorId: 'search',
-    //     content: 'Search for Package by name, version, tags and type',
-    //     title: 'Search',
-    // },
-    // {
-    //     anchorId: 'tagFilter',
-    //     content: 'Filter Packages by tags',
-    //     title: 'Tag Filter',
-    // },
+    {
+        anchorId: 'search',
+        content: 'Search for Package by name, version, tags and type',
+        title: 'Search',
+    },
+    {
+        anchorId: 'tagFilter',
+        content: 'Filter Packages by tags',
+        title: 'Tag Filter',
+    },
     {
         anchorId: 'create',
-        content: 'Start creating a full CBA packages from built-in forms without programming.',
+        content: 'Start creating a new CBA package using the built-in wizard. ' +
+            'You\'ll define metadata, templates, mappings, and scripts step by step.',
         title: 'Create new package',
     },
     {
         anchorId: 'metadataTab',
-        content: 'It captures the model entities that compose the cba package name, version, description and searchable tags.',
+        content: 'Give your automation package a unique name (e.g. vRouter-day2) and version (e.g. 1.0.0). ' +
+            'Tags let operators search for packages on the dashboard.',
         title: 'Metadata Tab',
         route: 'packages/createPackage'
     },
@@ -55,7 +59,8 @@ export const steps = [
     // Template & Mapping
     {
         anchorId: 'tm-templateTab',
-        content: 'A template is an artifact, and uses Modeling Concepts#artifact-mapping-resource and artifact-template-velocity. ',
+        content: 'A template is the configuration payload CDS sends to the device — a NETCONF RPC or REST body. ' +
+            'Mapping links each template variable to a Resource Dictionary entry that CDS resolves at runtime.',
         title: 'Template & Mapping',
         stepId: 'tm-templateTab'
     },
@@ -95,7 +100,8 @@ export const steps = [
     // Script
     {
         anchorId: 'st-scriptsTab',
-        content: 'It is Kotlin/Python scripts that allows the execution of a sequence of instructions as part of CDS workflow execution.',
+        content: 'Upload Kotlin or Python scripts that implement your workflow logic. ' +
+            'Each script must implement a CDS component interface (e.g. ComponentFunctionScriptingService).',
         title: 'Scripts',
         stepId: 'st-scriptsTab'
     },
@@ -107,7 +113,8 @@ export const steps = [
     // DSL
     {
         anchorId: 'dslTab',
-        content: 'Interaction with external systems is made dynamic, removing development cycle to support new endpoint.',
+        content: 'DSL Properties define named connections to external systems (AAI, SDNC, Netconf). ' +
+            'Reference these names inside your templates and workflow definitions.',
         title: 'External Systems support',
         stepId: 'dslTab'
     },

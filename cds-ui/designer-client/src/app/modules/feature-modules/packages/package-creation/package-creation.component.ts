@@ -106,7 +106,9 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
     }
 
     openTourGuide(step: string) {
-        // this.tourService.goto(step);
+        if (this.tourService.currentStep && this.tourService.currentStep.anchorId !== step) {
+            this.tourService.goto(step);
+        }
     }
 
     saveBluePrint() {
