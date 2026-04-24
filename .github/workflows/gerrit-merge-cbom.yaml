@@ -207,7 +207,7 @@ jobs:
       - name: 'Output SHA1 sum of password'
         if: steps.check-pom-xml.outputs.exists == 'true'
         env:
-          NEXUS_PASSWORD: $NEXUS_PASSWORD
+          NEXUS_PASSWORD: ${{ env.NEXUS_PASSWORD }}
         run: |
           # Output SHA1 sum of password
           VALUE_SHA1=$(printf '%s' "$NEXUS_PASSWORD" | shasum -a 1 | awk '{print $1}')
