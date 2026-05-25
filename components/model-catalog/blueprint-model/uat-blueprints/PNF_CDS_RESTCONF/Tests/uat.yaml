@@ -157,7 +157,7 @@ external-services:
     expectations:
       - request:
           method: GET
-          path: [ /aai/v22/network/pnfs/pnf, *pnfId]
+          path: [/aai/v22/network/pnfs/pnf, *pnfId]
           headers:
             Accept: application/json
         response:
@@ -170,13 +170,13 @@ external-services:
     expectations:
       - request:
           method: PUT
-          path: &configUri [ /restconf/config, &nodeIdentifier [network-topology:network-topology/topology/topology-netconf/node, *pnfId]]
+          path: &configUri [/restconf/config, &nodeIdentifier [network-topology:network-topology/topology/topology-netconf/node, *pnfId]]
           headers:
             Content-Type: application/json
           body:
             node:
               - node-id: *pnfId
-                netconf-node-topology:protocol: { name: TLS }
+                netconf-node-topology:protocol: {name: TLS}
                 netconf-node-topology:host: *pnfAddress
                 netconf-node-topology:key-based:
                   username: netconf
@@ -188,10 +188,10 @@ external-services:
           status: 201
       - request:
           method: GET
-          path: [ /restconf/operational, *nodeIdentifier]
+          path: [/restconf/operational, *nodeIdentifier]
         response:
           body:
-            node: [ { netconf-node-topology:connection-status: connected }]
+            node: [{netconf-node-topology:connection-status: connected}]
       - request:
           method: GET
           path: [*configUri, &configletResourcePath yang-ext:mount/mynetconf:netconflist]
@@ -209,15 +209,15 @@ external-services:
                 - edit-id: edit1
                   operation: merge
                   target: /
-                  value: { netconflist: { netconf: [ { netconf-id: "10", netconf-param: "1000" }]}}
+                  value: {netconflist: {netconf: [{netconf-id: "10", netconf-param: "1000"}]}}
                 - edit-id: edit2
                   operation: merge
                   target: /
-                  value: { netconflist: { netconf: [ { netconf-id: "20", netconf-param: "2000" }]}}
+                  value: {netconflist: {netconf: [{netconf-id: "20", netconf-param: "2000"}]}}
                 - edit-id: edit3
                   operation: merge
                   target: /
-                  value: { netconflist: { netconf: [ { netconf-id: "30", netconf-param: "3000" }]}}
+                  value: {netconflist: {netconf: [{netconf-id: "30", netconf-param: "3000"}]}}
         response:
           body:
             ietf-yang-patch:yang-patch-status:
@@ -312,7 +312,7 @@ external-services:
           headers:
             Content-Type: application/yang.patch-status+json
           body:
-            { ietf-yang-patch:yang-patch-status: {patch-id: patch-1, ok: [ ] } }
+            {ietf-yang-patch:yang-patch-status: {patch-id: patch-1, ok: []}}
         times: 2
       - request:
           method: GET

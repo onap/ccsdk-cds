@@ -1,6 +1,6 @@
 version: 1
 
-disable_existing_loggers: True
+disable_existing_loggers: true
 
 formatters:
     mdcFormatter:
@@ -18,4 +18,3 @@ formatters:
 loglevel: info
 logfilesize: 1048576
 rollovercount: 5
-
