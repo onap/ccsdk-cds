@@ -10,4 +10,4 @@ all:
     ansible_ssh_user: "{{ username }}"
     ansible_ssh_pass: "{{ password }}"
     ansible_connection: netconf
-    host_key_checking: False
+    host_key_checking: false
