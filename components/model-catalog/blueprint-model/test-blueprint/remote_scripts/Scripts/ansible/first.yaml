@@ -1,9 +1,9 @@
 ---
 - name: Get Device Running Config
   hosts: all
-  gather_facts: no
+  gather_facts: false
   connection: local
-  any_errors_fatal: True
+  any_errors_fatal: true
   serial: 5
 
   tasks:

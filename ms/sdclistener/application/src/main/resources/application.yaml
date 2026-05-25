@@ -11,7 +11,7 @@ listenerservice:
     consumerId: ${consumerId:cds-id-local}
     keyStorePassword: ${keyStorePassword}
     keyStorePath: ${keyStorePath}
-    activateServerTLSAuth : ${activateServerTLSAuth:false}
+    activateServerTLSAuth: ${activateServerTLSAuth:false}
     isUseHttpsWithSDC: ${isUseHttpsWithSDC:true}
     archivePath: ${archivePath:/opt/app/onap/cds-sdc-listener/}
     grpcAddress: ${grpcAddress:localhost}
@@ -28,8 +28,6 @@ server:
 spring:
   main:
     web-environment: ${sprintWebListenerEnabled:true}
-
-
 
 cdslistener:
   healthcheck:
