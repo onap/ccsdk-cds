@@ -27,28 +27,28 @@ class NetconfMessageUtilsTest {
     @Test
     fun `test getConfig with all parameters present`() {
         val outcome = NetconfMessageUtils.getConfig("customMessageId", "customConfigType", "customFilterContent")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/getConfig-response-all-parameters.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/getConfig-response-all-parameters.xml").trim()
         assertEquals("getConfig return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test get operational`() {
         val outcome = NetconfMessageUtils.get("customMessageId", "customConfigType")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/get-response.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/get-response.xml").trim()
         assertEquals("get return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test getConfig with filterContent parameter null`() {
         val outcome = NetconfMessageUtils.getConfig("customMessageId", "customConfigType", null)
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/getConfig-response-filterContent-null.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/getConfig-response-filterContent-null.xml").trim()
         assertEquals("getConfig return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test doWrappedRpc`() {
         val outcome = NetconfMessageUtils.doWrappedRpc("customMessageId", "customRequest")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/doWrappedRpc-response.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/doWrappedRpc-response.xml").trim()
         assertEquals("doWrappedRpc return was not correct", expectation, outcome)
     }
 
@@ -58,7 +58,7 @@ class NetconfMessageUtilsTest {
             "customMessageId", "customConfigType", "customDefaultOperation",
             "customNewConfiguration"
         )
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/editConfig-response-all-parameters.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/editConfig-response-all-parameters.xml").trim()
         assertEquals("editConfig return was not correct", expectation, outcome)
     }
 
@@ -68,14 +68,14 @@ class NetconfMessageUtilsTest {
             "customMessageId", "customConfigType", null,
             "customNewConfiguration"
         )
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/editConfig-response-defaultOperation-null.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/editConfig-response-defaultOperation-null.xml").trim()
         assertEquals("editConfig return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test validate`() {
         val outcome = NetconfMessageUtils.validate("customMessageId", "customConfigType")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/validate-response.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/validate-response.xml").trim()
         assertEquals("validate return was not correct", expectation, outcome)
     }
 
@@ -97,7 +97,7 @@ class NetconfMessageUtilsTest {
     fun `test commit with confirmed true, persistId empty and persist empty`() {
         val outcome = NetconfMessageUtils.commit("customMessageId", true, 1, "", "")
         val expectation =
-            JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-true-and-persistId-empty-and-persist-empty.xml")
+            JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-true-and-persistId-empty-and-persist-empty.xml").trim()
         assertEquals("commit return was not correct", expectation, outcome)
     }
 
@@ -105,7 +105,7 @@ class NetconfMessageUtilsTest {
     fun `test commit with confirmed false, persistId non-empty and persist empty`() {
         val outcome = NetconfMessageUtils.commit("customMessageId", false, 1, "", "customPersistId")
         val expectation =
-            JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-false-and-persistId-empty-and-persist-not-empty.xml")
+            JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-false-and-persistId-empty-and-persist-not-empty.xml").trim()
         assertEquals("commit return was not correct", expectation, outcome)
     }
 
@@ -113,35 +113,35 @@ class NetconfMessageUtilsTest {
     fun `test commit with confirmed false, persistId empty and persist non-empty`() {
         val outcome = NetconfMessageUtils.commit("customMessageId", false, 1, "customPersist", "")
         val expectation =
-            JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-false-and-persistId-not-empty-and-persist-empty.xml")
+            JacksonUtils.getClassPathFileContent("netconf-messages/commit-response-confirmed-false-and-persistId-not-empty-and-persist-empty.xml").trim()
         assertEquals("commit return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test cancelCommit with all parameters not empty`() {
         val outcome = NetconfMessageUtils.cancelCommit("customMessageId", "customPersistId")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/cancelCommit-response-all-parameters-not-empty.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/cancelCommit-response-all-parameters-not-empty.xml").trim()
         assertEquals("cancelCommit return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test cancelCommit with persistId empty`() {
         val outcome = NetconfMessageUtils.cancelCommit("customMessageId", "")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/cancelCommit-response-persistId-empty.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/cancelCommit-response-persistId-empty.xml").trim()
         assertEquals("cancelCommit return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test unlock with all parameters not empty`() {
         val outcome = NetconfMessageUtils.unlock("customMessageId", "customConfigType")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/unlock-response-all-parameters-not-empty.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/unlock-response-all-parameters-not-empty.xml").trim()
         assertEquals("unlock return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test deleteConfig with all parameters not empty`() {
         val outcome = NetconfMessageUtils.deleteConfig("customMessageId", "customConfigType")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/deleteConfig-response-all-parameters-not-empty.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/deleteConfig-response-all-parameters-not-empty.xml").trim()
         assertEquals("deleteConfig return was not correct", expectation, outcome)
     }
 
@@ -155,28 +155,28 @@ class NetconfMessageUtilsTest {
     @Test
     fun `test discardChanges with all parameters not empty`() {
         val outcome = NetconfMessageUtils.discardChanges("customMessageId")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/discardChanges-response-all-parameters-not-empty.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/discardChanges-response-all-parameters-not-empty.xml").trim()
         assertEquals("discardChanges return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test lock with all parameters not empty`() {
         val outcome = NetconfMessageUtils.lock("customMessageId", "customConfigType")
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/lock-response-all-parameters-not-empty.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/lock-response-all-parameters-not-empty.xml").trim()
         assertEquals("lock return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test closeSession with force true`() {
         val outcome = NetconfMessageUtils.closeSession("customMessageId", true)
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/closeSession-response-force-true.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/closeSession-response-force-true.xml").trim()
         assertEquals("closeSession return was not correct", expectation, outcome)
     }
 
     @Test
     fun `test closeSession with force false`() {
         val outcome = NetconfMessageUtils.closeSession("customMessageId", false)
-        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/closeSession-response-force-false.xml")
+        val expectation = JacksonUtils.getClassPathFileContent("netconf-messages/closeSession-response-force-false.xml").trim()
         assertEquals("closeSession return was not correct", expectation, outcome)
     }
 

@@ -39,7 +39,7 @@ class BluePrintNatsServiceTest {
                 "type" : "${NatsLibConstants.TYPE_TOKEN_AUTH}",
                 "host" : "nats://localhost:4222",
                 "token" : "tokenAuth"
-            }            
+            }
         """.trimIndent()
 
         val bluePrintNatsLibPropertyService = BluePrintNatsLibPropertyService(mockk())
@@ -62,7 +62,7 @@ class BluePrintNatsServiceTest {
         val configuration = """{
                 "type" : "${NatsLibConstants.TYPE_TLS_AUTH}",
                 "host" : "nats://localhost:4222"
-            }            
+            }
         """.trimIndent()
 
         val bluePrintNatsLibPropertyService = BluePrintNatsLibPropertyService(mockk())

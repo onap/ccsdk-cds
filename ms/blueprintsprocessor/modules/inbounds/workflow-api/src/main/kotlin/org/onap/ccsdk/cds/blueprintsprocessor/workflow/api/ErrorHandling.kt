@@ -30,6 +30,6 @@ object WorkflowApiHttpErrorCodes {
 
 object WorkflowGrpcErrorCodes {
     init {
-        // Register GrpcErrorCodes 
+        // Register GrpcErrorCodes
     }
 }

@@ -74,12 +74,12 @@ class ComponentNetconfExecutorTest {
             val assignmentParams = """{
                 "ipAddress" : "127.0.0.1",
                 "hostName" : "vnf-host"
-                }                
+                }
             """.trimIndent()
 
             val json = """{
                 "hostname" : "127.0.0.1"
-                }                
+                } 
             """.trimIndent()
 
             bluePrintRuntimeService.assignInputs(json.asJsonType())

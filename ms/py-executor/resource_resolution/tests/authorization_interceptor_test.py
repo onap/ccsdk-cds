@@ -26,7 +26,7 @@ def test_resource_resolution_auth_token_interceptor():
      - Checks if it's correctly set default value.
      - Checks if it's correctly set passed values.
      - Checks if it's correctly checked if all header characters are lowercase.
-     - Checks if continuation function is called with headers setted 
+     - Checks if continuation function is called with headers setted
     """
     interceptor: AuthTokenInterceptor = AuthTokenInterceptor("test_token", header="header")
     assert interceptor.token == "test_token"

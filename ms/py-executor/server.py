@@ -116,10 +116,9 @@ if __name__ == '__main__':
                         format=logging_formater)
     console = logging.handlers.RotatingFileHandler(log_file_name, maxBytes=log_config["logfilesize"],
                                                    backupCount=log_config["rollovercount"])
-    
+
     console.setLevel(loglevel)
     formatter = logging.Formatter(logging_formater)
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
     serve(configuration)
-

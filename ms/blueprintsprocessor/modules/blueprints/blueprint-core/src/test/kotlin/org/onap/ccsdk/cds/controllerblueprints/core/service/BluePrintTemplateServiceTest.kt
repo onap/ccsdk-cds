@@ -69,7 +69,7 @@ class BluePrintTemplateServiceTest {
     fun `Unresolved variable should be kept as-is - standalone velocity template mesh test`() {
         runBlocking {
             val template =
-                JacksonUtils.getClassPathFileContent("templates/default-variable-value-velocity-template.vtl")
+                JacksonUtils.getClassPathFileContent("templates/default-variable-value-velocity-template.vtl").trim()
             val json = JacksonUtils.getClassPathFileContent("templates/default-variable-value-data.json")
 
             val content = BluePrintVelocityTemplateService.generateContent(template, json)

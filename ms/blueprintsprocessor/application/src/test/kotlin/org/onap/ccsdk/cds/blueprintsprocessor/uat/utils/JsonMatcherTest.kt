@@ -10,12 +10,12 @@ class JsonMatcherTest {
         val expected = """
          {
             "a": "b"
-         }   
+         }
         """.trimIndent()
         val actual = """
          {
             "a": "b"
-         }   
+         }
         """.trimIndent()
         assertTrue(JsonMatcher(expected).matches(actual))
     }
@@ -25,12 +25,12 @@ class JsonMatcherTest {
         val expected = """
          {
             "a": "b"
-         }   
+         }
         """.trimIndent()
         val actual = """
          {
             "a": "c"
-         }   
+         }
         """.trimIndent()
         assertFalse(JsonMatcher(expected).matches(actual))
     }
@@ -40,13 +40,13 @@ class JsonMatcherTest {
         val expected = """
          {
             "a": "b"
-         }   
+         }
         """.trimIndent()
         val actual = """
          {
             "a": "b",
             "c": "d"
-         }   
+         }
         """.trimIndent()
         assertTrue(JsonMatcher(expected).matches(actual))
 
