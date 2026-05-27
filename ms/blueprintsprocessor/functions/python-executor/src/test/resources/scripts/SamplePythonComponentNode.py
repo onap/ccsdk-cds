@@ -11,4 +11,3 @@ class SamplePythonComponentNode(AbstractPythonComponentFunction):
     def recover(self, runtime_exception, execution_request):
         print("Recovering calling..." + PROPERTY_BLUEPRINT_BASE_PATH)
         return None
-

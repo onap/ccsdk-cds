@@ -34,7 +34,7 @@ class CommandExecutorServer(CommandExecutor_pb2_grpc.CommandExecutorServiceServi
         self.logger.info("{} - Received uploadBlueprint request".format(blueprint_name_version_uuid), extra=extra)
         handler = CommandExecutorHandler(request)
         return handler.uploadBlueprint(request)
-        
+
     def prepareEnv(self, request, context):
         blueprint_id = utils.blueprint_name_version_uuid(request)
         extra = utils.getExtraLogData(request)

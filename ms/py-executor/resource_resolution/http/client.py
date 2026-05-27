@@ -26,7 +26,7 @@ class Client:
         self, server_address: str, server_port: int, auth_user: str = None, auth_pass: str = None, use_ssl: bool = False
     ) -> None:
         """HTTP client class initialization.
-        
+
         Args:
             server_address (str): HTTP server address
             server_port (int): HTTP server port
@@ -46,7 +46,7 @@ class Client:
         """Authorization data tuple or None.
 
         Returns None if not both auth_user and auth_pass values are set.
-        
+
         Returns:
             Optional[Tuple[str, str]]: Authorization tuple (auth_user, auth_pass) or None
         """
@@ -57,7 +57,7 @@ class Client:
     @property
     def protocol(self) -> str:
         """Protocol which is going to be used for request call.
-        
+
         Returns:
             str: http or https
         """
@@ -68,7 +68,7 @@ class Client:
     @property
     def url(self) -> str:
         """Url to call requests.
-        
+
         Returns:
             str: Url string
         """

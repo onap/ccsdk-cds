@@ -17,13 +17,13 @@ error.catalog.errorDefinitionDir=/opt/app/onap/config
 
 - HTTP Error Exception
 ```
-errorCatalogException: ErrorCatalogException = httpProcessorException(ErrorCatalogCodes.ERROR_TYPE, 
+errorCatalogException: ErrorCatalogException = httpProcessorException(ErrorCatalogCodes.ERROR_TYPE,
 "Error message here...")
 ```
 
 - GRPC Error Exception
 ```
-errorCatalogException: ErrorCatalogException = grpcProcessorException(ErrorCatalogCodes.ERROR_TYPE, 
+errorCatalogException: ErrorCatalogException = grpcProcessorException(ErrorCatalogCodes.ERROR_TYPE,
 "Error message here...")
 ```
 

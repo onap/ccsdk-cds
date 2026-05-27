@@ -157,13 +157,13 @@ if __name__ == "__main__":
     )
     r.store_template(
         blueprint_name="blueprintName",
-        blueprint_version="1.0.0", 
+        blueprint_version="1.0.0",
         artifact_name="test",
-        resolution_key="test", 
+        resolution_key="test",
         result="test")
     template = r.retrieve_template(
         blueprint_name="blueprintName",
-        blueprint_version="1.0.0", 
+        blueprint_version="1.0.0",
         artifact_name="test",
         resolution_key="test",
     )
@@ -172,7 +172,7 @@ if __name__ == "__main__":
     template.store()
     another_template = r.retrieve_template(
         blueprint_name="blueprintName",
-        blueprint_version="1.0.0", 
+        blueprint_version="1.0.0",
         artifact_name="test",
         resolution_key="test",
     )

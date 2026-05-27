@@ -182,7 +182,7 @@ class BluePrintGrpcLibPropertyServiceTest {
             "trustCertCollection" : "server1.pem",
             "clientCertChain" : "server1.key",
             "clientPrivateKey" : "ca.pem"
-            }           
+            }
         """.trimIndent()
         val jsonProperties = bluePrintGrpcLibPropertyService
             .grpcClientProperties(configDsl.jsonAsJsonType()) as TLSAuthGrpcClientProperties
@@ -205,7 +205,7 @@ class BluePrintGrpcLibPropertyServiceTest {
             "certChain" : "server1.pem",
             "privateKey" : "server1.key",
             "trustCertCollection" : "ca.pem"
-            }           
+            }
         """.trimIndent()
         val jsonProperties = bluePrintGrpcLibPropertyService
             .grpcServerProperties(configDsl.jsonAsJsonType()) as TLSAuthGrpcServerProperties

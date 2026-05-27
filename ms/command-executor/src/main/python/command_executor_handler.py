@@ -108,7 +108,7 @@ class CommandExecutorHandler():
     def err_exit(self, msg):
         self.logger.error(msg, extra=self.extra)
         return utils.build_ret_data(False, error=msg)
-    
+
     def is_valid_archive_type(self, archiveType):
         return archiveType=="CBA_ZIP" or archiveType=="CBA_GZIP"
 
@@ -126,7 +126,7 @@ class CommandExecutorHandler():
         if not self.is_valid_archive_type(archive_type):
             self.prometheus_counter.labels(self.PROMETHEUS_METRICS_UPLOAD_CBA_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
             return utils.build_grpc_blueprint_upload_response(self.request_id, self.sub_request_id, False, ["Archive type {} is not valid.".format(archive_type)])
-        
+
         # create the BP dir self.blueprint_dir
         try:
             os.makedirs(name=self.blueprint_dir, mode=0o755, exist_ok=True)
@@ -139,7 +139,7 @@ class CommandExecutorHandler():
             self.logger.info("Extracting ZIP data to dir {}".format(self.blueprint_dir), extra=self.extra)
             try:
                 with ZipFile(compressed_cba_stream,'r') as zipfile:
-                    zipfile.extractall(self.blueprint_dir)                    
+                    zipfile.extractall(self.blueprint_dir)
                 self.logger.info("Done extracting ZIP data to dir {}".format(self.blueprint_dir), extra=self.extra)
             except (IOError, zipfile.error) as e:
                 self.prometheus_counter.labels(self.PROMETHEUS_METRICS_UPLOAD_CBA_LABEL, self.blueprint_name, self.blueprint_version, None).inc()
@@ -226,7 +226,7 @@ class CommandExecutorHandler():
         script_err_msg = []
 
         self.logger.info("execute_command request {}".format(request), extra=self.extra)
-        
+
         #Get the script name to be used for prometheus metrics
         #Command looks like this: python <script name> <parameter>
         command_array = request.command.split(" ")
