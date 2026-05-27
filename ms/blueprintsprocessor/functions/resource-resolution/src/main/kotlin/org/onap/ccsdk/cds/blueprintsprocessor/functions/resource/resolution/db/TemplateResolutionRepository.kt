@@ -46,8 +46,8 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
 
     @Query(
         value = """
-        SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key 
-             AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
+        SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key
+             AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
              AND artifact_name = :artifactName AND occurrence = :occurrence
              ORDER BY creation_date DESC LIMIT 1
         """,
@@ -63,9 +63,9 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
 
     @Query(
         value = """
-         SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key 
-            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
-            AND artifact_name = :artifactName 
+         SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key
+            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
+            AND artifact_name = :artifactName
             AND occurrence <=  :firstN
         """,
         nativeQuery = true
@@ -80,14 +80,14 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
 
     @Query(
         value = """
-        SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key 
-            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
-            AND artifact_name = :artifactName 
-            AND occurrence > ( 
-                select max(occurrence) - :lastN from RESOURCE_RESOLUTION 
-                WHERE resolution_key = :key 
-                    AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
-                    AND artifact_name = :artifactName) 
+        SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key
+            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
+            AND artifact_name = :artifactName
+            AND occurrence > (
+                select max(occurrence) - :lastN from RESOURCE_RESOLUTION
+                WHERE resolution_key = :key
+                    AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
+                    AND artifact_name = :artifactName)
                     ORDER BY occurrence DESC, creation_date DESC
       """,
         nativeQuery = true
@@ -102,10 +102,10 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
 
     @Query(
         value = """
-        SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key 
-            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion 
-            AND artifact_name = :artifactName 
-            AND occurrence BETWEEN :begin AND :end 
+        SELECT * FROM TEMPLATE_RESOLUTION WHERE resolution_key = :key
+            AND blueprint_name = :blueprintName AND blueprint_version = :blueprintVersion
+            AND artifact_name = :artifactName
+            AND occurrence BETWEEN :begin AND :end
             ORDER BY occurrence DESC, creation_date DESC
        """,
         nativeQuery = true
