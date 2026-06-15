@@ -1,6 +1,6 @@
 # Prepare stage for multistage image build
 ## START OF STAGE0 ##
-FROM onap/ccsdk-alpine-j17-image:1.6.2 AS stage0
+FROM onap/ccsdk-alpine-j21-image:2.2.1 AS stage0
 USER root
 
 # add entrypoint
@@ -9,7 +9,7 @@ COPY *.sh /opt/app/onap/blueprints-processor/
 # add application
 COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
 
-ARG OTEL_AGENT_VERSION=2.25.0
+ARG OTEL_AGENT_VERSION=2.26.1
 
 RUN tar -xzf /source.tar.gz -C /tmp \
  && cp -rf /tmp/@project.build.finalName@/opt / \
@@ -26,7 +26,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
 
 
 ## This will create actual image
-FROM onap/ccsdk-alpine-j17-image:1.6.2
+FROM onap/ccsdk-alpine-j21-image:2.2.1
 USER root
 
 COPY --from=stage0 /opt /opt
