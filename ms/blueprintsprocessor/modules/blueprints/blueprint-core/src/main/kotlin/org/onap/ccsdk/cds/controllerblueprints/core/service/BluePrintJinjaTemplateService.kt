@@ -127,12 +127,32 @@ object BluePrintJinjaTemplateService {
         constructor(interpreter: JinjavaInterpreter) : super(interpreter)
         constructor(jinjava: Jinjava, context: Context, config: JinjavaConfig) : super(jinjava, context, config)
 
-        // Overriding actual getAsString method to return `context.currentNode.master.image` instead of empty string
+        private var lastUnresolvedExpression: String? = null
+
+        // 1. Catch the string here
+        override fun resolveELExpression(expression: String, lineNumber: Int): Any? {
+            val result = super.resolveELExpression(expression, lineNumber)
+            if (result == null) {
+                lastUnresolvedExpression = "{{ $expression }}"
+            } else {
+                lastUnresolvedExpression = null
+            }
+            return result
+        }
+
+        // 2. Use it here
         override fun getAsString(`object`: Any?): String {
-            return if (config.legacyOverrides.isUsePyishObjectMapper)
+            return if (config.legacyOverrides.isUsePyishObjectMapper) {
                 PyishObjectMapper.getAsUnquotedPyishString(`object`)
-            else
-                Objects.toString(`object`, context.currentNode.master.image)
+            } else {
+                if (`object` == null && lastUnresolvedExpression != null) {
+                    val fallback = lastUnresolvedExpression!!
+                    lastUnresolvedExpression = null
+                    fallback
+                } else {
+                    Objects.toString(`object`, "")
+                }
+            }
         }
     }
 }
