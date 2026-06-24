@@ -59,4 +59,6 @@ linkcheck_ignore = [
   # migration to lf-onap.atlassian.net; the old download URLs now 404
   r'https://wiki\.onap\.org/download/attachments/',
   r'https://wiki\.onap\.org/download/thumbnails/',
+  # The link checker cannot resolve the following links, but they are valid
+  r'https://asciinema.org/a/160247'
 ]
