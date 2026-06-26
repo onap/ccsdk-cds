@@ -16,6 +16,24 @@
       "message": "Keep this `pom` type entry and remove all others please. The purpose of the pom type is to set versions for more than one dep.\nSo this is doing exactly what you are doing here with far fewer lines of code",
       "revId": "a859b9a31c150b28f0a0953db662e69b314efb6b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76999e00_3cb2ceca",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-06-26T05:29:04Z",
+      "side": 1,
+      "message": "You can run `mvn dependency:tree \u003e output` for this version and `mvn dependency:tree \u003e output2` for the version that only has the `netty-bom` and then compare the output.\nBoth should be the same, unless some of the netty deps are actually not managed by `netty-bom`",
+      "parentUuid": "8f572cc3_cd909cee",
+      "revId": "a859b9a31c150b28f0a0953db662e69b314efb6b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     }
   ]
 }
