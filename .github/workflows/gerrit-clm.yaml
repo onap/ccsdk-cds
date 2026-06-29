@@ -4,7 +4,7 @@
 
 name: '🔐 Security Scans (CLM)'
 
-on:
+"on":
   schedule:
     # Intentionally scheduled at an odd minute letting GitHub's queue randomize the exact start.
     - cron: "37 0 * * 6"
