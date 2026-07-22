@@ -247,11 +247,24 @@ jobs:
             <mirrors>
               <mirror>
                 <id>onap-public</id>
-                <mirrorOf>*</mirrorOf>
+                <mirrorOf>external:*,!snapshots</mirrorOf>
                 <url>https://nexus.onap.org/content/groups/public/</url>
               </mirror>
             </mirrors>
             <profiles>
+              <profile>
+                <id>onap-settings</id>
+                <properties>
+                  <onap.nexus.url>https://nexus.onap.org</onap.nexus.url>
+                  <onap.nexus.rawrepo.baseurl.upload>https://nexus.onap.org/content/sites/raw</onap.nexus.rawrepo.baseurl.upload>
+                  <onap.nexus.rawrepo.baseurl.download>https://nexus.onap.org/service/local/repositories/raw/content</onap.nexus.rawrepo.baseurl.download>
+                  <onap.nexus.rawrepo.serverid>ecomp-raw</onap.nexus.rawrepo.serverid>
+                  <onap.nexus.dockerregistry.daily>nexus3.onap.org:10003</onap.nexus.dockerregistry.daily>
+                  <onap.nexus.dockerregistry.release>nexus3.onap.org:10002</onap.nexus.dockerregistry.release>
+                  <docker.pull.registry>nexus3.onap.org:10001</docker.pull.registry>
+                  <docker.push.registry>nexus3.onap.org:10003</docker.push.registry>
+                </properties>
+              </profile>
               <profile>
                 <id>onap-nexus</id>
                 <repositories>
@@ -259,21 +272,98 @@ jobs:
                     <id>onap-public</id>
                     <url>https://nexus.onap.org/content/groups/public/</url>
                     <releases><enabled>true</enabled></releases>
-                    <snapshots><enabled>true</enabled></snapshots>
+                    <snapshots><enabled>false</enabled></snapshots>
                   </repository>
                 </repositories>
                 <pluginRepositories>
                   <pluginRepository>
                     <id>onap-public</id>
                     <url>https://nexus.onap.org/content/groups/public/</url>
-                    <releases><enabled>true</enabled></releases>
-                    <snapshots><enabled>true</enabled></snapshots>
+                    <releases>
+                      <enabled>true</enabled>
+                      <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots><enabled>false</enabled></snapshots>
                   </pluginRepository>
                 </pluginRepositories>
               </profile>
+              <profile>
+                <id>releases</id>
+                <repositories>
+                  <repository>
+                    <id>releases</id>
+                    <name>releases</name>
+                    <url>https://nexus.onap.org/content/repositories/releases/</url>
+                    <releases>
+                      <enabled>true</enabled>
+                      <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots><enabled>false</enabled></snapshots>
+                  </repository>
+                </repositories>
+                <pluginRepositories>
+                  <pluginRepository>
+                    <id>releases</id>
+                    <name>releases</name>
+                    <url>https://nexus.onap.org/content/repositories/releases/</url>
+                    <releases>
+                      <enabled>true</enabled>
+                      <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots><enabled>false</enabled></snapshots>
+                  </pluginRepository>
+                </pluginRepositories>
+              </profile>
+              <profile>
+                <id>snapshots</id>
+                <repositories>
+                  <repository>
+                    <id>snapshots</id>
+                    <name>snapshots</name>
+                    <url>https://nexus.onap.org/content/repositories/snapshots/</url>
+                    <releases>
+                      <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                      <enabled>true</enabled>
+                      <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                  </repository>
+                </repositories>
+                <pluginRepositories>
+                  <pluginRepository>
+                    <id>snapshots</id>
+                    <name>snapshots</name>
+                    <url>https://nexus.onap.org/content/repositories/snapshots/</url>
+                    <releases>
+                      <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                      <enabled>true</enabled>
+                      <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                  </pluginRepository>
+                </pluginRepositories>
+              </profile>
+              <profile>
+                <id>local_m2</id>
+                <repositories>
+                  <repository>
+                    <id>local_m2</id>
+                    <name>local_m2</name>
+                    <url>file:///tmp/r</url>
+                    <releases><enabled>true</enabled></releases>
+                    <snapshots><enabled>true</enabled></snapshots>
+                  </repository>
+                </repositories>
+              </profile>
             </profiles>
             <activeProfiles>
+              <activeProfile>onap-settings</activeProfile>
               <activeProfile>onap-nexus</activeProfile>
+              <activeProfile>releases</activeProfile>
+              <activeProfile>snapshots</activeProfile>
+              <activeProfile>local_m2</activeProfile>
             </activeProfiles>
           </settings>
           EOF
