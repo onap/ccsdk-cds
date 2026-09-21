@@ -93,6 +93,10 @@ class BlueprintProcessorCatalogServiceImpl(
             }
         } catch (e: Exception) {
             if (deployFile.exists()) {
+                // Clean blueprint script cache
+                val cacheKey = BluePrintFileUtils
+                    .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, name, version))
+                cleanClassLoader(cacheKey)
                 deleteNBDir(deployFile.absolutePath)
             }
             throw BluePrintProcessorException(
@@ -111,6 +115,10 @@ class BlueprintProcessorCatalogServiceImpl(
             }
             if (!idFileExists) {
                 log.info("update (${deployFile.absolutePath}) folder with the current version")
+                // Clean blueprint script cache
+                val cacheKey = BluePrintFileUtils
+                    .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, name, version))
+                cleanClassLoader(cacheKey)
                 updateDeployFolder(name, version, cbaFile, deployFile)
             }
             log.info("cba file name($name), version($version) already present(${deployFile.absolutePath})")
