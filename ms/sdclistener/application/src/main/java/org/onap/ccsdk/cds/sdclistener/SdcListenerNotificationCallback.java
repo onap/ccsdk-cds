@@ -26,7 +26,7 @@ import org.onap.sdc.api.consumer.INotificationCallback;
 import org.onap.sdc.api.notification.IArtifactInfo;
 import org.onap.sdc.api.notification.INotificationData;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
-import org.onap.sdc.utils.DistributionStatusEnum;
+import org.onap.sdc.api.notification.DistributionStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 
-import static org.onap.sdc.utils.DistributionActionResultEnum.SUCCESS;
+import static org.onap.sdc.api.results.DistributionActionResultEnum.SUCCESS;
 
 @ConfigurationProperties("listenerservice")
 @Component
