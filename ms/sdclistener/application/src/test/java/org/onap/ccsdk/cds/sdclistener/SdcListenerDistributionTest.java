@@ -23,7 +23,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.onap.sdc.utils.DistributionActionResultEnum.SUCCESS;
+import static org.junit.Assert.assertTrue;
+import static org.onap.sdc.api.results.DistributionActionResultEnum.SUCCESS;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +48,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.zip.ZipFile;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.ConsumerGroupDescription;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -201,6 +203,7 @@ public class SdcListenerDistributionTest {
         assertEquals(1, UPLOADS.size());
         assertArrayEquals(cbaFromCsar(), UPLOADS.peek().getFileChunk().getChunk().toByteArray());
         assertEquals(SUCCESS, listenerDto.getDistributionClient().stop().getDistributionActionResult());
+        assertTrue(awaitConsumerGroupEmpty());
     }
 
     // The client consumes with auto.offset.reset=latest. Committing offset 0 for its group up front lets the
@@ -259,6 +262,23 @@ public class SdcListenerDistributionTest {
             }
         }
         return statuses;
+    }
+
+    // Shorter than the consumer session timeout, so only a consumer that leaves the group on stop() passes.
+    private static boolean awaitConsumerGroupEmpty() throws Exception {
+        long deadline = System.nanoTime() + Duration.ofSeconds(10).toNanos();
+        try (Admin admin =
+                Admin.create(Map.of(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBrokersAsString()))) {
+            while (System.nanoTime() < deadline) {
+                ConsumerGroupDescription group = admin.describeConsumerGroups(List.of(CONSUMER_GROUP)).describedGroups()
+                        .get(CONSUMER_GROUP).get();
+                if (group.members().isEmpty()) {
+                    return true;
+                }
+                Thread.sleep(100);
+            }
+        }
+        return false;
     }
 
     private static boolean isComponentDone(List<String> statuses) {

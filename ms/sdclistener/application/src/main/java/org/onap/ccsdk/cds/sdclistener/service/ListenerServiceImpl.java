@@ -56,8 +56,8 @@ import java.util.zip.ZipFile;
 
 import static java.lang.String.format;
 import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
-import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_ERROR;
-import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
+import static org.onap.sdc.api.notification.DistributionStatusEnum.COMPONENT_DONE_ERROR;
+import static org.onap.sdc.api.notification.DistributionStatusEnum.COMPONENT_DONE_OK;
 
 @Component
 @ConfigurationProperties("listenerservice")

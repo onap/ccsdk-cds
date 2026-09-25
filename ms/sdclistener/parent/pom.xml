@@ -39,7 +39,7 @@
         <powermock.version>1.7.4</powermock.version>
         <mockk.version>1.12.8</mockk.version>
         <mockkserver.version>5.5.1</mockkserver.version>
-        <sdc-distribution-client.version>2.0.0</sdc-distribution-client.version>
+        <sdc-distribution-client.version>2.3.0</sdc-distribution-client.version>
         <jmockit.version>1.49</jmockit.version>
         <reactorcore.version>3.2.6.RELEASE</reactorcore.version>
 
