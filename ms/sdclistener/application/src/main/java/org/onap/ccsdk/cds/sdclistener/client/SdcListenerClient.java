@@ -23,7 +23,7 @@ import org.onap.ccsdk.cds.sdclistener.exceptions.SdcListenerException;
 import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.results.IDistributionClientResult;
 import org.onap.sdc.impl.DistributionClientFactory;
-import org.onap.sdc.utils.DistributionActionResultEnum;
+import org.onap.sdc.api.results.DistributionActionResultEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

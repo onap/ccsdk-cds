@@ -30,7 +30,7 @@ import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.results.IDistributionClientResult;
 import org.onap.sdc.impl.DistributionClientFactory;
 import org.onap.sdc.impl.DistributionClientResultImpl;
-import org.onap.sdc.utils.DistributionActionResultEnum;
+import org.onap.sdc.api.results.DistributionActionResultEnum;
 
 public class SdcListenerClientTest {
 

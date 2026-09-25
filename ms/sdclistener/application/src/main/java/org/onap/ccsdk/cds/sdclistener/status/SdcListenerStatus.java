@@ -22,7 +22,7 @@ import org.onap.sdc.api.IDistributionClient;
 import org.onap.sdc.api.consumer.IComponentDoneStatusMessage;
 import org.onap.sdc.api.consumer.IDistributionStatusMessage;
 import org.onap.sdc.api.results.IDistributionClientResult;
-import org.onap.sdc.utils.DistributionStatusEnum;
+import org.onap.sdc.api.notification.DistributionStatusEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-import static org.onap.sdc.utils.DistributionActionResultEnum.SUCCESS;
+import static org.onap.sdc.api.results.DistributionActionResultEnum.SUCCESS;
 
 @Component
 @ConfigurationProperties("listenerservice")

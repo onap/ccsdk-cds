@@ -32,7 +32,7 @@ import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.handler.BluePrintProcesssorHandler;
 import org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus;
 import org.onap.sdc.api.results.IDistributionClientDownloadResult;
-import org.onap.sdc.utils.DistributionActionResultEnum;
+import org.onap.sdc.api.results.DistributionActionResultEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,7 +47,7 @@ import java.nio.file.Paths;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
-import static org.onap.sdc.utils.DistributionStatusEnum.COMPONENT_DONE_OK;
+import static org.onap.sdc.api.notification.DistributionStatusEnum.COMPONENT_DONE_OK;
 
 @RunWith(SpringRunner.class)
 @EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class, BluePrintProcesssorHandler.class,
