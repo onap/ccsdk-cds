@@ -42,11 +42,16 @@ open class BlueprintGRPCServer(
     @Value("\${blueprintsprocessor.grpcPort}")
     private val grpcPort: Int? = null
 
+    // Default to 4 MiB (4 * 1024 * 1024 bytes) when not configured
+    @Value("\${blueprintsprocessor.grpcMaxInboundMessageSize:4194304}")
+    private val grpcMaxInboundMessageSize: Int = 4194304
+
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         try {
             log.info("Starting Blueprint Processor GRPC Starting..")
             val server = ServerBuilder
                 .forPort(grpcPort!!)
+                .maxInboundMessageSize(grpcMaxInboundMessageSize)
                 .intercept(GrpcServerLoggingInterceptor())
                 .intercept(authInterceptor)
                 .addService(bluePrintProcessingGRPCHandler)
