@@ -1952,6 +1952,33 @@
     "JsonNode" : {
       "type" : "object",
       "properties" : {
+        "object" : {
+          "type" : "boolean"
+        },
+        "boolean" : {
+          "type" : "boolean"
+        },
+        "binary" : {
+          "type" : "boolean"
+        },
+        "bigDecimal" : {
+          "type" : "boolean"
+        },
+        "bigInteger" : {
+          "type" : "boolean"
+        },
+        "double" : {
+          "type" : "boolean"
+        },
+        "long" : {
+          "type" : "boolean"
+        },
+        "int" : {
+          "type" : "boolean"
+        },
+        "short" : {
+          "type" : "boolean"
+        },
         "valueNode" : {
           "type" : "boolean"
         },
@@ -1970,18 +1997,8 @@
         "floatingPointNumber" : {
           "type" : "boolean"
         },
-        "bigDecimal" : {
-          "type" : "boolean"
-        },
-        "bigInteger" : {
-          "type" : "boolean"
-        },
         "textual" : {
           "type" : "boolean"
-        },
-        "nodeType" : {
-          "type" : "string",
-          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
         },
         "array" : {
           "type" : "boolean"
@@ -1992,28 +2009,11 @@
         "float" : {
           "type" : "boolean"
         },
+        "nodeType" : {
+          "type" : "string",
+          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
+        },
         "number" : {
-          "type" : "boolean"
-        },
-        "boolean" : {
-          "type" : "boolean"
-        },
-        "double" : {
-          "type" : "boolean"
-        },
-        "int" : {
-          "type" : "boolean"
-        },
-        "long" : {
-          "type" : "boolean"
-        },
-        "short" : {
-          "type" : "boolean"
-        },
-        "binary" : {
-          "type" : "boolean"
-        },
-        "object" : {
           "type" : "boolean"
         }
       }
@@ -2152,6 +2152,33 @@
           "type" : "string",
           "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
         },
+        "object" : {
+          "type" : "boolean"
+        },
+        "boolean" : {
+          "type" : "boolean"
+        },
+        "binary" : {
+          "type" : "boolean"
+        },
+        "bigDecimal" : {
+          "type" : "boolean"
+        },
+        "bigInteger" : {
+          "type" : "boolean"
+        },
+        "double" : {
+          "type" : "boolean"
+        },
+        "long" : {
+          "type" : "boolean"
+        },
+        "int" : {
+          "type" : "boolean"
+        },
+        "short" : {
+          "type" : "boolean"
+        },
         "valueNode" : {
           "type" : "boolean"
         },
@@ -2170,12 +2197,6 @@
         "floatingPointNumber" : {
           "type" : "boolean"
         },
-        "bigDecimal" : {
-          "type" : "boolean"
-        },
-        "bigInteger" : {
-          "type" : "boolean"
-        },
         "textual" : {
           "type" : "boolean"
         },
@@ -2189,27 +2210,6 @@
           "type" : "boolean"
         },
         "number" : {
-          "type" : "boolean"
-        },
-        "boolean" : {
-          "type" : "boolean"
-        },
-        "double" : {
-          "type" : "boolean"
-        },
-        "int" : {
-          "type" : "boolean"
-        },
-        "long" : {
-          "type" : "boolean"
-        },
-        "short" : {
-          "type" : "boolean"
-        },
-        "binary" : {
-          "type" : "boolean"
-        },
-        "object" : {
           "type" : "boolean"
         }
       }
@@ -2258,6 +2258,9 @@
         "last" : {
           "type" : "boolean"
         },
+        "first" : {
+          "type" : "boolean"
+        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -2274,9 +2277,6 @@
         },
         "sort" : {
           "$ref" : "#/definitions/Sort"
-        },
-        "first" : {
-          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -2304,6 +2304,9 @@
         "last" : {
           "type" : "boolean"
         },
+        "first" : {
+          "type" : "boolean"
+        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -2321,9 +2324,6 @@
         "sort" : {
           "$ref" : "#/definitions/Sort"
         },
-        "first" : {
-          "type" : "boolean"
-        },
         "empty" : {
           "type" : "boolean"
         }
@@ -2332,10 +2332,10 @@
     "Pageable" : {
       "type" : "object",
       "properties" : {
-        "unpaged" : {
+        "paged" : {
           "type" : "boolean"
         },
-        "paged" : {
+        "unpaged" : {
           "type" : "boolean"
         },
         "pageSize" : {
@@ -2618,10 +2618,10 @@
         "unsorted" : {
           "type" : "boolean"
         },
-        "empty" : {
+        "sorted" : {
           "type" : "boolean"
         },
-        "sorted" : {
+        "empty" : {
           "type" : "boolean"
         }
       }
