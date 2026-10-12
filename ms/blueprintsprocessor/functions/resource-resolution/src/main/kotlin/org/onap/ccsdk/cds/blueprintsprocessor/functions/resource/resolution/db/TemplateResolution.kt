@@ -28,12 +28,9 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.Index
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
-import org.hibernate.annotations.JdbcTypeCode
-import java.sql.Types
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
@@ -61,10 +58,8 @@ class TemplateResolution : Serializable {
     @Column(name = "artifact_name", nullable = false)
     var artifactName: String? = null
 
-    @Lob
-    @JdbcTypeCode(Types.LONGVARCHAR)
     @get:ApiModelProperty(value = "Rendered template.", required = true)
-    @Column(name = "result", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "result", nullable = false, columnDefinition = "TEXT")
     var result: String? = null
 
     @get:ApiModelProperty(

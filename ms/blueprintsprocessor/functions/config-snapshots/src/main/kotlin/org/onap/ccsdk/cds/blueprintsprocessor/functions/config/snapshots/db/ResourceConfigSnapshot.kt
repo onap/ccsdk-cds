@@ -27,7 +27,6 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -58,9 +57,8 @@ class ResourceConfigSnapshot : Serializable {
     @Column(name = "status", nullable = false)
     var status: Status? = null
 
-    @Lob
     @get:ApiModelProperty(value = "Snapshot of the resource as retrieved from resource.", required = true, example = "config_snapshot")
-    @Column(name = "config_snapshot", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "config_snapshot", nullable = false, columnDefinition = "TEXT")
     var config_snapshot: String? = null
 
     @Id

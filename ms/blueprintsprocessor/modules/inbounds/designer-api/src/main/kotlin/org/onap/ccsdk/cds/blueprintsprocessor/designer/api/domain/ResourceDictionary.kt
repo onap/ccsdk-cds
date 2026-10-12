@@ -29,7 +29,6 @@ import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -63,18 +62,16 @@ class ResourceDictionary : Serializable {
     @ApiModelProperty(value = "Resource dictionary group", required = true, example = "default")
     var resourceDictionaryGroup: String? = null
 
-    @Lob
     @Convert(converter = JpaResourceDefinitionConverter::class)
-    @Column(name = "definition", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "definition", nullable = false, columnDefinition = "TEXT")
     @ApiModelProperty(value = "Definition", required = true)
     lateinit var definition: ResourceDefinition
 
-    @Lob
-    @Column(name = "description", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     @ApiModelProperty(value = "Description", required = true, example = "demo_artifacts_version")
     lateinit var description: String
 
-    @Column(name = "tags", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "tags", nullable = false, columnDefinition = "TEXT")
     @ApiModelProperty(value = "Tags", required = true, example = "hostname")
     lateinit var tags: String
 

@@ -28,7 +28,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.Index
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -64,9 +63,8 @@ class ResourceResolution : Serializable {
     @Column(name = "name", nullable = false)
     var name: String? = null
 
-    @Lob
     @get:ApiModelProperty(value = "Value of the resolution.", required = true)
-    @Column(name = "value", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "value", nullable = false, columnDefinition = "TEXT")
     var value: String? = null
 
     @get:ApiModelProperty(value = "Whether success of failure.", required = true)
