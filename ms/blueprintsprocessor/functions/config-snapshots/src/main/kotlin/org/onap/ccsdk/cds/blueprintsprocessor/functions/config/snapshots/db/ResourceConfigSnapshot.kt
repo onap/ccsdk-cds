@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import io.swagger.annotations.ApiModelProperty
+import org.hibernate.Length
 import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -27,7 +28,6 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -58,9 +58,8 @@ class ResourceConfigSnapshot : Serializable {
     @Column(name = "status", nullable = false)
     var status: Status? = null
 
-    @Lob
     @get:ApiModelProperty(value = "Snapshot of the resource as retrieved from resource.", required = true, example = "config_snapshot")
-    @Column(name = "config_snapshot", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "config_snapshot", nullable = false, length = Length.LONG32)
     var config_snapshot: String? = null
 
     @Id

@@ -19,6 +19,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.databind.JsonNode
 import io.swagger.annotations.ApiModelProperty
+import org.hibernate.Length
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
@@ -28,7 +29,6 @@ import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -57,14 +57,12 @@ class ModelType : Serializable {
     @ApiModelProperty(required = true)
     lateinit var definitionType: String
 
-    @Lob
     @Convert(converter = JpaJsonNodeConverter::class)
-    @Column(name = "definition", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "definition", nullable = false, length = Length.LONG32)
     @ApiModelProperty(required = true)
     lateinit var definition: JsonNode
 
-    @Lob
-    @Column(name = "description", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "description", nullable = false, length = Length.LONG32)
     @ApiModelProperty(required = true)
     lateinit var description: String
 
@@ -72,7 +70,7 @@ class ModelType : Serializable {
     @ApiModelProperty(required = true)
     lateinit var version: String
 
-    @Column(name = "tags", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "tags", nullable = false, columnDefinition = "TEXT")
     @ApiModelProperty(required = true)
     var tags: String? = null
 

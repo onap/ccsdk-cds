@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import io.swagger.annotations.ApiModelProperty
+import org.hibernate.Length
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.io.Serializable
@@ -28,7 +29,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.Lob
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
@@ -61,12 +61,10 @@ class BlueprintModelContent : Serializable {
     @JoinColumn(name = "blueprint_model_id")
     var blueprintModel: BlueprintModel? = null
 
-    @Lob
-    @Column(name = "description", columnDefinition = "LONGTEXT")
+    @Column(name = "description", length = Length.LONG32)
     var description: String? = null
 
-    @Lob
-    @Column(name = "content", nullable = false, columnDefinition = "LONGBLOB")
+    @Column(name = "content", nullable = false, length = Length.LONG32)
     @ApiModelProperty(required = true)
     lateinit var content: ByteArray
 
