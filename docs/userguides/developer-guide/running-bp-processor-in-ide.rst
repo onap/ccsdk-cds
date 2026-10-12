@@ -45,7 +45,7 @@ This database will require a local directory to mount a volume, therefore before
 
 .. code-block:: bash
 
-   mkdir -p -m 755 /opt/app/cds/mysql/data
+   mkdir -p -m 755 /opt/app/cds/postgres/data
 
 Navigate to the docker-compose file in the distribution module:
 
@@ -69,21 +69,21 @@ And run docker-composer:
 
     docker-compose up -d db
 
-This should spin up a container of the MariaDB image in the background.
+This should spin up a container of the PostgreSQL image in the background.
 To check if it has worked, this command can be used:
 
 .. code-block:: bash
 
     docker-compose logs -f
 
-The phrase ``mysqld: ready for connections`` indicates that the database was started correctly.
+The phrase ``database system is ready to accept connections`` indicates that the database was started correctly.
 
 From now on, the Docker container will be available on the computer; if it ever gets stopped,
 it can be started again by the command:
 
 .. code-block:: bash
 
-   docker start <id of mariadb container>
+   docker start <id of postgres container>
 
 Set permissions on the local file system
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -211,19 +211,19 @@ Import the project into the IDE
                -Dms_name=org.onap.ccsdk.apps.controllerblueprints
                -DappVersion=1.0.0
                -Dspring.config.location=opt/app/onap/config/
-               -Dspring.datasource.url=jdbc:mysql://127.0.0.1:3306/sdnctl
+               -Dspring.datasource.url=jdbc:postgresql://127.0.0.1:5432/sdnctl
                -Dspring.datasource.username=sdnctl
                -Dspring.datasource.password=sdnctl
                -Dcontrollerblueprints.loadInitialData=true
                -Dblueprintsprocessor.restclient.sdncodl.url=http://localhost:8282/
-               -Dblueprintsprocessor.db.primary.url=jdbc:mysql://localhost:3306/sdnctl
+               -Dblueprintsprocessor.db.primary.url=jdbc:postgresql://localhost:5432/sdnctl
                -Dblueprintsprocessor.db.primary.username=sdnctl
                -Dblueprintsprocessor.db.primary.password=sdnctl
-               -Dblueprintsprocessor.db.primary.driverClassName=org.mariadb.jdbc.Driver
+               -Dblueprintsprocessor.db.primary.driverClassName=org.postgresql.Driver
                -Dblueprintsprocessor.db.primary.hibernateHbm2ddlAuto=update
                -Dblueprintsprocessor.db.primary.hibernateDDLAuto=none
                -Dblueprintsprocessor.db.primary.hibernateNamingStrategy=org.hibernate.cfg.ImprovedNamingStrategy
-               -Dblueprintsprocessor.db.primary.hibernateDialect=org.hibernate.dialect.MySQL5InnoDBDialect
+               -Dblueprintsprocessor.db.primary.hibernateDialect=org.hibernate.dialect.PostgreSQLDialect
                -Dblueprints.processor.functions.python.executor.executionPath=./components/scripts/python/ccsdk_blueprints
                -Dblueprints.processor.functions.python.executor.modulePaths=./components/scripts/python/ccsdk_blueprints,./components/scripts/python/ccsdk_netconf,./components/scripts/python/ccsdk_restconf
                -Dblueprintsprocessor.restconfEnabled=true
