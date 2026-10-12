@@ -26,7 +26,6 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -55,20 +54,16 @@ open class MessagePrioritization {
     @Column(name = "priority", nullable = false)
     var priority: Int = 5
 
-    @Lob
-    @Column(name = "message", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "message", nullable = false, columnDefinition = "TEXT")
     var message: String? = null
 
-    @Lob
-    @Column(name = "error", nullable = true, columnDefinition = "LONGTEXT")
+    @Column(name = "error", nullable = true, columnDefinition = "TEXT")
     var error: String? = null
 
-    @Lob
-    @Column(name = "aggregated_message_ids", nullable = true, columnDefinition = "LONGTEXT")
+    @Column(name = "aggregated_message_ids", nullable = true, columnDefinition = "TEXT")
     var aggregatedMessageIds: String? = null
 
-    @Lob
-    @Column(name = "correlation_id", nullable = true, columnDefinition = "LONGTEXT")
+    @Column(name = "correlation_id", nullable = true, columnDefinition = "TEXT")
     var correlationId: String? = null
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

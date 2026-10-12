@@ -28,7 +28,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.Lob
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
@@ -61,12 +60,10 @@ class BlueprintModelContent : Serializable {
     @JoinColumn(name = "blueprint_model_id")
     var blueprintModel: BlueprintModel? = null
 
-    @Lob
-    @Column(name = "description", columnDefinition = "LONGTEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     var description: String? = null
 
-    @Lob
-    @Column(name = "content", nullable = false, columnDefinition = "LONGBLOB")
+    @Column(name = "content", nullable = false, columnDefinition = "BYTEA")
     @ApiModelProperty(required = true)
     lateinit var content: ByteArray
 

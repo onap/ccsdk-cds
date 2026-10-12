@@ -25,7 +25,6 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
-import jakarta.persistence.Lob
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
@@ -50,8 +49,7 @@ class Domain : Serializable {
     @Column(name = "application_id")
     lateinit var applicationId: String
 
-    @Lob
-    @Column(name = "description", columnDefinition = "LONGTEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     var description: String = ""
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])

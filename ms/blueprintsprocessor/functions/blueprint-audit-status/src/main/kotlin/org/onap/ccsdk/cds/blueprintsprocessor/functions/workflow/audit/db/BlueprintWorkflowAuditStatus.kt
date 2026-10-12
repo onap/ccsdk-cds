@@ -27,7 +27,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GenerationType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -47,9 +46,8 @@ class BlueprintWorkflowAuditStatus : Serializable {
     @Column(name = "workflow_audit_id")
     var id: Long = 0
 
-    @Lob
     @get:ApiModelProperty(value = "Workflow payload.", required = true)
-    @Column(name = "workflow_task_content", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "workflow_task_content", nullable = false, columnDefinition = "TEXT")
     @ApiModelProperty(required = true)
     lateinit var workflowTaskContent: String
 
@@ -123,9 +121,8 @@ class BlueprintWorkflowAuditStatus : Serializable {
     @ApiModelProperty(required = true)
     lateinit var requestMode: String
 
-    @Lob
     @get:ApiModelProperty(value = "workflow response content", required = false)
-    @Column(name = "workflow_response_content", nullable = true, columnDefinition = "LONGTEXT")
+    @Column(name = "workflow_response_content", nullable = true, columnDefinition = "TEXT")
     @ApiModelProperty(required = false)
     lateinit var workflowResponseContent: String
 

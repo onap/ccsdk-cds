@@ -34,7 +34,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.FetchType
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
@@ -95,8 +94,7 @@ class BlueprintModel : Serializable {
     @ApiModelProperty(required = true)
     lateinit var artifactVersion: String
 
-    @Lob
-    @Column(name = "artifact_description", columnDefinition = "LONGTEXT")
+    @Column(name = "artifact_description", columnDefinition = "TEXT")
     var artifactDescription: String? = null
 
     @Column(name = "internal_version")
@@ -120,7 +118,7 @@ class BlueprintModel : Serializable {
     @ApiModelProperty(required = true)
     lateinit var updatedBy: String
 
-    @Column(name = "tags", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "tags", nullable = false, columnDefinition = "TEXT")
     @ApiModelProperty(required = true)
     lateinit var tags: String
 
@@ -128,9 +126,8 @@ class BlueprintModel : Serializable {
     var blueprintModelContent: BlueprintModelContent? = null
 
     // will be populated with workflow specs for each workflow (JSON object)
-    @Lob
     @Convert(converter = WorkflowsConverter::class)
-    @Column(name = "workflows", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "workflows", nullable = false, columnDefinition = "TEXT")
     lateinit var workflows: Map<String, Workflow>
 
     companion object {
