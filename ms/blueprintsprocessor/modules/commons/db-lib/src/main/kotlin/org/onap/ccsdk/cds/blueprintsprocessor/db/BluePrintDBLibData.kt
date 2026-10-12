@@ -58,3 +58,11 @@ open class MSSqlDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateDialect: String
     override var driverClassName = DBLibConstants.DRIVER_MSSQL_DB
 }
+
+open class PostgresDataSourceProperties : DBDataSourceProperties() {
+    lateinit var hibernateHbm2ddlAuto: String
+    lateinit var hibernateDDLAuto: String
+    lateinit var hibernateNamingStrategy: String
+    lateinit var hibernateDialect: String
+    override var driverClassName = DBLibConstants.DRIVER_POSTGRES_DB
+}

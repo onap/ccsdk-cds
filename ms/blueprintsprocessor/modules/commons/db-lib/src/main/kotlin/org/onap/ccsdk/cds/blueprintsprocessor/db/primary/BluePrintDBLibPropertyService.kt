@@ -23,10 +23,12 @@ import org.onap.ccsdk.cds.blueprintsprocessor.db.DBDataSourceProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants.Companion.MARIA_DB
 import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants.Companion.MYSQL_DB
 import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants.Companion.MSSQL_DB
+import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants.Companion.POSTGRES_DB
 import org.onap.ccsdk.cds.blueprintsprocessor.db.DBLibConstants.Companion.PROCESSOR_DB
 import org.onap.ccsdk.cds.blueprintsprocessor.db.MariaDataSourceProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.db.MySqlDataSourceProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.db.MSSqlDataSourceProperties
+import org.onap.ccsdk.cds.blueprintsprocessor.db.PostgresDataSourceProperties
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.springframework.stereotype.Service
@@ -45,9 +47,10 @@ class BluePrintDBLibPropertyService(private var bluePrintPropertiesService: Blue
             MYSQL_DB -> JacksonUtils.readValue(jsonNode, MySqlDataSourceProperties::class.java)
             MARIA_DB -> JacksonUtils.readValue(jsonNode, MariaDataSourceProperties::class.java)
             MSSQL_DB -> JacksonUtils.readValue(jsonNode, MSSqlDataSourceProperties::class.java)
+            POSTGRES_DB -> JacksonUtils.readValue(jsonNode, PostgresDataSourceProperties::class.java)
             else -> {
                 throw BluePrintProcessorException(
-                    "DB type ($type) is not supported. Valid types: $MARIA_DB, $MYSQL_DB, $MSSQL_DB"
+                    "DB type ($type) is not supported. Valid types: $MARIA_DB, $MYSQL_DB, $MSSQL_DB, $POSTGRES_DB"
                 )
             }
         }!!
@@ -58,9 +61,10 @@ class BluePrintDBLibPropertyService(private var bluePrintPropertiesService: Blue
                 MARIA_DB, PROCESSOR_DB -> mariaDBConnectionProperties(prefix)
                 MYSQL_DB -> mySqlDBConnectionProperties(prefix)
                 MSSQL_DB -> mssqlDBConnectionProperties(prefix)
+                POSTGRES_DB -> postgresDBConnectionProperties(prefix)
                 else -> {
                     throw BluePrintProcessorException(
-                        "DB type ($it) is not supported. Valid types: $MARIA_DB, $MYSQL_DB, $PROCESSOR_DB"
+                        "DB type ($it) is not supported. Valid types: $MARIA_DB, $MYSQL_DB, $PROCESSOR_DB, $MSSQL_DB, $POSTGRES_DB"
                     )
                 }
             }
@@ -71,6 +75,7 @@ class BluePrintDBLibPropertyService(private var bluePrintPropertiesService: Blue
             is MariaDataSourceProperties -> MariaDatabaseConfiguration(dBConnetionProperties)
             is MySqlDataSourceProperties -> MySqlDatabaseConfiguration(dBConnetionProperties)
             is MSSqlDataSourceProperties -> MSSqlDatabaseConfiguration(dBConnetionProperties)
+            is PostgresDataSourceProperties -> PostgresDatabaseConfiguration(dBConnetionProperties)
             else -> throw BluePrintProcessorException(
                 "Failed to create db configuration for ${dBConnetionProperties.url}"
             )
@@ -84,4 +89,7 @@ class BluePrintDBLibPropertyService(private var bluePrintPropertiesService: Blue
 
     private fun mssqlDBConnectionProperties(prefix: String): MSSqlDataSourceProperties =
         bluePrintPropertiesService.propertyBeanType(prefix, MSSqlDataSourceProperties::class.java)
+
+    private fun postgresDBConnectionProperties(prefix: String): PostgresDataSourceProperties =
+        bluePrintPropertiesService.propertyBeanType(prefix, PostgresDataSourceProperties::class.java)
 }
