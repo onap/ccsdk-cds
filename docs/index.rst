@@ -115,6 +115,7 @@ User Guides
 
    userguides/developer-guide/index
    userguides/installation
+   userguides/database
    userguides/design-time-guide/designtime
 
 Use Cases

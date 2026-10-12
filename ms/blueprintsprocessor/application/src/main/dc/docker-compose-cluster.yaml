@@ -2,22 +2,21 @@ version: '3.7'
 
 services:
   db:
-    image: mariadb:latest
-    container_name: ccsdk-mariadb
+    image: postgres:17-alpine
+    container_name: ccsdk-postgres
     networks:
       - cds-network
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - target: /var/lib/mysql
+      - target: /var/lib/postgresql/data
         type: volume
-        source: mysql-data
+        source: postgres-data
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: sdnctl
-      MYSQL_DATABASE: sdnctl
-      MYSQL_USER: sdnctl
-      MYSQL_PASSWORD: sdnctl
+      POSTGRES_DB: sdnctl
+      POSTGRES_USER: sdnctl
+      POSTGRES_PASSWORD: sdnctl
   nats:
     image: nats-streaming:latest
     container_name: nats
@@ -163,11 +162,11 @@ services:
       AUTH_TYPE: tls-auth
       LOG_FILE: /opt/app/onap/logs/application.log
 volumes:
-  mysql-data:
+  postgres-data:
     driver: local
     driver_opts:
       type: none
-      device: /opt/app/cds/mysql/data
+      device: /opt/app/cds/postgres/data
       o: bind
   nats-store:
     driver: local
