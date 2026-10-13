@@ -93,12 +93,6 @@
             <version>${sdc-distribution-client.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.jmockit</groupId>
-            <artifactId>jmockit</artifactId>
-            <version>${jmockit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jacorb</groupId>
             <artifactId>jacorb-omgapi</artifactId>
             <version>3.8</version>
