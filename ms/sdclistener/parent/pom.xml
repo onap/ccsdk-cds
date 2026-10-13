@@ -40,7 +40,6 @@
         <mockk.version>1.12.8</mockk.version>
         <mockkserver.version>5.5.1</mockkserver.version>
         <sdc-distribution-client.version>2.0.0</sdc-distribution-client.version>
-        <jmockit.version>1.49</jmockit.version>
         <reactorcore.version>3.2.6.RELEASE</reactorcore.version>
 
     </properties>
@@ -141,12 +140,6 @@
                 <version>${grpc.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>org.jmockit</groupId>
-                <artifactId>jmockit</artifactId>
-                <version>${jmockit.version}</version>
-                <scope>test</scope>
-            </dependency>
 
             <!-- SDC Distribution client dependency -->
             <dependency>
@@ -186,22 +179,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <!-- Sets the VM argument line used when unit tests are run. -->
-                    <argLine>-javaagent:"${settings.localRepository}"/org/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar</argLine>
-                    <!-- Excludes integration tests when unit tests are run. -->
-                    <excludes>
-                        <exclude>**/IT*.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
