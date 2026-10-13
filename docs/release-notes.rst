@@ -13,7 +13,77 @@ Abstract
 ========
 
 This document provides the release notes for the 1.10.0 release of the
-Controller Design Studio (CDS).
+Controller Design Studio (CDS), and lists the changes merged so far for the
+upcoming 1.11.0 release.
+
+Upcoming Release 1.11.0
+=======================
+
+CDS 1.11.0 is still in development. This section lists the notable changes
+merged since 1.10.0 and will be completed when the release is cut.
+
+New features
+------------
+
+* **Configurable gRPC message size** — The maximum inbound message size of
+  the blueprintsprocessor gRPC server can be set with
+  ``blueprintsprocessor.grpcMaxInboundMessageSize`` (default 4 MiB).
+  (Jira `CCSDK-4141 <https://jira.onap.org/browse/CCSDK-4141>`_)
+
+* **Configurable JSON parsing limits** — The Jackson stream read constraints
+  (maximum string length, nesting depth, document length and others) can be
+  overridden with the ``jackson.stream-read-constraints.*`` properties.
+  (Jira `CCSDK-4141 <https://jira.onap.org/browse/CCSDK-4141>`_)
+
+* **ed25519 SSH keys** — The SSH connections of the netconf and CLI
+  executors support the ed25519 key format.
+  (Jira `CCSDK-4203 <https://jira.onap.org/browse/CCSDK-4203>`_)
+
+**CDS Designer UI improvements**
+
+* Added a lifecycle action bar (Edit, Import DD, Enrich, Publish) to the
+  package creation screen, including bulk import of data dictionary
+  definitions.
+  (Jira `CCSDK-4205 <https://jira.onap.org/browse/CCSDK-4205>`_)
+* Blueprint processor errors are shown as readable messages.
+* Added a warning banner for unmapped variables on the Template & Mapping tab.
+* Reworded the guided tour steps and re-enabled the steps that were
+  commented out.
+  (Jira `CCSDK-4204 <https://jira.onap.org/browse/CCSDK-4204>`_)
+
+CVE and dependency updates
+--------------------------
+
+* The blueprintsprocessor image is now based on
+  ``onap/ccsdk-alpine-j21-image`` 2.2.1 and runs on Java 21.
+* Upgraded Netty to 4.1.137.Final, gRPC to 1.82.1, Jetty to 12.0.33,
+  Spring Framework to 6.2.17, Spring Security to 6.5.9, Micrometer to
+  1.15.10, Jackson to 2.20.1, Jinjava to 2.8.3 and Guava to 33.5.0-jre.
+* Replaced ``hazelcast-all`` 5.0-BETA-1 with ``hazelcast`` 5.4.0.
+* Updated to the Rabat ONAP parent POMs (3.3.2).
+  (Jira `CCSDK-4203 <https://jira.onap.org/browse/CCSDK-4203>`_)
+
+Bug fixes
+---------
+
+* When the blueprintsprocessor refreshes a stale local CBA copy during
+  workflow execution, it now also clears the compiled script cache of that
+  CBA, so the updated scripts are used.
+* Unresolved expressions in Jinja templates are kept as they are after the
+  Jinjava upgrade.
+* Fixed null pointer exceptions and unchecked delete results reported by
+  SonarQube.
+* Fixed the cds-ui designer client lock file so ``npm ci`` works again.
+  (Jira `CCSDK-4218 <https://jira.onap.org/browse/CCSDK-4218>`_)
+
+Upgrade notes
+-------------
+
+* The credentials used by the health API (``endpoints.user.name`` and
+  ``endpoints.user.password``) are now encrypted with AES/GCM instead of
+  AES/CBC. Values encrypted for 1.10.0 or earlier no longer decrypt and must
+  be re-encrypted.
+
 
 Summary
 =======
