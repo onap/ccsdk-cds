@@ -83,7 +83,7 @@ jobs:
       # yamllint disable rule:line-length
       ENV_VARS: '{"MAVEN_OPTS": "--add-opens=java.base/java.util=ALL-UNNAMED"}'
       ENV_SECRETS: "{}"
-      JDK_VERSION: "17"
+      JDK_VERSION: "21"
       SONAR_PROJECT_KEY: "onap_ccsdk-cds"
       SONAR_ORG: "onap"
       SONAR_ARGS: >
