@@ -16,14 +16,21 @@ limitations under the License.
 -->
 
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- CDS_LOG_FORMAT selects the console appender by name: text (default) or json -->
+    <appender name="text" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
         </encoder>
     </appender>
+    <appender name="json" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- Jackson modules found on the classpath need not match jackson-databind and fail the encoder -->
+            <findAndRegisterJacksonModules>false</findAndRegisterJacksonModules>
+        </encoder>
+    </appender>
 
     <root level="info">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="${CDS_LOG_FORMAT:-text}"/>
     </root>
 
     <logger name="org.springframework" level="info"/>
