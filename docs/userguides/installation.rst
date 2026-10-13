@@ -85,6 +85,15 @@ If more fine grained customization is required, this can be done manually
 in the application.properties file before making the helm chart.
 (oom/kubernetes/cds/components/cds-blueprints-processor/resources/config/application.properties)
 
+The blueprints processor properties that tune runtime limits, such as the
+gRPC message size and the JSON parsing limits, are described in
+:ref:`cds_bp_configuration`.
+
+.. toctree::
+   :maxdepth: 1
+
+   configuration
+
 
 Make the chart
 --------------
