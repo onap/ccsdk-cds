@@ -57,7 +57,7 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
     @ResponseBody
     @Throws(BluePrintException::class)
     suspend fun getResourceDictionaryByName(
-        @ApiParam(value = "Name of the resource", required = true, example = "\"hostname\"")
+        @ApiParam(value = "Name of the resource", required = true, example = "hostname")
         @PathVariable(value = "name") name: String
     ): ResourceDictionary =
         mdcWebCoroutineScope {
@@ -186,7 +186,7 @@ open class ResourceDictionaryController(private val resourceDictionaryHandler: R
     )
     @ResponseBody
     suspend fun searchResourceDictionaryByTags(
-        @ApiParam(value = "Tags list", required = true, example = "\"status\"")
+        @ApiParam(value = "Tags list", required = true, example = "status")
         @PathVariable(value = "tags") tags: String
     ): List<ResourceDictionary> =
         mdcWebCoroutineScope {

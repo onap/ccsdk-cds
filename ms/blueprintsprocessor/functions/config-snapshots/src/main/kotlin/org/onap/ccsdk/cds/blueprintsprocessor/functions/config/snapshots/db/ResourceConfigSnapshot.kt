@@ -46,11 +46,11 @@ import jakarta.persistence.TemporalType
 @Proxy(lazy = false)
 class ResourceConfigSnapshot : Serializable {
 
-    @get:ApiModelProperty(value = "Resource type.", required = true, example = "\"ServiceInstance\"")
+    @get:ApiModelProperty(value = "Resource type.", required = true, example = "ServiceInstance")
     @Column(name = "resource_type", nullable = false)
     var resourceType: String? = null
 
-    @get:ApiModelProperty(value = "ID associated with the resource type in the inventory system.", required = true, example = "\"1\"")
+    @get:ApiModelProperty(value = "ID associated with the resource type in the inventory system.", required = true, example = "1")
     @Column(name = "resource_id", nullable = false)
     var resourceId: String? = null
 
@@ -59,7 +59,7 @@ class ResourceConfigSnapshot : Serializable {
     var status: Status? = null
 
     @Lob
-    @get:ApiModelProperty(value = "Snapshot of the resource as retrieved from resource.", required = true, example = "\"config_snapshot\"")
+    @get:ApiModelProperty(value = "Snapshot of the resource as retrieved from resource.", required = true, example = "config_snapshot")
     @Column(name = "config_snapshot", nullable = false, columnDefinition = "LONGTEXT")
     var config_snapshot: String? = null
 

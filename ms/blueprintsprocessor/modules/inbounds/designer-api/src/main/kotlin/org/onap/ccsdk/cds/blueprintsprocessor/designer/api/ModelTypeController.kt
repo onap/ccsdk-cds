@@ -76,7 +76,6 @@ open class ModelTypeController(private val modelTypeHandler: ModelTypeHandler) {
         }
 
     @PostMapping(
-        path = [""],
         produces = [MediaType.APPLICATION_JSON_VALUE],
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )

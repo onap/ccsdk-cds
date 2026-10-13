@@ -408,10 +408,10 @@
                                     <type>basic</type>
                                 </securityDefinition>
                             </securityDefinitions>
-                            <outputFormats>json</outputFormats>
+                            <outputFormats>json,yaml</outputFormats>
                             <swaggerDirectory>${basedir}/../../../docs/api-reference/media</swaggerDirectory>
                             <swaggerFileName>cds-bp-processor-api-swagger</swaggerFileName>
-                            <jsonExampleValues>true</jsonExampleValues>
+                            <modelSubstitute>/swagger/model-substitute.txt</modelSubstitute>
                             <operationIdFormat>{{className}}_{{methodName}}_{{httpMethod}}.{{packageName}}</operationIdFormat>
                         </apiSource>
                     </apiSources>

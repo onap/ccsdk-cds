@@ -31,7 +31,7 @@ import java.util.Date
 open class ResourceDefinition {
 
     @JsonProperty(value = "name", required = true)
-    @ApiModelProperty(value = "Name", required = true, example = "\"default-source\"")
+    @ApiModelProperty(value = "Name", required = true, example = "default-source")
     lateinit var name: String
 
     @JsonProperty(value = "property", required = true)
@@ -42,15 +42,15 @@ open class ResourceDefinition {
 
     /** The default group for Resource Definition is "default" */
     @JsonProperty(value = "group", required = true)
-    @ApiModelProperty(value = "Group", required = true, example = "\"default\"")
+    @ApiModelProperty(value = "Group", required = true, example = "default")
     var group: String = "default"
 
     @JsonProperty(value = "updated-by")
-    @ApiModelProperty(value = "Updated by", required = true, example = "\"example@onap.com\"")
+    @ApiModelProperty(value = "Updated by", required = true, example = "example@onap.com")
     lateinit var updatedBy: String
 
     @JsonProperty(value = "sources", required = true)
-    @ApiModelProperty(value = "Sources", required = true, example = "\"sources\"")
+    @ApiModelProperty(value = "Sources", required = true, example = "sources")
     lateinit var sources: MutableMap<String, NodeTemplate>
 }
 

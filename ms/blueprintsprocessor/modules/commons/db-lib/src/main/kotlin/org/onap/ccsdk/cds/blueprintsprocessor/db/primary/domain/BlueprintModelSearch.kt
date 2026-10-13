@@ -49,55 +49,55 @@ class BlueprintModelSearch : Serializable {
 
     @ApiModelProperty(
         value = "ID of Blueprint model, is automatically created by CDS",
-        example = "\"658f9a48-7f54-41ba-ae18-c69f26f3dc94\"",
+        example = "658f9a48-7f54-41ba-ae18-c69f26f3dc94",
         required = true
     )
     @Id
     @Column(name = "blueprint_model_id")
     var id: String? = null
 
-    @ApiModelProperty(value = "Artifact UUID, usually null", example = "null", required = false)
+    @ApiModelProperty(value = "Artifact UUID, usually null", required = false)
     @Column(name = "artifact_uuid")
     var artifactUUId: String? = null
 
     @JsonSerialize
-    @ApiModelProperty(value = "Artifact Type, usually null", example = "\"SDNC_MODEL\"", required = false)
+    @ApiModelProperty(value = "Artifact Type, usually null", example = "SDNC_MODEL", required = false)
     @Column(name = "artifact_type")
     var artifactType: String? = null
 
-    @ApiModelProperty(value = "Artifact Version, usually 1.0.0", example = "\"1.0.0\"", required = true)
+    @ApiModelProperty(value = "Artifact Version, usually 1.0.0", example = "1.0.0", required = true)
     @Column(name = "artifact_version", nullable = false)
     var artifactVersion: String? = null
 
     @Lob
-    @ApiModelProperty(value = "Artifact Description, usually empty", example = "\"\"", required = false)
+    @ApiModelProperty(value = "Artifact Description, usually empty", example = "", required = false)
     @Column(name = "artifact_description", columnDefinition = "LONGTEXT")
     var artifactDescription: String? = null
 
-    @ApiModelProperty(value = "Internal Version of CBA, usually null", example = "null", required = false)
+    @ApiModelProperty(value = "Internal Version of CBA, usually null", required = false)
     @Column(name = "internal_version")
     var internalVersion: Int? = null
 
-    @ApiModelProperty(value = "Datetime of the creation of CBA in CDS", example = "\"2020-11-19T10:34:56.000Z\"", required = true)
+    @ApiModelProperty(value = "Datetime of the creation of CBA in CDS", example = "2020-11-19T10:34:56.000Z", required = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
     var createdDate = Date()
 
-    @ApiModelProperty(value = "Artifact Name, defined in Metadata", example = "\"pnf_netconf\"", required = true)
+    @ApiModelProperty(value = "Artifact Name, defined in Metadata", example = "pnf_netconf", required = true)
     @Column(name = "artifact_name", nullable = false)
     var artifactName: String? = null
 
-    @ApiModelProperty(value = "Artifact Name, defined in Metadata", example = "\"pnf_netconf\"", required = true)
+    @ApiModelProperty(value = "Artifact Name, defined in Metadata", example = "pnf_netconf", required = true)
     @Column(name = "published", nullable = false)
     var published: String? = null
 
-    @ApiModelProperty(value = "Name of publisher, defined in Metadata", example = "\"Deutsche Telekom AG\"", required = true)
+    @ApiModelProperty(value = "Name of publisher, defined in Metadata", example = "Deutsche Telekom AG", required = true)
     @Column(name = "updated_by", nullable = false)
     var updatedBy: String? = null
 
-    @ApiModelProperty(value = "Tags to identify the CBA, defined in Metadata", example = "\"test\"", required = true)
+    @ApiModelProperty(value = "Tags to identify the CBA, defined in Metadata", example = "test", required = true)
     @Column(name = "tags", nullable = false, columnDefinition = "LONGTEXT")
     var tags: String? = null
 

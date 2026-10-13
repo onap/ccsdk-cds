@@ -34,8 +34,11 @@ Use Basic authorization with `ccsdkapps` as a username and password, in Header `
 Download
 ------------
 
-Here is the automatically created swagger file for CDS Blueprint Processor API:
-:download:`cds-bp-processor-api-swagger.json <media/cds-bp-processor-api-swagger.json>`
+Here is the automatically created swagger file for CDS Blueprint Processor API,
+in JSON and YAML:
+
+* :download:`cds-bp-processor-api-swagger.json <media/cds-bp-processor-api-swagger.json>`
+* :download:`cds-bp-processor-api-swagger.yaml <media/cds-bp-processor-api-swagger.yaml>`
 
 You can find a postman collection including sample requests for all endpoints here:
 :download:`bp-processor.postman_collection.json <media/bp-processor.postman_collection.json>`.
@@ -153,13 +156,7 @@ HTTP Status 202 OK
 API Reference
 --------------
 
-.. note::
-   The embedded API documentation has been removed because the source swagger
-   file contains malformed JSON and cannot be rendered by Sphinx.
-   Use the download link above or paste the file into
-   `Swagger Editor <https://editor.swagger.io/>`_ to browse the API reference.
-
-.. .. openapi:: media/cds-bp-processor-api-swagger.json
+.. openapi:: media/cds-bp-processor-api-swagger.json
 
 
 
