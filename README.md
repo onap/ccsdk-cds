@@ -1,48 +1,58 @@
 # Controller Design Studio (CDS)
 
-## Basic Architecture
+CDS is the ONAP component for designing and running network automation
+without code changes in ONAP itself. Designers package models, resource
+dictionaries, templates and scripts into a Controller Blueprint Archive (CBA);
+the blueprints processor deploys the CBA and executes its workflows (resource
+resolution, configuration through NETCONF, RESTCONF, CLI, Ansible or scripts)
+over REST, gRPC or Kafka.
+
 ![Basic_Architecture](./docs/media/CDS_architecture.jpg)
 
-## Basic Requirements
-Before you can build this project, you must install and configure the following dependencies on your machine:
-  1) Java 11 SDK
-  2) Maven 3.6.X
-  3) MySQL Database
-  4) Node and npm installed
-  5) Angular CLI & Angular v8
+## Repository layout
 
-## Running in Development Mode
-Run `mvn clean install` command to install all libraries and dependencies for the maven and npm.
-Run `mvn clean install -Pdocker` command to install all libraries and create below docker images.
-  * ccsdk-blueprintsprocessor
-  * ccsdk-commandexecutor
-  * ccsdk-py-executor
-  * ccsdk-sdclistener
-  * ccsdk-cds-ui-server
-  * ccsdk-cds-ui
+| Path | Content |
+|------|---------|
+| `ms/blueprintsprocessor/` | Blueprints processor runtime (Kotlin, Spring Boot) and its modules and executor functions |
+| `ms/sdclistener/` | Listener that receives SDC distributions and uploads the contained CBAs |
+| `ms/py-executor/`, `ms/command-executor/`, `ms/artifact-manager/` | Python services for remote script execution and artifact management |
+| `ms/error-catalog/` | Shared error catalog |
+| `cds-ui/` | CDS Designer UI: Angular front ends, LoopBack backend for the UI, image packaging and Playwright tests, see [cds-ui/README.md](./cds-ui/README.md) |
+| `components/` | Model catalog (TOSCA types, sample and test blueprints), CBA parent POM and the Python script libraries available to CBAs |
+| `py-modules/` | Common Python package with the CDS protobuf and gRPC definitions |
+| `docs/` | Sources of the published documentation |
 
-**Note:** Run `mvn clean install -Pdocker -Ddocker.skip.push=true` to build but skip pushing docker image.
+## Build and test
 
-1) Back-end MS
-   >Create `sdnctl` table in MySQL<br>
-   >(Optional) You could run the project in a specific profile(dev, local) by adding `-Dspring.profiles.active=profile-name`
-  
-2) Loop-back server: 
-   >That allow your request to reach the backend from cds-ui<br>
-   >Move to `./cds-ui/server/` folder and run the  command `npm start`
- 
-3) cds-ui
-   >Move to `./cds-ui/designer-client/` folder and run the command `npm start`<br>
-   >This command will make sure all the files follow the linting rules and then connect to the loopback server.
+Requirements: JDK 17 or 21 (the code targets Java 17, CI builds with
+JDK 21), Maven 3.8 or newer, and the ONAP Maven `settings.xml` to resolve
+ONAP artifacts. The cds-ui modules download their own Node.js and npm during
+the Maven build.
 
-## Using an IDE
-**Front-end:** you could use `vscode` or `webstorm`<br>
-**Back-end:** `IntelliJ` with kotlin plugin or any other editor
+```bash
+mvn clean install                  # build everything and run the tests
+mvn clean install -DskipTests      # build without tests
+mvn clean install -Pdocker         # also build the Docker images
+mvn process-sources -P format      # format Kotlin sources with ktlint
+```
 
----
-For more information check: [CDS Docs](https://docs.onap.org/projects/onap-ccsdk-cds/en/latest/index.html)
+Python services are tested with tox, for example:
 
-### Format code with ktlint checkstyle tool use the following command
-`mvn process-sources -P format`
+```bash
+cd ms/py-executor && tox -e py38
+```
 
-**Reference:** [ktlint docs](https://ktlint.github.io/) | [ktlint codebase](https://github.com/pinterest/ktlint)
+Documentation:
+
+```bash
+cd docs && tox -e docs
+```
+
+## Documentation
+
+- [CDS documentation](https://docs.onap.org/projects/onap-ccsdk-cds/en/latest/index.html)
+- [Developer guide](https://docs.onap.org/projects/onap-ccsdk-cds/en/latest/userguides/developer-guide/index.html)
+- [Release notes](https://docs.onap.org/projects/onap-ccsdk-cds/en/latest/release-notes.html)
+
+Changes are reviewed on [ONAP Gerrit](https://gerrit.onap.org/r/q/project:ccsdk/cds)
+and tracked in the CCSDK project on [ONAP Jira](https://lf-onap.atlassian.net/projects/CCSDK).
