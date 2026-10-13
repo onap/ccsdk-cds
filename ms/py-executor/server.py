@@ -71,9 +71,10 @@ def serve(configuration: ScriptExecutorConfiguration):
         header_validator = RequestHeaderValidatorInterceptor(
             'authorization', basic_auth, grpc.StatusCode.UNAUTHENTICATED,
             'Access denied!')
-        # create server with token authentication interceptors
+        # create server with token authentication interceptors, as a list because
+        # opentelemetry-instrumentation-grpc inserts its server interceptor into it
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=int(maxWorkers)),
-                             interceptors=(header_validator,))
+                             interceptors=[header_validator])
         BluePrintProcessing_pb2_grpc.add_BluePrintProcessingServiceServicer_to_server(
             BluePrintProcessingServer(configuration), server
         )

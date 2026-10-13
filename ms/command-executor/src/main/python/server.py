@@ -43,9 +43,10 @@ def serve():
         'authorization', basic_auth, grpc.StatusCode.UNAUTHENTICATED,
         'Access denied!')
 
+    # A list, not a tuple: opentelemetry-instrumentation-grpc inserts its server interceptor into it.
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=15),
-        interceptors=(header_validator,))
+        interceptors=[header_validator])
 
     CommandExecutor_pb2_grpc.add_CommandExecutorServiceServicer_to_server(
         CommandExecutorServer(), server)
