@@ -116,7 +116,7 @@ open class ResourceController(private var resourceResolutionDBService: ResourceR
         method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
-        value = "Get the map of resolved resources with 'occurrence' as the keys to the resolved resources ",
+        value = "Get the map of resolved resources with 'occurrence' as the keys to the resolved resources",
         notes = "With optional 'occurrence' options, subset of stored resolved resources can be retrieved " +
             "using the blueprint name, blueprint version, artifact name and the resolution-key.",
         response = ResourceResolution::class,
