@@ -80,7 +80,7 @@ class ResourceResolution : Serializable {
     @Column(name = "resolution_key", nullable = false)
     var resolutionKey: String? = null
 
-    @get:ApiModelProperty(value = "Resolution type.", required = true, example = "\"ServiceInstance\"")
+    @get:ApiModelProperty(value = "Resolution type.", required = true, example = "ServiceInstance")
     @Column(name = "resource_type", nullable = false)
     var resourceType: String? = null
 

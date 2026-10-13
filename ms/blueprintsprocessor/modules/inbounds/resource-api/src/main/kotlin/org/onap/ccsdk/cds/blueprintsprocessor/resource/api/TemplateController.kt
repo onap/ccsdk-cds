@@ -64,7 +64,6 @@ open class TemplateController(private val templateResolutionService: TemplateRes
     }
 
     @RequestMapping(
-        path = [""],
         method = [RequestMethod.GET],
         produces = [MediaType.TEXT_PLAIN_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
@@ -174,7 +173,7 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ApiOperation(
-        value = "Get the map of resolved templates with 'occurrence' as the keys to the resolved templates ",
+        value = "Get the map of resolved templates with 'occurrence' as the keys to the resolved templates",
         notes = "With optional 'occurrence' options, subset of stored resolved templates can be retrieved " +
             "using the blueprint name, blueprint version, artifact name and the resolution-key.",
         response = TemplateResolution::class,
@@ -257,7 +256,6 @@ open class TemplateController(private val templateResolutionService: TemplateRes
     }
 
     @RequestMapping(
-        path = [""],
         method = [RequestMethod.DELETE], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @PreAuthorize("hasRole('USER')")

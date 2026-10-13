@@ -47,11 +47,11 @@ class WorkFlowsResponse {
 @ApiModel
 class WorkFlowSpecRequest {
 
-    @ApiModelProperty(value = "Name of the BLueprint", example = "\"pnf_netconf\"", required = true)
+    @ApiModelProperty(value = "Name of the BLueprint", example = "pnf_netconf", required = true)
     lateinit var blueprintName: String
     var version: String = DEFAULT_VERSION_NUMBER
     var returnContent: String = DATA_TYPE_JSON
-    @ApiModelProperty(value = "Name of the Workflow", example = "\"config-assign\"", required = true)
+    @ApiModelProperty(value = "Name of the Workflow", example = "config-assign", required = true)
     lateinit var workflowName: String
     var specType: String = TOSCA_SPEC
 }

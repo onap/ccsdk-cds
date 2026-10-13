@@ -48,19 +48,19 @@ class ResourceDictionary : Serializable {
 
     @Id
     @Column(name = "name", nullable = false)
-    @ApiModelProperty(value = "Name", required = true, example = "\"sample-db-source\"")
+    @ApiModelProperty(value = "Name", required = true, example = "sample-db-source")
     lateinit var name: String
 
     @Column(name = "data_type", nullable = false)
-    @ApiModelProperty(value = "Data type", required = true, example = "\"string\"")
+    @ApiModelProperty(value = "Data type", required = true, example = "string")
     lateinit var dataType: String
 
     @Column(name = "entry_schema")
-    @ApiModelProperty(value = "Entry schema", required = true, example = "\"dt-license-key\"")
+    @ApiModelProperty(value = "Entry schema", required = true, example = "dt-license-key")
     var entrySchema: String? = null
 
     @Column(name = "resource_dictionary_group")
-    @ApiModelProperty(value = "Resource dictionary group", required = true, example = "\"default\"")
+    @ApiModelProperty(value = "Resource dictionary group", required = true, example = "default")
     var resourceDictionaryGroup: String? = null
 
     @Lob
@@ -71,11 +71,11 @@ class ResourceDictionary : Serializable {
 
     @Lob
     @Column(name = "description", nullable = false, columnDefinition = "LONGTEXT")
-    @ApiModelProperty(value = "Description", required = true, example = "\"demo_artifacts_version\"")
+    @ApiModelProperty(value = "Description", required = true, example = "demo_artifacts_version")
     lateinit var description: String
 
     @Column(name = "tags", nullable = false, columnDefinition = "LONGTEXT")
-    @ApiModelProperty(value = "Tags", required = true, example = "\"hostname\"")
+    @ApiModelProperty(value = "Tags", required = true, example = "hostname")
     lateinit var tags: String
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -85,7 +85,7 @@ class ResourceDictionary : Serializable {
     var creationDate: Date? = null
 
     @Column(name = "updated_by", nullable = false)
-    @ApiModelProperty(value = "Updated by", required = true, example = "\"username\"")
+    @ApiModelProperty(value = "Updated by", required = true, example = "username")
     lateinit var updatedBy: String
 
     override fun toString(): String {

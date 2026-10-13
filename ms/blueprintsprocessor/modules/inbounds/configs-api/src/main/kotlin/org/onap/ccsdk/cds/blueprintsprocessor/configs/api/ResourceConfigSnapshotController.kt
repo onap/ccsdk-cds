@@ -81,10 +81,10 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun get(
-        @ApiParam(value = "Resource Type associated of the resource configuration snapshot", required = false, example = "\"PNF\"")
+        @ApiParam(value = "Resource Type associated of the resource configuration snapshot", required = false, example = "PNF")
         @RequestParam(value = "resourceType", required = true) resourceType: String,
 
-        @ApiParam(value = "Resource Id associated of the resource configuration snapshot", required = false, example = "\"1\"")
+        @ApiParam(value = "Resource Id associated of the resource configuration snapshot", required = false, example = "1")
         @RequestParam(value = "resourceId", required = true) resourceId: String,
 
         @ApiParam(value = "Status of the snapshot being retrieved", defaultValue = "RUNNING", required = false)
@@ -149,13 +149,13 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun postWithResourceIdAndResourceType(
-        @ApiParam(value = "Resource Type associated with the resolution", required = false, example = "\"PNF\"")
+        @ApiParam(value = "Resource Type associated with the resolution", required = false, example = "PNF")
         @PathVariable(value = "resourceType", required = true) resourceType: String,
-        @ApiParam(value = "Resource Id associated with the resolution", required = false, example = "\"1\"")
+        @ApiParam(value = "Resource Id associated with the resolution", required = false, example = "1")
         @PathVariable(value = "resourceId", required = true) resourceId: String,
         @ApiParam(value = "Status of the snapshot being retrieved", defaultValue = "RUNNING", required = true)
         @PathVariable(value = "status", required = true) status: String,
-        @ApiParam(value = "Config snapshot to store", required = true, example = "\"config_snapshot\"")
+        @ApiParam(value = "Config snapshot to store", required = true, example = "config_snapshot")
         @RequestBody snapshot: String
     ): ResponseEntity<ResourceConfigSnapshot> = runBlocking {
 
@@ -231,7 +231,7 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun getAllByID(
-        @ApiParam(value = "Resource Id associated of the resource configuration snapshots", required = false, example = "\"1\"")
+        @ApiParam(value = "Resource Id associated of the resource configuration snapshots", required = false, example = "1")
         @RequestParam(value = "resourceId", required = true) resourceId: String,
         @ApiParam(value = "Status of the snapshot being retrieved", defaultValue = "ANY", required = false)
         @RequestParam(value = "status", required = false, defaultValue = "ANY") status: String
@@ -276,7 +276,7 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun getAllByType(
-        @ApiParam(value = "Resource Type associated of the resource configuration snapshot", required = false, example = "\"PNF\"")
+        @ApiParam(value = "Resource Type associated of the resource configuration snapshot", required = false, example = "PNF")
         @RequestParam(value = "resourceType", required = true) resourceType: String,
         @ApiParam(value = "Status of the snapshot being retrieved", defaultValue = "ANY", required = false)
         @RequestParam(value = "status", required = false, defaultValue = "ANY") status: String
