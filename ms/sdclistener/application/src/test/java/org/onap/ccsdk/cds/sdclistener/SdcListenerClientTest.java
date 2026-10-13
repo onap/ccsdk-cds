@@ -16,13 +16,14 @@
 
 package org.onap.ccsdk.cds.sdclistener;
 
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Mock;
-import mockit.MockUp;
-import mockit.Tested;
-import mockit.VerificationsInOrder;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.onap.ccsdk.cds.sdclistener.client.SdcListenerClient;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
 import org.onap.ccsdk.cds.sdclistener.exceptions.SdcListenerException;
@@ -32,49 +33,44 @@ import org.onap.sdc.impl.DistributionClientFactory;
 import org.onap.sdc.impl.DistributionClientResultImpl;
 import org.onap.sdc.utils.DistributionActionResultEnum;
 
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
+
 public class SdcListenerClientTest {
 
-    @Tested
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
+
+    @Mock
+    private IDistributionClient distributionClient;
+
+    @Mock
+    private SdcListenerConfiguration configuration;
+
+    @Mock
+    private SdcListenerNotificationCallback notification;
+
+    @Mock
+    private SdcListenerDto sdcListenerDto;
+
+    @InjectMocks
     private SdcListenerClient sdcListenerClient;
 
     @Test
-    public void testInitCdsClientSuccesfully(@Injectable IDistributionClient distributionClient,
-            @Injectable SdcListenerConfiguration configuration,
-            @Injectable SdcListenerNotificationCallback notification, @Injectable SdcListenerDto sdcListenerDto)
-            throws SdcListenerException {
+    public void testInitCdsClientSuccesfully() throws SdcListenerException {
+        when(distributionClient.init(configuration, notification)).thenReturn(getResult());
+        when(distributionClient.start()).thenReturn(getResult());
 
-        // Arrange
-        new MockUp<DistributionClientFactory>() {
-            @Mock
-            public IDistributionClient createDistributionClient() {
-                return distributionClient;
-            }
-        };
+        try (MockedStatic<DistributionClientFactory> factory = mockStatic(DistributionClientFactory.class)) {
+            factory.when(DistributionClientFactory::createDistributionClient).thenReturn(distributionClient);
 
-        new Expectations() {
-            {
-                distributionClient.init(configuration, notification);
-                result = getResult();
-            }
-        };
+            sdcListenerClient.initSdcClient();
+        }
 
-        new Expectations() {
-            {
-                distributionClient.start();
-                result = getResult();
-            }
-        };
-
-        // Act
-        sdcListenerClient.initSdcClient();
-
-        // Verify
-        new VerificationsInOrder() {
-            {
-                distributionClient.init(configuration, notification);
-                distributionClient.start();
-            }
-        };
+        InOrder order = inOrder(distributionClient);
+        order.verify(distributionClient).init(configuration, notification);
+        order.verify(distributionClient).start();
     }
 
     public IDistributionClientResult getResult() {
