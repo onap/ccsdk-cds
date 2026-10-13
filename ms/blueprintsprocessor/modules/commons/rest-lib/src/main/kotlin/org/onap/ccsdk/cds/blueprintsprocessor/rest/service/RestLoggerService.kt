@@ -62,11 +62,16 @@ class RestLoggerService {
 
         /** Used before invoking any REST outbound request, Inbound Invocation ID is used as request Id
          * for outbound Request, If invocation Id is missing then default Request Id will be generated.
+         * Headers already supplied by the caller are kept as they are.
+         * @return the supplied headers plus the ONAP logging headers
          */
-        fun httpInvoking(headers: Array<BasicHeader>) {
-            headers.plusElement(BasicHeader(ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID()))
-            headers.plusElement(BasicHeader(ONAP_INVOCATION_ID, UUID.randomUUID().toString()))
-            headers.plusElement(BasicHeader(ONAP_PARTNER_NAME, BluePrintConstants.APP_NAME))
+        fun httpInvoking(headers: Array<BasicHeader>): Array<BasicHeader> {
+            val onapHeaders = listOf(
+                BasicHeader(ONAP_REQUEST_ID, MDC.get("InvocationID").defaultToUUID()),
+                BasicHeader(ONAP_INVOCATION_ID, UUID.randomUUID().toString()),
+                BasicHeader(ONAP_PARTNER_NAME, BluePrintConstants.APP_NAME)
+            ).filter { onapHeader -> headers.none { it.name.equals(onapHeader.name, ignoreCase = true) } }
+            return headers + onapHeaders
         }
     }
 

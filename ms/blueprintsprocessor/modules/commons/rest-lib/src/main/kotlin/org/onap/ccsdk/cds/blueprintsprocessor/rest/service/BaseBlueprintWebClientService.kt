@@ -96,8 +96,6 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
             }
         }
         return httpClients
-            .addInterceptorFirst(WebClientUtils.logRequest())
-            .addInterceptorLast(WebClientUtils.logResponse())
             .setDefaultRequestConfig(getRequestConfig())
             .build()
     }
@@ -132,7 +130,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
 
     @Throws(IOException::class, ClientProtocolException::class)
     protected fun performHttpCall(httpUriRequest: HttpUriRequest): WebClientResponse<String> {
-        val httpResponse = httpClient().execute(httpUriRequest)
+        val httpResponse = WebClientUtils.logExecution(httpUriRequest) { httpClient().execute(httpUriRequest) }
         val statusCode = httpResponse.statusLine.statusCode
         val responseHeaders: Map<String, String> = httpResponse.allHeaders.associate { header -> header.name to header.value }
         httpResponse.entity.content.use {
@@ -146,8 +144,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         val httpPost = HttpPost(host(path))
         val entity = EntityBuilder.create().setBinary(Files.readAllBytes(filePath)).build()
         httpPost.setEntity(entity)
-        RestLoggerService.httpInvoking(convertedHeaders)
-        httpPost.setHeaders(convertedHeaders)
+        httpPost.setHeaders(RestLoggerService.httpInvoking(convertedHeaders))
         return performHttpCall(httpPost)
     }
 
@@ -158,15 +155,13 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
 
     open fun <T> delete(path: String, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpDelete = HttpDelete(host(path))
-        RestLoggerService.httpInvoking(headers)
-        httpDelete.setHeaders(headers)
+        httpDelete.setHeaders(RestLoggerService.httpInvoking(headers))
         return performCallAndExtractTypedWebClientResponse(httpDelete, responseType)
     }
 
     open fun <T> get(path: String, headers: Array<BasicHeader>, responseType: Class<T>): WebClientResponse<T> {
         val httpGet = HttpGet(host(path))
-        RestLoggerService.httpInvoking(headers)
-        httpGet.setHeaders(headers)
+        httpGet.setHeaders(RestLoggerService.httpInvoking(headers))
         return performCallAndExtractTypedWebClientResponse(httpGet, responseType)
     }
 
@@ -174,8 +169,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         val httpPost = HttpPost(host(path))
         val entity = StringEntity(strRequest(request))
         httpPost.entity = entity
-        RestLoggerService.httpInvoking(headers)
-        httpPost.setHeaders(headers)
+        httpPost.setHeaders(RestLoggerService.httpInvoking(headers))
         return performCallAndExtractTypedWebClientResponse(httpPost, responseType)
     }
 
@@ -183,8 +177,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         val httpPut = HttpPut(host(path))
         val entity = StringEntity(strRequest(request))
         httpPut.entity = entity
-        RestLoggerService.httpInvoking(headers)
-        httpPut.setHeaders(headers)
+        httpPut.setHeaders(RestLoggerService.httpInvoking(headers))
         return performCallAndExtractTypedWebClientResponse(httpPut, responseType)
     }
 
@@ -192,8 +185,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         val httpPatch = HttpPatch(host(path))
         val entity = StringEntity(strRequest(request))
         httpPatch.entity = entity
-        RestLoggerService.httpInvoking(headers)
-        httpPatch.setHeaders(headers)
+        httpPatch.setHeaders(RestLoggerService.httpInvoking(headers))
         return performCallAndExtractTypedWebClientResponse(httpPatch, responseType)
     }
 
@@ -210,7 +202,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         responseType: Class<T>
     ):
         WebClientResponse<T> {
-            val httpResponse = httpClient().execute(httpUriRequest)
+            val httpResponse = WebClientUtils.logExecution(httpUriRequest) { httpClient().execute(httpUriRequest) }
             val statusCode = httpResponse.statusLine.statusCode
             val responseHeaders: Map<String, String> = httpResponse.allHeaders.associate { header -> header.name to header.value }
             val entity: HttpEntity? = httpResponse.entity

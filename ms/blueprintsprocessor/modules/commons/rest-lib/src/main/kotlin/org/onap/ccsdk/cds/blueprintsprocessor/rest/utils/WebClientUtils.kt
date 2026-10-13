@@ -16,20 +16,48 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.rest.utils
 
-import org.apache.http.HttpRequestInterceptor
-import org.apache.http.HttpResponseInterceptor
+import org.apache.http.HttpResponse
+import org.apache.http.client.methods.HttpUriRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.net.URI
 
 class WebClientUtils {
     companion object {
 
         val log: Logger = LoggerFactory.getLogger(WebClientUtils::class.java)
 
-        fun logRequest(): HttpRequestInterceptor =
-            HttpRequestInterceptor { request, _ -> log.info("Rest request method(${request?.requestLine?.method}), url(${request?.requestLine?.uri})") }
+        /**
+         * Executes an outbound REST call and logs its start, its outcome and its duration.
+         * Only the method and the URL without user info and query string are logged, because those can carry
+         * credentials; headers and bodies are never logged.
+         */
+        fun <T : HttpResponse> logExecution(request: HttpUriRequest, execute: () -> T): T {
+            val target = "method(${request.method}), url(${loggableUrl(request.uri)})"
+            log.info("Rest request $target")
+            val start = System.nanoTime()
+            try {
+                val response = execute()
+                log.info(
+                    "Rest response $target status(${response.statusLine.statusCode} - " +
+                        "${response.statusLine.reasonPhrase}) in ${elapsedMillis(start)} ms"
+                )
+                return response
+            } catch (e: Exception) {
+                log.error("Rest request $target failed after ${elapsedMillis(start)} ms", e)
+                throw e
+            }
+        }
 
-        fun logResponse(): HttpResponseInterceptor =
-            HttpResponseInterceptor { response, _ -> log.info("Response status(${response.statusLine.statusCode} - ${response.statusLine.reasonPhrase})") }
+        internal fun loggableUrl(uri: URI?): String {
+            if (uri == null) return ""
+            return try {
+                URI(uri.scheme, null, uri.host, uri.port, uri.path, null, null).toString()
+            } catch (e: Exception) {
+                uri.rawPath.orEmpty()
+            }
+        }
+
+        private fun elapsedMillis(start: Long) = (System.nanoTime() - start) / 1_000_000
     }
 }
