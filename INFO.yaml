@@ -13,7 +13,7 @@ primary_contact: *onap_releng_ptl
 issue_tracking:
     type: 'jira'
     url: 'https://jira.onap.org/projects/CCSDK'
-    key: 'CCDSK'
+    key: 'CCSDK'
 mailing_list:
     type: 'groups.io'
     url: 'lists.onap.org'
