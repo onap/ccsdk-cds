@@ -21,7 +21,8 @@ extensions = [
     'sphinx.ext.graphviz',
     'sphinxcontrib.mermaid',
     'sphinxcontrib.plantuml',
-    'sphinx_tabs.tabs'
+    'sphinx_tabs.tabs',
+    'sphinxcontrib.openapi'
 ]
 
 #

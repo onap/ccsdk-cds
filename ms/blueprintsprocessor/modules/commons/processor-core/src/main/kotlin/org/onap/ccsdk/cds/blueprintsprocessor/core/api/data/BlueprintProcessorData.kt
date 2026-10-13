@@ -104,7 +104,7 @@ open class ActionIdentifiers {
 
 open class CommonHeader {
 
-    @get:ApiModelProperty(required = true, value = "Date of the execution", example = "2012-04-23T18:25:43.511Z")
+    @get:ApiModelProperty(required = true, value = "Date of the execution", example = "\"2012-04-23T18:25:43.511Z\"")
     @get:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var timestamp: Date = Date()
 
@@ -141,7 +141,7 @@ open class Status {
     @get:ApiModelProperty(
         required = true,
         value = "Time when the execution ended.",
-        example = "2012-04-23T18:25:43.511Z"
+        example = "\"2012-04-23T18:25:43.511Z\""
     )
     @get:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var timestamp: Date = Date()

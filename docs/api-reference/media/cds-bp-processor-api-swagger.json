@@ -1112,6 +1112,32 @@
         }
       }
     },
+    "/api/v1/model-type" : {
+      "post" : {
+        "tags" : [ "Model Type Catalog" ],
+        "summary" : "Save a model type",
+        "description" : "Save a model type by model type definition provided.",
+        "operationId" : "ModelTypeController_saveModelType_POST.org.onap.ccsdk.cds.blueprintsprocessor.designer.api",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/ModelType"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ModelType"
+            }
+          }
+        }
+      }
+    },
     "/api/v1/model-type/by-definition/{definitionType}" : {
       "get" : {
         "tags" : [ "Model Type Catalog" ],
@@ -1326,7 +1352,7 @@
     "/api/v1/resources/occurrences" : {
       "get" : {
         "tags" : [ "Resources" ],
-        "summary" : "Get the map of resolved resources with 'occurrence' as the keys to the resolved resources ",
+        "summary" : "Get the map of resolved resources with 'occurrence' as the keys to the resolved resources",
         "description" : "With optional 'occurrence' options, subset of stored resolved resources can be retrieved using the blueprint name, blueprint version, artifact name and the resolution-key.",
         "operationId" : "ResourceController_getOccurrences_GET.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
         "produces" : [ "application/json" ],
@@ -1444,10 +1470,136 @@
         }
       }
     },
+    "/api/v1/template" : {
+      "get" : {
+        "tags" : [ "Resource Template" ],
+        "summary" : "Retrieve a resolved template",
+        "description" : "Retrieve a config template for a given CBA's action, identified by its blueprint name, blueprint version, artifact name and resolution key. An extra 'format' parameter can be passed to tell what content-type to expect in return",
+        "operationId" : "TemplateController_get_GET.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "produces" : [ "text/plain", "application/json", "application/xml" ],
+        "parameters" : [ {
+          "name" : "bpName",
+          "in" : "query",
+          "description" : "Name of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bpVersion",
+          "in" : "query",
+          "description" : "Version of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "artifactName",
+          "in" : "query",
+          "description" : "Artifact name for which to retrieve a resolved resource",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resolutionKey",
+          "in" : "query",
+          "description" : "Resolution Key associated with the resolution",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "resourceType",
+          "in" : "query",
+          "description" : "Resource Type associated with the resolution",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "resourceId",
+          "in" : "query",
+          "description" : "Resource Id associated with the resolution",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "format",
+          "in" : "query",
+          "description" : "Expected format of the template being retrieved",
+          "required" : true,
+          "type" : "string",
+          "default" : "text/plain"
+        }, {
+          "name" : "occurrence",
+          "in" : "query",
+          "description" : "Occurrence of the template resolution (1-n)",
+          "required" : false,
+          "type" : "integer",
+          "default" : 1,
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Resource Template" ],
+        "operationId" : "TemplateController_deleteTemplates_DELETE.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "bpName",
+          "in" : "query",
+          "description" : "Name of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "bpVersion",
+          "in" : "query",
+          "description" : "Version of the CBA",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "artifactName",
+          "in" : "query",
+          "description" : "Artifact name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "resolutionKey",
+          "in" : "query",
+          "description" : "Resolution Key associated with the template",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "resourceType",
+          "in" : "query",
+          "description" : "resourceType associated with the template, must be used with resourceId",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "resourceId",
+          "in" : "query",
+          "description" : "Resolution Key associated with the template, must be used with resourceType",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "lastN",
+          "in" : "query",
+          "description" : "Only delete last N occurrences",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/DeleteResponse"
+            }
+          }
+        }
+      }
+    },
     "/api/v1/template/occurrences" : {
       "get" : {
         "tags" : [ "Resource Template" ],
-        "summary" : "Get the map of resolved templates with 'occurrence' as the keys to the resolved templates ",
+        "summary" : "Get the map of resolved templates with 'occurrence' as the keys to the resolved templates",
         "description" : "With optional 'occurrence' options, subset of stored resolved templates can be retrieved using the blueprint name, blueprint version, artifact name and the resolution-key.",
         "operationId" : "TemplateController_getOccurrences_GET.org.onap.ccsdk.cds.blueprintsprocessor.resource.api",
         "produces" : [ "application/json" ],
@@ -1671,7 +1823,7 @@
         "properties" : {
           "type" : "object",
           "additionalProperties" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
         },
         "deploy_Path" : {
@@ -1769,13 +1921,13 @@
         "attributes" : {
           "type" : "object",
           "additionalProperties" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
         },
         "properties" : {
           "type" : "object",
           "additionalProperties" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
         }
       }
@@ -1787,7 +1939,7 @@
         "timestamp" : {
           "type" : "string",
           "format" : "date-time",
-          "example" : 2012-04-23T18:25:43.511Z,
+          "example" : "2012-04-23T18:25:43.511Z",
           "description" : "Date of the execution"
         },
         "originatorId" : {
@@ -1808,10 +1960,10 @@
       "type" : "object",
       "properties" : {
         "equal" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "length" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "pattern" : {
           "type" : "string"
@@ -1820,34 +1972,43 @@
           "type" : "string"
         },
         "greater_than" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "greater_or_equal" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "less_than" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "less_or_equal" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "in_range" : {
           "type" : "array",
           "items" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
         },
         "valid_values" : {
           "type" : "array",
           "items" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
         },
         "min_length" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "max_length" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
+        }
+      }
+    },
+    "DeleteResponse" : {
+      "type" : "object",
+      "properties" : {
+        "deletedEntries" : {
+          "type" : "integer",
+          "format" : "int32"
         }
       }
     },
@@ -1878,8 +2039,8 @@
           "$ref" : "#/definitions/ActionIdentifiers"
         },
         "payload" : {
-          "description" : "Contain the information to be passed as input to the action.The payload is constituted of two section: the workflow input which is the higher level block (xxx-request) and the input for resource resolution located within the xxx-request block, contained within xxx-properties",
-          "$ref" : "#/definitions/ObjectNode"
+          "type" : "object",
+          "description" : "Contain the information to be passed as input to the action.The payload is constituted of two section: the workflow input which is the higher level block (xxx-request) and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
         }
       }
     },
@@ -1900,8 +2061,8 @@
           "$ref" : "#/definitions/Status"
         },
         "payload" : {
-          "description" : "Contain the information to be passed as input to the action.The payload is constituted of two section: the workflow input which is the higher level block (xxx-request) and the input for resource resolution located within the xxx-request block, contained within xxx-properties",
-          "$ref" : "#/definitions/ObjectNode"
+          "type" : "object",
+          "description" : "Contain the information to be passed as input to the action.The payload is constituted of two section: the workflow input which is the higher level block (xxx-request) and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
         }
       }
     },
@@ -1944,77 +2105,8 @@
         "inputs" : {
           "type" : "object",
           "additionalProperties" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
-        }
-      }
-    },
-    "JsonNode" : {
-      "type" : "object",
-      "properties" : {
-        "object" : {
-          "type" : "boolean"
-        },
-        "boolean" : {
-          "type" : "boolean"
-        },
-        "binary" : {
-          "type" : "boolean"
-        },
-        "bigDecimal" : {
-          "type" : "boolean"
-        },
-        "bigInteger" : {
-          "type" : "boolean"
-        },
-        "double" : {
-          "type" : "boolean"
-        },
-        "long" : {
-          "type" : "boolean"
-        },
-        "int" : {
-          "type" : "boolean"
-        },
-        "short" : {
-          "type" : "boolean"
-        },
-        "valueNode" : {
-          "type" : "boolean"
-        },
-        "containerNode" : {
-          "type" : "boolean"
-        },
-        "missingNode" : {
-          "type" : "boolean"
-        },
-        "pojo" : {
-          "type" : "boolean"
-        },
-        "integralNumber" : {
-          "type" : "boolean"
-        },
-        "floatingPointNumber" : {
-          "type" : "boolean"
-        },
-        "textual" : {
-          "type" : "boolean"
-        },
-        "array" : {
-          "type" : "boolean"
-        },
-        "null" : {
-          "type" : "boolean"
-        },
-        "float" : {
-          "type" : "boolean"
-        },
-        "nodeType" : {
-          "type" : "string",
-          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
-        },
-        "number" : {
-          "type" : "boolean"
         }
       }
     },
@@ -2022,10 +2114,10 @@
       "type" : "object",
       "properties" : {
         "key" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "acquireTimeout" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         }
       }
     },
@@ -2043,7 +2135,7 @@
           "type" : "string"
         },
         "definition" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "description" : {
           "type" : "string"
@@ -2104,13 +2196,13 @@
         "properties" : {
           "type" : "object",
           "additionalProperties" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
         },
         "attributes" : {
           "type" : "object",
           "additionalProperties" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
         },
         "capabilities" : {
@@ -2145,75 +2237,6 @@
         }
       }
     },
-    "ObjectNode" : {
-      "type" : "object",
-      "properties" : {
-        "nodeType" : {
-          "type" : "string",
-          "enum" : [ "ARRAY", "BINARY", "BOOLEAN", "MISSING", "NULL", "NUMBER", "OBJECT", "POJO", "STRING" ]
-        },
-        "object" : {
-          "type" : "boolean"
-        },
-        "boolean" : {
-          "type" : "boolean"
-        },
-        "binary" : {
-          "type" : "boolean"
-        },
-        "bigDecimal" : {
-          "type" : "boolean"
-        },
-        "bigInteger" : {
-          "type" : "boolean"
-        },
-        "double" : {
-          "type" : "boolean"
-        },
-        "long" : {
-          "type" : "boolean"
-        },
-        "int" : {
-          "type" : "boolean"
-        },
-        "short" : {
-          "type" : "boolean"
-        },
-        "valueNode" : {
-          "type" : "boolean"
-        },
-        "containerNode" : {
-          "type" : "boolean"
-        },
-        "missingNode" : {
-          "type" : "boolean"
-        },
-        "pojo" : {
-          "type" : "boolean"
-        },
-        "integralNumber" : {
-          "type" : "boolean"
-        },
-        "floatingPointNumber" : {
-          "type" : "boolean"
-        },
-        "textual" : {
-          "type" : "boolean"
-        },
-        "array" : {
-          "type" : "boolean"
-        },
-        "null" : {
-          "type" : "boolean"
-        },
-        "float" : {
-          "type" : "boolean"
-        },
-        "number" : {
-          "type" : "boolean"
-        }
-      }
-    },
     "OperationAssignment" : {
       "type" : "object",
       "properties" : {
@@ -2226,13 +2249,13 @@
         "inputs" : {
           "type" : "object",
           "additionalProperties" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
         },
         "outputs" : {
           "type" : "object",
           "additionalProperties" : {
-            "$ref" : "#/definitions/JsonNode"
+            "type" : "object"
           }
         }
       }
@@ -2258,9 +2281,6 @@
         "last" : {
           "type" : "boolean"
         },
-        "first" : {
-          "type" : "boolean"
-        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -2277,6 +2297,9 @@
         },
         "sort" : {
           "$ref" : "#/definitions/Sort"
+        },
+        "first" : {
+          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -2304,9 +2327,6 @@
         "last" : {
           "type" : "boolean"
         },
-        "first" : {
-          "type" : "boolean"
-        },
         "size" : {
           "type" : "integer",
           "format" : "int32"
@@ -2323,6 +2343,9 @@
         },
         "sort" : {
           "$ref" : "#/definitions/Sort"
+        },
+        "first" : {
+          "type" : "boolean"
         },
         "empty" : {
           "type" : "boolean"
@@ -2383,13 +2406,13 @@
           }
         },
         "value" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "input-param" : {
           "type" : "boolean"
         },
         "default" : {
-          "$ref" : "#/definitions/JsonNode"
+          "type" : "object"
         },
         "entry_schema" : {
           "$ref" : "#/definitions/EntrySchema"
@@ -2618,10 +2641,10 @@
         "unsorted" : {
           "type" : "boolean"
         },
-        "sorted" : {
+        "empty" : {
           "type" : "boolean"
         },
-        "empty" : {
+        "sorted" : {
           "type" : "boolean"
         }
       }
@@ -2642,7 +2665,7 @@
         "timestamp" : {
           "type" : "string",
           "format" : "date-time",
-          "example" : 2012-04-23T18:25:43.511Z,
+          "example" : "2012-04-23T18:25:43.511Z",
           "description" : "Time when the execution ended."
         },
         "errorMessage" : {

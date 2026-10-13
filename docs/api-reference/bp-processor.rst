@@ -153,13 +153,7 @@ HTTP Status 202 OK
 API Reference
 --------------
 
-.. note::
-   The embedded API documentation has been removed because the source swagger
-   file contains malformed JSON and cannot be rendered by Sphinx.
-   Use the download link above or paste the file into
-   `Swagger Editor <https://editor.swagger.io/>`_ to browse the API reference.
-
-.. .. openapi:: media/cds-bp-processor-api-swagger.json
+.. openapi:: media/cds-bp-processor-api-swagger.json
 
 
 
