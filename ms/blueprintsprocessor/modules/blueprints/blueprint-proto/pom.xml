@@ -58,7 +58,6 @@
                     </protocArtifact>
                     <protoSourceRoot>${project.basedir}/../../../../../components/model-catalog/proto-definition/proto
                     </protoSourceRoot>
-                    <attachProtoSources>false</attachProtoSources>
                 </configuration>
                 <executions>
                     <execution>
