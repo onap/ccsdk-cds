@@ -29,7 +29,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.RestLibConstants
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLBasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.SSLTokenAuthRestClientProperties
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.utils.WebClientUtils
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import java.io.File
@@ -120,8 +119,6 @@ open class SSLRestClientService(private val restClientProperties: SSLRestClientP
             csf = SSLConnectionSocketFactory(sslContext.build())
         }
         return HttpClients.custom()
-            .addInterceptorFirst(WebClientUtils.logRequest())
-            .addInterceptorLast(WebClientUtils.logResponse())
             .setDefaultRequestConfig(getRequestConfig())
             .setSSLSocketFactory(csf).build()
     }
