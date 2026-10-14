@@ -53,9 +53,9 @@ import kotlin.streams.toList
 
 /**
  * Boots the complete blueprints processor against real infrastructure: a MariaDB container as both the
- * primary database and the `processor-db` resource source, and a WireMock server as the `rest` resource
- * source. The infrastructure is started once per JVM and every subclass gets the same configuration, so
- * all ITs share one cached Spring context.
+ * primary database and the `processor-db` resource source, a WireMock server as the `rest` resource
+ * source and an [EmbeddedNetconfServer] as the device. The infrastructure is started once per JVM and
+ * every subclass gets the same configuration, so all ITs share one cached Spring context.
  */
 @RunWith(SpringRunner::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -75,6 +75,7 @@ abstract class BaseE2eIT {
         WebTestClient.bindToServer()
             .baseUrl("http://localhost:$httpPort")
             .defaultHeader(HttpHeaders.AUTHORIZATION, TestSecuritySettings.clientAuthToken())
+            // the first config-deploy compiles the CBA's Kotlin script
             .responseTimeout(Duration.ofMinutes(2))
             .build()
     }
@@ -82,6 +83,7 @@ abstract class BaseE2eIT {
     @After
     fun resetSouthbound() {
         wireMock.resetAll()
+        netconf.reset()
     }
 
     protected fun publish(version: String) {
@@ -128,6 +130,21 @@ abstract class BaseE2eIT {
         mapOf(
             "resolution-key" to resolutionKey,
             "resource-assignment-properties" to mapOf("hostname" to hostname)
+        )
+    )
+
+    protected fun configDeployRequest(
+        resolutionKey: String,
+        requestId: String = uniqueId("req"),
+        version: String = DEFAULT_VERSION
+    ): JsonNode = executionRequest(
+        "config-deploy", requestId, version,
+        mapOf(
+            "resolution-key" to resolutionKey,
+            "netconf-host" to "127.0.0.1",
+            "netconf-port" to netconf.port,
+            "netconf-username" to netconf.username,
+            "netconf-password" to netconf.password
         )
     )
 
@@ -178,6 +195,8 @@ abstract class BaseE2eIT {
         }
 
         val wireMock = WireMockServer(wireMockConfig().dynamicPort()).apply { start() }
+
+        val netconf = EmbeddedNetconfServer("e2e-netconf", "e2e-netconf-secret")
 
         val grpcPort: Int = ServerSocket(0).use { it.localPort }
 
