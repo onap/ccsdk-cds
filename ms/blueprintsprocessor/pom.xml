@@ -36,6 +36,7 @@
         <module>modules</module>
         <module>functions</module>
         <module>application</module>
+        <module>coverage-report</module>
     </modules>
 
     <properties>

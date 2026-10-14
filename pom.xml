@@ -55,7 +55,7 @@ limitations under the License.
         <!--Only include java and kt files to the scan-->
         <sonar.inclusions>**/*.java,**/*.kt</sonar.inclusions>
         <!--Specify path to load jacoco XLM report, as Sonar can't load Kotlin coverage from binary report-->
-        <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml,${maven.multiModuleProjectDirectory}/ms/blueprintsprocessor/coverage-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <jacoco.version>0.8.12</jacoco.version>
 
         <!-- Properties for POM Format -->
