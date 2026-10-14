@@ -1,0 +1,108 @@
+{
+  "tosca_definitions_version" : "controller_blueprint_1_0_0",
+  "metadata" : {
+    "template_author" : "ONAP CCSDK",
+    "author-email" : "onap-discuss@lists.onap.org",
+    "user-groups" : "ADMIN, OPERATION",
+    "template_name" : "e2e-it",
+    "template_version" : "1.0.0",
+    "template_tags" : "e2e-it"
+  },
+  "imports" : [
+    {
+      "file" : "Definitions/data_types.json"
+    },
+    {
+      "file" : "Definitions/relationship_types.json"
+    },
+    {
+      "file" : "Definitions/artifact_types.json"
+    },
+    {
+      "file" : "Definitions/node_types.json"
+    },
+    {
+      "file" : "Definitions/policy_types.json"
+    }
+  ],
+  "topology_template" : {
+    "workflows" : {
+      "resource-assignment" : {
+        "steps" : {
+          "resource-assignment" : {
+            "description" : "Resolve the device configuration",
+            "target" : "resource-assignment",
+            "activities" : [
+              {
+                "call_operation" : ""
+              }
+            ]
+          }
+        },
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "resource-assignment-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(resource-assignment).",
+            "required" : true,
+            "type" : "dt-resource-assignment-properties"
+          }
+        },
+        "outputs" : {
+          "config" : {
+            "type" : "json",
+            "value" : {
+              "get_attribute" : [
+                "resource-assignment",
+                "assignment-params"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "node_templates" : {
+      "resource-assignment" : {
+        "type" : "component-resource-resolution",
+        "interfaces" : {
+          "ResourceResolutionComponent" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "resolution-key" : {
+                    "get_input" : "resolution-key"
+                  },
+                  "store-result" : true,
+                  "artifact-prefix-names" : [
+                    "config"
+                  ]
+                },
+                "outputs" : {
+                  "resource-assignment-params" : {
+                    "get_attribute" : [
+                      "SELF",
+                      "assignment-params"
+                    ]
+                  },
+                  "status" : "success"
+                }
+              }
+            }
+          }
+        },
+        "artifacts" : {
+          "config-template" : {
+            "type" : "artifact-template-velocity",
+            "file" : "Templates/config-template.vtl"
+          },
+          "config-mapping" : {
+            "type" : "artifact-mapping-resource",
+            "file" : "Templates/config-mapping.json"
+          }
+        }
+      }
+    }
+  }
+}

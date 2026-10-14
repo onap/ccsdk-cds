@@ -1,0 +1,76 @@
+{
+  "hostname" : {
+    "tags" : "hostname",
+    "name" : "hostname",
+    "property" : {
+      "description" : "Device host name",
+      "type" : "string"
+    },
+    "updated-by" : "ONAP CCSDK",
+    "sources" : {
+      "input" : {
+        "type" : "source-input",
+        "properties" : {}
+      }
+    }
+  },
+  "vlan-id" : {
+    "tags" : "vlan-id",
+    "name" : "vlan-id",
+    "property" : {
+      "description" : "VLAN of the device, looked up in the inventory",
+      "type" : "string"
+    },
+    "updated-by" : "ONAP CCSDK",
+    "sources" : {
+      "rest" : {
+        "type" : "source-rest",
+        "properties" : {
+          "type" : "JSON",
+          "verb" : "GET",
+          "url-path" : "/devices/$hostname",
+          "path" : "",
+          "input-key-mapping" : {
+            "hostname" : "hostname"
+          },
+          "output-key-mapping" : {
+            "vlan-id" : "vlan-id"
+          },
+          "headers" : {
+            "Accept" : "application/json"
+          },
+          "key-dependencies" : [
+            "hostname"
+          ]
+        }
+      }
+    }
+  },
+  "mgmt-ip" : {
+    "tags" : "mgmt-ip",
+    "name" : "mgmt-ip",
+    "property" : {
+      "description" : "Management IP of the device, looked up in the processor DB",
+      "type" : "string"
+    },
+    "updated-by" : "ONAP CCSDK",
+    "sources" : {
+      "processor-db" : {
+        "type" : "source-db",
+        "properties" : {
+          "type" : "SQL",
+          "query" : "SELECT mgmt_ip FROM E2E_DEVICE WHERE hostname = :hostname",
+          "input-key-mapping" : {
+            "hostname" : "hostname"
+          },
+          "output-key-mapping" : {
+            "mgmt-ip" : "mgmt_ip"
+          },
+          "key-dependencies" : [
+            "hostname"
+          ]
+        }
+      }
+    }
+  }
+}

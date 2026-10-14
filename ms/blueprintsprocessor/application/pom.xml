@@ -36,8 +36,21 @@
     <properties>
         <serviceArtifactName>blueprintsprocessor</serviceArtifactName>
         <image.name>onap/ccsdk-blueprintsprocessor</image.name>
+        <!-- 1.21.3, managed by Spring Boot 3.5, uses Docker API 1.32, which Docker Engine 29 rejects -->
+        <testcontainers.version>1.21.4</testcontainers.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
@@ -212,6 +225,11 @@
         </dependency>
 
         <!-- END UAT -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mariadb</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

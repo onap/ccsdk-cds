@@ -1,0 +1,7 @@
+TOSCA-Meta-File-Version: 1.0.0
+CSAR-Version: 1.0
+Created-By: ONAP CCSDK
+Entry-Definitions: Definitions/e2e-it.json
+Template-Name: e2e-it
+Template-Version: 1.0.0
+Template-Tags: e2e-it
