@@ -147,6 +147,13 @@ jobs:
       # Maven pulls from artifact CDNs that are impractical to enumerate
       # in the allow-list, and the build shares this job with the scan.
       build_permit_egress_traffic: true
+      # Scan only the built archives. Scanning the whole checkout also
+      # reads every package.json under the cds-ui node_modules, including
+      # Angular schematics templates that are not valid JSON, and the
+      # resulting scanning error fails the lane.
+      # advanced_properties cannot exclude them instead: run-iq-cli
+      # passes "-D key=value" as one argument, which the IQ CLI drops.
+      scan_targets: '**/*.ear **/*.jar **/*.tar.gz **/*.war **/*.zip'
       # application_id is left unset: the lane derives <owner>-<name>,
       # giving onap-ccsdk-cds.
       #
