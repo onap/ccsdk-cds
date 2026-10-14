@@ -659,6 +659,12 @@ limitations under the License.
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${maven-failsafe-plugin.version}</version>
                     <executions>
+                        <!-- The Spring Boot parent binds its own failsafe execution without the JaCoCo agent;
+                             unbound so that every IT runs once, here, with coverage. -->
+                        <execution>
+                            <id>default</id>
+                            <phase>none</phase>
+                        </execution>
                         <!-- Ensures that both integration-test and verify goals of the Failsafe Maven plugin are executed. -->
                         <execution>
                             <id>integration-tests</id>

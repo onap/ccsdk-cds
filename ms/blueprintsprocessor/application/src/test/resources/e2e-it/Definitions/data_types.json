@@ -1,0 +1,14 @@
+{
+  "data_types" : {
+    "dt-resource-assignment-properties" : {
+      "description" : "Dynamic DataType definition for workflow(resource-assignment).",
+      "version" : "1.0.0",
+      "properties" : {
+        "hostname" : {
+          "type" : "string"
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    }
+  }
+}

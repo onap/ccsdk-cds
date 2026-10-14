@@ -1,0 +1,38 @@
+[
+  {
+    "name" : "hostname",
+    "input-param" : true,
+    "property" : {
+      "type" : "string"
+    },
+    "dictionary-name" : "hostname",
+    "dictionary-source" : "input",
+    "dependencies" : []
+  },
+  {
+    "name" : "vlan-id",
+    "input-param" : false,
+    "property" : {
+      "type" : "string",
+      "required" : true
+    },
+    "dictionary-name" : "vlan-id",
+    "dictionary-source" : "rest",
+    "dependencies" : [
+      "hostname"
+    ]
+  },
+  {
+    "name" : "mgmt-ip",
+    "input-param" : false,
+    "property" : {
+      "type" : "string",
+      "required" : true
+    },
+    "dictionary-name" : "mgmt-ip",
+    "dictionary-source" : "processor-db",
+    "dependencies" : [
+      "hostname"
+    ]
+  }
+]
