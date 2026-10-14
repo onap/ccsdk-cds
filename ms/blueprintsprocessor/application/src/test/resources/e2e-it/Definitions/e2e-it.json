@@ -61,6 +61,46 @@
             }
           }
         }
+      },
+      "config-deploy" : {
+        "steps" : {
+          "config-deploy" : {
+            "description" : "Push the resolved configuration to the device",
+            "target" : "config-deploy",
+            "activities" : [
+              {
+                "call_operation" : ""
+              }
+            ]
+          }
+        },
+        "inputs" : {
+          "resolution-key" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "netconf-host" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "netconf-port" : {
+            "required" : true,
+            "type" : "integer"
+          },
+          "netconf-username" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "netconf-password" : {
+            "required" : true,
+            "type" : "string"
+          },
+          "config-deploy-properties" : {
+            "description" : "Dynamic PropertyDefinition for workflow(config-deploy).",
+            "required" : false,
+            "type" : "dt-config-deploy-properties"
+          }
+        }
       }
     },
     "node_templates" : {
@@ -102,6 +142,59 @@
             "file" : "Templates/config-mapping.json"
           }
         }
+      },
+      "config-deploy" : {
+        "type" : "component-netconf-executor",
+        "requirements" : {
+          "netconf-connection" : {
+            "capability" : "netconf",
+            "node" : "netconf-device",
+            "relationship" : "tosca.relationships.ConnectsTo"
+          }
+        },
+        "interfaces" : {
+          "ComponentNetconfExecutor" : {
+            "operations" : {
+              "process" : {
+                "inputs" : {
+                  "script-type" : "kotlin",
+                  "script-class-reference" : "cba.e2e.it.ConfigDeploy",
+                  "instance-dependencies" : [],
+                  "dynamic-properties" : "*config-deploy-properties"
+                }
+              }
+            }
+          }
+        }
+      },
+      "netconf-device" : {
+        "type" : "vnf-netconf-device",
+        "capabilities" : {
+          "netconf" : {
+            "properties" : {
+              "login-account" : {
+                "get_input" : "netconf-username"
+              },
+              "login-key" : {
+                "get_input" : "netconf-password"
+              },
+              "target-ip-address" : {
+                "get_input" : "netconf-host"
+              },
+              "port-number" : {
+                "get_input" : "netconf-port"
+              },
+              "connection-time-out" : 10
+            }
+          }
+        }
+      }
+    }
+  },
+  "dsl_definitions" : {
+    "config-deploy-properties" : {
+      "resolution-key" : {
+        "get_input" : "resolution-key"
       }
     }
   }
