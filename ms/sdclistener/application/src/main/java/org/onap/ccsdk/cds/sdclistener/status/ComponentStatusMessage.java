@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.sdclistener.status;
 
 import org.onap.sdc.api.consumer.IComponentDoneStatusMessage;
 import org.onap.sdc.api.consumer.IDistributionStatusMessage;
-import org.onap.sdc.utils.DistributionStatusEnum;
+import org.onap.sdc.api.notification.DistributionStatusEnum;
 
 public class ComponentStatusMessage implements IComponentDoneStatusMessage, IDistributionStatusMessage {
 
