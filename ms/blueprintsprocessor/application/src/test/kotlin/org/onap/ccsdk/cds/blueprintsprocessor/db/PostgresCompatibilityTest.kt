@@ -21,6 +21,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.BlueprintDatabaseConfiguration
+import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.BluePrintDBLibPropertyService
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModel
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain.BlueprintModelContent
 import org.onap.ccsdk.cds.blueprintsprocessor.db.primary.repository.BlueprintModelRepository
@@ -44,7 +45,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
-@ContextConfiguration(classes = [BlueprintDatabaseConfiguration::class])
+@ContextConfiguration(classes = [BlueprintDatabaseConfiguration::class, BluePrintDBLibPropertyService::class])
 @TestPropertySource(
     properties = [
         "blueprintsprocessor.db.driverClassName=org.postgresql.Driver",
@@ -77,6 +78,14 @@ class PostgresCompatibilityTest {
             registry.add("blueprintsprocessor.db.url") { postgres.jdbcUrl }
             registry.add("blueprintsprocessor.db.username") { postgres.username }
             registry.add("blueprintsprocessor.db.password") { postgres.password }
+            registry.add("blueprintsprocessor.db.pg-source.type") { "postgres-db" }
+            registry.add("blueprintsprocessor.db.pg-source.url") { postgres.jdbcUrl }
+            registry.add("blueprintsprocessor.db.pg-source.username") { postgres.username }
+            registry.add("blueprintsprocessor.db.pg-source.password") { postgres.password }
+            registry.add("blueprintsprocessor.db.pg-source.hibernateHbm2ddlAuto") { "none" }
+            registry.add("blueprintsprocessor.db.pg-source.hibernateDDLAuto") { "none" }
+            registry.add("blueprintsprocessor.db.pg-source.hibernateNamingStrategy") { "org.hibernate.cfg.ImprovedNamingStrategy" }
+            registry.add("blueprintsprocessor.db.pg-source.hibernateDialect") { "org.hibernate.dialect.PostgreSQLDialect" }
         }
     }
 
@@ -89,6 +98,9 @@ class PostgresCompatibilityTest {
 
     @Autowired
     lateinit var resourceResolutionRepository: ResourceResolutionRepository
+
+    @Autowired
+    lateinit var dbLibPropertyService: BluePrintDBLibPropertyService
 
     private val textColumns = listOf(
         "blueprint_model" to "artifact_description",
@@ -186,5 +198,11 @@ class PostgresCompatibilityTest {
                 "key-1", "db-compat", "1.0.0", "config", "hostname"
             )
         assertEquals("router-1", found?.value)
+    }
+
+    @Test
+    fun `postgres-db selector queries a PostgreSQL database`() {
+        val db = dbLibPropertyService.JdbcTemplate("pg-source")
+        assertEquals(1, db.query("SELECT 1 AS one", emptyMap())[0]["one"])
     }
 }
