@@ -110,6 +110,12 @@ Release Data
 New features
 ------------
 
+* **PostgreSQL database (breaking change)** — The blueprintsprocessor now
+  uses PostgreSQL as its database; MariaDB is no longer supported as the CDS
+  database. Existing installations must migrate their data, see
+  :ref:`cds_database_upgrade`.
+  (Jira `CCSDK-TBD <https://lf-onap.atlassian.net/browse/CCSDK-TBD>`_)
+
 * **OpenTelemetry instrumentation** — Added OpenTelemetry (OTel) Java agent for
   Java/Kotlin services (blueprintsprocessor, sdclistener) and Python
   instrumentation for py-executor and command-executor.  Tracing configuration

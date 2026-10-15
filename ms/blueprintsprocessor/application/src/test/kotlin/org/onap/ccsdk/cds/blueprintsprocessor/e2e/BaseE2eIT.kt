@@ -57,6 +57,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import org.testcontainers.containers.MariaDBContainer
+import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
 import java.io.ByteArrayOutputStream
 import java.net.ServerSocket
@@ -72,10 +73,10 @@ import kotlin.streams.toList
 import kotlin.test.fail
 
 /**
- * Boots the complete blueprints processor against real infrastructure: a MariaDB container as both the
- * primary database and the `processor-db` resource source, a WireMock server as the `rest` resource
- * source, an [EmbeddedNetconfServer] as the device and an embedded Kafka broker for the self-service
- * consumer. The infrastructure is started once per JVM and every subclass gets the same configuration,
+ * Boots the complete blueprints processor against real infrastructure: a PostgreSQL container as the
+ * primary database, a MariaDB container as the `processor-db` resource source, a WireMock server as
+ * the `rest` resource source, an [EmbeddedNetconfServer] as the device and an embedded Kafka broker
+ * for the self-service consumer. The infrastructure is started once per JVM and every subclass gets the same configuration,
  * so all ITs share one cached Spring context.
  */
 @RunWith(SpringRunner::class)
@@ -259,7 +260,7 @@ abstract class BaseE2eIT {
     }
 
     protected fun seedDevice(hostname: String, mgmtIp: String) {
-        jdbc.update("INSERT INTO E2E_DEVICE (hostname, mgmt_ip) VALUES (?, ?)", hostname, mgmtIp)
+        deviceDb.update("INSERT INTO E2E_DEVICE (hostname, mgmt_ip) VALUES (?, ?)", hostname, mgmtIp)
     }
 
     data class ProcessResult(val httpStatus: Int, val body: JsonNode) {
@@ -279,6 +280,13 @@ abstract class BaseE2eIT {
 
         private val FINAL_EVENTS = setOf(EventType.EVENT_COMPONENT_EXECUTED, EventType.EVENT_COMPONENT_FAILURE)
 
+        private val postgres = PostgreSQLContainer<Nothing>(DockerImageName.parse("postgres:13-alpine")).apply {
+            withDatabaseName("sdnctl")
+            withUsername("sdnctl")
+            withPassword("sdnctl")
+            start()
+        }
+
         private val mariaDb = MariaDBContainer<Nothing>(DockerImageName.parse("mariadb:11.7.2")).apply {
             withDatabaseName("sdnctl")
             withUsername("sdnctl")
@@ -294,7 +302,9 @@ abstract class BaseE2eIT {
 
         val kafka = EmbeddedKafkaKraftBroker(1, 1, REQUEST_TOPIC, RESPONSE_TOPIC).apply { afterPropertiesSet() }
 
-        val jdbc = JdbcTemplate(DriverManagerDataSource(mariaDb.jdbcUrl, mariaDb.username, mariaDb.password)).apply {
+        val jdbc = JdbcTemplate(DriverManagerDataSource(postgres.jdbcUrl, postgres.username, postgres.password))
+
+        private val deviceDb = JdbcTemplate(DriverManagerDataSource(mariaDb.jdbcUrl, mariaDb.username, mariaDb.password)).apply {
             execute("CREATE TABLE E2E_DEVICE (hostname VARCHAR(64) PRIMARY KEY, mgmt_ip VARCHAR(64) NOT NULL)")
         }
 
@@ -303,11 +313,11 @@ abstract class BaseE2eIT {
         @JvmStatic
         @DynamicPropertySource
         fun infrastructureProperties(registry: DynamicPropertyRegistry) {
-            registry.add("blueprintsprocessor.db.url") { mariaDb.jdbcUrl }
-            registry.add("blueprintsprocessor.db.username") { mariaDb.username }
-            registry.add("blueprintsprocessor.db.password") { mariaDb.password }
-            registry.add("blueprintsprocessor.db.driverClassName") { "org.mariadb.jdbc.Driver" }
-            registry.add("blueprintsprocessor.db.hibernateDialect") { "org.hibernate.dialect.MariaDBDialect" }
+            registry.add("blueprintsprocessor.db.url") { postgres.jdbcUrl }
+            registry.add("blueprintsprocessor.db.username") { postgres.username }
+            registry.add("blueprintsprocessor.db.password") { postgres.password }
+            registry.add("blueprintsprocessor.db.driverClassName") { "org.postgresql.Driver" }
+            registry.add("blueprintsprocessor.db.hibernateDialect") { "org.hibernate.dialect.PostgreSQLDialect" }
 
             registry.add("blueprintsprocessor.db.processor-db.type") { "maria-db" }
             registry.add("blueprintsprocessor.db.processor-db.url") { mariaDb.jdbcUrl }
