@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import io.swagger.annotations.ApiModelProperty
+import org.hibernate.Length
 import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -28,7 +29,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.Index
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -64,9 +64,8 @@ class ResourceResolution : Serializable {
     @Column(name = "name", nullable = false)
     var name: String? = null
 
-    @Lob
     @get:ApiModelProperty(value = "Value of the resolution.", required = true)
-    @Column(name = "value", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "value", nullable = false, length = Length.LONG32)
     var value: String? = null
 
     @get:ApiModelProperty(value = "Whether success of failure.", required = true)

@@ -17,6 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.message.prioritization.db
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import org.hibernate.Length
 import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -26,7 +27,6 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -55,20 +55,16 @@ open class MessagePrioritization {
     @Column(name = "priority", nullable = false)
     var priority: Int = 5
 
-    @Lob
-    @Column(name = "message", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "message", nullable = false, length = Length.LONG32)
     var message: String? = null
 
-    @Lob
-    @Column(name = "error", nullable = true, columnDefinition = "LONGTEXT")
+    @Column(name = "error", nullable = true, length = Length.LONG32)
     var error: String? = null
 
-    @Lob
-    @Column(name = "aggregated_message_ids", nullable = true, columnDefinition = "LONGTEXT")
+    @Column(name = "aggregated_message_ids", nullable = true, length = Length.LONG32)
     var aggregatedMessageIds: String? = null
 
-    @Lob
-    @Column(name = "correlation_id", nullable = true, columnDefinition = "LONGTEXT")
+    @Column(name = "correlation_id", nullable = true, length = Length.LONG32)
     var correlationId: String? = null
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

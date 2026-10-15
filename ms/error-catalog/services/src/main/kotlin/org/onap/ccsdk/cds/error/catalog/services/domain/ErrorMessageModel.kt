@@ -18,12 +18,12 @@ package org.onap.ccsdk.cds.error.catalog.services.domain
 
 import java.io.Serializable
 import java.util.UUID
+import org.hibernate.Length
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
@@ -44,12 +44,10 @@ class ErrorMessageModel : Serializable {
     @Column(name = "message_id", nullable = false)
     lateinit var messageID: String
 
-    @Lob
-    @Column(name = "cause", columnDefinition = "LONGTEXT")
+    @Column(name = "cause", length = Length.LONG32)
     var cause: String = ""
 
-    @Lob
-    @Column(name = "action", columnDefinition = "LONGTEXT")
+    @Column(name = "action", length = Length.LONG32)
     lateinit var action: String
 
     @ManyToMany(mappedBy = "errorMessages", fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST])

@@ -22,13 +22,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
+import org.hibernate.Length
 import org.springframework.data.annotation.LastModifiedDate
 import java.io.Serializable
 import java.util.Date
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
@@ -69,9 +69,8 @@ class BlueprintModelSearch : Serializable {
     @Column(name = "artifact_version", nullable = false)
     var artifactVersion: String? = null
 
-    @Lob
     @ApiModelProperty(value = "Artifact Description, usually empty", example = "", required = false)
-    @Column(name = "artifact_description", columnDefinition = "LONGTEXT")
+    @Column(name = "artifact_description", length = Length.LONG32)
     var artifactDescription: String? = null
 
     @ApiModelProperty(value = "Internal Version of CBA, usually null", required = false)
@@ -98,7 +97,7 @@ class BlueprintModelSearch : Serializable {
     var updatedBy: String? = null
 
     @ApiModelProperty(value = "Tags to identify the CBA, defined in Metadata", example = "test", required = true)
-    @Column(name = "tags", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "tags", nullable = false, columnDefinition = "TEXT")
     var tags: String? = null
 
     companion object {

@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.error.catalog.services.domain
 
 import java.io.Serializable
 import java.util.UUID
+import org.hibernate.Length
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -25,7 +26,6 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
-import jakarta.persistence.Lob
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
@@ -50,8 +50,7 @@ class Domain : Serializable {
     @Column(name = "application_id")
     lateinit var applicationId: String
 
-    @Lob
-    @Column(name = "description", columnDefinition = "LONGTEXT")
+    @Column(name = "description", length = Length.LONG32)
     var description: String = ""
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])

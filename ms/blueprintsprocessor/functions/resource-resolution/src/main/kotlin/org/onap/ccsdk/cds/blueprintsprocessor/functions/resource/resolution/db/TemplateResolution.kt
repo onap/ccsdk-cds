@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import io.swagger.annotations.ApiModelProperty
+import org.hibernate.Length
 import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -28,12 +29,9 @@ import jakarta.persistence.Entity
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.Id
 import jakarta.persistence.Index
-import jakarta.persistence.Lob
 import jakarta.persistence.Table
 import jakarta.persistence.Temporal
 import jakarta.persistence.TemporalType
-import org.hibernate.annotations.JdbcTypeCode
-import java.sql.Types
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
@@ -61,10 +59,8 @@ class TemplateResolution : Serializable {
     @Column(name = "artifact_name", nullable = false)
     var artifactName: String? = null
 
-    @Lob
-    @JdbcTypeCode(Types.LONGVARCHAR)
     @get:ApiModelProperty(value = "Rendered template.", required = true)
-    @Column(name = "result", nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "result", nullable = false, length = Length.LONG32)
     var result: String? = null
 
     @get:ApiModelProperty(
