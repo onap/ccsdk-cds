@@ -30,6 +30,8 @@ import org.junit.runner.RunWith
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertiesService
 import org.onap.ccsdk.cds.blueprintsprocessor.core.BluePrintPropertyConfiguration
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BluePrintRestLibConfiguration
+import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
+import org.slf4j.MDC
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -132,6 +134,21 @@ class RestClientServiceTest {
             "query with id:3", response.body,
             "failed to get query param response"
         )
+    }
+
+    @Test
+    fun testOnapRequestIdHeaderIsSent() {
+        val restClientService = bluePrintRestLibPropertyService
+            .blueprintWebClientService("sample")
+        MDC.put("InvocationID", "inbound-invocation-id")
+        try {
+            val response = restClientService.exchangeResource(
+                HttpMethod.GET.name(), "/sample/onapRequestId", ""
+            )
+            assertEquals("inbound-invocation-id", response.body)
+        } finally {
+            MDC.remove("InvocationID")
+        }
     }
 
     @Test
@@ -371,6 +388,10 @@ open class SampleController {
         }
         return ResponseEntity("query with id:$id", responseHeaders, HttpStatus.OK)
     }
+
+    @GetMapping("/onapRequestId")
+    fun getOnapRequestId(@RequestHeader(name = BluePrintConstants.ONAP_REQUEST_ID) requestId: String): String =
+        requestId
 
     @GetMapping("/path/{id}/get")
     fun getPathParam(@PathVariable("id") id: String): String =
