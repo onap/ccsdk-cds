@@ -18,6 +18,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.controller
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ApplicationHealth
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.CombinedHealthService
 import org.springframework.http.MediaType
@@ -48,7 +50,8 @@ open class CombinedHealth(private val combinedHealthService: CombinedHealthServi
     )
     @ResponseBody
     @ApiOperation(value = "Health Check", hidden = true)
-    fun getSystemHealthCheckResponse(): ResponseEntity<List<ApplicationHealth?>> {
-        return ResponseEntity.ok().body(combinedHealthService.getCombinedHealthCheck())
-    }
+    suspend fun getSystemHealthCheckResponse(): ResponseEntity<List<ApplicationHealth?>> =
+        withContext(Dispatchers.IO) {
+            ResponseEntity.ok().body(combinedHealthService.getCombinedHealthCheck())
+        }
 }

@@ -18,7 +18,10 @@ package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration.HealthCheckProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ApplicationHealth
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
-import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.WebClientEnpointResponse
+import org.springframework.beans.factory.ObjectProvider
+import org.springframework.boot.actuate.health.CompositeHealth
+import org.springframework.boot.actuate.health.Health
+import org.springframework.boot.actuate.health.HealthEndpoint
 import org.springframework.boot.actuate.health.Status
 import org.springframework.stereotype.Service
 
@@ -31,33 +34,36 @@ import org.springframework.stereotype.Service
 @Service
 open class CombinedHealthService(
     private val endPointExecution: EndPointExecution,
-    private val healthCheckProperties: HealthCheckProperties
+    private val healthCheckProperties: HealthCheckProperties,
+    private val healthEndpoint: ObjectProvider<HealthEndpoint>
 ) {
 
-    private fun setupServiceEndpoint(): List<ServiceEndpoint> {
-        return listOf(
-            ServiceEndpoint("BluePrintProcessor Health Check ", healthCheckProperties.getBluePrintBaseURL() + "actuator/health"),
-            ServiceEndpoint("CDSListener Health Check", healthCheckProperties.getCDSListenerBaseURL() + "actuator/health")
-        )
+    open fun getCombinedHealthCheck(): List<ApplicationHealth?> {
+        return listOf(getBluePrintProcessorHealth(), getCDSListenerHealth())
     }
 
-    open fun getCombinedHealthCheck(): List<ApplicationHealth?> {
-        val listOfResponse = ArrayList<ApplicationHealth?>()
-        for (serviceEndpoint in setupServiceEndpoint().parallelStream()) {
-            val result: WebClientEnpointResponse? = endPointExecution?.retrieveWebClientResponse(serviceEndpoint)
-            if (result?.response != null &&
-                result.response!!.status?.equals(200)!!
-            ) {
-                listOfResponse.add(endPointExecution?.getHealthFromWebClientEnpointResponse(result))
-            } else {
-                listOfResponse.add(
-                    ApplicationHealth(
-                        Status.DOWN,
-                        hashMapOf(serviceEndpoint.serviceLink to serviceEndpoint.serviceLink)
-                    )
-                )
-            }
+    private fun getBluePrintProcessorHealth(): ApplicationHealth {
+        val health = healthEndpoint.ifAvailable?.health()
+            ?: return downHealth(healthCheckProperties.getBluePrintBaseURL() + "actuator/health")
+        val details = when (health) {
+            is CompositeHealth -> health.components
+            is Health -> health.details
+            else -> emptyMap()
         }
-        return listOfResponse
+        return ApplicationHealth(health.status, details)
+    }
+
+    private fun getCDSListenerHealth(): ApplicationHealth? {
+        val serviceEndpoint =
+            ServiceEndpoint("CDSListener Health Check", healthCheckProperties.getCDSListenerBaseURL() + "actuator/health")
+        val result = endPointExecution.retrieveWebClientResponse(serviceEndpoint)
+        if (result?.response?.status == 200) {
+            return endPointExecution.getHealthFromWebClientEnpointResponse(result)
+        }
+        return downHealth(serviceEndpoint.serviceLink)
+    }
+
+    private fun downHealth(serviceLink: String): ApplicationHealth {
+        return ApplicationHealth(Status.DOWN, hashMapOf(serviceLink to serviceLink))
     }
 }

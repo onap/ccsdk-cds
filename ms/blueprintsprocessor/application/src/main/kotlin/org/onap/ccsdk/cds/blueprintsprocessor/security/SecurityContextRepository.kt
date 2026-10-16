@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.security
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextImpl
 import org.springframework.security.web.server.context.ServerSecurityContextRepository
@@ -39,12 +40,10 @@ class SecurityContextRepository(private val authenticationManager: Authenticatio
         val request = swe.request
         val authHeader = request.headers.getFirst(HttpHeaders.AUTHORIZATION)
         if (authHeader != null && authHeader.startsWith("Basic")) {
-            val tokens = decodeBasicAuth(authHeader)
-            val username = tokens[0]
-            val password = tokens[1]
-            val auth = UsernamePasswordAuthenticationToken(username, password)
-            return this.authenticationManager!!.authenticate(auth)
-                .map { SecurityContextImpl(it) }
+            return Mono.fromCallable { decodeBasicAuth(authHeader) }
+                .flatMap { tokens -> authenticationManager.authenticate(UsernamePasswordAuthenticationToken(tokens[0], tokens[1])) }
+                .map<SecurityContext> { SecurityContextImpl(it) }
+                .onErrorResume(AuthenticationException::class.java) { Mono.empty() }
         } else {
             return Mono.empty()
         }

@@ -42,7 +42,7 @@ class SecurityEncryptionConfiguration {
         return String()
     }
 
-    open fun decrypt(encrypted: String): String? {
+    open fun decrypt(encrypted: String): String {
         try {
             val combined = Base64.decodeBase64(encrypted)
             val ciphertext = combined.copyOfRange(12, combined.size)
@@ -51,9 +51,8 @@ class SecurityEncryptionConfiguration {
             val original = cipher.doFinal(ciphertext)
             return String(original)
         } catch (ex: Exception) {
-            ex.printStackTrace()
+            throw IllegalArgumentException("Value is not AES/GCM encrypted with the health API key", ex)
         }
-        return String()
     }
 
     private fun initChiper(): Triple<GCMParameterSpec, SecretKeySpec, Cipher> {

@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ApplicationHealth
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.WebClientEnpointResponse
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.slf4j.LoggerFactory
@@ -34,27 +33,19 @@ import org.springframework.stereotype.Service
  * @version 1.0
  */
 @Service
-open class EndPointExecution(
-    private val basicAuthRestClientService: BasicAuthRestClientService,
-    private val restClientProperties: BasicAuthRestClientProperties
-) {
+open class EndPointExecution(private val basicAuthRestClientService: BasicAuthRestClientService) {
 
     private var logger = LoggerFactory.getLogger(EndPointExecution::class.java)
 
     open fun retrieveWebClientResponse(serviceEndpoint: ServiceEndpoint): WebClientEnpointResponse? {
         try {
-            addClientPropertiesConfiguration(serviceEndpoint)
-            val result = basicAuthRestClientService.exchangeResource(HttpMethod.GET.name(), "", "")
+            val result = basicAuthRestClientService.exchangeResource(HttpMethod.GET.name(), serviceEndpoint.serviceLink, "")
             if (result.status == 200)
                 return WebClientEnpointResponse(result)
         } catch (e: Exception) {
             logger.error("service name ${serviceEndpoint.serviceName} is down ${e.message}")
         }
         return WebClientEnpointResponse(BlueprintWebClientService.WebClientResponse(500, "", emptyMap()))
-    }
-
-    private fun addClientPropertiesConfiguration(serviceEndpoint: ServiceEndpoint) {
-        restClientProperties.url = serviceEndpoint.serviceLink
     }
 
     open fun getHealthFromWebClientEnpointResponse(webClientEnpointResponse: WebClientEnpointResponse): ApplicationHealth? {
