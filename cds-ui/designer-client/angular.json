@@ -54,10 +54,7 @@
               "./node_modules/ace-builds/src-min/ext-searchbox.js",
               "./node_modules/ace-builds/src-min/ext-language_tools.js",
               "./node_modules/ace-builds/src-min/worker-json.js",
-              "./node_modules/ace-builds/src-min/worker-javascript.js",
-              "./node_modules/lodash/index.js",
-              "./node_modules/backbone/backbone.js",
-              "./node_modules/jointjs/dist/joint.js"
+              "./node_modules/ace-builds/src-min/worker-javascript.js"
             ]
           },
           "configurations": {
