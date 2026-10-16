@@ -16,8 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.controller
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.MetricsInfo
@@ -37,8 +37,8 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/api/v1/combinedMetrics")
-@Api(
-    value = "/api/v1/combinedMetrics",
+@Tag(
+    name = "/api/v1/combinedMetrics",
     description = "gather all Metrics info from BluePrint and CDSListener"
 )
 open class CombinedMetrics(private val combinedMetricsService: CombinedMetricsService) {
@@ -49,7 +49,7 @@ open class CombinedMetrics(private val combinedMetricsService: CombinedMetricsSe
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    @ApiOperation(value = " Metrics Check", hidden = true)
+    @Operation(summary = " Metrics Check", hidden = true)
     suspend fun getMetricsHealthCheckResponse(): ResponseEntity<MetricsInfo?> =
         withContext(Dispatchers.IO) {
             ResponseEntity.ok().body(combinedMetricsService.metricsInfo)

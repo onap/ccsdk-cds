@@ -33,7 +33,8 @@
     <properties>
         <!-- Override CDS version from parent to be project.version -->
         <error.catalog.version>${project.version}</error.catalog.version>
-        <springfox.swagger2.version>3.0.0</springfox.swagger2.version>
+        <springdoc.version>2.8.13</springdoc.version>
+        <swagger-annotations.version>2.2.36</swagger-annotations.version>
         <eelf.version>1.0.0</eelf.version>
         <onap.logger.slf4j>1.2.2</onap.logger.slf4j>
         <hazelcast.version>5.4.0</hazelcast.version>
@@ -86,17 +87,16 @@
                 <version>${kafka.version}</version>
             </dependency>
 
-            <!--Swagger Dependencies -->
+            <!-- OpenAPI Dependencies -->
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-boot-starter</artifactId>
-                <version>${springfox.swagger2.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-api</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations-jakarta</artifactId>
+                <version>${swagger-annotations.version}</version>
             </dependency>
 
             <!-- Common Utils Dependencies -->
@@ -647,14 +647,8 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.bytebuddy</groupId>
-                    <artifactId>byte-buddy</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations-jakarta</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

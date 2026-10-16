@@ -16,8 +16,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.controller
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ApplicationHealth
@@ -37,8 +37,8 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/api/v1/combinedHealth")
-@Api(
-    value = "/api/v1/combinedHealth",
+@Tag(
+    name = "/api/v1/combinedHealth",
     description = "gather all HealthCheckResponses for HealthChecks known to the runtime"
 )
 open class CombinedHealth(private val combinedHealthService: CombinedHealthService) {
@@ -49,7 +49,7 @@ open class CombinedHealth(private val combinedHealthService: CombinedHealthServi
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    @ApiOperation(value = "Health Check", hidden = true)
+    @Operation(summary = "Health Check", hidden = true)
     suspend fun getSystemHealthCheckResponse(): ResponseEntity<List<ApplicationHealth?>> =
         withContext(Dispatchers.IO) {
             ResponseEntity.ok().body(combinedHealthService.getCombinedHealthCheck())

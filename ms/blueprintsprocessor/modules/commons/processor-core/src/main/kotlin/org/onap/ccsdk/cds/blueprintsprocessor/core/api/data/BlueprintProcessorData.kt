@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.onap.ccsdk.cds.controllerblueprints.common.api.EventType
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import java.util.Date
@@ -34,48 +34,48 @@ import java.util.UUID
  */
 
 abstract class CommonExecutionServiceData {
-    @get:ApiModelProperty(required = true, value = "Headers providing request context.")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Headers providing request context.")
     lateinit var commonHeader: CommonHeader
 
-    @get:ApiModelProperty(required = true, value = "Provide information about the action to execute.")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Provide information about the action to execute.")
     lateinit var actionIdentifiers: ActionIdentifiers
 }
 
 open class ExecutionServiceInput : CommonExecutionServiceData() {
 
-    @get:ApiModelProperty(required = false, hidden = true)
+    @get:Schema(hidden = true)
     var correlationUUID: String = UUID.randomUUID().toString()
 
-    @get:ApiModelProperty(
-        required = true,
-        value = "Contain the information to be passed as input to the action." +
+    @get:Schema(
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        description = "Contain the information to be passed as input to the action." +
             "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
             " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
     )
     lateinit var payload: ObjectNode
 
-    @get:ApiModelProperty(hidden = true)
+    @get:Schema(hidden = true)
     @get:JsonIgnore
     var stepData: StepData? = null
 }
 
 open class ExecutionServiceOutput : CommonExecutionServiceData() {
 
-    @get:ApiModelProperty(required = false, hidden = true)
+    @get:Schema(hidden = true)
     var correlationUUID: String? = null
 
-    @get:ApiModelProperty(required = true, value = "Status of the request.")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Status of the request.")
     lateinit var status: Status
 
-    @get:ApiModelProperty(
-        required = true,
-        value = "Contain the information to be passed as input to the action." +
+    @get:Schema(
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        description = "Contain the information to be passed as input to the action." +
             "The payload is constituted of two section: the workflow input which is the higher level block (xxx-request)" +
             " and the input for resource resolution located within the xxx-request block, contained within xxx-properties"
     )
     lateinit var payload: ObjectNode
 
-    @get:ApiModelProperty(hidden = true)
+    @get:Schema(hidden = true)
     @get:JsonIgnore
     var stepData: StepData? = null
 }
@@ -85,71 +85,71 @@ const val ACTION_MODE_SYNC = "sync"
 
 open class ActionIdentifiers {
 
-    @get:ApiModelProperty(required = false, value = "Name of the CBA.")
+    @get:Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Name of the CBA.")
     lateinit var blueprintName: String
 
-    @get:ApiModelProperty(required = false, value = "Version of the CBA.")
+    @get:Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Version of the CBA.")
     lateinit var blueprintVersion: String
 
-    @get:ApiModelProperty(required = true, value = "Name of the workflow to execute.")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Name of the workflow to execute.")
     lateinit var actionName: String
 
-    @get:ApiModelProperty(
-        required = true,
-        value = "Async processing is only supported for gRPC client.",
-        allowableValues = "sync, async"
+    @get:Schema(
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        description = "Async processing is only supported for gRPC client.",
+        allowableValues = ["sync", "async"]
     )
     lateinit var mode: String
 }
 
 open class CommonHeader {
 
-    @get:ApiModelProperty(required = true, value = "Date of the execution", example = "2012-04-23T18:25:43.511Z")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Date of the execution", example = "2012-04-23T18:25:43.511Z")
     @get:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var timestamp: Date = Date()
 
-    @get:ApiModelProperty(required = true, value = "Identify the system/person triggering the request.")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Identify the system/person triggering the request.")
     lateinit var originatorId: String
 
-    @get:ApiModelProperty(required = true, value = "Uniquely identify a request.")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Uniquely identify a request.")
     lateinit var requestId: String
 
-    @get:ApiModelProperty(required = true, value = "Allow for fine-grain request identifier")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Allow for fine-grain request identifier")
     lateinit var subRequestId: String
 
-    @get:ApiModelProperty(required = false, hidden = true)
+    @get:Schema(hidden = true)
     var flags: Flags? = null
 }
 
 open class Flags {
 
-    @get:ApiModelProperty(value = "Whether or not to force the action.")
+    @get:Schema(description = "Whether or not to force the action.")
     var isForce: Boolean = false
 
-    @get:ApiModelProperty(value = "3600")
+    @get:Schema(description = "3600")
     var ttl: Int = 3600
 }
 
 open class Status {
 
-    @get:ApiModelProperty(required = true, value = "HTTP status code equivalent.")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "HTTP status code equivalent.")
     var code: Int = 200
 
-    @get:ApiModelProperty(required = true, value = "Type of the event being emitted by CDS.")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Type of the event being emitted by CDS.")
     var eventType: String = EventType.EVENT_COMPONENT_EXECUTED.name
 
-    @get:ApiModelProperty(
-        required = true,
-        value = "Time when the execution ended.",
+    @get:Schema(
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        description = "Time when the execution ended.",
         example = "2012-04-23T18:25:43.511Z"
     )
     @get:JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var timestamp: Date = Date()
 
-    @get:ApiModelProperty(required = false, value = "Error message when system failed")
+    @get:Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Error message when system failed")
     var errorMessage: String? = null
 
-    @get:ApiModelProperty(required = true, value = "Message providing request status")
+    @get:Schema(requiredMode = Schema.RequiredMode.REQUIRED, description = "Message providing request status")
     var message: String = BluePrintConstants.STATUS_SUCCESS
 }
 

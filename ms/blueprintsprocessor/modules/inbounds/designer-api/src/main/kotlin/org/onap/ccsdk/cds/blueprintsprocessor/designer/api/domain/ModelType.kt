@@ -18,7 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.databind.JsonNode
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.Length
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -46,32 +46,32 @@ class ModelType : Serializable {
 
     @Id
     @Column(name = "model_name", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var modelName: String
 
     @Column(name = "derived_from", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var derivedFrom: String
 
     @Column(name = "definition_type", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var definitionType: String
 
     @Convert(converter = JpaJsonNodeConverter::class)
     @Column(name = "definition", nullable = false, length = Length.LONG32)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var definition: JsonNode
 
     @Column(name = "description", nullable = false, length = Length.LONG32)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var description: String
 
     @Column(name = "version", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var version: String
 
     @Column(name = "tags", nullable = false, columnDefinition = "TEXT")
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     var tags: String? = null
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -81,7 +81,7 @@ class ModelType : Serializable {
     var creationDate: Date? = null
 
     @Column(name = "updated_by", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var updatedBy: String
 
     override fun toString(): String {

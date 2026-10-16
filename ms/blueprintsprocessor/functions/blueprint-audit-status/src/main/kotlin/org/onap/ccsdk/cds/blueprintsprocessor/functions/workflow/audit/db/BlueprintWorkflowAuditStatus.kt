@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.db
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.Length
 import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
@@ -47,38 +47,39 @@ class BlueprintWorkflowAuditStatus : Serializable {
     @Column(name = "workflow_audit_id")
     var id: Long = 0
 
-    @get:ApiModelProperty(value = "Workflow payload.", required = true)
+    @get:Schema(description = "Workflow payload.", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "workflow_task_content", nullable = false, length = Length.LONG32)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var workflowTaskContent: String
 
-    @get:ApiModelProperty(value = "request originator Id", required = true)
+    @get:Schema(description = "request originator Id", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "originator_Id", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var originatorId: String
 
-    @get:ApiModelProperty(value = "request Id", required = true)
+    @get:Schema(description = "request Id", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "request_Id", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var requestId: String
 
-    @get:ApiModelProperty(value = "sub request Id", required = true)
+    @get:Schema(description = "sub request Id", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "subRequest_Id", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var subRequestId: String
 
-    @get:ApiModelProperty(value = "workflow name", required = true)
+    @get:Schema(description = "workflow name", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "workflow_name", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var workflowName: String
 
-    @get:ApiModelProperty(value = "status", required = true)
+    @get:Schema(description = "status", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "status", nullable = true)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var status: String
 
-    @get:ApiModelProperty(
-        value = "start time when request process started", required = true
+    @get:Schema(
+        description = "start time when request process started",
+        requiredMode = Schema.RequiredMode.REQUIRED
     )
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
@@ -86,8 +87,9 @@ class BlueprintWorkflowAuditStatus : Serializable {
     @Column(name = "start_time")
     var startDate: Date = Date()
 
-    @get:ApiModelProperty(
-        value = "end time when request process completed", required = true
+    @get:Schema(
+        description = "end time when request process completed",
+        requiredMode = Schema.RequiredMode.REQUIRED
     )
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
@@ -95,40 +97,40 @@ class BlueprintWorkflowAuditStatus : Serializable {
     @Column(name = "end_time")
     var endDate: Date = Date()
 
-    @get:ApiModelProperty(value = "current date time", required = true)
+    @get:Schema(description = "current date time", requiredMode = Schema.RequiredMode.REQUIRED)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_date")
     var updatedDate: Date = Date()
 
-    @get:ApiModelProperty(value = "updated by", required = true)
+    @get:Schema(description = "updated by", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "updated_by", nullable = true)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var updatedBy: String
 
-    @get:ApiModelProperty(value = "blueprint version", required = true)
+    @get:Schema(description = "blueprint version", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "blueprint_version", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var blueprintVersion: String
 
-    @get:ApiModelProperty(value = "blueprint name", required = true)
+    @get:Schema(description = "blueprint name", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "blueprint_name", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var blueprintName: String
 
-    @get:ApiModelProperty(value = "request mode", required = true)
+    @get:Schema(description = "request mode", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "request_mode", nullable = true)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var requestMode: String
 
-    @get:ApiModelProperty(value = "workflow response content", required = false)
+    @get:Schema(description = "workflow response content", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     @Column(name = "workflow_response_content", nullable = true, length = Length.LONG32)
-    @ApiModelProperty(required = false)
+    @Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     lateinit var workflowResponseContent: String
 
-    @get:ApiModelProperty(value = "bluprint model uuid", required = true)
+    @get:Schema(description = "bluprint model uuid", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "blueprint_uuid", nullable = true)
-    @ApiModelProperty(required = false)
+    @Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     var blueprintUuid: String = ""
 }

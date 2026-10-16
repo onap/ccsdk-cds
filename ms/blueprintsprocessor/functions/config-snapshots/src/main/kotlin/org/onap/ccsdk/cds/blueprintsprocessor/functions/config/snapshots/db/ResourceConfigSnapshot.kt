@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.config.snapshots.db
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.Length
 import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
@@ -46,19 +46,19 @@ import jakarta.persistence.TemporalType
 @Proxy(lazy = false)
 class ResourceConfigSnapshot : Serializable {
 
-    @get:ApiModelProperty(value = "Resource type.", required = true, example = "ServiceInstance")
+    @get:Schema(description = "Resource type.", requiredMode = Schema.RequiredMode.REQUIRED, example = "ServiceInstance")
     @Column(name = "resource_type", nullable = false)
     var resourceType: String? = null
 
-    @get:ApiModelProperty(value = "ID associated with the resource type in the inventory system.", required = true, example = "1")
+    @get:Schema(description = "ID associated with the resource type in the inventory system.", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @Column(name = "resource_id", nullable = false)
     var resourceId: String? = null
 
-    @get:ApiModelProperty(value = "Status of the snapshot, either running or candidate.", required = true)
+    @get:Schema(description = "Status of the snapshot, either running or candidate.", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "status", nullable = false)
     var status: Status? = null
 
-    @get:ApiModelProperty(value = "Snapshot of the resource as retrieved from resource.", required = true, example = "config_snapshot")
+    @get:Schema(description = "Snapshot of the resource as retrieved from resource.", requiredMode = Schema.RequiredMode.REQUIRED, example = "config_snapshot")
     @Column(name = "config_snapshot", nullable = false, length = Length.LONG32)
     var config_snapshot: String? = null
 
@@ -66,7 +66,7 @@ class ResourceConfigSnapshot : Serializable {
     @Column(name = "resource_config_snapshot_id")
     var id: String? = null
 
-    @get:ApiModelProperty(value = "Creation date of the snapshot.", required = true)
+    @get:Schema(description = "Creation date of the snapshot.", requiredMode = Schema.RequiredMode.REQUIRED)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)

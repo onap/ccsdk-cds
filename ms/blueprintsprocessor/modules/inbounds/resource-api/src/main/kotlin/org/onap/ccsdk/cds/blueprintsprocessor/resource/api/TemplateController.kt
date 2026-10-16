@@ -17,9 +17,10 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.resource.api
 
 import com.fasterxml.jackson.databind.JsonNode
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.parameters.RequestBody as RequestBodyDoc
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolution
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db.TemplateResolutionService
@@ -46,8 +47,8 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/api/v1/template")
-@Api(
-    value = "Resource Template",
+@Tag(
+    name = "Resource Template",
     description = "Interaction with resolved templates"
 )
 open class TemplateController(private val templateResolutionService: TemplateResolutionService) {
@@ -58,7 +59,7 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    @ApiOperation(value = "Health Check", hidden = true)
+    @Operation(summary = "Health Check", hidden = true)
     fun templateControllerHealthCheck(): JsonNode = runBlocking {
         JacksonUtils.getJsonNode("Success")
     }
@@ -67,34 +68,33 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         method = [RequestMethod.GET],
         produces = [MediaType.TEXT_PLAIN_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE]
     )
-    @ApiOperation(
-        value = "Retrieve a resolved template",
-        notes = "Retrieve a config template for a given CBA's action, identified by its blueprint name, blueprint version, " +
+    @Operation(
+        summary = "Retrieve a resolved template",
+        description = "Retrieve a config template for a given CBA's action, identified by its blueprint name, blueprint version, " +
             "artifact name and resolution key. An extra 'format' parameter can be passed to tell what content-type" +
             " to expect in return"
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun get(
-        @ApiParam(value = "Name of the CBA", required = true)
+        @Parameter(description = "Name of the CBA", required = true)
         @RequestParam(value = "bpName") bpName: String,
-        @ApiParam(value = "Version of the CBA", required = true)
+        @Parameter(description = "Version of the CBA", required = true)
         @RequestParam(value = "bpVersion") bpVersion: String,
-        @ApiParam(value = "Artifact name for which to retrieve a resolved resource", required = true)
+        @Parameter(description = "Artifact name for which to retrieve a resolved resource", required = true)
         @RequestParam(value = "artifactName") artifactName: String,
-        @ApiParam(value = "Resolution Key associated with the resolution", required = false)
+        @Parameter(description = "Resolution Key associated with the resolution", required = false)
         @RequestParam(value = "resolutionKey", required = false, defaultValue = "") resolutionKey: String,
-        @ApiParam(value = "Resource Type associated with the resolution", required = false)
+        @Parameter(description = "Resource Type associated with the resolution", required = false)
         @RequestParam(value = "resourceType", required = false, defaultValue = "") resourceType: String,
-        @ApiParam(value = "Resource Id associated with the resolution", required = false)
+        @Parameter(description = "Resource Id associated with the resolution", required = false)
         @RequestParam(value = "resourceId", required = false, defaultValue = "") resourceId: String,
-        @ApiParam(
-            value = "Expected format of the template being retrieved",
-            defaultValue = MediaType.TEXT_PLAIN_VALUE,
+        @Parameter(
+            description = "Expected format of the template being retrieved",
             required = true
         )
         @RequestParam(value = "format", required = false, defaultValue = MediaType.TEXT_PLAIN_VALUE) format: String,
-        @ApiParam(value = "Occurrence of the template resolution (1-n)", required = false)
+        @Parameter(description = "Occurrence of the template resolution (1-n)", required = false)
         @RequestParam(value = "occurrence", required = false, defaultValue = "1") occurrence: Int = 1
     ):
         ResponseEntity<String> = runBlocking {
@@ -141,24 +141,23 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         }
 
     @PostMapping("/{bpName}/{bpVersion}/{artifactName}/{resolutionKey}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Store a resolved template w/ resolution-key",
-        notes = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
-            "artifact name and resolution key.",
-        response = TemplateResolution::class
+    @Operation(
+        summary = "Store a resolved template w/ resolution-key",
+        description = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
+            "artifact name and resolution key."
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun postWithResolutionKey(
-        @ApiParam(value = "Name of the CBA", required = true)
+        @Parameter(description = "Name of the CBA", required = true)
         @PathVariable(value = "bpName") bpName: String,
-        @ApiParam(value = "Version of the CBA", required = true)
+        @Parameter(description = "Version of the CBA", required = true)
         @PathVariable(value = "bpVersion") bpVersion: String,
-        @ApiParam(value = "Artifact name for which to retrieve a resolved resource", required = true)
+        @Parameter(description = "Artifact name for which to retrieve a resolved resource", required = true)
         @PathVariable(value = "artifactName") artifactName: String,
-        @ApiParam(value = "Resolution Key associated with the resolution", required = true)
+        @Parameter(description = "Resolution Key associated with the resolution", required = true)
         @PathVariable(value = "resolutionKey") resolutionKey: String,
-        @ApiParam(value = "Template to store", required = true)
+        @RequestBodyDoc(description = "Template to store", required = true)
         @RequestBody result: String
     ): ResponseEntity<TemplateResolution> = runBlocking {
 
@@ -172,32 +171,29 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         path = ["/occurrences"],
         method = [RequestMethod.GET], produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(
-        value = "Get the map of resolved templates with 'occurrence' as the keys to the resolved templates",
-        notes = "With optional 'occurrence' options, subset of stored resolved templates can be retrieved " +
-            "using the blueprint name, blueprint version, artifact name and the resolution-key.",
-        response = TemplateResolution::class,
-        responseContainer = "List",
-        produces = MediaType.APPLICATION_JSON_VALUE
+    @Operation(
+        summary = "Get the map of resolved templates with 'occurrence' as the keys to the resolved templates",
+        description = "With optional 'occurrence' options, subset of stored resolved templates can be retrieved " +
+            "using the blueprint name, blueprint version, artifact name and the resolution-key."
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun getOccurrences(
-        @ApiParam(value = "Name of the CBA.", required = true)
+        @Parameter(description = "Name of the CBA.", required = true)
         @RequestParam(value = "bpName", required = true) bpName: String,
-        @ApiParam(value = "Version of the CBA.", required = true)
+        @Parameter(description = "Version of the CBA.", required = true)
         @RequestParam(value = "bpVersion", required = true) bpVersion: String,
-        @ApiParam(value = "Artifact name for which to retrieve a resolved resource.", required = true)
+        @Parameter(description = "Artifact name for which to retrieve a resolved resource.", required = true)
         @RequestParam(value = "artifactName", required = true, defaultValue = "") artifactName: String,
-        @ApiParam(value = "Resolution Key associated with the resolution.", required = true)
+        @Parameter(description = "Resolution Key associated with the resolution.", required = true)
         @RequestParam(value = "resolutionKey", required = true, defaultValue = "") resolutionKey: String,
-        @ApiParam(value = "Number of earlier N occurrences of the templates.", required = false)
+        @Parameter(description = "Number of earlier N occurrences of the templates.", required = false)
         @RequestParam(value = "firstN", required = false) firstN: Int?,
-        @ApiParam(value = "Number of latest N occurrences of the templates.", required = false)
+        @Parameter(description = "Number of latest N occurrences of the templates.", required = false)
         @RequestParam(value = "lastN", required = false) lastN: Int?,
-        @ApiParam(value = "For Range option - 'begin' is the start occurrence of range of the templates.", required = false)
+        @Parameter(description = "For Range option - 'begin' is the start occurrence of range of the templates.", required = false)
         @RequestParam(value = "begin", required = false) begin: Int?,
-        @ApiParam(value = "For Range option - 'end' is the end occurrence of the range of the templates.", required = false)
+        @Parameter(description = "For Range option - 'end' is the end occurrence of the range of the templates.", required = false)
         @RequestParam(value = "end", required = false) end: Int?
     ): ResponseEntity<Map<Int, List<TemplateResolution>>> = runBlocking {
         when {
@@ -226,26 +222,25 @@ open class TemplateController(private val templateResolutionService: TemplateRes
         "/{bpName}/{bpVersion}/{artifactName}/{resourceType}/{resourceId}",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(
-        value = "Store a resolved template w/ resourceId and resourceType",
-        notes = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
-            "artifact name, resourceId and resourceType.",
-        response = TemplateResolution::class
+    @Operation(
+        summary = "Store a resolved template w/ resourceId and resourceType",
+        description = "Store a template for a given CBA's action, identified by its blueprint name, blueprint version, " +
+            "artifact name, resourceId and resourceType."
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     fun postWithResourceIdAndResourceType(
-        @ApiParam(value = "Name of the CBA", required = true)
+        @Parameter(description = "Name of the CBA", required = true)
         @PathVariable(value = "bpName") bpName: String,
-        @ApiParam(value = "Version of the CBA", required = true)
+        @Parameter(description = "Version of the CBA", required = true)
         @PathVariable(value = "bpVersion") bpVersion: String,
-        @ApiParam(value = "Artifact name for which to retrieve a resolved resource", required = true)
+        @Parameter(description = "Artifact name for which to retrieve a resolved resource", required = true)
         @PathVariable(value = "artifactName") artifactName: String,
-        @ApiParam(value = "Resource Type associated with the resolution", required = false)
+        @Parameter(description = "Resource Type associated with the resolution", required = false)
         @PathVariable(value = "resourceType", required = true) resourceType: String,
-        @ApiParam(value = "Resource Id associated with the resolution", required = false)
+        @Parameter(description = "Resource Id associated with the resolution", required = false)
         @PathVariable(value = "resourceId", required = true) resourceId: String,
-        @ApiParam(value = "Template to store", required = true)
+        @RequestBodyDoc(description = "Template to store", required = true)
         @RequestBody result: String
     ): ResponseEntity<TemplateResolution> = runBlocking {
 
@@ -260,19 +255,19 @@ open class TemplateController(private val templateResolutionService: TemplateRes
     )
     @PreAuthorize("hasRole('USER')")
     fun deleteTemplates(
-        @ApiParam(value = "Name of the CBA", required = true)
+        @Parameter(description = "Name of the CBA", required = true)
         @RequestParam(value = "bpName", required = true) bpName: String,
-        @ApiParam(value = "Version of the CBA", required = true)
+        @Parameter(description = "Version of the CBA", required = true)
         @RequestParam(value = "bpVersion", required = true) bpVersion: String,
-        @ApiParam(value = "Artifact name", required = true)
+        @Parameter(description = "Artifact name", required = true)
         @RequestParam(value = "artifactName", required = true, defaultValue = "") artifactName: String,
-        @ApiParam(value = "Resolution Key associated with the template", required = false)
+        @Parameter(description = "Resolution Key associated with the template", required = false)
         @RequestParam(value = "resolutionKey", required = false) resolutionKey: String?,
-        @ApiParam(value = "resourceType associated with the template, must be used with resourceId", required = false)
+        @Parameter(description = "resourceType associated with the template, must be used with resourceId", required = false)
         @RequestParam(value = "resourceType", required = false) resourceType: String?,
-        @ApiParam(value = "Resolution Key associated with the template, must be used with resourceType", required = false)
+        @Parameter(description = "Resolution Key associated with the template, must be used with resourceType", required = false)
         @RequestParam(value = "resourceId", required = false) resourceId: String?,
-        @ApiParam(value = "Only delete last N occurrences", required = false)
+        @Parameter(description = "Only delete last N occurrences", required = false)
         @RequestParam(value = "lastN", required = false) lastN: Int?
     ) = runBlocking {
         when {

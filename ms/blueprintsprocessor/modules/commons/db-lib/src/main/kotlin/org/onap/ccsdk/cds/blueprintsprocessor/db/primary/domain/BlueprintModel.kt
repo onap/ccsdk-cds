@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.Length
 import org.hibernate.annotations.Proxy
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
@@ -92,7 +92,7 @@ class BlueprintModel : Serializable {
     var artifactType: String? = null
 
     @Column(name = "artifact_version", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var artifactVersion: String
 
     @Column(name = "artifact_description", length = Length.LONG32)
@@ -108,19 +108,19 @@ class BlueprintModel : Serializable {
     var createdDate = Date()
 
     @Column(name = "artifact_name", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var artifactName: String
 
     @Column(name = "published", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var published: String
 
     @Column(name = "updated_by", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var updatedBy: String
 
     @Column(name = "tags", nullable = false, columnDefinition = "TEXT")
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var tags: String
 
     @OneToOne(mappedBy = "blueprintModel", fetch = FetchType.EAGER, orphanRemoval = true, cascade = [CascadeType.ALL])

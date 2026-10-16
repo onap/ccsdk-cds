@@ -18,9 +18,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api
 
 import com.fasterxml.jackson.databind.JsonNode
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.parameters.RequestBody as RequestBodyDoc
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ACTION_MODE_ASYNC
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceOutput
@@ -49,8 +49,8 @@ import jakarta.annotation.PreDestroy
 
 @RestController
 @RequestMapping("/api/v1/execution-service")
-@Api(
-    value = "Execution Service Catalog",
+@Tag(
+    name = "Execution Service Catalog",
     description = "Interaction with CBA which are available in CDS"
 )
 open class ExecutionServiceController {
@@ -71,7 +71,7 @@ open class ExecutionServiceController {
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    @ApiOperation(value = "Health Check", hidden = true)
+    @Operation(summary = "Health Check", hidden = true)
     suspend fun executionServiceControllerHealthCheck(
         @RequestParam(required = false, defaultValue = "false") checkDependencies: Boolean
     ): ResponseEntity<JsonNode> = mdcWebCoroutineScope {
@@ -93,16 +93,14 @@ open class ExecutionServiceController {
     }
 
     @RequestMapping(path = ["/process"], method = [RequestMethod.POST], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Execute a CBA workflow (action)",
-        notes = "Execute the appropriate CBA's action based on the ExecutionServiceInput object passed as input.",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        response = ExecutionServiceOutput::class
+    @Operation(
+        summary = "Execute a CBA workflow (action)",
+        description = "Execute the appropriate CBA's action based on the ExecutionServiceInput object passed as input."
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     suspend fun process(
-        @ApiParam(value = "ExecutionServiceInput payload.", required = true)
+        @RequestBodyDoc(description = "ExecutionServiceInput payload.", required = true)
         @RequestBody executionServiceInput: ExecutionServiceInput
     ): ResponseEntity<ExecutionServiceOutput> = mdcWebCoroutineScope(executionServiceInput) {
         if (executionServiceInput.actionIdentifiers.mode == ACTION_MODE_ASYNC) {

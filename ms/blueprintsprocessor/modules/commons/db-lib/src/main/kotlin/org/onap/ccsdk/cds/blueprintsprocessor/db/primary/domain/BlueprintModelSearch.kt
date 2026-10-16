@@ -20,8 +20,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeName
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import io.swagger.annotations.ApiModel
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.Length
 import org.springframework.data.annotation.LastModifiedDate
 import java.io.Serializable
@@ -44,59 +43,58 @@ import jakarta.persistence.TemporalType
 @Table(name = "BLUEPRINT_MODEL")
 @JsonTypeName("blueprintModel")
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@ApiModel
 class BlueprintModelSearch : Serializable {
 
-    @ApiModelProperty(
-        value = "ID of Blueprint model, is automatically created by CDS",
+    @Schema(
+        description = "ID of Blueprint model, is automatically created by CDS",
         example = "658f9a48-7f54-41ba-ae18-c69f26f3dc94",
-        required = true
+        requiredMode = Schema.RequiredMode.REQUIRED
     )
     @Id
     @Column(name = "blueprint_model_id")
     var id: String? = null
 
-    @ApiModelProperty(value = "Artifact UUID, usually null", required = false)
+    @Schema(description = "Artifact UUID, usually null", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     @Column(name = "artifact_uuid")
     var artifactUUId: String? = null
 
     @JsonSerialize
-    @ApiModelProperty(value = "Artifact Type, usually null", example = "SDNC_MODEL", required = false)
+    @Schema(description = "Artifact Type, usually null", example = "SDNC_MODEL", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     @Column(name = "artifact_type")
     var artifactType: String? = null
 
-    @ApiModelProperty(value = "Artifact Version, usually 1.0.0", example = "1.0.0", required = true)
+    @Schema(description = "Artifact Version, usually 1.0.0", example = "1.0.0", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "artifact_version", nullable = false)
     var artifactVersion: String? = null
 
-    @ApiModelProperty(value = "Artifact Description, usually empty", example = "", required = false)
+    @Schema(description = "Artifact Description, usually empty", example = "", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     @Column(name = "artifact_description", length = Length.LONG32)
     var artifactDescription: String? = null
 
-    @ApiModelProperty(value = "Internal Version of CBA, usually null", required = false)
+    @Schema(description = "Internal Version of CBA, usually null", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     @Column(name = "internal_version")
     var internalVersion: Int? = null
 
-    @ApiModelProperty(value = "Datetime of the creation of CBA in CDS", example = "2020-11-19T10:34:56.000Z", required = true)
+    @Schema(description = "Datetime of the creation of CBA in CDS", example = "2020-11-19T10:34:56.000Z", requiredMode = Schema.RequiredMode.REQUIRED)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "creation_date")
     var createdDate = Date()
 
-    @ApiModelProperty(value = "Artifact Name, defined in Metadata", example = "pnf_netconf", required = true)
+    @Schema(description = "Artifact Name, defined in Metadata", example = "pnf_netconf", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "artifact_name", nullable = false)
     var artifactName: String? = null
 
-    @ApiModelProperty(value = "Artifact Name, defined in Metadata", example = "pnf_netconf", required = true)
+    @Schema(description = "Artifact Name, defined in Metadata", example = "pnf_netconf", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "published", nullable = false)
     var published: String? = null
 
-    @ApiModelProperty(value = "Name of publisher, defined in Metadata", example = "Deutsche Telekom AG", required = true)
+    @Schema(description = "Name of publisher, defined in Metadata", example = "Deutsche Telekom AG", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "updated_by", nullable = false)
     var updatedBy: String? = null
 
-    @ApiModelProperty(value = "Tags to identify the CBA, defined in Metadata", example = "test", required = true)
+    @Schema(description = "Tags to identify the CBA, defined in Metadata", example = "test", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "tags", nullable = false, columnDefinition = "TEXT")
     var tags: String? = null
 
