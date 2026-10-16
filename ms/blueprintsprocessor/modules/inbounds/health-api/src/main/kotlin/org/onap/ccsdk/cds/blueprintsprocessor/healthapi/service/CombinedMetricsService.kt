@@ -23,7 +23,8 @@ import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.MetricsInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.MetricsResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.utils.ObjectMappingUtils
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
+import org.springframework.beans.factory.ObjectProvider
+import org.springframework.boot.actuate.metrics.MetricsEndpoint
 import org.springframework.stereotype.Service
 
 /**
@@ -36,47 +37,37 @@ import org.springframework.stereotype.Service
 open class CombinedMetricsService(
     private val endPointExecution: EndPointExecution,
     private val healthCheckProperties: HealthCheckProperties,
-    private val objectMappingUtils: ObjectMappingUtils<Metrics>
+    private val objectMappingUtils: ObjectMappingUtils<Metrics>,
+    private val metricsEndpoint: ObjectProvider<MetricsEndpoint>
 ) {
 
-    private fun setupServiceEndpoint(): List<ServiceEndpoint> {
-        return listOf(
-            ServiceEndpoint("BluePrintProcessor metrics", healthCheckProperties.getBluePrintBaseURL() + "/actuator/metrics"),
-            ServiceEndpoint("CDS Listener metrics", healthCheckProperties.getCDSListenerBaseURL() + "/actuator/metrics")
-        )
+    open val metricsInfo: MetricsInfo
+        get() = MetricsInfo(listOf(getBluePrintProcessorMetrics(), getCDSListenerMetrics()))
+
+    private fun getBluePrintProcessorMetrics(): ActuatorCheckResponse {
+        val serviceEndpoint =
+            ServiceEndpoint("BluePrintProcessor metrics", healthCheckProperties.getBluePrintBaseURL() + "/actuator/metrics")
+        val names = metricsEndpoint.ifAvailable?.listNames()?.names
+            ?: return ActuatorCheckResponse(serviceEndpoint.serviceName, HealthCheckStatus.DOWN)
+        return ActuatorCheckResponse(serviceEndpoint.serviceName, gettingCustomizedBody(serviceEndpoint, names))
     }
 
-    open val metricsInfo: MetricsInfo
-        get() {
-            val containerHealthChecks = mutableListOf<ActuatorCheckResponse>()
-            for (serviceEndpoint in setupServiceEndpoint().parallelStream()) {
-                val webClientResponse = endPointExecution?.retrieveWebClientResponse(serviceEndpoint)
-                var actuatorsHealthResponse: ActuatorCheckResponse? = null
-                actuatorsHealthResponse = if (webClientResponse?.response != null &&
-                    webClientResponse.response!!.status?.equals(200)!!
-                ) {
-                    var body = gettingCustomizedBody(serviceEndpoint, webClientResponse.response!!)
-                    ActuatorCheckResponse(serviceEndpoint.serviceName, body)
-                } else {
-                    ActuatorCheckResponse(serviceEndpoint.serviceName, HealthCheckStatus.DOWN)
-                }
-                containerHealthChecks.add(actuatorsHealthResponse)
-            }
-            return MetricsInfo(containerHealthChecks)
+    private fun getCDSListenerMetrics(): ActuatorCheckResponse {
+        val serviceEndpoint =
+            ServiceEndpoint("CDS Listener metrics", healthCheckProperties.getCDSListenerBaseURL() + "/actuator/metrics")
+        val webClientResponse = endPointExecution.retrieveWebClientResponse(serviceEndpoint)?.response
+        if (webClientResponse?.status != 200) {
+            return ActuatorCheckResponse(serviceEndpoint.serviceName, HealthCheckStatus.DOWN)
         }
-
-    private fun gettingCustomizedBody(
-        serviceEndpoint: ServiceEndpoint?,
-        webClientResponse: BlueprintWebClientService.WebClientResponse<String>
-    ): Any {
-        var body: Any
         val metrics: Metrics = objectMappingUtils.getObjectFromBody(webClientResponse.body, Metrics::class.java)
-        val mapOfMetricsInfo = HashMap<String, String>()
-        for (name in metrics.names!!) {
-            mapOfMetricsInfo.put(name.toString(), serviceEndpoint?.serviceLink + "/" + name)
-        }
-        body = MetricsResponse(mapOfMetricsInfo)
+        return ActuatorCheckResponse(serviceEndpoint.serviceName, gettingCustomizedBody(serviceEndpoint, metrics.names!!))
+    }
 
-        return body
+    private fun gettingCustomizedBody(serviceEndpoint: ServiceEndpoint, names: Collection<Any>): MetricsResponse {
+        val mapOfMetricsInfo = HashMap<String, String>()
+        for (name in names) {
+            mapOfMetricsInfo.put(name.toString(), serviceEndpoint.serviceLink + "/" + name)
+        }
+        return MetricsResponse(mapOfMetricsInfo)
     }
 }

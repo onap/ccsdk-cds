@@ -18,6 +18,8 @@ package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.controller
 
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.MetricsInfo
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.CombinedMetricsService
 import org.springframework.http.MediaType
@@ -48,7 +50,8 @@ open class CombinedMetrics(private val combinedMetricsService: CombinedMetricsSe
     )
     @ResponseBody
     @ApiOperation(value = " Metrics Check", hidden = true)
-    fun getMetricsHealthCheckResponse(): ResponseEntity<MetricsInfo?> {
-        return ResponseEntity.ok().body(combinedMetricsService.metricsInfo)
-    }
+    suspend fun getMetricsHealthCheckResponse(): ResponseEntity<MetricsInfo?> =
+        withContext(Dispatchers.IO) {
+            ResponseEntity.ok().body(combinedMetricsService.metricsInfo)
+        }
 }

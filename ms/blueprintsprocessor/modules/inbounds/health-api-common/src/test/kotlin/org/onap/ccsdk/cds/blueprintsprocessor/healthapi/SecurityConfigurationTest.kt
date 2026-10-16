@@ -30,4 +30,17 @@ class SecurityConfigurationTest {
         println(encryptedValue)
         Assert.assertEquals(passWord, securityConfiguration.decrypt(encryptedValue!!))
     }
+
+    @Test
+    fun testDecryptionOfGcmValue() {
+        Assert.assertEquals(
+            "ccsdkapps",
+            SecurityEncryptionConfiguration().decrypt("ZW5jcnlwdGlvbkluKku+TuXv7+dHH2yFXUTPM6N1Ui0p00OEkQ==")
+        )
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun testDecryptionOfCbcValueFails() {
+        SecurityEncryptionConfiguration().decrypt("eHbVUbJAj4AG2522cSbrOQ==")
+    }
 }

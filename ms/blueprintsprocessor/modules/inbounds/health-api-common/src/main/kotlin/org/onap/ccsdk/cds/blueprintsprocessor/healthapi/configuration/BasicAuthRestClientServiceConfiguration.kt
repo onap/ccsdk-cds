@@ -18,6 +18,7 @@ package org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration
 
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -26,6 +27,8 @@ import org.springframework.context.annotation.PropertySource
 @Configuration
 @PropertySource("classpath:application.properties")
 open class BasicAuthRestClientServiceConfiguration(private val securityConfiguration: SecurityEncryptionConfiguration) {
+
+    private val log = LoggerFactory.getLogger(BasicAuthRestClientServiceConfiguration::class.java)
 
     @Value("\${endpoints.user.name}")
     private val username: String? = null
@@ -36,13 +39,37 @@ open class BasicAuthRestClientServiceConfiguration(private val securityConfigura
     @Bean
     open fun getBasicAuthRestClientProperties(): BasicAuthRestClientProperties {
         val basicAuthRestClientProperties = BasicAuthRestClientProperties()
-        basicAuthRestClientProperties.username = securityConfiguration.decrypt(username!!)!!
-        basicAuthRestClientProperties.password = securityConfiguration.decrypt(password!!)!!
+        // The health checks pass the full service URL as path, so this client is shared by all of them.
+        basicAuthRestClientProperties.url = ""
+        basicAuthRestClientProperties.username = decrypt("endpoints.user.name", username!!)
+        basicAuthRestClientProperties.password = decrypt("endpoints.user.password", password!!)
+        basicAuthRestClientProperties.connectTimeout = CONNECT_TIMEOUT_MS
+        basicAuthRestClientProperties.socketTimeout = SOCKET_TIMEOUT_MS
         return basicAuthRestClientProperties
     }
 
     @Bean
     open fun getBasicAuthRestClientService(): BasicAuthRestClientService {
         return BasicAuthRestClientService(getBasicAuthRestClientProperties())
+    }
+
+    private fun decrypt(property: String, value: String): String {
+        return try {
+            securityConfiguration.decrypt(value)
+        } catch (e: IllegalArgumentException) {
+            log.error(
+                "Cannot decrypt {}, the health checks run without credentials and report DOWN. " +
+                    "Since CDS 1.11.0 the value must be AES/GCM encrypted, values encrypted for 1.10.0 " +
+                    "or earlier have to be re-encrypted (see the Upgrade notes in the release notes).",
+                property, e
+            )
+            ""
+        }
+    }
+
+    companion object {
+
+        private const val CONNECT_TIMEOUT_MS = 5000
+        private const val SOCKET_TIMEOUT_MS = 10000
     }
 }
