@@ -1,5 +1,6 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
+ * Modifications Copyright © 2026 Deutsche Telekom.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +30,12 @@ import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintContext
 import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintRuntimeService
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 
 @Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 open class BluePrintArtifactDefinitionEnhancerImpl(
     private val bluePrintRepoService: BluePrintRepoService,
     private val bluePrintTypeEnhancerService: BluePrintTypeEnhancerService,

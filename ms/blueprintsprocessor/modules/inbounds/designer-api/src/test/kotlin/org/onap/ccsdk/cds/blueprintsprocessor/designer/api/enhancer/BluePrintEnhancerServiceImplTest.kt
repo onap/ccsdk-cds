@@ -1,6 +1,7 @@
 /*
  * Copyright © 2017-2018 AT&T Intellectual Property.
  * Modifications Copyright © 2018 IBM.
+ * Modifications Copyright © 2026 Deutsche Telekom.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load.ModelTypeLoadSer
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.load.ResourceDictionaryLoadService
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintEnhancerService
+import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintTypeEnhancerService
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.springframework.beans.factory.annotation.Autowired
@@ -51,6 +53,33 @@ class BluePrintEnhancerServiceImplTest {
 
     @Autowired
     lateinit var bluePrintValidatorService: BluePrintValidatorService
+
+    @Autowired
+    lateinit var bluePrintTypeEnhancerService: BluePrintTypeEnhancerService
+
+    @Test
+    fun testEnhancersAreNotSharedBetweenLookups() {
+        val lookups = mapOf(
+            "service template" to { bluePrintTypeEnhancerService.getServiceTemplateEnhancers() },
+            "topology template" to { bluePrintTypeEnhancerService.getTopologyTemplateEnhancers() },
+            "workflow" to { bluePrintTypeEnhancerService.getWorkflowEnhancers() },
+            "node template" to { bluePrintTypeEnhancerService.getNodeTemplateEnhancers() },
+            "node type" to { bluePrintTypeEnhancerService.getNodeTypeEnhancers() },
+            "relationship template" to { bluePrintTypeEnhancerService.getRelationshipTemplateEnhancers() },
+            "relationship type" to { bluePrintTypeEnhancerService.getRelationshipTypeEnhancers() },
+            "artifact definition" to { bluePrintTypeEnhancerService.getArtifactDefinitionEnhancers() },
+            "policy type" to { bluePrintTypeEnhancerService.getPolicyTypeEnhancers() },
+            "property definition" to { bluePrintTypeEnhancerService.getPropertyDefinitionEnhancers() },
+            "attribute definition" to { bluePrintTypeEnhancerService.getAttributeDefinitionEnhancers() }
+        )
+        lookups.forEach { (kind, lookup) ->
+            val first = lookup()
+            val second = lookup()
+            first.zip(second).forEach { (a, b) ->
+                Assert.assertNotSame("$kind enhancer ${a::class.simpleName} is shared between enrichments", a, b)
+            }
+        }
+    }
 
     @Test
     @Throws(Exception::class)
