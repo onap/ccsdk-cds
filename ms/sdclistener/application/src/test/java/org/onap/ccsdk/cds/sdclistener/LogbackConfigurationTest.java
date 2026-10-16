@@ -64,6 +64,17 @@ public class LogbackConfigurationTest {
     }
 
     @Test
+    public void anyOtherLogFormatFallsBackToPlainText() throws JoranException {
+        for (String logFormat : List.of("", "text", "plain", "JSON")) {
+            Logger root = configure(logFormat).getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+
+            ConsoleAppender<?> appender = (ConsoleAppender<?>) root.getAppender("text");
+            assertTrue("CDS_LOG_FORMAT=" + logFormat, appender.getEncoder() instanceof LayoutWrappingEncoder);
+            assertNull("CDS_LOG_FORMAT=" + logFormat, root.getAppender("json"));
+        }
+    }
+
+    @Test
     public void jsonConsoleLoggingIncludesTheMdc() throws JoranException, IOException {
         Logger root = configure("json").getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
         assertNull(root.getAppender("text"));

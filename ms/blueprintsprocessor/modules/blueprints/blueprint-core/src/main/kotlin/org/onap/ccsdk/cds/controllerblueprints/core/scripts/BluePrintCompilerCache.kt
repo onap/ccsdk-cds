@@ -45,7 +45,7 @@ object BluePrintCompileCache {
             classLoaderCache.invalidate(key)
             log.info("Cleaned compiled cache($key)")
         } else {
-            log.warn("No compiled cache($key) present to clean.")
+            log.debug("No compiled cache($key) present to clean.")
         }
     }
 

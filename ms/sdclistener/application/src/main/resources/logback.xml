@@ -16,7 +16,8 @@ limitations under the License.
 -->
 
 <configuration>
-    <!-- CDS_LOG_FORMAT selects the console appender by name: text (default) or json -->
+    <!-- CDS_LOG_FORMAT selects the console appender: json, or text for any other value or when unset -->
+    <property name="consoleAppender.json" value="json"/>
     <appender name="text" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
@@ -30,7 +31,7 @@ limitations under the License.
     </appender>
 
     <root level="info">
-        <appender-ref ref="${CDS_LOG_FORMAT:-text}"/>
+        <appender-ref ref="${consoleAppender.${CDS_LOG_FORMAT:-text}:-text}"/>
     </root>
 
     <logger name="org.springframework" level="info"/>
