@@ -3,33 +3,25 @@
 <tour-step-template></tour-step-template>
 <div class="new-wrapper">
     <div class="container-fluid main-container">
-        <app-packages-header></app-packages-header>
-        <div class="container-fluid body-container">
+        <app-packages-header (gettingStarted)="startTour = true"></app-packages-header>
+        <main class="container-fluid body-container" id="main-content" tabindex="-1">
             <!--Tour Starter-->
-
-            <input id="clicker" [checked]="startTour" type="checkbox" style="display: none;" />
-            <label class="ml-1" for="clicker" style="display: none;">Start the tour</label>
-
-            <div class="panel-wrap packageWizard">
-                <div class="panel">
-                    <button id="clicker1" class="close" type="button" (click)="stopTour()">
-                        <label for="clicker"><img src="assets/img/icon-close.svg" /></label>
+            <div class="panel-wrap packageWizard" [class.open]="startTour">
+                <section class="panel" aria-labelledby="welcome-title">
+                    <button id="clicker1" class="close" type="button" aria-label="Close" (click)="stopTour()">
+                        <img src="assets/img/icon-close.svg" alt="" />
                     </button>
                     <br />
-                    <h3>Welcome to CDS Designer UI</h3>
+                    <h2 id="welcome-title">Welcome to CDS Designer UI</h2>
                     <p>CDS has new look and new way of delivering a reusable and simplified self-service experience.</p>
                     <!-- <span>Tab through these quick steps to help you get started.</span>
                     <br /> -->
-                    <button id="clicker2" class="closeWizard mr-2" type="button" (click)="stopTour()">
-                        <label for="clicker">No Thanks</label>
-                    </button>
-                    <button type="button" class="startTour float">
-                        <label (click)="start()" for="clicker" class="m-0">Start Tour</label>
-                    </button>
-                </div>
+                    <button id="clicker2" class="closeWizard mr-2" type="button" (click)="stopTour()">No Thanks</button>
+                    <button type="button" class="startTour float" (click)="start()">Start Tour</button>
+                </section>
             </div>
             <!---->
-            <nav class="row" tourAnchor="allTab">
+            <div class="row" tourAnchor="allTab">
                 <!--Nav Tabs-->
                 <div class="col pr-0">
                     <div class="nav nav-tabs " id="nav-tab" role="tablist">
@@ -56,9 +48,9 @@
 
                     </div>
                 </div>
-            </nav>
+            </div>
             <app-sort-packages></app-sort-packages>
-        </div>
+        </main>
     </div>
     <!-- <div class="copyright text-center w-100 m-auto">Copyright &#64;2020 CDS Designer UI - v1.0.0</div> -->
 </div>

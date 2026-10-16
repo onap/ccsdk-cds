@@ -4,7 +4,7 @@
         <div class="col-md-4">
             <div class="card setup-card">
                 <div class="card-body">
-                    <h5 class="card-title">Blueprint Selection</h5>
+                    <h2 class="h5 card-title">Blueprint Selection</h2>
 
                     <div class="form-group">
                         <label for="blueprintName">Blueprint Name</label>
@@ -153,7 +153,7 @@
         <div class="col-md-8">
             <div class="card editor-card">
                 <div class="card-body">
-                    <h5 class="card-title">Request Payload (ExecutionServiceInput)</h5>
+                    <h2 class="h5 card-title">Request Payload (ExecutionServiceInput)</h2>
                     <div class="ace-editor-wrapper">
                         <ace-editor
                             [(text)]="payloadText"
@@ -169,11 +169,11 @@
             <!-- Response panel -->
             <div class="card response-card mt-3" *ngIf="lastResponseText">
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h2 class="h5 card-title">
                         <i class="fa fa-check-circle text-success mr-1" *ngIf="lastResponse" aria-hidden="true"></i>
                         <i class="fa fa-times-circle text-danger mr-1" *ngIf="!lastResponse" aria-hidden="true"></i>
                         Execution Response
-                    </h5>
+                    </h2>
                     <div class="ace-editor-wrapper">
                         <ace-editor
                             [text]="lastResponseText"

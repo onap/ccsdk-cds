@@ -23,16 +23,15 @@
     <div class="container-fluid main-container">
         <header class="page-title">
             <div class="row">
-                <h2 class="col m-0 pb-0">
-                    <ul class="breadcrumb-header">
-                        <li><a routerLink="/resource-dictionary">Resource Dictionary</a></li>
-                        <i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i>
-                        <li>Dictionary Name</li>
-                    </ul>
-                </h2>
+                <nav class="col m-0 pb-0 page-breadcrumb" aria-label="Breadcrumb">
+                    <ol class="breadcrumb-header">
+                        <li><a routerLink="/resource-dictionary">Resource Dictionary</a><i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i></li>
+                        <li aria-current="page"><h1>Dictionary Name</h1></li>
+                    </ol>
+                </nav>
             </div>
         </header>
-        <div class="container-fluid body-container">
+        <main class="container-fluid body-container" id="main-content" tabindex="-1">
             <div class="container">
                 <!--Right Side - Action Buttons-->
                 <div class="creat-action-container">
@@ -106,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <nav class="row">
+                <div class="row">
                     <!--Nav Tabs-->
                     <div class="col">
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -135,8 +134,8 @@
                             </div>
                         </div>
                     </div>
-                </nav>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 </div>

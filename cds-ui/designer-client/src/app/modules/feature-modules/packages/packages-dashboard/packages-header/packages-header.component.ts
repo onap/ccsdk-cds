@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PackagesStore } from '../../packages.store';
 
 @Component({
@@ -7,6 +7,8 @@ import { PackagesStore } from '../../packages.store';
   styleUrls: ['./packages-header.component.css']
 })
 export class PackagesHeaderComponent implements OnInit {
+
+  @Output() gettingStarted = new EventEmitter<void>();
 
   numberOfPackages: number;
 

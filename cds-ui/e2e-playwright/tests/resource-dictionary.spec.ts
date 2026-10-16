@@ -183,7 +183,7 @@ test.describe('Resource Dictionary – paged listing', () => {
             page.goto('/#/resource-dictionary'),
         ]);
         // The header shows "Resource Dictionary (N Dictionary)" where N is the total count from the fixture
-        const header = page.locator('app-dictionary-header h2');
+        const header = page.locator('app-dictionary-header h1');
         await expect(header).toContainText('169', { timeout: 10_000 });
     });
 });
