@@ -27,10 +27,14 @@ import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.configuration.HealthCheckProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ApplicationHealth
+import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.WebClientEnpointResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.CombinedHealthService
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.EndPointExecution
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
+import org.springframework.beans.factory.ObjectProvider
+import org.springframework.boot.actuate.health.Health
+import org.springframework.boot.actuate.health.HealthEndpoint
 import org.springframework.boot.actuate.health.Status
 
 /**
@@ -48,19 +52,25 @@ class HealthCheckApplicationTests {
     @Mock
     private val healthCheckProperties: HealthCheckProperties? = null
 
+    @Mock
+    private val healthEndpointProvider: ObjectProvider<HealthEndpoint>? = null
+
+    @Mock
+    private val healthEndpoint: HealthEndpoint? = null
+
     @InjectMocks
     private var combinedHealthService: CombinedHealthService? = null
 
     @Before
     fun setup() {
-        Mockito.`when`(healthCheckProperties!!.getBluePrintBaseURL())
-            .thenReturn("http://cds-blueprints-processor-http:8080/")
-        Mockito.`when`(healthCheckProperties.getCDSListenerBaseURL())
+        Mockito.`when`(healthCheckProperties!!.getCDSListenerBaseURL())
             .thenReturn("http://cds-sdc-listener:8080/")
     }
 
     @Test
     fun testGetCombinedHealthCheckWhenServicesAreDown() {
+        Mockito.`when`(healthCheckProperties!!.getBluePrintBaseURL())
+            .thenReturn("http://cds-blueprints-processor-http:8080/")
         Mockito.`when`(
             endPointExecution!!.retrieveWebClientResponse(anyObject())
         ).thenReturn(WebClientEnpointResponse(BlueprintWebClientService.WebClientResponse(500, "")))
@@ -82,6 +92,8 @@ class HealthCheckApplicationTests {
         )
         val healthUp = ApplicationHealth(Status.UP, hashMapOf())
 
+        Mockito.`when`(healthEndpointProvider!!.ifAvailable).thenReturn(healthEndpoint)
+        Mockito.`when`(healthEndpoint!!.health()).thenReturn(Health.up().withDetail("db", "UP").build())
         Mockito.`when`(
             endPointExecution!!.retrieveWebClientResponse(anyObject())
         ).thenReturn(successResponse)
@@ -97,6 +109,23 @@ class HealthCheckApplicationTests {
             assertNotNull(health)
             assertEquals(Status.UP, health!!.status)
         }
+        assertEquals(mapOf("db" to "UP"), result[0]!!.details)
+    }
+
+    @Test
+    fun testProcessorHealthIsReadInProcess() {
+        Mockito.`when`(healthEndpointProvider!!.ifAvailable).thenReturn(healthEndpoint)
+        Mockito.`when`(healthEndpoint!!.health()).thenReturn(Health.up().build())
+        Mockito.`when`(
+            endPointExecution!!.retrieveWebClientResponse(anyObject())
+        ).thenReturn(WebClientEnpointResponse(BlueprintWebClientService.WebClientResponse(500, "")))
+
+        combinedHealthService!!.getCombinedHealthCheck()
+
+        Mockito.verify(endPointExecution).retrieveWebClientResponse(
+            ServiceEndpoint("CDSListener Health Check", "http://cds-sdc-listener:8080/actuator/health")
+        )
+        Mockito.verifyNoMoreInteractions(endPointExecution)
     }
 
     /**

@@ -32,7 +32,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthCheckStatus
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.ServiceEndpoint
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.EndPointExecution
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.health.BluePrintProcessorHealthCheck
-import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import java.util.Arrays
@@ -42,9 +41,6 @@ class HealthCheckServiceTest {
 
     @Mock
     private val basicAuthRestClientService: BasicAuthRestClientService? = null
-
-    @Mock
-    private val restClientProperties: BasicAuthRestClientProperties? = null
 
     @Mock
     private val healthCheckProperties: HealthCheckProperties? = null
@@ -104,6 +100,23 @@ class HealthCheckServiceTest {
         healthApiResponse.checks.forEach { serviceEndpoint ->
             assertNotNull(serviceEndpoint)
             assertEquals(HealthCheckStatus.UP, serviceEndpoint.status)
+        }
+    }
+
+    @Test
+    fun testEachServiceIsCalledWithItsOwnUrl() {
+        Mockito.`when`(
+            basicAuthRestClientService!!.exchangeResource(
+                anyString(),
+                anyString(),
+                anyString()
+            )
+        ).thenReturn(BlueprintWebClientService.WebClientResponse(200, "Success", emptyMap()))
+
+        bluePrintProcessorHealthCheck!!.retrieveEndpointExecutionStatus()
+
+        healthCheckProperties!!.getBluePrintServiceInformation().forEach { serviceEndpoint ->
+            Mockito.verify(basicAuthRestClientService).exchangeResource("GET", serviceEndpoint.serviceLink, "")
         }
     }
 

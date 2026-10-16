@@ -16,7 +16,6 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.actuator.indicator
 
-import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthApiResponse
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.domain.HealthCheckStatus
 import org.onap.ccsdk.cds.blueprintsprocessor.healthapi.service.health.BluePrintProcessorHealthCheck
@@ -38,19 +37,17 @@ open class BluePrintCustomIndicator(private val bluePrintProcessorHealthCheck: B
 
     @Throws(Exception::class)
     override fun doHealthCheck(builder: Health.Builder) {
-        runBlocking {
-            var result: HealthApiResponse? = null
-            try {
-                result = bluePrintProcessorHealthCheck!!.retrieveEndpointExecutionStatus()
-                if (result?.status == HealthCheckStatus.UP) {
-                    builder.up()
-                } else {
-                    builder.down()
-                }
-                builder.withDetail("Services", result?.checks)
-            } catch (exception: IllegalArgumentException) {
-                logger.error(exception.message)
+        var result: HealthApiResponse? = null
+        try {
+            result = bluePrintProcessorHealthCheck!!.retrieveEndpointExecutionStatus()
+            if (result?.status == HealthCheckStatus.UP) {
+                builder.up()
+            } else {
+                builder.down()
             }
+            builder.withDetail("Services", result?.checks)
+        } catch (exception: IllegalArgumentException) {
+            logger.error(exception.message)
         }
     }
 }

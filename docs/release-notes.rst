@@ -75,6 +75,12 @@ Bug fixes
   SonarQube.
 * Fixed the cds-ui designer client lock file so ``npm ci`` works again.
   (Jira `CCSDK-4218 <https://jira.onap.org/browse/CCSDK-4218>`_)
+* ``/api/v1/combinedHealth`` and ``/api/v1/combinedMetrics`` no longer block
+  a reactor thread, which could make the whole blueprintsprocessor REST API
+  hang. Credentials for the health API that cannot be decrypted are logged
+  as an error, and wrong basic auth credentials on the REST API return 401
+  instead of 500.
+  (Jira `CCSDK-4241 <https://jira.onap.org/browse/CCSDK-4241>`_)
 
 Upgrade notes
 -------------
