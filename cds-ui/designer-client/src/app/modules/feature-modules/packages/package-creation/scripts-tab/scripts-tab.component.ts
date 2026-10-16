@@ -147,6 +147,10 @@ export class ScriptsTabComponent implements OnInit {
         }
     }
 
+    get currentEditorMode(): string {
+        return this.currentExtension === 'ansible' ? 'yaml' : this.currentExtension || 'text';
+    }
+
     changeExtension() {
         this.currentExtension = this.scriptExtension;
         console.log(this.scriptExtension);
