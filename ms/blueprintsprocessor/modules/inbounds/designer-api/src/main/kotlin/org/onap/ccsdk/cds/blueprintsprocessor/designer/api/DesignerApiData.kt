@@ -17,8 +17,7 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
-import io.swagger.annotations.ApiModel
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.DATA_TYPE_JSON
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants.DEFAULT_VERSION_NUMBER
@@ -29,11 +28,11 @@ import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceAssignment
 
 class BootstrapRequest {
 
-    @ApiModelProperty(value = "Specifies if default model types should be loaded", example = "true", required = true)
+    @Schema(description = "Specifies if default model types should be loaded", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     var loadModelType: Boolean = false
-    @ApiModelProperty(value = "Specifies if default data dictionaries should be loaded", example = "true", required = true)
+    @Schema(description = "Specifies if default data dictionaries should be loaded", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     var loadResourceDictionary: Boolean = false
-    @ApiModelProperty(value = "Specifies if default blueprint models should be loaded", example = "true", required = true)
+    @Schema(description = "Specifies if default blueprint models should be loaded", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     var loadCBA: Boolean = false
 }
 
@@ -44,14 +43,13 @@ class WorkFlowsResponse {
     var workflows: MutableSet<String> = mutableSetOf()
 }
 
-@ApiModel
 class WorkFlowSpecRequest {
 
-    @ApiModelProperty(value = "Name of the BLueprint", example = "pnf_netconf", required = true)
+    @Schema(description = "Name of the BLueprint", example = "pnf_netconf", requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var blueprintName: String
     var version: String = DEFAULT_VERSION_NUMBER
     var returnContent: String = DATA_TYPE_JSON
-    @ApiModelProperty(value = "Name of the Workflow", example = "config-assign", required = true)
+    @Schema(description = "Name of the Workflow", example = "config-assign", requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var workflowName: String
     var specType: String = TOSCA_SPEC
 }

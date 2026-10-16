@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.db.primary.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.Length
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -50,11 +50,11 @@ class BlueprintModelContent : Serializable {
     var id: String? = null
 
     @Column(name = "name", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var name: String
 
     @Column(name = "content_type", nullable = false)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var contentType: String
 
     @OneToOne
@@ -65,7 +65,7 @@ class BlueprintModelContent : Serializable {
     var description: String? = null
 
     @Column(name = "content", nullable = false, length = Length.LONG32)
-    @ApiModelProperty(required = true)
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var content: ByteArray
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")

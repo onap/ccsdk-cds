@@ -17,8 +17,8 @@
 
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ModelType
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.handler.ModelTypeHandler
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.mdcWebCoroutineScope
@@ -35,39 +35,34 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping(value = ["/api/v1/model-type"])
-@Api(
-    value = "Model Type Catalog",
+@Tag(
+    name = "Model Type Catalog",
     description = "Manages data types in CDS"
 )
 open class ModelTypeController(private val modelTypeHandler: ModelTypeHandler) {
 
     @GetMapping(path = ["/{name}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Retrieve a model type",
-        notes = "Retrieve a model type by name provided.",
-        response = ModelType::class
+    @Operation(
+        summary = "Retrieve a model type",
+        description = "Retrieve a model type by name provided."
     )
     suspend fun getModelTypeByName(@PathVariable(value = "name") name: String): ModelType? = mdcWebCoroutineScope {
         modelTypeHandler.getModelTypeByName(name)
     }
 
     @GetMapping(path = ["/search/{tags}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Retrieve a list of model types",
-        notes = "Retrieve a list of model types by tags provided.",
-        responseContainer = "List",
-        response = ModelType::class
+    @Operation(
+        summary = "Retrieve a list of model types",
+        description = "Retrieve a list of model types by tags provided."
     )
     suspend fun searchModelTypes(@PathVariable(value = "tags") tags: String): List<ModelType> = mdcWebCoroutineScope {
         modelTypeHandler.searchModelTypes(tags)
     }
 
     @GetMapping(path = ["/by-definition/{definitionType}"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ApiOperation(
-        value = "Retrieve a list of model types",
-        notes = "Retrieve a list of model types by definition type provided.",
-        responseContainer = "List",
-        response = ModelType::class
+    @Operation(
+        summary = "Retrieve a list of model types",
+        description = "Retrieve a list of model types by definition type provided."
     )
     @ResponseBody
     suspend fun getModelTypeByDefinitionType(@PathVariable(value = "definitionType") definitionType: String): List<ModelType> =
@@ -79,10 +74,9 @@ open class ModelTypeController(private val modelTypeHandler: ModelTypeHandler) {
         produces = [MediaType.APPLICATION_JSON_VALUE],
         consumes = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(
-        value = "Save a model type",
-        notes = "Save a model type by model type definition provided.",
-        response = ModelType::class
+    @Operation(
+        summary = "Save a model type",
+        description = "Save a model type by model type definition provided."
     )
     @ResponseBody
     @Throws(BluePrintException::class)
@@ -91,10 +85,9 @@ open class ModelTypeController(private val modelTypeHandler: ModelTypeHandler) {
     }
 
     @DeleteMapping(path = ["/{name}"])
-    @ApiOperation(
-        value = "Remove a model type",
-        notes = "Remove a model type by name provided.",
-        response = ModelType::class
+    @Operation(
+        summary = "Remove a model type",
+        description = "Remove a model type by name provided."
     )
     suspend fun deleteModelTypeByName(@PathVariable(value = "name") name: String) = mdcWebCoroutineScope {
         modelTypeHandler.deleteByModelName(name)

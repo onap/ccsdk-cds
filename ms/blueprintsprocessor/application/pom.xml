@@ -77,6 +77,17 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- Error Catalog Services -->
         <dependency>
             <groupId>org.onap.ccsdk.cds.error.catalog</groupId>
@@ -314,6 +325,9 @@
                     </excludes>
                     <reuseForks>false</reuseForks>
                     <forkCount>1</forkCount>
+                    <systemPropertyVariables>
+                        <openapi.outputDirectory>${basedir}/../../../docs/api-reference/media</openapi.outputDirectory>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <plugin>
@@ -399,69 +413,6 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.github.kongchen</groupId>
-                <artifactId>swagger-maven-plugin</artifactId>
-                <version>3.1.8</version>
-                <configuration>
-                    <apiSources>
-                        <apiSource>
-                            <springmvc>true</springmvc>
-                            <locations>
-                                <location>org.onap.ccsdk.cds.blueprintsprocessor.designer.api</location>
-                                <location>org.onap.ccsdk.cds.blueprintsprocessor.selfservice.api</location>
-                                <location>org.onap.ccsdk.cds.blueprintsprocessor.resource.api</location>
-                                <location>org.onap.ccsdk.cds.blueprintsprocessor.configs.api</location>
-                                <!-- This location is not implemented yet
-                                <location>org.onap.ccsdk.cds.blueprintsprocessor.healthapi</location>
-                                -->
-                            </locations>
-                            <schemes>
-                                <scheme>http</scheme>
-                            </schemes>
-                            <host>localhost:8080</host>
-                            <info>
-                                <title>CDS Blueprint Processor API Reference</title>
-                                <version>v1</version>
-                                <description>
-                                    Shows all resources and endpoints which CDS BP processor currently provides with sample requests/responses, parameter description and other information.
-                                </description>
-                                <termsOfService>
-                                    https://www.onap.org/
-                                </termsOfService>
-                                <contact>
-                                    <email>onap-discuss@lists.onap.org</email>
-                                    <name>ONAP Community</name>
-                                    <url>https://www.onap.org/</url>
-                                </contact>
-                                <license>
-                                    <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-                                    <name>Apache 2.0</name>
-                                </license>
-                            </info>
-                            <securityDefinitions>
-                                <securityDefinition>
-                                    <name>Basic Auth</name>
-                                    <type>basic</type>
-                                </securityDefinition>
-                            </securityDefinitions>
-                            <outputFormats>json,yaml</outputFormats>
-                            <swaggerDirectory>${basedir}/../../../docs/api-reference/media</swaggerDirectory>
-                            <swaggerFileName>cds-bp-processor-api-swagger</swaggerFileName>
-                            <modelSubstitute>/swagger/model-substitute.txt</modelSubstitute>
-                            <operationIdFormat>{{className}}_{{methodName}}_{{httpMethod}}.{{packageName}}</operationIdFormat>
-                        </apiSource>
-                    </apiSources>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

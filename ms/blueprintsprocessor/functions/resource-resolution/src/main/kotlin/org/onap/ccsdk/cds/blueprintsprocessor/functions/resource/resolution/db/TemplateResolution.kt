@@ -17,7 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.db
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.Length
 import org.hibernate.annotations.Proxy
 import org.springframework.data.annotation.LastModifiedDate
@@ -47,40 +47,40 @@ import jakarta.persistence.TemporalType
 @Proxy(lazy = false)
 class TemplateResolution : Serializable {
 
-    @get:ApiModelProperty(value = "Name of the CBA.", required = true)
+    @get:Schema(description = "Name of the CBA.", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "blueprint_name", nullable = false)
     var blueprintName: String? = null
 
-    @get:ApiModelProperty(value = "Version of the CBA.", required = true)
+    @get:Schema(description = "Version of the CBA.", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "blueprint_version", nullable = false)
     var blueprintVersion: String? = null
 
-    @get:ApiModelProperty(value = "Artifact name for which to retrieve a resolved resource.", required = true)
+    @get:Schema(description = "Artifact name for which to retrieve a resolved resource.", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "artifact_name", nullable = false)
     var artifactName: String? = null
 
-    @get:ApiModelProperty(value = "Rendered template.", required = true)
+    @get:Schema(description = "Rendered template.", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "result", nullable = false, length = Length.LONG32)
     var result: String? = null
 
-    @get:ApiModelProperty(
-        value = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
-        required = true
+    @get:Schema(
+        description = "Resolution Key uniquely identifying the resolution of a given artifact within a CBA.",
+        requiredMode = Schema.RequiredMode.REQUIRED
     )
     @Column(name = "resolution_key", nullable = false)
     var resolutionKey: String? = null
 
-    @get:ApiModelProperty(value = "Resolution type.", required = true, example = "ServiceInstance")
+    @get:Schema(description = "Resolution type.", requiredMode = Schema.RequiredMode.REQUIRED, example = "ServiceInstance")
     @Column(name = "resource_type", nullable = false)
     var resourceType: String? = null
 
-    @get:ApiModelProperty(value = "ID associated with the resolution type in the inventory system.", required = true)
+    @get:Schema(description = "ID associated with the resolution type in the inventory system.", requiredMode = Schema.RequiredMode.REQUIRED)
     @Column(name = "resource_id", nullable = false)
     var resourceId: String? = null
 
-    @get:ApiModelProperty(
-        value = "If resolution occurred multiple time, this field provides the index.",
-        required = true
+    @get:Schema(
+        description = "If resolution occurred multiple time, this field provides the index.",
+        requiredMode = Schema.RequiredMode.REQUIRED
     )
     @Column(name = "occurrence", nullable = false)
     var occurrence: Int = 1
@@ -89,7 +89,7 @@ class TemplateResolution : Serializable {
     @Column(name = "template_resolution_id")
     var id: String? = null
 
-    @get:ApiModelProperty(value = "Creation date of the resolution.", required = true)
+    @get:Schema(description = "Creation date of the resolution.", requiredMode = Schema.RequiredMode.REQUIRED)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)

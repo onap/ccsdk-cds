@@ -17,8 +17,7 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import io.swagger.annotations.ApiModel
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.hibernate.Length
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.springframework.data.annotation.LastModifiedDate
@@ -41,39 +40,38 @@ import jakarta.persistence.TemporalType
  * @version 1.0
  */
 @EntityListeners(AuditingEntityListener::class)
-@ApiModel
 @Entity
 @Table(name = "RESOURCE_DICTIONARY")
 class ResourceDictionary : Serializable {
 
     @Id
     @Column(name = "name", nullable = false)
-    @ApiModelProperty(value = "Name", required = true, example = "sample-db-source")
+    @Schema(description = "Name", requiredMode = Schema.RequiredMode.REQUIRED, example = "sample-db-source")
     lateinit var name: String
 
     @Column(name = "data_type", nullable = false)
-    @ApiModelProperty(value = "Data type", required = true, example = "string")
+    @Schema(description = "Data type", requiredMode = Schema.RequiredMode.REQUIRED, example = "string")
     lateinit var dataType: String
 
     @Column(name = "entry_schema")
-    @ApiModelProperty(value = "Entry schema", required = true, example = "dt-license-key")
+    @Schema(description = "Entry schema", requiredMode = Schema.RequiredMode.REQUIRED, example = "dt-license-key")
     var entrySchema: String? = null
 
     @Column(name = "resource_dictionary_group")
-    @ApiModelProperty(value = "Resource dictionary group", required = true, example = "default")
+    @Schema(description = "Resource dictionary group", requiredMode = Schema.RequiredMode.REQUIRED, example = "default")
     var resourceDictionaryGroup: String? = null
 
     @Convert(converter = JpaResourceDefinitionConverter::class)
     @Column(name = "definition", nullable = false, length = Length.LONG32)
-    @ApiModelProperty(value = "Definition", required = true)
+    @Schema(description = "Definition", requiredMode = Schema.RequiredMode.REQUIRED)
     lateinit var definition: ResourceDefinition
 
     @Column(name = "description", nullable = false, length = Length.LONG32)
-    @ApiModelProperty(value = "Description", required = true, example = "demo_artifacts_version")
+    @Schema(description = "Description", requiredMode = Schema.RequiredMode.REQUIRED, example = "demo_artifacts_version")
     lateinit var description: String
 
     @Column(name = "tags", nullable = false, columnDefinition = "TEXT")
-    @ApiModelProperty(value = "Tags", required = true, example = "hostname")
+    @Schema(description = "Tags", requiredMode = Schema.RequiredMode.REQUIRED, example = "hostname")
     lateinit var tags: String
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -83,7 +81,7 @@ class ResourceDictionary : Serializable {
     var creationDate: Date? = null
 
     @Column(name = "updated_by", nullable = false)
-    @ApiModelProperty(value = "Updated by", required = true, example = "username")
+    @Schema(description = "Updated by", requiredMode = Schema.RequiredMode.REQUIRED, example = "username")
     lateinit var updatedBy: String
 
     override fun toString(): String {

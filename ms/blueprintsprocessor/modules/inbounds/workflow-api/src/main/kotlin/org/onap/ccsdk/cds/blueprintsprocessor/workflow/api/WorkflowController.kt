@@ -17,9 +17,9 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.workflow.api
 
 import com.fasterxml.jackson.databind.JsonNode
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.tags.Tag
 import kotlinx.coroutines.runBlocking
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.db.BlueprintWorkflowAuditStatus
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.workflow.audit.StoreAuditService
@@ -43,8 +43,8 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/api/v1/workflow")
-@Api(
-    value = "/api/v1/workflow",
+@Tag(
+    name = "/api/v1/workflow",
     description = "Interaction with blueprint workflow status resources"
 )
 class WorkflowController {
@@ -65,7 +65,7 @@ class WorkflowController {
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
     @ResponseBody
-    @ApiOperation(value = "Health Check", hidden = true)
+    @Operation(summary = "Health Check", hidden = true)
     fun workflowControllerHealthCheck(): JsonNode = runBlocking {
         JacksonUtils.getJsonNode("Success")
     }
@@ -77,20 +77,17 @@ class WorkflowController {
         "/audit-status/{requestId}/{subRequestId}",
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @ApiOperation(
-        value = "Get all workflow status records using request and Subrequest",
-        notes = "Retrieve all stored workflow audit records based on " +
-            "requestId and SubrequestId",
-        response = BlueprintWorkflowAuditStatus::class,
-        responseContainer = "List",
-        produces = MediaType.APPLICATION_JSON_VALUE
+    @Operation(
+        summary = "Get all workflow status records using request and Subrequest",
+        description = "Retrieve all stored workflow audit records based on " +
+            "requestId and SubrequestId"
     )
     @ResponseBody
     @PreAuthorize("hasRole('USER')")
     suspend fun getWorkFlowByRequestAndSubRequest(
-        @ApiParam(value = "request ID", required = true)
+        @Parameter(description = "request ID", required = true)
         @PathVariable(value = "requestId") requestId: String,
-        @ApiParam(value = "sub request ID", required = true)
+        @Parameter(description = "sub request ID", required = true)
         @PathVariable(value = "subRequestId") subRequestId: String
     ): ResponseEntity<List<BlueprintWorkflowAuditStatus>> = runBlocking {
         var requestIdResults: List<BlueprintWorkflowAuditStatus>

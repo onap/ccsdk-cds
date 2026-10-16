@@ -8,8 +8,9 @@ Blueprint Processor API Reference
 Introduction
 --------------
 
-This section shows all resources and endpoints which CDS BP processor currently provides through a swagger file
-which is automatically created during CDS build process by Swagger Maven Plugin. A corresponding Postman collection is
+This section shows all resources and endpoints which CDS BP processor currently provides through an OpenAPI file
+which is automatically created during the CDS build process from the API description the BP processor serves at runtime.
+A corresponding Postman collection is
 also included. Endpoints can also be described using this template
 :download:`api-doc-template.rst <media/api-doc-template.txt>` but this is not the preferred way to describe the CDS API.
 
@@ -39,6 +40,9 @@ in JSON and YAML:
 
 * :download:`cds-bp-processor-api-swagger.json <media/cds-bp-processor-api-swagger.json>`
 * :download:`cds-bp-processor-api-swagger.yaml <media/cds-bp-processor-api-swagger.yaml>`
+
+A running BP processor serves the same OpenAPI description at ``/v3/api-docs`` (``/v3/api-docs.yaml`` for YAML)
+and the Swagger UI at ``/swagger-ui.html``. Both require the Basic authorization described above.
 
 You can find a postman collection including sample requests for all endpoints here:
 :download:`bp-processor.postman_collection.json <media/bp-processor.postman_collection.json>`.

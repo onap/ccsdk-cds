@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.JsonNode
-import io.swagger.annotations.ApiModelProperty
+import io.swagger.v3.oas.annotations.media.Schema
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintConstants
 import org.onap.ccsdk.cds.controllerblueprints.core.asJsonType
 
@@ -193,7 +193,7 @@ class PropertyDefinition {
     var metadata: MutableMap<String, String>? = null
 
     // Mainly used in Workflow Outputs
-    @get:ApiModelProperty(notes = "Property Value, It may be Expression or Json type values")
+    @get:Schema(description = "Property Value, It may be Expression or Json type values")
     var value: JsonNode? = null
 }
 
@@ -224,7 +224,7 @@ class AttributeDefinition {
     var entrySchema: EntrySchema? = null
 
     // Mainly used in DSL definitions
-    @get:ApiModelProperty(notes = "Attribute Value, It may be Expression or Json type values")
+    @get:Schema(description = "Attribute Value, It may be Expression or Json type values")
     var value: JsonNode? = null
 }
 
