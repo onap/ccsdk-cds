@@ -348,10 +348,27 @@ input#menu[type="checkbox"]{
 /* .sub-menu-dropdown{
 background-color: #333;
 }   */
-.menu:hover{
+.menu:hover,
+.menu:focus-within{
   position: absolute;
   left: 0;
   top: 0;
+}
+.skip-link{
+  position: fixed;
+  top: 8px;
+  left: -9999px;
+  z-index: 3000;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 3px;
+  background: #fff;
+  color: #1B3E6F;
+  font-weight: bold;
+  box-shadow: 0 2px 6px 0 rgba(47, 83, 151, .3);
+}
+.skip-link:focus{
+  left: 60px;
 }
 .openNav .menu:hover{
   position: absolute;
@@ -1025,6 +1042,7 @@ height: 40px;
   background: transparent;
   box-shadow: none;
   font-size: 13px;
+  pointer-events: none;
   /* text-indent: -999px; */
 }
 .profile-help .dropdown-text img{
@@ -1127,6 +1145,27 @@ height: 40px;
 .helpMenu .dropdown-content{
   width: 262px;
 }
+.helpMenu .dropdown-content button{
+  display: block;
+  width: 100%;
+  padding: 5px 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  text-indent: 0;
+  font-size: 14px;
+  line-height: 22px;
+}
+.profile-help .dropdown-toggle:focus ~ .dropdown-content{
+  opacity: 0;
+  visibility: hidden;
+}
+.profile-help .dropdown.open .dropdown-content{
+  opacity: 1;
+  visibility: visible;
+  top: 42px;
+}
 .help-btn{
   border-right: solid 1px #ECEDF2;
 }
@@ -1156,12 +1195,13 @@ height: 40px;
   /* position: fixed;
   width: calc(100% - 50px); */
 }
-.page-title h2{
+.page-title h1,
+.page-title .page-breadcrumb{
   font-size: 16px;
   font-weight: bold;
   padding-top: 1px;
 }
-.page-title h2 span{
+.page-title h1 span{
   color: var(--cds-color-text-muted);
   font-size: 14px;
 }
@@ -3117,6 +3157,12 @@ animation: glowing 1500ms infinite;
   font-size: 14px;
 }
 
+.breadcrumb-header h1{
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
 .breadcrumb-header li:last-child::after{
   display: none;
 }
@@ -3703,6 +3749,7 @@ table.dataTable.no-footer{
   width: 350px;
   height: 200px;
   transform: translateX(100%);
+  visibility: hidden;
   transition: .3s ease-out;
   z-index: 2000;
 }
@@ -3731,10 +3778,11 @@ class name added to the body tag.
 Just using a checkbox sibling here
 for simplicity
 */
-[type="checkbox"]:checked ~ .panel-wrap {
+.packageWizard.panel-wrap.open{
   transform: translateX(0%);
+  visibility: visible;
 }
-.packageWizard h3{
+.packageWizard h2{
   margin-bottom: 15px;
   font-weight: bold !important;
   font-size: 16px;

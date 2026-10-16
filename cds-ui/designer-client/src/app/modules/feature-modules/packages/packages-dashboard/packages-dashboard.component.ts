@@ -53,7 +53,7 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
     }
 
     start() {
-
+        this.startTour = false;
         this.tourService.initialize([...steps]);
         console.log('start .................');
         this.tourService.start();
@@ -89,6 +89,7 @@ export class PackagesDashboardComponent implements OnInit, OnDestroy {
     }
 
     stopTour() {
+        this.startTour = false;
         localStorage.setItem('tour-guide', 'false');
     }
 

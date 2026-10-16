@@ -4,80 +4,19 @@
   <div class="container-fluid main-container">
     <header class="page-title" style="padding: 16px 30px 12px;">
       <div class="row">
-        <h2 class="col m-0 pb-0">
-          <ul class="breadcrumb-header">
-            <li><a routerLink="/packages">CBA Packages</a></li>
-            <i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i>
-            <li>Package Name</li>
-          </ul>
-        </h2>
+        <nav class="col m-0 pb-0 page-breadcrumb" aria-label="Breadcrumb">
+          <ol class="breadcrumb-header">
+            <li><a routerLink="/packages">CBA Packages</a><i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i></li>
+            <li aria-current="page"><h1>Package Name</h1></li>
+          </ol>
+        </nav>
         <div class="col profile-help">
-          <nav class="navbar navbar-expand-lg navbar-light">
-            <ul class="navbar-nav ml-auto">
-              <!--Version-->
-              <div class="nav-item copyright">v1.0.0</div>
-              <!--Help Menu-->
-              <div class="nav-item dropdown helpMenu">
-                <input class="dropdown-toggle" type="text">
-                <div class="dropdown-text"><i class="icon-info" aria-hidden="true"></i></div>
-                <ul class="dropdown-content">
-                  <li>
-                    <i class="icon-get_started" aria-hidden="true"></i>
-                    <p>
-                      <input id="clicker3" type="checkbox" />
-                      <label for="clicker">
-                        Getting Started
-                        <span>Quick steps to help you get started</span>
-                      </label>
-                    </p>
-                  </li>
-                  <!-- <li>
-                    <i class="icon-get_started" aria-hidden="true"></i>
-                    <p>
-                      <input id="clicker3" [checked]="startTour" type="checkbox" />
-                      <label for="clicker">
-                        Getting Started
-                        <span>Quick steps to help you get started</span>
-                      </label>
-                    </p>
-                  </li> -->
-                  <li>
-                    <a href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank">
-                      <i class="icon-user_guide" aria-hidden="true"></i>
-                      <p>
-                        Tutorials
-                        <span>CDS Designer's User Guide</span>
-                      </p>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <!--User Menu-->
-              <div class="nav-item dropdown userMenu">
-                <input class="dropdown-toggle" type="text">
-                <div class="dropdown-text"><img src="../assets/img/img-user.jpeg" align="right"></div>
-                <ul class="dropdown-content">
-                  <li>
-                    <a href="#">Username</a>
-                  </li>
-                  <li>
-                    <a href="#">Settings</a>
-                  </li>
-                  <li>
-                    <a href="#">Projects</a>
-                  </li>
-                  <li>
-                    <a href="#">Log out</a>
-                  </li>
-                </ul>
-              </div>
-            </ul>
-          </nav>
+          <app-header-actions></app-header-actions>
         </div>
       </div>
     </header>
 
-    <div class="container-fluid body-container">
+    <main class="container-fluid body-container" id="main-content" tabindex="-1">
       <ngx-ui-loader></ngx-ui-loader>
       <div class="container">
         <div class="creat-action-container">
@@ -159,7 +98,7 @@
           </div>
         </div>
 
-        <nav class="row">
+        <div class="row">
           <!--Nav Tabs-->
           <div class="col">
             <div class="nav nav-tabs " id="nav-tab" role="tablist">
@@ -183,7 +122,7 @@
             </div>
           </div>
 
-        </nav>
+        </div>
         <div class="row mt-4">
           <div class="col">
             <div class="tab-content" id="nav-tabContent">
@@ -213,6 +152,6 @@
           </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </div>

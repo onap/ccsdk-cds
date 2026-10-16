@@ -1,0 +1,69 @@
+<!-- /*
+* ============LICENSE_START=======================================================
+* ONAP : CDS
+* ================================================================================
+* Copyright (C) 2026 Deutsche Telekom AG.
+*=================================================================================
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+* ============LICENSE_END=========================================================
+*/ -->
+
+<nav class="navbar navbar-expand-lg navbar-light" aria-label="Help and user">
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item copyright">v1.0.0</li>
+    <li #helpMenu class="nav-item dropdown helpMenu" [class.open]="openMenu === 'help'">
+      <button #helpToggle type="button" class="dropdown-toggle" aria-label="Help" aria-controls="help-menu"
+        [attr.aria-expanded]="openMenu === 'help'" (click)="toggle('help')"></button>
+      <div class="dropdown-text"><i class="icon-info" aria-hidden="true"></i></div>
+      <ul class="dropdown-content" id="help-menu">
+        <li *ngIf="showGettingStarted">
+          <button type="button" (click)="startGettingStarted()">
+            <i class="icon-get_started" aria-hidden="true"></i>
+            <p>
+              Getting Started
+              <span>Quick steps to help you get started</span>
+            </p>
+          </button>
+        </li>
+        <li>
+          <a href="https://wiki.onap.org/display/DW/CDS+Designer+Guide" target="_blank">
+            <i class="icon-user_guide" aria-hidden="true"></i>
+            <p>
+              Tutorials
+              <span>CDS Designer's User Guide</span>
+            </p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li #userMenu class="nav-item dropdown userMenu" [class.open]="openMenu === 'user'">
+      <button #userToggle type="button" class="dropdown-toggle" aria-label="User menu" aria-controls="user-menu"
+        [attr.aria-expanded]="openMenu === 'user'" (click)="toggle('user')"></button>
+      <div class="dropdown-text"><img src="../assets/img/img-user.jpeg" alt="" align="right"></div>
+      <ul class="dropdown-content" id="user-menu">
+        <li>
+          <a href="#">Username</a>
+        </li>
+        <li>
+          <a href="#">Settings</a>
+        </li>
+        <li>
+          <a href="#">Projects</a>
+        </li>
+        <li>
+          <a href="#">Log out</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>

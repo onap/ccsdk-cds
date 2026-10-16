@@ -13,6 +13,13 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
+  skipToMain() {
+    const main = document.getElementById('main-content');
+    if (main) {
+      main.focus();
+    }
+  }
+
   // redirect() {
   //   this.router.navigate(['/packages']);
   // }

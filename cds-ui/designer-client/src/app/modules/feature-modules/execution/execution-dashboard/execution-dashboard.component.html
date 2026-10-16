@@ -4,18 +4,17 @@
     <div class="container-fluid main-container">
         <header class="page-title" style="padding: 16px 30px 12px;">
             <div class="row">
-                <h2 class="col m-0">
-                    <ul class="breadcrumb-header">
-                        <li><a routerLink="/packages">CBA Packages</a></li>
-                        <i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i>
-                        <li>Execute</li>
-                    </ul>
-                </h2>
+                <nav class="col m-0 page-breadcrumb" aria-label="Breadcrumb">
+                    <ol class="breadcrumb-header">
+                        <li><a routerLink="/packages">CBA Packages</a><i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i></li>
+                        <li aria-current="page"><h1>Execute</h1></li>
+                    </ol>
+                </nav>
             </div>
         </header>
-        <div class="container-fluid body-container">
+        <main class="container-fluid body-container" id="main-content" tabindex="-1">
             <div class="container">
-                <nav class="row">
+                <div class="row">
                     <div class="col">
                         <div class="nav nav-tabs" id="execution-nav-tab" role="tablist">
                             <a class="nav-item nav-link"
@@ -41,7 +40,7 @@
                             </a>
                         </div>
                     </div>
-                </nav>
+                </div>
 
                 <div class="tab-content" id="execution-tab-content">
                     <div *ngIf="activeTab === 'setup'" class="tab-pane fade show active" role="tabpanel">
@@ -59,6 +58,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </div>
