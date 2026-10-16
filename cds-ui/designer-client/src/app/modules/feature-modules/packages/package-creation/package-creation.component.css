@@ -30,7 +30,7 @@
 
 /* Green connector after a complete step */
 .lifecycle-step.complete + .lifecycle-connector {
-  background: #66BB00;
+  background: var(--cds-color-success);
 }
 
 /* ===== Step Circle ===== */
@@ -51,8 +51,8 @@
 }
 
 .lifecycle-step.complete .step-circle {
-  background: #66BB00;
-  border-color: #66BB00;
+  background: var(--cds-color-success);
+  border-color: var(--cds-color-success);
   font-size: 0;
 }
 
@@ -68,7 +68,7 @@
   margin-top: 8px;
   font-size: 11px;
   font-weight: 700;
-  color: #6B7D93;
+  color: var(--cds-color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-align: center;
@@ -76,7 +76,7 @@
 }
 
 .lifecycle-step.complete .step-label {
-  color: #66BB00;
+  color: var(--cds-color-success);
 }
 
 /* ===== Action Buttons ===== */
@@ -109,12 +109,12 @@
 }
 
 .lifecycle-step.complete .lifecycle-btn {
-  border-color: #66BB00;
-  color: #66BB00;
+  border-color: var(--cds-color-success);
+  color: var(--cds-color-success);
 }
 
 .lifecycle-step.complete .lifecycle-btn:hover:not(:disabled) {
-  background: #66BB00;
+  background: var(--cds-color-success);
   color: #fff;
 }
 
@@ -122,8 +122,24 @@
 .lifecycle-error {
   margin-top: 6px;
   font-size: 11px;
-  color: #FF6469;
+  color: var(--cds-color-danger);
   text-align: center;
   max-width: 120px;
   line-height: 1.3;
+}
+
+@media (max-width: 575.98px) {
+  .lifecycle-bar {
+    flex-wrap: wrap;
+    padding: 16px;
+  }
+
+  .lifecycle-connector {
+    display: none;
+  }
+
+  .lifecycle-step {
+    flex-basis: 50%;
+    margin-bottom: 12px;
+  }
 }

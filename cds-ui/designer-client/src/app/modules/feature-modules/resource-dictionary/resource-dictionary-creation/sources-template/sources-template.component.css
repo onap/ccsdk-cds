@@ -29,7 +29,7 @@
   margin-bottom: 0;
   padding: 12px 20px;
   border-bottom: solid 1px #D7E7F9;
-  color: #6B7D93;
+  color: var(--cds-color-text-muted);
   text-transform: uppercase;
   font-size: 12px;
   font-weight: bold;
@@ -55,7 +55,7 @@
   font-size: 13px;
 }
 .searchBox input::placeholder{
-  color: #6B7D93;
+  color: var(--cds-color-text-muted);
   font-size: 12px;
 }
 .searchBox input:focus{
@@ -87,7 +87,7 @@
 }
 .sourceOptionActions a{
   margin-left: 20px;
-  color: #2A81ED;
+  color: var(--cds-color-primary);
   font-weight: bold;
   font-size: 12px;
 }
@@ -97,7 +97,7 @@
   cursor: pointer;
 }
 .sourceOptionActions .btn{
-  background: #1273EB;
+  background: var(--cds-color-primary);
   border-radius: 15px;
   font-weight: bold;
   font-size: 12px;
@@ -111,7 +111,7 @@
   border-top: solid 1px #E8F0FA;
 }
 .deleteSource a{
-  color: #FF6469;
+  color: var(--cds-color-danger);
   font-weight: bold;
   font-size: 12px;
 }

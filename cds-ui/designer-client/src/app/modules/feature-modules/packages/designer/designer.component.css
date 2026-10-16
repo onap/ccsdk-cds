@@ -144,7 +144,7 @@ header{
 .dropdown-toggle:focus ~ .dropdown-text{
   top: 7px;
   text-indent: 15px;
-  background: #1273EB !important;
+  background: var(--cds-color-primary) !important;
   border-radius: 15px !important;
   border: 0;
   box-shadow: none;
@@ -501,7 +501,7 @@ p.compType-4{
   top: 1.25rem;
 }
 .actionsList .custom-control-label p{
-  color: #6B7D93;
+  color: var(--cds-color-text-muted);
   font-size: 12px;
 }
 .inserActionBtns .btn{
@@ -513,14 +513,14 @@ p.compType-4{
 
 }
 .inserActionBtns .btn:first-child{
-  background: #1273EB;
-  border: solid 1px #1273EB;
+  background: var(--cds-color-primary);
+  border: solid 1px var(--cds-color-primary);
   color: #fff;
 }
 .inserActionBtns .btn:last-child{
   background: #fff;
   border: solid 1px #D9E6F2;
-  color: #6B7D93;
+  color: var(--cds-color-text-muted);
   margin-top: 14px;
 }
 .controllerSidebar .custom-control label{
@@ -844,7 +844,7 @@ p.compType-4{
 .icon-required-star{
   margin-left: 2px;
   font-size: 10px;
-  color: #FF6469;
+  color: var(--cds-color-danger);
 }
 .optional-attribute::before{
   color: #CAD3E0;
@@ -959,7 +959,7 @@ p.compType-4{
   background: #FFE6E7;
   border: solid .5px #FFC9CB;
   border-radius: 2px;
-  color: #FF6469;
+  color: var(--cds-color-danger);
   font-size: 10px;
 
 }
@@ -1083,7 +1083,7 @@ ul.editor{
   padding-top: 0 !important;
 }
 .createAttributeTabs .nav-item a{
-  color: #6B7D93 !important;
+  color: var(--cds-color-text-muted) !important;
 }
 .createAttributeTabs .nav-item a,
 .createAttributeTabs .nav-item a.active{
@@ -1112,7 +1112,7 @@ ul.editor{
 }
 .createAttributeTabs .notation{
   margin-left: 3px;
-  color: #6B7D93 !important;
+  color: var(--cds-color-text-muted) !important;
   font-weight: normal;
 }
 .addedFunctionsList,
@@ -1225,7 +1225,7 @@ ul.editor{
   font-weight: bold;
 }
 .create-form .col-form-label span{
-  color: #FF6469;
+  color: var(--cds-color-danger);
 }
 .create-form .form-control{
   margin-bottom: 9px;
@@ -1239,7 +1239,7 @@ ul.editor{
   color: #1B3E6F;
 }
 .create-form .form-control::placeholder{
-  color: #6B7D93;
+  color: var(--cds-color-text-muted);
 }
 .create-form .form-control:focus{
   border-bottom-color: #1B3E6F;
@@ -1594,7 +1594,7 @@ ul.editor{
 .tooltiptext h6{
   background: transparent;
   line-height: 24px !important;
-  color: #6B7D93;
+  color: var(--cds-color-text-muted);
   text-transform: initial;
 }
 .tooltipHTML .tooltiptext span{
