@@ -38,7 +38,9 @@ open class PrimaryDatabaseConfiguration(private val primaryDataSourceProperties:
         em.jpaVendorAdapter = HibernateJpaVendorAdapter()
         val properties = HashMap<String, Any>()
         properties["hibernate.hbm2ddl.auto"] = primaryDataSourceProperties.hibernateHbm2ddlAuto
-        properties["hibernate.dialect"] = primaryDataSourceProperties.hibernateDialect
+        primaryDataSourceProperties.hibernateDialect?.takeIf { it.isNotBlank() }?.let {
+            properties["hibernate.dialect"] = it
+        }
         em.jpaPropertyMap = properties
         return em
     }

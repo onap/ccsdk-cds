@@ -93,4 +93,48 @@ class PersistenceIT : BaseE2eIT() {
         assertEquals("201", storedValues["vlan-id"])
         assertEquals("10.0.0.21", storedValues["mgmt-ip"])
     }
+
+    @Test
+    fun `deleting a resolution key removes its resolved values and template`() {
+        publishOnce()
+        val hostname = uniqueId("delete")
+        val resolutionKey = uniqueId("key")
+        seedDevice(hostname, "10.0.0.22")
+        wireMock.stubFor(get(urlEqualTo("/devices/$hostname")).willReturn(okJson("""{"vlan-id": "202"}""")))
+        val result = process(resourceAssignmentRequest(hostname, resolutionKey = resolutionKey))
+        assertEquals(200, result.httpStatus, result.body.toString())
+
+        assertEquals(3, delete("/api/v1/resources", resolutionKey))
+        assertEquals(1, delete("/api/v1/template", resolutionKey))
+
+        assertEquals(
+            0,
+            jdbc.queryForObject(
+                "SELECT COUNT(*) FROM RESOURCE_RESOLUTION WHERE resolution_key = ?", Int::class.java, resolutionKey
+            )
+        )
+        assertEquals(
+            0,
+            jdbc.queryForObject(
+                "SELECT COUNT(*) FROM TEMPLATE_RESOLUTION WHERE resolution_key = ?", Int::class.java, resolutionKey
+            )
+        )
+    }
+
+    private fun delete(path: String, resolutionKey: String): Int {
+        val response = http.delete()
+            .uri {
+                it.path(path)
+                    .queryParam("bpName", BLUEPRINT_NAME)
+                    .queryParam("bpVersion", DEFAULT_VERSION)
+                    .queryParam("artifactName", "config")
+                    .queryParam("resolutionKey", resolutionKey)
+                    .build()
+            }
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(String::class.java)
+            .returnResult().responseBody!!
+        return JacksonUtils.jsonNode(response)["deletedEntries"].asInt()
+    }
 }

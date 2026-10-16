@@ -254,6 +254,34 @@ class BlueprintProcessorCatalogServiceImplTest {
         }
     }
 
+    @Test
+    fun `test delete function removes the empty blueprint name folder`() {
+        runBlocking {
+            val file = normalizedFile("./target/blueprints/generated-cba.zip")
+            val versionFolder = createTempCBAInDeployFolder(file, "delete_baseconfiguration", "1.0.0")
+
+            blueprintsProcessorCatalogService.delete("delete_baseconfiguration", "1.0.0")
+
+            assertFalse(Files.exists(versionFolder), "Deploy folder of the version should be deleted")
+            assertFalse(Files.exists(versionFolder.parent), "Empty deploy folder of the blueprint name should be deleted")
+            assertTrue(Files.exists(versionFolder.parent.parent), "Deploy root folder should be kept")
+        }
+    }
+
+    @Test
+    fun `test delete function keeps the blueprint name folder with other versions`() {
+        runBlocking {
+            val file = normalizedFile("./target/blueprints/generated-cba.zip")
+            val versionFolder = createTempCBAInDeployFolder(file, "delete_baseconfiguration", "1.0.0")
+            val otherVersionFolder = createTempCBAInDeployFolder(file, "delete_baseconfiguration", "2.0.0")
+
+            blueprintsProcessorCatalogService.delete("delete_baseconfiguration", "1.0.0")
+
+            assertFalse(Files.exists(versionFolder), "Deploy folder of the version should be deleted")
+            assertTrue(Files.exists(otherVersionFolder), "Deploy folder of the other version should be kept")
+        }
+    }
+
     private fun createTempCBAInDeployFolder(file: File, name: String, version: String): Path {
         val tempCbaDeployFolderPath = normalizedPath(blueprintCoreConfiguration.bluePrintLoadConfiguration().blueprintDeployPath, "/$name/$version")
         val tempBlueprintId = "4321"

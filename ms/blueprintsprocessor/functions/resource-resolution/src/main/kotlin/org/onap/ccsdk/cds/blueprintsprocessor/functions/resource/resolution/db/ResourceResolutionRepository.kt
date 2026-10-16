@@ -178,20 +178,37 @@ interface ResourceResolutionRepository : JpaRepository<ResourceResolution, Strin
     ): List<ResourceResolution>
 
     @Transactional
+    @Modifying
+    @Query(
+        """
+        DELETE FROM ResourceResolution rr
+        WHERE rr.blueprintName = :blueprintName AND rr.blueprintVersion = :blueprintVersion
+            AND rr.artifactName = :artifactName AND rr.resolutionKey = :resolutionKey
+    """
+    )
     fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
-        blueprintName: String,
-        blueprintVersion: String,
-        artifactName: String,
-        resolutionKey: String
+        @Param("blueprintName") blueprintName: String,
+        @Param("blueprintVersion") blueprintVersion: String,
+        @Param("artifactName") artifactName: String,
+        @Param("resolutionKey") resolutionKey: String
     ): Int
 
     @Transactional
+    @Modifying
+    @Query(
+        """
+        DELETE FROM ResourceResolution rr
+        WHERE rr.blueprintName = :blueprintName AND rr.blueprintVersion = :blueprintVersion
+            AND rr.artifactName = :artifactName AND rr.resourceType = :resourceType
+            AND rr.resourceId = :resourceId
+    """
+    )
     fun deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResourceTypeAndResourceId(
-        blueprintName: String,
-        blueprintVersion: String,
-        artifactName: String,
-        resourceType: String,
-        resourceId: String
+        @Param("blueprintName") blueprintName: String,
+        @Param("blueprintVersion") blueprintVersion: String,
+        @Param("artifactName") artifactName: String,
+        @Param("resourceType") resourceType: String,
+        @Param("resourceId") resourceId: String
     ): Int
 
     @Transactional

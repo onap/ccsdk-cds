@@ -49,7 +49,6 @@ import kotlin.test.assertNotNull
 @TestPropertySource(
     properties = [
         "blueprintsprocessor.db.driverClassName=org.postgresql.Driver",
-        "blueprintsprocessor.db.hibernateDialect=org.hibernate.dialect.PostgreSQLDialect",
         "blueprintsprocessor.db.hibernateHbm2ddlAuto=create-drop",
         "blueprintsprocessor.db.hibernateDDLAuto=update",
         "blueprintsprocessor.db.hibernateNamingStrategy=org.hibernate.cfg.ImprovedNamingStrategy",
@@ -198,6 +197,36 @@ class PostgresCompatibilityTest {
                 "key-1", "db-compat", "1.0.0", "config", "hostname"
             )
         assertEquals("router-1", found?.value)
+    }
+
+    @Test
+    fun `deletes every resource resolution of a resolution key`() {
+        (1..3).forEach {
+            resourceResolutionRepository.saveAndFlush(
+                ResourceResolution().apply {
+                    id = UUID.randomUUID().toString()
+                    blueprintName = "db-compat"
+                    blueprintVersion = "1.0.0"
+                    artifactName = "config"
+                    name = "hostname"
+                    value = "router-$it"
+                    status = "SUCCESS"
+                    resolutionKey = "delete-key"
+                    resourceType = "vnf"
+                    resourceId = "id-1"
+                    occurrence = it
+                    dictionaryName = "hostname"
+                    dictionarySource = "input"
+                    dictionaryVersion = 0
+                }
+            )
+        }
+
+        val deleted = resourceResolutionRepository.deleteByBlueprintNameAndBlueprintVersionAndArtifactNameAndResolutionKey(
+            "db-compat", "1.0.0", "config", "delete-key"
+        )
+
+        assertEquals(3, deleted)
     }
 
     @Test
