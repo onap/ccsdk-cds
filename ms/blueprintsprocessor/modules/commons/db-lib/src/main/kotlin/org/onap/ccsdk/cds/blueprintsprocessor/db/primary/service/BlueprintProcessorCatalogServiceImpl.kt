@@ -36,6 +36,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.deCompress
 import org.onap.ccsdk.cds.controllerblueprints.core.deleteNBDir
 import org.onap.ccsdk.cds.controllerblueprints.core.interfaces.BluePrintValidatorService
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedFile
+import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPath
 import org.onap.ccsdk.cds.controllerblueprints.core.normalizedPathName
 import org.onap.ccsdk.cds.controllerblueprints.core.reCreateNBDirs
 import org.onap.ccsdk.cds.controllerblueprints.core.scripts.BluePrintCompileCache
@@ -70,6 +71,7 @@ class BlueprintProcessorCatalogServiceImpl(
         log.info("removed cba file name($name), version($version) from cache")
         // Cleaning Deployed Blueprint
         deleteNBDir(bluePrintLoadConfiguration.blueprintDeployPath, name, version)
+        deleteDeployNameDirIfEmpty(name)
         log.info("removed cba file name($name), version($version) from deploy location")
         // Cleaning Data Base
         blueprintModelRepository
@@ -98,6 +100,7 @@ class BlueprintProcessorCatalogServiceImpl(
                     .compileCacheKey(normalizedPathName(bluePrintLoadConfiguration.blueprintDeployPath, name, version))
                 cleanClassLoader(cacheKey)
                 deleteNBDir(deployFile.absolutePath)
+                deleteDeployNameDirIfEmpty(name)
             }
             throw BluePrintProcessorException(
                 "failed to get cba file name($name), version($version) from db" +
@@ -197,6 +200,14 @@ class BlueprintProcessorCatalogServiceImpl(
             log.info("Sending ClusterMessage: Clean Classloader Cache")
             clusterService.sendMessage(BlueprintClusterTopic.BLUEPRINT_CLEAN_COMPILER_CACHE, cacheKey)
         } else BluePrintCompileCache.cleanClassLoader(cacheKey)
+    }
+
+    private suspend fun deleteDeployNameDirIfEmpty(name: String) = withContext(Dispatchers.IO) {
+        val deployRoot = normalizedPath(bluePrintLoadConfiguration.blueprintDeployPath)
+        val nameDir = normalizedPath(bluePrintLoadConfiguration.blueprintDeployPath, name)
+        // File.delete() refuses non-empty directories, so other versions of the CBA survive;
+        // the parent check keeps a blank or ".." name from reaching the deploy root or beyond.
+        if (nameDir.parent == deployRoot) nameDir.toFile().delete()
     }
 
     private suspend fun updateDeployFolder(name: String, version: String, cbaFile: File, deployFile: File) {

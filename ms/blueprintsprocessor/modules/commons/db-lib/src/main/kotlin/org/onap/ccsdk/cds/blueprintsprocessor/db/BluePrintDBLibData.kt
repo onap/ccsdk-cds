@@ -30,7 +30,7 @@ open class PrimaryDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
-    lateinit var hibernateDialect: String
+    var hibernateDialect: String? = null
 }
 
 open class MariaDataSourceProperties : DBDataSourceProperties() {
@@ -38,7 +38,7 @@ open class MariaDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
-    lateinit var hibernateDialect: String
+    var hibernateDialect: String? = null
     override var driverClassName = DBLibConstants.DRIVER_MARIA_DB
 }
 
@@ -47,7 +47,7 @@ open class MySqlDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
-    lateinit var hibernateDialect: String
+    var hibernateDialect: String? = null
     override var driverClassName = DBLibConstants.DRIVER_MYSQL_DB
 }
 
@@ -55,7 +55,7 @@ open class MSSqlDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
-    lateinit var hibernateDialect: String
+    var hibernateDialect: String? = null
     override var driverClassName = DBLibConstants.DRIVER_MSSQL_DB
 }
 
@@ -63,6 +63,6 @@ open class PostgresDataSourceProperties : DBDataSourceProperties() {
     lateinit var hibernateHbm2ddlAuto: String
     lateinit var hibernateDDLAuto: String
     lateinit var hibernateNamingStrategy: String
-    lateinit var hibernateDialect: String
+    var hibernateDialect: String? = null
     override var driverClassName = DBLibConstants.DRIVER_POSTGRES_DB
 }

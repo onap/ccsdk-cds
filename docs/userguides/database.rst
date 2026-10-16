@@ -30,10 +30,11 @@ Configuration
 +-------------------------------------------------+-------------------------------------------------+
 | ``blueprintsprocessor.db.driverClassName``      | ``org.postgresql.Driver``                       |
 +-------------------------------------------------+-------------------------------------------------+
-| ``blueprintsprocessor.db.hibernateDialect``     | ``org.hibernate.dialect.PostgreSQLDialect``     |
-+-------------------------------------------------+-------------------------------------------------+
 | ``blueprintsprocessor.db.hibernateHbm2ddlAuto`` | ``update``                                      |
 +-------------------------------------------------+-------------------------------------------------+
+
+Hibernate detects the dialect from the database connection. Set
+``blueprintsprocessor.db.hibernateDialect`` only to override it.
 
 processor-db and CBA database connections
 -----------------------------------------

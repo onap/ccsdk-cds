@@ -165,20 +165,37 @@ interface TemplateResolutionRepository : JpaRepository<TemplateResolution, Strin
     )
 
     @Transactional
+    @Modifying
+    @Query(
+        """
+        DELETE FROM TemplateResolution tr
+        WHERE tr.resourceId = :resourceId AND tr.resourceType = :resourceType
+            AND tr.blueprintName = :blueprintName AND tr.blueprintVersion = :blueprintVersion
+            AND tr.artifactName = :artifactName
+    """
+    )
     fun deleteByResourceIdAndResourceTypeAndBlueprintNameAndBlueprintVersionAndArtifactName(
-        resourceId: String,
-        resourceType: String,
-        blueprintName: String,
-        blueprintVersion: String,
-        artifactName: String
+        @Param("resourceId") resourceId: String,
+        @Param("resourceType") resourceType: String,
+        @Param("blueprintName") blueprintName: String,
+        @Param("blueprintVersion") blueprintVersion: String,
+        @Param("artifactName") artifactName: String
     ): Int
 
     @Transactional
+    @Modifying
+    @Query(
+        """
+        DELETE FROM TemplateResolution tr
+        WHERE tr.resolutionKey = :key AND tr.blueprintName = :blueprintName
+            AND tr.blueprintVersion = :blueprintVersion AND tr.artifactName = :artifactName
+    """
+    )
     fun deleteByResolutionKeyAndBlueprintNameAndBlueprintVersionAndArtifactName(
-        key: String,
-        blueprintName: String,
-        blueprintVersion: String,
-        artifactName: String
+        @Param("key") key: String,
+        @Param("blueprintName") blueprintName: String,
+        @Param("blueprintVersion") blueprintVersion: String,
+        @Param("artifactName") artifactName: String
     ): Int
 
     @Transactional

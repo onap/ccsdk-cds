@@ -146,6 +146,32 @@ class TemplateControllerTest {
         }
     }
 
+    @Test
+    fun `delete removes the template of a resolution key`() {
+        val resKey = "delete-template-key"
+        post(resKey)
+
+        webTestClient
+            .delete()
+            .uri(
+                "/api/v1/template?bpName=$blueprintName&bpVersion=$blueprintVersion" +
+                    "&artifactName=$templatePrefix&resolutionKey=$resKey"
+            )
+            .exchange()
+            .expectStatus().isOk
+            .expectBody()
+            .jsonPath("$.deletedEntries").isEqualTo(1)
+
+        webTestClient
+            .get()
+            .uri(
+                "/api/v1/template?bpName=$blueprintName&bpVersion=$blueprintVersion" +
+                    "&artifactName=$templatePrefix&resolutionKey=$resKey"
+            )
+            .exchange()
+            .expectStatus().isNotFound
+    }
+
     private fun post(resKey: String) {
         webTestClient
             .post()

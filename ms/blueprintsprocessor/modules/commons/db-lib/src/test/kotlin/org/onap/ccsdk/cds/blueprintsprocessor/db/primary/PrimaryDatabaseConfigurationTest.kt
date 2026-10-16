@@ -18,12 +18,15 @@ package org.onap.ccsdk.cds.blueprintsprocessor.db.primary
 
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.onap.ccsdk.cds.blueprintsprocessor.db.PrimaryDataSourceProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.db.TestDatabaseConfiguration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit4.SpringRunner
 import javax.sql.DataSource
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 
 @RunWith(SpringRunner::class)
@@ -39,5 +42,29 @@ class PrimaryDatabaseConfigurationTest {
     @Test
     fun testPrimaryDatabaseConfiguration() {
         assertNotNull(primaryDataSource, " failed to create primary data source")
+    }
+
+    @Test
+    fun `configured hibernate dialect is passed to hibernate`() {
+        val properties = h2DataSourceProperties().apply { hibernateDialect = "org.hibernate.dialect.H2Dialect" }
+
+        val jpaProperties = PrimaryDatabaseConfiguration(properties).primaryEntityManager().jpaPropertyMap
+
+        assertEquals("org.hibernate.dialect.H2Dialect", jpaProperties["hibernate.dialect"])
+    }
+
+    @Test
+    fun `hibernate dialect is left to hibernate when not configured`() {
+        val jpaProperties = PrimaryDatabaseConfiguration(h2DataSourceProperties()).primaryEntityManager().jpaPropertyMap
+
+        assertFalse(jpaProperties.containsKey("hibernate.dialect"))
+    }
+
+    private fun h2DataSourceProperties() = PrimaryDataSourceProperties().apply {
+        url = "jdbc:h2:mem:dialecttest"
+        username = "sa"
+        password = ""
+        driverClassName = "org.h2.Driver"
+        hibernateHbm2ddlAuto = "none"
     }
 }

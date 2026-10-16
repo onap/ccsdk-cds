@@ -223,7 +223,6 @@ Import the project into the IDE
                -Dblueprintsprocessor.db.primary.hibernateHbm2ddlAuto=update
                -Dblueprintsprocessor.db.primary.hibernateDDLAuto=none
                -Dblueprintsprocessor.db.primary.hibernateNamingStrategy=org.hibernate.cfg.ImprovedNamingStrategy
-               -Dblueprintsprocessor.db.primary.hibernateDialect=org.hibernate.dialect.PostgreSQLDialect
                -Dblueprints.processor.functions.python.executor.executionPath=./components/scripts/python/ccsdk_blueprints
                -Dblueprints.processor.functions.python.executor.modulePaths=./components/scripts/python/ccsdk_blueprints,./components/scripts/python/ccsdk_netconf,./components/scripts/python/ccsdk_restconf
                -Dblueprintsprocessor.restconfEnabled=true

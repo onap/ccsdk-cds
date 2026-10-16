@@ -216,6 +216,43 @@ class ResourceControllerTest {
         }
     }
 
+    @Test
+    fun deleteAllFromResolutionKeyTest() {
+        val resolutionKey = "4"
+        runBlocking {
+            store(createRA("bob"), resKey = resolutionKey)
+            store(createRA("dylan"), resKey = resolutionKey)
+            store(createRA("joe"), resKey = resolutionKey)
+        }
+
+        val uri = "/api/v1/resources?bpName=$blueprintName&bpVersion=$blueprintVersion&artifactName=$templatePrefix&resolutionKey=$resolutionKey"
+        assertDeleted(uri, 3)
+        assertDeleted(uri, 0)
+    }
+
+    @Test
+    fun deleteAllFromResourceTypeAndIdTest() {
+        val resourceId = "2"
+        val resourceType = "ServiceInstance"
+        runBlocking {
+            store(createRA("bob"), resId = resourceId, resType = resourceType)
+            store(createRA("dylan"), resId = resourceId, resType = resourceType)
+        }
+
+        val uri = "/api/v1/resources?bpName=$blueprintName&bpVersion=$blueprintVersion&artifactName=$templatePrefix&resourceType=$resourceType&resourceId=$resourceId"
+        assertDeleted(uri, 2)
+        assertDeleted(uri, 0)
+    }
+
+    private fun assertDeleted(uri: String, expected: Int) {
+        webTestClient.delete()
+            .uri(uri)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody()
+            .jsonPath("$.deletedEntries").isEqualTo(expected)
+    }
+
     private suspend fun store(
         resourceAssignment: ResourceAssignment,
         resKey: String = "",
