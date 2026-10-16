@@ -49,7 +49,6 @@ export class MySequence implements SequenceHandler {
     try {
       if (!('X-ONAP-RequestID' in request.headers || 'x-onap-requestid' in request.headers)) {
         request.headers = { 'X-ONAP-RequestID': uuid(), ...request.headers}
-        logger.info(JSON.stringify(request.headers))
       }
       const route = this.findRoute(request);
       const args = await this.parseParams(request, route);
@@ -60,9 +59,8 @@ export class MySequence implements SequenceHandler {
         this.reject(context, err);
       }
     } finally {
-      const { authorization, ...headers} = request.headers;
-      logger.info("Incoming request from %s %s and with header %s query %s params %s and response code: %s",
-        request.method, request.url, JSON.stringify(headers), JSON.stringify(request.query), JSON.stringify(request.params), JSON.stringify(response.statusCode))
+      logger.info("Incoming request %s %s with request id %s and response code: %s",
+        request.method, request.path, request.headers['X-ONAP-RequestID'] || request.headers['x-onap-requestid'], response.statusCode)
     }
   }
 }

@@ -20,7 +20,8 @@
     <property name="localPattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
     <property name="defaultPattern"
               value="%date{ISO8601,UTC}|%X{RequestID}|%X{SubRequestID}|%X{OriginatorID}|%X{InvocationID}|%thread|%X{ServiceName}|%X{ClientIPAddress}|%logger{50}|%msg%n"/>
-    <!-- CDS_LOG_FORMAT selects the console appender by name: text (default) or json -->
+    <!-- CDS_LOG_FORMAT selects the console appender: json, or text for any other value or when unset -->
+    <property name="consoleAppender.json" value="json"/>
     <appender name="text" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${defaultPattern}</pattern>
@@ -40,7 +41,7 @@
     <logger name="org.onap.ccsdk.cds" level="info"/>
 
     <root level="info">
-        <appender-ref ref="${CDS_LOG_FORMAT:-text}"/>
+        <appender-ref ref="${consoleAppender.${CDS_LOG_FORMAT:-text}:-text}"/>
     </root>
 
 </configuration>

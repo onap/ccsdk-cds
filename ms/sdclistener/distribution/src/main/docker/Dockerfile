@@ -10,7 +10,7 @@ COPY *.sh /opt/app/onap/sdc-listener/
 # add application
 COPY @project.build.finalName@-@assembly.id@.tar.gz /source.tar.gz
 
-ARG OTEL_AGENT_VERSION=2.25.0
+ARG OTEL_AGENT_VERSION=2.26.1
 
 RUN tar -xzf /source.tar.gz -C /tmp \
  && cp -rf /tmp/@project.build.finalName@/opt / \

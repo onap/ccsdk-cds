@@ -54,6 +54,17 @@ class LogbackConfigurationTest {
     }
 
     @Test
+    fun `any other log format falls back to plain text`() {
+        listOf("", "text", "plain", "JSON").forEach { logFormat ->
+            val root = configure(logFormat).getLogger(Logger.ROOT_LOGGER_NAME)
+
+            val appender = root.getAppender("text") as ConsoleAppender
+            assertTrue(appender.encoder is LayoutWrappingEncoder, "CDS_LOG_FORMAT=$logFormat")
+            assertNull(root.getAppender("json"), "CDS_LOG_FORMAT=$logFormat")
+        }
+    }
+
+    @Test
     fun `json console logging includes the MDC`() {
         val context = configure("json")
         val root = context.getLogger(Logger.ROOT_LOGGER_NAME)
