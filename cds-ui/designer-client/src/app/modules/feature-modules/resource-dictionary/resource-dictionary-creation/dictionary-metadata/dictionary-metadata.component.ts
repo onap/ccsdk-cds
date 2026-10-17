@@ -17,7 +17,7 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DictionaryModel } from '../../model/dictionary.model';
 import { DictionaryCreationService } from '../dictionary-creation.service';
@@ -30,6 +30,7 @@ import { MetaData } from '../../model/metaData.model';
     styleUrls: ['./dictionary-metadata.component.css']
 })
 export class DictionaryMetadataComponent implements OnInit {
+    @Input() nameReadOnly = false;
     packageNameAndVersionEnables = true;
     counter = 0;
     tags = new Set<string>();
@@ -46,9 +47,8 @@ export class DictionaryMetadataComponent implements OnInit {
             if (element && element.metaData) {
                 this.metaDataTab = element.metaData;
                 this.metaDataTab.property.entry_schema = element.metaData.property.entry_schema;
-                this.tags = new Set(element.metaData.tags.split(','));
+                this.tags = new Set(element.metaData.tags.split(',').map(tag => tag.trim()));
                 this.tags.delete('');
-                this.tags.delete(' ');
 
                 //  console.log(element);
                 // console.log(element.metaData.property['entry_schema']);

@@ -18,14 +18,59 @@
 * ============LICENSE_END=========================================================
 */
 import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { DictionaryCreationService } from './dictionary-creation.service';
+import { ApiService } from 'src/app/common/core/services/api.service';
+import { MetaData } from '../model/metaData.model';
 
 describe('DictionaryCreationService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let service: DictionaryCreationService;
+  let httpMock: HttpTestingController;
 
-  it('should be created', () => {
-    const service: DictionaryCreationService = TestBed.get(DictionaryCreationService);
-    expect(service).toBeTruthy();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [ApiService]
+    });
+    service = TestBed.get(DictionaryCreationService);
+    httpMock = TestBed.get(HttpTestingController);
+  });
+
+  afterEach(() => httpMock.verify());
+
+  it('loads a dictionary entry by name as editable metadata', () => {
+    let metaData: MetaData;
+    service.getDictionaryByName('vnf name').subscribe(result => metaData = result);
+
+    httpMock.expectOne({ method: 'GET', url: '/resourcedictionary/vnf%20name' }).flush({
+      name: 'vnf name',
+      tags: 'vnf, name',
+      updatedBy: 'designer',
+      definition: {
+        name: 'vnf name',
+        tags: 'vnf, name',
+        group: 'default',
+        property: { type: 'string', description: 'VNF name', entry_schema: null },
+        sources: { input: { type: 'source-input' } }
+      }
+    });
+
+    expect(metaData.name).toBe('vnf name');
+    expect(metaData.tags).toBe('vnf, name');
+    expect(metaData['updated-by']).toBe('designer');
+    expect(metaData.property.type).toBe('string');
+    expect(metaData.property.entry_schema.type).toBe('');
+    expect(metaData.sources).toEqual({ input: { type: 'source-input' } });
+    expect((metaData as any).group).toBe('default');
+  });
+
+  it('deletes a dictionary entry by name', () => {
+    let deleted = false;
+    service.delete('vnf name').subscribe(() => deleted = true);
+
+    httpMock.expectOne({ method: 'DELETE', url: '/resourcedictionary/vnf%20name' }).flush(null);
+
+    expect(deleted).toBe(true);
   });
 });

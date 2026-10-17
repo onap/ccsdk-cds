@@ -14,8 +14,7 @@ export default {
                 "accepts": "application/json",
                 "content-type": "application/json",
                 "authorization": processorApiConfig.http.authToken
-            },
-            "responsePath": "$.*"
+            }
         },
         "functions": {
             "getByName": ["name"]
@@ -181,6 +180,20 @@ export default {
         },
         "functions": {
             "definitionBulk": ["entries"]
+        }
+    },
+    {
+        "template": {
+            "method": "DELETE",
+            "url": processorApiConfig.http.url + "/dictionary/{name}",
+            "headers": {
+                "accepts": "application/json",
+                "content-type": "application/json",
+                "authorization": processorApiConfig.http.authToken
+            }
+        },
+        "functions": {
+            "delete": ["name"]
         }
     }
     ]

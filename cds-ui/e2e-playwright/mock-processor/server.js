@@ -267,8 +267,19 @@ const server = http.createServer(async (req, res) => {
   // GET /api/v1/dictionary/:name
   if (method === 'GET' &&
       (m = pathname.match(`^${BASE}/dictionary/([^/]+)$`))) {
-    const d = resourceDictionaries.find(r => r.name === m[1]);
+    const d = resourceDictionaries.find(r => r.name === decodeURIComponent(m[1]));
     return d ? json(res, d) : json(res, { error: 'not found' }, 404);
+  }
+
+  // DELETE /api/v1/dictionary/:name
+  if (method === 'DELETE' &&
+      (m = pathname.match(`^${BASE}/dictionary/([^/]+)$`))) {
+    const index = resourceDictionaries.findIndex(r => r.name === decodeURIComponent(m[1]));
+    if (index >= 0) {
+      resourceDictionaries.splice(index, 1);
+    }
+    res.writeHead(200);
+    return res.end();
   }
 
   // POST /api/v1/dictionary/by-names
@@ -287,7 +298,30 @@ const server = http.createServer(async (req, res) => {
   // POST /api/v1/dictionary/definition   (must precede bare /dictionary)
   if (method === 'POST' && pathname === `${BASE}/dictionary/definition`) {
     const raw = await readBody(req);
-    try { return json(res, JSON.parse(raw)); } catch (_) { return json(res, {}); }
+    let definition;
+    try { definition = JSON.parse(raw); } catch (_) { return json(res, {}); }
+    if (definition && definition.name) {
+      const property = definition.property || {};
+      const entry = {
+        name:                    definition.name,
+        dataType:                property.type,
+        entrySchema:             property.entry_schema ? property.entry_schema.type : null,
+        resourceDictionaryGroup: definition.group || 'default',
+        definition,
+        description:             property.description,
+        tags:                    definition.tags,
+        creationDate:            new Date().toISOString(),
+        updatedBy:               definition['updated-by'],
+      };
+      const index = resourceDictionaries.findIndex(r => r.name === entry.name);
+      if (index >= 0) {
+        resourceDictionaries[index] = entry;
+      } else {
+        resourceDictionaries.push(entry);
+      }
+      return json(res, entry);
+    }
+    return json(res, definition);
   }
 
   // POST /api/v1/dictionary

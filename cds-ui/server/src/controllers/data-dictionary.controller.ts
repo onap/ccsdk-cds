@@ -51,6 +51,17 @@ export class DataDictionaryController {
     return await this.rdservice.getByName(name);
   }
 
+  @del('/resourcedictionary/{name}', {
+    responses: {
+      '204': {
+        description: 'Resource dictionary deleted',
+      },
+    },
+  })
+  async deleteByName(@param.path.string('name') name: string): Promise<void> {
+    await this.rdservice.delete(name);
+  }
+
   @get('/resourcedictionary/search/{tags}', {
     responses: {
       '200': {

@@ -163,7 +163,7 @@ blueprints-processor REST API (`/api/v1/…`):
 | Prefix                     | Endpoints stubbed                                                                                                                   |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `/api/v1/blueprint-model/` | list all, paged, paged+keyword, search by tags, by-id, by-name+version, upload (create/publish/enrich/deploy), download ZIP, delete |
-| `/api/v1/dictionary/`      | by-name, search by tags, source-mapping, save, save-definition, by-names                                                            |
+| `/api/v1/dictionary/`      | by-name, delete, search by tags, source-mapping, save, save-definition, by-names                                                    |
 | `/api/v1/model-type/`      | by-name, search by tags, by-definition type, save, delete                                                                           |
 
 Responses are served from the JSON fixture files in `mock-processor/fixtures/`.
@@ -216,6 +216,7 @@ reused automatically.
 | `home.spec.ts`                | Angular app bootstrap, redirect to `/#/packages`, `<app-root>` presence                                                                                                       |
 | `packages.spec.ts`            | Dashboard structure, tabs, fixture data rendered in cards, search, sort, proxy wiring                                                                                         |
 | `resource-dictionary.spec.ts` | Dashboard structure, tabs, search/filter sub-components, API proxy |
+| `resource-dictionary-edit.spec.ts` | Opening an existing entry from its card, editing and saving it, deleting it with confirmation |
 
 ## Fixture data
 

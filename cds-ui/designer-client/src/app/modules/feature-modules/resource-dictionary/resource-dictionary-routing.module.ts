@@ -30,6 +30,10 @@ const routes: Routes = [
   {
     path: 'createDictionary',
     component: ResourceDictionaryCreationComponent
+  },
+  {
+    path: 'edit/:name',
+    component: ResourceDictionaryCreationComponent
   }
 ];
 

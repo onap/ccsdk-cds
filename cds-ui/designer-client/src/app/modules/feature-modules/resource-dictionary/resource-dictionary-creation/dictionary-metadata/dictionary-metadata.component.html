@@ -21,7 +21,7 @@
     <div class="single-line-model">
         <label class="label-name">Name <span class="required-indicator">*</span></label>
         <div class="label-input">
-            <input type="input" [(ngModel)]="metaDataTab.name" (ngModelChange)="saveMetaDataToStore()" placeholder="Dictionary Name" required>
+            <input type="input" [(ngModel)]="metaDataTab.name" (ngModelChange)="saveMetaDataToStore()" placeholder="Dictionary Name" [readOnly]="nameReadOnly" required>
         </div>
         <!-- <div class="model-note-container error-message">
             Package name already exists with this version. Please enter a different name or enter different version

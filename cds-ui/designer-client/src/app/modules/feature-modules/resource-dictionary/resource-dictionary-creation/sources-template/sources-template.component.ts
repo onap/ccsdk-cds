@@ -86,15 +86,8 @@ export class SourcesTemplateComponent implements OnInit {
   }
 
   addSourcesInUI() {
-    // add sources from json to UI
-    const originalSources = this.sourcesOptions;
-    // for (const key of this.sourcesOptions) {
-    // this.sourcesOptions;
-    for (const source in this.metaDataTab.sources) {
-      if (source) {
-        console.log(source);
-      }
-    }
+    const sources = this.metaDataTab.sources || {};
+    this.sourcesOptions = new Map(Object.keys(sources).map(key => [key, { [key]: sources[key] }] as [string, any]));
   }
 
   saveSorcesDataToStore() {

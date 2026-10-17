@@ -115,7 +115,7 @@ export const ResourceDictionaryURLs = {
     getModelType: '/resourcedictionary/model-type',
     getResourceDictionary: '/resourcedictionary/model-type/by-definition',
     getMetaDatePageable: '/resourcedictionary/metadata/paged',
-    getDictionaryByName: '/resourcedictionary/by-name/',
+    getDictionaryByName: '/resourcedictionary/',
     getPagedDictionary: '/resourcedictionary/paged',
     definitionBulk: '/resourcedictionary/definition-bulk',
 };

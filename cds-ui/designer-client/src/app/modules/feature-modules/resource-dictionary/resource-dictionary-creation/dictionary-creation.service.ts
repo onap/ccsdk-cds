@@ -20,8 +20,10 @@
 import { Injectable } from '@angular/core';
 import { ResourceDictionaryURLs } from 'src/app/common/constants/app-constants';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Sources } from '../model/sources.model';
 import { ApiService } from 'src/app/common/core/services/api.service';
+import { EntrySchema, MetaData, Property } from '../model/metaData.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +38,26 @@ export class DictionaryCreationService {
 
   save(metadata) {
     return this.api.post(ResourceDictionaryURLs.saveDictionary, { ...metadata });
+  }
+
+  getDictionaryByName(name: string): Observable<MetaData> {
+    return this.api.get(ResourceDictionaryURLs.getDictionaryByName + encodeURIComponent(name))
+      .pipe(map(entry => this.toMetaData(entry)));
+  }
+
+  delete(name: string) {
+    return this.api.delete(ResourceDictionaryURLs.getDictionaryByName + encodeURIComponent(name));
+  }
+
+  private toMetaData(entry): MetaData {
+    const definition = entry.definition || {};
+    const metaData: MetaData = Object.assign(new MetaData(), definition);
+    metaData.name = definition.name || entry.name;
+    metaData.tags = definition.tags || entry.tags || '';
+    metaData['updated-by'] = definition['updated-by'] || entry.updatedBy;
+    metaData.sources = definition.sources || {};
+    metaData.property = Object.assign(new Property(), definition.property);
+    metaData.property.entry_schema = metaData.property.entry_schema || new EntrySchema();
+    return metaData;
   }
 }

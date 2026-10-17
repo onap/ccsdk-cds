@@ -14,6 +14,7 @@ export interface ResourceDictionaryService {
   getResourceDictionaryByType(type: string): Promise<JSON>;
   getPagedDictionary(limit: number, offset: number, sort: string, sortType: string): Promise<any>;
   definitionBulk(entries: JSON): Promise<any>;
+  delete(name: string): Promise<void>;
 }
 
 export class ResourceDictionaryServiceProvider implements Provider<ResourceDictionaryService> {

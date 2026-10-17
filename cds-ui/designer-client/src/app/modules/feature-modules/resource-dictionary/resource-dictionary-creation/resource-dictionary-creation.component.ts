@@ -18,10 +18,11 @@
 * ============LICENSE_END=========================================================
 */
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DictionaryCreationStore } from './dictionary-creation.store';
 import { DictionaryModel } from '../model/dictionary.model';
 import { Definition } from '../model/definition.model';
+import { MetaData } from '../model/metaData.model';
 import { DictionaryMetadataComponent } from './dictionary-metadata/dictionary-metadata.component';
 import { SourcesTemplateComponent } from './sources-template/sources-template.component';
 import { DictionaryCreationService } from './dictionary-creation.service';
@@ -37,6 +38,7 @@ export class ResourceDictionaryCreationComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private dictionaryCreationStore: DictionaryCreationStore,
     private dictionaryService: DictionaryCreationService,
     private toaster: ToastrService
@@ -51,6 +53,7 @@ export class ResourceDictionaryCreationComponent implements OnInit {
   metaDataTab: DictionaryModel = new DictionaryModel();
   definition: Definition = new Definition();
   createDate = '';
+  dictionaryName = '';
 
   @ViewChild(DictionaryMetadataComponent, { static: false })
   private metadataTabComponent: DictionaryMetadataComponent;
@@ -64,6 +67,15 @@ export class ResourceDictionaryCreationComponent implements OnInit {
   ngOnInit() {
     this.elementRef.nativeElement.focus();
     // this.elementRef2.nativeElement.focus();
+    this.dictionaryCreationStore.changeMetaData(new MetaData());
+    this.dictionaryName = this.route.snapshot.paramMap.get('name') || '';
+    if (this.dictionaryName) {
+      this.dictionaryService.getDictionaryByName(this.dictionaryName).subscribe(metaData => {
+        this.dictionaryCreationStore.changeMetaData(metaData);
+      }, err => {
+        this.toaster.error('Could not load dictionary resource ' + this.dictionaryName);
+      });
+    }
   }
 
   saveDictionaryToStore() {
@@ -82,7 +94,7 @@ export class ResourceDictionaryCreationComponent implements OnInit {
       console.log('---------------------------------------');
       console.log(res);
       this.dictionaryService.save(res.metaData).subscribe(data => {
-        this.toaster.success('Dictionary Resource created');
+        this.toaster.success(this.dictionaryName ? 'Dictionary Resource updated' : 'Dictionary Resource created');
       }, err => {
         this.toaster.error('An error happened ...');
       }, () => {
@@ -101,6 +113,15 @@ export class ResourceDictionaryCreationComponent implements OnInit {
       const baseName = (metadata && metadata.name) ? metadata.name : 'dictionary';
       saveAs(blob, baseName + '-' + timestamp + '.json');
     }).unsubscribe();
+  }
+
+  deleteDictionary() {
+    this.dictionaryService.delete(this.dictionaryName).subscribe(() => {
+      this.toaster.success('Dictionary Resource deleted');
+      this.goBackToDashBorad();
+    }, err => {
+      this.toaster.error('Could not delete dictionary resource ' + this.dictionaryName);
+    });
   }
 
   goBackToDashBorad() {

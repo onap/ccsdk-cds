@@ -17,28 +17,56 @@
 * limitations under the License.
 * ============LICENSE_END=========================================================
 */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 
 import { SourcesTemplateComponent } from './sources-template.component';
+import { SourcesStore } from './sources.store';
+import { DictionaryCreationService } from '../dictionary-creation.service';
+import { DictionaryCreationStore } from '../dictionary-creation.store';
+import { MetaData } from '../../model/metaData.model';
 
 describe('SourcesTemplateComponent', () => {
   let component: SourcesTemplateComponent;
-  let fixture: ComponentFixture<SourcesTemplateComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SourcesTemplateComponent ]
-    })
-    .compileComponents();
-  }));
+  let store: DictionaryCreationStore;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SourcesTemplateComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    const service = jasmine.createSpyObj<DictionaryCreationService>('DictionaryCreationService', ['getSources']);
+    service.getSources.and.returnValue(of([{ input: 'source-input', default: 'source-default' }]));
+    const sourcesStore = new SourcesStore(service);
+    store = new DictionaryCreationStore(service, sourcesStore);
+    component = new SourcesTemplateComponent(sourcesStore, service, store);
+    component.ngOnInit();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  function loadSources(sources: any) {
+    store.changeMetaData({ ...new MetaData(), sources });
+  }
+
+  it('lists the sources of a loaded entry', () => {
+    loadSources({ input: { type: 'source-input' }, default: { type: 'source-default', properties: {} } });
+
+    expect(Array.from(component.sourcesOptions.keys())).toEqual(['input', 'default']);
+    expect(component.sourcesOptions.get('input')).toEqual({ input: { type: 'source-input' } });
+  });
+
+  it('keeps the loaded sources when another source is added', () => {
+    loadSources({ input: { type: 'source-input' } });
+
+    component.tempSources.set('default', { name: 'default', value: 'source-default' });
+    component.addSources();
+
+    expect(store.state.metaData.sources).toEqual({
+      input: { type: 'source-input' },
+      default: { type: 'source-default', properties: {} }
+    });
+  });
+
+  it('removes a deleted source from the entry', () => {
+    loadSources({ input: { type: 'source-input' }, default: { type: 'source-default' } });
+
+    component.toDeleteSource.set('input', {});
+    component.deleteSource();
+
+    expect(store.state.metaData.sources).toEqual({ default: { type: 'source-default' } });
   });
 });

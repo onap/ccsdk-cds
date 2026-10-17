@@ -18,27 +18,55 @@
 * ============LICENSE_END=========================================================
 */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 
 import { DictionaryMetadataComponent } from './dictionary-metadata.component';
+import { DictionaryCreationService } from '../dictionary-creation.service';
+import { DictionaryCreationStore } from '../dictionary-creation.store';
+import { MetaData } from '../../model/metaData.model';
 
 describe('DictionaryMetadataComponent', () => {
   let component: DictionaryMetadataComponent;
   let fixture: ComponentFixture<DictionaryMetadataComponent>;
+  let store: DictionaryCreationStore;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DictionaryMetadataComponent ]
+      imports: [FormsModule],
+      declarations: [DictionaryMetadataComponent],
+      providers: [{ provide: DictionaryCreationService, useValue: {} }]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
+    store = TestBed.get(DictionaryCreationStore);
     fixture = TestBed.createComponent(DictionaryMetadataComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  function nameInput(): HTMLInputElement {
+    return fixture.nativeElement.querySelector('input[placeholder="Dictionary Name"]');
+  }
+
+  it('lets the user type a name for a new entry', async(() => {
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => expect(nameInput().readOnly).toBe(false));
+  }));
+
+  it('keeps the name of an existing entry read-only', async(() => {
+    component.nameReadOnly = true;
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => expect(nameInput().readOnly).toBe(true));
+  }));
+
+  it('splits the tags of a loaded entry', () => {
+    fixture.detectChanges();
+
+    store.changeMetaData({ ...new MetaData(), tags: 'vnf, name,' });
+
+    expect(Array.from(component.tags)).toEqual(['vnf', 'name']);
   });
 });
