@@ -27,6 +27,12 @@
             <i class="fa fa-play-circle" aria-hidden="true"></i>
           </span>
         </li>
+        <li routerLinkActive="active" #resolutionsLink="routerLinkActive">
+          <a routerLink="/resolutions" [attr.aria-current]="resolutionsLink.isActive ? 'page' : null">Resolutions</a>
+          <span class="icon">
+            <i class="fa fa-list-alt" aria-hidden="true"></i>
+          </span>
+        </li>
           <!-- <label title="toggle menu" for="settings">
             <span class="downarrow">
               <i class="fa fa-caret-down"></i>

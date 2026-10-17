@@ -39,6 +39,8 @@ const modelTypes = JSON.parse(
   fs.readFileSync(path.join(FIXTURES, 'model-types.json'), 'utf8'));
 const workflowSpecs = JSON.parse(
   fs.readFileSync(path.join(FIXTURES, 'workflow-specs.json'), 'utf8'));
+const resolutions = JSON.parse(
+  fs.readFileSync(path.join(FIXTURES, 'resolutions.json'), 'utf8'));
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -432,6 +434,47 @@ const server = http.createServer(async (req, res) => {
       },
     };
     return json(res, response);
+  }
+
+  // ── resources / template / configs ───────────────────────────────────────────
+
+  /** Match a stored resolution against the lookup keys of a query. */
+  const matchesLookup = (entry) =>
+    entry.blueprintName === query.bpName &&
+    entry.blueprintVersion === query.bpVersion &&
+    (!query.artifactName || entry.artifactName === query.artifactName) &&
+    (query.resolutionKey
+      ? entry.resolutionKey === query.resolutionKey
+      : entry.resourceType === query.resourceType && entry.resourceId === query.resourceId);
+
+  // GET /api/v1/resources
+  if (method === 'GET' && pathname === `${BASE}/resources`) {
+    return json(res, resolutions.resources.filter(matchesLookup));
+  }
+
+  // GET /api/v1/template
+  if (method === 'GET' && pathname === `${BASE}/template`) {
+    const occurrence = query.occurrence ? +query.occurrence : 1;
+    const template = resolutions.templates.find(t => matchesLookup(t) && t.occurrence === occurrence);
+    if (!template) {
+      return json(res, { code: 404, status: 'RESOURCE_NOT_FOUND', message: 'Incorrect result size: expected 1, actual 0' }, 404);
+    }
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    return res.end(template.result);
+  }
+
+  // GET /api/v1/configs/allByType
+  if (method === 'GET' && pathname === `${BASE}/configs/allByType`) {
+    return json(res, resolutions.configSnapshots.filter(s => s.resourceType === query.resourceType));
+  }
+
+  // GET /api/v1/configs
+  if (method === 'GET' && pathname === `${BASE}/configs`) {
+    const status = (query.status || 'RUNNING').toUpperCase();
+    const snapshot = resolutions.configSnapshots.find(s =>
+      s.resourceType === query.resourceType && s.resourceId === query.resourceId && s.status === status);
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    return res.end(snapshot ? snapshot.config_snapshot : '');
   }
 
   // ── fallthrough ───────────────────────────────────────────────────────────────

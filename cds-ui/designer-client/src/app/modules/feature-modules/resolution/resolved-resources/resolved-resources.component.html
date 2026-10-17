@@ -1,0 +1,131 @@
+<section class="resolution-section" aria-labelledby="resolved-resources-heading">
+    <h2 id="resolved-resources-heading" class="h5">Resolved resources and rendered templates</h2>
+
+    <form class="card lookup-card" (ngSubmit)="lookUp()">
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="resolutionBlueprintName">Blueprint name</label>
+                    <select id="resolutionBlueprintName" name="blueprintName" class="form-control"
+                            [(ngModel)]="blueprintName" (ngModelChange)="onBlueprintNameChange()">
+                        <option value="" disabled>Select a blueprint...</option>
+                        <option *ngFor="let name of blueprintNames" [value]="name">{{ name }}</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="resolutionBlueprintVersion">Blueprint version</label>
+                    <select id="resolutionBlueprintVersion" name="blueprintVersion" class="form-control"
+                            [(ngModel)]="blueprintVersion" [disabled]="blueprintVersions.length === 0">
+                        <option value="" disabled>Select a version...</option>
+                        <option *ngFor="let version of blueprintVersions" [value]="version">{{ version }}</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="resolutionArtifactName">Artifact name</label>
+                    <input id="resolutionArtifactName" name="artifactName" class="form-control" type="text"
+                           placeholder="e.g. baseconfig" [(ngModel)]="artifactName">
+                </div>
+            </div>
+
+            <fieldset class="form-group">
+                <legend class="lookup-legend">Look up by</legend>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="lookupByResolutionKey" name="lookupBy"
+                           value="resolutionKey" [(ngModel)]="lookupBy">
+                    <label class="form-check-label" for="lookupByResolutionKey">Resolution key</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="lookupByResource" name="lookupBy"
+                           value="resource" [(ngModel)]="lookupBy">
+                    <label class="form-check-label" for="lookupByResource">Resource type and ID</label>
+                </div>
+            </fieldset>
+
+            <div class="form-row">
+                <div class="form-group col-md-4" *ngIf="lookupBy === 'resolutionKey'">
+                    <label for="resolutionKey">Resolution key</label>
+                    <input id="resolutionKey" name="resolutionKey" class="form-control" type="text"
+                           [(ngModel)]="resolutionKey">
+                </div>
+                <ng-container *ngIf="lookupBy === 'resource'">
+                    <div class="form-group col-md-4">
+                        <label for="resolutionResourceType">Resource type</label>
+                        <input id="resolutionResourceType" name="resourceType" class="form-control" type="text"
+                               [(ngModel)]="resourceType">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="resolutionResourceId">Resource ID</label>
+                        <input id="resolutionResourceId" name="resourceId" class="form-control" type="text"
+                               [(ngModel)]="resourceId">
+                    </div>
+                </ng-container>
+                <div class="form-group col-md-4 lookup-actions">
+                    <button type="submit" class="btn btn-primary" [disabled]="!canLookUp">Look up</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="lookup-results" aria-live="polite">
+        <p *ngIf="resourcesState === 'loading'" class="text-muted" role="status">Loading resolved resources...</p>
+        <p *ngIf="resourcesState === 'notFound'" class="result-empty" role="status">
+            No resolved resources are stored for these keys.
+        </p>
+        <p *ngIf="resourcesState === 'error'" class="result-error" role="alert">
+            Could not load resolved resources: {{ resourcesError }}
+        </p>
+    </div>
+
+    <ng-container *ngIf="resourcesState === 'loaded'">
+        <div class="form-group occurrence-picker">
+            <label for="resolutionOccurrence">Occurrence</label>
+            <select id="resolutionOccurrence" class="form-control form-control-sm"
+                    [(ngModel)]="selectedOccurrence" (ngModelChange)="onOccurrenceChange()">
+                <option *ngFor="let occurrence of occurrences; let first = first" [ngValue]="occurrence">
+                    {{ occurrence }}{{ first ? ' (latest)' : '' }}
+                </option>
+            </select>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm resolution-table">
+                <caption>Resolved values, occurrence {{ selectedOccurrence }}</caption>
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Dictionary</th>
+                    <th scope="col">Source</th>
+                    <th scope="col">Resolved at</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let resource of occurrenceResources">
+                    <th scope="row">{{ resource.name }}</th>
+                    <td class="resolution-value">{{ resource.value }}</td>
+                    <td>{{ resource.status }}</td>
+                    <td>{{ resource.dictionaryName }}</td>
+                    <td>{{ resource.dictionarySource }}</td>
+                    <td>{{ resource.createdDate }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+
+    <section *ngIf="templateState !== 'idle'" class="template-section" aria-labelledby="rendered-template-heading">
+        <h3 id="rendered-template-heading" class="h6">Rendered template</h3>
+        <div aria-live="polite">
+            <p *ngIf="templateState === 'loading'" class="text-muted" role="status">Loading rendered template...</p>
+            <p *ngIf="templateState === 'notFound'" class="result-empty" role="status">
+                No rendered template is stored for these keys.
+            </p>
+            <p *ngIf="templateState === 'error'" class="result-error" role="alert">
+                Could not load the rendered template: {{ templateError }}
+            </p>
+        </div>
+        <pre *ngIf="templateState === 'loaded'" class="resolution-content" tabindex="0"
+             aria-label="Rendered template content">{{ template }}</pre>
+    </section>
+</section>

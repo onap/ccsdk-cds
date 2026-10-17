@@ -1,0 +1,62 @@
+.resolution-section {
+    padding: 20px 0;
+}
+
+.lookup-card {
+    border: 1px solid #bdbdbd;
+    border-radius: 4px;
+    margin-bottom: 16px;
+}
+
+.form-group label,
+.lookup-legend {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.lookup-legend {
+    width: auto;
+}
+
+.form-check-label {
+    font-weight: normal !important;
+}
+
+.lookup-actions {
+    display: flex;
+    align-items: flex-end;
+}
+
+.occurrence-picker {
+    max-width: 200px;
+}
+
+.resolution-table caption {
+    caption-side: top;
+    color: var(--cds-color-text-muted);
+}
+
+.resolution-value {
+    word-break: break-all;
+}
+
+.resolution-content {
+    max-height: 480px;
+    overflow: auto;
+    padding: 12px;
+    border: 1px solid #bdbdbd;
+    border-radius: 4px;
+    background: #f7f7f7;
+    font-size: 12px;
+    white-space: pre;
+}
+
+.result-empty {
+    color: var(--cds-color-text-muted);
+}
+
+.result-error {
+    color: var(--cds-color-danger);
+}
