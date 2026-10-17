@@ -1,40 +1,10 @@
 <tour-step-template></tour-step-template>
 <div class="card creat-card">
     <div class="single-line-model">
-        <label class="label-name">Mode</label>
-        <div class="label-input">
-            <label name="trst" *ngFor="let mode of modes; let i = index">
-                <input class="form-check-input" [(ngModel)]="modeType" type="radio" name="radioMode" id="radioMode"
-                    [value]="mode.name">
-
-                <span>
-                    <i [className]="mode.style" aria-hidden="true" [id]="mode.name"></i>
-                    {{mode.name}}
-                </span>
-            </label>
-        </div>
-    </div>
-    <div class="single-line">
-        <label class="label-name">Dictionary Library Instance</label>
-        <div class="label-input">
-            <select class="form-control" id="exampleFormControlSelect1">
-                <option>Select Library Instance</option>
-                <option>Library Instance 1</option>
-                <option>Library Instance 2</option>
-                <option>Library Instance 3</option>
-                <option>Library Instance 4</option>
-                <option>Library Instance 5</option>
-            </select>
-        </div>
-    </div>
-
-</div>
-<div class="card creat-card">
-    <div class="single-line-model">
         <label class="label-name" [class.label-invalid]="touchedFields['name'] && !metaDataTab.name?.trim()">Name <span>*</span></label>
         <div class="label-input">
             <input tourAnchor="mt-packageName" type="input"  [readOnly]="!isNameEditable"  (change)="checkRequiredElements()"
-                [(ngModel)]="metaDataTab.name" placeholder="Package name"
+                [(ngModel)]="metaDataTab.name" (input)="validatePackageNameAndVersion()" placeholder="Package name"
                 [class.input-invalid]="touchedFields['name'] && !metaDataTab.name?.trim()"
                 (blur)="markFieldTouched('name')">
         </div>

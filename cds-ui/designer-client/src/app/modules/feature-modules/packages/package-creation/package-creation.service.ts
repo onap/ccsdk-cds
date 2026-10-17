@@ -73,7 +73,8 @@ export class PackageCreationService {
 
     async checkBluePrintNameAndVersion(name: string, version: string): Promise<boolean> {
         return await this.packagesListService.checkBluePrintIfItExists(name, version)
-            .then(bluePrintModelsResult => bluePrintModelsResult != null && bluePrintModelsResult.length > 0);
+            .then(bluePrintModelsResult => bluePrintModelsResult != null && bluePrintModelsResult.length > 0)
+            .catch(() => false);
     }
 
     refreshPackages() {

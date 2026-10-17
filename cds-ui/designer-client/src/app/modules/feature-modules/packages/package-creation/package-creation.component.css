@@ -119,13 +119,18 @@
 }
 
 /* ===== Error text ===== */
-.lifecycle-error {
+.lifecycle-error,
+.lifecycle-hint {
   margin-top: 6px;
   font-size: 11px;
   color: var(--cds-color-danger);
   text-align: center;
   max-width: 120px;
   line-height: 1.3;
+}
+
+.lifecycle-hint {
+  color: var(--cds-color-text-muted);
 }
 
 @media (max-width: 575.98px) {
