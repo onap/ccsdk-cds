@@ -100,6 +100,8 @@ public class SdcListenerNotificationCallback implements INotificationCallback {
                 listenerStatus.sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_ERROR,
                         errorMessage, url, NotificationType.DOWNLOAD);
                 LOGGER.error(errorMessage);
+                listenerStatus.sendResponseBackToSdc(distributionId, DistributionStatusEnum.COMPONENT_DONE_ERROR,
+                        errorMessage, url, NotificationType.SDC_LISTENER_COMPONENT);
             } else {
                 listenerStatus.sendResponseBackToSdc(distributionId, DistributionStatusEnum.DOWNLOAD_OK, null, url,
                         NotificationType.DOWNLOAD);

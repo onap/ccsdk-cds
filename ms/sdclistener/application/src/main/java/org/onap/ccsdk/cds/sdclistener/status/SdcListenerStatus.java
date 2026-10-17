@@ -51,7 +51,7 @@ public class SdcListenerStatus {
 
 
     public enum NotificationType {
-        DOWNLOAD, SDC_LISTENER_COMPONENT;
+        DOWNLOAD, DEPLOY, SDC_LISTENER_COMPONENT;
     }
 
     /**
@@ -90,6 +90,19 @@ public class SdcListenerStatus {
                     checkResponseStatusFromSdc(
                             distributionClient.sendDownloadStatus(downloadStatusMessage, errorReason));
                 }
+                break;
+
+            case DEPLOY:
+                IDistributionStatusMessage deployStatusMessage = buildStatusMessage(distributionID, status, url, null);
+
+                if (errorReason == null) {
+                    checkResponseStatusFromSdc(distributionClient.sendDeploymentStatus(deployStatusMessage));
+                } else {
+                    checkResponseStatusFromSdc(
+                            distributionClient.sendDeploymentStatus(deployStatusMessage, errorReason));
+                }
+                break;
+
             default:
                 break;
         }

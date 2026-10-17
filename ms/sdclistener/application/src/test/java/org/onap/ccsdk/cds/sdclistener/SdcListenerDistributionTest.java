@@ -198,7 +198,7 @@ public class SdcListenerDistributionTest {
     public void distributedCbaIsUploadedToBlueprintProcessorAndReportedToSdc() throws Exception {
         List<String> statuses = awaitStatusesUntilComponentDone();
 
-        assertEquals(Arrays.asList("NOTIFIED", "DOWNLOAD_OK", "COMPONENT_DONE_OK"), statuses);
+        assertEquals(Arrays.asList("NOTIFIED", "DOWNLOAD_OK", "DEPLOY_OK", "COMPONENT_DONE_OK"), statuses);
         sdc.verify(getRequestedFor(urlEqualTo(ARTIFACT_URL)));
         assertEquals(1, UPLOADS.size());
         assertArrayEquals(cbaFromCsar(), UPLOADS.peek().getFileChunk().getChunk().toByteArray());

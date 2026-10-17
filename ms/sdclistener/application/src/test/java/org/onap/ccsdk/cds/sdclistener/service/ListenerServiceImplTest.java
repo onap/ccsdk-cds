@@ -22,10 +22,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.onap.ccsdk.cds.controllerblueprints.common.api.Status;
+import org.onap.ccsdk.cds.controllerblueprints.management.api.BluePrintUploadInput;
 import org.onap.ccsdk.cds.sdclistener.SdcListenerConfiguration;
 import org.onap.ccsdk.cds.sdclistener.client.SdcListenerAuthClientInterceptor;
 import org.onap.ccsdk.cds.sdclistener.dto.SdcListenerDto;
@@ -46,8 +50,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.DEPLOY;
 import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
+import static org.onap.sdc.api.notification.DistributionStatusEnum.COMPONENT_DONE_ERROR;
 import static org.onap.sdc.api.notification.DistributionStatusEnum.COMPONENT_DONE_OK;
+import static org.onap.sdc.api.notification.DistributionStatusEnum.DEPLOY_ERROR;
+import static org.onap.sdc.api.notification.DistributionStatusEnum.DEPLOY_OK;
 
 @RunWith(SpringRunner.class)
 @EnableConfigurationProperties({SdcListenerAuthClientInterceptor.class, BluePrintProcesssorHandler.class,
@@ -81,6 +89,9 @@ public class ListenerServiceImplTest {
 
     @MockBean
     SdcListenerDto listenerDto;
+
+    @MockBean
+    BluePrintProcesssorHandler bluePrintProcesssorHandler;
 
     @Before
     public void setup() {
@@ -126,6 +137,65 @@ public class ListenerServiceImplTest {
         // Verify
         String result = checkFileExists(tempDirectoryPath);
         assertTrue(result.contains(CSAR_FILE));
+    }
+
+    @Test
+    public void storeCsarArtifactFailureIsReportedAsComponentDoneError() throws IOException {
+        // Arrange
+        Mockito.when(listenerDto.getDistributionId()).thenReturn(DISTRIBUTION_ID);
+        Mockito.when(listenerDto.getArtifactUrl()).thenReturn(URL);
+        Path notADirectory = folder.newFile("not-a-directory").toPath();
+
+        // Act
+        listenerService.extractCsarAndStore(new DistributionClientDownloadResultStubImpl(), notADirectory);
+
+        // Verify
+        Mockito.verify(status).sendResponseBackToSdc(Mockito.eq(DISTRIBUTION_ID), Mockito.eq(COMPONENT_DONE_ERROR),
+                ArgumentMatchers.startsWith("Failed to store the CSAR"), Mockito.eq(URL),
+                Mockito.eq(SDC_LISTENER_COMPONENT));
+    }
+
+    @Test
+    public void storedBluePrintIsReportedAsDeployOkBeforeComponentDone() throws IOException {
+        // Arrange
+        Mockito.when(listenerDto.getDistributionId()).thenReturn(DISTRIBUTION_ID);
+        Mockito.when(listenerDto.getArtifactUrl()).thenReturn(URL);
+        Mockito.when(bluePrintProcesssorHandler.sendRequest(Mockito.any(BluePrintUploadInput.class), Mockito.any()))
+                .thenReturn(Status.newBuilder().setCode(200).build());
+
+        // Act
+        listenerService.saveBluePrintToCdsDatabase(cbaArchiveWithOneBluePrint(), null);
+
+        // Verify
+        InOrder inOrder = Mockito.inOrder(status);
+        inOrder.verify(status).sendResponseBackToSdc(DISTRIBUTION_ID, DEPLOY_OK, null, URL, DEPLOY);
+        inOrder.verify(status).sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_OK, null, URL,
+                SDC_LISTENER_COMPONENT);
+    }
+
+    @Test
+    public void rejectedBluePrintIsReportedAsDeployErrorBeforeComponentDone() throws IOException {
+        // Arrange
+        final String errorMessage = "Failed to store the CBA archive into CDS DB due to invalid blueprint";
+        Mockito.when(listenerDto.getDistributionId()).thenReturn(DISTRIBUTION_ID);
+        Mockito.when(listenerDto.getArtifactUrl()).thenReturn(URL);
+        Mockito.when(bluePrintProcesssorHandler.sendRequest(Mockito.any(BluePrintUploadInput.class), Mockito.any()))
+                .thenReturn(Status.newBuilder().setCode(500).setErrorMessage("invalid blueprint").build());
+
+        // Act
+        listenerService.saveBluePrintToCdsDatabase(cbaArchiveWithOneBluePrint(), null);
+
+        // Verify
+        InOrder inOrder = Mockito.inOrder(status);
+        inOrder.verify(status).sendResponseBackToSdc(DISTRIBUTION_ID, DEPLOY_ERROR, errorMessage, URL, DEPLOY);
+        inOrder.verify(status).sendResponseBackToSdc(DISTRIBUTION_ID, COMPONENT_DONE_ERROR, errorMessage, URL,
+                SDC_LISTENER_COMPONENT);
+    }
+
+    private Path cbaArchiveWithOneBluePrint() throws IOException {
+        Path cbaArchive = folder.newFolder("cba-archive").toPath();
+        Files.copy(Paths.get("src/test/resources/testcba.zip"), cbaArchive.resolve("testcba.zip"));
+        return cbaArchive;
     }
 
     private String checkFileExists(Path path) throws IOException {

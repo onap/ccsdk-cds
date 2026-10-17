@@ -55,9 +55,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static java.lang.String.format;
+import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.DEPLOY;
 import static org.onap.ccsdk.cds.sdclistener.status.SdcListenerStatus.NotificationType.SDC_LISTENER_COMPONENT;
 import static org.onap.sdc.api.notification.DistributionStatusEnum.COMPONENT_DONE_ERROR;
 import static org.onap.sdc.api.notification.DistributionStatusEnum.COMPONENT_DONE_OK;
+import static org.onap.sdc.api.notification.DistributionStatusEnum.DEPLOY_ERROR;
+import static org.onap.sdc.api.notification.DistributionStatusEnum.DEPLOY_OK;
 
 @Component
 @ConfigurationProperties("listenerservice")
@@ -170,7 +173,10 @@ public class ListenerServiceImpl implements ListenerService {
                 LOGGER.error("Could not able to store the CSAR at this location {}", csarArchivePath);
             }
         } catch (Exception e) {
-            LOGGER.error("Fail to write the data into FileOutputStream {}, {}", targetLocation, e);
+            final String errorMessage = format("Failed to store the CSAR %s: %s", targetLocation, e.getMessage());
+            listenerStatus.sendResponseBackToSdc(getDistributionId(), COMPONENT_DONE_ERROR, errorMessage,
+                    getArtifactUrl(), SDC_LISTENER_COMPONENT);
+            LOGGER.error(errorMessage, e);
         }
     }
 
@@ -201,17 +207,21 @@ public class ListenerServiceImpl implements ListenerService {
                 if (responseStatus.getCode() != SUCCESS_CODE) {
                     final String errorMessage = format("Failed to store the CBA archive into CDS DB due to %s",
                             responseStatus.getErrorMessage());
+                    listenerStatus.sendResponseBackToSdc(distributionId, DEPLOY_ERROR, errorMessage, artifactUrl,
+                            DEPLOY);
                     listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage,
                             artifactUrl, SDC_LISTENER_COMPONENT);
                     LOGGER.error(errorMessage);
                 } else {
                     LOGGER.info(responseStatus.getMessage());
+                    listenerStatus.sendResponseBackToSdc(distributionId, DEPLOY_OK, null, artifactUrl, DEPLOY);
                     listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_OK, null, artifactUrl,
                             SDC_LISTENER_COMPONENT);
                 }
 
             } catch (Exception e) {
                 final String errorMessage = format("Failure due to %s", e.getMessage());
+                listenerStatus.sendResponseBackToSdc(distributionId, DEPLOY_ERROR, errorMessage, artifactUrl, DEPLOY);
                 listenerStatus.sendResponseBackToSdc(distributionId, COMPONENT_DONE_ERROR, errorMessage, artifactUrl,
                         SDC_LISTENER_COMPONENT);
                 LOGGER.error(errorMessage);
