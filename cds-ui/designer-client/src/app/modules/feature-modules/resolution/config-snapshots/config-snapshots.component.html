@@ -1,0 +1,87 @@
+<section class="resolution-section" aria-labelledby="config-snapshots-heading">
+    <h2 id="config-snapshots-heading" class="h5">Configuration snapshots</h2>
+
+    <form class="card lookup-card" (ngSubmit)="show()">
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="snapshotResourceType">Resource type</label>
+                    <input id="snapshotResourceType" name="resourceType" class="form-control" type="text"
+                           placeholder="e.g. PNF" [(ngModel)]="resourceType">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="snapshotResourceId">Resource ID</label>
+                    <input id="snapshotResourceId" name="resourceId" class="form-control" type="text"
+                           [(ngModel)]="resourceId">
+                </div>
+                <div class="form-group col-md-4 lookup-actions">
+                    <button type="submit" class="btn btn-primary mr-2" [disabled]="!canShow">Show snapshots</button>
+                    <button type="button" class="btn btn-outline-primary" [disabled]="!canList" (click)="list()">
+                        List resources of this type
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div aria-live="polite">
+        <p *ngIf="listState === 'loading'" class="text-muted" role="status">Loading snapshots...</p>
+        <p *ngIf="listState === 'error'" class="result-error" role="alert">
+            Could not list snapshots: {{ listError }}
+        </p>
+        <p *ngIf="listState === 'loaded' && snapshots.length === 0" class="result-empty" role="status">
+            No snapshots are stored for resource type {{ listedType }}.
+        </p>
+    </div>
+
+    <div *ngIf="listState === 'loaded' && snapshots.length > 0" class="table-responsive">
+        <table class="table table-sm resolution-table">
+            <caption>Snapshots stored for resource type {{ listedType }}</caption>
+            <thead>
+            <tr>
+                <th scope="col">Resource ID</th>
+                <th scope="col">Status</th>
+                <th scope="col">Stored at</th>
+                <th scope="col"><span class="sr-only">Actions</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let snapshot of snapshots">
+                <th scope="row">{{ snapshot.resourceId }}</th>
+                <td>{{ snapshot.status }}</td>
+                <td>{{ snapshot.createdDate }}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-link" (click)="showSnapshotsOf(snapshot)">
+                        Show<span class="sr-only"> snapshots of {{ snapshot.resourceId }}</span>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div aria-live="polite">
+        <p *ngIf="snapshotState === 'loading'" class="text-muted" role="status">Loading snapshots...</p>
+        <p *ngIf="snapshotState === 'error'" class="result-error" role="alert">
+            Could not load snapshots: {{ snapshotError }}
+        </p>
+        <p *ngIf="snapshotState === 'loaded' && identical" class="result-empty" role="status">
+            The running and candidate configurations of {{ shownType }} {{ shownId }} are identical.
+        </p>
+    </div>
+
+    <div *ngIf="snapshotState === 'loaded'" class="row snapshot-compare">
+        <section class="col-md-6" aria-labelledby="running-snapshot-heading">
+            <h3 id="running-snapshot-heading" class="h6">Running: {{ shownType }} {{ shownId }}</h3>
+            <pre *ngIf="running" class="resolution-content" tabindex="0"
+                 aria-label="Running configuration">{{ running }}</pre>
+            <p *ngIf="!running" class="result-empty">No running snapshot is stored.</p>
+        </section>
+        <section class="col-md-6" aria-labelledby="candidate-snapshot-heading">
+            <h3 id="candidate-snapshot-heading" class="h6">Candidate: {{ shownType }} {{ shownId }}</h3>
+            <pre *ngIf="candidate" class="resolution-content" tabindex="0"
+                 aria-label="Candidate configuration">{{ candidate }}</pre>
+            <p *ngIf="!candidate" class="result-empty">No candidate snapshot is stored.</p>
+        </section>
+    </div>
+</section>

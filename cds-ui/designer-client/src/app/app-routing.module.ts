@@ -35,6 +35,10 @@ const routes: Routes = [
         path: 'execute',
         loadChildren: './modules/feature-modules/execution/execution.module#ExecutionModule'
     },
+    {
+        path: 'resolutions',
+        loadChildren: './modules/feature-modules/resolution/resolution.module#ResolutionModule'
+    },
     // { path: '', component: MainAppComponent },
     {
         path: '',

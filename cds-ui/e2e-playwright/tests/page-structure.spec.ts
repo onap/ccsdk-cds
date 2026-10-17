@@ -15,7 +15,7 @@
 
 import { test, expect } from '@playwright/test';
 
-const PAGES = ['/#/packages', '/#/packages/createPackage', '/#/resource-dictionary', '/#/execute'];
+const PAGES = ['/#/packages', '/#/packages/createPackage', '/#/resource-dictionary', '/#/execute', '/#/resolutions'];
 
 test.describe('Page structure – landmarks and headings', () => {
   for (const url of PAGES) {

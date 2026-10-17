@@ -1,0 +1,97 @@
+{
+  "resources": [
+    {
+      "blueprintName": "vFW-CDS",
+      "blueprintVersion": "1.0.0",
+      "artifactName": "baseconfig",
+      "resolutionKey": "vfw-key-1",
+      "resourceType": "vnf",
+      "resourceId": "vfw-vnf-1",
+      "name": "hostname",
+      "value": "vfw-old",
+      "status": "success",
+      "dictionaryName": "hostname",
+      "dictionarySource": "input",
+      "dictionaryVersion": 0,
+      "occurrence": 1,
+      "createdDate": "2026-10-16T09:00:00.000Z"
+    },
+    {
+      "blueprintName": "vFW-CDS",
+      "blueprintVersion": "1.0.0",
+      "artifactName": "baseconfig",
+      "resolutionKey": "vfw-key-1",
+      "resourceType": "vnf",
+      "resourceId": "vfw-vnf-1",
+      "name": "hostname",
+      "value": "vfw-01",
+      "status": "success",
+      "dictionaryName": "hostname",
+      "dictionarySource": "input",
+      "dictionaryVersion": 0,
+      "occurrence": 2,
+      "createdDate": "2026-10-17T09:00:00.000Z"
+    },
+    {
+      "blueprintName": "vFW-CDS",
+      "blueprintVersion": "1.0.0",
+      "artifactName": "baseconfig",
+      "resolutionKey": "vfw-key-1",
+      "resourceType": "vnf",
+      "resourceId": "vfw-vnf-1",
+      "name": "ip-address",
+      "value": "10.0.0.1",
+      "status": "success",
+      "dictionaryName": "ip-address",
+      "dictionarySource": "rest",
+      "dictionaryVersion": 0,
+      "occurrence": 2,
+      "createdDate": "2026-10-17T09:00:00.000Z"
+    }
+  ],
+  "templates": [
+    {
+      "blueprintName": "vFW-CDS",
+      "blueprintVersion": "1.0.0",
+      "artifactName": "baseconfig",
+      "resolutionKey": "vfw-key-1",
+      "resourceType": "vnf",
+      "resourceId": "vfw-vnf-1",
+      "occurrence": 1,
+      "result": "hostname vfw-old"
+    },
+    {
+      "blueprintName": "vFW-CDS",
+      "blueprintVersion": "1.0.0",
+      "artifactName": "baseconfig",
+      "resolutionKey": "vfw-key-1",
+      "resourceType": "vnf",
+      "resourceId": "vfw-vnf-1",
+      "occurrence": 2,
+      "result": "hostname vfw-01\nip-address 10.0.0.1"
+    }
+  ],
+  "configSnapshots": [
+    {
+      "resourceType": "PNF",
+      "resourceId": "pnf-1",
+      "status": "RUNNING",
+      "config_snapshot": "<config><mtu>1500</mtu></config>",
+      "createdDate": "2026-10-17T08:00:00.000Z"
+    },
+    {
+      "resourceType": "PNF",
+      "resourceId": "pnf-1",
+      "status": "CANDIDATE",
+      "config_snapshot": "<config><mtu>9000</mtu></config>",
+      "createdDate": "2026-10-17T08:30:00.000Z"
+    },
+    {
+      "resourceType": "PNF",
+      "resourceId": "pnf-2",
+      "status": "RUNNING",
+      "config_snapshot": "<config><mtu>1400</mtu></config>",
+      "createdDate": "2026-10-17T07:00:00.000Z"
+    }
+  ]
+}

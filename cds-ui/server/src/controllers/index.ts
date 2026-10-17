@@ -23,3 +23,4 @@ export * from './ping.controller';
 export * from './blueprint-rest.controller';
 export * from './data-dictionary.controller';
 export * from './controller-catalog.controller';
+export * from './resolution.controller';

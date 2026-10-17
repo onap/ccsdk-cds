@@ -131,5 +131,12 @@ export const ExecutionURLs = {
     execute: '/controllerblueprint/execute',
 };
 
+export const ResolutionURLs = {
+    resources: '/resolution/resources',
+    template: '/resolution/template',
+    configSnapshot: '/resolution/config-snapshot',
+    configSnapshotsByType: '/resolution/config-snapshots-by-type',
+};
+
 
 export const ActionElementTypeName = 'app.ActionElement';

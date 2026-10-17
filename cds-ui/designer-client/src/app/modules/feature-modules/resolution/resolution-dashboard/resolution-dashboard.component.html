@@ -1,0 +1,22 @@
+<app-header></app-header>
+
+<div class="new-wrapper">
+    <div class="container-fluid main-container">
+        <header class="page-title" style="padding: 16px 30px 12px;">
+            <div class="row">
+                <nav class="col m-0 page-breadcrumb" aria-label="Breadcrumb">
+                    <ol class="breadcrumb-header">
+                        <li><a routerLink="/packages">CBA Packages</a><i class="fa fa-angle-right ml-2 mr-2" aria-hidden="true"></i></li>
+                        <li aria-current="page"><h1>Resolutions</h1></li>
+                    </ol>
+                </nav>
+            </div>
+        </header>
+        <main class="container-fluid body-container" id="main-content" tabindex="-1">
+            <div class="container">
+                <app-resolved-resources></app-resolved-resources>
+                <app-config-snapshots></app-config-snapshots>
+            </div>
+        </main>
+    </div>
+</div>

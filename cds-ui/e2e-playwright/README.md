@@ -39,12 +39,14 @@ e2e-playwright/
 │   └── fixtures/
 │       ├── blueprints.json      – 4 sample blueprint-model records
 │       ├── resource-dictionaries.json – 3 sample resource dictionary records
-│       └── model-types.json     – 4 sample model-type / source-type records
+│       ├── model-types.json     – 4 sample model-type / source-type records
+│       └── resolutions.json     – resolved resources, rendered templates, config snapshots
 └── tests/
     ├── ping.spec.ts             – LoopBack BFF health-check (/ping)
     ├── home.spec.ts             – Angular app bootstrap and routing
     ├── packages.spec.ts         – Packages Dashboard UI + API integration
-    └── resource-dictionary.spec.ts – Resource Dictionary UI + API integration
+    ├── resource-dictionary.spec.ts – Resource Dictionary UI + API integration
+    └── resolutions.spec.ts      – Resolved resources, templates and config snapshots
 ```
 
 ## Prerequisites
@@ -216,6 +218,7 @@ reused automatically.
 | `home.spec.ts`                | Angular app bootstrap, redirect to `/#/packages`, `<app-root>` presence                                                                                                       |
 | `packages.spec.ts`            | Dashboard structure, tabs, fixture data rendered in cards, search, sort, proxy wiring                                                                                         |
 | `resource-dictionary.spec.ts` | Dashboard structure, tabs, search/filter sub-components, API proxy |
+| `resolutions.spec.ts`         | Lookup of resolved resources and rendered templates per occurrence, empty results, running vs candidate config snapshots |
 
 ## Fixture data
 
