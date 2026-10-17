@@ -20,6 +20,8 @@ limitations under the License.
 */
 
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { FilesContent, FolderNodeElement, MetaDataTabModel } from './mapping-models/metadata/MetaDataTab.model';
 
 import * as JSZip from 'jszip';
@@ -76,39 +78,66 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
     definition: Definition = new Definition();
     isSaveEnabled = false;
 
-    @ViewChild(MetadataTabComponent, { static: false })
+    @ViewChild(MetadataTabComponent, { static: true })
     metadataTabComponent: MetadataTabComponent;
 
     @ViewChild('nameit', { static: true })
     elementRef: ElementRef;
-    versionPattern = '^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$';
     metadataClasses = 'nav-item nav-link active complete';
     lifecycle = { ddImported: false, enriched: false, published: false, enrichError: '' };
     ddImportFile: File = null;
     private enrichedBlob: Blob = null;
+    private enrichedFingerprint: string = null;
+    private finished = false;
     private cbaPackage: CBAPackage;
+    private ngUnsubscribe = new Subject();
 
     ngOnInit() {
         this.elementRef.nativeElement.focus();
-        const regexp = RegExp(this.versionPattern);
-        this.packageCreationStore.state$.subscribe(cbaPackage => {
-            console.log(cbaPackage);
-            console.log('abbaaaas' + cbaPackage.metaData.name);
+        this.packageCreationStore.state$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(cbaPackage => {
             this.cbaPackage = cbaPackage;
-            if (cbaPackage && cbaPackage.metaData && cbaPackage.metaData.name
-                && cbaPackage.metaData.version &&
-                regexp.test(cbaPackage.metaData.version)) {
-                this.isSaveEnabled = true;
+            if (this.enrichedFingerprint !== null && this.fingerprint(cbaPackage) !== this.enrichedFingerprint) {
+                this.discardEnrichment();
+            }
+        });
+        this.metadataTabComponent.metadataValid$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(valid => {
+            this.isSaveEnabled = valid;
+            if (valid) {
                 if (!this.metadataClasses.includes('complete')) {
-                    console.log('added');
-                    this.metadataClasses += 'complete';
+                    this.metadataClasses += ' complete';
                 }
-                console.log('perhaps it is been added');
             } else {
-                this.isSaveEnabled = false;
                 this.metadataClasses = this.metadataClasses.replace('complete', '');
             }
         });
+    }
+
+    hasTemplate(): boolean {
+        return !!this.cbaPackage && this.cbaPackage.templates.files.size > 0;
+    }
+
+    canEnrich(): boolean {
+        return this.isSaveEnabled && this.hasTemplate();
+    }
+
+    // mode and entryFileName are rewritten by every enrich/save run, so they must not count as an edit
+    private fingerprint(cbaPackage: CBAPackage): string {
+        return JSON.stringify(cbaPackage, (key, value) => {
+            if (key === 'mode' || key === 'entryFileName') {
+                return undefined;
+            }
+            if (value instanceof Map || value instanceof Set) {
+                return Array.from(value as any);
+            }
+            return value;
+        });
+    }
+
+    private discardEnrichment() {
+        this.enrichedBlob = null;
+        this.enrichedFingerprint = null;
+        this.lifecycle.enriched = false;
+        this.lifecycle.published = false;
     }
 
     openTourGuide(step: string) {
@@ -143,8 +172,8 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
                     bluePrintDetailModels => {
                         if (bluePrintDetailModels) {
                             const id = bluePrintDetailModels.toString().split('id')[1].split(':')[1].split('"')[1];
-                            this.toastService.success('Package Updated Successfully ');
-                            this.isSaveEnabled = false;
+                            this.toastService.success('Package created successfully');
+                            this.finished = true;
                             this.router.navigate(['/packages/package/' + id]);
                         }
                     }, error => {
@@ -201,8 +230,11 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
     }
 
     enrichCurrentPackage() {
+        if (!this.canEnrich()) { return; }
         this.ngxService.start();
+        this.discardEnrichment();
         this.lifecycle.enrichError = '';
+        const fingerprint = this.fingerprint(this.cbaPackage);
         FilesContent.clear();
         this.cbaPackage = PackageCreationModes.mapModeType(this.cbaPackage);
         this.cbaPackage.metaData = PackageCreationModes.setEntryPoint(this.cbaPackage.metaData);
@@ -212,6 +244,7 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
             obs$.subscribe(
                 (blob: Blob) => {
                     this.enrichedBlob = blob;
+                    this.enrichedFingerprint = fingerprint;
                     this.lifecycle.enriched = true;
                     this.toastService.success('Blueprint enriched successfully. Ready to publish.');
                     this.ngxService.stop();
@@ -230,10 +263,13 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
         if (!this.enrichedBlob) { return; }
         this.ngxService.start();
         this.packageCreationService.deploy(this.enrichedBlob).subscribe(
-            () => {
+            response => {
                 this.lifecycle.published = true;
+                this.finished = true;
                 this.toastService.success('Blueprint published and ready for use in SO workflows.');
                 this.ngxService.stop();
+                const id = this.blueprintId(response);
+                this.router.navigate(id ? ['/packages/package/' + id] : ['/packages']);
             },
             err => {
                 this.toastService.error(
@@ -241,6 +277,25 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
                 this.ngxService.stop();
             }
         );
+    }
+
+    private blueprintId(response: any): string {
+        try {
+            const model = typeof response === 'string' ? JSON.parse(response) : response;
+            return model && model.id ? model.id : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    private hasUserInput(): boolean {
+        const meta = this.metadataTabComponent.metaDataTab;
+        const pkg = this.cbaPackage;
+        return !!(meta.name || meta.version || meta.description)
+            || (meta.templateTags && meta.templateTags.size > 0)
+            || (meta.mapOfCustomKey && meta.mapOfCustomKey.size > 0)
+            || (pkg && (pkg.templates.files.size > 0 || pkg.mapping.files.size > 0 || pkg.scripts.files.size > 0
+                || !!(pkg.definitions.dslDefinition && pkg.definitions.dslDefinition.content)));
     }
 
     goBackToDashBorad() {
@@ -254,10 +309,11 @@ export class PackageCreationComponent extends ComponentCanDeactivate implements 
     }
 
     canDeactivate(): boolean {
-        return this.isSaveEnabled;
+        return !this.finished && this.hasUserInput();
     }
 
     ngOnDestroy(): void {
-
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
     }
 }

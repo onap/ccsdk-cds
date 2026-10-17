@@ -24,13 +24,13 @@
                           <i class="icon-save-sm" aria-hidden="true"></i>
                           <span>Save</span>-->
           <button tourAnchor="packageSave" (click)="saveBluePrint()" [disabled]="!isSaveEnabled"
-            class="action-button save" aria-hidden="true"><i class="icon-save-sm" aria-hidden="true"></i>
+            class="action-button save"><i class="icon-save-sm" aria-hidden="true"></i>
             <span>Save</span></button>
         </div>
 
         <!-- Lifecycle action bar -->
         <div class="lifecycle-bar">
-          <div class="lifecycle-step complete">
+          <div class="lifecycle-step" [class.complete]="isSaveEnabled">
             <span class="step-circle">1</span>
             <span class="step-label">Edit</span>
           </div>
@@ -48,9 +48,10 @@
           <div class="lifecycle-step" [class.complete]="lifecycle.enriched">
             <span class="step-circle">3</span>
             <span class="step-label">Enrich</span>
-            <button class="lifecycle-btn" [disabled]="!isSaveEnabled" (click)="enrichCurrentPackage()">
+            <button class="lifecycle-btn" [disabled]="!canEnrich()" (click)="enrichCurrentPackage()">
               Enrich
             </button>
+            <span *ngIf="isSaveEnabled && !hasTemplate()" class="lifecycle-hint">Add a template first</span>
             <span *ngIf="lifecycle.enrichError" class="lifecycle-error">{{ lifecycle.enrichError }}</span>
           </div>
           <div class="lifecycle-connector"></div>

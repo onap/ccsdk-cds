@@ -27,13 +27,9 @@ test.describe('Lifecycle action bar', () => {
         await expect(labels.nth(3)).toContainText('Publish');
     });
 
-    test('step 1 (Edit) has complete class on initial load', async ({ page }) => {
-        await expect(page.locator('.lifecycle-step').first()).toHaveClass(/complete/);
-    });
-
-    test('steps 2–4 are not complete on initial load', async ({ page }) => {
+    test('no step is complete on initial load', async ({ page }) => {
         const steps = page.locator('.lifecycle-step');
-        for (let i = 1; i <= 3; i++) {
+        for (let i = 0; i <= 3; i++) {
             await expect(steps.nth(i)).not.toHaveClass(/complete/);
         }
     });
