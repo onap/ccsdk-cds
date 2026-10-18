@@ -62,7 +62,6 @@ jobs:
           gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
           gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
           vote-type: clear
-          comment-only: true
       - name: Allow replication
         run: sleep 10s
 
@@ -84,8 +83,8 @@ jobs:
       MVN_VERSION: "3.8.2"
       MVN_PROFILES: "docker"
       MVN_OPTS: >-
+        -T 1C
         -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
-        -Dmaven.repo.local=/tmp/r -Dorg.ops4j.pax.url.mvn.localRepository=/tmp/r
         -DaltDeploymentRepository=staging::default::file:"${GITHUB_WORKSPACE}"/m2repo
         -Dkaraf.keep.unpack
         -Ddocker.skip.push=true
@@ -110,4 +109,3 @@ jobs:
           gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
           gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
           vote-type: ${{ env.WORKFLOW_CONCLUSION }}
-          comment-only: true
