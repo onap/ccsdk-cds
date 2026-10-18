@@ -38,6 +38,38 @@ limitations under the License.
         <image.name>onap/ccsdk-cds-ui-server</image.name>
     </properties>
 
+    <!-- Build order only: both UI builds write into public/, which the image
+         packages, and blueprint-proto is unpacked below. Without these a
+         parallel build (-T) runs this module before them. -->
+    <dependencies>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds</groupId>
+            <artifactId>cds-ui-client</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds</groupId>
+            <artifactId>cds-ui-designer-client</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
+            <artifactId>blueprint-proto</artifactId>
+            <version>${ccsdk.cds.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

@@ -58,7 +58,8 @@ import kotlin.test.assertTrue
             "blueprintsprocessor.sshclient.sample.host=localhost",
             "blueprintsprocessor.sshclient.sample.port=52815",
             "blueprintsprocessor.sshclient.sample.username=root",
-            "blueprintsprocessor.sshclient.sample.password=dummyps"
+            "blueprintsprocessor.sshclient.sample.password=dummyps",
+            "blueprintsprocessor.sshclient.sample.connectionTimeOut=30000"
         ]
 )
 class BlueprintSshClientServiceTest {
