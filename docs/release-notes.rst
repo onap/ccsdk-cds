@@ -61,8 +61,13 @@ New features
 CVE and dependency updates
 --------------------------
 
-* The blueprintsprocessor image is now based on
-  ``onap/ccsdk-alpine-j21-image`` 2.2.1 and runs on Java 21.
+* The blueprintsprocessor and sdclistener images are now based on
+  ``eclipse-temurin:21-jre-alpine`` instead of
+  ``onap/ccsdk-alpine-j21-image`` and ``onap/ccsdk-alpine-j17-image``, and
+  both run on Java 21. The images no longer contain sudo, bash, git, nodejs,
+  npm, python3, mysql-client, graphviz, rsync and the other packages the
+  CCSDK base images added, which none of the CDS code uses. CBAs whose
+  Kotlin scripts start these programs need them added to a derived image.
 * Upgraded Netty to 4.1.137.Final, gRPC to 1.82.1, Jetty to 12.0.33,
   Spring Framework to 6.2.17, Spring Security to 6.5.9, Micrometer to
   1.15.10, Jackson to 2.20.1, Jinjava to 2.8.3 and Guava to 33.5.0-jre.
