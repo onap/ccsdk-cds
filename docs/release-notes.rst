@@ -72,6 +72,9 @@ CVE and dependency updates
   (Jira `CCSDK-4243 <https://jira.onap.org/browse/CCSDK-4243>`_)
 * Updated to the Rabat ONAP parent POMs (3.3.2).
   (Jira `CCSDK-4203 <https://jira.onap.org/browse/CCSDK-4203>`_)
+* The command-executor and py-executor images install the current Debian
+  security updates at build time, because their ``python:3.7-slim`` base
+  image is no longer rebuilt.
 
 Bug fixes
 ---------

@@ -15,7 +15,8 @@ RUN tar -xzf /source.tar.gz -C /tmp \
     && mkdir -p /opt/app/onap/blueprints/deploy /opt/app/onap/logs \
     && touch /opt/app/onap/logs/application.log \
     && chown -R onap:onap /opt \
-    && chmod -R 755 /opt
+    && chmod -R 755 /opt \
+    && apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools
 RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements.txt

@@ -16,7 +16,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
     && touch /opt/app/onap/logs/application.log \
     && chown -R onap:onap /opt \
     && chmod -R 755 /opt \
-    && apt-get update && apt-get install -y procps iputils-ping curl telnet && rm -rf /var/lib/apt/lists/* \
+    && apt-get update && apt-get upgrade -y && apt-get install -y procps iputils-ping curl telnet && rm -rf /var/lib/apt/lists/* \
     && python -m pip install --no-cache-dir --upgrade pip setuptools \
     && pip install --no-cache-dir -r /opt/app/onap/python/requirements.txt
 
