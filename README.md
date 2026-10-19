@@ -56,3 +56,4 @@ cd docs && tox -e docs
 
 Changes are reviewed on [ONAP Gerrit](https://gerrit.onap.org/r/q/project:ccsdk/cds)
 and tracked in the CCSDK project on [ONAP Jira](https://lf-onap.atlassian.net/projects/CCSDK).
+
