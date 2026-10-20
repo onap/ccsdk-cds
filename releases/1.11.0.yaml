@@ -1,0 +1,6 @@
+---
+distribution_type: 'maven'
+version: '1.11.0'
+project: 'ccsdk-cds'
+log_dir: 'ccsdk-cds-maven-stage-master/413/'
+ref: 0c63aa93df48591dc84ae48a6ff417fbcf3d8e6e
