@@ -18,10 +18,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Not modules-blueprints: the blueprintsprocessor parents declare the processor's runtime
+         dependencies in <dependencies>, which would all be published as compile dependencies of
+         this artifact to SO and Policy. -->
     <parent>
-        <groupId>org.onap.ccsdk.cds.blueprintsprocessor</groupId>
-        <artifactId>modules-blueprints</artifactId>
+        <groupId>org.onap.ccsdk.cds</groupId>
+        <artifactId>cds-aggregator</artifactId>
         <version>1.12.0-SNAPSHOT</version>
+        <relativePath>../../../../../pom.xml</relativePath>
     </parent>
 
     <groupId>org.onap.ccsdk.cds.blueprintsprocessor.modules</groupId>
@@ -33,15 +37,60 @@
         <sonar.skip>true</sonar.skip>
     </properties>
 
+    <!-- The CCSDK parent BOM pins grpc-api and guava below what ${grpc.version} needs; the
+         blueprintsprocessor parent overrides them, cds-aggregator does not. -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-api</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>com.github.marcoferrer.krotoplus</groupId>
-            <artifactId>kroto-plus-coroutines</artifactId>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>jsr250-api</artifactId>
-            <version>1.0</version>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <!-- Declared in cds-aggregator's <dependencies>; test scope keeps them off consumers' classpath. -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -91,25 +140,6 @@
                         </configuration>
                     </execution>
                     -->
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/target/generated-sources/protobuf/java</sourceDir>
-                                <sourceDir>${project.basedir}/target/generated-sources/protobuf/grpc-java</sourceDir>
-                                <!--<sourceDir>${project.basedir}/target/generated-sources/protobuf/kroto-plus</sourceDir>-->
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
         </plugins>

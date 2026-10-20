@@ -85,6 +85,7 @@ limitations under the License.
 
         <bytebuddy.version>1.17.7</bytebuddy.version>
         <grpc.version>1.82.1</grpc.version>
+        <guava.version>33.5.0-jre</guava.version>
         <netty-ssl>2.0.70.Final</netty-ssl>
         <protobuff.java.version>3.25.8</protobuff.java.version>
         <protobuff.java.utils.version>3.25.8</protobuff.java.utils.version>
@@ -470,23 +471,35 @@ limitations under the License.
                 <artifactId>grpc-protobuf-lite</artifactId>
                 <version>${grpc.version}</version>
             </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.5.18</version>
+            </dependency>
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>7.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>2.4</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.5.18</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>7.4</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>2.4</version>
         </dependency>
     </dependencies>
 
