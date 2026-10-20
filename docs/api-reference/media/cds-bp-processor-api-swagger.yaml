@@ -11,7 +11,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: https://www.onap.org/
   title: CDS Blueprint Processor API Reference
-  version: 1.11.0-SNAPSHOT
+  version: 1.12.0-SNAPSHOT
 servers:
 - description: Generated server url
   url: ""
