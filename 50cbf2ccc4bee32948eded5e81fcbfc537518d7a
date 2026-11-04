@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "199cb76f_4d79b77e",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:13:01Z",
+      "side": 1,
+      "message": "Can we drop the `\u003cversion\u003e` here? The root pom now manages `kotlin-scripting-common` and `kotlin-scripting-jvm`.",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c7c903b_79475820",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/dsl/BluePrintTemplateDSLBuilder.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:13:01Z",
+      "side": 1,
+      "message": "`typedProperties` is public and this now throws `IllegalStateException` when it is called on a plain `NodeTemplateBuilder`, which worked before. Same suggestion as for `typedOperation`: resolve the class in `definedProperties` and pass a `KClass\u003cProp\u003e` in here.",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e65c99a6_9e3e9865",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/dsl/BluePrintTemplateDSLBuilder.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:13:01Z",
+      "side": 1,
+      "message": "I would not use `runCatching` here, because every plain `operation {}` now goes through a thrown exception, and a real resolution failure silently falls back to `PropertiesAssignmentBuilder` and only blows up later with a `ClassCastException` inside `inputs {}`. Can we resolve the classes in `definedOperation` instead and pass them in, e.g. `typedOperation(interfaceName, description, inClass, outClass, block)`, with `operation()` passing `PropertiesAssignmentBuilder::class`?",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caef6aeb_de79fc59",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/dsl/BluePrintTemplateDSLBuilder.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:13:01Z",
+      "side": 1,
+      "message": "Can we fix this in this CR instead of leaving a TODO? Because Kotlin 2 compiles lambdas with invokedynamic, `block.reflect()` returns null and this method now fails on every call. Nothing in the repo calls it, so I would either take a `KClass\u003cProp\u003e` like the node template variant or remove it.",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "601fb4b8_e8fd8ccf",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:13:01Z",
+      "side": 1,
+      "message": "This comment is stale now that the dependency is `kotlin-scripting-jsr223`, can you remove it?",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a07ac69_37be1336",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:13:01Z",
+      "side": 1,
+      "message": "Is `kotlin-scripting-jsr223` still needed? Nothing in the repo uses the JSR-223 engine, and `blueprint-core` now declares `kotlin-scripting-common`/`kotlin-scripting-jvm` directly, which is what `BluePrintCompileService` needs.",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acbe4a5c_a176a855",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:13:01Z",
+      "side": 1,
+      "message": "`kotlin-stdlib-*` does not match `kotlin-stdlib` itself, so the main artifact is not banned any more. Can we use `kotlin-stdlib*` here?",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
