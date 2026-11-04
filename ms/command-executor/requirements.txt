@@ -7,3 +7,5 @@ protobuf==3.20.1
 opentelemetry-distro==0.40b0
 opentelemetry-instrumentation-grpc==0.40b0
 opentelemetry-exporter-otlp-proto-http==1.19.0
+# opentelemetry-instrument and grpcio-tools import pkg_resources, which setuptools 81 deprecates and 82 removes
+setuptools>=70,<81

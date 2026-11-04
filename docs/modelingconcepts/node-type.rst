@@ -264,7 +264,7 @@ listed in the other section.
 
             **component-remote-script-executor:**
 
-            Used to **execute** a python script in a dedicated micro-service, providing a Python 3.6 environment.
+            Used to **execute** a python script in a dedicated micro-service, providing a Python 3.9 environment.
 
             **Output result:**
 

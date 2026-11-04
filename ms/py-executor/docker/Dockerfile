@@ -1,4 +1,4 @@
-FROM python:3.7-slim
+FROM python:3.9-slim
 USER root
 
 # add entrypoint
@@ -18,7 +18,7 @@ RUN tar -xzf /source.tar.gz -C /tmp \
     && chmod -R 755 /opt \
     && apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
-RUN python -m pip install --no-cache-dir --upgrade pip setuptools
+RUN python -m pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r /opt/app/onap/python/requirements.txt
 RUN pip install --no-cache-dir /opt/app/onap/dependencies/common
 RUN pip install --no-cache-dir -r /opt/app/onap/dependencies/artifact-manager/requirements.txt
