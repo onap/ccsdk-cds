@@ -18,6 +18,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "44546eef_fd9098b8",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:19:40Z",
+      "side": 1,
+      "message": "Unresolving, this still needs addressing.",
+      "parentUuid": "199cb76f_4d79b77e",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9c7c903b_79475820",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-11-04T09:13:01Z",
       "side": 1,
       "message": "`typedProperties` is public and this now throws `IllegalStateException` when it is called on a plain `NodeTemplateBuilder`, which worked before. Same suggestion as for `typedOperation`: resolve the class in `definedProperties` and pass a `KClass\u003cProp\u003e` in here.",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab876eaf_6f990b8e",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/dsl/BluePrintTemplateDSLBuilder.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:19:40Z",
+      "side": 1,
+      "message": "Unresolving, this still needs addressing.",
+      "parentUuid": "9c7c903b_79475820",
       "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
@@ -52,6 +88,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "44038d3c_b55da47c",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/dsl/BluePrintTemplateDSLBuilder.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:19:40Z",
+      "side": 1,
+      "message": "Unresolving, this still needs addressing.",
+      "parentUuid": "e65c99a6_9e3e9865",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "caef6aeb_de79fc59",
@@ -65,6 +119,24 @@
       "writtenOn": "2026-11-04T09:13:01Z",
       "side": 1,
       "message": "Can we fix this in this CR instead of leaving a TODO? Because Kotlin 2 compiles lambdas with invokedynamic, `block.reflect()` returns null and this method now fails on every call. Nothing in the repo calls it, so I would either take a `KClass\u003cProp\u003e` like the node template variant or remove it.",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "199d5f13_ec3834de",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/dsl/BluePrintTemplateDSLBuilder.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:19:40Z",
+      "side": 1,
+      "message": "Unresolving, this still needs addressing.",
+      "parentUuid": "caef6aeb_de79fc59",
       "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
@@ -86,6 +158,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7425ded_e3219473",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:19:40Z",
+      "side": 1,
+      "message": "Unresolving, this still needs addressing.",
+      "parentUuid": "601fb4b8_e8fd8ccf",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6a07ac69_37be1336",
@@ -103,6 +193,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a0c742b_b71241c3",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:19:40Z",
+      "side": 1,
+      "message": "Unresolving, this still needs addressing.",
+      "parentUuid": "6a07ac69_37be1336",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "acbe4a5c_a176a855",
@@ -116,6 +224,24 @@
       "writtenOn": "2026-11-04T09:13:01Z",
       "side": 1,
       "message": "`kotlin-stdlib-*` does not match `kotlin-stdlib` itself, so the main artifact is not banned any more. Can we use `kotlin-stdlib*` here?",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c745a39_712f2a7f",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 7849
+      },
+      "writtenOn": "2026-11-04T09:19:40Z",
+      "side": 1,
+      "message": "Unresolving, this still needs addressing.",
+      "parentUuid": "acbe4a5c_a176a855",
       "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     }
