@@ -39,7 +39,7 @@ mvn process-sources -P format      # format Kotlin sources with ktlint
 Python services are tested with tox, for example:
 
 ```bash
-cd ms/py-executor && tox -e py38
+cd ms/py-executor && tox -e py39
 ```
 
 Documentation:

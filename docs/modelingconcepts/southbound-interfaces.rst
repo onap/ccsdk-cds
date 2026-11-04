@@ -8,7 +8,7 @@
 Southbound Interfaces
 ---------------------
 
-CDS comes with native python 3.6 support and Ansible AWX (Ansible Tower):
+CDS comes with native python 3.9 support and Ansible AWX (Ansible Tower):
 idea is Network Ops are familiar with Python and/or Ansible, and our goal is not to dictate the SBI to use for
 their operations. Ansible and Python provide already many, and well adopted,
 SBI libraries, hence they could be utilized as needed.
