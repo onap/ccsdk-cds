@@ -251,7 +251,7 @@ open class K8sConfigTemplateComponent(
                 templateLocation(child, params, newDestinationFolder.toFile())
             }
         } else if (!location.isDirectory) {
-            if (location.extension.toLowerCase() == "vtl") {
+            if (location.extension.lowercase() == "vtl") {
                 templateFile(location, params, destinationFolder)
             }
         }

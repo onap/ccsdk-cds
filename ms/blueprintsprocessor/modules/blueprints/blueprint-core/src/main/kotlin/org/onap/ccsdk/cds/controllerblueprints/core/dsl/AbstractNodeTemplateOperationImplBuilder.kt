@@ -24,7 +24,9 @@ abstract class AbstractNodeTemplateOperationImplBuilder<Prop : PropertiesAssignm
 ) : AbstractNodeTemplatePropertyImplBuilder<Prop>(id, type, description) {
 
     open fun definedOperation(description: String, block: OperationAssignmentBuilder<In, Out>.() -> Unit) {
-        typedOperation<In, Out>(interfaceName, description, block)
+        val inClass = resolveTypeArgument<In>(this, AbstractNodeTemplateOperationImplBuilder::class.java, 1)
+        val outClass = resolveTypeArgument<Out>(this, AbstractNodeTemplateOperationImplBuilder::class.java, 2)
+        typedOperation(interfaceName, description, inClass, outClass, block)
     }
 }
 
@@ -35,6 +37,7 @@ abstract class AbstractNodeTemplatePropertyImplBuilder<Prop : PropertiesAssignme
 ) : NodeTemplateBuilder(id, type, description) {
 
     open fun definedProperties(block: Prop.() -> Unit) {
-        typedProperties<Prop>(block)
+        val propClass = resolveTypeArgument<Prop>(this, AbstractNodeTemplatePropertyImplBuilder::class.java, 0)
+        typedProperties(propClass, block)
     }
 }

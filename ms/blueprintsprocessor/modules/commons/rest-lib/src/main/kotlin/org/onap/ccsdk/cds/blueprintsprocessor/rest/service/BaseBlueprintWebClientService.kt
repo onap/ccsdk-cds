@@ -370,7 +370,7 @@ abstract class BaseBlueprintWebClientService<out E : RestClientProperties> : Blu
         // Extract additionalHeaders from the requestProperties and
         // throw an error if HttpHeaders.AUTHORIZATION key (headers are case-insensitive)
         restClientProperties.additionalHeaders?.let {
-            if (it.keys.map { k -> k.toLowerCase().trim() }.contains(HttpHeaders.AUTHORIZATION.toLowerCase())) {
+            if (it.keys.map { k -> k.lowercase().trim() }.contains(HttpHeaders.AUTHORIZATION.lowercase())) {
                 val errMsg = "Error in definition of endpoint ${restClientProperties.url}." +
                     " User-supplied \"additionalHeaders\" cannot contain AUTHORIZATION header with" +
                     " auth-type \"${RestLibConstants.TYPE_BASIC_AUTH}\""

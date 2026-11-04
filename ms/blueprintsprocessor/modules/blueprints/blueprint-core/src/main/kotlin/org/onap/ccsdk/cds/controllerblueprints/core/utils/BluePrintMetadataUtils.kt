@@ -175,7 +175,7 @@ class BluePrintMetadataUtils {
             )
 
             // If the EntryDefinition is Kotlin file, compile and get Service Template
-            val bluePrintContext = when (toscaMetaData.templateType.toUpperCase()) {
+            val bluePrintContext = when (toscaMetaData.templateType.uppercase()) {
                 BluePrintConstants.BLUEPRINT_TYPE_KOTLIN_DSL -> readBlueprintKotlinFile(
                     toscaMetaData,
                     blueprintBasePath

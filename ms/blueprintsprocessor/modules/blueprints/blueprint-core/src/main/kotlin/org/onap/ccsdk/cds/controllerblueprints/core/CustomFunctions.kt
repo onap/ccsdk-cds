@@ -120,7 +120,7 @@ fun <T : Any?> T.asJsonPrimitive(): JsonNode {
 
 /** Based on Blueprint DataType Convert string value to JsonNode Type **/
 fun String.asJsonType(bpDataType: String): JsonNode {
-    return when (bpDataType.toLowerCase()) {
+    return when (bpDataType.lowercase()) {
         BluePrintConstants.DATA_TYPE_STRING -> this.asJsonPrimitive()
         BluePrintConstants.DATA_TYPE_BOOLEAN -> this.toBoolean().asJsonPrimitive()
         BluePrintConstants.DATA_TYPE_INTEGER -> this.toInt().asJsonPrimitive()

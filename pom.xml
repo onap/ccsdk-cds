@@ -77,10 +77,10 @@ limitations under the License.
         <ccsdk.sli.version>1.5.2</ccsdk.sli.version>
         <ccsdk.cds.version>${project.version}</ccsdk.cds.version>
 
-        <kotlin.version>1.9.25</kotlin.version>
-        <kotlin.maven.version>1.9.0</kotlin.maven.version>
-        <kotlin.couroutines.version>1.9.0</kotlin.couroutines.version>
-        <kotlinpoet.version>1.11.0</kotlinpoet.version>
+        <kotlin.version>2.2.21</kotlin.version>
+        <kotlin.maven.version>2.2.21</kotlin.maven.version>
+        <kotlin.couroutines.version>1.11.0</kotlin.couroutines.version>
+        <kotlinpoet.version>2.2.0</kotlinpoet.version>
         <apache.httpcomponents.client.version>4.5.14</apache.httpcomponents.client.version>
 
         <bytebuddy.version>1.17.7</bytebuddy.version>
@@ -240,6 +240,11 @@ limitations under the License.
                 <artifactId>kotlinx-coroutines-reactive</artifactId>
                 <version>${kotlin.couroutines.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlinx</groupId>
+                <artifactId>kotlinx-coroutines-test-jvm</artifactId>
+                <version>${kotlin.couroutines.version}</version>
+            </dependency>
             <!--  jetty dependencies for version alignment    -->
             <dependency>
                 <groupId>org.eclipse.jetty.http2</groupId>
@@ -373,7 +378,7 @@ limitations under the License.
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-kotlin</artifactId>
-                <version>2.19.2</version>
+                <version>${jackson-version}</version>
             </dependency>
             <!--  j2objc dependency to align with the guava dependency version -->
             <dependency>
@@ -485,6 +490,42 @@ limitations under the License.
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
                 <version>2.4</version>
+            </dependency>
+            <!--   kotlin dependencies for version alignment -->
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-reflect</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-scripting-jvm</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-scripting-common</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-scripting-jvm-host</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-script-runtime</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-test</artifactId>
+                <version>${kotlin.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -795,8 +836,8 @@ limitations under the License.
                                         <!-- Bad Netty versions (incompatible with Reactor & gRPC) -->
                                         <exclude>io.netty:netty-*: [4.1.50,4.1.60)</exclude>
 
-                                        <!-- Ban all kotlin-stdlib versions except 1.9.25 -->
-                                        <exclude>org.jetbrains.kotlin:kotlin-stdlib:(,1.9.25),(1.9.25,)</exclude>
+                                        <!-- Ban all kotlin-stdlib versions except 2.2.21 -->
+                                        <exclude>org.jetbrains.kotlin:kotlin-stdlib*:(,2.2.21),(2.2.21,)</exclude>
 
                                         <!-- Ban all jakarta xml bind versions except 4.0.2 -->
                                         <exclude>jakarta.xml.bind:jakarta.xml.bind-api:(,4.0.2),(4.0.2,)</exclude>

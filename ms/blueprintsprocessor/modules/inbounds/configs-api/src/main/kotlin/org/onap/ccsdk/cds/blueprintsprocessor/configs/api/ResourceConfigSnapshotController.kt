@@ -108,7 +108,7 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
                 try {
                     configSnapshot = resourceConfigSnapshotService.findByResourceIdAndResourceTypeAndStatus(
                         resourceId,
-                        resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase())
+                        resourceType, ResourceConfigSnapshot.Status.valueOf(status.uppercase())
                     )
                 } catch (ex: NoSuchElementException) {
                     throw httpProcessorException(
@@ -164,7 +164,7 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
         val resultStored =
             resourceConfigSnapshotService.write(
                 snapshot, resourceId, resourceType,
-                ResourceConfigSnapshot.Status.valueOf(status.toUpperCase())
+                ResourceConfigSnapshot.Status.valueOf(status.uppercase())
             )
 
         ResponseEntity.ok().body(resultStored)
@@ -200,7 +200,7 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
             if (status.isPresent)
                 resourceConfigSnapshotService.deleteByResourceIdAndResourceTypeAndStatus(
                     resourceId, resourceType,
-                    ResourceConfigSnapshot.Status.valueOf(status.get().toUpperCase())
+                    ResourceConfigSnapshot.Status.valueOf(status.get().uppercase())
                 )
             else {
                 resourceConfigSnapshotService.deleteByResourceIdAndResourceTypeAndStatus(
@@ -245,7 +245,7 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
                 configSnapshots = resourceConfigSnapshotService.findAllByResourceId(resourceId)
             } else {
                 configSnapshots = resourceConfigSnapshotService.findAllByResourceIdForStatus(
-                    resourceId, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase())
+                    resourceId, ResourceConfigSnapshot.Status.valueOf(status.uppercase())
                 )
             }
         } catch (ex: NoSuchElementException) {
@@ -290,7 +290,7 @@ open class ResourceConfigSnapshotController(private val resourceConfigSnapshotSe
                 configSnapshots = resourceConfigSnapshotService.findAllByResourceType(resourceType)
             } else {
                 configSnapshots = resourceConfigSnapshotService.findAllByResourceTypeForStatus(
-                    resourceType, ResourceConfigSnapshot.Status.valueOf(status.toUpperCase())
+                    resourceType, ResourceConfigSnapshot.Status.valueOf(status.uppercase())
                 )
             }
         } catch (ex: NoSuchElementException) {

@@ -96,7 +96,7 @@ open class K8sConfigValueComponent(
             val instanceId: String? = prefixInputParamsMap[INPUT_K8S_INSTANCE_ID]?.returnNullIfMissing()?.asText()
             var valueSource: String? = prefixInputParamsMap[INPUT_K8S_CONFIG_VALUE_SOURCE]?.returnNullIfMissing()?.asText()
             var configVersion: String? = prefixInputParamsMap[INPUT_K8S_RB_CONFIG_VERSION]?.returnNullIfMissing()?.asText()
-            val operationType = prefixInputParamsMap[INPUT_K8S_CONFIG_OPERATION_TYPE]?.returnNullIfMissing()?.asText()?.toUpperCase()
+            val operationType = prefixInputParamsMap[INPUT_K8S_CONFIG_OPERATION_TYPE]?.returnNullIfMissing()?.asText()?.uppercase()
 
             if (valueSource == null) {
                 valueSource = configName
@@ -222,7 +222,7 @@ open class K8sConfigValueComponent(
 
         var obj: Any? = null
         val yamlReader = ObjectMapper(YAMLFactory())
-        if (configeValueSourceFilePath.toFile().extension.toLowerCase() == "vtl") {
+        if (configeValueSourceFilePath.toFile().extension.lowercase() == "vtl") {
             log.info("Config building started from source $templateValueSource")
             val properties: MutableMap<String, Any> = mutableMapOf()
             properties[ResourceResolutionConstants.RESOURCE_RESOLUTION_INPUT_STORE_RESULT] = false

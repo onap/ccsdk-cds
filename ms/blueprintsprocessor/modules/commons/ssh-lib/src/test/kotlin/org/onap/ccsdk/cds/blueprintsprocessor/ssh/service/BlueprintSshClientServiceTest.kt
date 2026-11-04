@@ -143,7 +143,7 @@ class BlueprintSshClientServiceTest {
 
     private fun createTestHostKeyProvider(): KeyPairProvider {
         val keyProvider = SimpleGeneratorHostKeyProvider()
-        keyProvider.path = Paths.get("target").resolve("hostkey." + RSA_ALGORITHM.toLowerCase())
+        keyProvider.path = Paths.get("target").resolve("hostkey." + RSA_ALGORITHM.lowercase())
         keyProvider.algorithm = RSA_ALGORITHM
         return keyProvider
     }

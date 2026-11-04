@@ -195,7 +195,7 @@ class JacksonUtils {
         }
 
         fun checkJsonNodeValueOfType(type: String, jsonNode: JsonNode): Boolean {
-            if (BluePrintTypes.validPrimitiveTypes().contains(type.toLowerCase())) {
+            if (BluePrintTypes.validPrimitiveTypes().contains(type.lowercase())) {
                 return checkJsonNodeValueOfPrimitiveType(type, jsonNode)
             } else if (BluePrintTypes.validCollectionTypes().contains(type)) {
                 return checkJsonNodeValueOfCollectionType(type, jsonNode)
@@ -204,7 +204,7 @@ class JacksonUtils {
         }
 
         fun checkIfPrimitiveType(primitiveType: String): Boolean {
-            return when (primitiveType.toLowerCase()) {
+            return when (primitiveType.lowercase()) {
                 BluePrintConstants.DATA_TYPE_STRING -> true
                 BluePrintConstants.DATA_TYPE_BOOLEAN -> true
                 BluePrintConstants.DATA_TYPE_INTEGER -> true
@@ -216,7 +216,7 @@ class JacksonUtils {
         }
 
         fun checkJsonNodeValueOfPrimitiveType(primitiveType: String, jsonNode: JsonNode): Boolean {
-            return when (primitiveType.toLowerCase()) {
+            return when (primitiveType.lowercase()) {
                 BluePrintConstants.DATA_TYPE_STRING -> jsonNode.isTextual
                 BluePrintConstants.DATA_TYPE_BOOLEAN -> jsonNode.isBoolean
                 BluePrintConstants.DATA_TYPE_INTEGER -> jsonNode.isInt
@@ -228,7 +228,7 @@ class JacksonUtils {
         }
 
         fun checkJsonNodeValueOfCollectionType(type: String, jsonNode: JsonNode): Boolean {
-            return when (type.toLowerCase()) {
+            return when (type.lowercase()) {
                 BluePrintConstants.DATA_TYPE_LIST -> jsonNode.isArray
                 else -> false
             }
@@ -246,7 +246,7 @@ class JacksonUtils {
         }
 
         fun getValue(value: Any, type: String): Any {
-            return when (type.toLowerCase()) {
+            return when (type.lowercase()) {
                 BluePrintConstants.DATA_TYPE_BOOLEAN -> (value as BooleanNode).booleanValue()
                 BluePrintConstants.DATA_TYPE_INTEGER -> (value as IntNode).intValue()
                 BluePrintConstants.DATA_TYPE_FLOAT -> (value as FloatNode).floatValue()
@@ -257,7 +257,7 @@ class JacksonUtils {
         }
 
         fun populatePrimitiveValues(key: String, value: JsonNode, primitiveType: String, objectNode: ObjectNode) {
-            when (primitiveType.toLowerCase()) {
+            when (primitiveType.lowercase()) {
                 BluePrintConstants.DATA_TYPE_BOOLEAN,
                 BluePrintConstants.DATA_TYPE_INTEGER,
                 BluePrintConstants.DATA_TYPE_FLOAT,
@@ -265,13 +265,13 @@ class JacksonUtils {
                 BluePrintConstants.DATA_TYPE_TIMESTAMP,
                 BluePrintConstants.DATA_TYPE_STRING,
                 BluePrintConstants.DATA_TYPE_NULL ->
-                    objectNode.set(key, value)
+                    objectNode.set<JsonNode>(key, value)
                 else -> throw BluePrintException("populatePrimitiveValues expected only primitive values! Received: ($value)")
             }
         }
 
         fun populatePrimitiveValues(value: JsonNode, primitiveType: String, arrayNode: ArrayNode) {
-            when (primitiveType.toLowerCase()) {
+            when (primitiveType.lowercase()) {
                 BluePrintConstants.DATA_TYPE_BOOLEAN,
                 BluePrintConstants.DATA_TYPE_INTEGER,
                 BluePrintConstants.DATA_TYPE_FLOAT,
@@ -297,7 +297,7 @@ class JacksonUtils {
         }
 
         private fun getDefaultValueOfPrimitiveAsJsonNode(primitiveType: String): JsonNode? {
-            return when (primitiveType.toLowerCase()) {
+            return when (primitiveType.lowercase()) {
                 BluePrintConstants.DATA_TYPE_BOOLEAN -> BooleanNode.valueOf(false)
                 BluePrintConstants.DATA_TYPE_INTEGER -> IntNode.valueOf(0)
                 BluePrintConstants.DATA_TYPE_FLOAT -> FloatNode.valueOf(0.0f)
@@ -318,7 +318,7 @@ class JacksonUtils {
         }
 
         fun convertPrimitiveResourceValue(type: String, value: String): JsonNode {
-            return when (type.toLowerCase()) {
+            return when (type.lowercase()) {
                 BluePrintConstants.DATA_TYPE_BOOLEAN -> jsonNodeFromObject(value.toBoolean())
                 BluePrintConstants.DATA_TYPE_INTEGER -> jsonNodeFromObject(value.toInt())
                 BluePrintConstants.DATA_TYPE_FLOAT -> jsonNodeFromObject(value.toFloat())

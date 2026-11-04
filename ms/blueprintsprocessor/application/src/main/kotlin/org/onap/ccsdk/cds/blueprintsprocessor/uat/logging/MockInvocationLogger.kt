@@ -36,24 +36,24 @@ class MockInvocationLogger(private val marker: Marker) : InvocationListener {
 
     override fun reportInvocation(report: MethodInvocationReport) {
         val sb = StringBuilder()
-        sb.appendln("Method invocation #${mockInvocationsCounter.incrementAndGet()} on mock/spy")
+        sb.appendLine("Method invocation #${mockInvocationsCounter.incrementAndGet()} on mock/spy")
         report.locationOfStubbing?.let { location ->
-            sb.append(INDENT).append("stubbed ").appendln(location)
+            sb.append(INDENT).append("stubbed ").appendLine(location)
         }
-        sb.appendln(report.invocation)
-        sb.append(INDENT).append("invoked ").appendln(report.invocation.location)
+        sb.appendLine(report.invocation)
+        sb.append(INDENT).append("invoked ").appendLine(report.invocation.location)
         if (report.threwException()) {
             sb.append(INDENT).append("has thrown -> ").append(report.throwable.javaClass.name)
             report.throwable.message?.let { message ->
                 sb.append(" with message ").append(message)
             }
-            sb.appendln()
+            sb.appendLine()
         } else {
             sb.append(INDENT).append("has returned -> \"").append(report.returnedValue).append('"')
             report.returnedValue?.let { value ->
                 sb.append(" (").append(value.javaClass.name).append(')')
             }
-            sb.appendln()
+            sb.appendLine()
         }
         log.info(marker, sb.toString())
     }
