@@ -288,7 +288,7 @@ open class K8sProfileUploadComponent(
         var result: ArrayList<File>? = null
         if (directoryListing != null) {
             for (child in directoryListing) {
-                if (!child.isDirectory && child.name.toLowerCase() == "manifest.yaml") {
+                if (!child.isDirectory && child.name.lowercase() == "manifest.yaml") {
                     child.bufferedReader().use { inr ->
                         val manifestYaml = Yaml()
                         val manifestObject: Map<String, Any> = manifestYaml.load(inr)
@@ -335,7 +335,7 @@ open class K8sProfileUploadComponent(
                 templateLocation(child, params, newDestinationFolder.toFile(), manifestFiles)
             }
         } else if (!location.isDirectory) {
-            if (location.extension.toLowerCase() == "vtl") {
+            if (location.extension.lowercase() == "vtl") {
                 templateFile(location, params, destinationFolder, manifestFiles)
             } else {
                 val finalFilePath = Paths.get(
@@ -353,7 +353,7 @@ open class K8sProfileUploadComponent(
 
     private fun isFileInTheManifestFiles(file: File, manifestFiles: ArrayList<File>): Boolean {
         manifestFiles.forEach { fileFromManifest ->
-            if (fileFromManifest.toString().toLowerCase() == file.toString().toLowerCase())
+            if (fileFromManifest.toString().lowercase() == file.toString().lowercase())
                 return true
         }
         return false

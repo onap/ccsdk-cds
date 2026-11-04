@@ -194,7 +194,7 @@ class ResourceAssignmentUtils {
                     if (isNotEmpty(it.name) && it.property != null) {
                         val rName = it.name
                         val metadata = it.property!!.metadata
-                        val type = nullToEmpty(it.property?.type).toLowerCase()
+                        val type = nullToEmpty(it.property?.type).lowercase()
                         val value = useDefaultValueIfNull(it, rName)
                         val valueToPrint = getValueToLog(metadata, value)
                         containsLogProtected = hasLogProtect(metadata)
@@ -222,7 +222,7 @@ class ResourceAssignmentUtils {
                 if (isNotEmpty(it.name) && it.property != null) {
                     val rName = it.name
                     val metadata = it.property!!.metadata
-                    val type = nullToEmpty(it.property?.type).toLowerCase()
+                    val type = nullToEmpty(it.property?.type).lowercase()
                     val value = useDefaultValueIfNull(it, rName)
                     val valueToPrint = getValueToLog(metadata, value)
 

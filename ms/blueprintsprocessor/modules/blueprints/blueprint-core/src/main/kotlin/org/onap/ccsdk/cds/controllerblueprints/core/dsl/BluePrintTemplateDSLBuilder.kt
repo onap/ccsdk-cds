@@ -29,10 +29,24 @@ import org.onap.ccsdk.cds.controllerblueprints.core.data.RelationshipTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.RequirementAssignment
 import org.onap.ccsdk.cds.controllerblueprints.core.data.TopologyTemplate
 import org.onap.ccsdk.cds.controllerblueprints.core.data.Workflow
+import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.jvm.reflect
+
+@Suppress("UNCHECKED_CAST")
+internal fun <T : Any> resolveTypeArgument(instance: Any, targetRawType: Class<*>, index: Int): KClass<T> {
+    var current: Class<*> = instance.javaClass
+    while (current != Any::class.java) {
+        val generic = current.genericSuperclass
+        if (generic is ParameterizedType && targetRawType.isAssignableFrom(generic.rawType as Class<*>)) {
+            return (generic.actualTypeArguments[index] as Class<*>).kotlin as KClass<T>
+        }
+        current = current.superclass ?: break
+    }
+    throw IllegalStateException("Unable to resolve generic argument $index of $targetRawType for ${instance.javaClass}")
+}
 
 open class TopologyTemplateBuilder {
 
@@ -144,10 +158,12 @@ open class NodeTemplateBuilder(
 
     open fun <Prop : PropertiesAssignmentBuilder> typedProperties(block: Prop.() -> Unit) {
         if (properties == null) properties = hashMapOf()
-        val instance: Prop = (block.reflect()?.parameters?.get(0)?.type?.classifier as KClass<Prop>).createInstance()
+        val propClass: KClass<Prop> = resolveTypeArgument(this, AbstractNodeTemplatePropertyImplBuilder::class.java, 0)
+        val instance: Prop = propClass.createInstance()
         properties = instance.apply(block).build()
     }
 
+    @Suppress("UNCHECKED_CAST")
     open fun <In : PropertiesAssignmentBuilder, Out : PropertiesAssignmentBuilder> typedOperation(
         interfaceName: String,
         description: String = "",
@@ -155,11 +171,19 @@ open class NodeTemplateBuilder(
     ) {
         if (interfaces == null) interfaces = hashMapOf()
 
+        val inClass: KClass<In> = runCatching {
+            resolveTypeArgument<In>(this, AbstractNodeTemplateOperationImplBuilder::class.java, 1)
+        }.getOrDefault(PropertiesAssignmentBuilder::class as KClass<In>)
+
+        val outClass: KClass<Out> = runCatching {
+            resolveTypeArgument<Out>(this, AbstractNodeTemplateOperationImplBuilder::class.java, 2)
+        }.getOrDefault(PropertiesAssignmentBuilder::class as KClass<Out>)
+
         val interfaceAssignment = InterfaceAssignment()
         val defaultOperationName = BluePrintConstants.DEFAULT_STEP_OPERATION
         interfaceAssignment.operations = hashMapOf()
         interfaceAssignment.operations!![defaultOperationName] =
-            OperationAssignmentBuilder<In, Out>(defaultOperationName, description).apply(block).build()
+            OperationAssignmentBuilder(defaultOperationName, description, inClass, outClass).apply(block).build()
         interfaces!![interfaceName] = interfaceAssignment
     }
 
@@ -251,6 +275,7 @@ open class RelationshipTemplateBuilder(
         relationshipTemplate.copy = copy
     }
 
+    // TODO: Replace reflect() with resolveTypeArgument(), if used in the future
     open fun <Prop : PropertiesAssignmentBuilder> typedProperties(block: Prop.() -> Unit) {
         if (properties == null) properties = hashMapOf()
         val instance: Prop = (block.reflect()?.parameters?.get(0)?.type?.classifier as KClass<Prop>).createInstance()
@@ -371,7 +396,9 @@ class InterfaceAssignmentBuilder(private val id: String) {
 
 class OperationAssignmentBuilder<In : PropertiesAssignmentBuilder, Out : PropertiesAssignmentBuilder>(
     private val id: String,
-    private val description: String? = ""
+    private val description: String? = "",
+    private val inClass: KClass<In> = PropertiesAssignmentBuilder::class as KClass<In>,
+    private val outClass: KClass<Out> = PropertiesAssignmentBuilder::class as KClass<Out>
 ) {
 
     private var operationAssignment: OperationAssignment = OperationAssignment()
@@ -400,7 +427,7 @@ class OperationAssignmentBuilder<In : PropertiesAssignmentBuilder, Out : Propert
     }
 
     fun inputs(block: In.() -> Unit) {
-        val instance: In = (block.reflect()?.parameters?.get(0)?.type?.classifier as KClass<In>).createInstance()
+        val instance: In = inClass.createInstance()
         operationAssignment.inputs = instance.apply(block).build()
     }
 
@@ -409,7 +436,7 @@ class OperationAssignmentBuilder<In : PropertiesAssignmentBuilder, Out : Propert
     }
 
     fun outputs(block: Out.() -> Unit) {
-        val instance: Out = (block.reflect()?.parameters?.get(0)?.type?.classifier as KClass<Out>).createInstance()
+        val instance: Out = outClass.createInstance()
         operationAssignment.outputs = instance.apply(block).build()
     }
 

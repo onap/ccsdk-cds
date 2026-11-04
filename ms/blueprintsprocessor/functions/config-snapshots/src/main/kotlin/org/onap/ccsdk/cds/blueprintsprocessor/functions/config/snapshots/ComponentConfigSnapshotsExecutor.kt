@@ -165,7 +165,7 @@ open class ComponentConfigSnapshotsExecutor(private val cfgSnapshotService: Reso
             return
         }
 
-        when (contentType.toUpperCase()) {
+        when (contentType.uppercase()) {
             DIFF_JSON -> {
                 val patchNode = JsonDiff.asJson(cfgRunning.jsonAsJsonType(), cfgCandidate.jsonAsJsonType())
                 setNodeOutputProperties(ATTRIBUTE_STATUS_SUCCESS, patchNode.toString())

@@ -158,7 +158,7 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
         groupResourceAssignments.forEach {
             val metadata = resourceDictionaries[it.dictionaryName]?.property?.metadata
             val namingType = metadata?.get("naming-type")
-            val moduleName = namingType.plus("-name").toLowerCase()
+            val moduleName = namingType.plus("-name").lowercase()
             val moduleValue = "\${".plus(moduleName.plus("}"))
 
             val request: MutableMap<String, String> = input.mapValues {
@@ -184,7 +184,7 @@ open class NamingResolutionCapability : ResourceAssignmentProcessor() {
                 resourceDictionaries[resourceAssignment.dictionaryName]?.property?.metadata
 
             /** Naming ms returns the keys with "${naming-type}-name" */
-            val responseKey = metadata?.get("naming-type")?.toLowerCase().plus("-name")
+            val responseKey = metadata?.get("naming-type")?.lowercase().plus("-name")
 
             val parsedResourceAssignmentValue = checkNotNull(
                 JacksonUtils.jsonNode(restResponse).path(responseKey).textValue()

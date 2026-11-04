@@ -59,7 +59,7 @@ open class ErrorCatalogLoadDBService(
     }
 
     override fun getErrorMessage(domain: String, key: String): String? {
-        return getErrorMessage("$domain.${key.toLowerCase()}")
+        return getErrorMessage("$domain.${key.lowercase()}")
     }
 
     override fun getErrorMessage(attribute: String): String? {
@@ -117,7 +117,7 @@ open class ErrorCatalogLoadPropertyService(private var errorCatalogProperties: E
     }
 
     override fun getErrorMessage(domain: String, key: String): String? {
-        return getErrorMessage("$domain.${key.toLowerCase()}")
+        return getErrorMessage("$domain.${key.lowercase()}")
     }
 
     override fun getErrorMessage(attribute: String): String? {

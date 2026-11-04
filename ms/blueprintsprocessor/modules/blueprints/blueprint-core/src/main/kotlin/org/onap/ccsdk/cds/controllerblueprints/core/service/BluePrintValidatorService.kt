@@ -83,7 +83,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         this.serviceTemplate = serviceTemplate
         this.properties = properties
         try {
-            message.appendln("-> Config Blueprint")
+            message.appendLine("-> Config Blueprint")
             serviceTemplate.metadata?.let { validateMetadata(serviceTemplate.metadata!!) }
             serviceTemplate.artifactTypes?.let { validateArtifactTypes(serviceTemplate.artifactTypes!!) }
             serviceTemplate.dataTypes?.let { validateDataTypes(serviceTemplate.dataTypes!!) }
@@ -120,7 +120,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         paths.add("artifact_types")
         artifactTypes.forEach { artifactName, artifactType ->
             paths.add(artifactName)
-            message.appendln("--> Artifact Type :" + paths.joinToString(separator))
+            message.appendLine("--> Artifact Type :" + paths.joinToString(separator))
             artifactType.properties?.let { validatePropertyDefinitions(artifactType.properties!!) }
             paths.removeAt(paths.lastIndex)
         }
@@ -132,7 +132,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         paths.add("dataTypes")
         dataTypes.forEach { dataTypeName, dataType ->
             paths.add(dataTypeName)
-            message.appendln("--> DataType :" + paths.joinToString(separator))
+            message.appendLine("--> DataType :" + paths.joinToString(separator))
             dataType.properties?.let { validatePropertyDefinitions(dataType.properties!!) }
             paths.removeAt(paths.lastIndex)
         }
@@ -152,7 +152,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     @Throws(BluePrintException::class)
     open fun validateNodeType(nodeTypeName: String, nodeType: NodeType) {
         paths.add(nodeTypeName)
-        message.appendln("--> Node Type :" + paths.joinToString(separator))
+        message.appendLine("--> Node Type :" + paths.joinToString(separator))
         val derivedFrom: String = nodeType.derivedFrom
         // Check Derived From
         checkValidNodeTypesDerivedFrom(nodeTypeName, derivedFrom)
@@ -184,7 +184,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     @Throws(BluePrintException::class)
     open fun validateTopologyTemplate(topologyTemplate: TopologyTemplate) {
         paths.add("topology")
-        message.appendln("--> Topology Template")
+        message.appendLine("--> Topology Template")
         topologyTemplate.inputs?.let { validateInputs(topologyTemplate.inputs!!) }
         topologyTemplate.nodeTemplates?.let { validateNodeTemplates(topologyTemplate.nodeTemplates!!) }
         topologyTemplate.workflows?.let { validateWorkFlows(topologyTemplate.workflows!!) }
@@ -194,7 +194,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     @Throws(BluePrintException::class)
     open fun validateInputs(inputs: MutableMap<String, PropertyDefinition>) {
         paths.add("inputs")
-        message.appendln("---> Input :" + paths.joinToString(separator))
+        message.appendLine("---> Input :" + paths.joinToString(separator))
         validatePropertyDefinitions(inputs)
         paths.removeAt(paths.lastIndex)
     }
@@ -211,7 +211,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     @Throws(BluePrintException::class)
     open fun validateNodeTemplate(nodeTemplateName: String, nodeTemplate: NodeTemplate) {
         paths.add(nodeTemplateName)
-        message.appendln("---> NodeTemplate :" + paths.joinToString(separator))
+        message.appendLine("---> NodeTemplate :" + paths.joinToString(separator))
         val type: String = nodeTemplate.type
 
         val nodeType: NodeType = serviceTemplate.nodeTypes?.get(type)
@@ -230,7 +230,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         paths.add("artifacts")
         artifacts.forEach { artifactDefinitionName, artifactDefinition ->
             paths.add(artifactDefinitionName)
-            message.appendln("Validating artifact " + paths.joinToString(separator))
+            message.appendLine("Validating artifact " + paths.joinToString(separator))
             val type: String = artifactDefinition.type
                 ?: throw BluePrintException(format("type is missing for ArtifactDefinition({})", artifactDefinitionName))
             // Check Artifact Type
@@ -258,12 +258,12 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
     @Throws(BluePrintException::class)
     open fun validateWorkFlow(workflowName: String, workflow: Workflow) {
         paths.add(workflowName)
-        message.appendln("---> Workflow :" + paths.joinToString(separator))
+        message.appendLine("---> Workflow :" + paths.joinToString(separator))
         // Step Validation Start
         paths.add("steps")
         workflow.steps?.forEach { stepName, _ ->
             paths.add(stepName)
-            message.appendln("----> Steps :" + paths.joinToString(separator))
+            message.appendLine("----> Steps :" + paths.joinToString(separator))
             paths.removeAt(paths.lastIndex)
         }
         paths.removeAt(paths.lastIndex)
@@ -288,7 +288,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
                 }
                 else -> checkPropertyDataType(dataType, propertyName)
             }
-            message.appendln("property " + paths.joinToString(separator) + " of type " + dataType)
+            message.appendLine("property " + paths.joinToString(separator) + " of type " + dataType)
             paths.removeAt(paths.lastIndex)
         }
         paths.removeAt(paths.lastIndex)
@@ -552,7 +552,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
 
         requirements?.forEach { requirementDefinitionName, requirementDefinition ->
             paths.add(requirementDefinitionName)
-            message.appendln("Validating : " + paths.joinToString(separator))
+            message.appendLine("Validating : " + paths.joinToString(separator))
             validateRequirementDefinition(nodeName, nodeType, requirementDefinitionName, requirementDefinition)
             paths.removeAt(paths.lastIndex)
         }
@@ -603,7 +603,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         paths.add("interfaces")
         interfaces.forEach { interfaceName, interfaceDefinition ->
             paths.add(interfaceName)
-            message.appendln("Validating : " + paths.joinToString(separator))
+            message.appendLine("Validating : " + paths.joinToString(separator))
             interfaceDefinition.operations?.let { validateOperationDefinitions(interfaceDefinition.operations!!) }
             paths.removeAt(paths.lastIndex)
         }
@@ -615,7 +615,7 @@ open class BluePrintValidatorDefaultService : BluePrintValidatorService {
         paths.add("operations")
         operations.forEach { opertaionName, operationDefinition ->
             paths.add(opertaionName)
-            message.appendln("Validating : " + paths.joinToString(separator))
+            message.appendLine("Validating : " + paths.joinToString(separator))
             operationDefinition.implementation?.let { validateImplementation(operationDefinition.implementation!!) }
             operationDefinition.inputs?.let { validatePropertyDefinitions(operationDefinition.inputs!!) }
             operationDefinition.outputs?.let { validatePropertyDefinitions(operationDefinition.outputs!!) }

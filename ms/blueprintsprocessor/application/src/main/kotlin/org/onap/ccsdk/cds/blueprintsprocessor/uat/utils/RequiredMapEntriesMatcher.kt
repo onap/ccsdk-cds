@@ -25,6 +25,9 @@ import org.mockito.ArgumentMatcher
 class RequiredMapEntriesMatcher<K, V>(private val requiredEntries: Map<K, V>) : ArgumentMatcher<Map<K, V>> {
 
     override fun matches(argument: Map<K, V>?): Boolean {
+        if (argument == null) {
+            return false
+        }
         val missingEntries = Maps.difference(requiredEntries, argument).entriesOnlyOnLeft()
         return missingEntries.isEmpty()
     }

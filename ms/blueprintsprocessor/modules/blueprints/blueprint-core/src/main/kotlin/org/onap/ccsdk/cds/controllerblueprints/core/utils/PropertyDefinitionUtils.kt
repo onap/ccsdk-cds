@@ -24,7 +24,7 @@ class PropertyDefinitionUtils {
 
         fun hasLogProtect(metadata: MutableMap<String, String>?) = metadata?.get(LOG_PROTECT)
             ?.let {
-                when (it.toLowerCase()) {
+                when (it.lowercase()) {
                     "true" -> true
                     "yes" -> true
                     "y" -> true

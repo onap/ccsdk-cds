@@ -86,10 +86,10 @@ open class Execute : AbstractScriptComponentFunction() {
         for (action in actionList) {
             val actionTypeJsonNode = action.get(ACTION_TYPE)
             val actionPathJsonNode = action.get(ACTION_PATH)
-            val actionType = RestconfRequestType.valueOf(actionTypeJsonNode.asText().toUpperCase())
+            val actionType = RestconfRequestType.valueOf(actionTypeJsonNode.asText().uppercase())
             val dsJsonNode = action.get(ACTION_DATASTORE)
             val path = restconfPath(
-                RestconfRequestDatastore.valueOf(dsJsonNode.asText().toUpperCase()),
+                RestconfRequestDatastore.valueOf(dsJsonNode.asText().uppercase()),
                 nodeId, actionPathJsonNode.asText()
             )
             val payload = action.get(ACTION_PAYLOAD)
@@ -187,7 +187,7 @@ open class Execute : AbstractScriptComponentFunction() {
                 ?: throw BluePrintProcessorException("Failed to load action datastore.")
             val actionTypeJsonNode = action.get(ACTION_TYPE)
                 ?: throw BluePrintProcessorException("Failed to load action type.")
-            when (val actionType = RestconfRequestType.valueOf(actionTypeJsonNode.asText().toUpperCase())) {
+            when (val actionType = RestconfRequestType.valueOf(actionTypeJsonNode.asText().uppercase())) {
                 RestconfRequestType.PATCH, RestconfRequestType.PUT, RestconfRequestType.POST -> {
                     action.get(ACTION_PAYLOAD)
                         ?: throw BluePrintProcessorException("Failed to load action $actionType payload.")

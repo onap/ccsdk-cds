@@ -88,22 +88,22 @@
             <dependency>
                 <groupId>org.jetbrains.kotlinx</groupId>
                 <artifactId>kotlinx-coroutines-core-jvm</artifactId>
-                <version>1.9.0</version>
+                <version>${kotlin.couroutines.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlinx</groupId>
                 <artifactId>kotlinx-coroutines-reactive</artifactId>
-                <version>1.9.0</version>
+                <version>${kotlin.couroutines.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlinx</groupId>
                 <artifactId>kotlinx-coroutines-core</artifactId>
-                <version>1.9.0</version>
+                <version>${kotlin.couroutines.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlinx</groupId>
                 <artifactId>kotlinx-coroutines-reactor</artifactId>
-                <version>1.9.0</version>
+                <version>${kotlin.couroutines.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -119,7 +119,7 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-common</artifactId>
+            <artifactId>kotlin-stdlib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

@@ -98,7 +98,7 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.10.0</version>
+            <version>5.5.0</version>
         </dependency>
     </dependencies>
 
@@ -294,7 +294,7 @@
                             <dependency>
                                 <groupId>com.squareup.okhttp3</groupId>
                                 <artifactId>okhttp</artifactId>
-                                <version>4.10.0</version>
+                                <version>5.5.0</version>
                             </dependency>
                             <dependency>
                                 <groupId>commons-io</groupId>
