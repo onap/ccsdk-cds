@@ -53,6 +53,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b99a29e_f672ba16",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 8564
+      },
+      "writtenOn": "2026-11-05T08:34:12Z",
+      "side": 1,
+      "message": "Addressed in the latest patchset, Thanks!",
+      "parentUuid": "44546eef_fd9098b8",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9c7c903b_79475820",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Unresolving, this still needs addressing.",
       "parentUuid": "9c7c903b_79475820",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6807373f_397f9f6b",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/dsl/BluePrintTemplateDSLBuilder.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 8564
+      },
+      "writtenOn": "2026-11-05T08:34:12Z",
+      "side": 1,
+      "message": "Addressed in the latest patchset, Thanks!",
+      "parentUuid": "ab876eaf_6f990b8e",
       "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
@@ -123,6 +159,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "66b557af_12eda179",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/dsl/BluePrintTemplateDSLBuilder.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 8564
+      },
+      "writtenOn": "2026-11-05T08:34:12Z",
+      "side": 1,
+      "message": "Addressed in the latest patchset, Thanks!",
+      "parentUuid": "44038d3c_b55da47c",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "caef6aeb_de79fc59",
@@ -154,6 +208,24 @@
       "side": 1,
       "message": "Unresolving, this still needs addressing.",
       "parentUuid": "caef6aeb_de79fc59",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd6cee42_ccc44100",
+        "filename": "ms/blueprintsprocessor/modules/blueprints/blueprint-core/src/main/kotlin/org/onap/ccsdk/cds/controllerblueprints/core/dsl/BluePrintTemplateDSLBuilder.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 8564
+      },
+      "writtenOn": "2026-11-05T08:34:12Z",
+      "side": 1,
+      "message": "Addressed in the latest patchset, Thanks!",
+      "parentUuid": "199d5f13_ec3834de",
       "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
@@ -193,6 +265,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f82c5c9_7292e654",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 8564
+      },
+      "writtenOn": "2026-11-05T08:34:12Z",
+      "side": 1,
+      "message": "Addressed in the latest patchset, Thanks!",
+      "parentUuid": "c7425ded_e3219473",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6a07ac69_37be1336",
@@ -228,6 +318,24 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "939bd63d_96609f8c",
+        "filename": "ms/blueprintsprocessor/parent/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 8564
+      },
+      "writtenOn": "2026-11-05T08:34:12Z",
+      "side": 1,
+      "message": "Good point. However, noticed JSR-223-related entries under META-INF folder,so kept kotlin-scripting-jsr223 as part of this migration.",
+      "parentUuid": "3a0c742b_b71241c3",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "acbe4a5c_a176a855",
@@ -259,6 +367,24 @@
       "side": 1,
       "message": "Unresolving, this still needs addressing.",
       "parentUuid": "acbe4a5c_a176a855",
+      "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f46834a8_841494af",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 840,
+      "author": {
+        "id": 8564
+      },
+      "writtenOn": "2026-11-05T08:34:12Z",
+      "side": 1,
+      "message": "Addressed in the latest patchset, Thanks!",
+      "parentUuid": "6c745a39_712f2a7f",
       "revId": "50cbf2ccc4bee32948eded5e81fcbfc537518d7a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     }
