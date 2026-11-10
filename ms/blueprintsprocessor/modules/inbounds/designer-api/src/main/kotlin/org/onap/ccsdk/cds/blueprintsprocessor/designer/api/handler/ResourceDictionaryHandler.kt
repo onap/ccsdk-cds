@@ -24,7 +24,6 @@ import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.DesignerApiDomains
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.domain.ResourceDictionary
 import org.onap.ccsdk.cds.blueprintsprocessor.designer.api.repository.ResourceDictionaryRepository
 import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintException
-import org.onap.ccsdk.cds.controllerblueprints.core.checkNotEmpty
 import org.onap.ccsdk.cds.controllerblueprints.core.httpProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceDefinition
 import org.onap.ccsdk.cds.controllerblueprints.resource.dict.ResourceSourceMapping
@@ -101,7 +100,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         resourceDictionary.resourceDictionaryGroup = resourceDefinition.group
         // Set the Property Definitions
         val propertyDefinition = resourceDefinition.property
-        resourceDictionary.description = propertyDefinition.description!!
+        resourceDictionary.description = propertyDefinition.description.orEmpty()
         resourceDictionary.dataType = propertyDefinition.type
         if (propertyDefinition.entrySchema != null) {
             resourceDictionary.entrySchema = propertyDefinition.entrySchema!!.type
@@ -161,7 +160,7 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         resourceDictionary.updatedBy = resourceDefinition.updatedBy
         resourceDictionary.resourceDictionaryGroup = resourceDefinition.group
         resourceDictionary.entrySchema = resourceDefinition.property.entrySchema?.type
-        resourceDictionary.description = resourceDefinition.property.description!!
+        resourceDictionary.description = resourceDefinition.property.description.orEmpty()
         resourceDictionary.dataType = resourceDefinition.property.type
         resourceDictionary.definition = resourceDefinition
 
@@ -199,14 +198,24 @@ class ResourceDictionaryHandler(private val resourceDictionaryRepository: Resour
         return resourceDictionaryRepository.findAll(pageRequest)
     }
 
-    private fun validateResourceDictionary(resourceDictionary: ResourceDictionary): Boolean {
-        checkNotEmpty(resourceDictionary.name) { "ResourceDictionary Definition name is missing." }
-        checkNotNull(resourceDictionary.definition) { "ResourceDictionary Definition Information is missing." }
-        checkNotEmpty(resourceDictionary.description) { "ResourceDictionary Definition Information is missing." }
-        checkNotEmpty(resourceDictionary.tags) { "ResourceDictionary Definition tags is missing." }
-        checkNotEmpty(resourceDictionary.updatedBy) { "ResourceDictionary Definition updatedBy is missing." }
-        return true
+    private fun validateResourceDictionary(resourceDictionary: ResourceDictionary) {
+        val name = resourceDictionary.name
+        if (name.isEmpty()) {
+            throw invalidResourceDictionary("ResourceDictionary name is missing.")
+        }
+        if (resourceDictionary.description.isEmpty()) {
+            throw invalidResourceDictionary("ResourceDictionary($name) description is missing.")
+        }
+        if (resourceDictionary.tags.isEmpty()) {
+            throw invalidResourceDictionary("ResourceDictionary($name) tags is missing.")
+        }
+        if (resourceDictionary.updatedBy.isEmpty()) {
+            throw invalidResourceDictionary("ResourceDictionary($name) updatedBy is missing.")
+        }
     }
+
+    private fun invalidResourceDictionary(message: String) =
+        httpProcessorException(ErrorCatalogCodes.INVALID_REQUEST_FORMAT, DesignerApiDomains.DESIGNER_API, message)
 
     fun getResourceDictionaryDistinct(): List<String> {
         return resourceDictionaryRepository.findDistinctByResourceDictionaryGroup()
